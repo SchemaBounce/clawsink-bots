@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover existing contracts and their deadlines. Assess baseline compliance posture."
+    },
+    {
+      "namespace": "compliance_calendar",
+      "key": "init",
+      "value": "No compliance deadlines tracked yet. Will populate from contract dates and regulatory calendars."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No compliance patterns learned yet. Will track recurring issues and framework-specific risks over time."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "compliance_requirements",
+      "value": "Define your compliance frameworks here. Example: GDPR (EU data), SOC2 Type II (security), PCI DSS (payments).",
+      "description": "Active compliance frameworks to monitor — customize to your requirements"
+    },
+    {
+      "key": "contract_review_policy",
+      "value": "Flag contracts expiring within 60 days. Escalate at 30 days. Auto-renew review at 90 days.",
+      "description": "Contract review timeline thresholds"
+    }
+  ]
+}

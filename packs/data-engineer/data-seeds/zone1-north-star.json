@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "data_freshness_targets",
+      "value": "CDC pipelines: <60s. Direct pull: <15min. SaaS connectors: <1h.",
+      "description": "Maximum acceptable data staleness by pipeline type"
+    }
+  ]
+}

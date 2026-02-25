@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "reorder_policy",
+      "value": "Reorder when stock falls below 2 weeks of supply. Safety stock: 1 week. Review lead times monthly.",
+      "description": "Default inventory reorder policy — customize to your actual requirements"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "growth_targets",
+      "value": "Define your growth targets here. Example: MRR growth: 10%/month. Trial-to-paid conversion: 15%. Organic traffic: +20%/quarter.",
+      "description": "Growth targets to measure marketing effectiveness against"
+    }
+  ]
+}

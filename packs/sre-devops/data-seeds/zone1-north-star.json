@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "sla_targets",
+      "value": "Pipeline uptime: 99.9%. P99 latency: <5s. Data freshness: <60s. Error rate: <0.1%.",
+      "description": "Default SLA targets — customize to match your actual SLAs"
+    },
+    {
+      "key": "incident_severity_definitions",
+      "value": "Critical: service down or data loss. High: degraded performance >15min. Medium: elevated errors. Low: minor anomaly.",
+      "description": "Severity classification for incident detection"
+    }
+  ]
+}

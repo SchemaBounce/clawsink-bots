@@ -1,0 +1,24 @@
+{
+  "entityTypes": [
+    {
+      "name": "sre_findings",
+      "description": "Infrastructure reliability findings and observations",
+      "sampleFields": ["severity", "component", "description", "recommendation", "metrics"]
+    },
+    {
+      "name": "sre_alerts",
+      "description": "Urgent infrastructure alerts requiring immediate attention",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged"]
+    },
+    {
+      "name": "incidents",
+      "description": "Infrastructure incidents tracked over time",
+      "sampleFields": ["severity", "component", "started_at", "resolved_at", "root_cause", "impact"]
+    },
+    {
+      "name": "pipeline_status",
+      "description": "Pipeline health snapshots (read-only for SRE)",
+      "sampleFields": ["pipeline_id", "status", "throughput", "latency_p99", "error_rate", "dlq_depth"]
+    }
+  ]
+}

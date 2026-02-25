@@ -1,0 +1,14 @@
+{
+  "entityTypes": [
+    {
+      "name": "inv_findings",
+      "description": "Inventory analysis findings and reorder recommendations",
+      "sampleFields": ["severity", "category", "item", "current_stock", "reorder_point", "recommendation"]
+    },
+    {
+      "name": "inv_alerts",
+      "description": "Urgent inventory alerts (stock-outs, supply issues)",
+      "sampleFields": ["severity", "title", "description", "action_required", "item", "days_until_stockout"]
+    }
+  ]
+}

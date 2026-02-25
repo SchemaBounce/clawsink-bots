@@ -1,0 +1,24 @@
+{
+  "entityTypes": [
+    {
+      "name": "acct_findings",
+      "description": "Financial analysis findings and budget observations",
+      "sampleFields": ["severity", "category", "description", "amount", "recommendation"]
+    },
+    {
+      "name": "acct_alerts",
+      "description": "Urgent financial alerts requiring immediate attention",
+      "sampleFields": ["severity", "title", "description", "action_required", "amount"]
+    },
+    {
+      "name": "transactions",
+      "description": "Financial transactions (expenses and income)",
+      "sampleFields": ["date", "amount", "category", "vendor", "description", "status"]
+    },
+    {
+      "name": "invoices",
+      "description": "Invoices sent and received",
+      "sampleFields": ["invoice_number", "date", "due_date", "amount", "status", "vendor", "category"]
+    }
+  ]
+}
