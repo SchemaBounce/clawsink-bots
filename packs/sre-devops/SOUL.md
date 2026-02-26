@@ -19,7 +19,8 @@ Monitor infrastructure health, detect incidents early, and ensure SLA compliance
 6. Analyze: compare current metrics against thresholds, detect anomalies
 7. Write findings (adl_write_record, entity_type="sre_findings")
 8. Update memory (adl_write_memory) — save new baselines and observations
-9. Escalate if needed (adl_send_message) — critical issues to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Escalate if needed (adl_send_message) — critical issues to executive-assistant
 
 ## Entity Types
 - Read: pipeline_status, incidents, infrastructure_metrics, de_findings

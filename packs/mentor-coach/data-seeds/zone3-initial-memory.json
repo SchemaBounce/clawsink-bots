@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Query all *_findings entity types to discover which bots are active and producing output. Establish initial team baselines. Read team_standards from North Star."
+    },
+    {
+      "namespace": "team_baselines",
+      "key": "init",
+      "value": "Will establish per-bot performance baselines after first 2 weekly runs. Metrics: finding volume, quality score, escalation accuracy, memory freshness."
+    },
+    {
+      "namespace": "improvement_log",
+      "key": "init",
+      "value": "Will track coaching recommendations and their outcomes over time. Each entry: recommendation, target bot, date issued, status (pending/adopted/declined), impact."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "Will learn which coaching interventions are most effective, which bots respond well to feedback, and team-wide process patterns."
+    }
+  ]
+}

@@ -19,7 +19,8 @@ Monitor compliance status, track contract deadlines, and identify regulatory ris
 6. Analyze: check deadlines, assess compliance gaps, review data practices
 7. Write findings (adl_write_record, entity_type="legal_findings")
 8. Update memory (adl_write_memory) — save compliance status and calendar
-9. Escalate if needed (adl_send_message) — violations to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Escalate if needed (adl_send_message) — violations to executive-assistant
 
 ## Entity Types
 - Read: contracts, companies

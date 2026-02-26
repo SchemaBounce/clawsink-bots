@@ -9,7 +9,7 @@ metadata:
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
 agent:
-  capabilities: ["legal", "compliance"]
+  capabilities: ["legal_compliance", "research"]
   hostingMode: "openclaw"
   defaultDomain: "compliance"
 model:

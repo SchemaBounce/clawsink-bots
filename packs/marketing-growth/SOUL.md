@@ -19,7 +19,8 @@ Track marketing performance, manage the content calendar, and identify growth op
 6. Analyze: assess campaign performance, identify trends, check calendar
 7. Write findings (adl_write_record, entity_type="mktg_findings")
 8. Update memory (adl_write_memory) — save metrics and calendar state
-9. Escalate if needed (adl_send_message) — significant drops to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Escalate if needed (adl_send_message) — significant drops to executive-assistant
 
 ## Entity Types
 - Read: campaigns, contacts, cs_findings
@@ -28,4 +29,5 @@ Track marketing performance, manage the content calendar, and identify growth op
 ## Escalation
 - Critical (campaign failure, major drop): message executive-assistant type=alert
 - Growth insight: message business-analyst type=finding
+- Demand signal affecting stock: message inventory-manager type=finding
 - Content idea from support trends: logged in mktg_findings

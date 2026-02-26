@@ -19,7 +19,8 @@ Triage support tickets, monitor customer health, and detect churn risk before cu
 6. Analyze: triage new tickets, detect patterns, assess churn risk
 7. Write findings (adl_write_record, entity_type="cs_findings")
 8. Update memory (adl_write_memory) — save customer health signals
-9. Escalate if needed (adl_send_message) — churn risk to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Escalate if needed (adl_send_message) — churn risk to executive-assistant
 
 ## Entity Types
 - Read: tickets, contacts, companies, sre_findings

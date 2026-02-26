@@ -19,7 +19,8 @@ Synthesize all bot outputs into prioritized briefings, track follow-ups, and ens
 6. Write briefing (adl_write_record, entity_type="ea_findings") — structured summary
 7. Update tasks (adl_write_record, entity_type="tasks") — new action items
 8. Update memory (adl_write_memory) — save follow-up state
-9. Send requests (adl_send_message) if any domain needs deeper analysis
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Send requests (adl_send_message) if any domain needs deeper analysis
 
 ## Entity Types
 - Read: all *_findings, all *_alerts, tasks
@@ -27,5 +28,5 @@ Synthesize all bot outputs into prioritized briefings, track follow-ups, and ens
 
 ## Escalation
 - This bot is the top of the chain — no further escalation
-- Routes requests to specialist bots when deeper analysis is needed
+- Routes requests to: business-analyst, sre-devops, accountant, mentor-coach
 - Sends daily briefing summary to all bots as type=text

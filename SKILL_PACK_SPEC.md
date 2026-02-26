@@ -73,6 +73,7 @@ requirements:
 - `schedule.default` must be a valid cron expression or `@every` / `@daily` / `@weekly` interval
 - `messaging.listensTo[].from` uses bot `metadata.name` values or `["*"]`
 - `data.entityTypesWrite` must include `{name}_findings` as a convention
+- `agent.capabilities` should use values from the standard taxonomy: `operations`, `dev_devops`, `finance`, `analytics`, `customer_support`, `content_marketing`, `legal_compliance`, `management`, `research`, `data_engineering`, `procurement`, `security`
 
 ## SOUL.md Format
 

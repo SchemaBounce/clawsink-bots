@@ -9,7 +9,7 @@ metadata:
   category: marketing
   tags: ["marketing", "growth", "seo", "campaigns", "content", "social"]
 agent:
-  capabilities: ["marketing", "analytics"]
+  capabilities: ["content_marketing", "analytics"]
   hostingMode: "openclaw"
   defaultDomain: "marketing"
 model:
@@ -30,13 +30,13 @@ messaging:
     - { type: "request", from: ["executive-assistant", "business-analyst"] }
   sendsTo:
     - { type: "alert", to: ["executive-assistant"], when: "campaign failure or significant metric drop" }
-    - { type: "finding", to: ["business-analyst"], when: "growth trend or channel performance insight" }
+    - { type: "finding", to: ["business-analyst", "inventory-manager"], when: "growth trend or channel performance insight" }
 data:
   entityTypesRead: ["campaigns", "contacts", "cs_findings"]
   entityTypesWrite: ["mktg_findings", "mktg_alerts", "campaigns"]
   memoryNamespaces: ["working_notes", "learned_patterns", "content_calendar"]
 zones:
-  zone1Read: ["mission", "industry", "stage", "priorities"]
+  zone1Read: ["mission", "industry", "stage", "priorities", "growth_targets"]
   zone2Domains: ["marketing"]
 requirements:
   minTier: "starter"

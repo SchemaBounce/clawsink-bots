@@ -9,7 +9,7 @@ metadata:
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
 agent:
-  capabilities: ["management", "coordination"]
+  capabilities: ["management", "analytics"]
   hostingMode: "openclaw"
   defaultDomain: "management"
 model:
@@ -27,13 +27,13 @@ schedule:
 messaging:
   listensTo:
     - { type: "alert", from: ["*"] }
-    - { type: "finding", from: ["business-analyst"] }
+    - { type: "finding", from: ["business-analyst", "accountant", "legal-compliance", "product-owner", "mentor-coach"] }
     - { type: "text", from: ["*"] }
   sendsTo:
-    - { type: "request", to: ["business-analyst", "sre-devops", "accountant"], when: "needs cross-domain analysis" }
+    - { type: "request", to: ["business-analyst", "sre-devops", "accountant", "mentor-coach"], when: "needs cross-domain analysis" }
     - { type: "text", to: ["*"], when: "daily briefing distribution" }
 data:
-  entityTypesRead: ["sre_findings", "de_findings", "ba_findings", "acct_findings", "cs_findings", "inv_findings", "legal_findings", "mktg_findings", "tasks", "sre_alerts", "de_alerts", "acct_alerts", "cs_alerts", "inv_alerts", "legal_alerts", "mktg_alerts"]
+  entityTypesRead: ["sre_findings", "de_findings", "ba_findings", "acct_findings", "cs_findings", "inv_findings", "legal_findings", "mktg_findings", "sec_findings", "po_findings", "mentor_findings", "tasks", "team_health_reports", "sre_alerts", "de_alerts", "acct_alerts", "cs_alerts", "inv_alerts", "legal_alerts", "mktg_alerts", "sec_alerts", "po_alerts", "mentor_alerts"]
   entityTypesWrite: ["ea_findings", "ea_alerts", "tasks"]
   memoryNamespaces: ["working_notes", "learned_patterns", "follow_ups"]
 zones:

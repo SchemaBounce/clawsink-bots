@@ -9,7 +9,7 @@ metadata:
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
 agent:
-  capabilities: ["support", "customer_success"]
+  capabilities: ["customer_support", "analytics"]
   hostingMode: "openclaw"
   defaultDomain: "support"
 model:

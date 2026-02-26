@@ -19,7 +19,8 @@ Correlate findings from all bots, detect cross-domain trends, and produce strate
 6. Analyze: identify strategic implications, tie to quarterly priorities
 7. Write findings (adl_write_record, entity_type="ba_findings")
 8. Update memory (adl_write_memory) — save trend baselines and observations
-9. Send insights (adl_send_message) — strategic findings to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Send insights (adl_send_message) — strategic findings to executive-assistant
 
 ## Entity Types
 - Read: all *_findings types, transactions, pipeline_status, incidents

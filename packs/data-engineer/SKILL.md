@@ -9,7 +9,7 @@ metadata:
   category: engineering
   tags: ["data", "schemas", "cdc", "pipelines", "kolumn", "drift"]
 agent:
-  capabilities: ["dev_devops", "data_engineering"]
+  capabilities: ["data_engineering", "dev_devops"]
   hostingMode: "openclaw"
   defaultDomain: "engineering"
 model:

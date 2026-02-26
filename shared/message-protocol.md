@@ -30,7 +30,7 @@ Structured findings use the Toon Card format (200-500 bytes, token-efficient):
 {
   "toonCard": {
     "entityType": "sre_findings",
-    "entityId": "sre_2026-02-24_001",
+    "entityId": "sre_20260224_001",
     "title": "Pipeline latency spike",
     "severity": "high",
     "summary": "P99 latency 4.2s (threshold 3s). Correlated with webhook timeout increase.",
@@ -45,7 +45,7 @@ Structured findings use the Toon Card format (200-500 bytes, token-efficient):
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `entityType` | string | Yes | Source entity type of the finding |
-| `entityId` | string | Yes | Unique ID: `{role}_{date}_{seq}` |
+| `entityId` | string | Yes | Unique ID: `{role}_{YYYYMMDD}_{seq}` |
 | `title` | string | Yes | One-line summary (<80 chars) |
 | `severity` | string | Yes | `low`, `medium`, `high`, `critical` |
 | `summary` | string | Yes | Details (<200 chars) |

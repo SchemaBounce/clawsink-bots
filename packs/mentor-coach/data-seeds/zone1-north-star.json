@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "team_standards",
+      "value": "Each bot should produce at least 1 finding per run. Alerts should be acknowledged within 2 runs. Memory should be updated every run. Escalations should follow the defined chains.",
+      "description": "Baseline quality standards for bot team performance assessment"
+    }
+  ]
+}

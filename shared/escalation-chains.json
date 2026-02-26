@@ -3,13 +3,13 @@
   "chains": {
     "executive-assistant": {
       "receives_alerts_from": ["*"],
-      "receives_findings_from": ["business-analyst"],
-      "sends_requests_to": ["business-analyst", "sre-devops", "accountant"],
+      "receives_findings_from": ["business-analyst", "accountant", "legal-compliance", "product-owner", "mentor-coach"],
+      "sends_requests_to": ["business-analyst", "sre-devops", "accountant", "mentor-coach"],
       "sends_findings_to": []
     },
     "business-analyst": {
       "receives_alerts_from": [],
-      "receives_findings_from": ["sre-devops", "data-engineer", "accountant", "customer-support", "inventory-manager", "legal-compliance", "marketing-growth"],
+      "receives_findings_from": ["sre-devops", "data-engineer", "accountant", "customer-support", "inventory-manager", "legal-compliance", "marketing-growth", "product-owner"],
       "sends_requests_to": ["data-engineer", "accountant"],
       "sends_findings_to": ["executive-assistant"]
     },
@@ -43,7 +43,7 @@
     },
     "inventory-manager": {
       "receives_alerts_from": [],
-      "receives_findings_from": [],
+      "receives_findings_from": ["marketing-growth"],
       "sends_requests_to": ["accountant"],
       "sends_findings_to": ["business-analyst", "accountant"],
       "sends_alerts_to": ["executive-assistant"]
@@ -59,8 +59,27 @@
       "receives_alerts_from": [],
       "receives_findings_from": ["customer-support"],
       "sends_requests_to": ["business-analyst"],
-      "sends_findings_to": ["business-analyst"],
+      "sends_findings_to": ["business-analyst", "inventory-manager"],
       "sends_alerts_to": ["executive-assistant"]
+    },
+    "security-agent": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["sre-devops", "data-engineer"],
+      "sends_requests_to": [],
+      "sends_findings_to": ["sre-devops", "legal-compliance"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "product-owner": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["customer-support", "business-analyst", "marketing-growth"],
+      "sends_requests_to": ["customer-support"],
+      "sends_findings_to": ["executive-assistant", "business-analyst"]
+    },
+    "mentor-coach": {
+      "receives_alerts_from": [],
+      "receives_findings_from": [],
+      "sends_requests_to": [],
+      "sends_findings_to": ["executive-assistant"]
     }
   },
   "severity_routing": {

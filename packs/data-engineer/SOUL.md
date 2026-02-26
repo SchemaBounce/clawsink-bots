@@ -19,7 +19,8 @@ Monitor data pipeline health, detect schema drift, and ensure CDC events flow re
 6. Analyze: compare freshness, DLQ depth, error rates against thresholds
 7. Write findings (adl_write_record, entity_type="de_findings")
 8. Update memory (adl_write_memory) — save observations and baselines
-9. Escalate if needed (adl_send_message) — pipeline failures to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Escalate if needed (adl_send_message) — pipeline failures to executive-assistant
 
 ## Entity Types
 - Read: pipeline_status, sre_findings

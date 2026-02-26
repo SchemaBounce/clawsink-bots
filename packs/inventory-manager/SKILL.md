@@ -9,7 +9,7 @@ metadata:
   category: operations
   tags: ["inventory", "stock", "vendors", "reorder", "acquisition", "procurement"]
 agent:
-  capabilities: ["operations", "procurement"]
+  capabilities: ["procurement", "operations"]
   hostingMode: "openclaw"
   defaultDomain: "operations"
 model:
@@ -27,6 +27,7 @@ schedule:
 messaging:
   listensTo:
     - { type: "request", from: ["executive-assistant", "accountant"] }
+    - { type: "finding", from: ["marketing-growth"] }
   sendsTo:
     - { type: "alert", to: ["executive-assistant"], when: "critical stock-out or supply chain disruption" }
     - { type: "finding", to: ["business-analyst", "accountant"], when: "cost trend or reorder recommendation" }
@@ -35,7 +36,7 @@ data:
   entityTypesWrite: ["inv_findings", "inv_alerts"]
   memoryNamespaces: ["working_notes", "learned_patterns", "stock_levels"]
 zones:
-  zone1Read: ["mission", "industry", "budget_constraints"]
+  zone1Read: ["mission", "industry", "budget_constraints", "reorder_policy"]
   zone2Domains: ["operations"]
 requirements:
   minTier: "starter"

@@ -1,0 +1,24 @@
+{
+  "entityTypes": [
+    {
+      "name": "po_findings",
+      "description": "Product insights from customer feedback aggregation and market analysis",
+      "sampleFields": ["severity", "category", "theme", "signal_count", "customer_impact", "recommendation", "source_findings"]
+    },
+    {
+      "name": "po_alerts",
+      "description": "Urgent product alerts (churn signals, competitive threats)",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"]
+    },
+    {
+      "name": "gh_issues",
+      "description": "Structured GitHub issue specs ready for human review and creation",
+      "sampleFields": ["title", "body", "labels", "priority", "user_stories", "acceptance_criteria", "customer_signals", "source_findings"]
+    },
+    {
+      "name": "feature_requests",
+      "description": "Individual feature requests extracted from customer feedback",
+      "sampleFields": ["title", "source", "customer_id", "description", "frequency", "impact_score", "theme"]
+    }
+  ]
+}

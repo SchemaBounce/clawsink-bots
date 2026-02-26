@@ -15,6 +15,9 @@ Each bot writes to entity types prefixed with its role abbreviation:
 | Legal & Compliance | `legal_` | `legal_findings` | `legal_alerts` |
 | Marketing & Growth | `mktg_` | `mktg_findings` | `mktg_alerts` |
 | Executive Assistant | `ea_` | `ea_findings` | `ea_alerts` |
+| Security Agent | `sec_` | `sec_findings` | `sec_alerts` |
+| Product Owner | `po_` | `po_findings` | `po_alerts` |
+| Mentor / Coach | `mentor_` | `mentor_findings` | `mentor_alerts` |
 
 ## Shared Entity Types
 
@@ -31,7 +34,12 @@ These entity types are shared across bots and may be created by any bot or by th
 | `invoices` | Invoices (sent and received) | accountant |
 | `campaigns` | Marketing campaigns | marketing-growth |
 | `incidents` | Infrastructure incidents | sre-devops |
+| `infrastructure_metrics` | Infrastructure metrics (CPU, memory, latency, error rates) | user/external, sre-devops |
 | `pipeline_status` | Pipeline health snapshots | data-engineer, sre-devops |
+| `vulnerability_scans` | Security scan results and posture snapshots | security-agent |
+| `gh_issues` | Structured GitHub issue specs for human review | product-owner |
+| `feature_requests` | Individual customer feature requests | product-owner |
+| `team_health_reports` | Weekly bot team performance reports | mentor-coach |
 
 ## Entity ID Format
 

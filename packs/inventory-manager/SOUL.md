@@ -19,7 +19,8 @@ Monitor stock levels, calculate reorder points, and manage vendor relationships 
 6. Analyze: compare stock vs thresholds, calculate reorder needs, assess vendor performance
 7. Write findings (adl_write_record, entity_type="inv_findings")
 8. Update memory (adl_write_memory) — save stock levels and consumption rates
-9. Escalate if needed (adl_send_message) — stock-out risk to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Escalate if needed (adl_send_message) — stock-out risk to executive-assistant
 
 ## Entity Types
 - Read: transactions, companies

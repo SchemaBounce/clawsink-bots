@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "product_roadmap",
+      "value": "Define your product roadmap here. Example: Q1: Improve onboarding flow. Q2: Launch enterprise tier. Q3: Self-serve analytics. Q4: Mobile app.",
+      "description": "Current product roadmap — used to prioritize feature requests against strategic goals"
+    },
+    {
+      "key": "issue_threshold",
+      "value": "Create a gh_issues record when a feature request has 3+ independent customer signals and aligns with the current quarter's roadmap priorities.",
+      "description": "Threshold for when to create a GitHub issue spec"
+    }
+  ]
+}

@@ -9,7 +9,7 @@ metadata:
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
 agent:
-  capabilities: ["finance", "analysis"]
+  capabilities: ["finance", "analytics"]
   hostingMode: "openclaw"
   defaultDomain: "finance"
 model:

@@ -9,7 +9,7 @@ metadata:
   category: management
   tags: ["analysis", "trends", "strategy", "cross-domain", "insights"]
 agent:
-  capabilities: ["analysis", "strategy"]
+  capabilities: ["analytics", "management"]
   hostingMode: "openclaw"
   defaultDomain: "management"
 model:

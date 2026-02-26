@@ -19,7 +19,8 @@ Keep finances organized by categorizing transactions, monitoring budgets, and de
 6. Analyze: categorize new items, compare against budgets, detect anomalies
 7. Write findings (adl_write_record, entity_type="acct_findings")
 8. Update memory (adl_write_memory) — save running totals and observations
-9. Escalate if needed (adl_send_message) — budget breaches to executive-assistant
+9. Update learned_patterns (adl_write_memory, namespace="learned_patterns") — reusable insights
+10. Escalate if needed (adl_send_message) — budget breaches to executive-assistant
 
 ## Entity Types
 - Read: transactions, invoices, inv_findings
@@ -27,5 +28,5 @@ Keep finances organized by categorizing transactions, monitoring budgets, and de
 
 ## Escalation
 - Critical (payment failure, billing error): message executive-assistant type=alert
-- Budget anomaly: message business-analyst type=finding
-- Inventory cost impact: message inventory-manager type=finding
+- Budget anomaly or trend: message business-analyst type=finding
+- Monthly summary: message executive-assistant type=finding
