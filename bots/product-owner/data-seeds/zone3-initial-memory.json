@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Query cs_findings and tickets to discover customer feedback themes. Read product_roadmap from North Star to understand current priorities. Begin clustering signals."
+    },
+    {
+      "namespace": "customer_signals",
+      "key": "init",
+      "value": "Will build signal clusters from customer support findings and ticket analysis across first 3 runs. Track frequency and impact per theme."
+    },
+    {
+      "namespace": "backlog_priorities",
+      "key": "init",
+      "value": "Will establish initial top-10 feature priority ranking after first signal clustering pass. Re-rank every run based on new signals and roadmap alignment."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "Will learn which signal patterns lead to high-impact features vs noise. Track gh_issues creation accuracy over time."
+    }
+  ]
+}

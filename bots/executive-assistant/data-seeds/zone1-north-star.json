@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "briefing_format",
+      "value": "Top 3 urgent items, then domain summaries (operations, finance, growth, compliance). Max 10 items per briefing.",
+      "description": "Controls how the executive briefing is structured"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "description": "Required Zone 1 North Star keys that ALL bots expect. Users fill these during onboarding.",
+  "required": [
+    {
+      "key": "mission",
+      "label": "Company Mission",
+      "placeholder": "We help small businesses automate their data pipelines.",
+      "description": "Your company's mission statement. Bots use this to align their work with your goals."
+    },
+    {
+      "key": "industry",
+      "label": "Primary Industry",
+      "placeholder": "E-commerce / FinTech / SaaS / Healthcare / ...",
+      "description": "Your primary industry. Bots tailor their analysis and recommendations to your sector."
+    },
+    {
+      "key": "stage",
+      "label": "Business Stage",
+      "placeholder": "Solo founder / 5-person team / 20-person startup / ...",
+      "description": "Your current team size and stage. Bots adjust formality and detail level accordingly."
+    },
+    {
+      "key": "priorities",
+      "label": "Top 3 Quarterly Priorities",
+      "placeholder": "1. Launch v2 product\n2. Reduce churn to <5%\n3. Close Series A",
+      "description": "Your top priorities this quarter. Bots prioritize findings that relate to these goals."
+    }
+  ],
+  "optional": [
+    {
+      "key": "tech_stack",
+      "label": "Technology Stack",
+      "placeholder": "PostgreSQL, Redis, Kubernetes, Next.js, Go",
+      "description": "Primary technologies in use. SRE and Data Engineer bots use this for context."
+    },
+    {
+      "key": "sla_targets",
+      "label": "SLA Targets",
+      "placeholder": "99.9% uptime, P99 latency <5s, data freshness <60s",
+      "description": "Service level targets. SRE bot monitors against these thresholds."
+    },
+    {
+      "key": "budget_constraints",
+      "label": "Budget Constraints",
+      "placeholder": "Monthly cloud budget: $5,000. Marketing budget: $2,000.",
+      "description": "Budget limits. Accountant and Marketing bots factor these into recommendations."
+    },
+    {
+      "key": "compliance_requirements",
+      "label": "Compliance Requirements",
+      "placeholder": "GDPR, SOC2 Type II, PCI DSS Level 1",
+      "description": "Regulatory requirements. Legal & Compliance bot monitors against these frameworks."
+    }
+  ]
+}

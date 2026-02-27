@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "support_sla",
+      "value": "First response: <4h. Resolution: <24h for high severity, <72h for medium. Onboarding completion target: 7 days.",
+      "description": "Support response time and onboarding targets"
+    }
+  ]
+}

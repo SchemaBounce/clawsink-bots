@@ -1,0 +1,103 @@
+{
+  "description": "Machine-readable escalation routing. Defines which bot messages which bot for what event types.",
+  "chains": {
+    "executive-assistant": {
+      "receives_alerts_from": ["*"],
+      "receives_findings_from": ["business-analyst", "accountant", "legal-compliance", "product-owner", "mentor-coach"],
+      "sends_requests_to": ["business-analyst", "sre-devops", "accountant", "mentor-coach"],
+      "sends_findings_to": []
+    },
+    "business-analyst": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["sre-devops", "data-engineer", "accountant", "customer-support", "inventory-manager", "legal-compliance", "marketing-growth", "product-owner"],
+      "sends_requests_to": ["data-engineer", "accountant"],
+      "sends_findings_to": ["executive-assistant"]
+    },
+    "sre-devops": {
+      "receives_alerts_from": ["data-engineer"],
+      "receives_findings_from": ["data-engineer"],
+      "sends_requests_to": ["data-engineer"],
+      "sends_findings_to": ["business-analyst"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "data-engineer": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["sre-devops"],
+      "sends_requests_to": ["sre-devops"],
+      "sends_findings_to": ["business-analyst", "sre-devops"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "accountant": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["inventory-manager"],
+      "sends_requests_to": [],
+      "sends_findings_to": ["business-analyst", "executive-assistant"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "customer-support": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["sre-devops"],
+      "sends_requests_to": ["sre-devops"],
+      "sends_findings_to": ["business-analyst"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "inventory-manager": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["marketing-growth"],
+      "sends_requests_to": ["accountant"],
+      "sends_findings_to": ["business-analyst", "accountant"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "legal-compliance": {
+      "receives_alerts_from": [],
+      "receives_findings_from": [],
+      "sends_requests_to": [],
+      "sends_findings_to": ["business-analyst", "executive-assistant"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "marketing-growth": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["customer-support"],
+      "sends_requests_to": ["business-analyst"],
+      "sends_findings_to": ["business-analyst", "inventory-manager"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "security-agent": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["sre-devops", "data-engineer"],
+      "sends_requests_to": [],
+      "sends_findings_to": ["sre-devops", "legal-compliance"],
+      "sends_alerts_to": ["executive-assistant"]
+    },
+    "product-owner": {
+      "receives_alerts_from": [],
+      "receives_findings_from": ["customer-support", "business-analyst", "marketing-growth"],
+      "sends_requests_to": ["customer-support"],
+      "sends_findings_to": ["executive-assistant", "business-analyst"]
+    },
+    "mentor-coach": {
+      "receives_alerts_from": [],
+      "receives_findings_from": [],
+      "sends_requests_to": [],
+      "sends_findings_to": ["executive-assistant"]
+    }
+  },
+  "severity_routing": {
+    "critical": {
+      "always_notify": ["executive-assistant"],
+      "description": "Critical issues always escalate to executive-assistant immediately"
+    },
+    "high": {
+      "notify_domain_lead": true,
+      "description": "High severity goes to the domain lead bot plus business-analyst"
+    },
+    "medium": {
+      "log_as_finding": true,
+      "description": "Medium severity logged as finding, sent to business-analyst on next run"
+    },
+    "low": {
+      "log_only": true,
+      "description": "Low severity logged in bot's own findings, no escalation"
+    }
+  }
+}

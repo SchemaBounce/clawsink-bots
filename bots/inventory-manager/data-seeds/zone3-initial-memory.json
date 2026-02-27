@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover existing inventory items and vendor records. Establish consumption baselines."
+    },
+    {
+      "namespace": "stock_levels",
+      "key": "init",
+      "value": "No stock levels tracked yet. Will populate as inventory data becomes available."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No consumption or vendor patterns learned yet. Will build velocity estimates over time."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "ea_findings",
+      "description": "Executive briefings and cross-domain synthesis",
+      "sampleFields": ["severity", "briefing_type", "summary", "action_items", "domain_summaries"]
+    },
+    {
+      "name": "ea_alerts",
+      "description": "Executive-level alerts requiring human attention",
+      "sampleFields": ["severity", "title", "description", "action_required", "source_bot"]
+    },
+    {
+      "name": "tasks",
+      "description": "Cross-domain action items and follow-ups",
+      "sampleFields": ["title", "assigned_to", "due_date", "status", "priority", "source"]
+    }
+  ]
+}

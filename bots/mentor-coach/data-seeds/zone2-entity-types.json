@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "mentor_findings",
+      "description": "Process improvement findings and coaching recommendations for individual bots",
+      "sampleFields": ["severity", "target_bot", "issue", "recommendation", "evidence", "improvement_priority"]
+    },
+    {
+      "name": "mentor_alerts",
+      "description": "Critical team-wide issues requiring executive attention",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"]
+    },
+    {
+      "name": "team_health_reports",
+      "description": "Weekly team performance reports with per-bot scores and coaching items",
+      "sampleFields": ["period", "overall_score", "bot_scores", "highlights", "coaching", "harmony", "trend"]
+    }
+  ]
+}

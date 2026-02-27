@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "cs_findings",
+      "description": "Customer support analysis and trend observations",
+      "sampleFields": ["severity", "category", "description", "customer_impact", "recommendation"]
+    },
+    {
+      "name": "cs_alerts",
+      "description": "Urgent customer issues requiring immediate attention",
+      "sampleFields": ["severity", "title", "description", "action_required", "customer_id"]
+    },
+    {
+      "name": "tickets",
+      "description": "Customer support tickets",
+      "sampleFields": ["ticket_id", "customer_id", "subject", "severity", "category", "status", "created_at"]
+    }
+  ]
+}

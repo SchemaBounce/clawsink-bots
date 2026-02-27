@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "sec_findings",
+      "description": "Security posture findings from vulnerability analysis and policy audits",
+      "sampleFields": ["severity", "attack_vector", "affected_component", "cve_id", "remediation", "risk_score", "detected_at"]
+    },
+    {
+      "name": "sec_alerts",
+      "description": "Urgent security alerts requiring immediate attention",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"]
+    },
+    {
+      "name": "vulnerability_scans",
+      "description": "Periodic security scan results and posture snapshots",
+      "sampleFields": ["scan_type", "components_scanned", "vulnerabilities_found", "critical_count", "high_count", "posture_score", "scanned_at"]
+    }
+  ]
+}

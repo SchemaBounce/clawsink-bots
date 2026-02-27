@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Query sre_findings and de_findings to discover infrastructure components. Establish security baseline from North Star security_policy. Begin tracking secret rotation dates."
+    },
+    {
+      "namespace": "vulnerability_database",
+      "key": "init",
+      "value": "Will build vulnerability inventory from infrastructure findings and tech stack analysis across first 3 runs."
+    },
+    {
+      "namespace": "rotation_schedule",
+      "key": "init",
+      "value": "Will populate secret rotation tracking as secrets are discovered in infrastructure findings. Check rotation_baseline in North Star for target intervals."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "Will learn recurring security patterns, common misconfigurations, and false positive signatures over time."
+    }
+  ]
+}

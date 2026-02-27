@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "budget_constraints",
+      "value": "Define your monthly budget limits here. Example: Cloud: $5000, Marketing: $2000, Payroll: $15000, Operations: $3000.",
+      "description": "Monthly budget limits by category — customize to your actual budgets"
+    },
+    {
+      "key": "expense_categories",
+      "value": "cloud_infrastructure, marketing, payroll, software_subscriptions, office, travel, professional_services, other",
+      "description": "Standard expense categories for transaction classification"
+    }
+  ]
+}

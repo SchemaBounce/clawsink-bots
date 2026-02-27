@@ -1,0 +1,14 @@
+{
+  "entityTypes": [
+    {
+      "name": "ba_findings",
+      "description": "Cross-domain strategic analysis and trend reports",
+      "sampleFields": ["severity", "category", "domains_involved", "trend_direction", "description", "recommendation", "confidence"]
+    },
+    {
+      "name": "ba_alerts",
+      "description": "Strategic alerts requiring executive attention",
+      "sampleFields": ["severity", "title", "description", "action_required", "domains_affected"]
+    }
+  ]
+}

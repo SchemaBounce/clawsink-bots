@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all active bots and their entity types. Produce initial briefing with available data."
+    },
+    {
+      "namespace": "follow_ups",
+      "key": "init",
+      "value": "No follow-ups tracked yet. Will populate as action items emerge from bot findings."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No cross-domain patterns identified yet. Will learn which findings correlate over time."
+    }
+  ]
+}

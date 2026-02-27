@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover active pipelines, establish baseline throughput and freshness metrics."
+    },
+    {
+      "namespace": "thresholds",
+      "key": "defaults",
+      "value": "DLQ depth warn: 50, critical: 500. Freshness warn: 5min, critical: 30min. Error rate warn: 0.01, critical: 0.05."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No patterns learned yet. Will track throughput baselines and drift patterns over time."
+    }
+  ]
+}

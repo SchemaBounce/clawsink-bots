@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover available pipeline_status and incidents data. Establish baseline metrics."
+    },
+    {
+      "namespace": "thresholds",
+      "key": "defaults",
+      "value": "P99 latency warn: 3s, critical: 5s. Error rate warn: 0.05, critical: 0.1. DLQ depth warn: 100, critical: 1000."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No patterns learned yet. Will populate as incidents and anomalies are detected."
+    }
+  ]
+}

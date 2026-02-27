@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover existing transactions and invoices. Establish spending baseline by category."
+    },
+    {
+      "namespace": "thresholds",
+      "key": "defaults",
+      "value": "Budget warn: 80% of limit. Budget critical: 95% of limit. Anomaly threshold: 2x average transaction in category."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No spending patterns learned yet. Will build category averages and vendor patterns over time."
+    }
+  ]
+}

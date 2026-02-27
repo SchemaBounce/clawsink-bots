@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "mktg_findings",
+      "description": "Marketing analysis findings and growth observations",
+      "sampleFields": ["severity", "channel", "metric", "trend_direction", "description", "recommendation"]
+    },
+    {
+      "name": "mktg_alerts",
+      "description": "Urgent marketing alerts (campaign failures, metric drops)",
+      "sampleFields": ["severity", "title", "description", "action_required", "campaign_id"]
+    },
+    {
+      "name": "campaigns",
+      "description": "Marketing campaigns with performance tracking",
+      "sampleFields": ["campaign_id", "name", "channel", "status", "budget", "spend", "conversions", "engagement_rate"]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "de_findings",
+      "description": "Data engineering findings on pipeline health and schema state",
+      "sampleFields": ["severity", "pipeline_id", "description", "recommendation", "metrics"]
+    },
+    {
+      "name": "de_alerts",
+      "description": "Urgent data pipeline alerts",
+      "sampleFields": ["severity", "title", "description", "action_required", "pipeline_id"]
+    },
+    {
+      "name": "pipeline_status",
+      "description": "Pipeline health snapshots written by data-engineer",
+      "sampleFields": ["pipeline_id", "status", "throughput", "latency_p99", "error_rate", "dlq_depth", "freshness_seconds"]
+    }
+  ]
+}

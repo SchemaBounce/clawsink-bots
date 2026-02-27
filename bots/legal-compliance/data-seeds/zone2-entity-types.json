@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "legal_findings",
+      "description": "Compliance observations and risk assessments",
+      "sampleFields": ["severity", "framework", "description", "risk_level", "recommendation", "deadline"]
+    },
+    {
+      "name": "legal_alerts",
+      "description": "Urgent compliance alerts requiring immediate action",
+      "sampleFields": ["severity", "title", "description", "action_required", "framework", "deadline"]
+    },
+    {
+      "name": "contracts",
+      "description": "Contract records with renewal and compliance tracking",
+      "sampleFields": ["contract_id", "counterparty", "type", "start_date", "end_date", "status", "auto_renew"]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover existing campaigns and their performance baselines. Map active marketing channels."
+    },
+    {
+      "namespace": "content_calendar",
+      "key": "init",
+      "value": "No content calendar items tracked yet. Will populate as campaigns and content plans are created."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No marketing patterns learned yet. Will build channel performance baselines and content engagement models."
+    }
+  ]
+}

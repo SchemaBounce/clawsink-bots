@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover existing tickets and contacts. Establish baseline ticket volume and response times."
+    },
+    {
+      "namespace": "customer_health",
+      "key": "init",
+      "value": "No customer health signals tracked yet. Will build profiles as tickets and interactions accumulate."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No support patterns learned yet. Will identify common ticket categories and churn signals over time."
+    }
+  ]
+}

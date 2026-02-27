@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "analysis_focus",
+      "value": "Prioritize analysis that directly supports quarterly priorities. Focus on cost efficiency, growth metrics, and risk reduction.",
+      "description": "Guides which cross-domain correlations to prioritize"
+    }
+  ]
+}
