@@ -17,7 +17,6 @@ model:
   preferred: "claude-sonnet-4-6"
   fallback: "claude-haiku-4-5-20251001"
   thinkLevel: null
-  maxTokenBudget: 100000
 schedule:
   default: "@weekly"
   recommendations:

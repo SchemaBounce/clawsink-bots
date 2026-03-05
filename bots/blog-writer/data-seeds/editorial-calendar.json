@@ -7,31 +7,31 @@
         "topics": [
           {
             "id": "t001",
-            "section": "openclaw",
-            "category": "Agent Insights",
-            "title": "Building Your First AI Agent Team with OpenCLAW",
-            "description": "Step-by-step guide to deploying a multi-agent team using SOUL.md mandates, domain zones, and inter-agent messaging.",
-            "tags": ["openclaw", "agents", "tutorial", "getting-started"],
+            "section": "schemabounce",
+            "category": "Tutorials",
+            "title": "Getting Started with CDC Streaming",
+            "description": "Beginner-friendly guide to setting up your first CDC pipeline from database to destination.",
+            "tags": ["cdc", "tutorial", "getting-started"],
             "priority": "high",
             "status": "backlog"
           },
           {
             "id": "t002",
             "section": "openclaw",
-            "category": "Research",
-            "title": "Three-Zone ACL: How OpenCLAW Keeps AI Agents Honest",
-            "description": "Deep dive into North Star, Shared Domain, and Private State zones — why separation of concerns matters for agentic AI.",
-            "tags": ["openclaw", "security", "acl", "architecture"],
+            "category": "Agent Insights",
+            "title": "Building Your First Multi-Agent Team",
+            "description": "Step-by-step guide to deploying a multi-agent team using SOUL.md mandates, domain zones, and inter-agent messaging.",
+            "tags": ["agents", "tutorial", "getting-started"],
             "priority": "high",
             "status": "backlog"
           },
           {
             "id": "t003",
             "section": "schemabounce",
-            "category": "Tutorials",
-            "title": "Real-Time MongoDB Change Streams to Snowflake with SchemaBounce",
-            "description": "End-to-end tutorial: capture MongoDB changes via change streams and deliver them to Snowflake in under a second.",
-            "tags": ["mongodb", "snowflake", "cdc", "tutorial"],
+            "category": "Fundamentals",
+            "title": "The Outbox Pattern Explained: Reliable Event Publishing for Microservices",
+            "description": "Why the transactional outbox pattern solves dual-write problems and how to capture outbox events in real-time.",
+            "tags": ["outbox", "microservices", "patterns", "reliability"],
             "priority": "medium",
             "status": "backlog"
           },
@@ -40,73 +40,13 @@
             "section": "openclaw",
             "category": "Guides",
             "title": "Writing Effective SOUL.md Files: The Agent Mandate Pattern",
-            "description": "How to write SOUL.md files that give agents clear missions, run protocols, and escalation paths without over-constraining them.",
-            "tags": ["openclaw", "soul-md", "patterns", "best-practices"],
+            "description": "How to write SOUL.md files that give agents clear missions, run protocols, and escalation paths.",
+            "tags": ["soul-md", "patterns", "best-practices"],
             "priority": "high",
-            "status": "backlog"
-          },
-          {
-            "id": "t005",
-            "section": "schemabounce",
-            "category": "Comparisons",
-            "title": "Real-Time CDC vs Batch ETL: A Comparison Guide",
-            "description": "Compare sub-second CDC streaming against batch-first ETL approaches. Latency, cost, and complexity trade-offs.",
-            "tags": ["comparison", "cdc", "etl"],
-            "priority": "medium",
-            "status": "backlog"
-          },
-          {
-            "id": "t006",
-            "section": "openclaw",
-            "category": "Agent Insights",
-            "title": "Agent Memory Patterns: Working Notes, Learned Patterns, and Thresholds",
-            "description": "How OpenCLAW agents use structured memory namespaces to maintain context across runs and learn from experience.",
-            "tags": ["openclaw", "memory", "patterns", "persistence"],
-            "priority": "medium",
-            "status": "backlog"
-          },
-          {
-            "id": "t007",
-            "section": "schemabounce",
-            "category": "Fundamentals",
-            "title": "The Outbox Pattern Explained: Reliable Event Publishing for Microservices",
-            "description": "Why the transactional outbox pattern solves dual-write problems, and how SchemaBounce captures outbox events in real-time.",
-            "tags": ["outbox", "microservices", "patterns", "reliability"],
-            "priority": "medium",
-            "status": "backlog"
-          },
-          {
-            "id": "t008",
-            "section": "openclaw",
-            "category": "Research",
-            "title": "DID Identity for AI Agents: Cryptographic Accountability in Multi-Agent Systems",
-            "description": "How Decentralized Identifiers (DIDs) give each AI agent a verifiable identity, enabling signed actions and audit trails.",
-            "tags": ["openclaw", "did", "identity", "security", "w3c"],
-            "priority": "low",
-            "status": "backlog"
-          },
-          {
-            "id": "t009",
-            "section": "schemabounce",
-            "category": "Guides",
-            "title": "IaC for Data Platforms: Why Full Infrastructure Management Beats SQL-Only Transforms",
-            "description": "Managing schemas, indexes, and pipelines — not just transforms. Why full IaC matters for real-time data platforms.",
-            "tags": ["iac", "data-platforms", "comparison"],
-            "priority": "high",
-            "status": "backlog"
-          },
-          {
-            "id": "t010",
-            "section": "openclaw",
-            "category": "Tutorials",
-            "title": "Deploying a Per-Workspace AI Runtime on Kubernetes",
-            "description": "How to provision isolated agent runtime infrastructure per workspace using Helm charts and auto-scaling.",
-            "tags": ["kubernetes", "deployment", "tutorial"],
-            "priority": "medium",
             "status": "backlog"
           }
         ],
-        "lastUpdated": "2026-02-25",
+        "lastUpdated": "2026-03-05",
         "publishedSlugs": []
       }
     }

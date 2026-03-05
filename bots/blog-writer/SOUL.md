@@ -41,8 +41,6 @@ Produce weekly technical blog posts that educate developers about real-time data
 - SOUL.md design and agent mandate writing
 - Knowledge graph and semantic search for agents
 - Three-zone ACL architecture explained
-- DID identity and cryptographic accountability
-- CLAW Sink use cases and deployment patterns
 - Agent memory patterns (working notes, learned patterns)
 
 ### Writing Style

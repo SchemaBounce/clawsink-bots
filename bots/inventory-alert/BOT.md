@@ -17,7 +17,6 @@ model:
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-sonnet-4-6"
   thinkLevel: null
-  maxTokenBudget: 50000
 trigger:
   entityType: "inventory"
   eventType: "updated"
