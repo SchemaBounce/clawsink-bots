@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "user_patterns",
+      "key": "init",
+      "value": "Will build user behavior pattern library from usage analytics and feedback across first 3 runs. Track journey stages, drop-off points, and feature adoption rates."
+    },
+    {
+      "namespace": "pain_points",
+      "key": "init",
+      "value": "Will establish pain point registry from support tickets and user feedback. Score by frequency x severity x user segment size. Re-rank every run."
+    },
+    {
+      "namespace": "research_backlog",
+      "key": "init",
+      "value": "Will maintain a prioritized list of UX research questions that need deeper investigation. Add items when patterns are ambiguous or evidence is insufficient."
+    },
+    {
+      "namespace": "user_patterns",
+      "key": "first_run",
+      "value": "First run. Query user_feedback and support_tickets to discover initial pain point themes. Read usage_analytics to identify drop-off points. Begin clustering signals by journey stage."
+    }
+  ]
+}

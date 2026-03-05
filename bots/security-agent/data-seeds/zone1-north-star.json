@@ -2,12 +2,12 @@
   "seeds": [
     {
       "key": "security_policy",
-      "value": "Secret rotation: every 90 days. TLS minimum: 1.2. No public-facing Redis or databases. All API endpoints require authentication. Principle of least privilege for all service accounts.",
+      "value": "Follow industry-standard security practices for secret rotation, TLS, network isolation, authentication, and least-privilege access.",
       "description": "Default security policy baseline — customize to your business requirements"
     },
     {
       "key": "rotation_baseline",
-      "value": "API keys: 90 days. Database passwords: 90 days. TLS certificates: 365 days. OAuth client secrets: 180 days.",
+      "value": "Follow your organization's secret rotation policy for API keys, database passwords, TLS certificates, and OAuth client secrets.",
       "description": "Default secret rotation schedule"
     }
   ]

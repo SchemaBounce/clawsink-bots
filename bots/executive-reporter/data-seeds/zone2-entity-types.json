@@ -1,0 +1,37 @@
+{
+  "entityTypes": [
+    {
+      "name": "executive_summaries",
+      "displayName": "Executive Summaries",
+      "description": "Cross-domain C-suite executive summaries with KPI tracking and recommended actions",
+      "domain": "analytics",
+      "sampleFields": ["period", "tldr", "key_metrics", "changes", "risks", "recommended_actions", "domains_covered"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Reporting period (e.g., 'Week of 2026-03-02')"},
+        "tldr": {"type": "string", "required": true, "description": "2-3 sentence executive summary"},
+        "key_metrics": {"type": "array", "required": true, "description": "Array of KPI objects with name, current, baseline, change, status"},
+        "changes": {"type": "array", "required": true, "description": "Significant changes across domains"},
+        "risks": {"type": "array", "description": "Risks and issues requiring executive attention"},
+        "recommended_actions": {"type": "array", "required": true, "description": "Numbered, specific, assignable actions"},
+        "domains_covered": {"type": "array", "description": "Which domains contributed data to this summary"}
+      }
+    },
+    {
+      "name": "kpi_reports",
+      "displayName": "KPI Reports",
+      "description": "Detailed KPI tracking with trend analysis and deviation alerts",
+      "domain": "analytics",
+      "sampleFields": ["kpi_name", "current_value", "baseline_value", "change_percent", "trend", "status", "period"],
+      "fields": {
+        "kpi_name": {"type": "string", "required": true, "description": "Name of the KPI being tracked"},
+        "current_value": {"type": "number", "required": true, "description": "Current period value"},
+        "baseline_value": {"type": "number", "description": "Baseline or target value for comparison"},
+        "change_percent": {"type": "number", "description": "Percentage change from baseline or prior period"},
+        "trend": {"type": "string", "enum": ["improving", "stable", "declining"], "description": "Multi-period trend direction"},
+        "status": {"type": "string", "enum": ["green", "yellow", "red"], "required": true, "description": "KPI health status"},
+        "period": {"type": "string", "required": true, "description": "Reporting period for this measurement"},
+        "notes": {"type": "string", "description": "Context or explanation for significant deviations"}
+      }
+    }
+  ]
+}

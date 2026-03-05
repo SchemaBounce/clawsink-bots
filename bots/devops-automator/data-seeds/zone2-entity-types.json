@@ -1,0 +1,75 @@
+{
+  "entityTypes": [
+    {
+      "name": "devops_findings",
+      "displayName": "DevOps Findings",
+      "description": "CI/CD and deployment findings from automated monitoring",
+      "domain": "engineering",
+      "sampleFields": ["severity", "category", "component", "description", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity level"},
+        "category": {"type": "string", "required": true, "enum": ["deployment", "pipeline", "infrastructure", "performance"], "description": "Finding category"},
+        "component": {"type": "string", "required": true, "description": "Affected component or service"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding description"},
+        "recommendation": {"type": "string", "description": "Recommended action or fix"}
+      }
+    },
+    {
+      "name": "automation_proposals",
+      "displayName": "Automation Proposals",
+      "description": "Proposed automations for repetitive operational tasks",
+      "domain": "engineering",
+      "sampleFields": ["task_name", "trigger_entity", "trigger_event", "proposed_action", "frequency", "effort_saved"],
+      "fields": {
+        "task_name": {"type": "string", "required": true, "description": "Name of the repetitive task"},
+        "trigger_entity": {"type": "string", "required": true, "description": "Entity type that triggers this task"},
+        "trigger_event": {"type": "string", "required": true, "description": "Event type (created, updated, etc.)"},
+        "proposed_action": {"type": "string", "required": true, "description": "What the automation should do"},
+        "frequency": {"type": "string", "description": "How often this task occurs"},
+        "effort_saved": {"type": "string", "description": "Estimated time saved per occurrence"}
+      }
+    },
+    {
+      "name": "deployments",
+      "displayName": "Deployments",
+      "description": "Deployment events (read-only for devops-automator)",
+      "domain": "engineering",
+      "sampleFields": ["deployment_id", "service", "version", "environment", "status", "deployed_at"],
+      "fields": {
+        "deployment_id": {"type": "string", "required": true, "description": "Deployment identifier"},
+        "service": {"type": "string", "required": true, "description": "Service being deployed"},
+        "version": {"type": "string", "required": true, "description": "Version or commit hash"},
+        "environment": {"type": "string", "required": true, "description": "Target environment"},
+        "status": {"type": "string", "enum": ["pending", "in_progress", "succeeded", "failed", "rolled_back"], "description": "Deployment status"},
+        "deployed_at": {"type": "date", "description": "Deployment timestamp"}
+      }
+    },
+    {
+      "name": "infrastructure_events",
+      "displayName": "Infrastructure Events",
+      "description": "Infrastructure change events (read-only for devops-automator)",
+      "domain": "engineering",
+      "sampleFields": ["event_type", "resource", "description", "timestamp"],
+      "fields": {
+        "event_type": {"type": "string", "required": true, "description": "Type of infrastructure event"},
+        "resource": {"type": "string", "required": true, "description": "Affected resource"},
+        "description": {"type": "string", "description": "Event description"},
+        "timestamp": {"type": "date", "description": "Event timestamp"}
+      }
+    },
+    {
+      "name": "pipeline_runs",
+      "displayName": "Pipeline Runs",
+      "description": "CI/CD pipeline execution records (read-only for devops-automator)",
+      "domain": "engineering",
+      "sampleFields": ["pipeline_id", "branch", "status", "duration_s", "triggered_by"],
+      "fields": {
+        "pipeline_id": {"type": "string", "required": true, "description": "Pipeline run identifier"},
+        "branch": {"type": "string", "required": true, "description": "Git branch"},
+        "status": {"type": "string", "required": true, "enum": ["running", "succeeded", "failed", "cancelled"], "description": "Pipeline status"},
+        "duration_s": {"type": "number", "description": "Duration in seconds"},
+        "triggered_by": {"type": "string", "description": "Who or what triggered the run"}
+      }
+    }
+  ]
+}

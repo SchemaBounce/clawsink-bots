@@ -1,0 +1,38 @@
+{
+  "entityTypes": [
+    {
+      "name": "experiment_results",
+      "displayName": "Experiment Results",
+      "description": "Statistical analysis results for A/B experiments",
+      "domain": "analytics",
+      "sampleFields": ["experiment_id", "variant", "sample_size", "conversion_rate", "p_value", "confidence_interval", "effect_size", "recommendation"],
+      "fields": {
+        "experiment_id": {"type": "string", "required": true, "description": "ID of the experiment being analyzed"},
+        "variant": {"type": "string", "required": true, "description": "Variant identifier (control, treatment_a, treatment_b, etc.)"},
+        "sample_size": {"type": "number", "required": true, "description": "Number of observations for this variant"},
+        "conversion_rate": {"type": "number", "description": "Observed conversion rate for this variant"},
+        "p_value": {"type": "number", "description": "Calculated p-value from significance test"},
+        "confidence_interval": {"type": "string", "description": "95% confidence interval for the effect (e.g., '[0.02, 0.08]')"},
+        "effect_size": {"type": "number", "description": "Cohen's d or relative lift"},
+        "recommendation": {"type": "string", "enum": ["ship", "kill", "continue", "inconclusive"], "description": "Current recommendation based on analysis"},
+        "days_running": {"type": "number", "description": "Number of days the experiment has been active"},
+        "novelty_flag": {"type": "boolean", "description": "True if lift is decaying over time (novelty effect suspected)"}
+      }
+    },
+    {
+      "name": "experiment_recommendations",
+      "displayName": "Experiment Recommendations",
+      "description": "Ship/kill/continue recommendations with supporting rationale",
+      "domain": "analytics",
+      "sampleFields": ["experiment_id", "experiment_name", "decision", "rationale", "metrics_summary", "next_steps"],
+      "fields": {
+        "experiment_id": {"type": "string", "required": true, "description": "ID of the experiment"},
+        "experiment_name": {"type": "string", "required": true, "description": "Human-readable experiment name"},
+        "decision": {"type": "string", "required": true, "enum": ["ship", "kill", "continue", "extend"], "description": "Recommended decision"},
+        "rationale": {"type": "string", "required": true, "description": "Statistical rationale for the recommendation"},
+        "metrics_summary": {"type": "string", "description": "Summary of key metrics across variants"},
+        "next_steps": {"type": "string", "description": "Recommended follow-up actions"}
+      }
+    }
+  ]
+}

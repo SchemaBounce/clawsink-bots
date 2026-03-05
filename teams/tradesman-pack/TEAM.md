@@ -10,7 +10,7 @@ metadata:
   tags: ["construction", "trades", "small-business", "project-management"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$14.50"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/executive-assistant@1.0.0"
     overrides:
@@ -38,13 +38,13 @@ Complete AI workforce for construction and trades businesses. Five specialized b
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| Project Manager | Coordinates all activities, tracks project milestones | @every 2h | $2.70 |
-| Estimator & Billing | Creates quotes, tracks expenses, manages invoicing | @daily | $0.09 |
-| Materials & Scheduling | Manages inventory, schedules deliveries and crews | @daily | $0.09 |
-| Site Safety & Permits | Monitors compliance, tracks permits and certifications | @weekly | $0.15 |
-| Customer Liaison | Handles client communications, manages expectations | @every 2h | $1.44 |
+| Project Manager | Coordinates all activities, tracks project milestones | @every 2h |
+| Estimator & Billing | Creates quotes, tracks expenses, manages invoicing | @daily |
+| Materials & Scheduling | Manages inventory, schedules deliveries and crews | @daily |
+| Site Safety & Permits | Monitors compliance, tracks permits and certifications | @weekly |
+| Customer Liaison | Handles client communications, manages expectations | @every 2h |
 
 ## How They Work Together
 

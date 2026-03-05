@@ -2,13 +2,33 @@
   "entityTypes": [
     {
       "name": "ba_findings",
+      "displayName": "Business Analyst Findings",
       "description": "Cross-domain strategic analysis and trend reports",
-      "sampleFields": ["severity", "category", "domains_involved", "trend_direction", "description", "recommendation", "confidence"]
+      "domain": "operations",
+      "sampleFields": ["severity", "category", "domains_involved", "trend_direction", "description", "recommendation", "confidence"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "category": {"type": "string", "required": true, "description": "Analysis category"},
+        "domains_involved": {"type": "array", "description": "Domains covered by analysis"},
+        "trend_direction": {"type": "string", "enum": ["improving", "stable", "declining"], "description": "Trend direction"},
+        "description": {"type": "string", "required": true, "description": "Detailed analysis"},
+        "recommendation": {"type": "string", "description": "Strategic recommendation"},
+        "confidence": {"type": "number", "description": "Confidence score (0-100)"}
+      }
     },
     {
       "name": "ba_alerts",
+      "displayName": "Business Analyst Alerts",
       "description": "Strategic alerts requiring executive attention",
-      "sampleFields": ["severity", "title", "description", "action_required", "domains_affected"]
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "action_required", "domains_affected"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "domains_affected": {"type": "array", "description": "Affected business domains"}
+      }
     }
   ]
 }

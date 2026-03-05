@@ -1,0 +1,63 @@
+{
+  "domain": "finance",
+  "displayName": "Finance Schema Pack",
+  "description": "Pre-built entity schemas for financial management",
+  "entityTypes": [
+    {
+      "name": "transactions",
+      "displayName": "Transactions",
+      "description": "Financial transactions including expenses, income, and transfers",
+      "fields": {
+        "date": {"type": "date", "required": true, "description": "Transaction date"},
+        "amount": {"type": "number", "required": true, "description": "Transaction amount"},
+        "category": {"type": "string", "required": true, "description": "Transaction category"},
+        "vendor": {"type": "string", "description": "Vendor or payee name"},
+        "description": {"type": "string", "description": "Transaction description"},
+        "status": {"type": "string", "enum": ["pending", "completed", "failed", "reversed"], "description": "Transaction status"},
+        "account_id": {"type": "string", "description": "Associated account ID"},
+        "type": {"type": "string", "enum": ["expense", "income", "transfer"], "description": "Transaction type"}
+      }
+    },
+    {
+      "name": "invoices",
+      "displayName": "Invoices",
+      "description": "Invoices sent and received",
+      "fields": {
+        "invoice_number": {"type": "string", "required": true, "description": "Invoice number"},
+        "date": {"type": "date", "required": true, "description": "Invoice date"},
+        "due_date": {"type": "date", "description": "Payment due date"},
+        "amount": {"type": "number", "required": true, "description": "Invoice total amount"},
+        "status": {"type": "string", "enum": ["draft", "sent", "paid", "overdue", "cancelled"], "description": "Invoice status"},
+        "vendor": {"type": "string", "description": "Vendor name"},
+        "category": {"type": "string", "description": "Invoice category"},
+        "items": {"type": "array", "description": "Line items"}
+      }
+    },
+    {
+      "name": "accounts",
+      "displayName": "Accounts",
+      "description": "Financial accounts",
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Account name"},
+        "type": {"type": "string", "required": true, "enum": ["checking", "savings", "credit", "investment"], "description": "Account type"},
+        "balance": {"type": "number", "description": "Current balance"},
+        "institution": {"type": "string", "description": "Financial institution name"},
+        "currency": {"type": "string", "description": "Currency code (USD, EUR, etc.)"}
+      }
+    },
+    {
+      "name": "budgets",
+      "displayName": "Budgets",
+      "description": "Budget plans and tracking",
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Budget name"},
+        "period": {"type": "string", "required": true, "description": "Budget period (monthly, quarterly, annual)"},
+        "amount": {"type": "number", "required": true, "description": "Budgeted amount"},
+        "spent": {"type": "number", "description": "Amount spent so far"},
+        "category": {"type": "string", "description": "Budget category"},
+        "start_date": {"type": "date", "description": "Budget period start"},
+        "end_date": {"type": "date", "description": "Budget period end"}
+      }
+    }
+  ]
+}

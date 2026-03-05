@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "release_history",
+      "key": "init",
+      "value": "No release history tracked yet. Will record versions, dates, and change summaries as releases are processed."
+    },
+    {
+      "namespace": "versioning_decisions",
+      "key": "init",
+      "value": "No versioning decisions recorded yet. Will track version bump rationale and precedents for consistent decisions."
+    }
+  ]
+}

@@ -2,23 +2,62 @@
   "entityTypes": [
     {
       "name": "acct_findings",
+      "displayName": "Accountant Findings",
       "description": "Financial analysis findings and budget observations",
-      "sampleFields": ["severity", "category", "description", "amount", "recommendation"]
+      "domain": "finance",
+      "sampleFields": ["severity", "category", "description", "amount", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity level"},
+        "category": {"type": "string", "required": true, "description": "Category of the finding"},
+        "description": {"type": "string", "required": true, "description": "Detailed description of the finding"},
+        "amount": {"type": "number", "description": "Monetary amount related to the finding"},
+        "recommendation": {"type": "string", "description": "Recommended action to address the finding"}
+      }
     },
     {
       "name": "acct_alerts",
+      "displayName": "Accountant Alerts",
       "description": "Urgent financial alerts requiring immediate attention",
-      "sampleFields": ["severity", "title", "description", "action_required", "amount"]
+      "domain": "finance",
+      "sampleFields": ["severity", "title", "description", "action_required", "amount"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action to resolve"},
+        "amount": {"type": "number", "description": "Financial amount involved"}
+      }
     },
     {
       "name": "transactions",
+      "displayName": "Transactions",
       "description": "Financial transactions (expenses and income)",
-      "sampleFields": ["date", "amount", "category", "vendor", "description", "status"]
+      "domain": "finance",
+      "sampleFields": ["date", "amount", "category", "vendor", "description", "status"],
+      "fields": {
+        "date": {"type": "date", "required": true, "description": "Transaction date"},
+        "amount": {"type": "number", "required": true, "description": "Transaction amount"},
+        "category": {"type": "string", "required": true, "description": "Transaction category"},
+        "vendor": {"type": "string", "description": "Vendor or payee name"},
+        "description": {"type": "string", "description": "Transaction description"},
+        "status": {"type": "string", "description": "Transaction status"}
+      }
     },
     {
       "name": "invoices",
+      "displayName": "Invoices",
       "description": "Invoices sent and received",
-      "sampleFields": ["invoice_number", "date", "due_date", "amount", "status", "vendor", "category"]
+      "domain": "finance",
+      "sampleFields": ["invoice_number", "date", "due_date", "amount", "status", "vendor", "category"],
+      "fields": {
+        "invoice_number": {"type": "string", "required": true, "description": "Invoice number"},
+        "date": {"type": "date", "required": true, "description": "Invoice date"},
+        "due_date": {"type": "date", "description": "Payment due date"},
+        "amount": {"type": "number", "required": true, "description": "Invoice amount"},
+        "status": {"type": "string", "description": "Invoice status"},
+        "vendor": {"type": "string", "description": "Vendor name"},
+        "category": {"type": "string", "description": "Invoice category"}
+      }
     }
   ]
 }

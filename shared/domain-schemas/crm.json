@@ -1,0 +1,66 @@
+{
+  "domain": "crm",
+  "displayName": "CRM Schema Pack",
+  "description": "Pre-built entity schemas for Customer Relationship Management",
+  "entityTypes": [
+    {
+      "name": "contacts",
+      "displayName": "Contacts",
+      "description": "People your organization interacts with",
+      "fields": {
+        "first_name": {"type": "string", "required": true, "description": "Contact first name"},
+        "last_name": {"type": "string", "required": true, "description": "Contact last name"},
+        "email": {"type": "string", "required": true, "description": "Email address"},
+        "phone": {"type": "string", "description": "Phone number"},
+        "company": {"type": "string", "description": "Company name"},
+        "title": {"type": "string", "description": "Job title"},
+        "status": {"type": "string", "enum": ["lead", "prospect", "customer", "churned"], "description": "Contact status"},
+        "source": {"type": "string", "description": "Lead source"},
+        "tags": {"type": "array", "description": "Contact tags"}
+      }
+    },
+    {
+      "name": "companies",
+      "displayName": "Companies",
+      "description": "Organizations and accounts",
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Company name"},
+        "domain": {"type": "string", "description": "Company website domain"},
+        "industry": {"type": "string", "description": "Industry sector"},
+        "size": {"type": "string", "enum": ["1-10", "11-50", "51-200", "201-1000", "1001+"], "description": "Company size"},
+        "revenue": {"type": "number", "description": "Annual revenue"},
+        "status": {"type": "string", "enum": ["prospect", "customer", "partner", "churned"], "description": "Account status"},
+        "address": {"type": "string", "description": "Company address"}
+      }
+    },
+    {
+      "name": "deals",
+      "displayName": "Deals",
+      "description": "Sales opportunities and pipeline",
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Deal name"},
+        "value": {"type": "number", "required": true, "description": "Deal value"},
+        "stage": {"type": "string", "required": true, "enum": ["discovery", "qualification", "proposal", "negotiation", "closed_won", "closed_lost"], "description": "Pipeline stage"},
+        "probability": {"type": "number", "description": "Win probability percentage"},
+        "expected_close_date": {"type": "date", "description": "Expected close date"},
+        "contact_id": {"type": "string", "description": "Primary contact ID"},
+        "company_id": {"type": "string", "description": "Associated company ID"},
+        "owner": {"type": "string", "description": "Deal owner"}
+      }
+    },
+    {
+      "name": "activities",
+      "displayName": "Activities",
+      "description": "Sales activities and touchpoints",
+      "fields": {
+        "type": {"type": "string", "required": true, "enum": ["call", "email", "meeting", "note"], "description": "Activity type"},
+        "subject": {"type": "string", "required": true, "description": "Activity subject"},
+        "description": {"type": "string", "description": "Activity details"},
+        "contact_id": {"type": "string", "description": "Related contact ID"},
+        "deal_id": {"type": "string", "description": "Related deal ID"},
+        "scheduled_at": {"type": "date", "description": "Scheduled date/time"},
+        "completed_at": {"type": "date", "description": "Completion date/time"}
+      }
+    }
+  ]
+}

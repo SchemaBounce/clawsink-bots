@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "ux_research_goals",
+      "value": "Define your UX research priorities here. Example: Q1: Reduce onboarding drop-off by 20%. Q2: Improve feature discoverability. Q3: Optimize mobile experience. Q4: Accessibility audit.",
+      "description": "Current UX research goals -- used to focus feedback analysis and prioritize findings"
+    },
+    {
+      "key": "finding_threshold",
+      "value": "Create a ux_findings record when a pain point has 5+ independent user signals across feedback, analytics, or support tickets.",
+      "description": "Threshold for when to create a formal UX finding"
+    }
+  ]
+}

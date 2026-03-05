@@ -10,7 +10,7 @@ metadata:
   tags: ["ecommerce", "retail", "online-store", "customer-service"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$18.00"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/executive-assistant@1.0.0"
     overrides:
@@ -38,13 +38,13 @@ AI workforce for online retail operations. Five bots coordinate to optimize your
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| Operations Director | Oversees all operations, daily summaries, strategic decisions | @every 1h | $5.40 |
-| Finance & Revenue | Tracks revenue, margins, refunds, tax compliance | @daily | $0.09 |
-| Inventory & Fulfillment | Stock levels, reorder points, supplier management | @daily | $0.09 |
-| Customer Experience | Support tickets, reviews, satisfaction tracking | @every 2h | $1.44 |
-| Analytics & Growth | Sales trends, customer segments, marketing insights | @daily | $0.12 |
+| Operations Director | Oversees all operations, daily summaries, strategic decisions | @every 1h |
+| Finance & Revenue | Tracks revenue, margins, refunds, tax compliance | @daily |
+| Inventory & Fulfillment | Stock levels, reorder points, supplier management | @daily |
+| Customer Experience | Support tickets, reviews, satisfaction tracking | @every 2h |
+| Analytics & Growth | Sales trends, customer segments, marketing insights | @daily |
 
 ## How They Work Together
 

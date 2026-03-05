@@ -17,7 +17,9 @@ model:
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-sonnet-4-6"
   thinkLevel: null
-  maxTokenBudget: 50000
+cost:
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 8h"
   recommendations:
@@ -40,6 +42,19 @@ zones:
   zone2Domains: ["operations"]
 skills:
   - inline: "core-analysis"
+automations:
+  triggers:
+    - name: "Update stock levels on new order"
+      entityType: "orders"
+      eventType: "created"
+      targetAgent: "self"
+      promptTemplate: "A new order was placed. Update stock levels for all items in this order and flag any that drop below reorder thresholds."
+    - name: "Evaluate reorder on low stock"
+      entityType: "stock"
+      eventType: "updated"
+      targetAgent: "self"
+      condition: '{"quantity": {"$lt": 10}}'
+      promptTemplate: "Stock level dropped below threshold. Evaluate whether a reorder is needed based on consumption rate and lead time."
 requirements:
   minTier: "starter"
 ---

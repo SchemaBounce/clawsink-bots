@@ -1,0 +1,70 @@
+{
+  "routes": [
+    {
+      "from": "hr-onboarding",
+      "to": "executive-assistant",
+      "type": "alert",
+      "when": "onboarding blockers or new hire issues requiring coordination"
+    },
+    {
+      "from": "hr-onboarding",
+      "to": "legal-compliance",
+      "type": "finding",
+      "when": "compliance gaps detected in onboarding process"
+    },
+    {
+      "from": "mentor-coach",
+      "to": "executive-assistant",
+      "type": "finding",
+      "when": "performance concerns or development needs identified"
+    },
+    {
+      "from": "knowledge-base-curator",
+      "to": "executive-assistant",
+      "type": "finding",
+      "when": "stale documentation or policy gaps discovered"
+    },
+    {
+      "from": "knowledge-base-curator",
+      "to": "legal-compliance",
+      "type": "alert",
+      "when": "outdated compliance documentation found"
+    },
+    {
+      "from": "legal-compliance",
+      "to": "executive-assistant",
+      "type": "alert",
+      "when": "compliance violations or policy alerts requiring action"
+    },
+    {
+      "from": "legal-compliance",
+      "to": "hr-onboarding",
+      "type": "finding",
+      "when": "onboarding compliance requirements updated"
+    },
+    {
+      "from": "executive-assistant",
+      "to": "hr-onboarding",
+      "type": "request",
+      "when": "cross-domain request requiring onboarding action"
+    },
+    {
+      "from": "executive-assistant",
+      "to": "mentor-coach",
+      "type": "request",
+      "when": "cross-domain request requiring coaching action"
+    },
+    {
+      "from": "executive-assistant",
+      "to": "knowledge-base-curator",
+      "type": "request",
+      "when": "cross-domain request requiring documentation update"
+    },
+    {
+      "from": "executive-assistant",
+      "to": "legal-compliance",
+      "type": "request",
+      "when": "cross-domain request requiring compliance review"
+    }
+  ]
+}

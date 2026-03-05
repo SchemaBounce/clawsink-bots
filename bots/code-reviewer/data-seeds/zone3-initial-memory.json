@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "review_patterns",
+      "key": "init",
+      "value": "No review patterns established yet. Will populate as PRs are reviewed and common issues emerge."
+    },
+    {
+      "namespace": "recurring_issues",
+      "key": "init",
+      "value": "No recurring issues tracked yet. Will identify systemic patterns after multiple reviews."
+    }
+  ]
+}

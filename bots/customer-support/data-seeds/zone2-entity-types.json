@@ -2,18 +2,47 @@
   "entityTypes": [
     {
       "name": "cs_findings",
+      "displayName": "Customer Support Findings",
       "description": "Customer support analysis and trend observations",
-      "sampleFields": ["severity", "category", "description", "customer_impact", "recommendation"]
+      "domain": "support",
+      "sampleFields": ["severity", "category", "description", "customer_impact", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "category": {"type": "string", "required": true, "description": "Finding category"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding"},
+        "customer_impact": {"type": "string", "description": "Impact on customers"},
+        "recommendation": {"type": "string", "description": "Recommended action"}
+      }
     },
     {
       "name": "cs_alerts",
+      "displayName": "Customer Support Alerts",
       "description": "Urgent customer issues requiring immediate attention",
-      "sampleFields": ["severity", "title", "description", "action_required", "customer_id"]
+      "domain": "support",
+      "sampleFields": ["severity", "title", "description", "action_required", "customer_id"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "customer_id": {"type": "string", "description": "Affected customer ID"}
+      }
     },
     {
       "name": "tickets",
+      "displayName": "Support Tickets",
       "description": "Customer support tickets",
-      "sampleFields": ["ticket_id", "customer_id", "subject", "severity", "category", "status", "created_at"]
+      "domain": "support",
+      "sampleFields": ["ticket_id", "customer_id", "subject", "severity", "category", "status", "created_at"],
+      "fields": {
+        "ticket_id": {"type": "string", "required": true, "description": "Ticket identifier"},
+        "customer_id": {"type": "string", "required": true, "description": "Customer identifier"},
+        "subject": {"type": "string", "required": true, "description": "Ticket subject"},
+        "severity": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Issue severity"},
+        "category": {"type": "string", "description": "Ticket category"},
+        "status": {"type": "string", "enum": ["open", "in_progress", "waiting", "resolved", "closed"], "description": "Ticket status"},
+        "created_at": {"type": "date", "description": "Creation timestamp"}
+      }
     }
   ]
 }

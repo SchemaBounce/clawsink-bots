@@ -2,18 +2,49 @@
   "entityTypes": [
     {
       "name": "legal_findings",
+      "displayName": "Legal Compliance Findings",
       "description": "Compliance observations and risk assessments",
-      "sampleFields": ["severity", "framework", "description", "risk_level", "recommendation", "deadline"]
+      "domain": "operations",
+      "sampleFields": ["severity", "framework", "description", "risk_level", "recommendation", "deadline"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "framework": {"type": "string", "required": true, "description": "Compliance framework (SOC2, GDPR, etc.)"},
+        "description": {"type": "string", "required": true, "description": "Finding description"},
+        "risk_level": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Risk level assessment"},
+        "recommendation": {"type": "string", "description": "Recommended action"},
+        "deadline": {"type": "date", "description": "Compliance deadline"}
+      }
     },
     {
       "name": "legal_alerts",
+      "displayName": "Legal Compliance Alerts",
       "description": "Urgent compliance alerts requiring immediate action",
-      "sampleFields": ["severity", "title", "description", "action_required", "framework", "deadline"]
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "action_required", "framework", "deadline"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "framework": {"type": "string", "description": "Compliance framework"},
+        "deadline": {"type": "date", "description": "Action deadline"}
+      }
     },
     {
       "name": "contracts",
+      "displayName": "Contracts",
       "description": "Contract records with renewal and compliance tracking",
-      "sampleFields": ["contract_id", "counterparty", "type", "start_date", "end_date", "status", "auto_renew"]
+      "domain": "operations",
+      "sampleFields": ["contract_id", "counterparty", "type", "start_date", "end_date", "status", "auto_renew"],
+      "fields": {
+        "contract_id": {"type": "string", "required": true, "description": "Contract identifier"},
+        "counterparty": {"type": "string", "required": true, "description": "Counterparty name"},
+        "type": {"type": "string", "description": "Contract type"},
+        "start_date": {"type": "date", "description": "Contract start date"},
+        "end_date": {"type": "date", "description": "Contract end date"},
+        "status": {"type": "string", "enum": ["draft", "active", "expired", "terminated"], "description": "Contract status"},
+        "auto_renew": {"type": "boolean", "description": "Auto-renewal enabled"}
+      }
     }
   ]
 }

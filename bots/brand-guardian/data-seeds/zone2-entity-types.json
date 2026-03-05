@@ -1,0 +1,38 @@
+{
+  "entityTypes": [
+    {
+      "name": "brand_findings",
+      "displayName": "Brand Findings",
+      "description": "Brand consistency issues, guideline violations, and drift observations",
+      "domain": "design",
+      "sampleFields": ["severity", "content_id", "violation_type", "guideline_section", "description", "correction", "drift_trend"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "content_id": {"type": "string", "required": true, "description": "Reference to the content item reviewed"},
+        "violation_type": {"type": "string", "required": true, "description": "Type of violation (tone, visual, messaging, terminology)"},
+        "guideline_section": {"type": "string", "description": "Specific brand guideline section violated"},
+        "description": {"type": "string", "description": "Detailed description of the violation"},
+        "correction": {"type": "string", "description": "Specific correction to fix the violation"},
+        "drift_trend": {"type": "string", "description": "Whether this is part of a broader drift pattern"}
+      }
+    },
+    {
+      "name": "brand_scores",
+      "displayName": "Brand Scores",
+      "description": "Consistency scores for reviewed content items",
+      "domain": "design",
+      "sampleFields": ["content_id", "overall_score", "tone_score", "visual_score", "messaging_score", "terminology_score", "violations", "suggestions", "reviewed_at"],
+      "fields": {
+        "content_id": {"type": "string", "required": true, "description": "Reference to the content item scored"},
+        "overall_score": {"type": "number", "required": true, "description": "Weighted overall brand consistency score (0-100)"},
+        "tone_score": {"type": "number", "description": "Tone consistency score (0-100)"},
+        "visual_score": {"type": "number", "description": "Visual identity consistency score (0-100)"},
+        "messaging_score": {"type": "number", "description": "Messaging consistency score (0-100)"},
+        "terminology_score": {"type": "number", "description": "Terminology consistency score (0-100)"},
+        "violations": {"type": "array", "description": "List of specific violations found"},
+        "suggestions": {"type": "array", "description": "Improvement suggestions"},
+        "reviewed_at": {"type": "string", "description": "ISO timestamp of review"}
+      }
+    }
+  ]
+}

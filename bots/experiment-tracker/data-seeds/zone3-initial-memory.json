@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "experiment_log",
+      "key": "first_run",
+      "value": "First run. Discover all active experiments and their current metrics. Establish baseline analysis for each."
+    },
+    {
+      "namespace": "significance_thresholds",
+      "key": "defaults",
+      "value": "p-value threshold: 0.05. Minimum sample: 1000 per variant. Novelty check window: 7 days. Max duration: 28 days. Sequential testing correction: Bonferroni."
+    },
+    {
+      "namespace": "winning_patterns",
+      "key": "init",
+      "value": "No winning patterns catalogued yet. Will track which experiment types and hypothesis categories tend to win or lose over time."
+    }
+  ]
+}

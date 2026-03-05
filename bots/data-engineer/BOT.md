@@ -17,7 +17,9 @@ model:
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-sonnet-4-6"
   thinkLevel: null
-  maxTokenBudget: 50000
+cost:
+  estimatedTokensPerRun: 10000
+  estimatedCostTier: "medium"
 schedule:
   default: "@every 6h"
   recommendations:
@@ -41,6 +43,13 @@ zones:
   zone2Domains: ["engineering", "operations"]
 skills:
   - inline: "core-analysis"
+automations:
+  triggers:
+    - name: "Data quality check on new records"
+      entityType: "*"
+      eventType: "created"
+      targetAgent: "self"
+      promptTemplate: "New records were created. Run data quality checks — validate required fields, check for duplicates, verify referential integrity, and flag anomalies."
 requirements:
   minTier: "starter"
 ---

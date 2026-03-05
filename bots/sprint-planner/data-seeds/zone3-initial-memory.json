@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "sprint_history",
+      "key": "first_run",
+      "value": "First run. Discover existing tasks, stories, and bugs. Establish initial backlog and score all items with RICE."
+    },
+    {
+      "namespace": "velocity_trends",
+      "key": "init",
+      "value": "No velocity data yet. Will build trailing averages as sprints complete. Need at least 3 sprints for reliable planning basis."
+    },
+    {
+      "namespace": "team_capacity",
+      "key": "defaults",
+      "value": "Capacity buffer: plan to 90% of velocity. Reserve 10% for unplanned work and bug fixes. Reduce by 20% per team member on PTO."
+    }
+  ]
+}

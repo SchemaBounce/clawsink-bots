@@ -1,0 +1,50 @@
+{
+  "domain": "support",
+  "displayName": "Support Schema Pack",
+  "description": "Pre-built entity schemas for customer support operations",
+  "entityTypes": [
+    {
+      "name": "tickets",
+      "displayName": "Support Tickets",
+      "description": "Customer support tickets and issues",
+      "fields": {
+        "ticket_id": {"type": "string", "required": true, "description": "Ticket identifier"},
+        "customer_id": {"type": "string", "required": true, "description": "Customer identifier"},
+        "subject": {"type": "string", "required": true, "description": "Ticket subject"},
+        "description": {"type": "string", "description": "Detailed issue description"},
+        "severity": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Issue severity"},
+        "category": {"type": "string", "description": "Ticket category"},
+        "status": {"type": "string", "enum": ["open", "in_progress", "waiting", "resolved", "closed"], "description": "Ticket status"},
+        "assignee": {"type": "string", "description": "Assigned agent"},
+        "created_at": {"type": "date", "description": "Creation timestamp"},
+        "resolved_at": {"type": "date", "description": "Resolution timestamp"}
+      }
+    },
+    {
+      "name": "contacts",
+      "displayName": "Support Contacts",
+      "description": "Customer contact information for support",
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Contact name"},
+        "email": {"type": "string", "required": true, "description": "Email address"},
+        "phone": {"type": "string", "description": "Phone number"},
+        "company": {"type": "string", "description": "Company name"},
+        "priority_level": {"type": "string", "enum": ["standard", "premium", "enterprise"], "description": "Support priority level"},
+        "notes": {"type": "string", "description": "Contact notes"}
+      }
+    },
+    {
+      "name": "knowledge_base_articles",
+      "displayName": "Knowledge Base Articles",
+      "description": "Self-service knowledge base content",
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Article title"},
+        "body": {"type": "string", "required": true, "description": "Article content"},
+        "category": {"type": "string", "description": "Article category"},
+        "tags": {"type": "array", "description": "Article tags"},
+        "status": {"type": "string", "enum": ["draft", "published", "archived"], "description": "Publication status"},
+        "author": {"type": "string", "description": "Article author"}
+      }
+    }
+  ]
+}

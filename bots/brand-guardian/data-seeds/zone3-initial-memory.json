@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "brand_drift_log",
+      "key": "init",
+      "value": "Will track brand consistency scores over time to detect gradual drift. Record weekly averages per dimension (tone, visual, messaging, terminology) and flag downward trends."
+    },
+    {
+      "namespace": "guideline_updates",
+      "key": "init",
+      "value": "Will log guideline ambiguities and edge cases discovered during content review. Flag items for human clarification when guidelines are unclear or contradictory."
+    },
+    {
+      "namespace": "brand_drift_log",
+      "key": "first_run",
+      "value": "First run. Read brand_guidelines to establish baseline scoring criteria. Review recent content_items to calibrate scoring. Set initial brand health benchmark."
+    }
+  ]
+}
