@@ -17,6 +17,9 @@ model:
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-sonnet-4-6"
   thinkLevel: null
+cost:
+  estimatedTokensPerRun: 10000
+  estimatedCostTier: "low"
 trigger:
   entityType: "customers"
   eventType: "created"

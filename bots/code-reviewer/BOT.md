@@ -17,6 +17,9 @@ model:
   preferred: "claude-sonnet-4-6"
   fallback: "claude-haiku-4-5-20251001"
   thinkLevel: "medium"
+cost:
+  estimatedTokensPerRun: 30000
+  estimatedCostTier: "medium"
 schedule:
   default: null
   manual: true

@@ -17,6 +17,9 @@ model:
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
   thinkLevel: null
+cost:
+  estimatedTokensPerRun: 10000
+  estimatedCostTier: "medium"
 schedule:
   default: "@every 4h"
   recommendations:

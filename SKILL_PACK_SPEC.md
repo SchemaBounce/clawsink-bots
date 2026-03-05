@@ -124,6 +124,9 @@ model:
   preferred: string      # Model ID for normal runs
   fallback: string       # Model ID if preferred unavailable
   thinkLevel: null | string  # null, "low", "medium", "high"
+cost:
+  estimatedTokensPerRun: int    # Typical token consumption per run
+  estimatedCostTier: string     # "low", "medium", or "high"
 schedule:
   default: string        # Cron expression or @every interval
   recommendations:
@@ -164,6 +167,8 @@ The `skills:` section lists capabilities this bot uses. Two formats:
 
 - `metadata.name` must match the directory name under `bots/`
 - `model.preferred` should use lighter models for routine tasks, more capable models for analytical tasks
+- `cost.estimatedCostTier` is derived from model choice + schedule frequency: low (light model, infrequent), medium (light model + frequent OR capable model + infrequent), high (capable model + frequent)
+- `cost.estimatedTokensPerRun` is the typical token consumption per invocation (not a hard limit)
 - `schedule.default` must be a valid cron expression or `@every` / `@daily` / `@weekly` interval
 - `messaging.listensTo[].from` uses bot `metadata.name` values or `["*"]`
 - `data.entityTypesWrite` must include `{abbrev}_findings` as a convention
