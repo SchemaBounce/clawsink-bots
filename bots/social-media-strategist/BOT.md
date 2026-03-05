@@ -33,7 +33,7 @@ messaging:
     - { type: "finding", to: ["executive-assistant"], when: "viral content opportunity or reputation risk detected" }
     - { type: "finding", to: ["marketing-growth"], when: "engagement trend requiring campaign adjustment" }
 data:
-  entityTypesRead: ["social_metrics", "engagement_data", "competitor_posts"]
+  entityTypesRead: ["social_metrics", "engagement_data", "industry_posts"]
   entityTypesWrite: ["social_strategy", "content_calendar_items"]
   memoryNamespaces: ["platform_performance", "content_themes", "posting_cadence"]
 zones:
@@ -53,12 +53,12 @@ requirements:
 
 # Social Media Strategist
 
-Optimizes cross-platform social media presence through data-driven content planning, engagement analysis, and competitor monitoring. Creates content calendars aligned with brand voice and business goals.
+Optimizes cross-platform social media presence through data-driven content planning, engagement analysis, and industry monitoring. Creates content calendars aligned with brand voice and business goals.
 
 ## What It Does
 
 - Analyzes social metrics across platforms (engagement rates, reach, impressions, follower growth)
-- Monitors competitor posts for trending topics and content strategies
+- Monitors industry posts for trending topics and content strategies
 - Plans content calendars with optimal posting times and content mix
 - Tracks which content themes and formats drive the most engagement
 - Flags significant engagement changes (positive viral moments or negative drops)

@@ -10,7 +10,7 @@ metadata:
   tags: ["startup", "all-in-one", "full-stack", "growth", "ops"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$28.00"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/executive-assistant@1.0.0"
   - ref: "bots/accountant@1.0.0"
@@ -36,15 +36,15 @@ Seven bots providing complete operational coverage for early-stage startups: cen
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| Executive Assistant | COO, central coordination | @every 4h | $3.24 |
-| Accountant | Financial monitoring, invoice categorization | @daily | $0.09 |
-| Customer Support | Ticket triage, churn detection | @every 2h | $3.12 |
-| Marketing Growth | Campaign tracking, content calendar | @daily | $0.09 |
-| Product Owner | Backlog management, roadmap | @daily | $0.09 |
-| SRE & DevOps | Infrastructure monitoring, incident response | @every 4h | $3.24 |
-| Executive Reporter | Weekly C-suite reports, KPI dashboards | @weekly | $0.15 |
+| Executive Assistant | COO, central coordination | @every 4h |
+| Accountant | Financial monitoring, invoice categorization | @daily |
+| Customer Support | Ticket triage, churn detection | @every 2h |
+| Marketing Growth | Campaign tracking, content calendar | @daily |
+| Product Owner | Backlog management, roadmap | @daily |
+| SRE & DevOps | Infrastructure monitoring, incident response | @every 4h |
+| Executive Reporter | Weekly C-suite reports, KPI dashboards | @weekly |
 
 ## How They Work Together
 

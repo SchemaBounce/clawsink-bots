@@ -10,7 +10,7 @@ metadata:
   tags: ["engineering", "devops", "ci-cd", "code-quality"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$12.00"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/sre-devops@1.0.0"
   - ref: "bots/code-reviewer@1.0.0"
@@ -34,14 +34,14 @@ Six bots covering the full software development lifecycle: code quality enforcem
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| SRE & DevOps | Infrastructure monitoring, incident response | @every 4h | $3.24 |
-| Code Reviewer | PR review, code quality gates | CDC on pull_requests | $2.16 |
-| API Tester | API endpoint validation, regression detection | @daily | $0.09 |
-| DevOps Automator | CI/CD optimization, pipeline monitoring | @every 4h | $3.24 |
-| Release Manager | Release coordination, changelog, version management | @weekly | $0.15 |
-| Bug Triage | Bug prioritization, duplicate detection | @every 2h | $3.12 |
+| SRE & DevOps | Infrastructure monitoring, incident response | @every 4h |
+| Code Reviewer | PR review, code quality gates | CDC on pull_requests |
+| API Tester | API endpoint validation, regression detection | @daily |
+| DevOps Automator | CI/CD optimization, pipeline monitoring | @every 4h |
+| Release Manager | Release coordination, changelog, version management | @weekly |
+| Bug Triage | Bug prioritization, duplicate detection | @every 2h |
 
 ## How They Work Together
 

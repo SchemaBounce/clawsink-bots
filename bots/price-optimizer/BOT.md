@@ -5,11 +5,11 @@ metadata:
   name: price-optimizer
   displayName: "Price Optimizer"
   version: "1.0.0"
-  description: "Adjusts pricing recommendations based on competitor price changes."
+  description: "Adjusts pricing recommendations based on market price changes."
   category: ecommerce
-  tags: ["pricing", "optimization", "competitors", "cdc"]
+  tags: ["pricing", "optimization", "market-analysis", "cdc"]
 agent:
-  capabilities: ["pricing", "competitive_analysis"]
+  capabilities: ["pricing", "market_analysis"]
   hostingMode: "openclaw"
   defaultDomain: "strategy"
 model:
@@ -19,7 +19,7 @@ model:
   thinkLevel: null
   maxTokenBudget: 50000
 trigger:
-  entityType: "competitor_prices"
+  entityType: "market_prices"
   eventType: "updated"
   condition: "{}"
   autoCreateTrigger: true
@@ -29,7 +29,7 @@ messaging:
   sendsTo:
     - { type: "alert", to: ["executive-assistant"], when: "critical issue detected" }
 data:
-  entityTypesRead: ["competitor_prices", "pricing_rules"]
+  entityTypesRead: ["market_prices", "pricing_rules"]
   entityTypesWrite: ["price_recommendations", "pricing_alerts"]
   memoryNamespaces: ["price_history", "elasticity_models"]
 zones:
@@ -43,7 +43,7 @@ requirements:
 
 # Price Optimizer
 
-Monitors competitor pricing changes and recommends optimal price adjustments to maintain competitiveness and margins.
+Monitors market pricing changes and recommends optimal price adjustments to maintain competitiveness and margins.
 
 ## Escalation Behavior
 

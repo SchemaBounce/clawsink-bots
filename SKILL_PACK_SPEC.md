@@ -56,7 +56,7 @@ metadata:
   author: string         # Author or organization
   license: string        # License identifier
 tools:
-  required: [string]     # Subset of 8 ADL tools this skill needs
+  required: [string]     # Subset of platform tools this skill needs
 data:
   producesEntityTypes: [string]   # Entity types this skill writes
   consumesEntityTypes: [string]   # Entity types this skill reads
@@ -80,7 +80,7 @@ When processing invoices:
 ### Field Rules
 
 - `metadata.name` must match the directory name under `skills/`
-- `tools.required` must be a subset of the 8 ADL tools: `adl_query_records`, `adl_write_record`, `adl_read_memory`, `adl_write_memory`, `adl_send_message`, `adl_read_messages`, `adl_graph_query`, `adl_semantic_search`
+- `tools.required` must be a subset of the platform's available tools
 - `data.producesEntityTypes` must follow `{role_prefix}_findings` convention when writing findings
 - Skills must NOT define identity, schedule, model, or messaging -- those belong to the Bot
 
@@ -124,7 +124,6 @@ model:
   preferred: string      # Model ID for normal runs
   fallback: string       # Model ID if preferred unavailable
   thinkLevel: null | string  # null, "low", "medium", "high"
-  maxTokenBudget: int    # Max tokens per run (input + output)
 schedule:
   default: string        # Cron expression or @every interval
   recommendations:
@@ -164,8 +163,7 @@ The `skills:` section lists capabilities this bot uses. Two formats:
 ### Field Rules
 
 - `metadata.name` must match the directory name under `bots/`
-- `model.preferred` should use Haiku for routine tasks, Sonnet for analytical tasks
-- `model.maxTokenBudget` should be 50,000 for Haiku bots, 100,000 for Sonnet bots
+- `model.preferred` should use lighter models for routine tasks, more capable models for analytical tasks
 - `schedule.default` must be a valid cron expression or `@every` / `@daily` / `@weekly` interval
 - `messaging.listensTo[].from` uses bot `metadata.name` values or `["*"]`
 - `data.entityTypesWrite` must include `{abbrev}_findings` as a convention
@@ -173,7 +171,7 @@ The `skills:` section lists capabilities this bot uses. Two formats:
 
 ### SOUL.md Format
 
-Plain markdown. Target: **<800 tokens (~1.5KB)**. The runtime appends ~600 tokens of output format rules, zone context, and skill prompts, keeping total system prompt under 3KB.
+Plain markdown. Keep concise to minimize token usage per run.
 
 #### Required Sections
 
@@ -191,13 +189,13 @@ You are {Display Name}, a persistent AI team member for this business.
 3. {Third mandatory behavior}
 
 ## Run Protocol
-1. Read messages (adl_read_messages)
-2. Read memory (adl_read_memory, namespace="working_notes")
-3. Query data (adl_query_records, entity_type="{relevant_types}")
+1. Read messages -- check for requests from other bots
+2. Read memory -- resume context from last run
+3. Query data -- fetch relevant entity types
 4. Analyze and act
-5. Write findings (adl_write_record, entity_type="{role}_findings")
-6. Update memory (adl_write_memory)
-7. Message relevant bots (adl_send_message) if escalation needed
+5. Write findings -- record results
+6. Update memory -- save state for next run
+7. Message relevant bots if escalation needed
 
 ## Entity Types
 - Read: {comma-separated list}
@@ -207,20 +205,6 @@ You are {Display Name}, a persistent AI team member for this business.
 - Critical: message executive-assistant type=alert
 - Cross-domain: message {relevant-bot} type=finding
 ```
-
-#### Token Budget Guidelines
-
-| Section | Max Tokens |
-|---------|-----------|
-| Title + intro | ~50 |
-| Mission | ~30 |
-| Mandates | ~120 |
-| Run Protocol | ~200 |
-| Entity Types | ~50 |
-| Escalation | ~80 |
-| **Total** | **~530** |
-
-Leave ~270 token headroom for variations. Never exceed 800 tokens.
 
 ---
 
@@ -250,7 +234,7 @@ metadata:
   tags: [string]
   author: string
   license: string
-  estimatedMonthlyCost: string  # e.g., "$8.00"
+  estimatedMonthlyCost: string  # Estimated cost at default schedules
 bots:
   - ref: string          # Reference: "bots/{name}@{version}"
 northStar:
@@ -265,7 +249,7 @@ northStar:
 - `metadata.name` must match the directory name under `teams/`
 - `bots[].ref` must reference valid bot directories
 - `northStar.requiredKeys` should list all zone1 keys needed by any bot in the team
-- `estimatedMonthlyCost` is calculated from bot model costs at default schedules
+- `estimatedMonthlyCost` is calculated from model costs at default schedules
 - Teams do NOT override individual bot schedules or models -- those are bot-level concerns
 
 ---
@@ -368,4 +352,4 @@ Inter-bot messages use a compact "Toon Card" payload (200-500 bytes):
 1. `TEAM.md` has valid YAML frontmatter with `kind: Team`
 2. All `bots[].ref` reference existing bot directories with matching versions
 3. `northStar.requiredKeys` is the union of all `zones.zone1Read` keys from member bots
-4. `estimatedMonthlyCost` matches calculated cost from bot model/schedule combinations
+4. `estimatedMonthlyCost` matches calculated cost from model/schedule combinations

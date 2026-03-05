@@ -10,7 +10,7 @@ metadata:
   tags: ["agency", "design", "marketing", "content", "brand"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$22.00"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/executive-assistant@1.0.0"
   - ref: "bots/ux-researcher@1.0.0"
@@ -34,14 +34,14 @@ Six bots powering a full-service digital agency: creative direction, user resear
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| Executive Assistant | Creative Director, project coordination | @every 4h | $5.40 |
-| UX Researcher | User feedback synthesis, usability findings | @weekly | $0.15 |
-| Brand Guardian | Brand consistency monitoring, style enforcement | @weekly | $0.15 |
-| Blog Writer | Content creation, SEO optimization | @daily | $0.09 |
-| Social Media Strategist | Cross-platform strategy, content calendar | @daily | $5.40 |
-| Growth Hacker | Rapid experimentation, conversion optimization | @daily | $10.81 |
+| Executive Assistant | Creative Director, project coordination | @every 4h |
+| UX Researcher | User feedback synthesis, usability findings | @weekly |
+| Brand Guardian | Brand consistency monitoring, style enforcement | @weekly |
+| Blog Writer | Content creation, SEO optimization | @daily |
+| Social Media Strategist | Cross-platform strategy, content calendar | @daily |
+| Growth Hacker | Rapid experimentation, conversion optimization | @daily |
 
 ## How They Work Together
 

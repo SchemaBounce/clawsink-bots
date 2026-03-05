@@ -49,9 +49,9 @@
             "id": "t005",
             "section": "schemabounce",
             "category": "Comparisons",
-            "title": "SchemaBounce vs Airbyte: Real-Time CDC vs Batch ETL",
-            "description": "Head-to-head comparison of SchemaBounce's sub-second CDC against Airbyte's batch-first approach. Latency, cost, and complexity.",
-            "tags": ["comparison", "airbyte", "cdc", "etl"],
+            "title": "Real-Time CDC vs Batch ETL: A Comparison Guide",
+            "description": "Compare sub-second CDC streaming against batch-first ETL approaches. Latency, cost, and complexity trade-offs.",
+            "tags": ["comparison", "cdc", "etl"],
             "priority": "medium",
             "status": "backlog"
           },
@@ -89,9 +89,9 @@
             "id": "t009",
             "section": "schemabounce",
             "category": "Guides",
-            "title": "Kolumn vs dbt: Why Infrastructure-as-Code Beats SQL-Only Transforms",
-            "description": "Kolumn manages schemas, indexes, and pipelines — not just transforms. Here's why that matters for real-time data platforms.",
-            "tags": ["kolumn", "dbt", "iac", "comparison"],
+            "title": "IaC for Data Platforms: Why Full Infrastructure Management Beats SQL-Only Transforms",
+            "description": "Managing schemas, indexes, and pipelines — not just transforms. Why full IaC matters for real-time data platforms.",
+            "tags": ["iac", "data-platforms", "comparison"],
             "priority": "high",
             "status": "backlog"
           },
@@ -99,9 +99,9 @@
             "id": "t010",
             "section": "openclaw",
             "category": "Tutorials",
-            "title": "CLAW Sink: Deploying a Per-Workspace AI Runtime on Kubernetes",
-            "description": "How CLAW Sink provisions isolated PostgreSQL, Redis, and OpenCLAW runtime per workspace using Helm charts and KEDA.",
-            "tags": ["claw-sink", "kubernetes", "deployment", "tutorial"],
+            "title": "Deploying a Per-Workspace AI Runtime on Kubernetes",
+            "description": "How to provision isolated agent runtime infrastructure per workspace using Helm charts and auto-scaling.",
+            "tags": ["kubernetes", "deployment", "tutorial"],
             "priority": "medium",
             "status": "backlog"
           }

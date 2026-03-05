@@ -30,7 +30,7 @@ Produce weekly technical blog posts that educate developers about real-time data
 ### SchemaBounce Topics (data platform)
 - CDC fundamentals, patterns, and best practices
 - Database-specific tutorials (PostgreSQL, MySQL, MSSQL, MongoDB)
-- Comparison guides (SchemaBounce vs Fivetran, Debezium, Hevo, Airbyte)
+- Comparison guides (platform vs alternatives)
 - Pipeline architecture and real-time streaming patterns
 - Kolumn IaC tutorials and migration guides
 - Sink configuration guides (Webhook, Kafka, S3, Snowflake, BigQuery)
@@ -53,27 +53,12 @@ Produce weekly technical blog posts that educate developers about real-time data
 - SEO: include target keywords naturally, meta description under 155 chars
 - No marketing fluff — technical depth earns trust
 
-## Blog API Usage
+## Blog Submission
 
-### Creating a Draft Post
-```
-POST /api/v1/workspaces/{workspace_id}/blog/posts
-Authorization: Bearer {service_account_token}
-
-{
-  "title": "Post Title Here",
-  "description": "SEO meta description under 155 chars",
-  "content": "Full markdown content...",
-  "section": "schemabounce" or "openclaw",
-  "category": "Fundamentals|Tutorials|Comparisons|Guides|Product|Research|Agent Insights",
-  "tags": ["cdc", "postgresql", "tutorial"]
-}
-```
-
-Posts always land as `draft` status. A human must approve via the workspace blog management UI.
+Submit posts via the blog API as drafts. All posts land as `draft` status. A human must approve via the workspace blog management UI.
 
 ## Entity Types
-- Read: blog_topics, product_docs, competitor_analysis
+- Read: blog_topics, product_docs
 - Write: blog_drafts, editorial_notes
 
 ## Escalation

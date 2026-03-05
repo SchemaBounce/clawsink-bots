@@ -10,7 +10,7 @@ metadata:
   tags: ["product", "agile", "experimentation", "user-feedback"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$16.00"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/product-owner@1.0.0"
   - ref: "bots/sprint-planner@1.0.0"
@@ -33,13 +33,13 @@ Five bots forming a complete product management studio: backlog ownership, sprin
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| Product Owner | Backlog grooming, roadmap management | @daily | $0.09 |
-| Sprint Planner | Sprint planning, RICE prioritization, velocity tracking | @weekly | $0.15 |
-| Experiment Tracker | A/B test monitoring, statistical analysis | @daily | $0.09 |
-| Executive Assistant | Studio Lead, cross-team coordination | @every 4h | $5.40 |
-| Customer Support | User feedback channel, feature request triage | @every 2h | $10.27 |
+| Product Owner | Backlog grooming, roadmap management | @daily |
+| Sprint Planner | Sprint planning, RICE prioritization, velocity tracking | @weekly |
+| Experiment Tracker | A/B test monitoring, statistical analysis | @daily |
+| Executive Assistant | Studio Lead, cross-team coordination | @every 4h |
+| Customer Support | User feedback channel, feature request triage | @every 2h |
 
 ## How They Work Together
 

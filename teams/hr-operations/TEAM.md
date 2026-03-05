@@ -10,7 +10,7 @@ metadata:
   tags: ["hr", "people-ops", "onboarding", "compliance", "coaching"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$10.00"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/executive-assistant@1.0.0"
   - ref: "bots/hr-onboarding@1.0.0"
@@ -33,13 +33,13 @@ Five bots covering the full HR lifecycle: people management coordination, new hi
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| Executive Assistant | People Manager, HR coordination | @every 4h | $3.24 |
-| HR Onboarding | New hire workflows, document collection, onboarding checklists | @daily | $0.09 |
-| Mentor Coach | 1:1 prep, development plans, performance patterns | @weekly | $0.15 |
-| Knowledge Base Curator | Policy docs, SOPs, internal wiki maintenance | @weekly | $0.15 |
-| Legal Compliance | HR compliance, labor law monitoring, policy enforcement | @weekly | $0.15 |
+| Executive Assistant | People Manager, HR coordination | @every 4h |
+| HR Onboarding | New hire workflows, document collection, onboarding checklists | @daily |
+| Mentor Coach | 1:1 prep, development plans, performance patterns | @weekly |
+| Knowledge Base Curator | Policy docs, SOPs, internal wiki maintenance | @weekly |
+| Legal Compliance | HR compliance, labor law monitoring, policy enforcement | @weekly |
 
 ## How They Work Together
 

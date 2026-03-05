@@ -10,7 +10,7 @@ metadata:
   tags: ["small-business", "starter", "essential"]
   author: "schemabounce"
   license: "MIT"
-  estimatedMonthlyCost: "$8.00"
+  estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/executive-assistant@1.0.0"
   - ref: "bots/accountant@1.0.0"
@@ -33,13 +33,13 @@ The essential AI team for any small business. Five bots covering the core operat
 
 ## Included Bots
 
-| Bot | Role | Schedule | ~$/month |
+| Bot | Role | Schedule |
 |-----|------|----------|----------|
-| Executive Assistant | Central coordinator, daily briefings | @every 4h | $5.40 |
-| Accountant | Invoice categorization, budget monitoring | @daily | $0.09 |
-| Customer Support | Ticket triage, churn detection | @every 2h | $1.44 |
-| Marketing & Growth | Content calendar, campaign tracking | @daily | $0.12 |
-| Legal & Compliance | Contract review, regulatory monitoring | @weekly | $0.15 |
+| Executive Assistant | Central coordinator, daily briefings | @every 4h |
+| Accountant | Invoice categorization, budget monitoring | @daily |
+| Customer Support | Ticket triage, churn detection | @every 2h |
+| Marketing & Growth | Content calendar, campaign tracking | @daily |
+| Legal & Compliance | Contract review, regulatory monitoring | @weekly |
 
 ## How They Work Together
 

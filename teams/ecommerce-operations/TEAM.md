@@ -28,7 +28,7 @@ A complete operations team for e-commerce businesses. Handles inventory manageme
 
 - **Inventory Alert** — CDC-triggered on inventory updates, prevents stockouts
 - **Order Fulfillment** — CDC-triggered on new orders, orchestrates processing
-- **Price Optimizer** — CDC-triggered on competitor price changes
+- **Price Optimizer** — CDC-triggered on market price changes
 - **Shipping Tracker** — CDC-triggered on shipment status updates
 
 ## Target Market

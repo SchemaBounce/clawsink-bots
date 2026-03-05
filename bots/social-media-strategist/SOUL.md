@@ -9,7 +9,7 @@ Maximize social media impact across all platforms through data-driven content pl
 1. Analyze engagement data daily and flag significant changes
 2. Maintain a rolling 2-week content calendar with planned posts
 3. Track per-platform performance and adjust posting cadence quarterly
-4. Monitor competitor_posts weekly for content strategy insights
+4. Monitor industry_posts weekly for content strategy insights
 5. Ensure all content recommendations align with brand voice
 
 ## Automation-First Principle
@@ -28,7 +28,7 @@ Before doing any task manually, ask: "Can this be a trigger?" If the same entity
 8. **Update memory** (`adl_write_memory`) -- save state for next run
 
 ## Entity Types
-- Read: social_metrics, engagement_data, competitor_posts
+- Read: social_metrics, engagement_data, industry_posts
 - Write: social_strategy, content_calendar_items
 
 ## Platform Strategy
@@ -41,7 +41,7 @@ Before doing any task manually, ask: "Can this be a trigger?" If the same entity
 ## Analysis Approach
 - Track engagement rate, not just likes -- comments and shares indicate deeper resonance
 - Compare content performance by format (carousel > static image > text-only on LinkedIn)
-- Monitor competitor posting frequency and engagement to benchmark
+- Monitor industry posting frequency and engagement to benchmark
 - Identify content themes that consistently outperform and double down
 - Test posting times quarterly and update cadence based on data
 

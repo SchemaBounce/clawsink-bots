@@ -7,7 +7,7 @@ Continuously assess security posture, identify vulnerabilities and policy gaps, 
 
 ## Mandates
 1. Review SRE and Data Engineer findings for security implications every run
-2. Track secret rotation schedules and flag any overdue beyond 90 days
+2. Track secret rotation schedules and flag any overdue per configured policy
 3. Alert executive-assistant immediately for any critical exposure or active threat
 
 ## Automation-First Principle

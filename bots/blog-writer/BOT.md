@@ -34,7 +34,7 @@ messaging:
     - { type: "finding", to: ["executive-assistant"], when: "draft blog post ready for review" }
     - { type: "request", to: ["executive-assistant"], when: "missing context or unable to write" }
 data:
-  entityTypesRead: ["blog_topics", "product_docs", "competitor_analysis"]
+  entityTypesRead: ["blog_topics", "product_docs"]
   entityTypesWrite: ["blog_drafts", "editorial_notes"]
   memoryNamespaces: ["editorial_calendar", "writing_notes", "topic_research"]
 zones:
@@ -42,15 +42,10 @@ zones:
   zone2Domains: ["content"]
 externalApis:
   - name: "blog"
-    description: "SchemaBounce Blog API for creating draft posts"
-    endpoints:
-      - "POST /api/v1/workspaces/{workspace_id}/blog/posts"
+    description: "Blog API for creating draft posts"
     requiredScopes: ["blog:write"]
 requirements:
   minTier: "starter"
-  serviceAccount:
-    role: "agent"
-    scopes: ["blog:read", "blog:write", "state:read", "operations:read"]
 ---
 
 # Blog Writer
@@ -77,42 +72,13 @@ Use Claude Cowork's built-in cron scheduler for the simplest setup:
 4. Configure the task with workspace ID and service account credentials
 5. Claude Cowork handles execution and retries automatically
 
-### OpenCLAW Internal Scheduler
+### Self-Hosted Scheduler
 
-For fully self-hosted deployments, register the agent via ADL:
-
-```bash
-# Register the blog-writer agent
-POST /api/v1/workspaces/{workspace_id}/agent-data-layer/data/agents/register
-{
-  "name": "Blog Writer",
-  "domainName": "content",
-  "description": "Weekly technical blog content creation",
-  "capabilities": ["writing", "research", "seo"],
-  "soulMd": "<contents of SOUL.md>",
-  "cronExpression": "0 9 * * 1",
-  "thinkLevel": "medium",
-  "hostingMode": "self_hosted"
-}
-```
+For self-hosted deployments, register the agent via the platform API with the appropriate cron expression and capabilities.
 
 ### Service Account Setup
 
-Both approaches require a service account with `blog:write` scope:
-
-```bash
-# Create service account for the blog writer
-POST /api/v1/workspaces/{workspace_id}/service-accounts
-{
-  "name": "Blog Writer Agent",
-  "description": "Service account for automated blog content creation",
-  "role": "agent",
-  "scopes": ["blog:read", "blog:write", "state:read", "operations:read"],
-  "expires_in": "never"
-}
-```
-
-Save the `client_id` and `client_secret` — the secret is shown only once.
+Both approaches require a service account with blog scopes. Create one in Workspace Settings > Service Accounts. Save the credentials — the secret is shown only once.
 
 ## Content Categories
 
@@ -134,4 +100,4 @@ Set these in your workspace's North Star zone for best results:
 - `brand_voice` — Tone, style guidelines, terminology preferences
 - `product_catalog` — Current features, pricing tiers, differentiators
 - `company_glossary` — Product names, acronyms, technical terms
-- `competitor_analysis` — Competitor positioning for comparison posts
+- `market_context` — Industry context for comparison posts

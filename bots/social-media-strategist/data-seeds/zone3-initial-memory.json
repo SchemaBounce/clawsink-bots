@@ -18,7 +18,7 @@
     {
       "namespace": "platform_performance",
       "key": "first_run",
-      "value": "First run. Read social_metrics to establish baseline engagement rates per platform. Analyze competitor_posts for content strategy benchmarks. Create initial 2-week content calendar based on available data."
+      "value": "First run. Read social_metrics to establish baseline engagement rates per platform. Analyze industry_posts for content strategy benchmarks. Create initial 2-week content calendar based on available data."
     }
   ]
 }

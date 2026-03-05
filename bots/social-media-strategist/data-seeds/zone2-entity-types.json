@@ -5,7 +5,7 @@
       "displayName": "Social Strategy",
       "description": "Strategic insights and recommendations for social media presence",
       "domain": "marketing",
-      "sampleFields": ["period", "platform", "finding_type", "finding", "engagement_trend", "recommendation", "competitor_insight", "priority"],
+      "sampleFields": ["period", "platform", "finding_type", "finding", "engagement_trend", "recommendation", "industry_insight", "priority"],
       "fields": {
         "period": {"type": "string", "required": true, "description": "Analysis period (e.g., 2026-W09)"},
         "platform": {"type": "string", "description": "Platform this strategy applies to (or 'all')"},
@@ -13,7 +13,7 @@
         "finding": {"type": "string", "required": true, "description": "The strategic insight"},
         "engagement_trend": {"type": "string", "description": "Direction of engagement (up, down, stable)"},
         "recommendation": {"type": "string", "description": "Recommended action"},
-        "competitor_insight": {"type": "string", "description": "Relevant competitor activity"},
+        "industry_insight": {"type": "string", "description": "Relevant industry activity"},
         "priority": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Priority level"}
       }
     },
