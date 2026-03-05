@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "endpoint_baselines",
+      "key": "init",
+      "value": "No baselines established yet. Will record P50/P95/P99 latency and response schemas on first successful test run."
+    },
+    {
+      "namespace": "failure_patterns",
+      "key": "init",
+      "value": "No failure patterns tracked yet. Will identify recurring failures and flaky endpoints over time."
+    }
+  ]
+}

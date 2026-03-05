@@ -41,6 +41,19 @@ zones:
   zone2Domains: ["support"]
 skills:
   - inline: "core-analysis"
+automations:
+  triggers:
+    - name: "Triage new ticket"
+      entityType: "tickets"
+      eventType: "created"
+      targetAgent: "self"
+      promptTemplate: "A new support ticket was submitted. Triage by severity, categorize the issue, and draft an initial response if the issue matches a known pattern."
+    - name: "Check SLA on ticket update"
+      entityType: "tickets"
+      eventType: "updated"
+      targetAgent: "self"
+      condition: '{"status": {"$in": ["open", "pending"]}}'
+      promptTemplate: "A ticket was updated. Check SLA compliance — if approaching breach, escalate. If resolved, update customer health score."
 requirements:
   minTier: "starter"
 ---

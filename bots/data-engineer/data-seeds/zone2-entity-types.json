@@ -2,18 +2,47 @@
   "entityTypes": [
     {
       "name": "de_findings",
+      "displayName": "Data Engineering Findings",
       "description": "Data engineering findings on pipeline health and schema state",
-      "sampleFields": ["severity", "pipeline_id", "description", "recommendation", "metrics"]
+      "domain": "operations",
+      "sampleFields": ["severity", "pipeline_id", "description", "recommendation", "metrics"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "pipeline_id": {"type": "string", "required": true, "description": "Related pipeline ID"},
+        "description": {"type": "string", "required": true, "description": "Finding description"},
+        "recommendation": {"type": "string", "description": "Recommended action"},
+        "metrics": {"type": "object", "description": "Pipeline metrics data"}
+      }
     },
     {
       "name": "de_alerts",
+      "displayName": "Data Engineering Alerts",
       "description": "Urgent data pipeline alerts",
-      "sampleFields": ["severity", "title", "description", "action_required", "pipeline_id"]
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "action_required", "pipeline_id"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "pipeline_id": {"type": "string", "description": "Affected pipeline ID"}
+      }
     },
     {
       "name": "pipeline_status",
+      "displayName": "Pipeline Status",
       "description": "Pipeline health snapshots written by data-engineer",
-      "sampleFields": ["pipeline_id", "status", "throughput", "latency_p99", "error_rate", "dlq_depth", "freshness_seconds"]
+      "domain": "operations",
+      "sampleFields": ["pipeline_id", "status", "throughput", "latency_p99", "error_rate", "dlq_depth", "freshness_seconds"],
+      "fields": {
+        "pipeline_id": {"type": "string", "required": true, "description": "Pipeline identifier"},
+        "status": {"type": "string", "required": true, "enum": ["healthy", "degraded", "down"], "description": "Pipeline health status"},
+        "throughput": {"type": "number", "description": "Events per second"},
+        "latency_p99": {"type": "number", "description": "P99 latency in ms"},
+        "error_rate": {"type": "number", "description": "Error rate percentage"},
+        "dlq_depth": {"type": "number", "description": "Dead letter queue depth"},
+        "freshness_seconds": {"type": "number", "description": "Data freshness in seconds"}
+      }
     }
   ]
 }

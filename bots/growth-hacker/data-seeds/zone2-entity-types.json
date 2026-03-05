@@ -1,0 +1,41 @@
+{
+  "entityTypes": [
+    {
+      "name": "growth_experiments",
+      "displayName": "Growth Experiments",
+      "description": "A/B tests, channel experiments, and viral loop tests with hypotheses and results",
+      "domain": "marketing",
+      "sampleFields": ["name", "hypothesis", "channel", "status", "metric", "baseline", "target", "start_date", "sample_size_needed", "current_result", "kill_criteria"],
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Experiment name"},
+        "hypothesis": {"type": "string", "required": true, "description": "What we expect to happen and why"},
+        "channel": {"type": "string", "required": true, "description": "Growth channel being tested"},
+        "status": {"type": "string", "required": true, "enum": ["planned", "running", "won", "lost", "killed"], "description": "Experiment status"},
+        "metric": {"type": "string", "required": true, "description": "Primary metric being measured"},
+        "baseline": {"type": "number", "description": "Baseline metric value"},
+        "target": {"type": "number", "description": "Target metric value"},
+        "start_date": {"type": "string", "description": "Experiment start date"},
+        "sample_size_needed": {"type": "number", "description": "Required sample size for significance"},
+        "current_result": {"type": "number", "description": "Current metric value"},
+        "kill_criteria": {"type": "string", "description": "Conditions to terminate experiment early"}
+      }
+    },
+    {
+      "name": "growth_findings",
+      "displayName": "Growth Findings",
+      "description": "Insights from growth experiments, funnel analysis, and channel performance",
+      "domain": "marketing",
+      "sampleFields": ["severity", "category", "channel", "finding", "impact", "recommendation", "data_source", "confidence"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "category": {"type": "string", "required": true, "description": "Finding category (experiment_result, funnel_insight, channel_analysis)"},
+        "channel": {"type": "string", "description": "Growth channel related to finding"},
+        "finding": {"type": "string", "required": true, "description": "The insight or observation"},
+        "impact": {"type": "string", "description": "Estimated business impact"},
+        "recommendation": {"type": "string", "description": "Recommended next action"},
+        "data_source": {"type": "string", "description": "Source data backing this finding"},
+        "confidence": {"type": "string", "enum": ["low", "medium", "high"], "description": "Confidence level in the finding"}
+      }
+    }
+  ]
+}

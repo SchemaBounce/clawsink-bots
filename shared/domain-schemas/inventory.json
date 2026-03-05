@@ -1,0 +1,66 @@
+{
+  "domain": "inventory",
+  "displayName": "Inventory Schema Pack",
+  "description": "Pre-built entity schemas for inventory and order management",
+  "entityTypes": [
+    {
+      "name": "products",
+      "displayName": "Products",
+      "description": "Product catalog items",
+      "fields": {
+        "sku": {"type": "string", "required": true, "description": "Stock keeping unit"},
+        "name": {"type": "string", "required": true, "description": "Product name"},
+        "description": {"type": "string", "description": "Product description"},
+        "category": {"type": "string", "description": "Product category"},
+        "price": {"type": "number", "description": "Unit price"},
+        "quantity_on_hand": {"type": "number", "description": "Current stock quantity"},
+        "reorder_point": {"type": "number", "description": "Minimum stock before reorder"},
+        "status": {"type": "string", "enum": ["active", "discontinued", "out_of_stock", "backordered"], "description": "Product status"},
+        "supplier": {"type": "string", "description": "Primary supplier name"}
+      }
+    },
+    {
+      "name": "orders",
+      "displayName": "Orders",
+      "description": "Customer and purchase orders",
+      "fields": {
+        "order_number": {"type": "string", "required": true, "description": "Order identifier"},
+        "date": {"type": "date", "required": true, "description": "Order date"},
+        "customer": {"type": "string", "description": "Customer name or ID"},
+        "status": {"type": "string", "enum": ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"], "description": "Order status"},
+        "total_amount": {"type": "number", "description": "Order total"},
+        "items": {"type": "array", "description": "Line items"},
+        "shipping_address": {"type": "string", "description": "Delivery address"},
+        "tracking_number": {"type": "string", "description": "Shipment tracking number"}
+      }
+    },
+    {
+      "name": "shipments",
+      "displayName": "Shipments",
+      "description": "Shipment tracking and logistics",
+      "fields": {
+        "shipment_id": {"type": "string", "required": true, "description": "Shipment identifier"},
+        "order_number": {"type": "string", "required": true, "description": "Associated order"},
+        "carrier": {"type": "string", "description": "Shipping carrier"},
+        "tracking_number": {"type": "string", "description": "Tracking number"},
+        "status": {"type": "string", "enum": ["pending", "in_transit", "delivered", "returned"], "description": "Shipment status"},
+        "shipped_date": {"type": "date", "description": "Ship date"},
+        "estimated_delivery": {"type": "date", "description": "Estimated delivery date"},
+        "actual_delivery": {"type": "date", "description": "Actual delivery date"}
+      }
+    },
+    {
+      "name": "warehouses",
+      "displayName": "Warehouses",
+      "description": "Warehouse and storage locations",
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Warehouse name"},
+        "location": {"type": "string", "required": true, "description": "Physical location"},
+        "capacity": {"type": "number", "description": "Total storage capacity"},
+        "utilization": {"type": "number", "description": "Current utilization percentage"},
+        "type": {"type": "string", "enum": ["distribution", "fulfillment", "cold_storage", "bonded"], "description": "Warehouse type"},
+        "manager": {"type": "string", "description": "Warehouse manager"}
+      }
+    }
+  ]
+}

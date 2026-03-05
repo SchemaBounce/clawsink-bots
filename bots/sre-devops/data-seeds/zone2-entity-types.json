@@ -2,23 +2,61 @@
   "entityTypes": [
     {
       "name": "sre_findings",
+      "displayName": "SRE Findings",
       "description": "Infrastructure reliability findings and observations",
-      "sampleFields": ["severity", "component", "description", "recommendation", "metrics"]
+      "domain": "operations",
+      "sampleFields": ["severity", "component", "description", "recommendation", "metrics"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity level"},
+        "component": {"type": "string", "required": true, "description": "Affected infrastructure component"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding description"},
+        "recommendation": {"type": "string", "description": "Recommended remediation action"},
+        "metrics": {"type": "object", "description": "Related performance metrics"}
+      }
     },
     {
       "name": "sre_alerts",
+      "displayName": "SRE Alerts",
       "description": "Urgent infrastructure alerts requiring immediate attention",
-      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged"]
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action to resolve"},
+        "acknowledged": {"type": "boolean", "description": "Whether alert has been acknowledged"}
+      }
     },
     {
       "name": "incidents",
+      "displayName": "Incidents",
       "description": "Infrastructure incidents tracked over time",
-      "sampleFields": ["severity", "component", "started_at", "resolved_at", "root_cause", "impact"]
+      "domain": "operations",
+      "sampleFields": ["severity", "component", "started_at", "resolved_at", "root_cause", "impact"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["sev1", "sev2", "sev3", "sev4"], "description": "Incident severity"},
+        "component": {"type": "string", "required": true, "description": "Affected component"},
+        "started_at": {"type": "date", "description": "Incident start time"},
+        "resolved_at": {"type": "date", "description": "Resolution time"},
+        "root_cause": {"type": "string", "description": "Root cause analysis"},
+        "impact": {"type": "string", "description": "Business impact assessment"}
+      }
     },
     {
       "name": "pipeline_status",
+      "displayName": "Pipeline Status",
       "description": "Pipeline health snapshots (read-only for SRE)",
-      "sampleFields": ["pipeline_id", "status", "throughput", "latency_p99", "error_rate", "dlq_depth"]
+      "domain": "operations",
+      "sampleFields": ["pipeline_id", "status", "throughput", "latency_p99", "error_rate", "dlq_depth"],
+      "fields": {
+        "pipeline_id": {"type": "string", "required": true, "description": "Pipeline identifier"},
+        "status": {"type": "string", "required": true, "enum": ["healthy", "degraded", "down"], "description": "Pipeline health status"},
+        "throughput": {"type": "number", "description": "Events per second"},
+        "latency_p99": {"type": "number", "description": "P99 latency in ms"},
+        "error_rate": {"type": "number", "description": "Error rate percentage"},
+        "dlq_depth": {"type": "number", "description": "Dead letter queue depth"}
+      }
     }
   ]
 }

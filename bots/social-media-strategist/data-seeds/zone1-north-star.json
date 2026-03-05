@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "social_goals",
+      "value": "Define your social media goals here. Example: LinkedIn: 5% engagement rate, 500 new followers/month. Twitter: 3% engagement rate, daily presence. YouTube: 1 video/week, 1000 views average. Overall: drive 20% of marketing qualified leads from social.",
+      "description": "Social media KPIs per platform -- used to evaluate content performance and set posting strategy"
+    },
+    {
+      "key": "content_guidelines",
+      "value": "All social content must align with brand voice. No competitor bashing. Technical accuracy required. Include call-to-action on product posts. Use approved hashtags. Flag engagement drops >20% for immediate review.",
+      "description": "Content creation and publishing guidelines for social media"
+    }
+  ]
+}

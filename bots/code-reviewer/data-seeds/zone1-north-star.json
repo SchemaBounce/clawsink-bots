@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "coding_standards",
+      "value": "Follow language-specific best practices. Prefer explicit error handling over silent failures. All public functions must have documentation. Test coverage required for new logic.",
+      "description": "Default coding standards -- customize to match your team conventions"
+    },
+    {
+      "key": "security_policy",
+      "value": "OWASP Top 10 compliance required. No secrets in source code. All user input must be validated and sanitized. Authentication required on all non-public endpoints.",
+      "description": "Security requirements for code review"
+    }
+  ]
+}

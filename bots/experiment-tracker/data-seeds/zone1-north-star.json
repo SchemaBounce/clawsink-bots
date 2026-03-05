@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "significance_level",
+      "value": "0.05",
+      "description": "p-value threshold for declaring statistical significance (default: 0.05)"
+    },
+    {
+      "key": "minimum_sample_size",
+      "value": "1000 observations per variant minimum before evaluating significance. Adjust based on expected effect size.",
+      "description": "Minimum sample size per variant before any ship/kill recommendation"
+    },
+    {
+      "key": "max_experiment_duration",
+      "value": "28 days",
+      "description": "Maximum experiment run time before recommending kill if no significance reached"
+    }
+  ]
+}

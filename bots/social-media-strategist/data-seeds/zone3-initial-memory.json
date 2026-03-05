@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "platform_performance",
+      "key": "init",
+      "value": "Will track per-platform metrics: engagement rate, follower growth, reach, impressions, best performing content types. Update daily. Compare against social_goals from North Star."
+    },
+    {
+      "namespace": "content_themes",
+      "key": "init",
+      "value": "Will build a library of content themes ranked by engagement performance. Track which topics, formats, and angles resonate most per platform. Retire underperformers quarterly."
+    },
+    {
+      "namespace": "posting_cadence",
+      "key": "init",
+      "value": "Will optimize posting times and frequency per platform based on engagement data. Start with industry best practices, then refine based on actual audience behavior."
+    },
+    {
+      "namespace": "platform_performance",
+      "key": "first_run",
+      "value": "First run. Read social_metrics to establish baseline engagement rates per platform. Analyze competitor_posts for content strategy benchmarks. Create initial 2-week content calendar based on available data."
+    }
+  ]
+}

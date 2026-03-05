@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "team_size",
+      "value": "Define your team size here. Example: 6 engineers, 1 QA, 1 designer.",
+      "description": "Number of team members and roles for capacity planning"
+    },
+    {
+      "key": "sprint_cadence",
+      "value": "2 weeks",
+      "description": "Sprint length -- used to calculate velocity and plan capacity"
+    },
+    {
+      "key": "velocity_target",
+      "value": "Use trailing 3-sprint average. Do not set an artificial target -- let data drive planning.",
+      "description": "How velocity targets are determined"
+    }
+  ]
+}

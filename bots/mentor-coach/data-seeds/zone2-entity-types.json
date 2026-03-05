@@ -2,18 +2,49 @@
   "entityTypes": [
     {
       "name": "mentor_findings",
+      "displayName": "Mentor Findings",
       "description": "Process improvement findings and coaching recommendations for individual bots",
-      "sampleFields": ["severity", "target_bot", "issue", "recommendation", "evidence", "improvement_priority"]
+      "domain": "operations",
+      "sampleFields": ["severity", "target_bot", "issue", "recommendation", "evidence", "improvement_priority"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "target_bot": {"type": "string", "required": true, "description": "Bot being coached"},
+        "issue": {"type": "string", "required": true, "description": "Issue identified"},
+        "recommendation": {"type": "string", "description": "Coaching recommendation"},
+        "evidence": {"type": "string", "description": "Supporting evidence"},
+        "improvement_priority": {"type": "string", "enum": ["low", "medium", "high"], "description": "Improvement priority"}
+      }
     },
     {
       "name": "mentor_alerts",
+      "displayName": "Mentor Alerts",
       "description": "Critical team-wide issues requiring executive attention",
-      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"]
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "acknowledged": {"type": "boolean", "description": "Whether alert has been acknowledged"},
+        "escalated_to": {"type": "string", "description": "Escalation target"}
+      }
     },
     {
       "name": "team_health_reports",
+      "displayName": "Team Health Reports",
       "description": "Weekly team performance reports with per-bot scores and coaching items",
-      "sampleFields": ["period", "overall_score", "bot_scores", "highlights", "coaching", "harmony", "trend"]
+      "domain": "operations",
+      "sampleFields": ["period", "overall_score", "bot_scores", "highlights", "coaching", "harmony", "trend"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Report period"},
+        "overall_score": {"type": "number", "required": true, "description": "Overall team health score"},
+        "bot_scores": {"type": "object", "description": "Per-bot performance scores"},
+        "highlights": {"type": "array", "description": "Period highlights"},
+        "coaching": {"type": "array", "description": "Coaching items"},
+        "harmony": {"type": "number", "description": "Team harmony score"},
+        "trend": {"type": "string", "enum": ["improving", "stable", "declining"], "description": "Trend direction"}
+      }
     }
   ]
 }

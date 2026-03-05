@@ -1,0 +1,62 @@
+{
+  "entityTypes": [
+    {
+      "name": "test_results",
+      "displayName": "Test Results",
+      "description": "Individual API test execution results",
+      "domain": "engineering",
+      "sampleFields": ["endpoint", "method", "status_code", "expected_status", "latency_ms", "passed", "error"],
+      "fields": {
+        "endpoint": {"type": "string", "required": true, "description": "API endpoint path"},
+        "method": {"type": "string", "required": true, "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"], "description": "HTTP method"},
+        "status_code": {"type": "number", "required": true, "description": "Actual HTTP status code"},
+        "expected_status": {"type": "number", "required": true, "description": "Expected HTTP status code"},
+        "latency_ms": {"type": "number", "description": "Response latency in milliseconds"},
+        "passed": {"type": "boolean", "required": true, "description": "Whether the test passed"},
+        "error": {"type": "string", "description": "Error message if test failed"}
+      }
+    },
+    {
+      "name": "api_health_reports",
+      "displayName": "API Health Reports",
+      "description": "Aggregated API health reports per test run",
+      "domain": "engineering",
+      "sampleFields": ["run_id", "total_tests", "passed", "failed", "avg_latency_ms", "p99_latency_ms"],
+      "fields": {
+        "run_id": {"type": "string", "required": true, "description": "Test run identifier"},
+        "total_tests": {"type": "number", "required": true, "description": "Total test count"},
+        "passed": {"type": "number", "required": true, "description": "Passed test count"},
+        "failed": {"type": "number", "required": true, "description": "Failed test count"},
+        "avg_latency_ms": {"type": "number", "description": "Average latency across all endpoints"},
+        "p99_latency_ms": {"type": "number", "description": "P99 latency across all endpoints"}
+      }
+    },
+    {
+      "name": "api_endpoints",
+      "displayName": "API Endpoints",
+      "description": "Registered API endpoints to test (read-only for api-tester)",
+      "domain": "engineering",
+      "sampleFields": ["path", "method", "description", "auth_required", "expected_status"],
+      "fields": {
+        "path": {"type": "string", "required": true, "description": "Endpoint path"},
+        "method": {"type": "string", "required": true, "description": "HTTP method"},
+        "description": {"type": "string", "description": "Endpoint description"},
+        "auth_required": {"type": "boolean", "description": "Whether authentication is required"},
+        "expected_status": {"type": "number", "description": "Expected status code for happy path"}
+      }
+    },
+    {
+      "name": "test_suites",
+      "displayName": "Test Suites",
+      "description": "Grouped test configurations (read-only for api-tester)",
+      "domain": "engineering",
+      "sampleFields": ["name", "endpoints", "schedule", "tags"],
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Test suite name"},
+        "endpoints": {"type": "array", "description": "List of endpoint paths in this suite"},
+        "schedule": {"type": "string", "description": "Execution schedule"},
+        "tags": {"type": "array", "description": "Tags for filtering"}
+      }
+    }
+  ]
+}

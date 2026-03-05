@@ -1,0 +1,36 @@
+{
+  "entityTypes": [
+    {
+      "name": "ux_findings",
+      "displayName": "UX Findings",
+      "description": "Usability insights synthesized from user feedback, analytics, and support data",
+      "domain": "design",
+      "sampleFields": ["severity", "theme", "pain_point", "evidence_count", "user_impact", "recommendation", "source_feedback", "affected_personas"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "theme": {"type": "string", "required": true, "description": "UX theme (onboarding, navigation, performance, etc.)"},
+        "pain_point": {"type": "string", "required": true, "description": "Description of the user pain point"},
+        "evidence_count": {"type": "number", "description": "Number of independent signals supporting this finding"},
+        "user_impact": {"type": "string", "description": "Description of impact on users"},
+        "recommendation": {"type": "string", "description": "Actionable recommendation to address the pain point"},
+        "source_feedback": {"type": "array", "description": "References to source feedback records"},
+        "affected_personas": {"type": "array", "description": "User personas affected by this issue"}
+      }
+    },
+    {
+      "name": "usability_reports",
+      "displayName": "Usability Reports",
+      "description": "Periodic reports summarizing UX trends, pain points, and improvement opportunities",
+      "domain": "design",
+      "sampleFields": ["period", "top_pain_points", "emerging_themes", "resolved_issues", "recommendations", "metrics_summary"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Report period (e.g., 2026-W09)"},
+        "top_pain_points": {"type": "array", "required": true, "description": "Top ranked pain points for the period"},
+        "emerging_themes": {"type": "array", "description": "New themes emerging from recent feedback"},
+        "resolved_issues": {"type": "array", "description": "Previously reported issues that have been addressed"},
+        "recommendations": {"type": "array", "description": "Prioritized list of recommendations"},
+        "metrics_summary": {"type": "object", "description": "Key UX metrics for the period"}
+      }
+    }
+  ]
+}

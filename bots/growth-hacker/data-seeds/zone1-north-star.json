@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "growth_targets",
+      "value": "Define your growth targets here. Example: Target CAC: $50. Monthly growth rate target: 15%. Viral coefficient target: 1.2. Primary channels: organic content, referral program, paid social.",
+      "description": "Growth targets and KPIs -- used to evaluate experiments and channel performance"
+    },
+    {
+      "key": "experiment_rules",
+      "value": "Run minimum 3 concurrent experiments. Kill any experiment not trending positive after 72 hours or 1000 samples. Require 95% statistical significance before declaring a winner. Always have a control group.",
+      "description": "Rules for experiment lifecycle management"
+    }
+  ]
+}

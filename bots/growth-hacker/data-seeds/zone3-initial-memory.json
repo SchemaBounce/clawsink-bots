@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "experiment_log",
+      "key": "init",
+      "value": "Will track all experiments: planned, running, won, lost, killed. Record hypothesis, results, and learnings for each. Build institutional knowledge of what works."
+    },
+    {
+      "namespace": "channel_performance",
+      "key": "init",
+      "value": "Will maintain per-channel metrics: CAC, conversion rate, LTV/CAC ratio, volume capacity. Update weekly. Rank channels by efficiency."
+    },
+    {
+      "namespace": "viral_coefficients",
+      "key": "init",
+      "value": "Will track viral metrics: k-factor, referral rate, invite-to-signup conversion, time-to-first-referral. Alert when k-factor drops below target."
+    },
+    {
+      "namespace": "experiment_log",
+      "key": "first_run",
+      "value": "First run. Read acquisition_metrics and campaign_results to establish channel baselines. Map existing conversion_funnels. Identify top 3 experiment opportunities based on biggest funnel drop-offs."
+    }
+  ]
+}

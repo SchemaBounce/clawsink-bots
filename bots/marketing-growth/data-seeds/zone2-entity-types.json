@@ -2,18 +2,49 @@
   "entityTypes": [
     {
       "name": "mktg_findings",
+      "displayName": "Marketing Findings",
       "description": "Marketing analysis findings and growth observations",
-      "sampleFields": ["severity", "channel", "metric", "trend_direction", "description", "recommendation"]
+      "domain": "crm",
+      "sampleFields": ["severity", "channel", "metric", "trend_direction", "description", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "channel": {"type": "string", "required": true, "description": "Marketing channel"},
+        "metric": {"type": "string", "description": "Key metric affected"},
+        "trend_direction": {"type": "string", "enum": ["improving", "stable", "declining"], "description": "Trend direction"},
+        "description": {"type": "string", "required": true, "description": "Finding description"},
+        "recommendation": {"type": "string", "description": "Recommended action"}
+      }
     },
     {
       "name": "mktg_alerts",
+      "displayName": "Marketing Alerts",
       "description": "Urgent marketing alerts (campaign failures, metric drops)",
-      "sampleFields": ["severity", "title", "description", "action_required", "campaign_id"]
+      "domain": "crm",
+      "sampleFields": ["severity", "title", "description", "action_required", "campaign_id"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "campaign_id": {"type": "string", "description": "Related campaign ID"}
+      }
     },
     {
       "name": "campaigns",
+      "displayName": "Marketing Campaigns",
       "description": "Marketing campaigns with performance tracking",
-      "sampleFields": ["campaign_id", "name", "channel", "status", "budget", "spend", "conversions", "engagement_rate"]
+      "domain": "crm",
+      "sampleFields": ["campaign_id", "name", "channel", "status", "budget", "spend", "conversions", "engagement_rate"],
+      "fields": {
+        "campaign_id": {"type": "string", "required": true, "description": "Campaign identifier"},
+        "name": {"type": "string", "required": true, "description": "Campaign name"},
+        "channel": {"type": "string", "description": "Marketing channel"},
+        "status": {"type": "string", "enum": ["draft", "active", "paused", "completed"], "description": "Campaign status"},
+        "budget": {"type": "number", "description": "Campaign budget"},
+        "spend": {"type": "number", "description": "Amount spent"},
+        "conversions": {"type": "number", "description": "Total conversions"},
+        "engagement_rate": {"type": "number", "description": "Engagement rate percentage"}
+      }
     }
   ]
 }

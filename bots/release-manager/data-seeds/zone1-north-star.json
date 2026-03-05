@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "versioning_strategy",
+      "value": "Semantic versioning (SemVer). Major for breaking changes, minor for features, patch for fixes. Pre-release tags allowed (e.g. 1.2.0-rc.1).",
+      "description": "Versioning policy for release management"
+    },
+    {
+      "key": "release_cadence",
+      "value": "Target weekly releases for minor/patch. Major releases planned quarterly with 2-week notice to stakeholders.",
+      "description": "Target release frequency and planning horizon"
+    }
+  ]
+}

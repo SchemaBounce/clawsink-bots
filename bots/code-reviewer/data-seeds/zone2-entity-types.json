@@ -1,0 +1,62 @@
+{
+  "entityTypes": [
+    {
+      "name": "review_findings",
+      "displayName": "Review Findings",
+      "description": "Code review findings with severity, location, and fix suggestions",
+      "domain": "engineering",
+      "sampleFields": ["severity", "category", "file_path", "line_range", "description", "suggestion"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity level"},
+        "category": {"type": "string", "required": true, "enum": ["security", "quality", "architecture", "performance"], "description": "Finding category"},
+        "file_path": {"type": "string", "required": true, "description": "File path where issue was found"},
+        "line_range": {"type": "string", "description": "Line range (e.g. 42-58)"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding description"},
+        "suggestion": {"type": "string", "description": "Concrete fix suggestion with code example"}
+      }
+    },
+    {
+      "name": "code_quality_metrics",
+      "displayName": "Code Quality Metrics",
+      "description": "Aggregated code quality metrics per review",
+      "domain": "engineering",
+      "sampleFields": ["pr_id", "score", "security_issues", "quality_issues", "architecture_issues"],
+      "fields": {
+        "pr_id": {"type": "string", "required": true, "description": "Pull request identifier"},
+        "score": {"type": "number", "required": true, "description": "Overall quality score 0-100"},
+        "security_issues": {"type": "number", "description": "Count of security findings"},
+        "quality_issues": {"type": "number", "description": "Count of quality findings"},
+        "architecture_issues": {"type": "number", "description": "Count of architecture findings"}
+      }
+    },
+    {
+      "name": "pull_requests",
+      "displayName": "Pull Requests",
+      "description": "Pull request metadata (read-only for code reviewer)",
+      "domain": "engineering",
+      "sampleFields": ["pr_id", "title", "author", "base_branch", "files_changed", "additions", "deletions"],
+      "fields": {
+        "pr_id": {"type": "string", "required": true, "description": "Pull request identifier"},
+        "title": {"type": "string", "required": true, "description": "PR title"},
+        "author": {"type": "string", "required": true, "description": "PR author"},
+        "base_branch": {"type": "string", "description": "Target branch"},
+        "files_changed": {"type": "number", "description": "Number of files changed"},
+        "additions": {"type": "number", "description": "Lines added"},
+        "deletions": {"type": "number", "description": "Lines removed"}
+      }
+    },
+    {
+      "name": "code_diffs",
+      "displayName": "Code Diffs",
+      "description": "File-level diffs for code review (read-only for code reviewer)",
+      "domain": "engineering",
+      "sampleFields": ["pr_id", "file_path", "diff_content", "language"],
+      "fields": {
+        "pr_id": {"type": "string", "required": true, "description": "Associated pull request"},
+        "file_path": {"type": "string", "required": true, "description": "File path"},
+        "diff_content": {"type": "string", "required": true, "description": "Unified diff content"},
+        "language": {"type": "string", "description": "Programming language"}
+      }
+    }
+  ]
+}

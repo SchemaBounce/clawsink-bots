@@ -1,0 +1,39 @@
+{
+  "entityTypes": [
+    {
+      "name": "sprint_plans",
+      "displayName": "Sprint Plans",
+      "description": "Planned sprint commitments with story point allocation and risk assessment",
+      "domain": "management",
+      "sampleFields": ["sprint_number", "start_date", "end_date", "planned_points", "velocity_basis", "risk_level", "items"],
+      "fields": {
+        "sprint_number": {"type": "number", "required": true, "description": "Sprint sequence number"},
+        "start_date": {"type": "date", "required": true, "description": "Sprint start date"},
+        "end_date": {"type": "date", "required": true, "description": "Sprint end date"},
+        "planned_points": {"type": "number", "required": true, "description": "Total story points planned"},
+        "velocity_basis": {"type": "number", "description": "Trailing 3-sprint average velocity used for planning"},
+        "risk_level": {"type": "string", "enum": ["low", "medium", "high"], "description": "Overall sprint risk assessment"},
+        "items": {"type": "array", "description": "List of items committed to the sprint with IDs and point values"},
+        "blocked_dependencies": {"type": "array", "description": "Known dependency risks for this sprint"}
+      }
+    },
+    {
+      "name": "priority_recommendations",
+      "displayName": "Priority Recommendations",
+      "description": "RICE-scored backlog prioritization recommendations",
+      "domain": "management",
+      "sampleFields": ["item_id", "item_type", "title", "rice_score", "reach", "impact", "confidence", "effort", "recommendation"],
+      "fields": {
+        "item_id": {"type": "string", "required": true, "description": "ID of the task, story, or bug being scored"},
+        "item_type": {"type": "string", "required": true, "enum": ["task", "story", "bug"], "description": "Type of backlog item"},
+        "title": {"type": "string", "required": true, "description": "Item title"},
+        "rice_score": {"type": "number", "required": true, "description": "Calculated RICE priority score"},
+        "reach": {"type": "number", "description": "RICE Reach component (1-10)"},
+        "impact": {"type": "number", "description": "RICE Impact component (0.25-3)"},
+        "confidence": {"type": "number", "description": "RICE Confidence component (0.5-1.0)"},
+        "effort": {"type": "number", "description": "RICE Effort component (person-sprints)"},
+        "recommendation": {"type": "string", "description": "Prioritization recommendation and rationale"}
+      }
+    }
+  ]
+}

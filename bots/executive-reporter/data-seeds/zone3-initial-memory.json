@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "reporting_templates",
+      "key": "first_run",
+      "value": "First run. Discover all available entity types across domains. Establish initial KPI baselines and generate first executive summary."
+    },
+    {
+      "namespace": "kpi_baselines",
+      "key": "init",
+      "value": "No KPI baselines established yet. First run should snapshot current values as baselines. Update baselines quarterly or when business targets change."
+    },
+    {
+      "namespace": "stakeholder_preferences",
+      "key": "defaults",
+      "value": "Default format: TL;DR + metrics table + changes + risks + actions. Max 500 words. Adapt based on feedback over time."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "company_goals",
+      "value": "Define current quarter/year business objectives. Example: Q1 targets: $500K MRR, 95% uptime, 50 NPS, ship 3 major features.",
+      "description": "Business objectives and KPI targets for the current period"
+    },
+    {
+      "key": "reporting_cadence",
+      "value": "Weekly executive summary every Monday. Ad-hoc reports on request.",
+      "description": "How often and when executive summaries should be generated"
+    },
+    {
+      "key": "kpi_definitions",
+      "value": "Define your key performance indicators. Example: MRR, churn rate, deployment frequency, mean time to recovery, NPS, support ticket resolution time.",
+      "description": "Which KPIs to track and report on"
+    }
+  ]
+}

@@ -41,6 +41,13 @@ zones:
   zone2Domains: ["engineering", "operations"]
 skills:
   - inline: "core-analysis"
+automations:
+  triggers:
+    - name: "Data quality check on new records"
+      entityType: "*"
+      eventType: "created"
+      targetAgent: "self"
+      promptTemplate: "New records were created. Run data quality checks — validate required fields, check for duplicates, verify referential integrity, and flag anomalies."
 requirements:
   minTier: "starter"
 ---

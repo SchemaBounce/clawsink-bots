@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "brand_standards",
+      "value": "Define your brand standards here. Example: Voice: professional yet approachable. Colors: #1E40AF primary, #F59E0B accent. Tone: confident, clear, never condescending. Terminology: 'workspace' not 'project', 'pipeline' not 'flow'.",
+      "description": "Core brand standards -- used as the baseline for all content scoring"
+    },
+    {
+      "key": "drift_tolerance",
+      "value": "Flag individual content with overall score below 70. Escalate to executive-assistant when 3+ content items in a week score below 75 or when average scores drop 10+ points over a month.",
+      "description": "Thresholds for brand drift alerts and escalation"
+    }
+  ]
+}

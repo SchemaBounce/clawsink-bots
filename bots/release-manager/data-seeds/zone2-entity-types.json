@@ -1,0 +1,59 @@
+{
+  "entityTypes": [
+    {
+      "name": "release_notes",
+      "displayName": "Release Notes",
+      "description": "Generated release notes with categorized changes",
+      "domain": "engineering",
+      "sampleFields": ["version", "title", "breaking_changes", "features", "fixes", "improvements"],
+      "fields": {
+        "version": {"type": "string", "required": true, "description": "Release version (SemVer)"},
+        "title": {"type": "string", "required": true, "description": "Release title"},
+        "breaking_changes": {"type": "array", "description": "List of breaking changes"},
+        "features": {"type": "array", "description": "List of new features"},
+        "fixes": {"type": "array", "description": "List of bug fixes"},
+        "improvements": {"type": "array", "description": "List of improvements and optimizations"}
+      }
+    },
+    {
+      "name": "release_plans",
+      "displayName": "Release Plans",
+      "description": "Release planning documents with readiness status",
+      "domain": "engineering",
+      "sampleFields": ["version", "target_date", "status", "blockers", "version_bump", "pr_count"],
+      "fields": {
+        "version": {"type": "string", "required": true, "description": "Planned release version"},
+        "target_date": {"type": "date", "description": "Target release date"},
+        "status": {"type": "string", "required": true, "enum": ["planning", "ready", "blocked", "released"], "description": "Release readiness status"},
+        "blockers": {"type": "array", "description": "List of release blockers"},
+        "version_bump": {"type": "string", "enum": ["major", "minor", "patch"], "description": "Recommended version bump type"},
+        "pr_count": {"type": "number", "description": "Number of merged PRs in this release"}
+      }
+    },
+    {
+      "name": "releases",
+      "displayName": "Releases",
+      "description": "Published releases (read-only for release-manager)",
+      "domain": "engineering",
+      "sampleFields": ["version", "tag", "published_at", "author"],
+      "fields": {
+        "version": {"type": "string", "required": true, "description": "Release version"},
+        "tag": {"type": "string", "required": true, "description": "Git tag"},
+        "published_at": {"type": "date", "description": "Publication timestamp"},
+        "author": {"type": "string", "description": "Release author"}
+      }
+    },
+    {
+      "name": "changelogs",
+      "displayName": "Changelogs",
+      "description": "Changelog entries (read-only for release-manager)",
+      "domain": "engineering",
+      "sampleFields": ["version", "date", "entries"],
+      "fields": {
+        "version": {"type": "string", "required": true, "description": "Associated version"},
+        "date": {"type": "date", "required": true, "description": "Changelog date"},
+        "entries": {"type": "array", "required": true, "description": "List of changelog entries"}
+      }
+    }
+  ]
+}

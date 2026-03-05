@@ -1,0 +1,65 @@
+{
+  "domain": "operations",
+  "displayName": "Operations Schema Pack",
+  "description": "Pre-built entity schemas for IT and business operations",
+  "entityTypes": [
+    {
+      "name": "incidents",
+      "displayName": "Incidents",
+      "description": "Operational incidents and outages",
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Incident title"},
+        "severity": {"type": "string", "required": true, "enum": ["sev1", "sev2", "sev3", "sev4"], "description": "Severity level"},
+        "status": {"type": "string", "enum": ["detected", "investigating", "mitigating", "resolved", "postmortem"], "description": "Incident status"},
+        "description": {"type": "string", "description": "Incident description"},
+        "impact": {"type": "string", "description": "Business impact assessment"},
+        "assignee": {"type": "string", "description": "Assigned responder"},
+        "detected_at": {"type": "date", "description": "Detection timestamp"},
+        "resolved_at": {"type": "date", "description": "Resolution timestamp"},
+        "root_cause": {"type": "string", "description": "Root cause analysis"}
+      }
+    },
+    {
+      "name": "deployments",
+      "displayName": "Deployments",
+      "description": "Software deployment records",
+      "fields": {
+        "service": {"type": "string", "required": true, "description": "Service or application name"},
+        "version": {"type": "string", "required": true, "description": "Version deployed"},
+        "environment": {"type": "string", "required": true, "enum": ["development", "staging", "production"], "description": "Target environment"},
+        "status": {"type": "string", "enum": ["pending", "in_progress", "succeeded", "failed", "rolled_back"], "description": "Deployment status"},
+        "deployer": {"type": "string", "description": "Who initiated the deployment"},
+        "deployed_at": {"type": "date", "description": "Deployment timestamp"},
+        "changelog": {"type": "string", "description": "Changes included"}
+      }
+    },
+    {
+      "name": "runbooks",
+      "displayName": "Runbooks",
+      "description": "Operational runbooks and procedures",
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Runbook title"},
+        "category": {"type": "string", "description": "Runbook category"},
+        "steps": {"type": "array", "description": "Procedure steps"},
+        "owner": {"type": "string", "description": "Runbook owner"},
+        "last_used": {"type": "date", "description": "Last execution date"},
+        "status": {"type": "string", "enum": ["draft", "active", "deprecated"], "description": "Runbook status"},
+        "services": {"type": "array", "description": "Related services"}
+      }
+    },
+    {
+      "name": "metrics",
+      "displayName": "Metrics",
+      "description": "Operational metrics and KPIs",
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Metric name"},
+        "value": {"type": "number", "required": true, "description": "Metric value"},
+        "unit": {"type": "string", "description": "Unit of measurement"},
+        "service": {"type": "string", "description": "Related service"},
+        "timestamp": {"type": "date", "description": "Measurement timestamp"},
+        "threshold_warning": {"type": "number", "description": "Warning threshold"},
+        "threshold_critical": {"type": "number", "description": "Critical threshold"}
+      }
+    }
+  ]
+}

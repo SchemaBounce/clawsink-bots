@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "deployment_patterns",
+      "key": "init",
+      "value": "No deployment patterns established yet. Will track deployment frequency, failure rates, and rollback patterns over time."
+    },
+    {
+      "namespace": "incident_correlations",
+      "key": "init",
+      "value": "No incident correlations mapped yet. Will correlate deployments with incidents to identify regression patterns."
+    }
+  ]
+}

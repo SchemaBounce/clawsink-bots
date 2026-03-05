@@ -2,13 +2,33 @@
   "entityTypes": [
     {
       "name": "inv_findings",
+      "displayName": "Inventory Findings",
       "description": "Inventory analysis findings and reorder recommendations",
-      "sampleFields": ["severity", "category", "item", "current_stock", "reorder_point", "recommendation"]
+      "domain": "inventory",
+      "sampleFields": ["severity", "category", "item", "current_stock", "reorder_point", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "category": {"type": "string", "required": true, "description": "Finding category"},
+        "item": {"type": "string", "required": true, "description": "Affected item or SKU"},
+        "current_stock": {"type": "number", "description": "Current stock level"},
+        "reorder_point": {"type": "number", "description": "Reorder threshold"},
+        "recommendation": {"type": "string", "description": "Recommended action"}
+      }
     },
     {
       "name": "inv_alerts",
+      "displayName": "Inventory Alerts",
       "description": "Urgent inventory alerts (stock-outs, supply issues)",
-      "sampleFields": ["severity", "title", "description", "action_required", "item", "days_until_stockout"]
+      "domain": "inventory",
+      "sampleFields": ["severity", "title", "description", "action_required", "item", "days_until_stockout"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "item": {"type": "string", "description": "Affected item or SKU"},
+        "days_until_stockout": {"type": "number", "description": "Days until stock-out"}
+      }
     }
   ]
 }

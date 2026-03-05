@@ -42,6 +42,18 @@ skills:
   - ref: "skills/invoice-categorization@1.0.0"
   - ref: "skills/expense-tracking@1.0.0"
   - ref: "skills/budget-monitoring@1.0.0"
+automations:
+  triggers:
+    - name: "Categorize new transaction"
+      entityType: "transactions"
+      eventType: "created"
+      targetAgent: "self"
+      promptTemplate: "A new transaction was recorded. Categorize it, check against budget thresholds, and flag if it exceeds category limits."
+    - name: "Match invoice to purchase order"
+      entityType: "invoices"
+      eventType: "created"
+      targetAgent: "self"
+      promptTemplate: "A new invoice arrived. Match it to existing purchase orders, verify amounts, and flag discrepancies or duplicates."
 requirements:
   minTier: "starter"
 ---

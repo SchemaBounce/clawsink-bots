@@ -44,6 +44,19 @@ skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/pipeline-monitoring@1.0.0"
   - ref: "skills/sla-compliance@1.0.0"
+automations:
+  triggers:
+    - name: "Runbook lookup on new incident"
+      entityType: "incidents"
+      eventType: "created"
+      targetAgent: "self"
+      promptTemplate: "A new incident was reported. Look up matching runbooks, assess severity, and recommend immediate remediation steps."
+    - name: "Anomaly alert on metric change"
+      entityType: "infrastructure_metrics"
+      eventType: "updated"
+      targetAgent: "self"
+      condition: '{"anomaly_score": {"$gt": 0.8}}'
+      promptTemplate: "Infrastructure metric anomaly detected. Correlate with recent deployments, check for cascading failures, and determine if escalation is needed."
 requirements:
   minTier: "starter"
 ---

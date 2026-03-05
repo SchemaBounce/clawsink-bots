@@ -2,18 +2,50 @@
   "entityTypes": [
     {
       "name": "sec_findings",
+      "displayName": "Security Findings",
       "description": "Security posture findings from vulnerability analysis and policy audits",
-      "sampleFields": ["severity", "attack_vector", "affected_component", "cve_id", "remediation", "risk_score", "detected_at"]
+      "domain": "operations",
+      "sampleFields": ["severity", "attack_vector", "affected_component", "cve_id", "remediation", "risk_score", "detected_at"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "attack_vector": {"type": "string", "required": true, "description": "Attack vector or vulnerability type"},
+        "affected_component": {"type": "string", "required": true, "description": "Affected system component"},
+        "cve_id": {"type": "string", "description": "CVE identifier if applicable"},
+        "remediation": {"type": "string", "description": "Remediation recommendation"},
+        "risk_score": {"type": "number", "description": "Risk score (0-100)"},
+        "detected_at": {"type": "date", "description": "Detection timestamp"}
+      }
     },
     {
       "name": "sec_alerts",
+      "displayName": "Security Alerts",
       "description": "Urgent security alerts requiring immediate attention",
-      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"]
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "acknowledged": {"type": "boolean", "description": "Whether alert has been acknowledged"},
+        "escalated_to": {"type": "string", "description": "Escalation target"}
+      }
     },
     {
       "name": "vulnerability_scans",
+      "displayName": "Vulnerability Scans",
       "description": "Periodic security scan results and posture snapshots",
-      "sampleFields": ["scan_type", "components_scanned", "vulnerabilities_found", "critical_count", "high_count", "posture_score", "scanned_at"]
+      "domain": "operations",
+      "sampleFields": ["scan_type", "components_scanned", "vulnerabilities_found", "critical_count", "high_count", "posture_score", "scanned_at"],
+      "fields": {
+        "scan_type": {"type": "string", "required": true, "description": "Type of security scan"},
+        "components_scanned": {"type": "number", "required": true, "description": "Number of components scanned"},
+        "vulnerabilities_found": {"type": "number", "description": "Total vulnerabilities found"},
+        "critical_count": {"type": "number", "description": "Critical vulnerability count"},
+        "high_count": {"type": "number", "description": "High vulnerability count"},
+        "posture_score": {"type": "number", "description": "Overall security posture score"},
+        "scanned_at": {"type": "date", "description": "Scan timestamp"}
+      }
     }
   ]
 }

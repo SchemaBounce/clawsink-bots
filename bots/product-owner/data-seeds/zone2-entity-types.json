@@ -2,23 +2,67 @@
   "entityTypes": [
     {
       "name": "po_findings",
+      "displayName": "Product Owner Findings",
       "description": "Product insights from customer feedback aggregation and market analysis",
-      "sampleFields": ["severity", "category", "theme", "signal_count", "customer_impact", "recommendation", "source_findings"]
+      "domain": "operations",
+      "sampleFields": ["severity", "category", "theme", "signal_count", "customer_impact", "recommendation", "source_findings"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "category": {"type": "string", "required": true, "description": "Finding category"},
+        "theme": {"type": "string", "description": "Product theme or area"},
+        "signal_count": {"type": "number", "description": "Number of customer signals"},
+        "customer_impact": {"type": "string", "description": "Impact on customers"},
+        "recommendation": {"type": "string", "description": "Product recommendation"},
+        "source_findings": {"type": "array", "description": "Source finding references"}
+      }
     },
     {
       "name": "po_alerts",
+      "displayName": "Product Owner Alerts",
       "description": "Urgent product alerts (churn signals, competitive threats)",
-      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"]
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged", "escalated_to"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "acknowledged": {"type": "boolean", "description": "Whether alert has been acknowledged"},
+        "escalated_to": {"type": "string", "description": "Escalation target"}
+      }
     },
     {
       "name": "gh_issues",
+      "displayName": "GitHub Issues",
       "description": "Structured GitHub issue specs ready for human review and creation",
-      "sampleFields": ["title", "body", "labels", "priority", "user_stories", "acceptance_criteria", "customer_signals", "source_findings"]
+      "domain": "operations",
+      "sampleFields": ["title", "body", "labels", "priority", "user_stories", "acceptance_criteria", "customer_signals", "source_findings"],
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Issue title"},
+        "body": {"type": "string", "description": "Issue body/description"},
+        "labels": {"type": "array", "description": "GitHub labels"},
+        "priority": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Priority level"},
+        "user_stories": {"type": "array", "description": "User stories"},
+        "acceptance_criteria": {"type": "array", "description": "Acceptance criteria"},
+        "customer_signals": {"type": "number", "description": "Number of customer signals"},
+        "source_findings": {"type": "array", "description": "Source finding references"}
+      }
     },
     {
       "name": "feature_requests",
+      "displayName": "Feature Requests",
       "description": "Individual feature requests extracted from customer feedback",
-      "sampleFields": ["title", "source", "customer_id", "description", "frequency", "impact_score", "theme"]
+      "domain": "operations",
+      "sampleFields": ["title", "source", "customer_id", "description", "frequency", "impact_score", "theme"],
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Feature request title"},
+        "source": {"type": "string", "description": "Request source"},
+        "customer_id": {"type": "string", "description": "Customer identifier"},
+        "description": {"type": "string", "description": "Feature description"},
+        "frequency": {"type": "number", "description": "Number of times requested"},
+        "impact_score": {"type": "number", "description": "Estimated impact score"},
+        "theme": {"type": "string", "description": "Product theme"}
+      }
     }
   ]
 }

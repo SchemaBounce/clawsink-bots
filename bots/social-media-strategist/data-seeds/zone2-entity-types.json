@@ -1,0 +1,40 @@
+{
+  "entityTypes": [
+    {
+      "name": "social_strategy",
+      "displayName": "Social Strategy",
+      "description": "Strategic insights and recommendations for social media presence",
+      "domain": "marketing",
+      "sampleFields": ["period", "platform", "finding_type", "finding", "engagement_trend", "recommendation", "competitor_insight", "priority"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Analysis period (e.g., 2026-W09)"},
+        "platform": {"type": "string", "description": "Platform this strategy applies to (or 'all')"},
+        "finding_type": {"type": "string", "required": true, "description": "Type of finding (trend, opportunity, risk, benchmark)"},
+        "finding": {"type": "string", "required": true, "description": "The strategic insight"},
+        "engagement_trend": {"type": "string", "description": "Direction of engagement (up, down, stable)"},
+        "recommendation": {"type": "string", "description": "Recommended action"},
+        "competitor_insight": {"type": "string", "description": "Relevant competitor activity"},
+        "priority": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Priority level"}
+      }
+    },
+    {
+      "name": "content_calendar_items",
+      "displayName": "Content Calendar Items",
+      "description": "Planned social media posts with platform, timing, and content details",
+      "domain": "marketing",
+      "sampleFields": ["platform", "scheduled_date", "scheduled_time", "content_type", "theme", "topic", "hook", "hashtags", "target_engagement_rate", "status"],
+      "fields": {
+        "platform": {"type": "string", "required": true, "description": "Target platform (linkedin, twitter, youtube, reddit)"},
+        "scheduled_date": {"type": "string", "required": true, "description": "Planned publish date"},
+        "scheduled_time": {"type": "string", "description": "Optimal posting time"},
+        "content_type": {"type": "string", "required": true, "description": "Format (text, image, carousel, video, thread)"},
+        "theme": {"type": "string", "description": "Content theme (educational, product, industry, culture)"},
+        "topic": {"type": "string", "required": true, "description": "Post topic or title"},
+        "hook": {"type": "string", "description": "Opening line or hook"},
+        "hashtags": {"type": "array", "description": "Recommended hashtags"},
+        "target_engagement_rate": {"type": "number", "description": "Expected engagement rate"},
+        "status": {"type": "string", "enum": ["planned", "draft", "approved", "published", "cancelled"], "description": "Calendar item status"}
+      }
+    }
+  ]
+}

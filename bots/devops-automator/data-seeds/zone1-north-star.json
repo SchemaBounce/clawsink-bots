@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "deployment_environments",
+      "value": "Production: critical, zero-downtime required. Staging: high, used for pre-production validation. Development: low, fast iteration.",
+      "description": "Deployment environments and their criticality levels"
+    },
+    {
+      "key": "error_rate_thresholds",
+      "value": "Rollback trigger: >1% error rate for 5 minutes post-deploy. Warning: >0.5% error rate. Normal: <0.1% error rate.",
+      "description": "Error rate thresholds for deployment health verification"
+    }
+  ]
+}
