@@ -18,8 +18,8 @@ model:
   fallback: "claude-sonnet-4-6"
   thinkLevel: null
 cost:
-  estimatedTokensPerRun: 10000
-  estimatedCostTier: "low"
+  estimatedTokensPerRun: 6000
+  estimatedCostTier: "medium"
 trigger:
   entityType: "*"
   eventType: "created"

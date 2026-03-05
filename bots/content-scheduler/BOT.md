@@ -18,7 +18,7 @@ model:
   fallback: "claude-sonnet-4-6"
   thinkLevel: null
 cost:
-  estimatedTokensPerRun: 10000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 schedule:
   default: "0 9 * * 1-5"

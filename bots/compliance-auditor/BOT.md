@@ -18,7 +18,7 @@ model:
   fallback: "claude-sonnet-4-6"
   thinkLevel: null
 cost:
-  estimatedTokensPerRun: 10000
+  estimatedTokensPerRun: 6000
   estimatedCostTier: "low"
 trigger:
   entityType: "financial_records"
