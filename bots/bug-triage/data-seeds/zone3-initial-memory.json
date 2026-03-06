@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "bug_patterns",
+      "key": "init",
+      "value": "No bug patterns learned yet. Will identify recurring categories and root causes over time."
+    },
+    {
+      "namespace": "resolution_times",
+      "key": "init",
+      "value": "No resolution time data yet. Will track average fix times by severity and team."
+    }
+  ]
+}

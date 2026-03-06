@@ -38,7 +38,7 @@ zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/anomaly-detection@1.0.0"
 requirements:
   minTier: "starter"
 ---

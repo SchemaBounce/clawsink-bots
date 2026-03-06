@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "workflow_state",
+      "key": "init",
+      "value": "No active workflows tracked yet. Will build fulfillment state as orders are processed through the pipeline."
+    },
+    {
+      "namespace": "sla_targets",
+      "key": "init",
+      "value": "No SLA performance data yet. Will track processing times and compliance rates to identify bottlenecks."
+    }
+  ]
+}

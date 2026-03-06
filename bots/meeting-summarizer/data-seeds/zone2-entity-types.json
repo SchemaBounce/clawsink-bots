@@ -1,0 +1,33 @@
+{
+  "entityTypes": [
+    {
+      "name": "meeting_summaries",
+      "displayName": "Meeting Summaries",
+      "description": "Structured summaries generated from meeting notes",
+      "domain": "general",
+      "sampleFields": ["meeting_id", "title", "date", "attendees", "key_decisions", "summary"],
+      "fields": {
+        "meeting_id": {"type": "string", "required": true, "description": "Meeting identifier"},
+        "title": {"type": "string", "required": true, "description": "Meeting title"},
+        "date": {"type": "date", "required": true, "description": "Meeting date"},
+        "attendees": {"type": "array", "description": "List of attendees"},
+        "key_decisions": {"type": "array", "description": "Decisions made during the meeting"},
+        "summary": {"type": "string", "required": true, "description": "Structured summary text"}
+      }
+    },
+    {
+      "name": "action_items",
+      "displayName": "Action Items",
+      "description": "Action items extracted from meetings",
+      "domain": "general",
+      "sampleFields": ["meeting_id", "owner", "description", "deadline", "status"],
+      "fields": {
+        "meeting_id": {"type": "string", "required": true, "description": "Source meeting identifier"},
+        "owner": {"type": "string", "required": true, "description": "Assigned owner"},
+        "description": {"type": "string", "required": true, "description": "Action item description"},
+        "deadline": {"type": "date", "description": "Due date"},
+        "status": {"type": "string", "enum": ["pending", "in_progress", "completed"], "description": "Action item status"}
+      }
+    }
+  ]
+}

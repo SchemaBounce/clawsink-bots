@@ -31,6 +31,45 @@ bots:
 northStar:
   industry: "Construction / Trades"
   context: "Small to mid-size contracting business managing projects, estimates, materials, safety compliance, and client relationships"
+orgChart:
+  lead: executive-assistant
+  roles:
+    - bot: executive-assistant
+      role: lead
+      reportsTo: null
+      domain: job-management
+    - bot: accountant
+      role: specialist
+      reportsTo: executive-assistant
+      domain: finance
+    - bot: inventory-manager
+      role: specialist
+      reportsTo: executive-assistant
+      domain: job-management
+    - bot: legal-compliance
+      role: specialist
+      reportsTo: executive-assistant
+      domain: compliance
+    - bot: customer-support
+      role: specialist
+      reportsTo: executive-assistant
+      domain: customer-relations
+  escalation:
+    critical: executive-assistant
+    unhandled: executive-assistant
+    paths:
+      - name: "Budget Overrun"
+        trigger: "estimate_exceeds_budget"
+        chain: [accountant, executive-assistant]
+      - name: "Material Shortage"
+        trigger: "material_shortage"
+        chain: [inventory-manager, executive-assistant]
+      - name: "Safety Violation"
+        trigger: "safety_violation"
+        chain: [legal-compliance, executive-assistant]
+      - name: "Client Escalation"
+        trigger: "client_escalation"
+        chain: [customer-support, executive-assistant]
 ---
 # Tradesman Pack
 

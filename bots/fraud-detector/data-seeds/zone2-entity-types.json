@@ -1,0 +1,29 @@
+{
+  "entityTypes": [
+    {
+      "name": "fraud_scores",
+      "displayName": "Fraud Scores",
+      "description": "Fraud risk scores computed per transaction",
+      "domain": "finance",
+      "fields": {
+        "transaction_id": {"type": "string", "required": true, "description": "Transaction identifier"},
+        "risk_score": {"type": "number", "required": true, "description": "Fraud risk score 0-1"},
+        "risk_level": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Risk classification"},
+        "signals_triggered": {"type": "string", "description": "Fraud signals that fired"},
+        "recommended_action": {"type": "string", "enum": ["pass", "review", "block"], "description": "Recommended action"}
+      }
+    },
+    {
+      "name": "fraud_alerts",
+      "displayName": "Fraud Alerts",
+      "description": "Urgent fraud alerts for high-risk transactions",
+      "domain": "finance",
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["high", "critical"], "description": "Alert severity"},
+        "transaction_id": {"type": "string", "required": true, "description": "Flagged transaction"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action to resolve"}
+      }
+    }
+  ]
+}

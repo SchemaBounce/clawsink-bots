@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "risk_policy",
+      "value": "Define your fraud risk policy here. Example: auto-block score above 0.95, manual review 0.7-0.95, pass below 0.7.",
+      "description": "Risk thresholds and actions for fraud scoring"
+    },
+    {
+      "key": "fraud_signals",
+      "value": "Define key fraud signals here. Example: velocity_spike, geo_mismatch, unusual_amount, new_device, off_hours.",
+      "description": "Signals the detector uses to assess fraud risk"
+    }
+  ]
+}

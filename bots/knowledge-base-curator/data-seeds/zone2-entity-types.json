@@ -1,0 +1,31 @@
+{
+  "entityTypes": [
+    {
+      "name": "kb_updates",
+      "displayName": "Knowledge Base Updates",
+      "description": "Proposed updates and improvements to knowledge base articles",
+      "domain": "general",
+      "sampleFields": ["article_id", "update_type", "summary", "priority", "reason"],
+      "fields": {
+        "article_id": {"type": "string", "required": true, "description": "Article identifier"},
+        "update_type": {"type": "string", "required": true, "enum": ["refresh", "merge", "archive", "rewrite"], "description": "Type of update"},
+        "summary": {"type": "string", "required": true, "description": "Update summary"},
+        "priority": {"type": "string", "enum": ["low", "medium", "high"], "description": "Update priority"},
+        "reason": {"type": "string", "description": "Reason for the update"}
+      }
+    },
+    {
+      "name": "organization_suggestions",
+      "displayName": "Organization Suggestions",
+      "description": "Suggestions for restructuring or reorganizing KB content",
+      "domain": "general",
+      "sampleFields": ["suggestion_type", "scope", "description", "impact"],
+      "fields": {
+        "suggestion_type": {"type": "string", "required": true, "enum": ["recategorize", "merge_duplicates", "add_cross_links", "new_section"], "description": "Suggestion type"},
+        "scope": {"type": "string", "required": true, "description": "Affected articles or categories"},
+        "description": {"type": "string", "required": true, "description": "Suggestion details"},
+        "impact": {"type": "string", "enum": ["low", "medium", "high"], "description": "Expected impact on discoverability"}
+      }
+    }
+  ]
+}

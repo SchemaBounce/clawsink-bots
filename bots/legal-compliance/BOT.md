@@ -40,7 +40,7 @@ zones:
   zone1Read: ["mission", "industry", "compliance_requirements"]
   zone2Domains: ["compliance"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/record-monitoring@1.0.0"
 requirements:
   minTier: "starter"
 ---

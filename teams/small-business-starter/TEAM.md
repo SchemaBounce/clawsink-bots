@@ -26,6 +26,42 @@ northStar:
     - priorities
     - budget_constraints
     - compliance_requirements
+orgChart:
+  lead: executive-assistant
+  roles:
+    - bot: executive-assistant
+      role: lead
+      reportsTo: null
+      domain: operations
+    - bot: accountant
+      role: specialist
+      reportsTo: executive-assistant
+      domain: finance
+    - bot: customer-support
+      role: specialist
+      reportsTo: executive-assistant
+      domain: customer-relations
+    - bot: marketing-growth
+      role: specialist
+      reportsTo: executive-assistant
+      domain: growth
+    - bot: legal-compliance
+      role: specialist
+      reportsTo: executive-assistant
+      domain: compliance
+  escalation:
+    critical: executive-assistant
+    unhandled: executive-assistant
+    paths:
+      - name: "Budget anomaly"
+        trigger: "budget_anomaly"
+        chain: [accountant, executive-assistant]
+      - name: "Churn risk"
+        trigger: "churn_risk"
+        chain: [customer-support, executive-assistant]
+      - name: "Compliance deadline"
+        trigger: "compliance_deadline"
+        chain: [legal-compliance, executive-assistant]
 ---
 # Small Business Starter
 

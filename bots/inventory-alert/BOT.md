@@ -38,7 +38,8 @@ zones:
   zone1Read: ["mission"]
   zone2Domains: ["operations"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/cdc-event-analysis@1.0.0"
+  - ref: "skills/notification-dispatch@1.0.0"
 requirements:
   minTier: "starter"
 ---

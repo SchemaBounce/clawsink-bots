@@ -38,7 +38,8 @@ zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/cdc-event-analysis@1.0.0"
+  - ref: "skills/data-validation@1.0.0"
 requirements:
   minTier: "starter"
 ---

@@ -1,0 +1,30 @@
+{
+  "entityTypes": [
+    {
+      "name": "onboarding_checklists",
+      "displayName": "Onboarding Checklists",
+      "description": "Employee onboarding checklists with task tracking",
+      "domain": "hr",
+      "fields": {
+        "employee_id": {"type": "string", "required": true, "description": "Employee identifier"},
+        "department": {"type": "string", "required": true, "description": "Employee department"},
+        "start_date": {"type": "date", "required": true, "description": "Employee start date"},
+        "status": {"type": "string", "enum": ["not_started", "in_progress", "completed"], "description": "Overall checklist status"},
+        "completion_pct": {"type": "number", "description": "Percentage of tasks completed"}
+      }
+    },
+    {
+      "name": "hr_tasks",
+      "displayName": "HR Tasks",
+      "description": "Individual HR onboarding tasks",
+      "domain": "hr",
+      "fields": {
+        "employee_id": {"type": "string", "required": true, "description": "Employee identifier"},
+        "task_name": {"type": "string", "required": true, "description": "Task name"},
+        "status": {"type": "string", "required": true, "enum": ["pending", "in_progress", "completed", "blocked"], "description": "Task status"},
+        "due_date": {"type": "date", "description": "Task deadline"},
+        "assigned_to": {"type": "string", "description": "Person responsible for the task"}
+      }
+    }
+  ]
+}

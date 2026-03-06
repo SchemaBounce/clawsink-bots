@@ -1,0 +1,30 @@
+{
+  "entityTypes": [
+    {
+      "name": "health_reports",
+      "displayName": "Health Reports",
+      "description": "Periodic infrastructure health summary reports",
+      "domain": "engineering",
+      "fields": {
+        "report_period": {"type": "string", "required": true, "description": "Reporting period (e.g. 2025-03-06T00:00-06:00)"},
+        "overall_status": {"type": "string", "required": true, "enum": ["healthy", "degraded", "critical"], "description": "Overall infrastructure health"},
+        "components_checked": {"type": "number", "description": "Number of components assessed"},
+        "issues_found": {"type": "number", "description": "Number of issues detected"},
+        "summary": {"type": "string", "description": "Report summary narrative"}
+      }
+    },
+    {
+      "name": "infra_alerts",
+      "displayName": "Infrastructure Alerts",
+      "description": "Infrastructure alerts from health report analysis",
+      "domain": "engineering",
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "component": {"type": "string", "required": true, "description": "Affected infrastructure component"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Recommended remediation"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "content_quality",
+      "key": "init",
+      "value": "No content quality scores tracked yet. Will build article freshness and completeness baselines on first review."
+    },
+    {
+      "namespace": "search_patterns",
+      "key": "init",
+      "value": "No search patterns recorded yet. Will analyze usage analytics to identify content gaps and popular queries."
+    }
+  ]
+}

@@ -14,8 +14,8 @@ For each ticket, determine:
 
 Severity rules:
 - Critical: data loss, complete service outage, security breach, or customer explicitly threatening to leave
-- High: partial outage, broken core workflow, billing discrepancy over $500
-- Medium: degraded experience, non-blocking bug, billing question under $500
+- High: partial outage, broken core workflow, significant billing discrepancy
+- Medium: degraded experience, non-blocking bug, minor billing question
 - Low: feature request, general question, cosmetic issue
 
 Write each triaged ticket as a `cs_findings` record with fields: ticket_id, severity, type, customer_name, summary, recommended_action.

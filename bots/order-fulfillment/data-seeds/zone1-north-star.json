@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "fulfillment_sla",
+      "value": "Define your fulfillment SLA targets here. Example: Order processing: under 2 hours. Shipping handoff: same business day. Express orders: within 1 hour.",
+      "description": "Order fulfillment service level targets"
+    }
+  ]
+}

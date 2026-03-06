@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "fraud_patterns",
+      "key": "init",
+      "value": "No fraud patterns learned yet. Will build pattern database from flagged and confirmed fraud cases."
+    },
+    {
+      "namespace": "risk_thresholds",
+      "key": "defaults",
+      "value": "Auto-block: score above 0.95. Manual review: 0.7-0.95. Pass: below 0.7. Adjust via risk_policy seed."
+    }
+  ]
+}

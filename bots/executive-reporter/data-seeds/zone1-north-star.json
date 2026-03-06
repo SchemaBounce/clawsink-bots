@@ -2,7 +2,7 @@
   "seeds": [
     {
       "key": "company_goals",
-      "value": "Define current quarter/year business objectives. Example: Q1 targets: $500K MRR, 95% uptime, 50 NPS, ship 3 major features.",
+      "value": "Define current quarter/year business objectives. Example: Q1 targets: grow MRR 20%, 95% uptime, 50 NPS, ship 3 major features.",
       "description": "Business objectives and KPI targets for the current period"
     },
     {

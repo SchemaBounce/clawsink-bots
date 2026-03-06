@@ -70,7 +70,7 @@ Experiments are written as `growth_experiments` entity type records:
 ```json
 {
   "name": "referral_incentive_test_v2",
-  "hypothesis": "Offering $10 credit to both referrer and referee will increase referral rate by 25%",
+  "hypothesis": "Offering credit to both referrer and referee will increase referral rate by 25%",
   "channel": "referral",
   "status": "running",
   "metric": "referral_conversion_rate",

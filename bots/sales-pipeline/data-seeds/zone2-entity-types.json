@@ -1,0 +1,32 @@
+{
+  "entityTypes": [
+    {
+      "name": "pipeline_reports",
+      "displayName": "Pipeline Reports",
+      "description": "Sales pipeline analysis and funnel reports",
+      "domain": "sales",
+      "sampleFields": ["period", "total_deals", "total_value", "stage_breakdown", "summary"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Reporting period"},
+        "total_deals": {"type": "number", "required": true, "description": "Total active deals"},
+        "total_value": {"type": "number", "description": "Total pipeline value"},
+        "stage_breakdown": {"type": "array", "description": "Deals per pipeline stage"},
+        "summary": {"type": "string", "required": true, "description": "Pipeline analysis summary"}
+      }
+    },
+    {
+      "name": "deal_insights",
+      "displayName": "Deal Insights",
+      "description": "Insights and recommendations for specific deals or pipeline patterns",
+      "domain": "sales",
+      "sampleFields": ["severity", "deal_id", "insight_type", "description", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Insight severity"},
+        "deal_id": {"type": "string", "description": "Related deal identifier"},
+        "insight_type": {"type": "string", "required": true, "enum": ["stalled", "at_risk", "upsell", "bottleneck"], "description": "Type of insight"},
+        "description": {"type": "string", "required": true, "description": "Insight details"},
+        "recommendation": {"type": "string", "description": "Recommended action"}
+      }
+    }
+  ]
+}

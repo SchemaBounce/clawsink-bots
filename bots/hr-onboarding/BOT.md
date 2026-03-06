@@ -35,8 +35,6 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["hr"]
-skills:
-  - inline: "core-analysis"
 plugins:
   - ref: "n8n-workflow@latest"
     required: true

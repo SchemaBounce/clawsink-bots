@@ -1,0 +1,29 @@
+{
+  "entityTypes": [
+    {
+      "name": "onboarding_tasks",
+      "displayName": "Onboarding Tasks",
+      "description": "Individual tasks in a customer onboarding workflow",
+      "domain": "customer_success",
+      "fields": {
+        "customer_id": {"type": "string", "required": true, "description": "Customer identifier"},
+        "task_name": {"type": "string", "required": true, "description": "Name of the onboarding task"},
+        "status": {"type": "string", "required": true, "enum": ["pending", "in_progress", "completed", "blocked"], "description": "Task status"},
+        "due_date": {"type": "date", "description": "Task deadline"},
+        "completed_at": {"type": "date", "description": "Actual completion time"}
+      }
+    },
+    {
+      "name": "welcome_messages",
+      "displayName": "Welcome Messages",
+      "description": "Personalized welcome messages sent to new customers",
+      "domain": "customer_success",
+      "fields": {
+        "customer_id": {"type": "string", "required": true, "description": "Customer identifier"},
+        "channel": {"type": "string", "required": true, "description": "Delivery channel (email, in-app, chat)"},
+        "sent_at": {"type": "date", "description": "When the message was sent"},
+        "template_used": {"type": "string", "description": "Template identifier used"}
+      }
+    }
+  ]
+}

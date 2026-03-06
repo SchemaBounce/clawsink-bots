@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "conversion_rates",
+      "key": "init",
+      "value": "No conversion rates tracked yet. Will compute stage-to-stage conversion baselines from initial pipeline data."
+    },
+    {
+      "namespace": "stage_durations",
+      "key": "init",
+      "value": "No stage duration data yet. Will track average time-in-stage to identify bottlenecks and stalled deals."
+    }
+  ]
+}

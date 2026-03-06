@@ -1,0 +1,32 @@
+{
+  "entityTypes": [
+    {
+      "name": "fulfillment_tasks",
+      "displayName": "Fulfillment Tasks",
+      "description": "Tasks generated during order fulfillment processing",
+      "domain": "operations",
+      "sampleFields": ["order_id", "task_type", "status", "warehouse", "priority"],
+      "fields": {
+        "order_id": {"type": "string", "required": true, "description": "Order identifier"},
+        "task_type": {"type": "string", "required": true, "enum": ["pick", "pack", "ship", "validate"], "description": "Fulfillment task type"},
+        "status": {"type": "string", "enum": ["pending", "in_progress", "completed", "blocked"], "description": "Task status"},
+        "warehouse": {"type": "string", "description": "Assigned warehouse"},
+        "priority": {"type": "string", "enum": ["standard", "express", "urgent"], "description": "Fulfillment priority"}
+      }
+    },
+    {
+      "name": "order_status",
+      "displayName": "Order Status",
+      "description": "Order status updates throughout the fulfillment lifecycle",
+      "domain": "operations",
+      "sampleFields": ["order_id", "status", "stage", "updated_at", "notes"],
+      "fields": {
+        "order_id": {"type": "string", "required": true, "description": "Order identifier"},
+        "status": {"type": "string", "required": true, "enum": ["received", "processing", "packed", "shipped", "delivered", "exception"], "description": "Current order status"},
+        "stage": {"type": "string", "description": "Current fulfillment stage"},
+        "updated_at": {"type": "date", "description": "Last update timestamp"},
+        "notes": {"type": "string", "description": "Status notes or exception details"}
+      }
+    }
+  ]
+}

@@ -35,7 +35,7 @@ zones:
   zone1Read: ["mission"]
   zone2Domains: ["general"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/record-monitoring@1.0.0"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"

@@ -42,7 +42,7 @@ zones:
   zone1Read: ["mission", "industry", "stage", "priorities", "product_roadmap"]
   zone2Domains: ["product", "marketing"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/record-monitoring@1.0.0"
 requirements:
   minTier: "starter"
 ---

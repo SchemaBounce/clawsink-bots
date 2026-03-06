@@ -34,9 +34,11 @@ Configure the active memory slot:
 plugins.slots.memory = "memory-lancedb"
 ```
 
-## Bot Plugin Dependencies
+## Relationship to Bots and Teams
 
-Bots declare plugin dependencies in their `BOT.md` manifest under `plugins:`. When you install a bot pack, check its `plugins:` section to see what needs to be installed. Bots with `required: true` (the default) won't start without their plugins.
+Plugins are declared in BOT.md under `plugins:` or in TEAM.md under `plugins:` (team-level shared plugins). See [bots/README.md](../bots/README.md) for the full plugin field reference (categories, slots, config merging, field rules). See [teams/README.md](../teams/README.md) for how teams share plugins across all member bots.
+
+When you install a bot pack, check its `plugins:` section to see what needs to be installed. Bots with `required: true` (the default) won't start without their plugins.
 
 ## Configuration
 

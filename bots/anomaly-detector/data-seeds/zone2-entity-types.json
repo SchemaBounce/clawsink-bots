@@ -1,0 +1,30 @@
+{
+  "entityTypes": [
+    {
+      "name": "anomaly_findings",
+      "displayName": "Anomaly Findings",
+      "description": "Detected anomalies in time-series metrics",
+      "domain": "engineering",
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Anomaly severity"},
+        "metric_name": {"type": "string", "required": true, "description": "Name of the affected metric"},
+        "expected_value": {"type": "number", "description": "Expected baseline value"},
+        "actual_value": {"type": "number", "description": "Observed anomalous value"},
+        "deviation": {"type": "number", "description": "Standard deviations from baseline"}
+      }
+    },
+    {
+      "name": "anomaly_alerts",
+      "displayName": "Anomaly Alerts",
+      "description": "Urgent anomaly alerts requiring immediate attention",
+      "domain": "engineering",
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "metric_name": {"type": "string", "required": true, "description": "Affected metric"},
+        "action_required": {"type": "string", "description": "Recommended action"}
+      }
+    }
+  ]
+}

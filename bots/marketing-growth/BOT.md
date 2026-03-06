@@ -41,7 +41,7 @@ zones:
   zone1Read: ["mission", "industry", "stage", "priorities", "growth_targets"]
   zone2Domains: ["marketing"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/scheduled-report@1.0.0"
 plugins:
   - ref: "composio@latest"
     slot: "oauth"

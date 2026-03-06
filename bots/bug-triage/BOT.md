@@ -35,8 +35,6 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
-skills:
-  - inline: "core-analysis"
 requirements:
   minTier: "starter"
 ---

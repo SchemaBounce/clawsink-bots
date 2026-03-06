@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "churn_risk_thresholds",
+      "value": "Define your churn risk thresholds here. Example: high_risk: score above 0.8, medium_risk: 0.5-0.8, low_risk: below 0.5.",
+      "description": "Thresholds for classifying churn risk levels"
+    },
+    {
+      "key": "engagement_signals",
+      "value": "Define key engagement signals here. Example: login_frequency, feature_usage, support_tickets, session_duration.",
+      "description": "Activity signals used to predict churn"
+    }
+  ]
+}

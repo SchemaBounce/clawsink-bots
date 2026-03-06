@@ -1,118 +1,434 @@
 # ClawSink Bots
 
-Pre-built, persistent AI bot modules for SchemaBounce. Each bot is a complete OpenClaw agent that autonomously operates a specific business role -- from SRE to Accountant to Executive Assistant.
+Pre-built, persistent AI bot packs for SchemaBounce workspaces. Each bot is a complete OpenCLAW agent that autonomously operates a specific business role. Teams compose bots into full operational teams for specific industries.
 
-Designed for **solopreneurs and small businesses** to fill organizational gaps and reduce mental load.
+This repository is **parsed programmatically** to populate the marketplace, agent pages, and org chart views in the SchemaBounce console. Every manifest file is a contract -- the format must be followed exactly.
 
-## Three-Tier Composability Model
+## Spec
 
-ClawSink Bots uses a hierarchical composition model:
+**[ARCHITECTURE.md](ARCHITECTURE.md)** provides the architectural overview and cross-cutting conventions. Each directory has its own README with the complete manifest specification for that level:
 
-| Tier | What | Example |
-|------|------|---------|
-| **Skill** | Reusable capability (single responsibility) | `invoice-categorization`, `incident-triage` |
-| **Bot** | Complete agent (identity + skills) | `accountant`, `sre-devops` |
-| **Team** | Coordinated bot group (shared North Star) | `small-business-starter` |
+| Level | Spec |
+|-------|------|
+| Skills | [skills/README.md](skills/README.md) |
+| Bots | [bots/README.md](bots/README.md) |
+| Teams | [teams/README.md](teams/README.md) |
+| MCP Servers | [tools/README.md](tools/README.md) |
+| Plugins | [plugins/README.md](plugins/README.md) |
 
-Skills are composed into Bots. Bots are composed into Teams. Skills can be shared across multiple bots.
-
-## How It Works
-
-Each bot is a persistent agent that:
-1. Wakes on a configurable cron schedule
-2. Reads data via structured tool calls -- not prompt stuffing
-3. Analyzes, acts, and writes structured findings back
-4. Messages other bots when escalation is needed
-5. Persists learnings in private memory across runs
-
-## Available Bots
-
-| Bot | Purpose |
-|-----|---------|
-| [SRE / DevOps](bots/sre-devops/) | Pipeline health, incidents, SLA tracking |
-| [Data Engineer](bots/data-engineer/) | Schema drift, CDC health, DLQ monitoring |
-| [Customer Support](bots/customer-support/) | Ticket triage, onboarding, churn detection |
-| [Inventory Manager](bots/inventory-manager/) | Stock levels, reorder points, vendor tracking |
-| [Marketing & Growth](bots/marketing-growth/) | Content calendar, campaigns, SEO tracking |
-| [Accountant](bots/accountant/) | Expense tracking, reconciliation, budget monitoring |
-| [Business Analyst](bots/business-analyst/) | Cross-domain analysis, trend detection |
-| [Legal & Compliance](bots/legal-compliance/) | Contract review, regulatory tracking |
-| [Executive Assistant](bots/executive-assistant/) | Synthesizes all bot outputs, daily briefings |
-| [Security Agent](bots/security-agent/) | Vulnerability scanning, policy audits, CVE monitoring |
-| [Product Owner](bots/product-owner/) | Customer feedback, feature prioritization, GH issue specs |
-| [Mentor / Coach](bots/mentor-coach/) | Bot team health, coaching, process improvement |
-| [Blog Writer](bots/blog-writer/) | Blog post drafting and content creation |
-
-## Available Skills
-
-Reusable capabilities extracted from bots and composable across multiple agents:
-
-| Skill | Used By | Purpose |
-|-------|---------|---------|
-| [invoice-categorization](skills/invoice-categorization/) | accountant | Classify invoices by type, vendor, urgency |
-| [expense-tracking](skills/expense-tracking/) | accountant | Track spending patterns, detect anomalies |
-| [budget-monitoring](skills/budget-monitoring/) | accountant | Compare spend against budget limits |
-| [incident-triage](skills/incident-triage/) | sre-devops | Detect and correlate infrastructure incidents |
-| [pipeline-monitoring](skills/pipeline-monitoring/) | sre-devops | Monitor CDC pipeline health metrics |
-| [sla-compliance](skills/sla-compliance/) | sre-devops | Track SLA targets and alert on breaches |
-| [daily-briefing](skills/daily-briefing/) | executive-assistant | Generate prioritized daily briefings |
-| [cross-domain-synthesis](skills/cross-domain-synthesis/) | executive-assistant | Identify patterns across business domains |
-| [follow-up-tracking](skills/follow-up-tracking/) | executive-assistant | Track action items and ensure completion |
-
-## Available Teams
-
-Pre-configured bot groups for common use cases:
-
-| Team | Bots | Purpose |
-|------|------|---------|
-| [Small Business Starter](teams/small-business-starter/) | 5 bots | Essential AI team for any small business |
-
-## Directory Structure
+## Repository Structure
 
 ```
 clawsink-bots/
-├── SKILL_PACK_SPEC.md          # Authoritative format specification (v2)
-├── skills/                     # Reusable skill definitions
-│   ├── invoice-categorization/
-│   │   ├── SKILL.md
-│   │   └── prompt.md
-│   ├── expense-tracking/
-│   ├── budget-monitoring/
-│   ├── incident-triage/
-│   ├── pipeline-monitoring/
-│   ├── sla-compliance/
-│   ├── daily-briefing/
-│   ├── cross-domain-synthesis/
-│   └── follow-up-tracking/
-├── bots/                       # Complete agent definitions
-│   ├── sre-devops/
-│   │   ├── BOT.md
-│   │   ├── SOUL.md
-│   │   └── data-seeds/
-│   ├── accountant/
-│   ├── executive-assistant/
-│   └── ... (13 bots total)
-├── teams/                      # Coordinated bot groups
-│   └── small-business-starter/
-│       └── TEAM.md
-├── shared/                     # Common infrastructure
-│   ├── north-star-template.json
-│   ├── message-protocol.md
-│   ├── entity-schemas.md
-│   ├── escalation-chains.json
-│   └── output-format.md
-└── tools/                      # Future: custom tool declarations
+├── ARCHITECTURE.md              # Authoritative format specification
+├── README.md                       # This file
+├── LICENSE                         # Apache 2.0
+│
+├── skills/                         # 22 reusable skill definitions
+│   └── {skill-name}/
+│       ├── SKILL.md                # Manifest (kind: Skill)
+│       └── prompt.md               # Skill instructions (<200 tokens)
+│
+├── bots/                           # 44 complete agent definitions
+│   └── {bot-name}/
+│       ├── BOT.md                  # Manifest (kind: Bot) -- PARSED FOR MARKETPLACE
+│       ├── SOUL.md                 # Agent identity (<800 tokens)
+│       ├── agents/                 # Sub-agent definitions (optional)
+│       │   └── {agent-name}.md     # YAML frontmatter + system prompt
+│       └── data-seeds/             # Bootstrap data for ADL zones
+│           ├── zone1-north-star.json
+│           ├── zone2-entity-types.json
+│           └── zone3-initial-memory.json
+│
+├── teams/                          # 22 coordinated bot groups
+│   └── {team-name}/
+│       └── TEAM.md                 # Manifest (kind: Team) -- PARSED FOR MARKETPLACE
+│
+├── shared/                         # Cross-cutting infrastructure
+│   ├── message-protocol.md         # Inter-bot message format (alert/request/finding/text)
+│   ├── escalation-chains.json      # Global default escalation routing
+│   ├── entity-schemas.md           # Common entity type definitions
+│   ├── north-star-template.json    # North Star key template
+│   └── output-format.md           # Standard output formatting
+│
+├── tools/                          # MCP server definitions
+│   ├── README.md                   # MCP server documentation
+│   └── {server-name}/
+│       └── SERVER.md               # Manifest (kind: McpServer) -- PARSED FOR MARKETPLACE
+│
+└── plugins/                        # Plugin ecosystem documentation
+    └── README.md                   # Installation guide, slot system
 ```
 
-## Activation
+## How the Marketplace Parser Works
 
-Bots, skills, and teams are activated via the onboarding wizard or API. The activation flow registers agents, seeds data, assigns domains, and the scheduler automatically picks them up.
+The marketplace reads manifest files (BOT.md, TEAM.md, SKILL.md) and extracts YAML frontmatter to populate UI. Every field in the frontmatter has a specific rendering target.
+
+### Bot Page (`/marketplace/bots/{name}`)
+
+| YAML Field | Renders As |
+|---|---|
+| `metadata.displayName` | Page title, card heading |
+| `metadata.description` | Card subtitle, search snippet |
+| `metadata.category` | Category filter pill |
+| `metadata.tags` | Search index, tag chips |
+| `model.preferred` | "Powered by" badge |
+| `cost.estimatedCostTier` | Cost indicator (low/medium/high) |
+| `cost.estimatedTokensPerRun` | Estimated usage display |
+| `schedule.default` | "Runs every..." label |
+| `schedule.recommendations` | Schedule picker options |
+| `messaging.sendsTo` | Communication diagram edges |
+| `messaging.listensTo` | Communication diagram edges |
+| `skills[].ref` | "Capabilities" section |
+| `plugins[].ref` | "Required plugins" section |
+| `agents/*.md` (directory listing) | "Sub-agents" section |
+| Markdown body after `---` | Long description / documentation tab |
+
+### Team Page (`/marketplace/teams/{name}`)
+
+| YAML Field | Renders As |
+|---|---|
+| `metadata.displayName` | Page title, card heading |
+| `metadata.description` | Card subtitle, search snippet |
+| `metadata.category` | Category filter pill |
+| `metadata.tags` | Search index, tag chips |
+| `bots[].ref` | Bot cards grid, bot count badge |
+| `northStar.industry` | "Built for" label |
+| `northStar.context` | Target audience description |
+| `northStar.requiredKeys` | "Setup required" checklist |
+| `orgChart.lead` | Org chart root node |
+| `orgChart.roles` | Org chart tree visualization |
+| `orgChart.roles[].domain` | Domain grouping in org chart |
+| `orgChart.escalation.paths` | Escalation flow arrows in org chart |
+| `plugins[].ref` | "Team plugins" section |
+| Markdown body after `---` | Long description / documentation tab |
+
+### Org Chart Page (`/workspaces/{id}/agent-data-layer/org-chart`)
+
+The org chart view renders the team's `orgChart` as an interactive tree:
+
+- **Nodes**: Each bot is a node, colored by role (lead = primary, specialist = secondary, support = muted)
+- **Edges**: `reportsTo` defines parent-child edges in the tree
+- **Grouping**: Bots are visually grouped by `domain`
+- **Escalation overlays**: `escalation.paths` render as highlighted flow arrows when selected
+- **Bot detail**: Clicking a node shows the bot's `metadata.description`, `schedule.default`, and `messaging` connections
+
+### MCP Server Page (`/marketplace/tools/{name}`)
+
+| YAML Field | Renders As |
+|---|---|
+| `metadata.displayName` | Page title, card heading |
+| `metadata.description` | Card subtitle, search snippet |
+| `metadata.tags` | Search index, tag chips |
+| `transport.type` | Transport badge (stdio/sse/streamable-http) |
+| `env[].name` | "Required configuration" checklist |
+| `env[].description` | Configuration help text |
+| `tools[].name` | "Available tools" list |
+| `tools[].description` | Tool description |
+| `tools[].category` | Tool grouping headers |
+| Markdown body after `---` | Long description / documentation tab |
+
+### Skill Page (`/marketplace/skills/{name}`)
+
+| YAML Field | Renders As |
+|---|---|
+| `metadata.displayName` | Page title |
+| `metadata.description` | Card subtitle |
+| `tools.required` | "Uses tools" badges |
+| `data.producesEntityTypes` | "Produces" section |
+| `data.consumesEntityTypes` | "Consumes" section |
+| `prompt.md` content | Skill instructions display |
+
+## What Happens When You Activate
+
+Every field in a manifest maps to a platform action. When a bot is activated, the platform uses the manifest to compose its identity, install its plugins and MCP servers, seed its data, register its schedule, and wire its messaging. For teams, the platform also creates the org chart, sets up escalation routing, and deploys shared resources across all member bots.
+
+See **"What the Platform Does With This Spec"** in [ARCHITECTURE.md](ARCHITECTURE.md) for details on what each field triggers.
+
+## Three-Tier Composability
+
+```
+Team (restaurant-group)                      ← industry-specific bot group
+ ├── Bot (executive-assistant)               ← top-level agent [lead]
+ │    ├── Skill (daily-briefing)             ← reusable capability
+ │    ├── Skill (cross-domain-synthesis)
+ │    ├── Sub-Agent (request-router)         ← internal workflow step
+ │    └── Sub-Agent (followup-tracker)
+ ├── Bot (accountant)                        ← top-level agent [specialist]
+ │    ├── Skill (invoice-categorization)
+ │    ├── Skill (expense-tracking)
+ │    └── Skill (budget-monitoring)
+ ├── Bot (inventory-manager)                 ← top-level agent [specialist]
+ │    └── Sub-Agent (stock-analyst)
+ ├── Bot (inventory-alert)                   ← top-level agent [support → inventory-manager]
+ ├── Bot (customer-support)                  ← top-level agent [specialist]
+ └── Bot (marketing-growth)                  ← top-level agent [specialist]
+```
+
+**Skills** are reusable instructions composed into bots. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart and escalation paths. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
+
+## Creating Your Own Bot Pack
+
+Any team can create a bot pack repository that the marketplace parser will index. Follow these steps:
+
+### 1. Create a new repository
+
+```
+your-org-bots/
+├── ARCHITECTURE.md    # Copy from this repo (or reference it)
+├── bots/
+│   └── your-bot/
+│       ├── BOT.md
+│       ├── SOUL.md
+│       ├── agents/       # Optional
+│       └── data-seeds/
+│           ├── zone1-north-star.json
+│           ├── zone2-entity-types.json
+│           └── zone3-initial-memory.json
+├── teams/
+│   └── your-team/
+│       └── TEAM.md
+├── skills/               # Optional
+│   └── your-skill/
+│       ├── SKILL.md
+│       └── prompt.md
+└── tools/                # Optional -- MCP server definitions
+    └── your-server/
+        └── SERVER.md
+```
+
+### 2. Write your BOT.md
+
+Every field in the YAML frontmatter is required unless marked optional in the spec. The parser will reject manifests with missing required fields.
+
+```yaml
+---
+apiVersion: clawsink.schemabounce.com/v1
+kind: Bot
+metadata:
+  name: your-bot              # Must match directory name
+  displayName: "Your Bot"     # Shows in marketplace
+  version: "1.0.0"
+  description: "What this bot does in one line"  # <120 chars
+  category: operations        # See category taxonomy below
+  tags: ["tag1", "tag2"]
+agent:
+  capabilities: ["operations"]
+  hostingMode: "openclaw"
+  defaultDomain: "your-domain"
+model:
+  provider: "anthropic"
+  preferred: "claude-sonnet-4-6"
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: null
+cost:
+  estimatedTokensPerRun: 10000
+  estimatedCostTier: "medium"
+schedule:
+  default: "@daily"
+  recommendations:
+    light: "@weekly"
+    standard: "@daily"
+    intensive: "@every 4h"
+messaging:
+  listensTo:
+    - { type: "alert", from: ["*"] }
+  sendsTo:
+    - { type: "finding", to: ["executive-assistant"], when: "analysis complete" }
+data:
+  entityTypesRead: ["relevant_entity_types"]
+  entityTypesWrite: ["yb_findings"]
+  memoryNamespaces: ["working_notes"]
+zones:
+  zone1Read: ["mission", "industry"]
+  zone2Domains: ["your-domain"]
+skills:
+  - ref: "skills/your-skill@1.0.0"
+mcpServers:                          # Optional -- MCP servers this bot requires
+  - ref: "tools/github"
+    required: true
+    reason: "Needs GitHub access for issue management"
+---
+
+# Your Bot
+
+Extended documentation goes here. This renders as the "About" tab on the marketplace page.
+```
+
+### 3. Write your SOUL.md
+
+The agent's identity document. Injected as system context on every run. Keep under 800 tokens.
+
+```markdown
+# Your Bot
+
+You are Your Bot, a persistent AI team member for this business.
+
+## Mission
+{One sentence core purpose}
+
+## Mandates
+1. {First mandatory behavior}
+2. {Second mandatory behavior}
+
+## Run Protocol
+1. Read messages (adl_read_messages)
+2. Read memory (adl_read_memory)
+3. Query data (adl_query_records)
+4. Analyze and act
+5. Write findings (adl_write_record)
+6. Update memory (adl_write_memory)
+7. Escalate if needed (adl_send_message)
+
+## Escalation
+- Critical: message executive-assistant type=alert
+```
+
+### 4. Write your TEAM.md
+
+```yaml
+---
+apiVersion: clawsink.schemabounce.com/v1
+kind: Team
+metadata:
+  name: your-team
+  displayName: "Your Team"
+  version: "1.0.0"
+  description: "What this team does"
+  category: your-industry
+  tags: ["tag1"]
+  author: "your-org"
+  license: "MIT"
+  estimatedMonthlyCost: "varies"
+bots:
+  - ref: "bots/bot-a@1.0.0"
+  - ref: "bots/bot-b@1.0.0"
+  - ref: "bots/bot-c@1.0.0"
+northStar:
+  industry: "Your Industry"
+  context: "Who this team is for"
+  requiredKeys:
+    - mission
+    - industry
+orgChart:
+  lead: bot-a
+  roles:
+    - bot: bot-a
+      role: lead
+      reportsTo: null
+      domain: operations
+    - bot: bot-b
+      role: specialist
+      reportsTo: bot-a
+      domain: finance
+    - bot: bot-c
+      role: support
+      reportsTo: bot-b
+      domain: finance
+  escalation:
+    critical: bot-a
+    unhandled: bot-a
+    paths:
+      - name: "Budget anomaly"
+        trigger: "budget_breach"
+        chain: [bot-c, bot-b, bot-a]
+mcpServers:                          # Optional -- shared MCP servers for all team bots
+  - ref: "tools/github"
+    reason: "Shared GitHub access for the whole team"
+---
+
+# Your Team
+
+Extended documentation here.
+```
+
+### 5. Validate before submitting
+
+Run these checks before submitting your bot pack:
+
+```
+Checklist:
+[ ] Every BOT.md has valid YAML frontmatter with kind: Bot
+[ ] Every SOUL.md is under 800 tokens
+[ ] Every bot has data-seeds/ with all 3 zone files (valid JSON)
+[ ] metadata.name matches directory name for every manifest
+[ ] All skills[].ref point to existing skill directories
+[ ] All messaging.sendsTo[].to reference valid bot names
+[ ] Every TEAM.md has orgChart with exactly one lead
+[ ] Every bot in the team appears exactly once in orgChart.roles
+[ ] Every escalation path only references bots in the team
+[ ] No secrets, API keys, or credentials in any file
+[ ] No competitor names or internal pricing
+[ ] All mcpServers[].ref point to existing tools/ directories
+[ ] MCP server SERVER.md has valid YAML with kind: McpServer
+[ ] Markdown body exists after --- for marketplace documentation
+```
+
+## Category Taxonomy
+
+Standard categories for `metadata.category` on bots:
+
+| Category | Examples |
+|---|---|
+| `operations` | executive-assistant, order-fulfillment |
+| `engineering` | sre-devops, data-engineer, code-reviewer |
+| `finance` | accountant, revenue-analyst |
+| `support` | customer-support, customer-onboarding |
+| `legal` | legal-compliance, compliance-auditor |
+| `marketing` | marketing-growth, social-media-strategist |
+| `management` | executive-reporter, mentor-coach |
+| `security` | security-agent, fraud-detector |
+| `product` | product-owner, ux-researcher |
+| `data` | data-quality-monitor, anomaly-detector |
+| `logistics` | inventory-manager, shipping-tracker |
+| `content` | blog-writer, content-scheduler |
+
+Standard categories for `metadata.category` on teams:
+
+| Category | Examples |
+|---|---|
+| `general` | small-business-starter |
+| `startup` | startup-all-in-one |
+| `hospitality` | restaurant-group |
+| `real-estate` | real-estate-agency |
+| `healthcare` | healthcare-practice |
+| `professional-services` | consulting-firm |
+| `logistics` | logistics-company |
+| `media` | media-publisher |
+| `fitness` | fitness-studio |
+| `legal` | legal-practice |
+| `manufacturing` | manufacturing-ops |
+| `enterprise` | enterprise-platform |
+| `ecommerce` | ecommerce-pack, ecommerce-operations |
+| `fintech` | fintech-fraud-prevention |
+| `agency` | digital-agency |
+| `saas` | saas-growth |
+| `engineering` | software-dev-team, data-ops |
+| `hr` | hr-operations |
+| `trades` | tradesman-pack |
 
 ## Inter-Bot Communication
 
-Bots communicate via messaging with 4 message types: `alert`, `request`, `finding`, `text`. Data exchange uses compact structured payloads to minimize token cost.
+Bots communicate via 4 message types through the ADL message system:
 
-See [shared/message-protocol.md](shared/message-protocol.md) for the full protocol.
+| Type | Semantics | Response Expected |
+|------|-----------|-------------------|
+| `alert` | Urgent -- recipient must act | Acknowledge + action |
+| `request` | Ask for analysis/data | Response with findings |
+| `finding` | Informational | Read and incorporate |
+| `text` | General | Optional |
+
+See [shared/message-protocol.md](shared/message-protocol.md) for the full protocol including Toon Card format and rate limiting.
+
+## Data Architecture
+
+Bots operate within a three-zone data model:
+
+- **Zone 1 (North Star)**: Company-level data all bots read. Humans write. Contains mission, org chart, industry context, compliance rules.
+- **Zone 2 (Shared Domains)**: Domain-scoped working data. Bots in the same domain read/write freely. Cross-domain requires human grant.
+- **Zone 3 (Private)**: Per-bot scratch space. Cursors, drafts, session state. Invisible to other bots.
+
+Data seed files (`data-seeds/`) bootstrap these zones at bot activation.
 
 ## License
 

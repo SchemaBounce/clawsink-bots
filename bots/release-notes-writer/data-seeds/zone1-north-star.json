@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "release_format",
+      "value": "Define your release notes format here. Example: Group by category (features, fixes, improvements). Include ticket references. Audience: end users. Tone: professional and concise.",
+      "description": "Release notes formatting and categorization preferences"
+    }
+  ]
+}

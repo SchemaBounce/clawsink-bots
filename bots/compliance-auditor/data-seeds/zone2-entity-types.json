@@ -1,0 +1,29 @@
+{
+  "entityTypes": [
+    {
+      "name": "audit_findings",
+      "displayName": "Audit Findings",
+      "description": "Compliance audit findings and violations",
+      "domain": "compliance",
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "framework": {"type": "string", "required": true, "description": "Regulatory framework violated"},
+        "rule_id": {"type": "string", "description": "Specific rule or control identifier"},
+        "description": {"type": "string", "required": true, "description": "Finding description"},
+        "remediation": {"type": "string", "description": "Required remediation steps"}
+      }
+    },
+    {
+      "name": "compliance_reports",
+      "displayName": "Compliance Reports",
+      "description": "Periodic compliance status reports",
+      "domain": "compliance",
+      "fields": {
+        "framework": {"type": "string", "required": true, "description": "Regulatory framework assessed"},
+        "status": {"type": "string", "required": true, "enum": ["compliant", "partial", "non_compliant"], "description": "Overall compliance status"},
+        "findings_count": {"type": "number", "description": "Number of open findings"},
+        "summary": {"type": "string", "description": "Report summary"}
+      }
+    }
+  ]
+}

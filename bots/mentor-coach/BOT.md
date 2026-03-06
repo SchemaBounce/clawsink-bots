@@ -38,8 +38,6 @@ data:
 zones:
   zone1Read: ["mission", "priorities"]
   zone2Domains: ["operations"]
-skills:
-  - inline: "core-analysis"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"

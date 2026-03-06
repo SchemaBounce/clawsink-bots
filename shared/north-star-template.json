@@ -42,7 +42,7 @@
     {
       "key": "budget_constraints",
       "label": "Budget Constraints",
-      "placeholder": "Monthly cloud budget: $5,000. Marketing budget: $2,000.",
+      "placeholder": "Monthly cloud budget: [amount]. Marketing budget: [amount].",
       "description": "Budget limits. Accountant and Marketing bots factor these into recommendations."
     },
     {

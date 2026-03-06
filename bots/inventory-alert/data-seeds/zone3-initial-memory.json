@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "stock_levels",
+      "key": "init",
+      "value": "No stock levels tracked yet. Will build baseline inventory snapshots as CDC events arrive."
+    },
+    {
+      "namespace": "reorder_thresholds",
+      "key": "init",
+      "value": "No reorder thresholds configured yet. Will learn optimal thresholds from stock movement patterns."
+    }
+  ]
+}

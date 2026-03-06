@@ -42,7 +42,7 @@ zones:
   zone1Read: ["mission", "tech_stack"]
   zone2Domains: ["engineering", "operations"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/record-monitoring@1.0.0"
 automations:
   triggers:
     - name: "Data quality check on new records"

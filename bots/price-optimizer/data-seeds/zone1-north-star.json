@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "pricing_strategy",
+      "value": "Define your pricing strategy here. Example: Target margin: 30-45%. Maximum single adjustment: 10%. Price review frequency: weekly. Elasticity sensitivity: moderate.",
+      "description": "Pricing boundaries and optimization strategy"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "metric_baselines",
+      "key": "init",
+      "value": "No baselines established yet. Will compute rolling averages as metric data arrives."
+    },
+    {
+      "namespace": "detection_models",
+      "key": "init",
+      "value": "Using default z-score model. Will refine detection parameters as patterns emerge."
+    }
+  ]
+}

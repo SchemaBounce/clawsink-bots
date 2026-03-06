@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "performance_baselines",
+      "key": "init",
+      "value": "No performance baselines established yet. Will compute per-component normal ranges from first few report cycles."
+    },
+    {
+      "namespace": "capacity_trends",
+      "key": "init",
+      "value": "No capacity trend data yet. Will track resource utilization trends to predict capacity needs."
+    }
+  ]
+}

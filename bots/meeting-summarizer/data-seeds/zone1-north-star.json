@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "summary_format",
+      "value": "Define your preferred summary format here. Example: Include decisions, action items with owners, key discussion points. Max summary length: 500 words. Action item format: owner + deadline + description.",
+      "description": "Meeting summary structure and formatting preferences"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "entityTypes": [
+    {
+      "name": "blog_drafts",
+      "description": "Blog post drafts created by the writer, pending human review",
+      "fields": ["title", "section", "category", "content_markdown", "meta_description", "tags", "status", "created_at"]
+    },
+    {
+      "name": "editorial_notes",
+      "description": "Notes on editorial decisions, revision feedback, and topic research",
+      "fields": ["topic_id", "note_type", "content", "created_at"]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "severity_criteria",
+      "value": "Define your severity levels here. Example: Critical: data loss or outage. High: major feature broken. Medium: degraded UX. Low: cosmetic issue.",
+      "description": "Criteria for classifying bug severity levels"
+    },
+    {
+      "key": "team_routing_rules",
+      "value": "Define team routing rules here. Example: frontend bugs to UI team, API bugs to backend team, infra bugs to SRE team.",
+      "description": "Rules for routing triaged bugs to the right team"
+    }
+  ]
+}

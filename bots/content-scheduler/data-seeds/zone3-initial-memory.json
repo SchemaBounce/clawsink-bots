@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "editorial_calendar",
+      "key": "init",
+      "value": "No editorial calendar data yet. Will build calendar as content_plans and scheduled_posts are created."
+    },
+    {
+      "namespace": "performance_data",
+      "key": "init",
+      "value": "No content performance data yet. Will track engagement metrics per channel and posting time."
+    }
+  ]
+}

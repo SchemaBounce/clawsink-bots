@@ -38,7 +38,7 @@ zones:
   zone1Read: ["mission"]
   zone2Domains: ["compliance"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/cdc-event-analysis@1.0.0"
 requirements:
   minTier: "starter"
 ---

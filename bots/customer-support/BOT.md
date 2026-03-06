@@ -42,7 +42,7 @@ zones:
   zone1Read: ["mission", "industry", "stage"]
   zone2Domains: ["support"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/notification-dispatch@1.0.0"
 automations:
   triggers:
     - name: "Triage new ticket"

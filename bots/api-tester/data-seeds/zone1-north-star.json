@@ -2,7 +2,7 @@
   "seeds": [
     {
       "key": "api_base_url",
-      "value": "http://localhost:8080",
+      "value": "https://api.example.com",
       "description": "Base URL for the API under test -- customize to match your environment"
     },
     {

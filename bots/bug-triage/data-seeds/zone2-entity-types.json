@@ -1,0 +1,29 @@
+{
+  "entityTypes": [
+    {
+      "name": "triage_decisions",
+      "displayName": "Triage Decisions",
+      "description": "Bug triage outcomes with severity and assignment",
+      "domain": "engineering",
+      "fields": {
+        "bug_id": {"type": "string", "required": true, "description": "Reference to the original bug report"},
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Assigned severity"},
+        "assigned_team": {"type": "string", "description": "Team assigned to fix"},
+        "root_cause_guess": {"type": "string", "description": "Initial root cause hypothesis"},
+        "priority_rank": {"type": "number", "description": "Priority ranking within severity level"}
+      }
+    },
+    {
+      "name": "severity_scores",
+      "displayName": "Severity Scores",
+      "description": "Computed severity scores for bug reports",
+      "domain": "engineering",
+      "fields": {
+        "bug_id": {"type": "string", "required": true, "description": "Reference to the bug report"},
+        "score": {"type": "number", "required": true, "description": "Numeric severity score 0-100"},
+        "factors": {"type": "string", "description": "Factors contributing to the score"},
+        "confidence": {"type": "number", "description": "Confidence level 0-1"}
+      }
+    }
+  ]
+}

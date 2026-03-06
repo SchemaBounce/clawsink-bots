@@ -1,0 +1,32 @@
+{
+  "entityTypes": [
+    {
+      "name": "inventory_alerts",
+      "displayName": "Inventory Alerts",
+      "description": "Low stock and reorder alerts triggered by inventory changes",
+      "domain": "operations",
+      "sampleFields": ["severity", "sku", "current_stock", "threshold", "description"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "sku": {"type": "string", "required": true, "description": "Product SKU"},
+        "current_stock": {"type": "number", "required": true, "description": "Current stock level"},
+        "threshold": {"type": "number", "description": "Configured reorder threshold"},
+        "description": {"type": "string", "required": true, "description": "Alert details"}
+      }
+    },
+    {
+      "name": "reorder_requests",
+      "displayName": "Reorder Requests",
+      "description": "Generated reorder requests for low-stock items",
+      "domain": "operations",
+      "sampleFields": ["sku", "quantity", "urgency", "supplier", "reason"],
+      "fields": {
+        "sku": {"type": "string", "required": true, "description": "Product SKU"},
+        "quantity": {"type": "number", "required": true, "description": "Recommended reorder quantity"},
+        "urgency": {"type": "string", "enum": ["routine", "urgent", "emergency"], "description": "Reorder urgency"},
+        "supplier": {"type": "string", "description": "Preferred supplier"},
+        "reason": {"type": "string", "description": "Reason for reorder"}
+      }
+    }
+  ]
+}

@@ -35,7 +35,7 @@ zones:
   zone1Read: ["mission"]
   zone2Domains: ["finance"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/scheduled-report@1.0.0"
 requirements:
   minTier: "starter"
 ---

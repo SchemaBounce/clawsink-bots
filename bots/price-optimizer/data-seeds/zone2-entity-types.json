@@ -1,0 +1,33 @@
+{
+  "entityTypes": [
+    {
+      "name": "price_recommendations",
+      "displayName": "Price Recommendations",
+      "description": "Pricing adjustment recommendations based on market analysis",
+      "domain": "strategy",
+      "sampleFields": ["sku", "current_price", "recommended_price", "change_pct", "reason", "confidence"],
+      "fields": {
+        "sku": {"type": "string", "required": true, "description": "Product SKU"},
+        "current_price": {"type": "number", "required": true, "description": "Current price"},
+        "recommended_price": {"type": "number", "required": true, "description": "Recommended price"},
+        "change_pct": {"type": "number", "description": "Percentage change"},
+        "reason": {"type": "string", "required": true, "description": "Recommendation rationale"},
+        "confidence": {"type": "string", "enum": ["low", "medium", "high"], "description": "Confidence level"}
+      }
+    },
+    {
+      "name": "pricing_alerts",
+      "displayName": "Pricing Alerts",
+      "description": "Alerts for significant market price movements",
+      "domain": "strategy",
+      "sampleFields": ["severity", "sku", "market_change", "description", "action_required"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "sku": {"type": "string", "required": true, "description": "Affected product SKU"},
+        "market_change": {"type": "number", "description": "Market price change percentage"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Recommended action"}
+      }
+    }
+  ]
+}

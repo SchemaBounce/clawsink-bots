@@ -35,7 +35,7 @@ zones:
   zone1Read: ["mission"]
   zone2Domains: ["marketing"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/record-monitoring@1.0.0"
 plugins:
   - ref: "gog@latest"
     required: true
