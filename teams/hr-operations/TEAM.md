@@ -17,6 +17,19 @@ bots:
   - ref: "bots/mentor-coach@1.0.0"
   - ref: "bots/knowledge-base-curator@1.0.0"
   - ref: "bots/legal-compliance@1.0.0"
+plugins:
+  - ref: "gog@latest"
+    slot: "google"
+    reason: "Google Calendar for interview scheduling and Google Drive for document management"
+    config:
+      calendar_access: "read_write"
+      drive_access: "read_write"
+  - ref: "n8n-workflow@latest"
+    slot: "workflow"
+    reason: "Onboarding workflow automation for hr-onboarding and knowledge-base-curator"
+    config:
+      webhook_triggers: true
+      workflow_templates: ["onboarding", "offboarding", "compliance-review"]
 northStar:
   industry: "Human Resources"
   context: "HR team automating onboarding, compliance, coaching, and knowledge management"

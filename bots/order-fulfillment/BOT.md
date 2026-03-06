@@ -39,6 +39,10 @@ zones:
   zone2Domains: ["operations"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "n8n-workflow@latest"
+    required: true
+    reason: "Triggers fulfillment workflows in external systems (warehouse routing, shipping labels, carrier dispatch)"
 requirements:
   minTier: "starter"
 ---

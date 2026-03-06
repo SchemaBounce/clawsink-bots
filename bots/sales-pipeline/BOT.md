@@ -36,6 +36,11 @@ zones:
   zone2Domains: ["sales"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    required: true
+    reason: "OAuth access to CRM platforms (Salesforce, HubSpot, Pipedrive) for reading deal stages and pipeline data"
 requirements:
   minTier: "starter"
 ---

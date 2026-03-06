@@ -37,6 +37,15 @@ zones:
   zone2Domains: ["hr"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "n8n-workflow@latest"
+    required: true
+    reason: "Triggers onboarding workflows (account provisioning, equipment requests, training enrollment)"
+  - ref: "gog@latest"
+    required: false
+    reason: "Google Calendar for scheduling orientation sessions, Drive for sharing onboarding documents"
+    config:
+      scopes: ["calendar.events", "drive.readonly"]
 requirements:
   minTier: "starter"
 ---

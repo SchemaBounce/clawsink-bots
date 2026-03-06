@@ -42,6 +42,11 @@ zones:
   zone2Domains: ["marketing"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    required: true
+    reason: "OAuth access to marketing platforms (Google Ads, Meta Ads, Mailchimp) for pulling campaign metrics and SEO data"
 requirements:
   minTier: "starter"
 ---

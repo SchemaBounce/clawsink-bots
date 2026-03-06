@@ -18,6 +18,18 @@ bots:
   - ref: "bots/blog-writer@1.0.0"
   - ref: "bots/social-media-strategist@1.0.0"
   - ref: "bots/growth-hacker@1.0.0"
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    reason: "Social-media-strategist and growth-hacker need OAuth for social platforms and analytics"
+    config:
+      scopes: ["social", "analytics", "ads"]
+  - ref: "gog@latest"
+    slot: "calendar"
+    reason: "Content scheduling via Google Calendar for blog-writer and social-media-strategist"
+    config:
+      calendar_access: "read_write"
+      drive_access: "read"
 northStar:
   industry: "Digital Agency / Creative Services"
   context: "Agency team managing brand, content, UX, and growth across multiple client accounts"

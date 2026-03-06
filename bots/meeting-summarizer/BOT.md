@@ -37,6 +37,12 @@ zones:
   zone2Domains: ["general"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "gog@latest"
+    required: true
+    reason: "Google Calendar for meeting context and attendee lists, Drive for storing and sharing summaries"
+    config:
+      scopes: ["calendar.readonly", "drive"]
 requirements:
   minTier: "starter"
 ---

@@ -42,6 +42,11 @@ zones:
   zone2Domains: ["management", "operations", "finance", "support", "engineering"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "memory-lancedb@^2.0.0"
+    slot: "memory"
+    required: true
+    reason: "Cross-domain correlation history; retains trend baselines and strategic context across 7+ bot finding streams between runs"
 requirements:
   minTier: "starter"
 ---

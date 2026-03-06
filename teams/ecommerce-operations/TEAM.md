@@ -18,6 +18,12 @@ skills:
   - trend-analysis
 requirements:
   minTier: "starter"
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    reason: "Marketplace and platform OAuth for inventory-alert, order-fulfillment, and price-optimizer"
+    config:
+      scopes: ["marketplace", "orders", "inventory"]
 ---
 
 # E-Commerce Operations

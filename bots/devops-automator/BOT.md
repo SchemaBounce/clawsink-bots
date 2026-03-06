@@ -47,6 +47,10 @@ automations:
       eventType: "created"
       targetAgent: "self"
       promptTemplate: "Verify deployment health and rollback if error rate exceeds threshold."
+plugins:
+  - ref: "n8n-workflow@latest"
+    required: true
+    reason: "Triggers CI/CD pipelines, deployment rollbacks, and infrastructure automation workflows in external systems"
 requirements:
   minTier: "starter"
 ---

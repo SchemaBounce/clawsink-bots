@@ -45,6 +45,15 @@ skills:
   - ref: "skills/daily-briefing@1.0.0"
   - ref: "skills/cross-domain-synthesis@1.0.0"
   - ref: "skills/follow-up-tracking@1.0.0"
+plugins:
+  - ref: "memory-lancedb@^2.0.0"
+    slot: "memory"
+    required: true
+    reason: "Reads 22+ entity types across all domains; heavy cross-run recall for briefing continuity and follow-up tracking"
+  - ref: "microsoft-teams@latest"
+    slot: "channel"
+    required: false
+    reason: "Distributes daily briefings and priority alerts to Teams channels"
 requirements:
   minTier: "starter"
 ---

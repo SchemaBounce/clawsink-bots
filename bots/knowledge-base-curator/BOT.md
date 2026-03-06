@@ -36,6 +36,11 @@ zones:
   zone2Domains: ["general"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "memory-lancedb@^2.0.0"
+    slot: "memory"
+    required: true
+    reason: "Semantic recall of article content for gap detection, duplicate identification, and content quality tracking across runs"
 requirements:
   minTier: "starter"
 ---

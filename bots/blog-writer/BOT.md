@@ -42,10 +42,13 @@ data:
 zones:
   zone1Read: ["brand_voice", "product_catalog", "company_glossary"]
   zone2Domains: ["content"]
-externalApis:
-  - name: "blog"
-    description: "Blog API for creating draft posts"
-    requiredScopes: ["blog:write"]
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    reason: "Managed OAuth for blog API — handles token refresh and scoping"
+    config:
+      apps: ["blog"]
+      scopes: ["blog:write"]
 requirements:
   minTier: "starter"
 ---
@@ -57,7 +60,10 @@ Creates weekly technical blog posts for the SchemaBounce and OpenCLAW blog secti
 ## What It Does
 
 - Writes one blog post per week, alternating between SchemaBounce and OpenCLAW sections
-- Researches topics using North Star docs, knowledge graph, and memory
+- Orchestrates three sub-agents in isolated sessions: **researcher** → **writer** → **editor**
+- Researcher validates topic feasibility and gathers source material
+- Writer drafts the full post from research notes
+- Editor reviews for voice, accuracy, and style guide adherence (with revision cycles)
 - Maintains an editorial calendar to avoid duplicate topics
 - Submits all posts as drafts — never auto-publishes
 - Notifies the team when a draft is ready for review

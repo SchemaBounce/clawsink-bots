@@ -40,6 +40,11 @@ zones:
   zone2Domains: ["operations"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "memory-lancedb@^2.0.0"
+    slot: "memory"
+    required: true
+    reason: "Cross-run learning from 11 bot finding streams; retains team performance baselines and coaching history across runs"
 requirements:
   minTier: "starter"
 ---
