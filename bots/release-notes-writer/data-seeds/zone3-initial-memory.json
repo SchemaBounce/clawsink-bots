@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "release_history",
+      "key": "init",
+      "value": "No release history tracked yet. Will build version timeline and change frequency baselines from commit and ticket data."
+    },
+    {
+      "namespace": "feature_categories",
+      "key": "init",
+      "value": "No feature categories learned yet. Will develop categorization patterns from past commits and ticket labels."
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "description": "Machine-readable escalation routing. Defines which bot messages which bot for what event types.",
+  "note": "This is the GLOBAL DEFAULT for bots operating outside a team context. When a bot is activated within a team, the team's orgChart.escalation overrides these chains. See teams/README.md for the team-level orgChart format.",
   "chains": {
     "executive-assistant": {
       "receives_alerts_from": ["*"],

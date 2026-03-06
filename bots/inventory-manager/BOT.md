@@ -41,7 +41,7 @@ zones:
   zone1Read: ["mission", "industry", "budget_constraints", "reorder_policy"]
   zone2Domains: ["operations"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/record-monitoring@1.0.0"
 automations:
   triggers:
     - name: "Update stock levels on new order"

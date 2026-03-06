@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "onboarding_checklist_template",
+      "value": "Define your default onboarding checklist here. Example: IT_setup, badge_access, orientation, benefits_enrollment, team_intro, training.",
+      "description": "Standard checklist items for new employee onboarding"
+    },
+    {
+      "key": "onboarding_timeline",
+      "value": "Define your onboarding timeline here. Example: day_1: orientation and IT setup, week_1: team intros, month_1: training complete.",
+      "description": "Target timeline for completing onboarding milestones"
+    }
+  ]
+}

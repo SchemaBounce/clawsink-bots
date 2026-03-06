@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "onboarding_progress",
+      "key": "init",
+      "value": "No onboarding data yet. Will track per-customer progress through onboarding steps."
+    },
+    {
+      "namespace": "completion_rates",
+      "key": "init",
+      "value": "No completion rate data yet. Will compute step-by-step conversion rates as customers onboard."
+    }
+  ]
+}

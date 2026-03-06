@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "anomaly_sensitivity",
+      "value": "Define your anomaly detection sensitivity here. Example: standard_deviations: 3, min_data_points: 30.",
+      "description": "How sensitive the detector should be to deviations"
+    },
+    {
+      "key": "metric_categories",
+      "value": "Define which metric categories to monitor. Example: latency, throughput, error_rate, cpu, memory.",
+      "description": "Categories of metrics the bot should analyze"
+    }
+  ]
+}

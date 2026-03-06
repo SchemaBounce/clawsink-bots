@@ -39,7 +39,7 @@ zones:
   zone1Read: ["mission", "risk_policy"]
   zone2Domains: ["finance"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/cdc-event-analysis@1.0.0"
 requirements:
   minTier: "starter"
 ---

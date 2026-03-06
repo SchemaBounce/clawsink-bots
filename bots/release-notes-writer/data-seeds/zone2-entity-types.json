@@ -1,0 +1,32 @@
+{
+  "entityTypes": [
+    {
+      "name": "release_notes",
+      "displayName": "Release Notes",
+      "description": "Generated release notes for product versions",
+      "domain": "engineering",
+      "sampleFields": ["version", "release_date", "summary", "categories", "highlights"],
+      "fields": {
+        "version": {"type": "string", "required": true, "description": "Release version"},
+        "release_date": {"type": "date", "required": true, "description": "Release date"},
+        "summary": {"type": "string", "required": true, "description": "Release summary"},
+        "categories": {"type": "array", "description": "Change categories included"},
+        "highlights": {"type": "array", "description": "Key highlights of this release"}
+      }
+    },
+    {
+      "name": "changelogs",
+      "displayName": "Changelogs",
+      "description": "Detailed changelog entries for individual changes",
+      "domain": "engineering",
+      "sampleFields": ["version", "category", "description", "ticket_ref", "breaking"],
+      "fields": {
+        "version": {"type": "string", "required": true, "description": "Release version"},
+        "category": {"type": "string", "required": true, "enum": ["feature", "fix", "improvement", "deprecation", "breaking"], "description": "Change category"},
+        "description": {"type": "string", "required": true, "description": "Change description"},
+        "ticket_ref": {"type": "string", "description": "Related ticket reference"},
+        "breaking": {"type": "boolean", "description": "Whether this is a breaking change"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "entityTypes": [
+    {
+      "name": "churn_scores",
+      "displayName": "Churn Scores",
+      "description": "Computed churn risk scores per account",
+      "domain": "analytics",
+      "fields": {
+        "account_id": {"type": "string", "required": true, "description": "Customer account identifier"},
+        "risk_score": {"type": "number", "required": true, "description": "Churn risk score 0-1"},
+        "risk_level": {"type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Risk classification"},
+        "top_signals": {"type": "string", "description": "Key signals driving the score"},
+        "trend": {"type": "string", "enum": ["improving", "stable", "declining"], "description": "Risk trend direction"}
+      }
+    },
+    {
+      "name": "retention_alerts",
+      "displayName": "Retention Alerts",
+      "description": "Urgent retention alerts for at-risk accounts",
+      "domain": "analytics",
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["medium", "high", "critical"], "description": "Alert severity"},
+        "account_id": {"type": "string", "required": true, "description": "At-risk account"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "recommended_action": {"type": "string", "description": "Suggested retention intervention"}
+      }
+    }
+  ]
+}

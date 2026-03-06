@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "onboarding_sla",
+      "value": "Define your onboarding SLA here. Example: welcome email within 1 hour, first check-in within 24 hours, setup complete within 7 days.",
+      "description": "Target timelines for onboarding milestones"
+    },
+    {
+      "key": "onboarding_steps",
+      "value": "Define your onboarding steps here. Example: welcome_email, account_setup, product_tour, first_integration, check_in.",
+      "description": "Standard onboarding workflow steps"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "onboarding_metrics",
+      "key": "init",
+      "value": "No onboarding metrics yet. Will track average completion times and bottleneck tasks by department."
+    },
+    {
+      "namespace": "completion_rates",
+      "key": "init",
+      "value": "No completion rate data yet. Will compute per-task and per-department completion rates over time."
+    }
+  ]
+}

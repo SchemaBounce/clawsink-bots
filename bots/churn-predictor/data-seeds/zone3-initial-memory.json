@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "activity_baselines",
+      "key": "init",
+      "value": "No activity baselines established yet. Will compute per-account engagement norms as data arrives."
+    },
+    {
+      "namespace": "churn_indicators",
+      "key": "init",
+      "value": "No churn indicators learned yet. Will identify leading disengagement signals over time."
+    }
+  ]
+}

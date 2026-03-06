@@ -39,6 +39,49 @@ northStar:
     - content_pillars
     - campaign_goals
     - client_accounts
+orgChart:
+  lead: executive-assistant
+  roles:
+    - bot: executive-assistant
+      role: lead
+      reportsTo: null
+      domain: creative
+    - bot: ux-researcher
+      role: specialist
+      reportsTo: executive-assistant
+      domain: research
+    - bot: brand-guardian
+      role: specialist
+      reportsTo: executive-assistant
+      domain: creative
+    - bot: blog-writer
+      role: specialist
+      reportsTo: brand-guardian
+      domain: content
+    - bot: social-media-strategist
+      role: specialist
+      reportsTo: brand-guardian
+      domain: content
+    - bot: growth-hacker
+      role: specialist
+      reportsTo: executive-assistant
+      domain: growth
+  escalation:
+    critical: executive-assistant
+    unhandled: executive-assistant
+    paths:
+      - name: "Brand Drift"
+        trigger: "brand_inconsistency"
+        chain: [brand-guardian, executive-assistant]
+      - name: "Content Performance Drop"
+        trigger: "content_underperformance"
+        chain: [blog-writer, brand-guardian, executive-assistant]
+      - name: "Viral Opportunity"
+        trigger: "viral_opportunity"
+        chain: [social-media-strategist, growth-hacker, executive-assistant]
+      - name: "Usability Issue"
+        trigger: "usability_finding"
+        chain: [ux-researcher, executive-assistant]
 ---
 # Digital Agency
 

@@ -19,6 +19,35 @@ skills:
   - report-generation
 requirements:
   minTier: "starter"
+orgChart:
+  lead: data-engineer
+  roles:
+    - bot: data-engineer
+      role: lead
+      reportsTo: null
+      domain: data-infrastructure
+    - bot: data-quality-monitor
+      role: specialist
+      reportsTo: data-engineer
+      domain: data-quality
+    - bot: anomaly-detector
+      role: specialist
+      reportsTo: data-engineer
+      domain: data-quality
+    - bot: infrastructure-reporter
+      role: support
+      reportsTo: data-quality-monitor
+      domain: data-infrastructure
+  escalation:
+    critical: data-engineer
+    unhandled: data-engineer
+    paths:
+      - name: "Pipeline failure"
+        trigger: "pipeline_failure"
+        chain: [data-quality-monitor, data-engineer]
+      - name: "Data quality breach"
+        trigger: "quality_breach"
+        chain: [data-quality-monitor, anomaly-detector, data-engineer]
 ---
 
 # Data Ops

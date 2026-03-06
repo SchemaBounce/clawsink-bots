@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "sentiment_baselines",
+      "key": "init",
+      "value": "No sentiment baselines established yet. Will compute normal sentiment ranges per platform from initial monitoring data."
+    },
+    {
+      "namespace": "trending_topics",
+      "key": "init",
+      "value": "No trending topics tracked yet. Will identify recurring themes and conversation patterns around the brand."
+    }
+  ]
+}

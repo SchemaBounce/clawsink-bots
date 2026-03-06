@@ -39,6 +39,45 @@ northStar:
     - compliance_requirements
     - review_cadence
     - org_structure
+orgChart:
+  lead: executive-assistant
+  roles:
+    - bot: executive-assistant
+      role: lead
+      reportsTo: null
+      domain: administration
+    - bot: hr-onboarding
+      role: specialist
+      reportsTo: executive-assistant
+      domain: talent
+    - bot: mentor-coach
+      role: specialist
+      reportsTo: executive-assistant
+      domain: talent
+    - bot: knowledge-base-curator
+      role: specialist
+      reportsTo: executive-assistant
+      domain: administration
+    - bot: legal-compliance
+      role: specialist
+      reportsTo: executive-assistant
+      domain: compliance
+  escalation:
+    critical: executive-assistant
+    unhandled: executive-assistant
+    paths:
+      - name: "Onboarding Blocker"
+        trigger: "onboarding_blocked"
+        chain: [hr-onboarding, executive-assistant]
+      - name: "Compliance Violation"
+        trigger: "compliance_violation"
+        chain: [legal-compliance, executive-assistant]
+      - name: "Performance Concern"
+        trigger: "performance_concern"
+        chain: [mentor-coach, executive-assistant]
+      - name: "Stale Policy"
+        trigger: "stale_documentation"
+        chain: [knowledge-base-curator, legal-compliance, executive-assistant]
 ---
 # HR & People Operations
 

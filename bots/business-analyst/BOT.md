@@ -41,7 +41,7 @@ zones:
   zone1Read: ["mission", "industry", "stage", "priorities"]
   zone2Domains: ["management", "operations", "finance", "support", "engineering"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/scheduled-report@1.0.0"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"

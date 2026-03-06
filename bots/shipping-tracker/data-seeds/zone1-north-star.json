@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "delivery_sla",
+      "value": "Define your delivery SLA targets here. Example: Standard delivery: 5 business days. Express delivery: 2 business days. Delay notification threshold: 1 day past estimate.",
+      "description": "Shipping and delivery service level targets"
+    }
+  ]
+}

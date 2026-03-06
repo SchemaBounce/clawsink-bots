@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "regulatory_frameworks",
+      "value": "Define which regulatory frameworks apply here. Example: SOC2, GDPR, PCI-DSS, HIPAA.",
+      "description": "Regulatory frameworks the auditor should check against"
+    },
+    {
+      "key": "audit_frequency",
+      "value": "Define your audit schedule here. Example: continuous for transactions, weekly for access reviews, quarterly for full audits.",
+      "description": "How often different audit types should run"
+    }
+  ]
+}

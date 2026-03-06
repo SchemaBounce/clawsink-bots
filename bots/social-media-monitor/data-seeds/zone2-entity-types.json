@@ -1,0 +1,32 @@
+{
+  "entityTypes": [
+    {
+      "name": "sentiment_reports",
+      "displayName": "Sentiment Reports",
+      "description": "Periodic brand sentiment analysis reports",
+      "domain": "marketing",
+      "sampleFields": ["period", "platform", "overall_sentiment", "mention_count", "summary"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Reporting period"},
+        "platform": {"type": "string", "description": "Social media platform"},
+        "overall_sentiment": {"type": "string", "required": true, "enum": ["positive", "neutral", "negative", "mixed"], "description": "Overall sentiment"},
+        "mention_count": {"type": "number", "description": "Total mentions in period"},
+        "summary": {"type": "string", "required": true, "description": "Sentiment analysis summary"}
+      }
+    },
+    {
+      "name": "mention_alerts",
+      "displayName": "Mention Alerts",
+      "description": "Alerts for significant brand mentions or sentiment shifts",
+      "domain": "marketing",
+      "sampleFields": ["severity", "platform", "alert_type", "description", "action_required"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "platform": {"type": "string", "required": true, "description": "Source platform"},
+        "alert_type": {"type": "string", "required": true, "enum": ["viral_mention", "negative_spike", "influencer", "crisis"], "description": "Alert type"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Recommended response"}
+      }
+    }
+  ]
+}

@@ -24,6 +24,38 @@ plugins:
     reason: "Marketplace and platform OAuth for inventory-alert, order-fulfillment, and price-optimizer"
     config:
       scopes: ["marketplace", "orders", "inventory"]
+orgChart:
+  lead: order-fulfillment
+  roles:
+    - bot: order-fulfillment
+      role: lead
+      reportsTo: null
+      domain: fulfillment
+    - bot: inventory-alert
+      role: specialist
+      reportsTo: order-fulfillment
+      domain: storefront
+    - bot: price-optimizer
+      role: specialist
+      reportsTo: order-fulfillment
+      domain: storefront
+    - bot: shipping-tracker
+      role: support
+      reportsTo: order-fulfillment
+      domain: customer-ops
+  escalation:
+    critical: order-fulfillment
+    unhandled: order-fulfillment
+    paths:
+      - name: "Stockout Risk"
+        trigger: "low_inventory"
+        chain: [inventory-alert, order-fulfillment]
+      - name: "Shipping Delay"
+        trigger: "shipment_delayed"
+        chain: [shipping-tracker, order-fulfillment]
+      - name: "Price Anomaly"
+        trigger: "price_anomaly"
+        chain: [price-optimizer, order-fulfillment]
 ---
 
 # E-Commerce Operations

@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "report_scope",
+      "value": "Define which infrastructure components to include in reports. Example: compute, networking, storage, databases, CDN.",
+      "description": "Infrastructure components covered by health reports"
+    },
+    {
+      "key": "health_thresholds",
+      "value": "Define health thresholds here. Example: healthy below 70% utilization, warning 70-90%, critical above 90%.",
+      "description": "Resource utilization thresholds for health classification"
+    }
+  ]
+}

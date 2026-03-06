@@ -1,0 +1,32 @@
+{
+  "entityTypes": [
+    {
+      "name": "revenue_reports",
+      "displayName": "Revenue Reports",
+      "description": "Daily and periodic revenue analysis reports",
+      "domain": "finance",
+      "sampleFields": ["period", "total_revenue", "growth_rate", "segments", "summary"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Reporting period"},
+        "total_revenue": {"type": "number", "required": true, "description": "Total revenue for period"},
+        "growth_rate": {"type": "number", "description": "Period-over-period growth rate"},
+        "segments": {"type": "array", "description": "Revenue breakdown by segment"},
+        "summary": {"type": "string", "required": true, "description": "Analysis summary"}
+      }
+    },
+    {
+      "name": "trend_findings",
+      "displayName": "Trend Findings",
+      "description": "Revenue trend observations and anomalies",
+      "domain": "finance",
+      "sampleFields": ["severity", "trend_type", "metric", "description", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "trend_type": {"type": "string", "required": true, "enum": ["growth", "decline", "anomaly", "seasonal"], "description": "Type of trend"},
+        "metric": {"type": "string", "required": true, "description": "Affected metric"},
+        "description": {"type": "string", "required": true, "description": "Trend description"},
+        "recommendation": {"type": "string", "description": "Recommended action"}
+      }
+    }
+  ]
+}

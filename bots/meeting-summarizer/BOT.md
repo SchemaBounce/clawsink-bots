@@ -35,8 +35,6 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["general"]
-skills:
-  - inline: "core-analysis"
 plugins:
   - ref: "gog@latest"
     required: true

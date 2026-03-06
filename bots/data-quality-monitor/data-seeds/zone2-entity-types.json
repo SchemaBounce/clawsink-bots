@@ -1,0 +1,30 @@
+{
+  "entityTypes": [
+    {
+      "name": "dq_findings",
+      "displayName": "Data Quality Findings",
+      "description": "Data quality issues detected in incoming records",
+      "domain": "engineering",
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "entity_type": {"type": "string", "required": true, "description": "Entity type where issue was found"},
+        "dimension": {"type": "string", "required": true, "description": "Quality dimension (completeness, consistency, etc.)"},
+        "description": {"type": "string", "required": true, "description": "Description of the quality issue"},
+        "affected_records": {"type": "number", "description": "Number of records affected"}
+      }
+    },
+    {
+      "name": "dq_scores",
+      "displayName": "Data Quality Scores",
+      "description": "Computed quality scores per entity type and dimension",
+      "domain": "engineering",
+      "fields": {
+        "entity_type": {"type": "string", "required": true, "description": "Scored entity type"},
+        "dimension": {"type": "string", "required": true, "description": "Quality dimension scored"},
+        "score": {"type": "number", "required": true, "description": "Quality score 0-1"},
+        "sample_size": {"type": "number", "description": "Number of records evaluated"},
+        "trend": {"type": "string", "enum": ["improving", "stable", "declining"], "description": "Score trend"}
+      }
+    }
+  ]
+}

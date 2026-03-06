@@ -31,6 +31,42 @@ bots:
 northStar:
   industry: "E-Commerce / Online Retail"
   context: "Online retail business managing inventory, orders, customer service, and growth analytics"
+orgChart:
+  lead: executive-assistant
+  roles:
+    - bot: executive-assistant
+      role: lead
+      reportsTo: null
+      domain: operations
+    - bot: accountant
+      role: specialist
+      reportsTo: executive-assistant
+      domain: finance
+    - bot: inventory-manager
+      role: specialist
+      reportsTo: executive-assistant
+      domain: fulfillment
+    - bot: customer-support
+      role: specialist
+      reportsTo: executive-assistant
+      domain: storefront
+    - bot: business-analyst
+      role: support
+      reportsTo: customer-support
+      domain: storefront
+  escalation:
+    critical: executive-assistant
+    unhandled: executive-assistant
+    paths:
+      - name: "Revenue anomaly"
+        trigger: "revenue_anomaly"
+        chain: [accountant, executive-assistant]
+      - name: "Stock critical"
+        trigger: "stock_critical"
+        chain: [inventory-manager, executive-assistant]
+      - name: "Customer escalation"
+        trigger: "customer_escalation"
+        chain: [customer-support, executive-assistant]
 ---
 # E-Commerce Pack
 

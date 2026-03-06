@@ -36,7 +36,7 @@ Produce weekly technical blog posts that educate developers about real-time data
 - Comparison guides (platform vs alternatives)
 - Pipeline architecture and real-time streaming patterns
 - Kolumn IaC tutorials and migration guides
-- Sink configuration guides (Webhook, Kafka, S3, Snowflake, BigQuery)
+- Sink configuration guides (Webhook, Kafka, S3, cloud data warehouses)
 
 ### OpenCLAW Topics (agent framework)
 - Agentic AI architecture patterns

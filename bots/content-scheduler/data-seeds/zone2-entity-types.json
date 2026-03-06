@@ -1,0 +1,29 @@
+{
+  "entityTypes": [
+    {
+      "name": "scheduled_posts",
+      "displayName": "Scheduled Posts",
+      "description": "Content items scheduled for publication",
+      "domain": "marketing",
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Post title"},
+        "channel": {"type": "string", "required": true, "description": "Target publishing channel"},
+        "scheduled_at": {"type": "date", "required": true, "description": "Scheduled publication time"},
+        "status": {"type": "string", "enum": ["draft", "scheduled", "published", "cancelled"], "description": "Post status"},
+        "content_type": {"type": "string", "description": "Type of content (article, social, video)"}
+      }
+    },
+    {
+      "name": "content_plans",
+      "displayName": "Content Plans",
+      "description": "Weekly or monthly content planning summaries",
+      "domain": "marketing",
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Planning period (e.g. 2025-W12)"},
+        "channel": {"type": "string", "required": true, "description": "Target channel"},
+        "planned_count": {"type": "number", "description": "Number of planned posts"},
+        "themes": {"type": "string", "description": "Content themes for the period"}
+      }
+    }
+  ]
+}

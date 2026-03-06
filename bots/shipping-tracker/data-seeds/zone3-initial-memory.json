@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "carrier_performance",
+      "key": "init",
+      "value": "No carrier performance data yet. Will track on-time rates and exception frequencies per carrier over time."
+    },
+    {
+      "namespace": "route_patterns",
+      "key": "init",
+      "value": "No route patterns identified yet. Will learn regional delivery time baselines and seasonal delay patterns."
+    }
+  ]
+}

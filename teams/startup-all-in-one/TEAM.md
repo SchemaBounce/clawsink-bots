@@ -29,6 +29,53 @@ northStar:
     - growth_targets
     - tech_stack
     - compliance_requirements
+orgChart:
+  lead: executive-assistant
+  roles:
+    - bot: executive-assistant
+      role: lead
+      reportsTo: null
+      domain: operations
+    - bot: accountant
+      role: specialist
+      reportsTo: executive-assistant
+      domain: finance
+    - bot: customer-support
+      role: specialist
+      reportsTo: executive-assistant
+      domain: customer-relations
+    - bot: marketing-growth
+      role: specialist
+      reportsTo: executive-assistant
+      domain: growth
+    - bot: product-owner
+      role: specialist
+      reportsTo: executive-assistant
+      domain: product
+    - bot: sre-devops
+      role: specialist
+      reportsTo: executive-assistant
+      domain: engineering
+    - bot: executive-reporter
+      role: support
+      reportsTo: executive-assistant
+      domain: reporting
+  escalation:
+    critical: executive-assistant
+    unhandled: executive-assistant
+    paths:
+      - name: "Budget anomaly"
+        trigger: "budget_anomaly"
+        chain: [accountant, executive-assistant]
+      - name: "Infrastructure incident"
+        trigger: "infra_incident"
+        chain: [sre-devops, executive-assistant]
+      - name: "Churn risk"
+        trigger: "churn_risk"
+        chain: [customer-support, executive-assistant]
+      - name: "Roadmap escalation"
+        trigger: "roadmap_escalation"
+        chain: [product-owner, executive-assistant]
 ---
 # Full-Stack Startup Team
 

@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "quality_rules",
+      "key": "init",
+      "value": "No custom quality rules defined yet. Using default checks: null detection, type validation, range checks."
+    },
+    {
+      "namespace": "baseline_stats",
+      "key": "init",
+      "value": "No baseline statistics yet. Will compute field-level distributions and null rates as data flows in."
+    }
+  ]
+}

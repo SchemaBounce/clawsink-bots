@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "reorder_policy",
+      "value": "Define your reorder policy here. Example: Minimum stock threshold: 50 units. Lead time buffer: 7 days. Safety stock multiplier: 1.5x average daily sales.",
+      "description": "Inventory reorder thresholds and safety stock policy"
+    }
+  ]
+}

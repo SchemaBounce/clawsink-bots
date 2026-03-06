@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "quality_dimensions",
+      "value": "Define which quality dimensions to check. Example: completeness, consistency, accuracy, timeliness, uniqueness.",
+      "description": "Data quality dimensions the monitor evaluates"
+    },
+    {
+      "key": "quality_thresholds",
+      "value": "Define acceptable quality score thresholds. Example: pass above 0.95, warn 0.85-0.95, fail below 0.85.",
+      "description": "Thresholds for data quality pass/warn/fail classification"
+    }
+  ]
+}

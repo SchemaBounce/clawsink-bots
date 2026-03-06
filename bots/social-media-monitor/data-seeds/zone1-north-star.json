@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "brand_monitoring",
+      "value": "Define your brand monitoring parameters here. Example: Brand keywords: list your brand names and product names. Sentiment alert threshold: negative spike over 20%. Platforms to monitor: configure per your channels.",
+      "description": "Brand monitoring keywords and sentiment alert thresholds"
+    }
+  ]
+}

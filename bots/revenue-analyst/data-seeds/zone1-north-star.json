@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "revenue_targets",
+      "value": "Define your revenue targets here. Example: Monthly recurring revenue growth: 10%. Churn rate ceiling: 5%. Average revenue per account target: configure per segment.",
+      "description": "Revenue targets and financial KPIs for analysis benchmarking"
+    }
+  ]
+}

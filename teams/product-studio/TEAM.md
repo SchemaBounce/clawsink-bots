@@ -26,6 +26,39 @@ northStar:
     - sprint_cadence
     - experiment_framework
     - user_segments
+orgChart:
+  lead: executive-assistant
+  roles:
+    - bot: executive-assistant
+      role: lead
+      reportsTo: null
+      domain: product
+    - bot: product-owner
+      role: specialist
+      reportsTo: executive-assistant
+      domain: product
+    - bot: sprint-planner
+      role: specialist
+      reportsTo: product-owner
+      domain: engineering
+    - bot: experiment-tracker
+      role: specialist
+      reportsTo: product-owner
+      domain: research
+    - bot: customer-support
+      role: support
+      reportsTo: product-owner
+      domain: research
+  escalation:
+    critical: executive-assistant
+    unhandled: executive-assistant
+    paths:
+      - name: "Sprint risk"
+        trigger: "sprint_risk"
+        chain: [sprint-planner, product-owner, executive-assistant]
+      - name: "Experiment significance"
+        trigger: "experiment_significant"
+        chain: [experiment-tracker, product-owner, executive-assistant]
 ---
 # Product Studio
 

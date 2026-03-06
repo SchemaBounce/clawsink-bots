@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "publishing_channels",
+      "value": "Define your publishing channels here. Example: blog, social_media, newsletter, documentation.",
+      "description": "Content channels the scheduler manages"
+    },
+    {
+      "key": "posting_guidelines",
+      "value": "Define your posting frequency and timing guidelines here. Example: blog 2x/week, social daily at 10am and 3pm.",
+      "description": "Guidelines for content frequency and optimal posting times"
+    }
+  ]
+}

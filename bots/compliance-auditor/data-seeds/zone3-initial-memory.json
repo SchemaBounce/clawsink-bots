@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "regulatory_frameworks",
+      "key": "init",
+      "value": "No frameworks configured yet. Will load compliance rules when regulatory_frameworks seed is populated."
+    },
+    {
+      "namespace": "audit_history",
+      "key": "init",
+      "value": "No audit history yet. Will track findings, resolutions, and compliance trends over time."
+    }
+  ]
+}

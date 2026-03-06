@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "pipeline_targets",
+      "value": "Define your pipeline targets here. Example: Stage conversion rate floor: 20%. Average deal cycle: 30 days. Stale deal threshold: 14 days without activity.",
+      "description": "Sales pipeline performance targets and thresholds"
+    }
+  ]
+}

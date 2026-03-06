@@ -41,6 +41,49 @@ northStar:
     - release_cadence
     - quality_standards
     - incident_runbooks
+orgChart:
+  lead: release-manager
+  roles:
+    - bot: release-manager
+      role: lead
+      reportsTo: null
+      domain: project-management
+    - bot: sre-devops
+      role: specialist
+      reportsTo: release-manager
+      domain: devops
+    - bot: code-reviewer
+      role: specialist
+      reportsTo: release-manager
+      domain: quality
+    - bot: api-tester
+      role: specialist
+      reportsTo: code-reviewer
+      domain: quality
+    - bot: devops-automator
+      role: specialist
+      reportsTo: sre-devops
+      domain: devops
+    - bot: bug-triage
+      role: specialist
+      reportsTo: release-manager
+      domain: engineering
+  escalation:
+    critical: release-manager
+    unhandled: release-manager
+    paths:
+      - name: "Production Incident"
+        trigger: "production_incident"
+        chain: [sre-devops, release-manager]
+      - name: "Pipeline Failure"
+        trigger: "pipeline_failure"
+        chain: [devops-automator, sre-devops, release-manager]
+      - name: "Release Blocker"
+        trigger: "release_blocker"
+        chain: [bug-triage, release-manager]
+      - name: "Quality Gate Failure"
+        trigger: "quality_gate_failure"
+        chain: [code-reviewer, release-manager]
 ---
 # Software Development Team
 

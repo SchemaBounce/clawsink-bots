@@ -31,6 +31,38 @@ plugins:
     config:
       embedding_model: "text-embedding-3-small"
       max_results: 20
+orgChart:
+  lead: sales-pipeline
+  roles:
+    - bot: sales-pipeline
+      role: lead
+      reportsTo: null
+      domain: sales
+    - bot: churn-predictor
+      role: specialist
+      reportsTo: sales-pipeline
+      domain: customer-success
+    - bot: customer-onboarding
+      role: specialist
+      reportsTo: sales-pipeline
+      domain: customer-success
+    - bot: content-scheduler
+      role: specialist
+      reportsTo: sales-pipeline
+      domain: content
+  escalation:
+    critical: sales-pipeline
+    unhandled: sales-pipeline
+    paths:
+      - name: "Churn Risk"
+        trigger: "high_churn_risk"
+        chain: [churn-predictor, sales-pipeline]
+      - name: "Onboarding Blocker"
+        trigger: "onboarding_blocked"
+        chain: [customer-onboarding, sales-pipeline]
+      - name: "Content Gap"
+        trigger: "content_gap_detected"
+        chain: [content-scheduler, sales-pipeline]
 ---
 
 # SaaS Growth

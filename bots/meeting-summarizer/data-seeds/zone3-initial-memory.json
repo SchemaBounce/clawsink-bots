@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "decision_log",
+      "key": "init",
+      "value": "No decisions logged yet. Will track key decisions across meetings to build organizational decision history."
+    },
+    {
+      "namespace": "recurring_themes",
+      "key": "init",
+      "value": "No recurring themes identified yet. Will detect repeated topics and unresolved items across meeting summaries."
+    }
+  ]
+}

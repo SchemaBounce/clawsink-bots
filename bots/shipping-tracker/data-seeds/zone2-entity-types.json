@@ -1,0 +1,32 @@
+{
+  "entityTypes": [
+    {
+      "name": "shipping_alerts",
+      "displayName": "Shipping Alerts",
+      "description": "Alerts for shipment delays, exceptions, and SLA breaches",
+      "domain": "operations",
+      "sampleFields": ["severity", "tracking_id", "carrier", "issue_type", "description"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "tracking_id": {"type": "string", "required": true, "description": "Shipment tracking identifier"},
+        "carrier": {"type": "string", "description": "Shipping carrier"},
+        "issue_type": {"type": "string", "enum": ["delay", "exception", "lost", "damaged", "sla_breach"], "description": "Issue type"},
+        "description": {"type": "string", "required": true, "description": "Alert details"}
+      }
+    },
+    {
+      "name": "delivery_predictions",
+      "displayName": "Delivery Predictions",
+      "description": "Predicted delivery dates and delay risk assessments",
+      "domain": "operations",
+      "sampleFields": ["tracking_id", "predicted_date", "confidence", "risk_level", "factors"],
+      "fields": {
+        "tracking_id": {"type": "string", "required": true, "description": "Shipment tracking identifier"},
+        "predicted_date": {"type": "date", "required": true, "description": "Predicted delivery date"},
+        "confidence": {"type": "string", "enum": ["low", "medium", "high"], "description": "Prediction confidence"},
+        "risk_level": {"type": "string", "enum": ["on_track", "at_risk", "likely_delayed"], "description": "Delay risk level"},
+        "factors": {"type": "array", "description": "Factors influencing the prediction"}
+      }
+    }
+  ]
+}

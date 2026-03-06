@@ -19,6 +19,35 @@ skills:
   - data-validation
 requirements:
   minTier: "starter"
+orgChart:
+  lead: fraud-detector
+  roles:
+    - bot: fraud-detector
+      role: lead
+      reportsTo: null
+      domain: fraud-detection
+    - bot: compliance-auditor
+      role: specialist
+      reportsTo: fraud-detector
+      domain: compliance
+    - bot: anomaly-detector
+      role: specialist
+      reportsTo: fraud-detector
+      domain: fraud-detection
+    - bot: revenue-analyst
+      role: support
+      reportsTo: compliance-auditor
+      domain: finance
+  escalation:
+    critical: fraud-detector
+    unhandled: fraud-detector
+    paths:
+      - name: "Fraud alert"
+        trigger: "fraud_alert"
+        chain: [anomaly-detector, fraud-detector]
+      - name: "Compliance violation"
+        trigger: "compliance_violation"
+        chain: [compliance-auditor, fraud-detector]
 ---
 
 # FinTech Fraud Prevention

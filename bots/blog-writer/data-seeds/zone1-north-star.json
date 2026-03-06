@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "brand_voice",
+      "value": "Define your brand voice and tone here. Example: Technical but approachable, developer-first, no marketing fluff, actionable content.",
+      "description": "Brand voice guidelines for all written content"
+    },
+    {
+      "key": "product_catalog",
+      "value": "List your core products and features. The blog writer references this to ensure technical accuracy.",
+      "description": "Current product features and capabilities for blog content accuracy"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "content_standards",
+      "value": "Define your knowledge base standards here. Example: Max article age before review: 90 days. Minimum article sections: 3. Required metadata: category, audience, last_reviewed.",
+      "description": "Knowledge base quality and freshness standards"
+    }
+  ]
+}

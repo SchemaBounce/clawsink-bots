@@ -42,7 +42,7 @@ zones:
   zone1Read: ["mission", "tech_stack", "security_policy", "compliance_requirements"]
   zone2Domains: ["security", "operations"]
 skills:
-  - inline: "core-analysis"
+  - ref: "skills/scheduled-report@1.0.0"
 requirements:
   minTier: "starter"
 ---

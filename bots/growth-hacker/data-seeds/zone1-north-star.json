@@ -2,7 +2,7 @@
   "seeds": [
     {
       "key": "growth_targets",
-      "value": "Define your growth targets here. Example: Target CAC: $50. Monthly growth rate target: 15%. Viral coefficient target: 1.2. Primary channels: organic content, referral program, paid social.",
+      "value": "Define your growth targets here. Example: Target CAC below industry average. Monthly growth rate target: 15%. Viral coefficient target: 1.2. Primary channels: organic content, referral program, paid social.",
       "description": "Growth targets and KPIs -- used to evaluate experiments and channel performance"
     },
     {
