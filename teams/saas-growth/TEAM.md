@@ -19,6 +19,18 @@ skills:
   - notification-dispatch
 requirements:
   minTier: "starter"
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    reason: "Multiple bots (sales-pipeline, content-scheduler) need OAuth for external SaaS platforms"
+    config:
+      scopes: ["crm", "calendar", "analytics"]
+  - ref: "memory-lancedb@^2.0.0"
+    slot: "memory"
+    reason: "Executive-assistant and mentor-coach bots need persistent recall across sessions"
+    config:
+      embedding_model: "text-embedding-3-small"
+      max_results: 20
 ---
 
 # SaaS Growth

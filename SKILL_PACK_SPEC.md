@@ -1,29 +1,44 @@
 # ClawSink Bots Specification v2
 
-This is the authoritative format specification for the three-tier composability model: **Skills**, **Bots**, and **Teams**.
+This is the authoritative format specification for the composability model: **Skills**, **Bots** (with optional **Sub-Agents**), and **Teams**.
 
 ## Overview
 
-The architecture uses three manifest kinds that compose hierarchically:
+The architecture uses three manifest kinds that compose hierarchically. ClawSink is an abstraction layer **above** agents — it defines what agents are, how they compose, and how they communicate. It does not sit between agents and the runtime.
 
 | Kind | Directory | Purpose | Manifest File |
 |------|-----------|---------|---------------|
 | `Skill` | `skills/` | Reusable capability (single responsibility) | `SKILL.md` |
-| `Bot` | `bots/` | Complete agent definition (identity + skills) | `BOT.md` |
+| `Bot` | `bots/` | Top-level agent definition (identity + skills + sub-agents) | `BOT.md` |
 | `Team` | `teams/` | Coordinated bot group (shared North Star) | `TEAM.md` |
 
+**Bots are always top-level agents.** Teams are groupings of bots. Sub-agents exist *within* a bot for internal workflow orchestration — they are never exposed outside the bot's scope.
+
 ```
-Team
- ├── Bot (executive-assistant)
+Team (saas-growth)
+ ├── Bot (executive-assistant)          ← top-level agent
  │    ├── Skill (daily-briefing)
  │    ├── Skill (cross-domain-synthesis)
  │    └── Skill (follow-up-tracking)
- ├── Bot (accountant)
+ ├── Bot (blog-writer)                  ← top-level agent
+ │    ├── Skill (editorial-planning)    ← composed into SOUL.md
+ │    ├── Sub-Agent (researcher)        ← isolated session, task string only
+ │    ├── Sub-Agent (writer)            ← isolated session, task string only
+ │    └── Sub-Agent (editor)            ← isolated session, task string only
+ ├── Bot (accountant)                   ← top-level agent
  │    ├── Skill (invoice-categorization)
  │    ├── Skill (expense-tracking)
  │    └── Skill (budget-monitoring)
  └── ...
 ```
+
+### Design Principles
+
+1. **Bots own their sub-agents.** Sub-agents are internal implementation details — other bots and teams never interact with them directly. All inter-bot communication goes through the parent bot.
+2. **Sub-agents have their own identity.** Each sub-agent is defined as a markdown file with YAML frontmatter and a system prompt body — the same format as Claude Code's `.claude/agents/`. They run in isolated sessions with their own context.
+3. **Skills belong to the parent bot only.** Skills are composed into the parent bot's SOUL.md at runtime. Sub-agents get their identity from their own agent file, not from skills.
+4. **Sub-agents validate each other's work.** The pattern enables quality gates within a single bot's workflow (e.g., a writer drafts, an editor reviews) without requiring cross-bot messaging.
+5. **ClawSink sits above, not between.** The manifest layer defines agent identity, composition, and communication. The runtime (OpenCLAW) handles execution. ClawSink never intercepts agent-to-runtime calls.
 
 ---
 
@@ -96,6 +111,10 @@ A Bot is a complete agent definition with identity, model, schedule, messaging, 
 bots/{bot-name}/
 ├── BOT.md            # Manifest with kind: Bot
 ├── SOUL.md           # Agent identity document (<800 tokens)
+├── agents/           # Sub-agent definitions (optional, Claude Code format)
+│   ├── researcher.md
+│   ├── writer.md
+│   └── editor.md
 └── data-seeds/       # Bootstrap data for ADL zones
     ├── zone1-north-star.json
     ├── zone2-entity-types.json
@@ -148,9 +167,15 @@ data:
 zones:
   zone1Read: [string]    # North Star keys this bot reads
   zone2Domains: [string] # Shared domains this bot accesses
-skills:                  # NEW: Skill composition
+skills:                  # Skill composition
   - ref: string          # Reference to shared skill: "skills/{name}@{version}"
   - inline: string       # Bot-specific skill (no shared definition)
+plugins:                 # OpenCLAW plugin dependencies (optional)
+  - ref: string          # npm package + version: "{name}@{version}"
+    slot: string         # Plugin slot if exclusive (e.g., "memory", "channel")
+    required: boolean    # true (default) = bot won't start without it
+    reason: string       # Why this bot needs this plugin
+    config: object       # Bot-specific config (merged with workspace defaults)
 requirements:
   minTier: string        # Minimum workspace tier
 ---
@@ -162,6 +187,114 @@ The `skills:` section lists capabilities this bot uses. Two formats:
 
 - `ref: "skills/{skill-name}@{version}"` -- references a shared skill from the `skills/` directory. The skill's `prompt.md` is appended to the bot's SOUL.md at runtime.
 - `inline: "{skill-name}"` -- a bot-specific capability that doesn't have a shared skill definition. Documented directly in the bot's SOUL.md.
+
+### Plugins Section
+
+The `plugins:` section declares OpenCLAW plugin dependencies — npm-based TypeScript modules that extend the runtime with channels, memory backends, OAuth managers, tools, and background services. Plugins are runtime code; skills are declarative instructions. Both are composable, but plugins require installation via `openclaw plugins install`.
+
+This section replaces the legacy `externalApis:` field.
+
+#### Plugin Categories
+
+| Category | Slot | Examples | What It Adds |
+|----------|------|----------|-------------|
+| **Channel** | `channel` | `microsoft-teams`, `voice-call`, `wacli` | Messaging channels (Teams, phone, WhatsApp) |
+| **Memory** | `memory` | `memory-lancedb`, `memos-cloud` | Vector recall, cross-agent memory |
+| **OAuth** | `oauth` | `composio` | Managed OAuth for 860+ apps |
+| **Workflow** | — | `n8n-workflow` | External workflow orchestration |
+| **Workspace** | — | `gog` | Google Workspace (Gmail, Calendar, Drive, Docs) |
+
+Plugins with a `slot` are exclusive — only one plugin per slot loads at a time (e.g., you can't run both `memory-lancedb` and `memos-cloud`).
+
+#### Example
+
+```yaml
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    reason: "Managed OAuth for blog API — handles token refresh and scoping"
+    config:
+      apps: ["blog"]
+      scopes: ["blog:write"]
+  - ref: "memory-lancedb@^2.0.0"
+    slot: "memory"
+    reason: "Vector recall for editorial history and topic research across runs"
+```
+
+#### Field Rules
+
+- `plugins[].ref` must be a valid npm package spec (name + semver range)
+- `plugins[].reason` is required and non-empty — explain why, not just what
+- `plugins[].config` must NEVER contain secrets (API keys, tokens, passwords) — those go in workspace secrets
+- `plugins[].slot` should match OpenCLAW's slot taxonomy when the plugin is exclusive
+- `plugins[].required` defaults to `true` — set to `false` for nice-to-have plugins where the bot can function without them
+
+### Sub-Agents (`agents/` directory)
+
+Bots can define sub-agents as markdown files in an `agents/` directory, following the same format as Claude Code's `.claude/agents/`. Each sub-agent file is a standalone agent definition with YAML frontmatter and a system prompt body.
+
+Sub-agents are internal to the bot — other bots and teams never interact with them directly. The parent bot orchestrates them via `sessions_spawn`.
+
+#### Agent File Format
+
+```markdown
+---
+name: string            # Kebab-case identifier, unique within this bot
+description: string     # When the parent bot should spawn this sub-agent
+model: string           # "haiku", "sonnet", "opus", or "inherit" (default: inherit)
+tools: [string]         # ADL tools this sub-agent can use (default: all except session tools)
+---
+
+{System prompt in markdown — this is the sub-agent's identity and instructions}
+```
+
+#### Supported Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Unique identifier (kebab-case, matches filename without `.md`) |
+| `description` | Yes | When the parent bot should delegate to this sub-agent |
+| `model` | No | Model override: `haiku`, `sonnet`, `opus`, or `inherit` (default: `inherit`) |
+| `tools` | No | Tool allowlist. Inherits all ADL tools except session tools if omitted |
+
+The markdown body after the frontmatter becomes the sub-agent's system prompt. This is the sub-agent's entire identity — write it as a focused, self-contained instruction set.
+
+#### How Sub-Agents Work at Runtime
+
+1. Parent bot calls `sessions_spawn` with the sub-agent's system prompt and model
+2. Sub-agent runs in an isolated session with its own context
+3. Sub-agent completes the task and announces results back to the parent
+4. Parent bot reads the result and continues orchestrating
+
+Sub-agents receive their system prompt + standard tool access. They do NOT receive the parent's SOUL.md, memory, or messages.
+
+> **OpenCLAW compatibility note**: OpenCLAW's `sessions_spawn` currently accepts a `task` string but not a full custom system prompt. Until custom prompt injection is supported ([#18136](https://github.com/openclaw/openclaw/issues/18136)), the runtime will pass the agent file's markdown body as the task string. The format is designed to work today as task instructions and to upgrade seamlessly when full prompt injection lands.
+
+#### When to Use Sub-Agents vs Skills
+
+| Use Case | Use a Skill | Use a Sub-Agent |
+|----------|-------------|-----------------|
+| Simple, sequential step | Yes | No |
+| Needs its own isolated session | No | Yes |
+| Validates another agent's output | No | Yes |
+| Reusable across many bots | Yes | No |
+| Requires different model/think level | No | Yes |
+| Workflow with quality gates | No | Yes |
+
+#### Example: Blog Writer agents/
+
+```
+bots/blog-writer/
+├── BOT.md
+├── SOUL.md
+├── agents/
+│   ├── researcher.md    # Fast research on haiku
+│   ├── writer.md        # Drafts post (inherits model)
+│   └── editor.md        # Quality gate on sonnet
+└── data-seeds/
+```
+
+See `bots/blog-writer/agents/` for the canonical example of sub-agent definitions.
 
 ### Field Rules
 
@@ -206,6 +339,11 @@ You are {Display Name}, a persistent AI team member for this business.
 - Read: {comma-separated list}
 - Write: {role}_findings, {role}_alerts
 
+## Sub-Agent Workflow (if applicable)
+{Describe the orchestration flow between sub-agents.
+Each sub-agent is defined in agents/*.md with its own system prompt.
+The parent bot spawns them via sessions_spawn and orchestrates the pipeline.}
+
 ## Escalation
 - Critical: message executive-assistant type=alert
 - Cross-domain: message {relevant-bot} type=finding
@@ -242,6 +380,11 @@ metadata:
   estimatedMonthlyCost: string  # Estimated cost at default schedules
 bots:
   - ref: string          # Reference: "bots/{name}@{version}"
+plugins:                 # Shared plugin dependencies for this team (optional)
+  - ref: string          # npm package + version
+    slot: string         # Plugin slot if exclusive
+    reason: string       # Why this team needs this plugin
+    config: object       # Team-wide defaults (bots can override)
 northStar:
   industry: string       # Target industry for this team
   context: string        # Description of the ideal user/scenario
@@ -256,6 +399,7 @@ northStar:
 - `northStar.requiredKeys` should list all zone1 keys needed by any bot in the team
 - `estimatedMonthlyCost` is calculated from model costs at default schedules
 - Teams do NOT override individual bot schedules or models -- those are bot-level concerns
+- Team-level `plugins` provide shared defaults; individual bot `plugins` can override `config`
 
 ---
 
@@ -352,9 +496,17 @@ Inter-bot messages use a compact "Toon Card" payload (200-500 bytes):
 5. All `skills[].ref` reference existing skill directories with matching versions
 6. All `messaging.sendsTo[].to` reference valid bot names or system targets
 7. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
+8. All files in `agents/` have valid YAML frontmatter with `name` and `description`
+9. Agent `name` matches the filename (e.g., `researcher.md` → `name: researcher`)
+10. Agent `tools` only references valid ADL tool names
+11. All `plugins[].ref` are valid npm package specs (name + semver range)
+12. All `plugins[].reason` are non-empty strings
+13. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
 
 ### Team validation
 1. `TEAM.md` has valid YAML frontmatter with `kind: Team`
 2. All `bots[].ref` reference existing bot directories with matching versions
 3. `northStar.requiredKeys` is the union of all `zones.zone1Read` keys from member bots
 4. `estimatedMonthlyCost` matches calculated cost from model/schedule combinations
+5. All `plugins[].ref` are valid npm package specs
+6. No conflicting plugin slots between team-level and bot-level declarations

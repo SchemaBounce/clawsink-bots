@@ -36,6 +36,11 @@ zones:
   zone2Domains: ["marketing"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    required: true
+    reason: "OAuth access to social platform APIs (Twitter/X, LinkedIn, Instagram) for pulling brand mentions and sentiment data"
 requirements:
   minTier: "starter"
 ---

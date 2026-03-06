@@ -56,6 +56,15 @@ automations:
       targetAgent: "self"
       condition: '{"status": {"$in": ["open", "pending"]}}'
       promptTemplate: "A ticket was updated. Check SLA compliance — if approaching breach, escalate. If resolved, update customer health score."
+plugins:
+  - ref: "voice-call@latest"
+    slot: "channel"
+    required: false
+    reason: "Phone-based escalation for critical customer issues and churn-risk callbacks"
+  - ref: "microsoft-teams@latest"
+    slot: "channel"
+    required: false
+    reason: "Sends ticket escalation and SLA breach notifications to support Teams channels"
 requirements:
   minTier: "starter"
 ---

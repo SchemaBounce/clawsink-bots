@@ -36,6 +36,12 @@ zones:
   zone2Domains: ["marketing"]
 skills:
   - inline: "core-analysis"
+plugins:
+  - ref: "gog@latest"
+    required: true
+    reason: "Google Calendar for managing the content publishing schedule and editorial deadlines"
+    config:
+      scopes: ["calendar.events"]
 requirements:
   minTier: "starter"
 ---

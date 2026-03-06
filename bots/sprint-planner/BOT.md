@@ -49,6 +49,11 @@ automations:
       eventType: "created"
       targetAgent: "self"
       promptTemplate: "A new task was recorded. Assess priority and add to backlog with RICE score."
+plugins:
+  - ref: "microsoft-teams@latest"
+    slot: "channel"
+    required: false
+    reason: "Sends sprint plan summaries, velocity alerts, and overcommitment warnings to team channels"
 requirements:
   minTier: "starter"
 ---

@@ -18,12 +18,15 @@ Produce weekly technical blog posts that educate developers about real-time data
 4. Read North Star (adl_read_memory, namespace="northstar:brand_voice") — brand tone, product positioning
 5. Read North Star (adl_read_memory, namespace="northstar:product_catalog") — current features and capabilities
 6. Choose topic: pick from editorial calendar or generate based on trends and gaps
-7. Research: query records for relevant data, search knowledge graph for related concepts
-8. Write: draft full markdown blog post with title, description, content, tags
-9. Submit: POST to blog API endpoint as draft (section=schemabounce or section=openclaw)
-10. Update memory (adl_write_memory, namespace="editorial_calendar") — mark topic as drafted
-11. Update memory (adl_write_memory, namespace="writing_notes") — save research and outline for follow-ups
-12. Notify: message executive-assistant type=finding with draft summary for review
+7. **Spawn researcher** (sessions_spawn) — validate topic feasibility, gather source material from docs and knowledge graph
+8. Review researcher output — if topic is not viable, pick another and repeat step 7
+9. **Spawn writer** (sessions_spawn) — draft full blog post from research notes, following editorial guidelines
+10. **Spawn editor** (sessions_spawn) — review draft for voice, accuracy, style guide adherence; return pass/fail with feedback
+11. If editor fails the draft, re-spawn writer with editor feedback (max 2 revision cycles)
+12. Submit: POST to blog API endpoint as draft (section=schemabounce or section=openclaw)
+13. Update memory (adl_write_memory, namespace="editorial_calendar") — mark topic as drafted
+14. Update memory (adl_write_memory, namespace="writing_notes") — save research and outline for follow-ups
+15. Notify: message executive-assistant type=finding with draft summary for review
 
 ## Content Guidelines
 
@@ -50,6 +53,19 @@ Produce weekly technical blog posts that educate developers about real-time data
 - Format: H2/H3 headers, bullet lists, code blocks, callout boxes
 - SEO: include target keywords naturally, meta description under 155 chars
 - No marketing fluff — technical depth earns trust
+
+## Sub-Agent Workflow
+
+You orchestrate three sub-agents defined in `agents/`. Each has its own system prompt and runs in an isolated session via `sessions_spawn`.
+
+### Pipeline: researcher → writer → editor
+
+1. **Spawn researcher** (haiku) — validates topic, gathers sources, returns topic brief
+2. If topic not viable, pick another and re-spawn researcher
+3. **Spawn writer** (inherits model) — drafts full post from research brief
+4. **Spawn editor** (sonnet) — reviews draft, returns pass/fail with feedback
+5. If editor fails the draft, re-spawn writer with editor feedback (max 2 revision cycles)
+6. Submit passing draft via blog API
 
 ## Blog Submission
 

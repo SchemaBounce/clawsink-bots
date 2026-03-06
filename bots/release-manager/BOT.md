@@ -46,6 +46,10 @@ automations:
       eventType: "created"
       targetAgent: "self"
       promptTemplate: "Generate release notes from merged PRs and changelog entries."
+plugins:
+  - ref: "n8n-workflow@latest"
+    required: true
+    reason: "Triggers release pipelines, version tagging, and deployment promotion workflows"
 requirements:
   minTier: "starter"
 ---

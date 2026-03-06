@@ -49,6 +49,11 @@ automations:
     - entityType: "social_metrics"
       event: "updated"
       prompt: "Flag significant engagement changes."
+plugins:
+  - ref: "composio@latest"
+    slot: "oauth"
+    required: true
+    reason: "OAuth access to social platform APIs (Twitter/X, LinkedIn, Instagram) for reading engagement metrics and posting content"
 requirements:
   minTier: "starter"
 ---

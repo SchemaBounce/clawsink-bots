@@ -18,6 +18,20 @@ bots:
   - ref: "bots/devops-automator@1.0.0"
   - ref: "bots/release-manager@1.0.0"
   - ref: "bots/bug-triage@1.0.0"
+plugins:
+  - ref: "n8n-workflow@latest"
+    slot: "workflow"
+    reason: "CI/CD and release automation for devops-automator, release-manager, and sre-devops"
+    config:
+      webhook_triggers: true
+      workflow_templates: ["ci-cd", "release", "incident"]
+  - ref: "microsoft-teams@latest"
+    slot: "notifications"
+    reason: "Team notifications for build failures, release status, and incident alerts"
+    config:
+      channel_mapping:
+        alerts: "engineering-alerts"
+        releases: "release-updates"
 northStar:
   industry: "Software Development"
   context: "Engineering team automating CI/CD, code quality, and release processes"
