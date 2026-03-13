@@ -1,0 +1,356 @@
+{
+  "records": {
+    "hc_patients": [
+      {
+        "first_name": "Margaret",
+        "last_name": "Johnson",
+        "date_of_birth": "1958-04-12",
+        "gender": "female",
+        "phone": "+1-555-0301",
+        "email": "m.johnson@email.com",
+        "insurance_provider": "Aetna",
+        "insurance_id": "AET-882714",
+        "primary_provider": "Dr. Sarah Kim",
+        "status": "active"
+      },
+      {
+        "first_name": "James",
+        "last_name": "Rivera",
+        "date_of_birth": "1985-11-23",
+        "gender": "male",
+        "phone": "+1-555-0302",
+        "email": "j.rivera@email.com",
+        "insurance_provider": "Blue Cross Blue Shield",
+        "insurance_id": "BCBS-456201",
+        "primary_provider": "Dr. Sarah Kim",
+        "status": "active"
+      },
+      {
+        "first_name": "Linda",
+        "last_name": "Patel",
+        "date_of_birth": "1972-07-09",
+        "gender": "female",
+        "phone": "+1-555-0303",
+        "email": "linda.patel@email.com",
+        "insurance_provider": "UnitedHealthcare",
+        "insurance_id": "UHC-991305",
+        "primary_provider": "Dr. Michael Chen",
+        "status": "active"
+      },
+      {
+        "first_name": "Robert",
+        "last_name": "Williams",
+        "date_of_birth": "1995-02-17",
+        "gender": "male",
+        "phone": "+1-555-0304",
+        "insurance_provider": "Cigna",
+        "insurance_id": "CIG-223847",
+        "primary_provider": "Dr. Michael Chen",
+        "status": "active"
+      },
+      {
+        "first_name": "Susan",
+        "last_name": "Nakamura",
+        "date_of_birth": "1968-09-30",
+        "gender": "female",
+        "phone": "+1-555-0305",
+        "email": "s.nakamura@email.com",
+        "insurance_provider": "Medicare",
+        "insurance_id": "MCR-1EG4-TE5-MK72",
+        "primary_provider": "Dr. Sarah Kim",
+        "status": "active"
+      },
+      {
+        "first_name": "Thomas",
+        "last_name": "Okafor",
+        "date_of_birth": "2001-12-05",
+        "gender": "male",
+        "phone": "+1-555-0306",
+        "email": "t.okafor@email.com",
+        "insurance_provider": "Aetna",
+        "insurance_id": "AET-667923",
+        "primary_provider": "NP Rachel Adams",
+        "status": "active"
+      }
+    ],
+    "hc_appointments": [
+      {
+        "patient_name": "Margaret Johnson",
+        "provider_name": "Dr. Sarah Kim",
+        "date": "2026-03-15",
+        "time": "09:00",
+        "duration_minutes": 30,
+        "visit_type": "follow-up",
+        "status": "scheduled",
+        "chief_complaint": "Blood pressure medication review",
+        "copay_amount": 25.00
+      },
+      {
+        "patient_name": "James Rivera",
+        "provider_name": "Dr. Sarah Kim",
+        "date": "2026-03-15",
+        "time": "10:00",
+        "duration_minutes": 45,
+        "visit_type": "annual-wellness",
+        "status": "scheduled",
+        "chief_complaint": "Annual physical exam",
+        "copay_amount": 0
+      },
+      {
+        "patient_name": "Linda Patel",
+        "provider_name": "Dr. Michael Chen",
+        "date": "2026-03-14",
+        "time": "14:30",
+        "duration_minutes": 20,
+        "visit_type": "sick-visit",
+        "status": "completed",
+        "check_in_time": "14:22",
+        "chief_complaint": "Persistent cough for 5 days, low-grade fever",
+        "copay_amount": 35.00
+      },
+      {
+        "patient_name": "Robert Williams",
+        "provider_name": "Dr. Michael Chen",
+        "date": "2026-03-14",
+        "time": "15:30",
+        "duration_minutes": 15,
+        "visit_type": "follow-up",
+        "status": "no-show",
+        "chief_complaint": "Lab results review"
+      },
+      {
+        "patient_name": "Susan Nakamura",
+        "provider_name": "Dr. Sarah Kim",
+        "date": "2026-03-13",
+        "time": "11:00",
+        "duration_minutes": 45,
+        "visit_type": "annual-wellness",
+        "status": "completed",
+        "check_in_time": "10:48",
+        "chief_complaint": "Medicare annual wellness visit",
+        "copay_amount": 0
+      },
+      {
+        "patient_name": "Thomas Okafor",
+        "provider_name": "NP Rachel Adams",
+        "date": "2026-03-16",
+        "time": "08:30",
+        "duration_minutes": 30,
+        "visit_type": "new-patient",
+        "status": "scheduled",
+        "chief_complaint": "Establish care, sports physical needed",
+        "copay_amount": 40.00
+      },
+      {
+        "patient_name": "Margaret Johnson",
+        "provider_name": "Dr. Sarah Kim",
+        "date": "2026-03-10",
+        "time": "09:30",
+        "duration_minutes": 20,
+        "visit_type": "telehealth",
+        "status": "completed",
+        "check_in_time": "09:28",
+        "chief_complaint": "Dizziness side effect from new medication",
+        "copay_amount": 25.00
+      }
+    ],
+    "hc_claims": [
+      {
+        "patient_name": "Linda Patel",
+        "provider_name": "Dr. Michael Chen",
+        "service_date": "2026-03-14",
+        "cpt_codes": ["99213", "87880"],
+        "icd_codes": ["J06.9", "R50.9"],
+        "billed_amount": 285.00,
+        "allowed_amount": 178.00,
+        "paid_amount": 142.40,
+        "patient_responsibility": 35.00,
+        "status": "submitted"
+      },
+      {
+        "patient_name": "Susan Nakamura",
+        "provider_name": "Dr. Sarah Kim",
+        "service_date": "2026-03-13",
+        "cpt_codes": ["99397", "G0438"],
+        "icd_codes": ["Z00.00"],
+        "billed_amount": 425.00,
+        "allowed_amount": 285.00,
+        "paid_amount": 285.00,
+        "patient_responsibility": 0,
+        "status": "paid"
+      },
+      {
+        "patient_name": "Margaret Johnson",
+        "provider_name": "Dr. Sarah Kim",
+        "service_date": "2026-03-10",
+        "cpt_codes": ["99213", "99441"],
+        "icd_codes": ["I10", "R42"],
+        "billed_amount": 195.00,
+        "allowed_amount": 132.00,
+        "patient_responsibility": 25.00,
+        "status": "denied",
+        "denial_reason": "CO-4: Service not covered under telehealth modifier missing"
+      },
+      {
+        "patient_name": "James Rivera",
+        "provider_name": "Dr. Sarah Kim",
+        "service_date": "2026-02-20",
+        "cpt_codes": ["99214", "80053", "85025"],
+        "icd_codes": ["E11.65", "Z13.1"],
+        "billed_amount": 520.00,
+        "allowed_amount": 345.00,
+        "paid_amount": 310.00,
+        "patient_responsibility": 35.00,
+        "status": "paid"
+      },
+      {
+        "patient_name": "Margaret Johnson",
+        "provider_name": "Dr. Sarah Kim",
+        "service_date": "2026-02-10",
+        "cpt_codes": ["99214"],
+        "icd_codes": ["I10", "E78.5"],
+        "billed_amount": 225.00,
+        "allowed_amount": 156.00,
+        "paid_amount": 131.00,
+        "patient_responsibility": 25.00,
+        "status": "paid"
+      }
+    ],
+    "hc_compliance_items": [
+      {
+        "requirement": "HIPAA Annual Risk Assessment",
+        "description": "Conduct a comprehensive risk assessment of all systems containing PHI. Document threats, vulnerabilities, and current safeguards. Produce a remediation plan for identified gaps.",
+        "framework": "hipaa-security",
+        "frequency": "annual",
+        "status": "compliant",
+        "due_date": "2027-01-15",
+        "last_completed": "2026-01-15",
+        "responsible_role": "Privacy Officer"
+      },
+      {
+        "requirement": "Staff HIPAA Training",
+        "description": "All staff with PHI access must complete HIPAA privacy and security training. Training must cover permitted uses and disclosures, patient rights, breach notification, and social engineering awareness.",
+        "framework": "hipaa-privacy",
+        "frequency": "annual",
+        "status": "due-soon",
+        "due_date": "2026-04-01",
+        "last_completed": "2025-04-01",
+        "responsible_role": "Office Manager"
+      },
+      {
+        "requirement": "OSHA Bloodborne Pathogen Training",
+        "description": "All clinical staff must complete bloodborne pathogen exposure control training. Includes needle stick prevention, PPE requirements, and post-exposure protocols.",
+        "framework": "osha",
+        "frequency": "annual",
+        "status": "compliant",
+        "due_date": "2026-09-15",
+        "last_completed": "2025-09-15",
+        "responsible_role": "Clinical Director"
+      },
+      {
+        "requirement": "Business Associate Agreement Audit",
+        "description": "Review all vendor relationships to ensure current BAAs are in place for every entity that accesses, stores, or transmits PHI. Includes EHR vendors, billing services, cloud storage, and shredding companies.",
+        "framework": "hipaa-privacy",
+        "frequency": "annual",
+        "status": "in-progress",
+        "due_date": "2026-03-31",
+        "last_completed": "2025-03-28",
+        "responsible_role": "Privacy Officer"
+      },
+      {
+        "requirement": "Fire Extinguisher Inspection",
+        "description": "Monthly visual inspection of all fire extinguishers. Annual professional inspection and certification. Document inspection dates and any issues found.",
+        "framework": "osha",
+        "frequency": "monthly",
+        "status": "compliant",
+        "due_date": "2026-04-01",
+        "last_completed": "2026-03-01",
+        "responsible_role": "Office Manager"
+      },
+      {
+        "requirement": "Patient Rights Notice",
+        "description": "Notice of Privacy Practices must be provided to every new patient and posted in the waiting area. Updated whenever privacy practices change. Patient must acknowledge receipt.",
+        "framework": "hipaa-privacy",
+        "frequency": "ongoing",
+        "status": "compliant",
+        "last_completed": "2026-01-10",
+        "responsible_role": "Front Desk Lead"
+      }
+    ],
+    "hc_staff_credentials": [
+      {
+        "staff_name": "Dr. Sarah Kim",
+        "role": "physician",
+        "credential_type": "medical-license",
+        "credential_number": "ML-045892",
+        "issuing_body": "State Medical Board",
+        "issue_date": "2022-07-01",
+        "expiration_date": "2026-06-30",
+        "status": "active",
+        "payer_enrolled": ["Aetna", "BCBS", "UHC", "Cigna", "Medicare"]
+      },
+      {
+        "staff_name": "Dr. Sarah Kim",
+        "role": "physician",
+        "credential_type": "dea-registration",
+        "credential_number": "FK1234567",
+        "issuing_body": "DEA",
+        "issue_date": "2023-08-15",
+        "expiration_date": "2026-08-14",
+        "status": "active"
+      },
+      {
+        "staff_name": "Dr. Michael Chen",
+        "role": "physician",
+        "credential_type": "medical-license",
+        "credential_number": "ML-067234",
+        "issuing_body": "State Medical Board",
+        "issue_date": "2024-01-01",
+        "expiration_date": "2027-12-31",
+        "status": "active",
+        "payer_enrolled": ["Aetna", "BCBS", "UHC", "Cigna"]
+      },
+      {
+        "staff_name": "Dr. Michael Chen",
+        "role": "physician",
+        "credential_type": "board-certification",
+        "credential_number": "BC-IM-78234",
+        "issuing_body": "ABIM",
+        "issue_date": "2020-11-01",
+        "expiration_date": "2030-10-31",
+        "status": "active"
+      },
+      {
+        "staff_name": "NP Rachel Adams",
+        "role": "nurse-practitioner",
+        "credential_type": "state-license",
+        "credential_number": "NP-112890",
+        "issuing_body": "State Board of Nursing",
+        "issue_date": "2023-03-01",
+        "expiration_date": "2026-02-28",
+        "status": "expired",
+        "payer_enrolled": ["Aetna", "BCBS"]
+      },
+      {
+        "staff_name": "NP Rachel Adams",
+        "role": "nurse-practitioner",
+        "credential_type": "dea-registration",
+        "credential_number": "MA2345678",
+        "issuing_body": "DEA",
+        "issue_date": "2024-04-01",
+        "expiration_date": "2027-03-31",
+        "status": "active"
+      },
+      {
+        "staff_name": "Maria Gonzalez",
+        "role": "medical-assistant",
+        "credential_type": "cpr-certification",
+        "credential_number": "CPR-AHA-5567",
+        "issuing_body": "American Heart Association",
+        "issue_date": "2025-06-15",
+        "expiration_date": "2027-06-14",
+        "status": "active"
+      }
+    ]
+  }
+}

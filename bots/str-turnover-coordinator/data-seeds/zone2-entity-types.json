@@ -1,0 +1,37 @@
+{
+  "entityTypes": [
+    {
+      "name": "str_turnovers",
+      "displayName": "Turnovers",
+      "description": "Cleaning and turnover records between guest stays",
+      "domain": "operations",
+      "sampleFields": ["property_id", "checkout_booking_id", "checkin_booking_id", "cleaner_assigned", "scheduled_start", "status", "checklist_complete", "maintenance_flags"],
+      "fields": {
+        "property_id": {"type": "string", "required": true, "description": "Reference to str_properties"},
+        "checkout_booking_id": {"type": "string", "required": true, "description": "Reference to departing guest booking"},
+        "checkin_booking_id": {"type": "string", "description": "Reference to arriving guest booking (if back-to-back)"},
+        "cleaner_assigned": {"type": "string", "description": "Assigned cleaner name or ID"},
+        "scheduled_start": {"type": "datetime", "required": true, "description": "Scheduled cleaning start time"},
+        "status": {"type": "string", "required": true, "enum": ["scheduled", "in_progress", "completed", "verified", "late", "missed"], "description": "Turnover status"},
+        "checklist_complete": {"type": "boolean", "description": "Whether the cleaning checklist was fully completed"},
+        "maintenance_flags": {"type": "array", "description": "Issues discovered during turnover (broken items, stains, damage)"},
+        "completion_time": {"type": "datetime", "description": "When turnover was completed"},
+        "quality_score": {"type": "number", "description": "Quality inspection score (0-10)"}
+      }
+    },
+    {
+      "name": "str_findings",
+      "displayName": "STR Findings",
+      "description": "Turnover scheduling findings and operational reports",
+      "domain": "operations",
+      "sampleFields": ["severity", "finding_type", "summary", "property_id"]
+    },
+    {
+      "name": "str_alerts",
+      "displayName": "STR Alerts",
+      "description": "Late turnover, missed cleaning, and maintenance alerts",
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "property_id", "turnover_id"]
+    }
+  ]
+}

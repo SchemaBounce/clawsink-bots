@@ -1,0 +1,252 @@
+[
+  {
+    "name": "saas_accounts",
+    "displayName": "SaaS Accounts",
+    "description": "Customer organizations using the SaaS platform",
+    "fields": {
+      "company_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the customer organization"
+      },
+      "domain": {
+        "type": "string",
+        "required": true,
+        "description": "Primary website domain of the account"
+      },
+      "plan_tier": {
+        "type": "string",
+        "required": true,
+        "enum": ["free", "starter", "professional", "enterprise"],
+        "description": "Current subscription plan tier"
+      },
+      "mrr": {
+        "type": "number",
+        "required": true,
+        "description": "Monthly recurring revenue in USD"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["trial", "active", "past_due", "churned", "paused"],
+        "description": "Account lifecycle status"
+      },
+      "employee_count": {
+        "type": "number",
+        "description": "Number of employees at the organization"
+      },
+      "industry": {
+        "type": "string",
+        "description": "Industry vertical of the account"
+      },
+      "signup_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the account was created (ISO 8601)"
+      },
+      "owner_email": {
+        "type": "string",
+        "required": true,
+        "description": "Email of the primary account owner"
+      },
+      "tags": {
+        "type": "array",
+        "description": "Custom tags for segmentation"
+      }
+    }
+  },
+  {
+    "name": "saas_subscriptions",
+    "displayName": "Subscriptions",
+    "description": "Active and historical subscription records for each account",
+    "fields": {
+      "account_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to saas_accounts"
+      },
+      "plan_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the subscribed plan"
+      },
+      "billing_cycle": {
+        "type": "string",
+        "required": true,
+        "enum": ["monthly", "quarterly", "annual"],
+        "description": "Billing frequency"
+      },
+      "amount": {
+        "type": "number",
+        "required": true,
+        "description": "Subscription amount per billing cycle in USD"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "cancelled", "past_due", "trialing", "paused"],
+        "description": "Current subscription status"
+      },
+      "start_date": {
+        "type": "date",
+        "required": true,
+        "description": "Subscription start date"
+      },
+      "renewal_date": {
+        "type": "date",
+        "description": "Next renewal date"
+      },
+      "cancelled_at": {
+        "type": "date",
+        "description": "Cancellation date if applicable"
+      },
+      "seats": {
+        "type": "number",
+        "required": true,
+        "description": "Number of licensed seats"
+      },
+      "discount_percent": {
+        "type": "number",
+        "description": "Applied discount as a percentage"
+      }
+    }
+  },
+  {
+    "name": "saas_feature_usage",
+    "displayName": "Feature Usage",
+    "description": "Per-account feature adoption and usage tracking",
+    "fields": {
+      "account_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to saas_accounts"
+      },
+      "feature_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the product feature"
+      },
+      "feature_category": {
+        "type": "string",
+        "required": true,
+        "enum": ["core", "advanced", "integration", "reporting", "admin"],
+        "description": "Feature category"
+      },
+      "usage_count": {
+        "type": "number",
+        "required": true,
+        "description": "Number of times the feature was used this period"
+      },
+      "unique_users": {
+        "type": "number",
+        "description": "Number of unique users who used this feature"
+      },
+      "first_used_at": {
+        "type": "date",
+        "required": true,
+        "description": "Date the account first used this feature"
+      },
+      "last_used_at": {
+        "type": "date",
+        "required": true,
+        "description": "Most recent usage timestamp"
+      },
+      "is_activated": {
+        "type": "boolean",
+        "required": true,
+        "description": "Whether the feature meets the activation threshold"
+      }
+    }
+  },
+  {
+    "name": "saas_onboarding_progress",
+    "displayName": "Onboarding Progress",
+    "description": "Step-by-step onboarding completion tracking per account",
+    "fields": {
+      "account_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to saas_accounts"
+      },
+      "step_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the onboarding step"
+      },
+      "step_order": {
+        "type": "number",
+        "required": true,
+        "description": "Sequential order of the step"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["not_started", "in_progress", "completed", "skipped"],
+        "description": "Completion status of this step"
+      },
+      "started_at": {
+        "type": "date",
+        "description": "When the user began this step"
+      },
+      "completed_at": {
+        "type": "date",
+        "description": "When the user finished this step"
+      },
+      "duration_minutes": {
+        "type": "number",
+        "description": "Time spent on this step in minutes"
+      },
+      "assigned_to": {
+        "type": "string",
+        "description": "Email of the person responsible for completing this step"
+      }
+    }
+  },
+  {
+    "name": "saas_nps_scores",
+    "displayName": "NPS Scores",
+    "description": "Net Promoter Score submissions with qualitative feedback",
+    "fields": {
+      "account_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to saas_accounts"
+      },
+      "respondent_email": {
+        "type": "string",
+        "required": true,
+        "description": "Email of the person who submitted the score"
+      },
+      "score": {
+        "type": "number",
+        "required": true,
+        "description": "NPS score from 0 to 10"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "enum": ["detractor", "passive", "promoter"],
+        "description": "NPS category based on score (0-6 detractor, 7-8 passive, 9-10 promoter)"
+      },
+      "feedback_text": {
+        "type": "string",
+        "description": "Free-text feedback from the respondent"
+      },
+      "submitted_at": {
+        "type": "date",
+        "required": true,
+        "description": "Date the NPS survey was submitted"
+      },
+      "survey_trigger": {
+        "type": "string",
+        "enum": ["quarterly", "post_onboarding", "post_support", "annual"],
+        "description": "What triggered this NPS survey"
+      },
+      "follow_up_status": {
+        "type": "string",
+        "enum": ["pending", "contacted", "resolved", "no_action"],
+        "description": "Status of follow-up action for detractors"
+      }
+    }
+  }
+]

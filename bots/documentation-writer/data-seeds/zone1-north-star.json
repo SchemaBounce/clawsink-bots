@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "documentation_standards",
+      "value": "Doc structure conventions, style guide, and file organization. Customize for your project.",
+      "description": "Documentation standards governing structure, formatting, and style for all written docs"
+    },
+    {
+      "key": "product_catalog",
+      "value": "Product features and capabilities referenced in documentation. Customize for your product.",
+      "description": "Product feature catalog used to ensure documentation accuracy and completeness"
+    }
+  ]
+}

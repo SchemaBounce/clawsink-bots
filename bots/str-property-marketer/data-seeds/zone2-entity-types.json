@@ -1,0 +1,49 @@
+{
+  "entityTypes": [
+    {
+      "name": "mkt_content",
+      "displayName": "Marketing Content",
+      "description": "Listing descriptions, promotional copy, and marketing materials for properties",
+      "domain": "marketing",
+      "sampleFields": ["property_id", "content_type", "platform", "title", "body", "status", "seo_score"],
+      "fields": {
+        "property_id": {"type": "string", "required": true, "description": "Reference to str_properties"},
+        "content_type": {"type": "string", "required": true, "enum": ["listing_description", "promotion", "seasonal_campaign", "social_post_draft", "email_template"], "description": "Type of marketing content"},
+        "platform": {"type": "string", "description": "Target platform (airbnb, vrbo, lodgify, facebook, instagram, general)"},
+        "title": {"type": "string", "required": true, "description": "Content title or headline"},
+        "body": {"type": "string", "required": true, "description": "Content body text"},
+        "status": {"type": "string", "enum": ["draft", "pending_approval", "approved", "published", "archived"], "description": "Content workflow status"},
+        "seo_score": {"type": "number", "description": "SEO optimization score (0-100)"}
+      }
+    },
+    {
+      "name": "mkt_social_posts",
+      "displayName": "Social Media Posts",
+      "description": "Social media content for property portfolio promotion",
+      "domain": "marketing",
+      "sampleFields": ["property_id", "platform", "content", "scheduled_date", "status", "engagement_score"],
+      "fields": {
+        "property_id": {"type": "string", "description": "Reference to str_properties (if property-specific)"},
+        "platform": {"type": "string", "required": true, "enum": ["facebook", "instagram", "twitter", "pinterest"], "description": "Social media platform"},
+        "content": {"type": "string", "required": true, "description": "Post content"},
+        "scheduled_date": {"type": "datetime", "description": "Scheduled publish date"},
+        "status": {"type": "string", "enum": ["draft", "scheduled", "published", "archived"], "description": "Post status"},
+        "engagement_score": {"type": "number", "description": "Post engagement metrics"}
+      }
+    },
+    {
+      "name": "str_findings",
+      "displayName": "STR Findings",
+      "description": "Marketing content recommendations and listing optimization findings",
+      "domain": "marketing",
+      "sampleFields": ["severity", "finding_type", "summary", "property_id"]
+    },
+    {
+      "name": "str_alerts",
+      "displayName": "STR Alerts",
+      "description": "Marketing alerts — listing content stale, competitor visibility changes",
+      "domain": "marketing",
+      "sampleFields": ["severity", "title", "description", "property_id"]
+    }
+  ]
+}

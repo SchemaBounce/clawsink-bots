@@ -1,0 +1,24 @@
+{
+  "edgeTypes": [
+    {
+      "label": "REPORTS_TO",
+      "description": "Links an employee to their direct manager, forming the organizational hierarchy",
+      "fromEntity": "hr_employees",
+      "toEntity": "hr_employees",
+      "properties": {
+        "since": "date",
+        "relationship_type": "string"
+      }
+    },
+    {
+      "label": "REVIEW_OF",
+      "description": "Links a performance review to the employee being reviewed",
+      "fromEntity": "hr_performance_reviews",
+      "toEntity": "hr_employees",
+      "properties": {
+        "review_period": "string",
+        "overall_rating": "number"
+      }
+    }
+  ]
+}

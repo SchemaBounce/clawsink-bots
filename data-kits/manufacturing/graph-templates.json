@@ -1,0 +1,34 @@
+{
+  "edgeTypes": [
+    {
+      "label": "COMPONENT_OF",
+      "description": "Links a raw material to a bill of materials entry for material requirement planning",
+      "fromEntity": "mfg_raw_materials",
+      "toEntity": "mfg_bill_of_materials",
+      "properties": {
+        "quantity_per_unit": "number",
+        "unit": "string"
+      }
+    },
+    {
+      "label": "CHECKED",
+      "description": "Connects a quality check to the production run it inspects",
+      "fromEntity": "mfg_quality_checks",
+      "toEntity": "mfg_production_runs",
+      "properties": {
+        "result": "string",
+        "defects_found": "number"
+      }
+    },
+    {
+      "label": "USES_EQUIPMENT",
+      "description": "Links a production run to the equipment used for manufacturing",
+      "fromEntity": "mfg_production_runs",
+      "toEntity": "mfg_equipment",
+      "properties": {
+        "run_hours": "number",
+        "utilization_percent": "number"
+      }
+    }
+  ]
+}

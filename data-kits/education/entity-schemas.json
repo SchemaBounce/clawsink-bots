@@ -1,0 +1,269 @@
+[
+  {
+    "name": "edu_students",
+    "displayName": "Students",
+    "description": "Learners enrolled in the training academy",
+    "fields": {
+      "first_name": {
+        "type": "string",
+        "required": true,
+        "description": "Student first name"
+      },
+      "last_name": {
+        "type": "string",
+        "required": true,
+        "description": "Student last name"
+      },
+      "email": {
+        "type": "string",
+        "required": true,
+        "description": "Student email address"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "inactive", "graduated", "suspended"],
+        "description": "Current enrollment status"
+      },
+      "skill_level": {
+        "type": "string",
+        "required": true,
+        "enum": ["beginner", "intermediate", "advanced"],
+        "description": "Self-reported or assessed skill level"
+      },
+      "enrolled_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the student first enrolled"
+      },
+      "courses_completed": {
+        "type": "number",
+        "description": "Total number of courses completed"
+      },
+      "total_hours_learned": {
+        "type": "number",
+        "description": "Cumulative learning hours across all courses"
+      },
+      "preferred_language": {
+        "type": "string",
+        "description": "Preferred language for course content"
+      },
+      "tags": {
+        "type": "array",
+        "description": "Student interest tags and segments"
+      }
+    }
+  },
+  {
+    "name": "edu_courses",
+    "displayName": "Courses",
+    "description": "Course catalog with content metadata and learning objectives",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Course title"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Detailed course description"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "description": "Course category (e.g., Development, Design, Marketing)"
+      },
+      "difficulty": {
+        "type": "string",
+        "required": true,
+        "enum": ["beginner", "intermediate", "advanced"],
+        "description": "Course difficulty level"
+      },
+      "duration_hours": {
+        "type": "number",
+        "required": true,
+        "description": "Estimated course duration in hours"
+      },
+      "price": {
+        "type": "number",
+        "required": true,
+        "description": "Course price in USD (0 for free courses)"
+      },
+      "instructor_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to edu_instructors"
+      },
+      "learning_objectives": {
+        "type": "array",
+        "required": true,
+        "description": "List of learning objectives the student will achieve"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["draft", "published", "archived"],
+        "description": "Course publication status"
+      },
+      "avg_rating": {
+        "type": "number",
+        "description": "Average student rating (1.0-5.0)"
+      }
+    }
+  },
+  {
+    "name": "edu_enrollments",
+    "displayName": "Enrollments",
+    "description": "Student enrollment records linking students to courses",
+    "fields": {
+      "student_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to edu_students"
+      },
+      "course_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to edu_courses"
+      },
+      "enrolled_at": {
+        "type": "date",
+        "required": true,
+        "description": "Enrollment date"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "completed", "dropped", "paused"],
+        "description": "Enrollment status"
+      },
+      "progress_percent": {
+        "type": "number",
+        "required": true,
+        "description": "Completion percentage (0-100)"
+      },
+      "completed_at": {
+        "type": "date",
+        "description": "Course completion date"
+      },
+      "last_activity_at": {
+        "type": "date",
+        "description": "Date of last course activity"
+      },
+      "certificate_issued": {
+        "type": "boolean",
+        "description": "Whether a completion certificate was issued"
+      }
+    }
+  },
+  {
+    "name": "edu_instructors",
+    "displayName": "Instructors",
+    "description": "Teaching staff and subject matter experts",
+    "fields": {
+      "first_name": {
+        "type": "string",
+        "required": true,
+        "description": "Instructor first name"
+      },
+      "last_name": {
+        "type": "string",
+        "required": true,
+        "description": "Instructor last name"
+      },
+      "email": {
+        "type": "string",
+        "required": true,
+        "description": "Instructor email address"
+      },
+      "specializations": {
+        "type": "array",
+        "required": true,
+        "description": "Subject areas the instructor teaches"
+      },
+      "bio": {
+        "type": "string",
+        "description": "Instructor biography"
+      },
+      "avg_rating": {
+        "type": "number",
+        "description": "Average student rating (1.0-5.0)"
+      },
+      "courses_taught": {
+        "type": "number",
+        "description": "Total number of courses created"
+      },
+      "total_students": {
+        "type": "number",
+        "description": "Total students across all courses"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "inactive", "on_leave"],
+        "description": "Instructor availability status"
+      },
+      "hire_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the instructor joined"
+      }
+    }
+  },
+  {
+    "name": "edu_assessments",
+    "displayName": "Assessments",
+    "description": "Graded assignments, quizzes, and exams submitted by students",
+    "fields": {
+      "student_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to edu_students"
+      },
+      "course_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to edu_courses"
+      },
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Assessment title"
+      },
+      "type": {
+        "type": "string",
+        "required": true,
+        "enum": ["quiz", "assignment", "midterm", "final_exam", "project"],
+        "description": "Type of assessment"
+      },
+      "score": {
+        "type": "number",
+        "required": true,
+        "description": "Score achieved (0-100)"
+      },
+      "max_score": {
+        "type": "number",
+        "required": true,
+        "description": "Maximum possible score"
+      },
+      "submitted_at": {
+        "type": "date",
+        "required": true,
+        "description": "Date and time of submission"
+      },
+      "graded_at": {
+        "type": "date",
+        "description": "Date the assessment was graded"
+      },
+      "feedback": {
+        "type": "string",
+        "description": "Instructor feedback on the submission"
+      },
+      "attempts": {
+        "type": "number",
+        "description": "Number of attempts taken"
+      }
+    }
+  }
+]

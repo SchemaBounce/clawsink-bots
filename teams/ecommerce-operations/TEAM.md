@@ -24,6 +24,16 @@ plugins:
     reason: "Marketplace and platform OAuth for inventory-alert, order-fulfillment, and price-optimizer"
     config:
       scopes: ["marketplace", "orders", "inventory"]
+dataKits:
+  - ref: "data-kits/ecommerce@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/customer-feedback@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
 orgChart:
   lead: order-fulfillment
   roles:

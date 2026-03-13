@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:it-operations:defaults",
+  "entries": [
+    {
+      "key": "kpi:mttr",
+      "value": "Target mean time to resolve (MTTR): SEV1 <1 hour, SEV2 <4 hours, SEV3 <24 hours, SEV4 <72 hours. Track separately by severity. Trending upward indicates process degradation or increasing system complexity.",
+      "category": "kpi",
+      "tags": ["mttr", "incident-response", "sla"]
+    },
+    {
+      "key": "kpi:deployment_frequency",
+      "value": "Target deployment frequency is daily or more for high-performing teams (DORA Elite). Weekly deployments indicate moderate maturity. Less than monthly signals delivery bottlenecks requiring process review.",
+      "category": "kpi",
+      "tags": ["deployments", "dora", "velocity"]
+    },
+    {
+      "key": "kpi:change_failure_rate",
+      "value": "Target change failure rate is <15%. DORA Elite benchmark is <5%. Rate above 25% indicates insufficient testing, review, or staging validation. Measure as (failed deployments / total deployments) over 30-day windows.",
+      "category": "kpi",
+      "tags": ["change-failure", "dora", "quality"]
+    },
+    {
+      "key": "kpi:service_availability",
+      "value": "Target service availability: Tier 1 >99.9% (8.76h downtime/year), Tier 2 >99.5% (43.8h/year), Tier 3 >99.0% (87.6h/year). Track rolling 30-day and 90-day windows. Breaches require incident review.",
+      "category": "kpi",
+      "tags": ["availability", "sla", "uptime"]
+    },
+    {
+      "key": "kpi:incident_recurrence_rate",
+      "value": "Target incident recurrence rate is <10%. Recurring incidents above 15% indicate ineffective root cause analysis or incomplete remediation. Every SEV1/SEV2 requires a blameless postmortem within 48 hours.",
+      "category": "kpi",
+      "tags": ["recurrence", "incidents", "root-cause"]
+    },
+    {
+      "key": "kpi:runbook_coverage",
+      "value": "Target runbook coverage is >80% of known incident types. Each Tier 1 service must have at minimum: startup/shutdown, health check, scaling, and common failure mode runbooks. Review and update runbooks quarterly.",
+      "category": "kpi",
+      "tags": ["runbooks", "documentation", "readiness"]
+    },
+    {
+      "key": "best-practice:incident_severity",
+      "value": "SEV1: Full customer outage or data loss risk. SEV2: Significant degradation affecting >25% of users. SEV3: Minor degradation or single-customer impact. SEV4: Cosmetic issue or internal tooling problem.",
+      "category": "terminology",
+      "tags": ["severity", "classification", "incidents"]
+    },
+    {
+      "key": "best-practice:blameless_postmortems",
+      "value": "All SEV1 and SEV2 incidents require blameless postmortems within 48 hours. Focus on systemic causes, not individual blame. Document timeline, root cause, impact, remediation items, and lessons learned.",
+      "category": "best-practice",
+      "tags": ["postmortem", "culture", "learning"]
+    },
+    {
+      "key": "threshold:deployment_rollback",
+      "value": "Automatic rollback triggers: error rate >5% within 5 minutes of deploy, P99 latency >3x baseline, health check failures on >10% of pods. All production deploys must have a tested rollback path.",
+      "category": "threshold",
+      "tags": ["rollback", "deployment", "safety"]
+    },
+    {
+      "key": "best-practice:on_call_rotation",
+      "value": "On-call rotation: 1 week per engineer, no more than 1 in 4 weeks. Primary and secondary on-call required. Handoff meeting at each rotation. Compensation for after-hours pages. Target <2 pages per on-call shift.",
+      "category": "best-practice",
+      "tags": ["on-call", "operations", "team-health"]
+    }
+  ]
+}

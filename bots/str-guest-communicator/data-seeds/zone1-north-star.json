@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "response_time_target",
+      "value": "Under 15 minutes for all guest messages. Under 5 minutes for pre-booking inquiries (highest conversion impact).",
+      "description": "Target response times to maintain Superhost status and maximize booking conversion"
+    },
+    {
+      "key": "check_in_instruction_timing",
+      "value": "Send check-in instructions 24 hours before arrival. Send door code / access details 2 hours before check-in time.",
+      "description": "When to automatically send check-in information to guests"
+    }
+  ]
+}

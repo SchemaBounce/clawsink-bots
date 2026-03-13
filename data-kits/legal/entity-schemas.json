@@ -1,0 +1,294 @@
+[
+  {
+    "name": "law_matters",
+    "displayName": "Matters",
+    "description": "Client matters and cases with status, practice area, billing method, and responsible attorney",
+    "fields": {
+      "matter_number": {
+        "type": "string",
+        "required": true,
+        "description": "Unique matter/case number (e.g., 2026-0042)"
+      },
+      "matter_name": {
+        "type": "string",
+        "required": true,
+        "description": "Matter title or short name"
+      },
+      "client_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the client this matter is for"
+      },
+      "practice_area": {
+        "type": "string",
+        "required": true,
+        "description": "Area of law",
+        "enum": ["litigation", "family-law", "real-estate", "business", "estate-planning", "criminal-defense", "employment", "personal-injury"]
+      },
+      "responsible_attorney": {
+        "type": "string",
+        "required": true,
+        "description": "Lead attorney assigned to this matter"
+      },
+      "billing_method": {
+        "type": "string",
+        "required": true,
+        "description": "How this matter is billed",
+        "enum": ["hourly", "flat-fee", "contingency", "retainer", "pro-bono"]
+      },
+      "hourly_rate": {
+        "type": "number",
+        "required": false,
+        "description": "Agreed hourly rate for this matter (if hourly billing)"
+      },
+      "retainer_balance": {
+        "type": "number",
+        "required": false,
+        "description": "Current retainer/trust balance for this matter"
+      },
+      "date_opened": {
+        "type": "date",
+        "required": true,
+        "description": "Date the matter was opened (ISO 8601)"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Current matter status",
+        "enum": ["active", "pending", "closed", "on-hold", "archived"]
+      }
+    }
+  },
+  {
+    "name": "law_time_entries",
+    "displayName": "Time Entries",
+    "description": "Billable and non-billable time records for attorneys and paralegals",
+    "fields": {
+      "matter_number": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the matter this time was spent on"
+      },
+      "timekeeper": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the attorney or paralegal who performed the work"
+      },
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the work was performed (ISO 8601)"
+      },
+      "hours": {
+        "type": "number",
+        "required": true,
+        "description": "Time spent in hours (0.1 increments)"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Narrative description of work performed"
+      },
+      "activity_code": {
+        "type": "string",
+        "required": false,
+        "description": "UTBMS/LEDES activity code for task-based billing",
+        "enum": ["A101", "A102", "A103", "A104", "A106", "A107", "A108", "A109", "L100", "L110", "L120", "L130", "L140", "L150"]
+      },
+      "billable": {
+        "type": "boolean",
+        "required": true,
+        "description": "Whether this time entry is billable to the client"
+      },
+      "rate": {
+        "type": "number",
+        "required": false,
+        "description": "Billing rate applied for this entry"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Billing status of this time entry",
+        "enum": ["draft", "submitted", "billed", "collected", "written-off"]
+      }
+    }
+  },
+  {
+    "name": "law_deadlines",
+    "displayName": "Deadlines",
+    "description": "Court deadlines, statute of limitations, filing dates, and calendar events for matters",
+    "fields": {
+      "matter_number": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the matter this deadline belongs to"
+      },
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Short description of the deadline"
+      },
+      "deadline_type": {
+        "type": "string",
+        "required": true,
+        "description": "Category of deadline",
+        "enum": ["statute-of-limitations", "court-filing", "discovery", "hearing", "trial", "response", "appeal", "administrative", "contractual"]
+      },
+      "due_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the deadline is due (ISO 8601)"
+      },
+      "reminder_days": {
+        "type": "number",
+        "required": false,
+        "description": "Number of days before due date to send reminder alerts"
+      },
+      "responsible_attorney": {
+        "type": "string",
+        "required": true,
+        "description": "Attorney responsible for meeting this deadline"
+      },
+      "priority": {
+        "type": "string",
+        "required": true,
+        "description": "Urgency level",
+        "enum": ["critical", "high", "medium", "low"]
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Current deadline status",
+        "enum": ["upcoming", "due-soon", "overdue", "completed", "waived", "extended"]
+      },
+      "court_name": {
+        "type": "string",
+        "required": false,
+        "description": "Court or jurisdiction for court-related deadlines"
+      },
+      "notes": {
+        "type": "string",
+        "required": false,
+        "description": "Additional notes or filing instructions"
+      }
+    }
+  },
+  {
+    "name": "law_documents",
+    "displayName": "Documents",
+    "description": "Case documents, pleadings, contracts, and correspondence with classification and versioning",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Document title"
+      },
+      "matter_number": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the matter this document belongs to"
+      },
+      "document_type": {
+        "type": "string",
+        "required": true,
+        "description": "Classification of the document",
+        "enum": ["pleading", "motion", "brief", "contract", "correspondence", "discovery", "court-order", "memo", "settlement", "corporate-filing"]
+      },
+      "summary": {
+        "type": "string",
+        "required": false,
+        "description": "Brief summary of the document contents"
+      },
+      "practice_area": {
+        "type": "string",
+        "required": false,
+        "description": "Practice area for cross-matter searchability",
+        "enum": ["litigation", "family-law", "real-estate", "business", "estate-planning", "criminal-defense", "employment", "personal-injury"]
+      },
+      "author": {
+        "type": "string",
+        "required": true,
+        "description": "Person who drafted or uploaded the document"
+      },
+      "date_created": {
+        "type": "date",
+        "required": true,
+        "description": "Date the document was created (ISO 8601)"
+      },
+      "version": {
+        "type": "number",
+        "required": false,
+        "description": "Document version number"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Document status",
+        "enum": ["draft", "final", "filed", "executed", "superseded", "archived"]
+      },
+      "confidential": {
+        "type": "boolean",
+        "required": false,
+        "description": "Whether this document contains privileged or confidential information"
+      }
+    }
+  },
+  {
+    "name": "law_trust_accounts",
+    "displayName": "Trust Account Transactions",
+    "description": "IOLTA and client trust account deposits, disbursements, and balance tracking for bar compliance",
+    "fields": {
+      "transaction_id": {
+        "type": "string",
+        "required": true,
+        "description": "Unique transaction identifier"
+      },
+      "matter_number": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the matter this transaction is for"
+      },
+      "client_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the client whose funds these are"
+      },
+      "transaction_type": {
+        "type": "string",
+        "required": true,
+        "description": "Type of trust account transaction",
+        "enum": ["deposit", "disbursement", "transfer-to-operating", "refund", "interest", "bank-fee"]
+      },
+      "amount": {
+        "type": "number",
+        "required": true,
+        "description": "Transaction amount in USD (positive for deposits, negative for disbursements)"
+      },
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Transaction date (ISO 8601)"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Description of the transaction purpose"
+      },
+      "running_balance": {
+        "type": "number",
+        "required": true,
+        "description": "Client trust balance after this transaction"
+      },
+      "check_number": {
+        "type": "string",
+        "required": false,
+        "description": "Trust account check number (if disbursement by check)"
+      },
+      "reconciled": {
+        "type": "boolean",
+        "required": true,
+        "description": "Whether this transaction has been reconciled with the bank statement"
+      }
+    }
+  }
+]

@@ -1,0 +1,421 @@
+{
+  "records": {
+    "mfg_equipment": [
+      {
+        "name": "Arburg 470A Injection Molder",
+        "equipment_type": "injection_molder",
+        "manufacturer": "Arburg",
+        "model": "470A-1000-400",
+        "serial_number": "ARB-2019-44821",
+        "status": "operational",
+        "install_date": "2019-06-15",
+        "last_maintenance": "2026-02-28",
+        "next_maintenance": "2026-04-28",
+        "uptime_percent": 94.2,
+        "location": "Bay 1, Line A"
+      },
+      {
+        "name": "Arburg 370A Injection Molder",
+        "equipment_type": "injection_molder",
+        "manufacturer": "Arburg",
+        "model": "370A-600-250",
+        "serial_number": "ARB-2021-58103",
+        "status": "operational",
+        "install_date": "2021-03-10",
+        "last_maintenance": "2026-03-05",
+        "next_maintenance": "2026-05-05",
+        "uptime_percent": 91.8,
+        "location": "Bay 1, Line B"
+      },
+      {
+        "name": "Conair TempTrol Chiller",
+        "equipment_type": "other",
+        "manufacturer": "Conair",
+        "model": "TW-E-050",
+        "serial_number": "CON-2020-22019",
+        "status": "operational",
+        "install_date": "2020-01-20",
+        "last_maintenance": "2026-01-15",
+        "next_maintenance": "2026-04-15",
+        "uptime_percent": 99.1,
+        "location": "Utility Room"
+      },
+      {
+        "name": "Maguire WSB-240 Blender",
+        "equipment_type": "mixer",
+        "manufacturer": "Maguire",
+        "model": "WSB-240",
+        "serial_number": "MAG-2022-08451",
+        "status": "operational",
+        "install_date": "2022-08-01",
+        "last_maintenance": "2026-02-10",
+        "next_maintenance": "2026-05-10",
+        "uptime_percent": 97.5,
+        "location": "Bay 1, Material Station"
+      },
+      {
+        "name": "Keyence IM-8000 Measurement System",
+        "equipment_type": "testing",
+        "manufacturer": "Keyence",
+        "model": "IM-8000",
+        "serial_number": "KEY-2023-11092",
+        "status": "operational",
+        "install_date": "2023-04-15",
+        "last_maintenance": "2026-03-01",
+        "next_maintenance": "2026-06-01",
+        "uptime_percent": 99.8,
+        "location": "QC Lab"
+      },
+      {
+        "name": "Wittmann W818 Robot",
+        "equipment_type": "other",
+        "manufacturer": "Wittmann",
+        "model": "W818",
+        "serial_number": "WIT-2021-30144",
+        "status": "maintenance",
+        "install_date": "2021-03-10",
+        "last_maintenance": "2026-03-12",
+        "next_maintenance": "2026-03-14",
+        "uptime_percent": 88.3,
+        "location": "Bay 1, Line B"
+      }
+    ],
+    "mfg_raw_materials": [
+      {
+        "name": "ABS Resin Natural",
+        "material_code": "RM-ABS-NAT-01",
+        "category": "resin",
+        "unit": "lbs",
+        "quantity_on_hand": 4200,
+        "reorder_point": 2000,
+        "unit_cost": 1.45,
+        "supplier_name": "PolyOne Distribution",
+        "lot_number": "PO-2026-0218A",
+        "expiration_date": null,
+        "last_received": "2026-02-18"
+      },
+      {
+        "name": "Polypropylene Copolymer",
+        "material_code": "RM-PP-COP-01",
+        "category": "resin",
+        "unit": "lbs",
+        "quantity_on_hand": 3100,
+        "reorder_point": 1500,
+        "unit_cost": 0.98,
+        "supplier_name": "PolyOne Distribution",
+        "lot_number": "PO-2026-0301B",
+        "expiration_date": null,
+        "last_received": "2026-03-01"
+      },
+      {
+        "name": "Blue Masterbatch Pigment",
+        "material_code": "RM-PIG-BLU-01",
+        "category": "pigment",
+        "unit": "lbs",
+        "quantity_on_hand": 85,
+        "reorder_point": 50,
+        "unit_cost": 8.50,
+        "supplier_name": "Clariant Plastics",
+        "lot_number": "CL-2026-0115",
+        "expiration_date": "2027-01-15",
+        "last_received": "2026-01-20"
+      },
+      {
+        "name": "UV Stabilizer Additive",
+        "material_code": "RM-ADD-UV-01",
+        "category": "additive",
+        "unit": "lbs",
+        "quantity_on_hand": 120,
+        "reorder_point": 100,
+        "unit_cost": 12.00,
+        "supplier_name": "BASF Plastics Additives",
+        "lot_number": "BF-2025-1205",
+        "expiration_date": "2026-12-05",
+        "last_received": "2025-12-10"
+      },
+      {
+        "name": "Corrugated Shipping Box 12x8x6",
+        "material_code": "RM-PKG-BOX-01",
+        "category": "packaging",
+        "unit": "each",
+        "quantity_on_hand": 2400,
+        "reorder_point": 500,
+        "unit_cost": 0.85,
+        "supplier_name": "Pacific Packaging",
+        "lot_number": null,
+        "expiration_date": null,
+        "last_received": "2026-03-05"
+      },
+      {
+        "name": "M4 x 12mm Stainless Steel Screws",
+        "material_code": "RM-FST-M4-SS",
+        "category": "fastener",
+        "unit": "each",
+        "quantity_on_hand": 18500,
+        "reorder_point": 5000,
+        "unit_cost": 0.03,
+        "supplier_name": "Fastenal",
+        "lot_number": "FN-2026-0220",
+        "expiration_date": null,
+        "last_received": "2026-02-22"
+      }
+    ],
+    "mfg_bill_of_materials": [
+      {
+        "product_name": "ProCase Tablet Stand — Blue",
+        "product_code": "PC-TBST-BLU-01",
+        "version": "2.1",
+        "status": "active",
+        "components": [
+          {"material_id": "rm-abs-nat-01", "quantity_per_unit": 0.35, "unit": "lbs"},
+          {"material_id": "rm-pig-blu-01", "quantity_per_unit": 0.012, "unit": "lbs"},
+          {"material_id": "rm-add-uv-01", "quantity_per_unit": 0.005, "unit": "lbs"},
+          {"material_id": "rm-fst-m4-ss", "quantity_per_unit": 4, "unit": "each"},
+          {"material_id": "rm-pkg-box-01", "quantity_per_unit": 1, "unit": "each"}
+        ],
+        "assembly_time_minutes": 2.5,
+        "setup_time_minutes": 45,
+        "yield_rate": 97.8,
+        "effective_date": "2025-09-01",
+        "notes": "Injection mold tool #T-2019-08. Blue pigment at 3.4% letdown ratio."
+      },
+      {
+        "product_name": "FlexMount Phone Cradle",
+        "product_code": "FM-PHCR-BLK-01",
+        "version": "1.3",
+        "status": "active",
+        "components": [
+          {"material_id": "rm-pp-cop-01", "quantity_per_unit": 0.18, "unit": "lbs"},
+          {"material_id": "rm-fst-m4-ss", "quantity_per_unit": 2, "unit": "each"},
+          {"material_id": "rm-pkg-box-01", "quantity_per_unit": 1, "unit": "each"}
+        ],
+        "assembly_time_minutes": 1.8,
+        "setup_time_minutes": 35,
+        "yield_rate": 98.5,
+        "effective_date": "2025-11-15",
+        "notes": "Injection mold tool #T-2021-03. Natural PP — no pigment. Living hinge design requires precise mold temp control."
+      },
+      {
+        "product_name": "ProCase Tablet Stand — Natural",
+        "product_code": "PC-TBST-NAT-01",
+        "version": "2.1",
+        "status": "active",
+        "components": [
+          {"material_id": "rm-abs-nat-01", "quantity_per_unit": 0.35, "unit": "lbs"},
+          {"material_id": "rm-add-uv-01", "quantity_per_unit": 0.005, "unit": "lbs"},
+          {"material_id": "rm-fst-m4-ss", "quantity_per_unit": 4, "unit": "each"},
+          {"material_id": "rm-pkg-box-01", "quantity_per_unit": 1, "unit": "each"}
+        ],
+        "assembly_time_minutes": 2.5,
+        "setup_time_minutes": 30,
+        "yield_rate": 98.2,
+        "effective_date": "2025-09-01",
+        "notes": "Same tool as Blue variant. No color change — run after Blue to avoid purge."
+      },
+      {
+        "product_name": "DuraClip Cable Organizer",
+        "product_code": "DC-CORG-GRY-01",
+        "version": "1.0",
+        "status": "draft",
+        "components": [
+          {"material_id": "rm-pp-cop-01", "quantity_per_unit": 0.08, "unit": "lbs"},
+          {"material_id": "rm-pkg-box-01", "quantity_per_unit": 0.25, "unit": "each"}
+        ],
+        "assembly_time_minutes": 0.5,
+        "setup_time_minutes": 25,
+        "yield_rate": null,
+        "effective_date": "2026-04-01",
+        "notes": "New product. Mold tool in fabrication — expected delivery March 28. Pilot run scheduled April."
+      },
+      {
+        "product_name": "ProCase Tablet Stand — Blue (v1 - retired)",
+        "product_code": "PC-TBST-BLU-01",
+        "version": "1.0",
+        "status": "retired",
+        "components": [
+          {"material_id": "rm-abs-nat-01", "quantity_per_unit": 0.42, "unit": "lbs"},
+          {"material_id": "rm-pig-blu-01", "quantity_per_unit": 0.015, "unit": "lbs"},
+          {"material_id": "rm-fst-m4-ss", "quantity_per_unit": 6, "unit": "each"},
+          {"material_id": "rm-pkg-box-01", "quantity_per_unit": 1, "unit": "each"}
+        ],
+        "assembly_time_minutes": 3.5,
+        "setup_time_minutes": 45,
+        "yield_rate": 95.1,
+        "effective_date": "2023-03-01",
+        "notes": "Superseded by v2.1. Old design used more material and extra fasteners."
+      }
+    ],
+    "mfg_production_runs": [
+      {
+        "run_number": "PR-2026-0312-A",
+        "product_name": "ProCase Tablet Stand — Blue",
+        "bom_id": "procase-tablet-stand-blue-v2.1",
+        "status": "completed",
+        "planned_quantity": 500,
+        "actual_quantity": 492,
+        "scrap_quantity": 11,
+        "start_time": "2026-03-12T06:00:00Z",
+        "end_time": "2026-03-12T14:30:00Z",
+        "equipment_id": "arburg-470a",
+        "operator": "Carlos Mendez",
+        "shift": "day"
+      },
+      {
+        "run_number": "PR-2026-0312-B",
+        "product_name": "FlexMount Phone Cradle",
+        "bom_id": "flexmount-phone-cradle-v1.3",
+        "status": "completed",
+        "planned_quantity": 800,
+        "actual_quantity": 795,
+        "scrap_quantity": 8,
+        "start_time": "2026-03-12T06:30:00Z",
+        "end_time": "2026-03-12T13:00:00Z",
+        "equipment_id": "arburg-370a",
+        "operator": "Li Wei",
+        "shift": "day"
+      },
+      {
+        "run_number": "PR-2026-0313-A",
+        "product_name": "ProCase Tablet Stand — Natural",
+        "bom_id": "procase-tablet-stand-natural-v2.1",
+        "status": "running",
+        "planned_quantity": 350,
+        "actual_quantity": 180,
+        "scrap_quantity": 3,
+        "start_time": "2026-03-13T06:00:00Z",
+        "end_time": null,
+        "equipment_id": "arburg-470a",
+        "operator": "Carlos Mendez",
+        "shift": "day"
+      },
+      {
+        "run_number": "PR-2026-0313-B",
+        "product_name": "FlexMount Phone Cradle",
+        "bom_id": "flexmount-phone-cradle-v1.3",
+        "status": "setup",
+        "planned_quantity": 600,
+        "actual_quantity": 0,
+        "scrap_quantity": 0,
+        "start_time": "2026-03-13T14:00:00Z",
+        "end_time": null,
+        "equipment_id": "arburg-370a",
+        "operator": "Anh Tran",
+        "shift": "swing"
+      },
+      {
+        "run_number": "PR-2026-0314-A",
+        "product_name": "ProCase Tablet Stand — Blue",
+        "bom_id": "procase-tablet-stand-blue-v2.1",
+        "status": "scheduled",
+        "planned_quantity": 1000,
+        "actual_quantity": 0,
+        "scrap_quantity": 0,
+        "start_time": "2026-03-14T06:00:00Z",
+        "end_time": null,
+        "equipment_id": "arburg-470a",
+        "operator": "Carlos Mendez",
+        "shift": "day"
+      },
+      {
+        "run_number": "PR-2026-0311-A",
+        "product_name": "ProCase Tablet Stand — Blue",
+        "bom_id": "procase-tablet-stand-blue-v2.1",
+        "status": "aborted",
+        "planned_quantity": 500,
+        "actual_quantity": 120,
+        "scrap_quantity": 45,
+        "start_time": "2026-03-11T06:00:00Z",
+        "end_time": "2026-03-11T09:15:00Z",
+        "equipment_id": "arburg-470a",
+        "operator": "Carlos Mendez",
+        "shift": "day"
+      }
+    ],
+    "mfg_quality_checks": [
+      {
+        "check_number": "QC-2026-0312-001",
+        "production_run_id": "pr-2026-0312-a",
+        "check_type": "in_process",
+        "result": "pass",
+        "inspector": "Kenji Tanaka",
+        "check_date": "2026-03-12T08:00:00Z",
+        "sample_size": 10,
+        "defects_found": 0,
+        "defect_types": [],
+        "measurements": {"wall_thickness_mm": 2.52, "overall_length_mm": 185.1, "weight_g": 158.4},
+        "corrective_action": null,
+        "notes": "All dimensions within spec. First article approved."
+      },
+      {
+        "check_number": "QC-2026-0312-002",
+        "production_run_id": "pr-2026-0312-a",
+        "check_type": "final",
+        "result": "pass",
+        "inspector": "Kenji Tanaka",
+        "check_date": "2026-03-12T14:45:00Z",
+        "sample_size": 25,
+        "defects_found": 1,
+        "defect_types": ["cosmetic"],
+        "measurements": {"wall_thickness_mm": 2.50, "overall_length_mm": 185.0, "weight_g": 158.2},
+        "corrective_action": null,
+        "notes": "1 unit with minor flow line on non-visible surface. Within AQL. Lot released."
+      },
+      {
+        "check_number": "QC-2026-0312-003",
+        "production_run_id": "pr-2026-0312-b",
+        "check_type": "final",
+        "result": "pass",
+        "inspector": "Kenji Tanaka",
+        "check_date": "2026-03-12T13:30:00Z",
+        "sample_size": 20,
+        "defects_found": 0,
+        "defect_types": [],
+        "measurements": {"hinge_flex_cycles": 500, "weight_g": 82.1},
+        "corrective_action": null,
+        "notes": "Living hinge tested to 500 cycles — no cracking. Lot released."
+      },
+      {
+        "check_number": "QC-2026-0311-001",
+        "production_run_id": "pr-2026-0311-a",
+        "check_type": "in_process",
+        "result": "fail",
+        "inspector": "Kenji Tanaka",
+        "check_date": "2026-03-11T08:30:00Z",
+        "sample_size": 10,
+        "defects_found": 4,
+        "defect_types": ["dimensional", "cosmetic"],
+        "measurements": {"wall_thickness_mm": 2.15, "overall_length_mm": 184.2, "weight_g": 151.8},
+        "corrective_action": "Run aborted. Root cause: barrel heater zone 3 thermocouple failure causing inconsistent melt temperature. Thermocouple replaced, machine recalibrated.",
+        "notes": "Short shots and sink marks observed. 45 units scrapped from this run."
+      },
+      {
+        "check_number": "QC-2026-0313-001",
+        "production_run_id": "pr-2026-0313-a",
+        "check_type": "in_process",
+        "result": "pass",
+        "inspector": "Sarah Kim",
+        "check_date": "2026-03-13T08:15:00Z",
+        "sample_size": 10,
+        "defects_found": 0,
+        "defect_types": [],
+        "measurements": {"wall_thickness_mm": 2.51, "overall_length_mm": 185.0, "weight_g": 158.1},
+        "corrective_action": null,
+        "notes": "Post-thermocouple repair. Machine running within spec. Monitoring closely."
+      },
+      {
+        "check_number": "QC-2026-0301-IM1",
+        "production_run_id": null,
+        "check_type": "incoming_material",
+        "result": "pass",
+        "inspector": "Sarah Kim",
+        "check_date": "2026-03-01T10:00:00Z",
+        "sample_size": 5,
+        "defects_found": 0,
+        "defect_types": [],
+        "measurements": {"melt_flow_index": 10.2, "moisture_content_pct": 0.04},
+        "corrective_action": null,
+        "notes": "PP copolymer lot PO-2026-0301B. MFI and moisture within spec. Released to inventory."
+      }
+    ]
+  }
+}

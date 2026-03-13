@@ -1,0 +1,322 @@
+[
+  {
+    "name": "re_listings",
+    "displayName": "Property Listings",
+    "description": "Residential property listings with pricing, features, and market status",
+    "fields": {
+      "address": {
+        "type": "string",
+        "required": true,
+        "description": "Full street address of the property"
+      },
+      "city": {
+        "type": "string",
+        "required": true,
+        "description": "City name"
+      },
+      "state": {
+        "type": "string",
+        "required": true,
+        "description": "State or province abbreviation"
+      },
+      "zip_code": {
+        "type": "string",
+        "required": true,
+        "description": "Postal/ZIP code"
+      },
+      "list_price": {
+        "type": "number",
+        "required": true,
+        "description": "Current listing price in USD"
+      },
+      "property_type": {
+        "type": "string",
+        "required": true,
+        "description": "Type of residential property",
+        "enum": ["single-family", "condo", "townhouse", "multi-family", "land", "mobile-home"]
+      },
+      "bedrooms": {
+        "type": "number",
+        "required": true,
+        "description": "Number of bedrooms"
+      },
+      "bathrooms": {
+        "type": "number",
+        "required": true,
+        "description": "Number of bathrooms (including half baths as 0.5)"
+      },
+      "sqft": {
+        "type": "number",
+        "required": true,
+        "description": "Total living area in square feet"
+      },
+      "lot_size_sqft": {
+        "type": "number",
+        "required": false,
+        "description": "Lot size in square feet"
+      },
+      "year_built": {
+        "type": "number",
+        "required": false,
+        "description": "Year the property was built"
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "Marketing description of the property"
+      },
+      "features": {
+        "type": "array",
+        "required": false,
+        "description": "Notable property features (pool, garage, updated kitchen, etc.)"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Current listing status",
+        "enum": ["active", "pending", "sold", "withdrawn", "expired"]
+      },
+      "list_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the property was listed (ISO 8601)"
+      },
+      "mls_number": {
+        "type": "string",
+        "required": false,
+        "description": "MLS listing number for cross-referencing"
+      }
+    }
+  },
+  {
+    "name": "re_clients",
+    "displayName": "Clients",
+    "description": "Buyer and seller clients with preferences and qualification status",
+    "fields": {
+      "first_name": {
+        "type": "string",
+        "required": true,
+        "description": "Client first name"
+      },
+      "last_name": {
+        "type": "string",
+        "required": true,
+        "description": "Client last name"
+      },
+      "email": {
+        "type": "string",
+        "required": true,
+        "description": "Primary email address"
+      },
+      "phone": {
+        "type": "string",
+        "required": false,
+        "description": "Primary phone number"
+      },
+      "client_type": {
+        "type": "string",
+        "required": true,
+        "description": "Whether this client is buying, selling, or both",
+        "enum": ["buyer", "seller", "both"]
+      },
+      "pre_approved": {
+        "type": "boolean",
+        "required": false,
+        "description": "Whether the buyer has mortgage pre-approval"
+      },
+      "budget_min": {
+        "type": "number",
+        "required": false,
+        "description": "Minimum budget for property search (buyers)"
+      },
+      "budget_max": {
+        "type": "number",
+        "required": false,
+        "description": "Maximum budget for property search (buyers)"
+      },
+      "preferred_areas": {
+        "type": "array",
+        "required": false,
+        "description": "Preferred neighborhoods or ZIP codes"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Client engagement status",
+        "enum": ["active", "under-contract", "closed", "dormant", "lost"]
+      }
+    }
+  },
+  {
+    "name": "re_showings",
+    "displayName": "Showings",
+    "description": "Property viewing appointments with client feedback and outcome tracking",
+    "fields": {
+      "listing_name": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the listing address shown"
+      },
+      "client_name": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the client who attended the showing"
+      },
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Date of the showing (ISO 8601)"
+      },
+      "time": {
+        "type": "string",
+        "required": true,
+        "description": "Scheduled time (HH:MM format)"
+      },
+      "duration_minutes": {
+        "type": "number",
+        "required": false,
+        "description": "Actual duration of the showing in minutes"
+      },
+      "feedback": {
+        "type": "string",
+        "required": false,
+        "description": "Client feedback after the showing"
+      },
+      "interest_level": {
+        "type": "string",
+        "required": false,
+        "description": "Client interest level after viewing",
+        "enum": ["very-interested", "interested", "neutral", "not-interested"]
+      },
+      "outcome": {
+        "type": "string",
+        "required": true,
+        "description": "Result of the showing",
+        "enum": ["offer-made", "second-showing", "passed", "pending-decision", "cancelled"]
+      },
+      "showing_type": {
+        "type": "string",
+        "required": false,
+        "description": "Type of showing",
+        "enum": ["in-person", "virtual", "open-house"]
+      }
+    }
+  },
+  {
+    "name": "re_offers",
+    "displayName": "Offers",
+    "description": "Purchase offers with price terms, contingencies, and negotiation status",
+    "fields": {
+      "listing_name": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the listing this offer is on"
+      },
+      "buyer_name": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the buyer client making the offer"
+      },
+      "offer_price": {
+        "type": "number",
+        "required": true,
+        "description": "Offered purchase price in USD"
+      },
+      "earnest_money": {
+        "type": "number",
+        "required": false,
+        "description": "Earnest money deposit amount"
+      },
+      "offer_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the offer was submitted (ISO 8601)"
+      },
+      "expiration_date": {
+        "type": "date",
+        "required": false,
+        "description": "Offer expiration date"
+      },
+      "contingencies": {
+        "type": "array",
+        "required": false,
+        "description": "Contingencies included (inspection, financing, appraisal, sale-of-home)"
+      },
+      "financing_type": {
+        "type": "string",
+        "required": false,
+        "description": "How the buyer will finance the purchase",
+        "enum": ["conventional", "fha", "va", "cash", "usda", "jumbo"]
+      },
+      "closing_date_requested": {
+        "type": "date",
+        "required": false,
+        "description": "Buyer's requested closing date"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Current offer status",
+        "enum": ["submitted", "countered", "accepted", "rejected", "withdrawn", "expired"]
+      }
+    }
+  },
+  {
+    "name": "re_transactions",
+    "displayName": "Transactions",
+    "description": "Closed real estate transactions with financial details and timeline",
+    "fields": {
+      "listing_name": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the listing that was sold"
+      },
+      "buyer_name": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the buyer client"
+      },
+      "seller_name": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to the seller client"
+      },
+      "sale_price": {
+        "type": "number",
+        "required": true,
+        "description": "Final sale price in USD"
+      },
+      "list_price": {
+        "type": "number",
+        "required": true,
+        "description": "Original listing price for ratio calculation"
+      },
+      "closing_date": {
+        "type": "date",
+        "required": true,
+        "description": "Actual closing date (ISO 8601)"
+      },
+      "days_on_market": {
+        "type": "number",
+        "required": true,
+        "description": "Number of days from listing to accepted offer"
+      },
+      "commission_rate": {
+        "type": "number",
+        "required": true,
+        "description": "Commission percentage earned"
+      },
+      "commission_amount": {
+        "type": "number",
+        "required": true,
+        "description": "Total commission earned in USD"
+      },
+      "transaction_type": {
+        "type": "string",
+        "required": true,
+        "description": "Which side of the transaction the agent represented",
+        "enum": ["buyer-side", "seller-side", "dual-agency"]
+      }
+    }
+  }
+]

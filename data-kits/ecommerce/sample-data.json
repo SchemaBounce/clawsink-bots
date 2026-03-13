@@ -1,0 +1,406 @@
+{
+  "records": {
+    "ec_products": [
+      {
+        "name": "Classic Denim Jacket",
+        "sku": "DJ-CLR-001",
+        "description": "Timeless medium-wash denim jacket with antique brass buttons. Relaxed fit with side pockets and adjustable cuffs. 100% cotton denim, pre-washed for softness.",
+        "category": "outerwear",
+        "price": 89.00,
+        "cost": 28.50,
+        "inventory_count": 145,
+        "tags": ["denim", "jacket", "casual", "layering", "spring", "fall"],
+        "sizes_available": ["XS", "S", "M", "L", "XL"],
+        "status": "active"
+      },
+      {
+        "name": "Essential V-Neck Tee",
+        "sku": "VN-TEE-002",
+        "description": "Everyday essential v-neck t-shirt in Pima cotton. Soft hand feel with reinforced collar. Available in 8 colors. Machine washable, holds shape after 50+ washes.",
+        "category": "tops",
+        "price": 29.00,
+        "cost": 6.80,
+        "inventory_count": 520,
+        "tags": ["basics", "cotton", "everyday", "v-neck", "year-round"],
+        "sizes_available": ["XS", "S", "M", "L", "XL", "XXL"],
+        "status": "active"
+      },
+      {
+        "name": "High-Rise Slim Chinos",
+        "sku": "CH-SLM-003",
+        "description": "Modern slim-fit chinos with 2% stretch for all-day comfort. High-rise waist with flat front. Perfect for office or weekend. Available in khaki, navy, olive, and black.",
+        "category": "bottoms",
+        "price": 69.00,
+        "cost": 19.20,
+        "inventory_count": 88,
+        "tags": ["chinos", "office", "smart-casual", "stretch", "year-round"],
+        "sizes_available": ["28", "30", "32", "34", "36", "38"],
+        "status": "active"
+      },
+      {
+        "name": "Weekend Crossbody Bag",
+        "sku": "CB-WKD-004",
+        "description": "Compact crossbody bag in vegan leather with gold hardware. Adjustable strap, interior zip pocket, and card slots. Fits phone, wallet, and essentials.",
+        "category": "accessories",
+        "price": 49.00,
+        "cost": 12.50,
+        "inventory_count": 210,
+        "tags": ["bag", "crossbody", "vegan-leather", "everyday", "travel"],
+        "sizes_available": ["one-size"],
+        "status": "active"
+      },
+      {
+        "name": "Performance Running Shorts",
+        "sku": "RS-PFM-005",
+        "description": "Lightweight running shorts with moisture-wicking fabric and built-in liner. Reflective details for visibility. Zippered back pocket for keys. 5-inch inseam.",
+        "category": "activewear",
+        "price": 45.00,
+        "cost": 11.00,
+        "inventory_count": 175,
+        "tags": ["running", "athletic", "moisture-wicking", "summer", "fitness"],
+        "sizes_available": ["S", "M", "L", "XL"],
+        "status": "active"
+      },
+      {
+        "name": "Cashmere Blend Crew Sweater",
+        "sku": "SW-CSH-006",
+        "description": "Luxurious cashmere-cotton blend crew neck sweater. Fine gauge knit, ribbed cuffs and hem. Perfect layering piece. Dry clean recommended.",
+        "category": "tops",
+        "price": 128.00,
+        "cost": 42.00,
+        "inventory_count": 35,
+        "tags": ["cashmere", "sweater", "luxury", "fall", "winter", "layering"],
+        "sizes_available": ["S", "M", "L", "XL"],
+        "status": "active"
+      },
+      {
+        "name": "Linen Midi Dress",
+        "sku": "DR-LIN-007",
+        "description": "Breezy linen midi dress with tie waist and puff sleeves. Relaxed A-line silhouette. Machine washable linen blend. Ideal for warm weather occasions.",
+        "category": "dresses",
+        "price": 95.00,
+        "cost": 26.00,
+        "inventory_count": 0,
+        "tags": ["linen", "summer", "midi", "occasion", "vacation"],
+        "sizes_available": ["XS", "S", "M", "L"],
+        "status": "out-of-stock"
+      },
+      {
+        "name": "Leather Minimalist Sneakers",
+        "sku": "SN-MIN-008",
+        "description": "Clean white leather sneakers with minimal branding. Cushioned insole and rubber cup sole. Versatile enough for office or casual. Break-in period of 1-2 weeks.",
+        "category": "shoes",
+        "price": 110.00,
+        "cost": 35.00,
+        "inventory_count": 62,
+        "tags": ["sneakers", "leather", "white", "minimalist", "year-round"],
+        "sizes_available": ["7", "8", "9", "10", "11", "12"],
+        "status": "active"
+      }
+    ],
+    "ec_orders": [
+      {
+        "order_number": "ORD-2026-4401",
+        "customer_name": "Sophia Martinez",
+        "order_date": "2026-03-10",
+        "items": [
+          {"product": "Classic Denim Jacket", "sku": "DJ-CLR-001", "quantity": 1, "size": "M", "unit_price": 89.00},
+          {"product": "Essential V-Neck Tee", "sku": "VN-TEE-002", "quantity": 2, "size": "M", "unit_price": 29.00}
+        ],
+        "subtotal": 147.00,
+        "tax": 12.50,
+        "shipping_cost": 0,
+        "total": 159.50,
+        "status": "shipped",
+        "shipping_method": "free-shipping",
+        "tracking_number": "1Z999AA10123456784"
+      },
+      {
+        "order_number": "ORD-2026-4402",
+        "customer_name": "Tyler Brooks",
+        "order_date": "2026-03-11",
+        "items": [
+          {"product": "High-Rise Slim Chinos", "sku": "CH-SLM-003", "quantity": 2, "size": "32", "unit_price": 69.00},
+          {"product": "Leather Minimalist Sneakers", "sku": "SN-MIN-008", "quantity": 1, "size": "10", "unit_price": 110.00}
+        ],
+        "subtotal": 248.00,
+        "tax": 21.08,
+        "shipping_cost": 0,
+        "total": 269.08,
+        "status": "processing",
+        "shipping_method": "free-shipping"
+      },
+      {
+        "order_number": "ORD-2026-4403",
+        "customer_name": "Emma Wilson",
+        "order_date": "2026-03-09",
+        "items": [
+          {"product": "Cashmere Blend Crew Sweater", "sku": "SW-CSH-006", "quantity": 1, "size": "S", "unit_price": 128.00}
+        ],
+        "subtotal": 128.00,
+        "tax": 10.88,
+        "shipping_cost": 7.95,
+        "total": 146.83,
+        "status": "delivered",
+        "shipping_method": "standard",
+        "tracking_number": "9400111899223100012"
+      },
+      {
+        "order_number": "ORD-2026-4404",
+        "customer_name": "Aisha Okafor",
+        "order_date": "2026-03-12",
+        "items": [
+          {"product": "Weekend Crossbody Bag", "sku": "CB-WKD-004", "quantity": 1, "unit_price": 49.00},
+          {"product": "Performance Running Shorts", "sku": "RS-PFM-005", "quantity": 1, "size": "M", "unit_price": 45.00},
+          {"product": "Essential V-Neck Tee", "sku": "VN-TEE-002", "quantity": 1, "size": "S", "unit_price": 29.00}
+        ],
+        "subtotal": 123.00,
+        "tax": 10.46,
+        "shipping_cost": 5.95,
+        "total": 139.41,
+        "status": "pending",
+        "shipping_method": "standard"
+      },
+      {
+        "order_number": "ORD-2026-4405",
+        "customer_name": "Sophia Martinez",
+        "order_date": "2026-02-15",
+        "items": [
+          {"product": "Linen Midi Dress", "sku": "DR-LIN-007", "quantity": 1, "size": "M", "unit_price": 95.00}
+        ],
+        "subtotal": 95.00,
+        "tax": 8.08,
+        "shipping_cost": 7.95,
+        "total": 111.03,
+        "status": "returned",
+        "shipping_method": "standard",
+        "tracking_number": "9400111899223100029"
+      },
+      {
+        "order_number": "ORD-2026-4406",
+        "customer_name": "Jake Henderson",
+        "order_date": "2026-03-08",
+        "items": [
+          {"product": "Essential V-Neck Tee", "sku": "VN-TEE-002", "quantity": 3, "size": "L", "unit_price": 29.00},
+          {"product": "Performance Running Shorts", "sku": "RS-PFM-005", "quantity": 2, "size": "L", "unit_price": 45.00}
+        ],
+        "subtotal": 177.00,
+        "tax": 15.05,
+        "shipping_cost": 0,
+        "total": 192.05,
+        "status": "delivered",
+        "shipping_method": "free-shipping",
+        "tracking_number": "1Z999AA10123456791"
+      }
+    ],
+    "ec_customers": [
+      {
+        "first_name": "Sophia",
+        "last_name": "Martinez",
+        "email": "sophia.m@email.com",
+        "phone": "+1-555-0401",
+        "acquisition_channel": "social-media",
+        "total_orders": 7,
+        "total_spent": 642.00,
+        "first_order_date": "2025-08-15",
+        "last_order_date": "2026-03-10",
+        "status": "vip"
+      },
+      {
+        "first_name": "Tyler",
+        "last_name": "Brooks",
+        "email": "tyler.brooks@email.com",
+        "phone": "+1-555-0402",
+        "acquisition_channel": "organic-search",
+        "total_orders": 2,
+        "total_spent": 269.08,
+        "first_order_date": "2026-01-20",
+        "last_order_date": "2026-03-11",
+        "status": "active"
+      },
+      {
+        "first_name": "Emma",
+        "last_name": "Wilson",
+        "email": "emma.w@email.com",
+        "acquisition_channel": "referral",
+        "total_orders": 1,
+        "total_spent": 146.83,
+        "first_order_date": "2026-03-09",
+        "last_order_date": "2026-03-09",
+        "status": "active"
+      },
+      {
+        "first_name": "Aisha",
+        "last_name": "Okafor",
+        "email": "aisha.okafor@email.com",
+        "phone": "+1-555-0404",
+        "acquisition_channel": "email-marketing",
+        "total_orders": 4,
+        "total_spent": 485.20,
+        "first_order_date": "2025-11-02",
+        "last_order_date": "2026-03-12",
+        "status": "active"
+      },
+      {
+        "first_name": "Jake",
+        "last_name": "Henderson",
+        "email": "jake.h@email.com",
+        "phone": "+1-555-0405",
+        "acquisition_channel": "paid-search",
+        "total_orders": 3,
+        "total_spent": 392.05,
+        "first_order_date": "2025-12-10",
+        "last_order_date": "2026-03-08",
+        "status": "active"
+      },
+      {
+        "first_name": "Olivia",
+        "last_name": "Chen",
+        "email": "olivia.chen@email.com",
+        "acquisition_channel": "social-media",
+        "total_orders": 1,
+        "total_spent": 89.00,
+        "first_order_date": "2025-09-22",
+        "last_order_date": "2025-09-22",
+        "status": "churned"
+      }
+    ],
+    "ec_returns": [
+      {
+        "return_number": "RET-2026-0088",
+        "order_number": "ORD-2026-4405",
+        "customer_name": "Sophia Martinez",
+        "items_returned": [
+          {"product": "Linen Midi Dress", "sku": "DR-LIN-007", "quantity": 1, "size": "M"}
+        ],
+        "reason": "wrong-size",
+        "reason_detail": "Runs very large. Medium fits more like a large. Would reorder in small if available.",
+        "return_date": "2026-02-22",
+        "refund_amount": 95.00,
+        "resolution": "refund",
+        "status": "resolved"
+      },
+      {
+        "return_number": "RET-2026-0089",
+        "order_number": "ORD-2026-4406",
+        "customer_name": "Jake Henderson",
+        "items_returned": [
+          {"product": "Performance Running Shorts", "sku": "RS-PFM-005", "quantity": 1, "size": "L"}
+        ],
+        "reason": "defective",
+        "reason_detail": "Zipper on back pocket broke after first wash. Kept the other pair which is fine.",
+        "return_date": "2026-03-12",
+        "refund_amount": 45.00,
+        "resolution": "refund",
+        "status": "received"
+      },
+      {
+        "return_number": "RET-2026-0090",
+        "order_number": "ORD-2026-4403",
+        "customer_name": "Emma Wilson",
+        "items_returned": [
+          {"product": "Cashmere Blend Crew Sweater", "sku": "SW-CSH-006", "quantity": 1, "size": "S"}
+        ],
+        "reason": "not-as-described",
+        "reason_detail": "Color looks much more blue online than in person. Expected navy, received more of a teal.",
+        "return_date": "2026-03-13",
+        "refund_amount": 128.00,
+        "resolution": "exchange",
+        "status": "in-transit"
+      },
+      {
+        "return_number": "RET-2026-0091",
+        "order_number": "ORD-2026-4401",
+        "customer_name": "Sophia Martinez",
+        "items_returned": [
+          {"product": "Essential V-Neck Tee", "sku": "VN-TEE-002", "quantity": 1, "size": "M"}
+        ],
+        "reason": "changed-mind",
+        "reason_detail": "Decided the color does not work for me. Keeping the other one.",
+        "return_date": "2026-03-13",
+        "refund_amount": 29.00,
+        "resolution": "store-credit",
+        "status": "initiated"
+      },
+      {
+        "return_number": "RET-2026-0092",
+        "order_number": "ORD-2026-4402",
+        "customer_name": "Tyler Brooks",
+        "items_returned": [
+          {"product": "High-Rise Slim Chinos", "sku": "CH-SLM-003", "quantity": 1, "size": "32"}
+        ],
+        "reason": "wrong-size",
+        "reason_detail": "Waist is correct but inseam is too long. Need the 30-inch inseam option.",
+        "return_date": "2026-03-13",
+        "refund_amount": 69.00,
+        "resolution": "pending",
+        "status": "initiated"
+      }
+    ],
+    "ec_price_history": [
+      {
+        "product_name": "Classic Denim Jacket",
+        "sku": "DJ-CLR-001",
+        "old_price": 99.00,
+        "new_price": 89.00,
+        "change_date": "2026-02-01",
+        "change_reason": "competitive-adjustment",
+        "change_percentage": -10.1
+      },
+      {
+        "product_name": "Cashmere Blend Crew Sweater",
+        "sku": "SW-CSH-006",
+        "old_price": 148.00,
+        "new_price": 128.00,
+        "change_date": "2026-03-01",
+        "change_reason": "seasonal",
+        "change_percentage": -13.5
+      },
+      {
+        "product_name": "Essential V-Neck Tee",
+        "sku": "VN-TEE-002",
+        "old_price": 25.00,
+        "new_price": 29.00,
+        "change_date": "2026-01-15",
+        "change_reason": "cost-increase",
+        "change_percentage": 16.0
+      },
+      {
+        "product_name": "Linen Midi Dress",
+        "sku": "DR-LIN-007",
+        "old_price": 95.00,
+        "new_price": 65.00,
+        "change_date": "2026-03-05",
+        "change_reason": "clearance",
+        "change_percentage": -31.6
+      },
+      {
+        "product_name": "Leather Minimalist Sneakers",
+        "sku": "SN-MIN-008",
+        "old_price": 98.00,
+        "new_price": 110.00,
+        "change_date": "2026-01-01",
+        "change_reason": "new-launch",
+        "change_percentage": 12.2
+      },
+      {
+        "product_name": "Performance Running Shorts",
+        "sku": "RS-PFM-005",
+        "old_price": 45.00,
+        "new_price": 36.00,
+        "change_date": "2026-02-14",
+        "change_reason": "promotion",
+        "change_percentage": -20.0
+      },
+      {
+        "product_name": "Performance Running Shorts",
+        "sku": "RS-PFM-005",
+        "old_price": 36.00,
+        "new_price": 45.00,
+        "change_date": "2026-02-21",
+        "change_reason": "price-correction",
+        "change_percentage": 25.0
+      }
+    ]
+  }
+}

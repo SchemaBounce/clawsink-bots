@@ -20,6 +20,19 @@ bots:
   - ref: "bots/accountant@1.0.0"
   - ref: "bots/revenue-analyst@1.0.0"
   - ref: "bots/mentor-coach@1.0.0"
+dataKits:
+  - ref: "data-kits/consulting@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/crm-contacts@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/project-management@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "Consulting / Professional Services"
   context: "Consulting firms or advisory practices where billable hours, client deliverables, knowledge management, and team development are the core operations"

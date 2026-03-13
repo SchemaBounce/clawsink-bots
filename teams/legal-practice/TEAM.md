@@ -18,6 +18,16 @@ bots:
   - ref: "bots/meeting-summarizer@1.0.0"
   - ref: "bots/knowledge-base-curator@1.0.0"
   - ref: "bots/accountant@1.0.0"
+dataKits:
+  - ref: "data-kits/legal@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/compliance-governance@1.0.0"
+    required: false
+    installSampleData: false
 requirements:
   minTier: "scale"
 northStar:

@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all active properties and their statuses. Query all specialist bots for existing findings. Produce initial portfolio briefing with available data. Establish baseline occupancy and revenue metrics."
+    },
+    {
+      "namespace": "portfolio_health",
+      "key": "init",
+      "value": "No portfolio health baseline established yet. Will track: overall occupancy rate, average nightly rate, revenue per available night (RevPAN), guest satisfaction score (average rating), channel distribution, turnover on-time rate."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No cross-domain patterns identified yet. Will learn which specialist findings correlate — e.g., pricing drops leading to occupancy spikes, negative reviews correlating with specific turnover issues, channel sync failures preceding double-bookings."
+    }
+  ]
+}

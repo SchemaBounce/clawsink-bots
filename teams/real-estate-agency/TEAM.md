@@ -20,6 +20,16 @@ bots:
   - ref: "bots/content-scheduler@1.0.0"
   - ref: "bots/accountant@1.0.0"
   - ref: "bots/legal-compliance@1.0.0"
+dataKits:
+  - ref: "data-kits/real-estate@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/crm-contacts@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "Real Estate / Property"
   context: "Real estate agencies managing listings, buyer/seller pipelines, closings, and marketing of properties"

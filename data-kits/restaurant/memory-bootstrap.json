@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:restaurant:defaults",
+  "entries": [
+    {
+      "key": "kpi:food_cost_ratio",
+      "value": "Target food cost ratio is 28-35% of revenue. Above 35% indicates waste, over-portioning, or pricing issues. Below 28% may signal quality concerns. Fine dining can run 30-38%, fast casual should stay under 30%.",
+      "category": "kpi",
+      "tags": ["financial", "food-cost", "profitability"]
+    },
+    {
+      "key": "kpi:table_turnover",
+      "value": "Target 2-3 table turns per service for casual dining. Fine dining targets 1-1.5 turns. Lunch service should turn faster (45-60 min) than dinner (75-90 min). Low turnover = slow service or poor reservations management.",
+      "category": "kpi",
+      "tags": ["operations", "capacity", "revenue"]
+    },
+    {
+      "key": "kpi:average_check",
+      "value": "Average check (revenue per guest) is the primary revenue lever. Track separately for food and beverage. Beverage attachment rate target is 60-70%. Upselling can increase average check by 15-25%.",
+      "category": "kpi",
+      "tags": ["financial", "revenue", "upselling"]
+    },
+    {
+      "key": "kpi:waste_percentage",
+      "value": "Food waste should stay below 5% of food purchases. Track prep waste, plate waste, and spoilage separately. Prep waste above 3% suggests menu engineering issues. Plate waste above 2% indicates portion size problems.",
+      "category": "kpi",
+      "tags": ["operations", "waste", "sustainability"]
+    },
+    {
+      "key": "kpi:reservation_no_show_rate",
+      "value": "No-show rate should stay below 10%. Above 15% requires intervention: confirmation calls, credit card holds, or overbooking strategy. Track by day-of-week and source channel (phone vs online vs third-party).",
+      "category": "kpi",
+      "tags": ["operations", "reservations", "capacity"]
+    },
+    {
+      "key": "threshold:labor_cost",
+      "value": "Total labor cost (including benefits) should be 25-35% of revenue. Front of house 12-18%, back of house 10-14%, management 3-5%. Combined food + labor (prime cost) must stay under 65%.",
+      "category": "threshold",
+      "tags": ["financial", "labor", "staffing"]
+    },
+    {
+      "key": "threshold:beverage_cost",
+      "value": "Beverage cost ratio target: liquor 18-20%, beer 24-28%, wine 30-35%. Blended beverage cost should be 20-25%. Pour cost above 25% on spirits indicates over-pouring or theft.",
+      "category": "threshold",
+      "tags": ["financial", "beverage", "bar"]
+    },
+    {
+      "key": "best-practice:menu_engineering",
+      "value": "Classify items into four quadrants: Stars (high profit, high popularity), Plowhorses (low profit, high popularity), Puzzles (high profit, low popularity), Dogs (low profit, low popularity). Promote Stars, reprice Plowhorses, reposition Puzzles, remove Dogs.",
+      "category": "best-practice",
+      "tags": ["menu", "pricing", "strategy"]
+    },
+    {
+      "key": "best-practice:supplier_management",
+      "value": "Maintain at least 2 suppliers per critical ingredient category. Review supplier pricing quarterly. Negotiate volume discounts for top-5 spend items. Track delivery reliability (on-time %) and quality rejection rate.",
+      "category": "best-practice",
+      "tags": ["suppliers", "procurement", "risk"]
+    },
+    {
+      "key": "terminology:covers",
+      "value": "A 'cover' is one guest served during a service period. 'Daily covers' = total guests across all services. Used to calculate average check (revenue / covers) and labor efficiency (covers per labor hour).",
+      "category": "terminology",
+      "tags": ["glossary", "metrics"]
+    }
+  ]
+}

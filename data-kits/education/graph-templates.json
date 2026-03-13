@@ -1,0 +1,35 @@
+{
+  "edgeTypes": [
+    {
+      "label": "ENROLLED_IN",
+      "description": "Links a student to a course they are enrolled in",
+      "fromEntity": "edu_students",
+      "toEntity": "edu_courses",
+      "properties": {
+        "enrolled_at": "date",
+        "progress_percent": "number",
+        "status": "string"
+      }
+    },
+    {
+      "label": "TEACHES",
+      "description": "Links an instructor to a course they teach",
+      "fromEntity": "edu_instructors",
+      "toEntity": "edu_courses",
+      "properties": {
+        "role": "string",
+        "since": "date"
+      }
+    },
+    {
+      "label": "SUBMITTED_BY",
+      "description": "Links an assessment submission back to the student who submitted it",
+      "fromEntity": "edu_assessments",
+      "toEntity": "edu_students",
+      "properties": {
+        "submitted_at": "date",
+        "score": "number"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "quality_standards",
+      "value": "Code coverage threshold, complexity limits, and acceptable duplication levels. Customize for your project.",
+      "description": "Quality standards used to evaluate technical debt severity and prioritize refactoring"
+    },
+    {
+      "key": "tech_stack",
+      "value": "Languages, frameworks, and tools in use. Helps contextualize debt analysis.",
+      "description": "Technology stack context for understanding debt patterns and suggesting appropriate fixes"
+    }
+  ]
+}

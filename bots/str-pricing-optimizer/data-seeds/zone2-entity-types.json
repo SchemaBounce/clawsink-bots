@@ -1,0 +1,35 @@
+{
+  "entityTypes": [
+    {
+      "name": "str_pricing_calendar",
+      "displayName": "Pricing Calendar",
+      "description": "Per-property daily rate calendar with pricing strategy metadata",
+      "domain": "revenue",
+      "sampleFields": ["property_id", "date", "base_rate", "adjusted_rate", "min_stay", "demand_score", "competitor_avg", "strategy_notes"],
+      "fields": {
+        "property_id": {"type": "string", "required": true, "description": "Reference to str_properties"},
+        "date": {"type": "date", "required": true, "description": "Calendar date"},
+        "base_rate": {"type": "number", "required": true, "description": "Base nightly rate before adjustments"},
+        "adjusted_rate": {"type": "number", "required": true, "description": "Final recommended nightly rate"},
+        "min_stay": {"type": "integer", "description": "Minimum stay requirement for this date"},
+        "demand_score": {"type": "number", "description": "Demand score (0-100) based on market signals"},
+        "competitor_avg": {"type": "number", "description": "Average competitor rate for comparable properties"},
+        "strategy_notes": {"type": "string", "description": "Explanation of pricing adjustments applied"}
+      }
+    },
+    {
+      "name": "str_findings",
+      "displayName": "STR Findings",
+      "description": "Pricing analysis findings and rate adjustment recommendations",
+      "domain": "revenue",
+      "sampleFields": ["severity", "finding_type", "summary", "revenue_impact"]
+    },
+    {
+      "name": "str_alerts",
+      "displayName": "STR Alerts",
+      "description": "Pricing anomaly alerts — competitor drops, demand spikes, revenue risks",
+      "domain": "revenue",
+      "sampleFields": ["severity", "title", "description", "property_id", "anomaly_type"]
+    }
+  ]
+}

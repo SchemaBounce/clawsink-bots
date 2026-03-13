@@ -1,0 +1,288 @@
+{
+  "records": {
+    "log_carriers": [
+      {
+        "name": "United Parcel Service",
+        "carrier_code": "UPS",
+        "account_number": "X4R892",
+        "service_levels": ["ground", "express", "overnight"],
+        "avg_transit_days": 4.2,
+        "on_time_rate": 96.8,
+        "damage_rate": 0.3,
+        "contact_email": "acct.rep@ups-example.com",
+        "contract_end_date": "2026-12-31",
+        "active": true
+      },
+      {
+        "name": "FedEx",
+        "carrier_code": "FEDEX",
+        "account_number": "287461903",
+        "service_levels": ["ground", "express", "overnight", "freight"],
+        "avg_transit_days": 3.8,
+        "on_time_rate": 97.2,
+        "damage_rate": 0.2,
+        "contact_email": "acct.rep@fedex-example.com",
+        "contract_end_date": "2026-09-30",
+        "active": true
+      },
+      {
+        "name": "USPS",
+        "carrier_code": "USPS",
+        "account_number": "EVSE-0048291",
+        "service_levels": ["ground", "express", "economy"],
+        "avg_transit_days": 5.1,
+        "on_time_rate": 93.4,
+        "damage_rate": 0.8,
+        "contact_email": null,
+        "contract_end_date": null,
+        "active": true
+      },
+      {
+        "name": "DHL eCommerce",
+        "carrier_code": "DHL",
+        "account_number": "5088712345",
+        "service_levels": ["ground", "economy"],
+        "avg_transit_days": 6.0,
+        "on_time_rate": 91.5,
+        "damage_rate": 0.5,
+        "contact_email": "ecom.support@dhl-example.com",
+        "contract_end_date": "2026-06-30",
+        "active": true
+      },
+      {
+        "name": "OnTrac",
+        "carrier_code": "ONTRAC",
+        "account_number": "OT-77291",
+        "service_levels": ["ground", "express"],
+        "avg_transit_days": 2.8,
+        "on_time_rate": 95.0,
+        "damage_rate": 0.6,
+        "contact_email": "biz@ontrac-example.com",
+        "contract_end_date": "2026-08-31",
+        "active": true
+      }
+    ],
+    "log_warehouse_stock": [
+      {
+        "sku": "WH-TSHIRT-BLK-M",
+        "product_name": "Classic T-Shirt Black Medium",
+        "quantity_on_hand": 342,
+        "quantity_reserved": 28,
+        "quantity_available": 314,
+        "location": "A-04-2",
+        "lot_number": "LOT-2026-0112",
+        "reorder_point": 100,
+        "unit_cost": 4.50,
+        "last_counted": "2026-03-01"
+      },
+      {
+        "sku": "WH-MUG-WHT-12OZ",
+        "product_name": "Ceramic Mug White 12oz",
+        "quantity_on_hand": 856,
+        "quantity_reserved": 45,
+        "quantity_available": 811,
+        "location": "B-12-1",
+        "lot_number": "LOT-2026-0098",
+        "reorder_point": 200,
+        "unit_cost": 2.80,
+        "last_counted": "2026-02-15"
+      },
+      {
+        "sku": "WH-HOODIE-GRY-L",
+        "product_name": "Pullover Hoodie Grey Large",
+        "quantity_on_hand": 78,
+        "quantity_reserved": 15,
+        "quantity_available": 63,
+        "location": "A-08-3",
+        "lot_number": "LOT-2025-1204",
+        "reorder_point": 80,
+        "unit_cost": 12.00,
+        "last_counted": "2026-03-05"
+      },
+      {
+        "sku": "WH-NOTEBOOK-A5",
+        "product_name": "Lined Notebook A5 80-page",
+        "quantity_on_hand": 1240,
+        "quantity_reserved": 120,
+        "quantity_available": 1120,
+        "location": "C-02-4",
+        "lot_number": "LOT-2026-0205",
+        "reorder_point": 300,
+        "unit_cost": 1.20,
+        "last_counted": "2026-03-10"
+      },
+      {
+        "sku": "WH-BOTTLE-SS-24",
+        "product_name": "Stainless Steel Water Bottle 24oz",
+        "quantity_on_hand": 195,
+        "quantity_reserved": 32,
+        "quantity_available": 163,
+        "location": "B-06-2",
+        "lot_number": "LOT-2026-0118",
+        "reorder_point": 150,
+        "unit_cost": 6.50,
+        "last_counted": "2026-02-28"
+      },
+      {
+        "sku": "WH-TOTE-CANVAS",
+        "product_name": "Canvas Tote Bag Natural",
+        "quantity_on_hand": 520,
+        "quantity_reserved": 0,
+        "quantity_available": 520,
+        "location": "C-10-1",
+        "lot_number": "LOT-2026-0150",
+        "reorder_point": 100,
+        "unit_cost": 3.25,
+        "last_counted": "2026-03-01"
+      }
+    ],
+    "log_fulfillment_orders": [
+      {
+        "order_number": "ORD-2026-04821",
+        "status": "picking",
+        "priority": "standard",
+        "order_date": "2026-03-12",
+        "ship_by_date": "2026-03-14",
+        "line_items": [
+          {"sku": "WH-TSHIRT-BLK-M", "quantity": 2, "product_name": "Classic T-Shirt Black Medium"},
+          {"sku": "WH-MUG-WHT-12OZ", "quantity": 1, "product_name": "Ceramic Mug White 12oz"}
+        ],
+        "total_items": 3,
+        "customer_name": "Emma Rodriguez",
+        "shipping_address": "1847 Oak Lane, Portland, OR 97201",
+        "notes": null
+      },
+      {
+        "order_number": "ORD-2026-04822",
+        "status": "pending",
+        "priority": "rush",
+        "order_date": "2026-03-13",
+        "ship_by_date": "2026-03-13",
+        "line_items": [
+          {"sku": "WH-BOTTLE-SS-24", "quantity": 50, "product_name": "Stainless Steel Water Bottle 24oz"}
+        ],
+        "total_items": 50,
+        "customer_name": "TechCon Events LLC",
+        "shipping_address": "300 Convention Center Dr, Austin, TX 78701",
+        "notes": "Corporate event giveaway. Ship all in one box on pallet."
+      },
+      {
+        "order_number": "ORD-2026-04818",
+        "status": "shipped",
+        "priority": "standard",
+        "order_date": "2026-03-10",
+        "ship_by_date": "2026-03-12",
+        "line_items": [
+          {"sku": "WH-HOODIE-GRY-L", "quantity": 1, "product_name": "Pullover Hoodie Grey Large"},
+          {"sku": "WH-TOTE-CANVAS", "quantity": 1, "product_name": "Canvas Tote Bag Natural"}
+        ],
+        "total_items": 2,
+        "customer_name": "James Whitfield",
+        "shipping_address": "982 Pine St, Apt 4B, Denver, CO 80202",
+        "notes": null
+      },
+      {
+        "order_number": "ORD-2026-04815",
+        "status": "shipped",
+        "priority": "expedited",
+        "order_date": "2026-03-09",
+        "ship_by_date": "2026-03-10",
+        "line_items": [
+          {"sku": "WH-NOTEBOOK-A5", "quantity": 25, "product_name": "Lined Notebook A5 80-page"},
+          {"sku": "WH-MUG-WHT-12OZ", "quantity": 10, "product_name": "Ceramic Mug White 12oz"}
+        ],
+        "total_items": 35,
+        "customer_name": "Riverside Middle School",
+        "shipping_address": "400 River Rd, Boise, ID 83702",
+        "notes": "Teacher appreciation week gifts. Fragile — double box the mugs."
+      },
+      {
+        "order_number": "ORD-2026-04823",
+        "status": "backordered",
+        "priority": "standard",
+        "order_date": "2026-03-13",
+        "ship_by_date": "2026-03-17",
+        "line_items": [
+          {"sku": "WH-HOODIE-GRY-L", "quantity": 30, "product_name": "Pullover Hoodie Grey Large"}
+        ],
+        "total_items": 30,
+        "customer_name": "Peak Outdoor Adventures",
+        "shipping_address": "125 Mountain View Blvd, Flagstaff, AZ 86001",
+        "notes": "Staff uniforms. Customer notified of backorder. ETA restock 2026-03-18."
+      }
+    ],
+    "log_receiving": [
+      {
+        "po_number": "PO-2026-0312",
+        "supplier_name": "Pacific Textile Co.",
+        "status": "completed",
+        "expected_date": "2026-03-08",
+        "received_date": "2026-03-08",
+        "line_items": [
+          {"sku": "WH-TSHIRT-BLK-M", "expected_qty": 500, "received_qty": 500},
+          {"sku": "WH-TOTE-CANVAS", "expected_qty": 300, "received_qty": 300}
+        ],
+        "total_units_expected": 800,
+        "total_units_received": 800,
+        "discrepancy_notes": null,
+        "receiving_dock": "Dock A"
+      },
+      {
+        "po_number": "PO-2026-0318",
+        "supplier_name": "Pacific Textile Co.",
+        "status": "expected",
+        "expected_date": "2026-03-18",
+        "received_date": null,
+        "line_items": [
+          {"sku": "WH-HOODIE-GRY-L", "expected_qty": 200, "received_qty": 0}
+        ],
+        "total_units_expected": 200,
+        "total_units_received": 0,
+        "discrepancy_notes": null,
+        "receiving_dock": null
+      },
+      {
+        "po_number": "PO-2026-0305",
+        "supplier_name": "GreenMark Ceramics",
+        "status": "completed",
+        "expected_date": "2026-03-04",
+        "received_date": "2026-03-05",
+        "line_items": [
+          {"sku": "WH-MUG-WHT-12OZ", "expected_qty": 1000, "received_qty": 988}
+        ],
+        "total_units_expected": 1000,
+        "total_units_received": 988,
+        "discrepancy_notes": "12 mugs damaged in transit. Filed claim with carrier.",
+        "receiving_dock": "Dock B"
+      },
+      {
+        "po_number": "PO-2026-0310",
+        "supplier_name": "SteelCraft Industries",
+        "status": "inspecting",
+        "expected_date": "2026-03-12",
+        "received_date": "2026-03-12",
+        "line_items": [
+          {"sku": "WH-BOTTLE-SS-24", "expected_qty": 400, "received_qty": 400}
+        ],
+        "total_units_expected": 400,
+        "total_units_received": 400,
+        "discrepancy_notes": "QC sampling in progress. Checking lid seal integrity.",
+        "receiving_dock": "Dock A"
+      },
+      {
+        "po_number": "PO-2026-0301",
+        "supplier_name": "Papyrus Paper Goods",
+        "status": "completed",
+        "expected_date": "2026-03-01",
+        "received_date": "2026-03-01",
+        "line_items": [
+          {"sku": "WH-NOTEBOOK-A5", "expected_qty": 2000, "received_qty": 2000}
+        ],
+        "total_units_expected": 2000,
+        "total_units_received": 2000,
+        "discrepancy_notes": null,
+        "receiving_dock": "Dock C"
+      }
+    ]
+  }
+}

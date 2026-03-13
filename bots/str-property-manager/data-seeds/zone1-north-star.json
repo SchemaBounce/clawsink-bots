@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "portfolio_briefing_format",
+      "value": "Urgency-first: critical items (guest emergencies, double-bookings, late turnovers), then occupancy pipeline (next 30 days), then domain summaries (channels, guests, pricing, turnovers, reviews, marketing). Max 15 items per briefing.",
+      "description": "Controls how the daily portfolio briefing is structured"
+    },
+    {
+      "key": "reporting_cadence",
+      "value": "Daily full briefing at 8am local time. Mid-day critical-only update if alerts received since morning briefing.",
+      "description": "When the Property Manager produces reports for the human owner"
+    }
+  ]
+}

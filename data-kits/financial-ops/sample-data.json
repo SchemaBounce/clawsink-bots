@@ -1,0 +1,323 @@
+{
+  "records": {
+    "fin_transactions": [
+      {
+        "date": "2026-03-01",
+        "amount": 15000.00,
+        "type": "income",
+        "category": "Revenue",
+        "vendor": "TechForward Inc",
+        "description": "Monthly platform subscription - March 2026",
+        "status": "completed",
+        "payment_method": "ach",
+        "invoice_id": "inv-2026-0042",
+        "tags": ["subscription", "recurring"]
+      },
+      {
+        "date": "2026-03-02",
+        "amount": -4500.00,
+        "type": "expense",
+        "category": "Payroll",
+        "vendor": "ADP Payroll Services",
+        "description": "Bi-weekly payroll processing - Period 5",
+        "status": "completed",
+        "payment_method": "ach",
+        "tags": ["payroll", "recurring"]
+      },
+      {
+        "date": "2026-03-03",
+        "amount": -249.00,
+        "type": "expense",
+        "category": "Software",
+        "vendor": "Slack Technologies",
+        "description": "Slack Business+ monthly subscription - 15 seats",
+        "status": "completed",
+        "payment_method": "credit_card",
+        "tags": ["software", "recurring"]
+      },
+      {
+        "date": "2026-03-05",
+        "amount": 8500.00,
+        "type": "income",
+        "category": "Revenue",
+        "vendor": "NorthStar Logistics",
+        "description": "Consulting engagement - Phase 2 milestone payment",
+        "status": "completed",
+        "payment_method": "wire",
+        "invoice_id": "inv-2026-0038",
+        "tags": ["consulting", "milestone"]
+      },
+      {
+        "date": "2026-03-07",
+        "amount": -1200.00,
+        "type": "expense",
+        "category": "Office",
+        "vendor": "WeWork",
+        "description": "March 2026 coworking space - 4 hot desks",
+        "status": "completed",
+        "payment_method": "credit_card",
+        "tags": ["office", "recurring"]
+      },
+      {
+        "date": "2026-03-10",
+        "amount": -350.00,
+        "type": "expense",
+        "category": "Marketing",
+        "vendor": "Google Ads",
+        "description": "Search campaign spend - Week of March 3",
+        "status": "reconciled",
+        "payment_method": "credit_card",
+        "tags": ["marketing", "advertising"]
+      },
+      {
+        "date": "2026-03-12",
+        "amount": 3200.00,
+        "type": "income",
+        "category": "Revenue",
+        "vendor": "Sunrise Health",
+        "description": "Setup fee - Data platform onboarding",
+        "status": "pending",
+        "payment_method": "bank_transfer",
+        "invoice_id": "inv-2026-0045",
+        "tags": ["one-time", "setup"]
+      },
+      {
+        "date": "2026-03-08",
+        "amount": -150.00,
+        "type": "refund",
+        "category": "Revenue",
+        "vendor": "Bloom Design",
+        "description": "Prorated refund for unused days after cancellation",
+        "status": "completed",
+        "payment_method": "ach",
+        "tags": ["refund", "cancellation"]
+      }
+    ],
+    "fin_invoices": [
+      {
+        "invoice_number": "INV-2026-0042",
+        "direction": "receivable",
+        "date": "2026-02-25",
+        "due_date": "2026-03-25",
+        "amount": 15000.00,
+        "status": "paid",
+        "counterparty": "TechForward Inc",
+        "category": "Subscription",
+        "line_items": [
+          {"description": "Platform subscription - Professional plan", "quantity": 1, "unit_price": 12500.00, "amount": 12500.00},
+          {"description": "Additional API calls overage (50K)", "quantity": 1, "unit_price": 2500.00, "amount": 2500.00}
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "INV-2026-0038",
+        "direction": "receivable",
+        "date": "2026-02-15",
+        "due_date": "2026-03-15",
+        "amount": 8500.00,
+        "status": "paid",
+        "counterparty": "NorthStar Logistics",
+        "category": "Consulting",
+        "line_items": [
+          {"description": "Data migration consulting - 20 hours", "quantity": 20, "unit_price": 350.00, "amount": 7000.00},
+          {"description": "Architecture review document", "quantity": 1, "unit_price": 1500.00, "amount": 1500.00}
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "INV-2026-0045",
+        "direction": "receivable",
+        "date": "2026-03-10",
+        "due_date": "2026-04-09",
+        "amount": 3200.00,
+        "status": "sent",
+        "counterparty": "Sunrise Health",
+        "category": "Setup Fee",
+        "line_items": [
+          {"description": "Platform onboarding and configuration", "quantity": 1, "unit_price": 2000.00, "amount": 2000.00},
+          {"description": "Data import assistance (4 hours)", "quantity": 4, "unit_price": 300.00, "amount": 1200.00}
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "INV-2026-0046",
+        "direction": "receivable",
+        "date": "2026-03-01",
+        "due_date": "2026-03-31",
+        "amount": 45000.00,
+        "status": "sent",
+        "counterparty": "Swift Finance",
+        "category": "Subscription",
+        "line_items": [
+          {"description": "Enterprise platform license - Q2 2026", "quantity": 1, "unit_price": 45000.00, "amount": 45000.00}
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "BILL-2026-0089",
+        "direction": "payable",
+        "date": "2026-03-01",
+        "due_date": "2026-03-31",
+        "amount": 2400.00,
+        "status": "sent",
+        "counterparty": "AWS",
+        "category": "Infrastructure",
+        "line_items": [
+          {"description": "EC2 instances - March 2026", "quantity": 1, "unit_price": 1800.00, "amount": 1800.00},
+          {"description": "S3 storage and data transfer", "quantity": 1, "unit_price": 600.00, "amount": 600.00}
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "INV-2025-0031",
+        "direction": "receivable",
+        "date": "2025-12-15",
+        "due_date": "2026-01-14",
+        "amount": 6800.00,
+        "status": "overdue",
+        "counterparty": "DataWave Inc",
+        "category": "Consulting",
+        "line_items": [
+          {"description": "Custom integration development", "quantity": 1, "unit_price": 6800.00, "amount": 6800.00}
+        ],
+        "payment_terms": "net_30"
+      }
+    ],
+    "fin_budgets": [
+      {
+        "name": "Q1 2026 Engineering",
+        "category": "Engineering",
+        "period": "quarterly",
+        "allocated_amount": 45000.00,
+        "spent_amount": 42150.00,
+        "start_date": "2026-01-01",
+        "end_date": "2026-03-31",
+        "owner": "Rachel Torres",
+        "status": "active",
+        "notes": "Includes contractor spend for platform v3 migration"
+      },
+      {
+        "name": "Q1 2026 Marketing",
+        "category": "Marketing",
+        "period": "quarterly",
+        "allocated_amount": 15000.00,
+        "spent_amount": 11200.00,
+        "start_date": "2026-01-01",
+        "end_date": "2026-03-31",
+        "owner": "Jordan Lee",
+        "status": "active",
+        "notes": "Focused on content marketing and paid search"
+      },
+      {
+        "name": "March 2026 Operations",
+        "category": "Operations",
+        "period": "monthly",
+        "allocated_amount": 8000.00,
+        "spent_amount": 5950.00,
+        "start_date": "2026-03-01",
+        "end_date": "2026-03-31",
+        "owner": "Alex Kim",
+        "status": "active",
+        "notes": "Office, utilities, and administrative expenses"
+      },
+      {
+        "name": "2026 Annual Infrastructure",
+        "category": "Infrastructure",
+        "period": "annual",
+        "allocated_amount": 120000.00,
+        "spent_amount": 28500.00,
+        "start_date": "2026-01-01",
+        "end_date": "2026-12-31",
+        "owner": "Rachel Torres",
+        "status": "active",
+        "notes": "Cloud hosting, SaaS tools, and security services"
+      },
+      {
+        "name": "Q1 2026 Sales",
+        "category": "Sales",
+        "period": "quarterly",
+        "allocated_amount": 20000.00,
+        "spent_amount": 21500.00,
+        "start_date": "2026-01-01",
+        "end_date": "2026-03-31",
+        "owner": "Jordan Lee",
+        "status": "over_budget",
+        "notes": "Over budget due to unplanned conference sponsorship. Approved by CEO."
+      }
+    ],
+    "fin_recurring": [
+      {
+        "name": "AWS Cloud Infrastructure",
+        "type": "subscription",
+        "amount": 2400.00,
+        "frequency": "monthly",
+        "counterparty": "Amazon Web Services",
+        "direction": "outbound",
+        "next_due_date": "2026-04-01",
+        "status": "active",
+        "auto_generate_invoice": false,
+        "start_date": "2024-06-01"
+      },
+      {
+        "name": "Slack Business+",
+        "type": "subscription",
+        "amount": 249.00,
+        "frequency": "monthly",
+        "counterparty": "Slack Technologies",
+        "direction": "outbound",
+        "next_due_date": "2026-04-03",
+        "status": "active",
+        "auto_generate_invoice": false,
+        "start_date": "2025-01-15"
+      },
+      {
+        "name": "WeWork Coworking Space",
+        "type": "lease",
+        "amount": 1200.00,
+        "frequency": "monthly",
+        "counterparty": "WeWork",
+        "direction": "outbound",
+        "next_due_date": "2026-04-01",
+        "status": "active",
+        "auto_generate_invoice": false,
+        "start_date": "2025-06-01"
+      },
+      {
+        "name": "TechForward Platform Subscription",
+        "type": "subscription",
+        "amount": 12500.00,
+        "frequency": "monthly",
+        "counterparty": "TechForward Inc",
+        "direction": "inbound",
+        "next_due_date": "2026-04-01",
+        "status": "active",
+        "auto_generate_invoice": true,
+        "start_date": "2025-06-15"
+      },
+      {
+        "name": "NorthStar Retainer",
+        "type": "retainer",
+        "amount": 5000.00,
+        "frequency": "monthly",
+        "counterparty": "NorthStar Logistics",
+        "direction": "inbound",
+        "next_due_date": "2026-04-01",
+        "status": "active",
+        "auto_generate_invoice": true,
+        "start_date": "2025-10-01"
+      },
+      {
+        "name": "Business Insurance",
+        "type": "insurance",
+        "amount": 3600.00,
+        "frequency": "quarterly",
+        "counterparty": "Hartford Insurance",
+        "direction": "outbound",
+        "next_due_date": "2026-04-15",
+        "status": "active",
+        "auto_generate_invoice": false,
+        "start_date": "2024-04-15"
+      }
+    ]
+  }
+}

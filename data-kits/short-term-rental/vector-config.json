@@ -1,0 +1,28 @@
+{
+  "collections": [
+    {
+      "name": "str_properties",
+      "description": "Semantic search over property listings by name, description, amenities, and neighborhood guide for finding similar properties and recommendation matching",
+      "sourceEntity": "str_properties",
+      "embeddingFields": ["name", "description", "amenities", "neighborhood_guide"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    },
+    {
+      "name": "str_reviews",
+      "description": "Semantic search over guest reviews and host responses for sentiment analysis, pattern detection, and identifying recurring issues or praise themes",
+      "sourceEntity": "str_reviews",
+      "embeddingFields": ["review_text", "host_response"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    },
+    {
+      "name": "str_messages",
+      "description": "Semantic search over guest messages for inquiry pattern matching, auto-response template selection, and identifying common questions",
+      "sourceEntity": "str_messages",
+      "embeddingFields": ["message_text"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:real-estate:defaults",
+  "entries": [
+    {
+      "key": "kpi:days_on_market",
+      "value": "Average days on market (DOM) should be under 30 for a healthy market. DOM above 60 indicates overpricing or low demand. Track DOM by price bracket and neighborhood. Median DOM is more useful than average to avoid outlier skew.",
+      "category": "kpi",
+      "tags": ["market", "pricing", "inventory"]
+    },
+    {
+      "key": "kpi:list_to_sale_ratio",
+      "value": "List-to-sale ratio (sale price / list price) should be 97-100% in a balanced market. Above 100% indicates a seller's market with bidding wars. Below 95% suggests systematic overpricing. Track by agent and price bracket.",
+      "category": "kpi",
+      "tags": ["pricing", "negotiation", "performance"]
+    },
+    {
+      "key": "kpi:conversion_rate",
+      "value": "Showing-to-offer conversion rate target is 10-15%. Below 5% indicates poor buyer qualification or mismatched property recommendations. Track per agent and per listing to identify coaching opportunities.",
+      "category": "kpi",
+      "tags": ["sales", "efficiency", "leads"]
+    },
+    {
+      "key": "kpi:average_commission",
+      "value": "Average commission rate is 2.5-3% per side in most US markets (post-2024 settlement changes). Track gross commission income (GCI) per agent per month. Target GCI depends on market: $15K-$25K/month for productive agents.",
+      "category": "kpi",
+      "tags": ["financial", "commission", "revenue"]
+    },
+    {
+      "key": "kpi:market_absorption_rate",
+      "value": "Absorption rate = sold listings / active listings per month. Above 20% = seller's market (under 5 months inventory). 15-20% = balanced. Below 15% = buyer's market (over 6 months inventory). Use to advise pricing strategy.",
+      "category": "kpi",
+      "tags": ["market", "inventory", "strategy"]
+    },
+    {
+      "key": "threshold:price_reduction",
+      "value": "If a listing has not received a showing request in 14 days or an offer in 30 days, recommend a price reduction of 3-5%. Listings with more than 2 price reductions should be re-evaluated for market positioning entirely.",
+      "category": "threshold",
+      "tags": ["pricing", "strategy", "listings"]
+    },
+    {
+      "key": "threshold:lead_response_time",
+      "value": "New buyer leads must be contacted within 5 minutes for optimal conversion. Response within 1 hour has 7x higher conversion than after 1 hour. After 24 hours, the lead is effectively cold. Auto-assign leads to available agents.",
+      "category": "threshold",
+      "tags": ["leads", "response-time", "conversion"]
+    },
+    {
+      "key": "best-practice:buyer_qualification",
+      "value": "Always verify pre-approval before first showing. Confirm budget range, timeline, must-haves vs nice-to-haves. Limit initial showing tours to 5-6 properties maximum. Send a recap with agent notes within 24 hours of each showing.",
+      "category": "best-practice",
+      "tags": ["buyers", "showings", "qualification"]
+    },
+    {
+      "key": "best-practice:listing_presentation",
+      "value": "CMA (Comparative Market Analysis) should include 3-5 comparable sales within 0.5 miles and 6 months. Adjust for condition, lot size, and upgrades. Price the listing within 3% of CMA midpoint for fastest sale.",
+      "category": "best-practice",
+      "tags": ["listings", "pricing", "cma"]
+    },
+    {
+      "key": "terminology:dom",
+      "value": "DOM = Days on Market. Counted from MLS list date to accepted offer date (not closing date). CDOM = Cumulative Days on Market, which persists across re-listings of the same property. Both are key market health indicators.",
+      "category": "terminology",
+      "tags": ["glossary", "metrics"]
+    }
+  ]
+}

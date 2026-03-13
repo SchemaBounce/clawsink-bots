@@ -28,6 +28,16 @@ bots:
   - ref: "bots/customer-support@1.0.0"
     overrides:
       name: "Customer Liaison"
+dataKits:
+  - ref: "data-kits/construction@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/crm-contacts@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "Construction / Trades"
   context: "Small to mid-size contracting business managing projects, estimates, materials, safety compliance, and client relationships"

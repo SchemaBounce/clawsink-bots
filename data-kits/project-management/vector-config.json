@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "pm_tasks",
+      "description": "Semantic search over tasks by title, description, and acceptance criteria for duplicate detection and similar task discovery",
+      "sourceEntity": "pm_tasks",
+      "embeddingFields": ["title", "description", "acceptance_criteria"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

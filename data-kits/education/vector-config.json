@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "edu_courses",
+      "description": "Semantic search over course titles, descriptions, and learning objectives for course discovery and recommendations",
+      "sourceEntity": "edu_courses",
+      "embeddingFields": ["title", "description", "learning_objectives"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

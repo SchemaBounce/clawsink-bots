@@ -20,6 +20,13 @@ bots:
   - ref: "bots/shipping-tracker@1.0.0"
   - ref: "bots/order-fulfillment@1.0.0"
   - ref: "bots/inventory-alert@1.0.0"
+dataKits:
+  - ref: "data-kits/logistics@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "Logistics / Warehousing / 3PL"
   context: "Logistics companies, warehouses, or 3PL providers managing inbound/outbound shipments, inventory across locations, and order fulfillment SLAs"

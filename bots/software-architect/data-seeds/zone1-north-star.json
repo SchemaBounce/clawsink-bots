@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "repository_config",
+      "value": "Repository URL, main branch name, test commands, and build commands. Customize for your project.",
+      "description": "Repository configuration for code sessions and PR creation"
+    },
+    {
+      "key": "architecture_principles",
+      "value": "Coding standards, design patterns, and architectural constraints. Customize for your team's conventions.",
+      "description": "Architecture guidelines that inform implementation planning and code review"
+    }
+  ]
+}

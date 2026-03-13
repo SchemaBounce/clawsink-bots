@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:legal:defaults",
+  "entries": [
+    {
+      "key": "kpi:billable_utilization_rate",
+      "value": "Billable utilization rate (billable hours / available hours) target is 70-85% for associates, 60-70% for partners (who spend more time on business development). An associate with 1,800 available hours/year should bill 1,260-1,530 hours. Track weekly to catch underutilization early.",
+      "category": "kpi",
+      "tags": ["productivity", "billing", "attorneys"]
+    },
+    {
+      "key": "kpi:realization_rate",
+      "value": "Realization rate (collected amount / billed amount) should exceed 90%. Below 85% indicates systematic over-billing, poor time descriptions, or client dissatisfaction. Track by attorney, practice area, and client. Write-offs above 10% need review.",
+      "category": "kpi",
+      "tags": ["financial", "billing", "collections"]
+    },
+    {
+      "key": "kpi:collection_rate",
+      "value": "Collection rate (cash collected / invoices sent) should exceed 95%. AR aging: 0-30 days is normal, 31-60 needs follow-up, 61-90 requires a call from the responsible partner, 90+ may need payment plan or write-off decision. Invoice promptly (within 5 days of month-end).",
+      "category": "kpi",
+      "tags": ["financial", "accounts-receivable", "cash-flow"]
+    },
+    {
+      "key": "kpi:trust_account_compliance",
+      "value": "Trust account compliance must be 100% at all times. State bar rules require: (1) funds deposited within 24 hours, (2) no commingling with operating funds, (3) monthly reconciliation, (4) no overdrafts EVER, (5) three-way reconciliation (bank, book, client ledger). Violations can result in disbarment.",
+      "category": "kpi",
+      "tags": ["compliance", "trust", "bar-rules"]
+    },
+    {
+      "key": "kpi:statute_of_limitations",
+      "value": "Zero missed statutes of limitations is the only acceptable target. A missed SOL is malpractice per se. Track all SOL dates with 90-day, 60-day, 30-day, and 7-day alerts. Assign backup attorney for every critical deadline. Calendar both the actual date and the safe-harbor filing date.",
+      "category": "kpi",
+      "tags": ["deadlines", "malpractice", "risk"]
+    },
+    {
+      "key": "threshold:time_entry_submission",
+      "value": "Time entries must be submitted daily (best practice) or no later than end of week. Entries submitted more than 72 hours after the work was performed lose an average of 10-15% of billable time due to poor recall. Contemporaneous time recording increases billing by 20-30%.",
+      "category": "threshold",
+      "tags": ["billing", "time-management", "productivity"]
+    },
+    {
+      "key": "threshold:retainer_replenishment",
+      "value": "Trigger retainer replenishment request when balance drops below 25% of original retainer. Send replenishment invoice immediately when balance reaches the threshold. Do not continue work on depleted retainers unless the partner approves — firm exposure risk.",
+      "category": "threshold",
+      "tags": ["financial", "retainer", "risk"]
+    },
+    {
+      "key": "best-practice:matter_intake",
+      "value": "New matter intake checklist: (1) Conflicts check (run before engagement), (2) Signed engagement letter, (3) Fee agreement with billing terms, (4) Trust deposit collected (if required), (5) Client contact info verified, (6) Matter opened in system with correct billing rates, (7) Key deadlines calendared within 24 hours.",
+      "category": "best-practice",
+      "tags": ["intake", "risk-management", "onboarding"]
+    },
+    {
+      "key": "best-practice:document_management",
+      "value": "Every document filed in the matter folder within 24 hours. Use consistent naming: YYYY-MM-DD_DocType_Description. Version control for all drafts (v1, v2, FINAL). Mark privileged documents clearly. Correspondence filed chronologically. Close matters with a document retention memo.",
+      "category": "best-practice",
+      "tags": ["documents", "organization", "retention"]
+    },
+    {
+      "key": "terminology:utbms_codes",
+      "value": "UTBMS (Uniform Task-Based Management System) codes standardize legal billing tasks. Common codes: A101 (Plan/Strategy), A102 (Fact Investigation), A103 (Document Drafting), A104 (Review/Analysis), A106 (Court Appearances), L110 (Document Production), L120 (Depositions), L140 (Expert Discovery). Required by many insurance and corporate clients.",
+      "category": "terminology",
+      "tags": ["glossary", "billing", "codes"]
+    }
+  ]
+}

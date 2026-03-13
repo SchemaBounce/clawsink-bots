@@ -1,0 +1,35 @@
+{
+  "edgeTypes": [
+    {
+      "label": "PART_OF",
+      "description": "Links a social media post to the campaign it belongs to",
+      "fromEntity": "mkt_social_posts",
+      "toEntity": "mkt_campaigns",
+      "properties": {
+        "added_date": "string",
+        "post_order": "number"
+      }
+    },
+    {
+      "label": "PROMOTES",
+      "description": "Links a content asset to the campaign it supports",
+      "fromEntity": "mkt_content",
+      "toEntity": "mkt_campaigns",
+      "properties": {
+        "role": "string",
+        "attribution_weight": "number"
+      }
+    },
+    {
+      "label": "GENERATED_BY",
+      "description": "Links a lead to the campaign that generated it",
+      "fromEntity": "mkt_leads",
+      "toEntity": "mkt_campaigns",
+      "properties": {
+        "touchpoints": "number",
+        "first_touch_date": "string",
+        "conversion_path": "string"
+      }
+    }
+  ]
+}

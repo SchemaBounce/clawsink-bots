@@ -1,0 +1,306 @@
+{
+  "records": {
+    "crm_contacts": [
+      {
+        "first_name": "Rachel",
+        "last_name": "Torres",
+        "email": "rachel.torres@techforward.com",
+        "phone": "+1-415-555-0142",
+        "company_id": "techforward-inc",
+        "title": "VP of Engineering",
+        "status": "customer",
+        "source": "referral",
+        "last_contacted_at": "2026-03-10",
+        "tags": ["champion", "technical-buyer"]
+      },
+      {
+        "first_name": "Michael",
+        "last_name": "Chen",
+        "email": "mchen@globalretail.com",
+        "phone": "+1-212-555-0198",
+        "company_id": "global-retail-group",
+        "title": "CTO",
+        "status": "prospect",
+        "source": "event",
+        "last_contacted_at": "2026-03-05",
+        "tags": ["decision-maker", "enterprise"]
+      },
+      {
+        "first_name": "Sarah",
+        "last_name": "Okafor",
+        "email": "sarah.okafor@sunrisehealth.org",
+        "phone": "+1-305-555-0167",
+        "company_id": "sunrise-health",
+        "title": "Director of IT",
+        "status": "lead",
+        "source": "website",
+        "last_contacted_at": "2026-02-28",
+        "tags": ["healthcare", "inbound"]
+      },
+      {
+        "first_name": "James",
+        "last_name": "Whitfield",
+        "email": "jwhitfield@northstarlogistics.com",
+        "phone": "+1-312-555-0134",
+        "company_id": "northstar-logistics",
+        "title": "Operations Manager",
+        "status": "customer",
+        "source": "cold_outreach",
+        "last_contacted_at": "2026-03-12",
+        "tags": ["logistics", "power-user"]
+      },
+      {
+        "first_name": "Nina",
+        "last_name": "Petrova",
+        "email": "nina@bloomdesign.co",
+        "phone": "+44-20-7946-0158",
+        "company_id": "bloom-design",
+        "title": "Founder & CEO",
+        "status": "churned",
+        "source": "inbound",
+        "last_contacted_at": "2025-11-20",
+        "tags": ["small-business", "design", "churned"]
+      },
+      {
+        "first_name": "David",
+        "last_name": "Nguyen",
+        "email": "david.nguyen@swiftfinance.io",
+        "phone": "+1-650-555-0189",
+        "company_id": "swift-finance",
+        "title": "Head of Data",
+        "status": "prospect",
+        "source": "partner",
+        "last_contacted_at": "2026-03-08",
+        "tags": ["fintech", "data-team", "warm-intro"]
+      },
+      {
+        "first_name": "Emily",
+        "last_name": "Crawford",
+        "email": "emily.crawford@peakperformance.fit",
+        "phone": "+1-510-555-0145",
+        "company_id": "peak-performance",
+        "title": "Business Development Manager",
+        "status": "lead",
+        "source": "website",
+        "last_contacted_at": "2026-03-01",
+        "tags": ["fitness", "smb"]
+      }
+    ],
+    "crm_companies": [
+      {
+        "name": "TechForward Inc",
+        "domain": "techforward.com",
+        "industry": "Technology",
+        "size": "201-1000",
+        "annual_revenue": 45000000,
+        "status": "customer",
+        "address": "500 Howard St",
+        "city": "San Francisco",
+        "country": "US",
+        "owner": "Alex Kim"
+      },
+      {
+        "name": "Global Retail Group",
+        "domain": "globalretail.com",
+        "industry": "Retail",
+        "size": "1001+",
+        "annual_revenue": 320000000,
+        "status": "prospect",
+        "address": "350 Fifth Avenue",
+        "city": "New York",
+        "country": "US",
+        "owner": "Alex Kim"
+      },
+      {
+        "name": "Sunrise Health",
+        "domain": "sunrisehealth.org",
+        "industry": "Healthcare",
+        "size": "51-200",
+        "annual_revenue": 12000000,
+        "status": "prospect",
+        "address": "1200 Brickell Ave",
+        "city": "Miami",
+        "country": "US",
+        "owner": "Jordan Lee"
+      },
+      {
+        "name": "NorthStar Logistics",
+        "domain": "northstarlogistics.com",
+        "industry": "Logistics",
+        "size": "201-1000",
+        "annual_revenue": 85000000,
+        "status": "customer",
+        "address": "233 S Wacker Dr",
+        "city": "Chicago",
+        "country": "US",
+        "owner": "Jordan Lee"
+      },
+      {
+        "name": "Bloom Design",
+        "domain": "bloomdesign.co",
+        "industry": "Creative Services",
+        "size": "1-10",
+        "annual_revenue": 500000,
+        "status": "churned",
+        "address": "10 Shoreditch High St",
+        "city": "London",
+        "country": "GB",
+        "owner": "Alex Kim"
+      },
+      {
+        "name": "Swift Finance",
+        "domain": "swiftfinance.io",
+        "industry": "Financial Services",
+        "size": "51-200",
+        "annual_revenue": 25000000,
+        "status": "prospect",
+        "address": "2100 Sand Hill Rd",
+        "city": "Menlo Park",
+        "country": "US",
+        "owner": "Jordan Lee"
+      }
+    ],
+    "crm_deals": [
+      {
+        "name": "TechForward Platform Expansion",
+        "value": 120000,
+        "stage": "negotiation",
+        "probability": 75,
+        "expected_close_date": "2026-04-15",
+        "contact_id": "rachel-torres",
+        "company_id": "techforward-inc",
+        "owner": "Alex Kim",
+        "source": "Upsell"
+      },
+      {
+        "name": "Global Retail Enterprise POC",
+        "value": 450000,
+        "stage": "qualification",
+        "probability": 25,
+        "expected_close_date": "2026-06-30",
+        "contact_id": "michael-chen",
+        "company_id": "global-retail-group",
+        "owner": "Alex Kim",
+        "source": "Industry Conference 2026"
+      },
+      {
+        "name": "Sunrise Health Data Platform",
+        "value": 65000,
+        "stage": "discovery",
+        "probability": 10,
+        "expected_close_date": "2026-07-15",
+        "contact_id": "sarah-okafor",
+        "company_id": "sunrise-health",
+        "owner": "Jordan Lee",
+        "source": "Website Demo Request"
+      },
+      {
+        "name": "Swift Finance Analytics Suite",
+        "value": 180000,
+        "stage": "proposal",
+        "probability": 50,
+        "expected_close_date": "2026-05-01",
+        "contact_id": "david-nguyen",
+        "company_id": "swift-finance",
+        "owner": "Jordan Lee",
+        "source": "Partner Referral"
+      },
+      {
+        "name": "NorthStar Annual Renewal",
+        "value": 96000,
+        "stage": "closed_won",
+        "probability": 100,
+        "expected_close_date": "2026-03-01",
+        "contact_id": "james-whitfield",
+        "company_id": "northstar-logistics",
+        "owner": "Jordan Lee",
+        "source": "Renewal"
+      },
+      {
+        "name": "Bloom Design Starter Plan",
+        "value": 8400,
+        "stage": "closed_lost",
+        "probability": 0,
+        "expected_close_date": "2025-11-15",
+        "contact_id": "nina-petrova",
+        "company_id": "bloom-design",
+        "owner": "Alex Kim",
+        "source": "Inbound",
+        "lost_reason": "price"
+      }
+    ],
+    "crm_interactions": [
+      {
+        "type": "meeting",
+        "subject": "TechForward Q2 Planning Review",
+        "notes": "Met with Rachel and her team to discuss expanding to 3 additional departments. They are very happy with the current implementation in engineering. Main concern is SSO integration with their Okta setup. Budget approved for Q2, just need legal to review the expansion terms.",
+        "summary": "Expansion approved by engineering. Pending: SSO integration scope and legal review.",
+        "contact_id": "rachel-torres",
+        "deal_id": "techforward-platform-expansion",
+        "duration_minutes": 45,
+        "occurred_at": "2026-03-10",
+        "outcome": "positive",
+        "next_action": "Send SSO integration specification by March 15"
+      },
+      {
+        "type": "demo",
+        "subject": "Global Retail Initial Platform Demo",
+        "notes": "Presented the full platform demo to Michael Chen and 4 team members. Strong interest in real-time inventory sync capabilities. They currently use Fivetran with 15-minute latency which is causing stockout issues. Asked detailed questions about CDC connector for their Oracle EBS system.",
+        "summary": "Strong interest in real-time CDC. Key need: Oracle EBS connector. Requested technical architecture document.",
+        "contact_id": "michael-chen",
+        "deal_id": "global-retail-enterprise-poc",
+        "duration_minutes": 90,
+        "occurred_at": "2026-03-05",
+        "outcome": "positive",
+        "next_action": "Send Oracle EBS technical architecture and schedule POC scoping call"
+      },
+      {
+        "type": "call",
+        "subject": "Sunrise Health Discovery Call",
+        "notes": "Sarah is exploring data platform options for their growing network of 12 clinics. Need to consolidate patient flow data from 3 different EMR systems. Compliance (HIPAA) is their top concern. Currently using manual CSV exports which take their team 20 hours per week.",
+        "summary": "Discovery call complete. Need: multi-EMR consolidation, HIPAA compliance. Pain point: 20hrs/week manual data work.",
+        "contact_id": "sarah-okafor",
+        "deal_id": "sunrise-health-data-platform",
+        "duration_minutes": 30,
+        "occurred_at": "2026-02-28",
+        "outcome": "positive",
+        "next_action": "Prepare HIPAA compliance overview and schedule follow-up with their compliance officer"
+      },
+      {
+        "type": "email",
+        "subject": "Swift Finance Proposal Follow-Up",
+        "notes": "David responded to our proposal with questions about data residency. They need all data to remain in US-East region. Also asked about SOC 2 certification timeline. Mentioned they are also evaluating Hevo and Airbyte.",
+        "summary": "Proposal questions: US data residency, SOC 2 timeline. Competitive situation with Hevo and Airbyte.",
+        "contact_id": "david-nguyen",
+        "deal_id": "swift-finance-analytics-suite",
+        "duration_minutes": 5,
+        "occurred_at": "2026-03-08",
+        "outcome": "neutral",
+        "next_action": "Respond with data residency options and competitive comparison document"
+      },
+      {
+        "type": "call",
+        "subject": "NorthStar Renewal Check-In",
+        "notes": "Quarterly check-in with James. They processed 18M events last month, up from 12M last quarter. Very happy with pipeline reliability. Asked about our new workflow automation features. Renewal auto-processed on March 1st.",
+        "summary": "Healthy account. 50% event volume growth. Interested in workflow automation. Renewal complete.",
+        "contact_id": "james-whitfield",
+        "deal_id": "northstar-annual-renewal",
+        "duration_minutes": 20,
+        "occurred_at": "2026-03-12",
+        "outcome": "positive",
+        "next_action": "Schedule workflow automation demo for April"
+      },
+      {
+        "type": "follow_up",
+        "subject": "Peak Performance Fitness Intro Follow-Up",
+        "notes": "Left voicemail for Emily. She filled out the demo request form last week but hasn't responded to scheduling emails. Will try again in 3 days. Their website shows they have 8 gym locations.",
+        "summary": "No response to demo scheduling. Voicemail left. 8-location fitness chain.",
+        "contact_id": "emily-crawford",
+        "duration_minutes": 2,
+        "occurred_at": "2026-03-01",
+        "outcome": "no_answer",
+        "next_action": "Send personal LinkedIn message and try calling again March 4"
+      }
+    ]
+  }
+}

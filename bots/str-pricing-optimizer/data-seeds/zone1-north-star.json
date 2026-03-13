@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "pricing_strategy",
+      "value": "Multi-factor dynamic pricing: base rate from comps, demand multiplier from booking pace, gap-night discounts for orphan dates, seasonal adjustment by market type, last-minute progressive discounts within 7 days.",
+      "description": "Core pricing methodology used for rate recommendations"
+    },
+    {
+      "key": "last_minute_discount_rules",
+      "value": "7 days out: 5% discount. 3 days out: 15% discount. Same day: 25% discount. Never below floor price (60% of base rate).",
+      "description": "Progressive discount schedule for unbooked nights approaching check-in"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+[
+  {
+    "name": "bld_projects",
+    "displayName": "Projects",
+    "description": "Construction projects with phases, timeline, budget, and completion tracking",
+    "fields": {
+      "name": {"type": "string", "required": true, "description": "Project name"},
+      "project_type": {"type": "string", "required": true, "enum": ["new_build", "renovation", "addition", "remodel", "commercial_tenant_improvement", "custom_home"], "description": "Type of construction project"},
+      "status": {"type": "string", "required": true, "enum": ["bidding", "awarded", "permitting", "in_progress", "punch_list", "completed", "warranty"], "description": "Current project status"},
+      "address": {"type": "string", "required": true, "description": "Project site address"},
+      "client_name": {"type": "string", "required": true, "description": "Property owner or client name"},
+      "contract_value": {"type": "number", "required": true, "description": "Total contract value in USD"},
+      "start_date": {"type": "date", "required": true, "description": "Project start date"},
+      "estimated_completion": {"type": "date", "required": true, "description": "Estimated completion date"},
+      "actual_completion": {"type": "date", "description": "Actual completion date"},
+      "percent_complete": {"type": "number", "required": true, "description": "Overall completion percentage (0-100)"},
+      "project_manager": {"type": "string", "required": true, "description": "Assigned project manager"}
+    }
+  },
+  {
+    "name": "bld_estimates",
+    "displayName": "Estimates",
+    "description": "Detailed cost estimates with labor, materials, and markup breakdowns",
+    "fields": {
+      "project_id": {"type": "string", "required": true, "description": "Reference to bld_projects"},
+      "estimate_number": {"type": "string", "required": true, "description": "Unique estimate reference number"},
+      "status": {"type": "string", "required": true, "enum": ["draft", "submitted", "approved", "revised", "rejected"], "description": "Estimate status"},
+      "scope_description": {"type": "string", "required": true, "description": "Description of work covered by this estimate"},
+      "labor_cost": {"type": "number", "required": true, "description": "Total estimated labor cost in USD"},
+      "material_cost": {"type": "number", "required": true, "description": "Total estimated material cost in USD"},
+      "subcontractor_cost": {"type": "number", "description": "Total estimated subcontractor cost in USD"},
+      "overhead_percent": {"type": "number", "required": true, "description": "Overhead markup percentage"},
+      "profit_percent": {"type": "number", "required": true, "description": "Profit margin percentage"},
+      "total_estimate": {"type": "number", "required": true, "description": "Grand total estimate in USD"},
+      "valid_until": {"type": "date", "required": true, "description": "Date estimate expires"}
+    }
+  },
+  {
+    "name": "bld_materials",
+    "displayName": "Materials",
+    "description": "Material inventory, procurement, and usage tracking with supplier details",
+    "fields": {
+      "name": {"type": "string", "required": true, "description": "Material name"},
+      "category": {"type": "string", "required": true, "enum": ["lumber", "concrete", "electrical", "plumbing", "hvac", "roofing", "drywall", "flooring", "hardware", "insulation", "paint", "other"], "description": "Material category"},
+      "unit": {"type": "string", "required": true, "description": "Unit of measure (e.g., board ft, sq ft, each, linear ft)"},
+      "unit_cost": {"type": "number", "required": true, "description": "Cost per unit in USD"},
+      "quantity_on_hand": {"type": "number", "required": true, "description": "Current quantity in stock"},
+      "quantity_allocated": {"type": "number", "description": "Quantity allocated to active projects"},
+      "supplier_name": {"type": "string", "required": true, "description": "Primary supplier name"},
+      "lead_time_days": {"type": "number", "description": "Typical supplier lead time in days"},
+      "project_id": {"type": "string", "description": "Reference to bld_projects if allocated to a specific project"},
+      "last_ordered": {"type": "date", "description": "Date of most recent purchase order"}
+    }
+  },
+  {
+    "name": "bld_crew_schedule",
+    "displayName": "Crew Schedule",
+    "description": "Daily crew assignments with trade, project location, and hours worked",
+    "fields": {
+      "date": {"type": "date", "required": true, "description": "Scheduled work date"},
+      "project_id": {"type": "string", "required": true, "description": "Reference to bld_projects"},
+      "crew_lead": {"type": "string", "required": true, "description": "Crew leader name"},
+      "trade": {"type": "string", "required": true, "enum": ["general_labor", "framing", "electrical", "plumbing", "hvac", "roofing", "drywall", "painting", "flooring", "concrete", "excavation", "landscaping"], "description": "Trade or specialty"},
+      "crew_size": {"type": "number", "required": true, "description": "Number of workers on this crew"},
+      "scheduled_hours": {"type": "number", "required": true, "description": "Planned hours for the day"},
+      "actual_hours": {"type": "number", "description": "Actual hours worked"},
+      "task_description": {"type": "string", "required": true, "description": "Description of work to be performed"},
+      "status": {"type": "string", "required": true, "enum": ["scheduled", "in_progress", "completed", "cancelled", "weather_delay"], "description": "Schedule status"},
+      "notes": {"type": "string", "description": "Field notes or issues encountered"}
+    }
+  },
+  {
+    "name": "bld_safety_items",
+    "displayName": "Safety Items",
+    "description": "Safety observations, incidents, near-misses, and compliance tracking",
+    "fields": {
+      "project_id": {"type": "string", "required": true, "description": "Reference to bld_projects"},
+      "type": {"type": "string", "required": true, "enum": ["observation", "near_miss", "first_aid", "recordable_incident", "inspection", "violation"], "description": "Safety item type"},
+      "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Severity level"},
+      "date": {"type": "date", "required": true, "description": "Date of observation or incident"},
+      "reported_by": {"type": "string", "required": true, "description": "Person who reported the item"},
+      "description": {"type": "string", "required": true, "description": "Detailed description of the safety item"},
+      "corrective_action": {"type": "string", "description": "Corrective action taken or required"},
+      "status": {"type": "string", "required": true, "enum": ["open", "in_progress", "resolved", "closed"], "description": "Resolution status"},
+      "category": {"type": "string", "required": true, "enum": ["fall_protection", "electrical", "excavation", "ppe", "housekeeping", "scaffolding", "ladder", "tools", "hazmat", "other"], "description": "OSHA safety category"},
+      "resolution_date": {"type": "date", "description": "Date corrective action was completed"}
+    }
+  }
+]

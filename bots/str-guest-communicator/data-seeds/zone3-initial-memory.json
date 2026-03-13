@@ -1,0 +1,39 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all properties and their active bookings. Check for any pending guest messages. Establish response time tracking baseline."
+    },
+    {
+      "namespace": "response_templates",
+      "key": "pre_booking_inquiry",
+      "value": "Template: Hi [Guest Name]! Thanks for your interest in [Property Name]. [Answer their specific question]. The property is [key highlights — beds, location, amenities]. [Address any concerns]. Would you like me to check availability for your dates? Looking forward to hosting you!"
+    },
+    {
+      "namespace": "response_templates",
+      "key": "check_in_instructions",
+      "value": "Template: Hi [Guest Name]! We're excited to welcome you tomorrow to [Property Name]. Here's everything you need for a smooth check-in:\n\nCheck-in time: [time]\nAddress: [address]\nAccess: [check-in method details]\nWifi: [network/password]\nParking: [instructions]\n\nHouse rules reminder: [key rules]\n\nIf you need anything, don't hesitate to reach out. Safe travels!"
+    },
+    {
+      "namespace": "response_templates",
+      "key": "during_stay_common",
+      "value": "Common during-stay questions and answers: Wifi password → check the card on the fridge or nightstand. Thermostat → [location]. Extra blankets/pillows → [location]. Trash/recycling → [schedule and locations]. Local restaurants → [top 3 nearby]. Grocery store → [nearest]. Emergency contacts → [local emergency + property manager]."
+    },
+    {
+      "namespace": "response_templates",
+      "key": "emergency_response",
+      "value": "Emergency protocol: 1) Acknowledge immediately ('I'm so sorry you're dealing with this'). 2) Assess safety — if life/safety threat, direct to 911 first. 3) For property issues (plumbing, electrical, lockout), escalate to Property Manager immediately. 4) Provide interim solution if possible. 5) Follow up within 30 minutes with resolution status."
+    },
+    {
+      "namespace": "response_templates",
+      "key": "post_stay_followup",
+      "value": "Template: Hi [Guest Name]! Thank you so much for staying at [Property Name] — we hope you had a wonderful time! If you enjoyed your stay, we'd really appreciate a review. It helps other travelers find us and helps us keep improving. We'd love to host you again — returning guests get [incentive]. Safe travels home!"
+    },
+    {
+      "namespace": "guest_context",
+      "key": "init",
+      "value": "No active guest conversations tracked yet. Will maintain context for ongoing conversations to provide continuity across 15-minute check intervals."
+    }
+  ]
+}

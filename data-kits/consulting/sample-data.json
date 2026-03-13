@@ -1,0 +1,343 @@
+{
+  "records": {
+    "con_clients": [
+      {
+        "name": "Meridian Health Systems",
+        "industry": "Healthcare",
+        "size": "enterprise",
+        "primary_contact": "Sarah Chen",
+        "contact_email": "s.chen@meridianhealth.com",
+        "relationship_start": "2024-03-15",
+        "lifetime_revenue": 485000,
+        "nps_score": 72,
+        "account_tier": "strategic",
+        "notes": "Long-term relationship, strong executive sponsorship. Prefers on-site workshops."
+      },
+      {
+        "name": "Volta Financial Group",
+        "industry": "Financial Services",
+        "size": "mid_market",
+        "primary_contact": "James Okafor",
+        "contact_email": "jokafor@voltafg.com",
+        "relationship_start": "2025-01-10",
+        "lifetime_revenue": 120000,
+        "nps_score": 58,
+        "account_tier": "key",
+        "notes": "Growing relationship. Interested in digital transformation and process optimization."
+      },
+      {
+        "name": "GreenLoop Logistics",
+        "industry": "Supply Chain",
+        "size": "smb",
+        "primary_contact": "Maria Vasquez",
+        "contact_email": "m.vasquez@greenloop.io",
+        "relationship_start": "2025-06-01",
+        "lifetime_revenue": 45000,
+        "nps_score": 65,
+        "account_tier": "standard",
+        "notes": "First engagement. Sustainability-focused company needing operational efficiency."
+      },
+      {
+        "name": "Apex Manufacturing Co.",
+        "industry": "Manufacturing",
+        "size": "mid_market",
+        "primary_contact": "David Park",
+        "contact_email": "dpark@apexmfg.com",
+        "relationship_start": "2024-09-20",
+        "lifetime_revenue": 210000,
+        "nps_score": 81,
+        "account_tier": "key",
+        "notes": "Repeat client. Successfully completed lean transformation. Now exploring digital twins."
+      },
+      {
+        "name": "Brightpath Education",
+        "industry": "Education",
+        "size": "startup",
+        "primary_contact": "Aisha Rahman",
+        "contact_email": "aisha@brightpath.edu",
+        "relationship_start": "2025-11-01",
+        "lifetime_revenue": 0,
+        "nps_score": null,
+        "account_tier": "standard",
+        "notes": "New prospect. EdTech startup seeking go-to-market strategy support."
+      }
+    ],
+    "con_engagements": [
+      {
+        "title": "Digital Transformation Roadmap",
+        "client_id": "meridian-health-systems",
+        "status": "active",
+        "engagement_type": "technology",
+        "start_date": "2025-09-01",
+        "end_date": "2026-02-28",
+        "budget": 275000,
+        "billing_model": "fixed_fee",
+        "lead_consultant": "Rachel Torres",
+        "team_size": 4
+      },
+      {
+        "title": "Process Optimization Assessment",
+        "client_id": "volta-financial-group",
+        "status": "active",
+        "engagement_type": "operations",
+        "start_date": "2025-12-01",
+        "end_date": "2026-03-31",
+        "budget": 120000,
+        "billing_model": "time_and_materials",
+        "lead_consultant": "Marcus Webb",
+        "team_size": 3
+      },
+      {
+        "title": "Supply Chain Sustainability Audit",
+        "client_id": "greenloop-logistics",
+        "status": "completed",
+        "engagement_type": "strategy",
+        "start_date": "2025-06-15",
+        "end_date": "2025-09-30",
+        "budget": 45000,
+        "billing_model": "fixed_fee",
+        "lead_consultant": "Rachel Torres",
+        "team_size": 2
+      },
+      {
+        "title": "Lean Manufacturing Phase 2",
+        "client_id": "apex-manufacturing",
+        "status": "proposal",
+        "engagement_type": "operations",
+        "start_date": "2026-04-01",
+        "end_date": "2026-09-30",
+        "budget": 180000,
+        "billing_model": "time_and_materials",
+        "lead_consultant": "Marcus Webb",
+        "team_size": 3
+      },
+      {
+        "title": "Organizational Restructuring",
+        "client_id": "meridian-health-systems",
+        "status": "completed",
+        "engagement_type": "organizational",
+        "start_date": "2024-03-15",
+        "end_date": "2024-08-31",
+        "budget": 210000,
+        "billing_model": "fixed_fee",
+        "lead_consultant": "Rachel Torres",
+        "team_size": 5
+      },
+      {
+        "title": "Go-to-Market Strategy",
+        "client_id": "brightpath-education",
+        "status": "proposal",
+        "engagement_type": "strategy",
+        "start_date": "2026-01-15",
+        "end_date": "2026-04-15",
+        "budget": 85000,
+        "billing_model": "fixed_fee",
+        "lead_consultant": "Lena Hoffman",
+        "team_size": 2
+      }
+    ],
+    "con_time_entries": [
+      {
+        "engagement_id": "digital-transformation-roadmap",
+        "consultant_name": "Rachel Torres",
+        "date": "2026-03-10",
+        "hours": 6.5,
+        "billable": true,
+        "activity_type": "client_meeting",
+        "description": "Executive steering committee presentation on Phase 2 findings",
+        "hourly_rate": 350
+      },
+      {
+        "engagement_id": "digital-transformation-roadmap",
+        "consultant_name": "Kevin Patel",
+        "date": "2026-03-10",
+        "hours": 8,
+        "billable": true,
+        "activity_type": "analysis",
+        "description": "Technology stack assessment and vendor comparison matrix",
+        "hourly_rate": 225
+      },
+      {
+        "engagement_id": "process-optimization-assessment",
+        "consultant_name": "Marcus Webb",
+        "date": "2026-03-11",
+        "hours": 4,
+        "billable": true,
+        "activity_type": "workshop",
+        "description": "Process mapping workshop with operations team",
+        "hourly_rate": 300
+      },
+      {
+        "engagement_id": "process-optimization-assessment",
+        "consultant_name": "Anika Johansson",
+        "date": "2026-03-11",
+        "hours": 3,
+        "billable": false,
+        "activity_type": "internal",
+        "description": "Internal methodology review and quality check on draft recommendations",
+        "hourly_rate": null
+      },
+      {
+        "engagement_id": "digital-transformation-roadmap",
+        "consultant_name": "Rachel Torres",
+        "date": "2026-03-12",
+        "hours": 2,
+        "billable": false,
+        "activity_type": "travel",
+        "description": "Travel to Meridian Health corporate headquarters",
+        "hourly_rate": null
+      },
+      {
+        "engagement_id": "process-optimization-assessment",
+        "consultant_name": "Marcus Webb",
+        "date": "2026-03-12",
+        "hours": 7,
+        "billable": true,
+        "activity_type": "deliverable_creation",
+        "description": "Drafting current-state process documentation with bottleneck analysis",
+        "hourly_rate": 300
+      },
+      {
+        "engagement_id": "digital-transformation-roadmap",
+        "consultant_name": "Priya Nair",
+        "date": "2026-03-12",
+        "hours": 8,
+        "billable": true,
+        "activity_type": "research",
+        "description": "Benchmarking healthcare IT adoption rates and best practices",
+        "hourly_rate": 200
+      }
+    ],
+    "con_deliverables": [
+      {
+        "title": "Current State Assessment Report",
+        "engagement_id": "digital-transformation-roadmap",
+        "deliverable_type": "report",
+        "status": "delivered",
+        "due_date": "2025-11-15",
+        "owner": "Rachel Torres",
+        "description": "Comprehensive assessment of Meridian's current technology landscape, pain points, and organizational readiness for digital transformation",
+        "hours_invested": 120,
+        "knowledge_artifacts_used": ["digital-maturity-framework", "healthcare-it-benchmarks"]
+      },
+      {
+        "title": "Technology Roadmap Presentation",
+        "engagement_id": "digital-transformation-roadmap",
+        "deliverable_type": "presentation",
+        "status": "in_review",
+        "due_date": "2026-03-15",
+        "owner": "Kevin Patel",
+        "description": "Board-ready presentation with 3-year technology roadmap, investment phasing, and expected ROI",
+        "hours_invested": 85,
+        "knowledge_artifacts_used": ["technology-roadmap-template"]
+      },
+      {
+        "title": "Process Optimization Playbook",
+        "engagement_id": "process-optimization-assessment",
+        "deliverable_type": "playbook",
+        "status": "draft",
+        "due_date": "2026-03-28",
+        "owner": "Marcus Webb",
+        "description": "Step-by-step playbook for implementing identified process improvements across Volta's operations",
+        "hours_invested": 45,
+        "knowledge_artifacts_used": ["lean-six-sigma-toolkit"]
+      },
+      {
+        "title": "Sustainability Audit Final Report",
+        "engagement_id": "supply-chain-sustainability-audit",
+        "deliverable_type": "assessment",
+        "status": "delivered",
+        "due_date": "2025-09-25",
+        "owner": "Rachel Torres",
+        "description": "Full supply chain carbon footprint analysis with 12-month reduction roadmap",
+        "hours_invested": 64,
+        "knowledge_artifacts_used": ["esg-assessment-framework"]
+      },
+      {
+        "title": "Financial Model — Lean Phase 2",
+        "engagement_id": "lean-manufacturing-phase-2",
+        "deliverable_type": "model",
+        "status": "draft",
+        "due_date": "2026-03-20",
+        "owner": "Marcus Webb",
+        "description": "ROI model for proposed lean manufacturing improvements including labor savings and quality gains",
+        "hours_invested": 18,
+        "knowledge_artifacts_used": ["lean-roi-calculator"]
+      }
+    ],
+    "con_knowledge_artifacts": [
+      {
+        "title": "Digital Maturity Assessment Framework",
+        "content": "Structured framework for evaluating organizational digital maturity across 6 dimensions: strategy, culture, technology, operations, data, and customer experience. Includes scoring rubric and benchmarking database.",
+        "artifact_type": "framework",
+        "domain": "Digital Transformation",
+        "methodology": "Custom maturity model based on MIT CISR and McKinsey Digital Quotient",
+        "source_engagement_id": "organizational-restructuring",
+        "reuse_count": 7,
+        "last_updated": "2025-10-15",
+        "tags": ["digital", "maturity", "assessment", "transformation"],
+        "quality_rating": 4.8
+      },
+      {
+        "title": "Lean Six Sigma Toolkit",
+        "content": "Complete toolkit for process optimization engagements including value stream mapping templates, DMAIC worksheets, statistical analysis guides, and implementation checklists. Adapted for services and manufacturing.",
+        "artifact_type": "tool",
+        "domain": "Operations",
+        "methodology": "Lean Six Sigma (DMAIC)",
+        "source_engagement_id": null,
+        "reuse_count": 14,
+        "last_updated": "2025-08-20",
+        "tags": ["lean", "six-sigma", "process", "operations"],
+        "quality_rating": 4.5
+      },
+      {
+        "title": "Technology Roadmap Template",
+        "content": "Board-ready presentation template for multi-year technology investment roadmaps. Includes swim-lane timeline, investment phasing matrix, risk-return scatter plot, and vendor evaluation scorecard.",
+        "artifact_type": "template",
+        "domain": "Technology",
+        "methodology": null,
+        "source_engagement_id": "digital-transformation-roadmap",
+        "reuse_count": 5,
+        "last_updated": "2026-01-10",
+        "tags": ["technology", "roadmap", "presentation", "investment"],
+        "quality_rating": 4.2
+      },
+      {
+        "title": "ESG Assessment Framework",
+        "content": "End-to-end framework for environmental, social, and governance supply chain audits. Covers Scope 1-3 emissions calculation, supplier scoring, materiality assessment, and regulatory compliance mapping.",
+        "artifact_type": "framework",
+        "domain": "Sustainability",
+        "methodology": "GRI Standards + TCFD Recommendations",
+        "source_engagement_id": "supply-chain-sustainability-audit",
+        "reuse_count": 3,
+        "last_updated": "2025-10-01",
+        "tags": ["esg", "sustainability", "supply-chain", "audit"],
+        "quality_rating": 4.6
+      },
+      {
+        "title": "Healthcare IT Benchmark Database",
+        "content": "Curated benchmark data for healthcare IT spending, adoption rates, and digital maturity by organization size and type. Includes HIMSS EMRAM stage distributions and telehealth adoption curves.",
+        "artifact_type": "benchmark",
+        "domain": "Healthcare",
+        "methodology": null,
+        "source_engagement_id": "digital-transformation-roadmap",
+        "reuse_count": 4,
+        "last_updated": "2026-02-15",
+        "tags": ["healthcare", "benchmarks", "IT-spend", "digital"],
+        "quality_rating": 4.0
+      },
+      {
+        "title": "Lean ROI Calculator",
+        "content": "Financial model template for quantifying lean manufacturing ROI. Models labor savings, quality cost reduction, throughput improvement, and inventory reduction with sensitivity analysis.",
+        "artifact_type": "tool",
+        "domain": "Manufacturing",
+        "methodology": "Lean Accounting",
+        "source_engagement_id": null,
+        "reuse_count": 9,
+        "last_updated": "2025-07-30",
+        "tags": ["lean", "roi", "financial-model", "manufacturing"],
+        "quality_rating": 4.3
+      }
+    ]
+  }
+}
