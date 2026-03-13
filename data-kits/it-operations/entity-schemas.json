@@ -1,0 +1,73 @@
+[
+  {
+    "name": "ops_incidents",
+    "displayName": "Incidents",
+    "description": "Production incidents with severity classification, timeline, root cause analysis, and resolution tracking",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Incident title" },
+      "description": { "type": "string", "required": true, "description": "Detailed incident description including symptoms and impact" },
+      "severity": { "type": "string", "required": true, "enum": ["sev1", "sev2", "sev3", "sev4"], "description": "Incident severity (sev1 = critical outage)" },
+      "status": { "type": "string", "required": true, "enum": ["detected", "investigating", "mitigating", "resolved", "postmortem"], "description": "Current incident status" },
+      "resolution": { "type": "string", "description": "How the incident was resolved" },
+      "root_cause": { "type": "string", "description": "Identified root cause" },
+      "incident_commander": { "type": "string", "required": true, "description": "Incident commander on call" },
+      "affected_services": { "type": "array", "description": "List of affected service names" },
+      "detected_at": { "type": "date", "required": true, "description": "When the incident was detected" },
+      "resolved_at": { "type": "date", "description": "When the incident was resolved" },
+      "customer_impact": { "type": "string", "enum": ["none", "degraded", "partial_outage", "full_outage"], "description": "Customer-facing impact level" },
+      "is_recurring": { "type": "boolean", "description": "Whether this is a recurrence of a previous incident" }
+    }
+  },
+  {
+    "name": "ops_deployments",
+    "displayName": "Deployments",
+    "description": "Release deployments with version tracking, rollback capability, and change metadata",
+    "fields": {
+      "version": { "type": "string", "required": true, "description": "Release version (semver)" },
+      "service_name": { "type": "string", "required": true, "description": "Service being deployed" },
+      "environment": { "type": "string", "required": true, "enum": ["staging", "production", "canary"], "description": "Deployment environment" },
+      "status": { "type": "string", "required": true, "enum": ["pending", "in_progress", "succeeded", "failed", "rolled_back"], "description": "Deployment status" },
+      "deploy_type": { "type": "string", "required": true, "enum": ["rolling", "blue_green", "canary", "recreate", "hotfix"], "description": "Deployment strategy" },
+      "deployer": { "type": "string", "required": true, "description": "Person or CI system that initiated the deploy" },
+      "commit_sha": { "type": "string", "description": "Git commit SHA for this release" },
+      "change_summary": { "type": "string", "description": "Summary of changes in this release" },
+      "started_at": { "type": "date", "required": true, "description": "Deployment start time" },
+      "completed_at": { "type": "date", "description": "Deployment completion time" },
+      "rollback_version": { "type": "string", "description": "Version to rollback to if needed" }
+    }
+  },
+  {
+    "name": "ops_services",
+    "displayName": "Services",
+    "description": "Service catalog with health status, SLA targets, ownership, and dependency information",
+    "fields": {
+      "name": { "type": "string", "required": true, "description": "Service name" },
+      "description": { "type": "string", "description": "Service description and purpose" },
+      "tier": { "type": "string", "required": true, "enum": ["tier1", "tier2", "tier3"], "description": "Service criticality tier (tier1 = business critical)" },
+      "status": { "type": "string", "required": true, "enum": ["healthy", "degraded", "down", "maintenance"], "description": "Current health status" },
+      "owner_team": { "type": "string", "required": true, "description": "Team that owns this service" },
+      "tech_stack": { "type": "array", "description": "Technology stack components" },
+      "sla_target": { "type": "number", "description": "SLA availability target as percentage (e.g., 99.9)" },
+      "current_availability": { "type": "number", "description": "Current rolling 30-day availability percentage" },
+      "repository_url": { "type": "string", "description": "Source code repository URL" },
+      "runbook_url": { "type": "string", "description": "Link to operational runbook" }
+    }
+  },
+  {
+    "name": "ops_runbooks",
+    "displayName": "Runbooks",
+    "description": "Operational runbooks with step-by-step procedures, automation status, and usage tracking",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Runbook title" },
+      "steps": { "type": "string", "required": true, "description": "Step-by-step procedure (markdown)" },
+      "category": { "type": "string", "required": true, "enum": ["incident_response", "deployment", "maintenance", "troubleshooting", "recovery", "scaling"], "description": "Runbook category" },
+      "tags": { "type": "array", "description": "Searchable tags" },
+      "service_name": { "type": "string", "description": "Primary service this runbook applies to" },
+      "automation_status": { "type": "string", "required": true, "enum": ["manual", "partially_automated", "fully_automated"], "description": "Level of automation" },
+      "last_used": { "type": "date", "description": "Last time this runbook was executed" },
+      "author": { "type": "string", "required": true, "description": "Runbook author" },
+      "review_date": { "type": "date", "description": "Next scheduled review date" },
+      "estimated_duration_minutes": { "type": "number", "description": "Estimated execution time in minutes" }
+    }
+  }
+]

@@ -30,6 +30,16 @@ plugins:
     config:
       calendar_access: "read_write"
       drive_access: "read"
+dataKits:
+  - ref: "data-kits/content-marketing@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/crm-contacts@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/project-management@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "Digital Agency / Creative Services"
   context: "Agency team managing brand, content, UX, and growth across multiple client accounts"

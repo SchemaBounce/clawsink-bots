@@ -1,0 +1,231 @@
+[
+  {
+    "name": "fin_transactions",
+    "displayName": "Transactions",
+    "description": "Financial transactions including income, expenses, and transfers",
+    "fields": {
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Transaction date (ISO 8601)"
+      },
+      "amount": {
+        "type": "number",
+        "required": true,
+        "description": "Transaction amount in USD (positive for income, negative for expenses)"
+      },
+      "type": {
+        "type": "string",
+        "required": true,
+        "enum": ["income", "expense", "transfer", "refund"],
+        "description": "Transaction type"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "description": "Transaction category (e.g., Payroll, Office Supplies, Revenue)"
+      },
+      "vendor": {
+        "type": "string",
+        "description": "Vendor, payee, or payer name"
+      },
+      "description": {
+        "type": "string",
+        "description": "Transaction description or memo"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["pending", "completed", "failed", "reversed", "reconciled"],
+        "description": "Transaction processing status"
+      },
+      "payment_method": {
+        "type": "string",
+        "enum": ["bank_transfer", "credit_card", "check", "cash", "wire", "ach"],
+        "description": "Payment method used"
+      },
+      "invoice_id": {
+        "type": "string",
+        "description": "Reference to fin_invoices if this transaction settles an invoice"
+      },
+      "tags": {
+        "type": "array",
+        "description": "Custom tags for reporting and filtering"
+      }
+    }
+  },
+  {
+    "name": "fin_invoices",
+    "displayName": "Invoices",
+    "description": "Invoices sent to customers and received from vendors",
+    "fields": {
+      "invoice_number": {
+        "type": "string",
+        "required": true,
+        "description": "Unique invoice number"
+      },
+      "direction": {
+        "type": "string",
+        "required": true,
+        "enum": ["receivable", "payable"],
+        "description": "Whether this is money owed to you (receivable) or owed by you (payable)"
+      },
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Invoice issue date"
+      },
+      "due_date": {
+        "type": "date",
+        "required": true,
+        "description": "Payment due date"
+      },
+      "amount": {
+        "type": "number",
+        "required": true,
+        "description": "Invoice total amount in USD"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["draft", "sent", "viewed", "partial", "paid", "overdue", "cancelled", "written_off"],
+        "description": "Invoice payment status"
+      },
+      "counterparty": {
+        "type": "string",
+        "required": true,
+        "description": "Customer name (for receivable) or vendor name (for payable)"
+      },
+      "category": {
+        "type": "string",
+        "description": "Invoice category for reporting"
+      },
+      "line_items": {
+        "type": "array",
+        "description": "Array of line item objects with description, quantity, unit_price, and amount"
+      },
+      "payment_terms": {
+        "type": "string",
+        "enum": ["due_on_receipt", "net_15", "net_30", "net_45", "net_60"],
+        "description": "Payment terms"
+      }
+    }
+  },
+  {
+    "name": "fin_budgets",
+    "displayName": "Budgets",
+    "description": "Budget plans and spend tracking by period and category",
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Budget name"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "description": "Budget category (e.g., Marketing, Engineering, Operations)"
+      },
+      "period": {
+        "type": "string",
+        "required": true,
+        "enum": ["monthly", "quarterly", "annual"],
+        "description": "Budget period frequency"
+      },
+      "allocated_amount": {
+        "type": "number",
+        "required": true,
+        "description": "Budgeted allocation in USD"
+      },
+      "spent_amount": {
+        "type": "number",
+        "required": true,
+        "description": "Amount spent so far in this period"
+      },
+      "start_date": {
+        "type": "date",
+        "required": true,
+        "description": "Budget period start date"
+      },
+      "end_date": {
+        "type": "date",
+        "required": true,
+        "description": "Budget period end date"
+      },
+      "owner": {
+        "type": "string",
+        "description": "Person responsible for this budget"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "closed", "over_budget"],
+        "description": "Budget status"
+      },
+      "notes": {
+        "type": "string",
+        "description": "Budget notes or justification"
+      }
+    }
+  },
+  {
+    "name": "fin_recurring",
+    "displayName": "Recurring Charges",
+    "description": "Recurring billing items — subscriptions, retainers, and periodic charges",
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the recurring charge"
+      },
+      "type": {
+        "type": "string",
+        "required": true,
+        "enum": ["subscription", "retainer", "lease", "insurance", "utility", "other"],
+        "description": "Type of recurring charge"
+      },
+      "amount": {
+        "type": "number",
+        "required": true,
+        "description": "Charge amount per period in USD"
+      },
+      "frequency": {
+        "type": "string",
+        "required": true,
+        "enum": ["weekly", "monthly", "quarterly", "annual"],
+        "description": "Billing frequency"
+      },
+      "counterparty": {
+        "type": "string",
+        "required": true,
+        "description": "Vendor or customer name"
+      },
+      "direction": {
+        "type": "string",
+        "required": true,
+        "enum": ["inbound", "outbound"],
+        "description": "Whether this is revenue (inbound) or an expense (outbound)"
+      },
+      "next_due_date": {
+        "type": "date",
+        "required": true,
+        "description": "Next billing date"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "paused", "cancelled"],
+        "description": "Recurring charge status"
+      },
+      "auto_generate_invoice": {
+        "type": "boolean",
+        "description": "Whether to automatically generate an invoice on the billing date"
+      },
+      "start_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the recurring charge started"
+      }
+    }
+  }
+]

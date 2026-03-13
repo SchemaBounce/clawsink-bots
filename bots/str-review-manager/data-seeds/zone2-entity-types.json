@@ -1,0 +1,37 @@
+{
+  "entityTypes": [
+    {
+      "name": "str_reviews",
+      "displayName": "Reviews",
+      "description": "Guest reviews across all booking platforms with host response tracking",
+      "domain": "guest-relations",
+      "sampleFields": ["property_id", "booking_id", "guest_id", "channel", "rating", "review_text", "host_response", "response_status", "sentiment", "themes"],
+      "fields": {
+        "property_id": {"type": "string", "required": true, "description": "Reference to str_properties"},
+        "booking_id": {"type": "string", "description": "Reference to str_bookings"},
+        "guest_id": {"type": "string", "description": "Reference to str_guests"},
+        "channel": {"type": "string", "required": true, "description": "Platform the review was posted on"},
+        "rating": {"type": "number", "required": true, "description": "Star rating (1-5)"},
+        "review_text": {"type": "string", "description": "Guest review content"},
+        "host_response": {"type": "string", "description": "Drafted or published host response"},
+        "response_status": {"type": "string", "enum": ["pending", "drafted", "approved", "published"], "description": "Host response workflow status"},
+        "sentiment": {"type": "string", "enum": ["positive", "neutral", "negative"], "description": "Review sentiment classification"},
+        "themes": {"type": "array", "description": "Identified feedback themes (cleanliness, location, amenities, communication, etc.)"}
+      }
+    },
+    {
+      "name": "str_findings",
+      "displayName": "STR Findings",
+      "description": "Review analysis findings — patterns, trends, response drafts",
+      "domain": "guest-relations",
+      "sampleFields": ["severity", "finding_type", "summary", "property_id"]
+    },
+    {
+      "name": "str_alerts",
+      "displayName": "STR Alerts",
+      "description": "Negative review alerts and rating trend warnings",
+      "domain": "guest-relations",
+      "sampleFields": ["severity", "title", "description", "property_id", "rating"]
+    }
+  ]
+}

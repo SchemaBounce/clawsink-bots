@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "crm_interactions",
+      "description": "Semantic search over interaction notes and summaries for finding past conversations and context",
+      "sourceEntity": "crm_interactions",
+      "embeddingFields": ["notes", "summary"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:saas:defaults",
+  "entries": [
+    {
+      "key": "kpi:mrr_growth_rate",
+      "value": "Target MRR growth rate is >5% month-over-month. Below 3% signals stagnation. Above 10% indicates hypergrowth. Calculate as (MRR_current - MRR_previous) / MRR_previous * 100.",
+      "category": "kpi",
+      "tags": ["revenue", "growth", "mrr"]
+    },
+    {
+      "key": "kpi:churn_rate",
+      "value": "Target monthly churn rate is <5%. Best-in-class SaaS achieves <2% monthly churn. Calculate as churned_accounts / total_accounts_at_period_start * 100. Net revenue churn includes expansion revenue offsets.",
+      "category": "kpi",
+      "tags": ["retention", "churn", "revenue"]
+    },
+    {
+      "key": "kpi:nps_score",
+      "value": "Target NPS is >40. Scores 0-6 are detractors, 7-8 passive, 9-10 promoters. NPS = %promoters - %detractors. Above 50 is excellent. Below 0 requires urgent product/support intervention.",
+      "category": "kpi",
+      "tags": ["satisfaction", "nps", "retention"]
+    },
+    {
+      "key": "kpi:trial_to_paid_conversion",
+      "value": "Target trial-to-paid conversion rate is >15%. Top SaaS products achieve 25-30%. Calculate as paid_conversions / trial_starts * 100 within the trial window. Track by cohort week for trend analysis.",
+      "category": "kpi",
+      "tags": ["conversion", "trial", "acquisition"]
+    },
+    {
+      "key": "kpi:feature_adoption_rate",
+      "value": "Target feature adoption rate is >60% of accounts using core features within 30 days. Track per feature: activated_accounts / eligible_accounts * 100. Low adoption of a core feature may indicate UX issues or missing documentation.",
+      "category": "kpi",
+      "tags": ["adoption", "product", "engagement"]
+    },
+    {
+      "key": "kpi:time_to_value",
+      "value": "Target time to value is <7 days from signup to first 'aha moment'. Measure as the median days between account creation and first meaningful action (defined per product). Longer TTV correlates strongly with higher churn.",
+      "category": "kpi",
+      "tags": ["onboarding", "activation", "time-to-value"]
+    },
+    {
+      "key": "threshold:churn_alert",
+      "value": "Trigger an alert when any account shows 3+ churn risk signals: no login in 14 days, support ticket escalation, NPS detractor score, cancelled scheduled calls, reduced seat count.",
+      "category": "threshold",
+      "tags": ["churn", "alerting", "risk"]
+    },
+    {
+      "key": "best-practice:expansion_revenue",
+      "value": "Healthy SaaS businesses generate 20-30% of new ARR from expansion (upsells, cross-sells, seat additions). Track net revenue retention (NRR) — target >110%. NRR above 120% indicates strong product-market fit.",
+      "category": "best-practice",
+      "tags": ["expansion", "upsell", "nrr"]
+    },
+    {
+      "key": "terminology:arr_vs_mrr",
+      "value": "ARR (Annual Recurring Revenue) = MRR * 12. Use MRR for monthly operational decisions and ARR for investor reporting and annual planning. Never annualize one-time revenue or usage-based overages.",
+      "category": "terminology",
+      "tags": ["revenue", "metrics", "definitions"]
+    },
+    {
+      "key": "best-practice:cohort_analysis",
+      "value": "Always analyze SaaS metrics by signup cohort (weekly or monthly). Blended averages hide trends. A rising blended churn rate might mask improving recent cohorts diluted by a bad legacy cohort.",
+      "category": "best-practice",
+      "tags": ["analysis", "cohorts", "methodology"]
+    }
+  ]
+}

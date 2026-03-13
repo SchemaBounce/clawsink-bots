@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "sync_interval_default",
+      "value": "2 hours between full calendar sync checks across all channels. Intensive mode: 30 minutes.",
+      "description": "How frequently channel calendars are cross-checked for conflicts"
+    },
+    {
+      "key": "conflict_severity_rules",
+      "value": "Double-booking on confirmed reservation = critical. Overlapping hold/inquiry = high. Stale listing (no update >7 days) = medium.",
+      "description": "How calendar conflicts are classified by severity"
+    }
+  ]
+}

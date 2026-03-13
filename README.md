@@ -13,6 +13,7 @@ This repository is **parsed programmatically** to populate the marketplace, agen
 | Skills | [skills/README.md](skills/README.md) |
 | Bots | [bots/README.md](bots/README.md) |
 | Teams | [teams/README.md](teams/README.md) |
+| Data Kits | [data-kits/README.md](data-kits/README.md) |
 | MCP Servers | [tools/README.md](tools/README.md) |
 | Plugins | [plugins/README.md](plugins/README.md) |
 
@@ -43,6 +44,15 @@ clawsink-bots/
 ├── teams/                          # 22 coordinated bot groups
 │   └── {team-name}/
 │       └── TEAM.md                 # Manifest (kind: Team) -- PARSED FOR MARKETPLACE
+│
+├── data-kits/                      # 20 full-stack domain data packages
+│   └── {kit-name}/
+│       ├── KIT.md                  # Manifest (kind: DataKit) -- PARSED FOR MARKETPLACE
+│       ├── entity-schemas.json     # Entity type definitions with typed fields
+│       ├── graph-templates.json    # AGE graph edge type templates
+│       ├── vector-config.json      # pgvector collection configurations
+│       ├── memory-bootstrap.json   # Industry KPIs, thresholds, domain knowledge
+│       └── sample-data.json        # Example records for optional seeding
 │
 ├── shared/                         # Cross-cutting infrastructure
 │   ├── message-protocol.md         # Inter-bot message format (alert/request/finding/text)
@@ -128,6 +138,22 @@ The org chart view renders the team's `orgChart` as an interactive tree:
 | `tools[].category` | Tool grouping headers |
 | Markdown body after `---` | Long description / documentation tab |
 
+### Data Kit Page (`/marketplace/data-kits/{name}`)
+
+| YAML Field | Renders As |
+|---|---|
+| `metadata.displayName` | Page title, card heading |
+| `metadata.description` | Card subtitle, search snippet |
+| `metadata.category` | Category filter pill (industry/horizontal) |
+| `metadata.tags` | Search index, tag chips |
+| `entityPrefix` | Prefix badge |
+| `entityCount` | Entity count badge |
+| `graphEdgeTypes` | "Relationships" section |
+| `vectorCollections` | "Search Collections" section |
+| `compatibility.teams` | "Works with" team badges |
+| `compatibility.composableWith` | "Composes with" kit badges |
+| Markdown body after `---` | Long description / documentation tab |
+
 ### Skill Page (`/marketplace/skills/{name}`)
 
 | YAML Field | Renders As |
@@ -145,10 +171,17 @@ Every field in a manifest maps to a platform action. When a bot is activated, th
 
 See **"What the Platform Does With This Spec"** in [ARCHITECTURE.md](ARCHITECTURE.md) for details on what each field triggers.
 
-## Three-Tier Composability
+## Composability Hierarchy
 
 ```
 Team (restaurant-group)                      ← industry-specific bot group
+ ├── Data Kit (restaurant)                   ← primary domain data package
+ │    ├── Entity Schemas (rest_menu_items, rest_reservations, ...)
+ │    ├── Graph Templates (SUPPLIED_BY, REVIEWED)
+ │    ├── Vector Collections (rest_menu_items, rest_reviews)
+ │    └── Memory Bootstraps (food cost KPIs, industry thresholds)
+ ├── Data Kit (crm-contacts)                 ← horizontal cross-cutting kit
+ ├── Data Kit (financial-ops)                ← horizontal cross-cutting kit
  ├── Bot (executive-assistant)               ← top-level agent [lead]
  │    ├── Skill (daily-briefing)             ← reusable capability
  │    ├── Skill (cross-domain-synthesis)
@@ -165,7 +198,7 @@ Team (restaurant-group)                      ← industry-specific bot group
  └── Bot (marketing-growth)                  ← top-level agent [specialist]
 ```
 
-**Skills** are reusable instructions composed into bots. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart and escalation paths. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
+**Data Kits** are full-stack domain data packages (entity schemas + graph + vectors + memory + sample data). **Skills** are reusable instructions composed into bots. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart, escalation paths, and bundled Data Kits. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
 
 ## Creating Your Own Bot Pack
 
@@ -430,6 +463,22 @@ Bots operate within a three-zone data model:
 
 Data seed files (`data-seeds/`) bootstrap these zones at bot activation.
 
+## Disclaimers
+
+**AI-Generated Output.** Bots in this repository are autonomous AI agents. All output they produce -- reports, recommendations, alerts, drafted content, triaged tickets, and any other artifacts -- is AI-generated and may contain errors, omissions, or hallucinations. Human review is required before acting on any bot output.
+
+**No Professional Advice.** Nothing produced by these bots constitutes financial, legal, medical, tax, compliance, or other professional advice. Bots such as `accountant`, `legal-compliance`, and `hr-onboarding` are operational assistants, not licensed professionals. Always consult qualified professionals for decisions in these domains.
+
+**Platform Dependency.** These bot definitions are specifications only. They require an active SchemaBounce workspace with the OpenCLAW runtime to execute. This repository contains no executable code, no API keys, and no credentials. Bot behavior depends on the platform version, model provider availability, and workspace configuration at the time of activation.
+
+**Data Handling.** Bots read and write data within your workspace's scoped zones. You are responsible for the data you provide (North Star configuration, entity records, secrets) and for ensuring it complies with your organization's data governance and privacy policies. SchemaBounce does not access your workspace data except as described in the platform's privacy policy and terms of service.
+
+**No Warranty.** This repository is provided "AS IS" without warranty of any kind. See the [LICENSE](LICENSE) for the full Apache 2.0 terms.
+
+**Trademarks.** SchemaBounce, ClawSink, OpenCLAW, and Kolumn are trademarks of SchemaBounce, Inc. All other trademarks are the property of their respective owners.
+
 ## License
 
-Apache License 2.0 -- see [LICENSE](LICENSE).
+Copyright 2024-2026 SchemaBounce, Inc.
+
+Apache License 2.0 -- see [LICENSE](LICENSE) and [NOTICE](NOTICE).

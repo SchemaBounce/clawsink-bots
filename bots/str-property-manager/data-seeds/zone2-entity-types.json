@@ -1,0 +1,51 @@
+{
+  "entityTypes": [
+    {
+      "name": "str_properties",
+      "displayName": "Properties",
+      "description": "Vacation rental properties in the portfolio with status, amenities, and configuration",
+      "domain": "portfolio-management",
+      "sampleFields": ["name", "address", "status", "bedrooms", "bathrooms", "max_guests", "amenities", "check_in_method", "house_rules"],
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Property display name"},
+        "address": {"type": "string", "required": true, "description": "Full property address"},
+        "status": {"type": "string", "required": true, "enum": ["active", "blocked", "maintenance", "seasonal_close", "onboarding"], "description": "Current property status"},
+        "bedrooms": {"type": "integer", "description": "Number of bedrooms"},
+        "bathrooms": {"type": "number", "description": "Number of bathrooms"},
+        "max_guests": {"type": "integer", "description": "Maximum guest capacity"},
+        "amenities": {"type": "array", "description": "List of amenities"},
+        "check_in_method": {"type": "string", "description": "Check-in method (smart lock, lockbox, in-person)"},
+        "house_rules": {"type": "string", "description": "Property-specific house rules"}
+      }
+    },
+    {
+      "name": "str_findings",
+      "displayName": "STR Findings",
+      "description": "Portfolio-level findings, briefings, and cross-domain synthesis from the Property Manager",
+      "domain": "portfolio-management",
+      "sampleFields": ["severity", "finding_type", "summary", "action_items", "domain_summaries"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "finding_type": {"type": "string", "required": true, "description": "Type of finding (briefing, analysis, recommendation)"},
+        "summary": {"type": "string", "required": true, "description": "Finding summary"},
+        "action_items": {"type": "array", "description": "Recommended actions"},
+        "domain_summaries": {"type": "object", "description": "Per-domain summary data"}
+      }
+    },
+    {
+      "name": "str_alerts",
+      "displayName": "STR Alerts",
+      "description": "Operational alerts requiring attention across the STR portfolio",
+      "domain": "portfolio-management",
+      "sampleFields": ["severity", "title", "description", "action_required", "source_bot", "property_id"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action"},
+        "source_bot": {"type": "string", "description": "Bot that raised the alert"},
+        "property_id": {"type": "string", "description": "Affected property ID"}
+      }
+    }
+  ]
+}

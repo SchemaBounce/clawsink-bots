@@ -1,0 +1,74 @@
+[
+  {
+    "name": "gov_controls",
+    "displayName": "Compliance Controls",
+    "description": "Compliance controls mapped to regulatory frameworks with effectiveness tracking",
+    "fields": {
+      "control_id": { "type": "string", "required": true, "description": "Unique control identifier (e.g., CC-1.1, AC-2)" },
+      "title": { "type": "string", "required": true, "description": "Control title" },
+      "description": { "type": "string", "required": true, "description": "Detailed control description and objectives" },
+      "framework": { "type": "string", "required": true, "enum": ["soc2", "iso27001", "hipaa", "pci_dss", "gdpr", "nist_csf", "custom"], "description": "Regulatory framework" },
+      "category": { "type": "string", "required": true, "enum": ["access_control", "data_protection", "incident_response", "change_management", "risk_management", "business_continuity", "monitoring"], "description": "Control category" },
+      "status": { "type": "string", "required": true, "enum": ["implemented", "partially_implemented", "planned", "not_applicable", "failed"], "description": "Implementation status" },
+      "effectiveness": { "type": "string", "enum": ["effective", "partially_effective", "ineffective", "not_tested"], "description": "Last assessed effectiveness" },
+      "owner": { "type": "string", "required": true, "description": "Control owner" },
+      "evidence_location": { "type": "string", "description": "Where evidence is stored" },
+      "last_tested": { "type": "date", "description": "Last testing date" },
+      "next_review": { "type": "date", "description": "Next scheduled review date" }
+    }
+  },
+  {
+    "name": "gov_audit_findings",
+    "displayName": "Audit Findings",
+    "description": "Internal and external audit findings with severity, remediation plans, and closure tracking",
+    "fields": {
+      "finding_id": { "type": "string", "required": true, "description": "Unique finding identifier" },
+      "title": { "type": "string", "required": true, "description": "Finding title" },
+      "description": { "type": "string", "required": true, "description": "Detailed finding description" },
+      "audit_type": { "type": "string", "required": true, "enum": ["internal", "external", "regulatory", "self_assessment"], "description": "Type of audit" },
+      "severity": { "type": "string", "required": true, "enum": ["critical", "high", "medium", "low", "informational"], "description": "Finding severity" },
+      "status": { "type": "string", "required": true, "enum": ["open", "in_remediation", "pending_verification", "closed", "accepted_risk"], "description": "Remediation status" },
+      "control_id": { "type": "string", "description": "Related control identifier" },
+      "remediation_plan": { "type": "string", "description": "Planned remediation actions" },
+      "owner": { "type": "string", "required": true, "description": "Finding owner responsible for remediation" },
+      "identified_date": { "type": "date", "required": true, "description": "Date finding was identified" },
+      "target_closure_date": { "type": "date", "description": "Target remediation date" },
+      "actual_closure_date": { "type": "date", "description": "Actual closure date" }
+    }
+  },
+  {
+    "name": "gov_policies",
+    "displayName": "Policies",
+    "description": "Organizational policies with approval workflows, review schedules, and version tracking",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Policy title" },
+      "content": { "type": "string", "required": true, "description": "Full policy content" },
+      "scope": { "type": "string", "required": true, "description": "Who and what this policy applies to" },
+      "category": { "type": "string", "required": true, "enum": ["information_security", "data_privacy", "acceptable_use", "incident_response", "business_continuity", "access_management", "vendor_management", "hr"], "description": "Policy category" },
+      "status": { "type": "string", "required": true, "enum": ["draft", "in_review", "approved", "published", "retired"], "description": "Policy lifecycle status" },
+      "version": { "type": "string", "required": true, "description": "Policy version (e.g., 2.1)" },
+      "owner": { "type": "string", "required": true, "description": "Policy owner" },
+      "approver": { "type": "string", "description": "Policy approver" },
+      "effective_date": { "type": "date", "description": "Date policy becomes effective" },
+      "review_date": { "type": "date", "description": "Next scheduled review date" },
+      "frameworks": { "type": "array", "description": "Regulatory frameworks this policy supports" }
+    }
+  },
+  {
+    "name": "gov_regulatory_changes",
+    "displayName": "Regulatory Changes",
+    "description": "Regulatory updates and changes with impact assessment and organizational response tracking",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Regulatory change title" },
+      "summary": { "type": "string", "required": true, "description": "Summary of the regulatory change" },
+      "affected_areas": { "type": "array", "required": true, "description": "Business areas affected by the change" },
+      "regulation": { "type": "string", "required": true, "description": "Originating regulation or standard" },
+      "jurisdiction": { "type": "string", "required": true, "enum": ["us_federal", "us_state", "eu", "uk", "apac", "global", "industry_specific"], "description": "Regulatory jurisdiction" },
+      "impact_level": { "type": "string", "required": true, "enum": ["critical", "significant", "moderate", "minor"], "description": "Assessed impact on the organization" },
+      "status": { "type": "string", "required": true, "enum": ["monitoring", "assessing", "implementing", "compliant", "non_compliant"], "description": "Response status" },
+      "effective_date": { "type": "date", "required": true, "description": "Date the regulation takes effect" },
+      "response_deadline": { "type": "date", "description": "Internal deadline for compliance response" },
+      "assigned_to": { "type": "string", "description": "Person responsible for assessment and response" }
+    }
+  }
+]

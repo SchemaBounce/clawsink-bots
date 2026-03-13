@@ -1,0 +1,35 @@
+{
+  "entityTypes": [
+    {
+      "name": "str_channel_listings",
+      "displayName": "Channel Listings",
+      "description": "Property listings across booking platforms with sync status and health metrics",
+      "domain": "channel-ops",
+      "sampleFields": ["property_id", "channel", "listing_url", "status", "sync_status", "health_score", "last_synced", "search_rank"],
+      "fields": {
+        "property_id": {"type": "string", "required": true, "description": "Reference to str_properties"},
+        "channel": {"type": "string", "required": true, "enum": ["airbnb", "vrbo", "lodgify", "facebook_marketplace", "direct"], "description": "Booking platform"},
+        "listing_url": {"type": "string", "description": "URL of the listing on the platform"},
+        "status": {"type": "string", "required": true, "enum": ["active", "paused", "snoozed", "delisted"], "description": "Listing status on the platform"},
+        "sync_status": {"type": "string", "enum": ["synced", "pending", "conflict", "error"], "description": "Calendar sync status"},
+        "health_score": {"type": "number", "description": "Listing health score (0-100)"},
+        "last_synced": {"type": "datetime", "description": "Last successful sync timestamp"},
+        "search_rank": {"type": "integer", "description": "Search ranking position on the platform"}
+      }
+    },
+    {
+      "name": "str_findings",
+      "displayName": "STR Findings",
+      "description": "Channel sync findings and listing health reports",
+      "domain": "channel-ops",
+      "sampleFields": ["severity", "finding_type", "summary", "channel", "property_id"]
+    },
+    {
+      "name": "str_alerts",
+      "displayName": "STR Alerts",
+      "description": "Channel sync failures and calendar conflict alerts",
+      "domain": "channel-ops",
+      "sampleFields": ["severity", "title", "description", "channel", "property_id"]
+    }
+  ]
+}

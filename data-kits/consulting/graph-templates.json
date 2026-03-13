@@ -1,0 +1,34 @@
+{
+  "edgeTypes": [
+    {
+      "label": "CLIENT_OF",
+      "description": "Links an engagement to its client organization",
+      "fromEntity": "con_engagements",
+      "toEntity": "con_clients",
+      "properties": {
+        "contract_value": "number",
+        "signed_date": "string"
+      }
+    },
+    {
+      "label": "CREATED_FROM",
+      "description": "Tracks which deliverables were built using knowledge artifacts",
+      "fromEntity": "con_deliverables",
+      "toEntity": "con_knowledge_artifacts",
+      "properties": {
+        "adaptation_level": "string",
+        "time_saved_hours": "number"
+      }
+    },
+    {
+      "label": "USES",
+      "description": "Connects engagements to the knowledge artifacts they leverage",
+      "fromEntity": "con_engagements",
+      "toEntity": "con_knowledge_artifacts",
+      "properties": {
+        "relevance_score": "number",
+        "usage_context": "string"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "re_listings",
+      "description": "Semantic search over property listings by address, description, and features for buyer matching",
+      "sourceEntity": "re_listings",
+      "embeddingFields": ["address", "description", "features"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

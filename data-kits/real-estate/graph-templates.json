@@ -1,0 +1,36 @@
+{
+  "edgeTypes": [
+    {
+      "label": "VIEWED",
+      "description": "Links a client to a listing they viewed during a showing",
+      "fromEntity": "re_clients",
+      "toEntity": "re_listings",
+      "properties": {
+        "showing_date": "string",
+        "interest_level": "string",
+        "feedback_summary": "string"
+      }
+    },
+    {
+      "label": "MADE_OFFER",
+      "description": "Links a buyer client to a listing they made an offer on",
+      "fromEntity": "re_clients",
+      "toEntity": "re_listings",
+      "properties": {
+        "offer_price": "number",
+        "offer_status": "string",
+        "offer_date": "string"
+      }
+    },
+    {
+      "label": "OWNED_BY",
+      "description": "Links a listing to its seller/owner client",
+      "fromEntity": "re_listings",
+      "toEntity": "re_clients",
+      "properties": {
+        "ownership_type": "string",
+        "years_owned": "number"
+      }
+    }
+  ]
+}

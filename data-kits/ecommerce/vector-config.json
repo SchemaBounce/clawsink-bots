@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "ec_products",
+      "description": "Semantic search over product catalog by name, description, and tags for product discovery and recommendation",
+      "sourceEntity": "ec_products",
+      "embeddingFields": ["name", "description", "tags"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

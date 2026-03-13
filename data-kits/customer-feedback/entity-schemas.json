@@ -1,0 +1,78 @@
+[
+  {
+    "name": "fb_tickets",
+    "displayName": "Support Tickets",
+    "description": "Customer support tickets with severity, SLA tracking, and resolution data. Enhanced from shared/domain-schemas/support.json",
+    "fields": {
+      "subject": { "type": "string", "required": true, "description": "Ticket subject line" },
+      "description": { "type": "string", "required": true, "description": "Detailed issue description" },
+      "customer_email": { "type": "string", "required": true, "description": "Customer email address" },
+      "customer_name": { "type": "string", "required": true, "description": "Customer name" },
+      "company": { "type": "string", "description": "Customer company name" },
+      "severity": { "type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Issue severity" },
+      "category": { "type": "string", "required": true, "enum": ["bug", "question", "feature_request", "billing", "onboarding", "integration", "performance", "security"], "description": "Ticket category" },
+      "status": { "type": "string", "required": true, "enum": ["open", "in_progress", "waiting_customer", "waiting_internal", "resolved", "closed"], "description": "Ticket status" },
+      "channel": { "type": "string", "required": true, "enum": ["email", "chat", "phone", "portal", "social", "api"], "description": "Channel the ticket was submitted through" },
+      "assignee": { "type": "string", "description": "Assigned support agent" },
+      "priority_level": { "type": "string", "enum": ["standard", "premium", "enterprise"], "description": "Customer support tier" },
+      "created_at": { "type": "date", "required": true, "description": "Ticket creation timestamp" },
+      "first_response_at": { "type": "date", "description": "First agent response timestamp" },
+      "resolved_at": { "type": "date", "description": "Resolution timestamp" },
+      "satisfaction_score": { "type": "number", "description": "Post-resolution CSAT score (1-5)" }
+    }
+  },
+  {
+    "name": "fb_reviews",
+    "displayName": "Product Reviews",
+    "description": "Product and service reviews from multiple platforms with rating and sentiment data",
+    "fields": {
+      "reviewer_name": { "type": "string", "required": true, "description": "Name of the reviewer" },
+      "platform": { "type": "string", "required": true, "enum": ["g2", "capterra", "trustpilot", "google", "app_store", "product_hunt", "internal"], "description": "Review platform" },
+      "rating": { "type": "number", "required": true, "description": "Star rating (1-5)" },
+      "review_text": { "type": "string", "required": true, "description": "Full review text" },
+      "title": { "type": "string", "description": "Review title/headline" },
+      "sentiment": { "type": "string", "enum": ["positive", "neutral", "negative", "mixed"], "description": "Detected sentiment" },
+      "verified_user": { "type": "boolean", "description": "Whether the reviewer is a verified customer" },
+      "product_area": { "type": "string", "description": "Product area referenced in the review" },
+      "review_date": { "type": "date", "required": true, "description": "Date the review was published" },
+      "response_text": { "type": "string", "description": "Company response to the review" },
+      "response_date": { "type": "date", "description": "Date the company responded" }
+    }
+  },
+  {
+    "name": "fb_nps_responses",
+    "displayName": "NPS Responses",
+    "description": "Net Promoter Score survey responses with scoring, segmentation, and follow-up tracking",
+    "fields": {
+      "respondent_email": { "type": "string", "required": true, "description": "Survey respondent email" },
+      "respondent_name": { "type": "string", "description": "Survey respondent name" },
+      "company": { "type": "string", "description": "Respondent company name" },
+      "score": { "type": "number", "required": true, "description": "NPS score (0-10)" },
+      "segment": { "type": "string", "required": true, "enum": ["detractor", "passive", "promoter"], "description": "NPS segment based on score" },
+      "feedback": { "type": "string", "description": "Open-ended feedback text" },
+      "survey_trigger": { "type": "string", "required": true, "enum": ["quarterly", "post_onboarding", "post_support", "annual", "milestone"], "description": "What triggered this survey" },
+      "plan_tier": { "type": "string", "enum": ["free", "starter", "team", "scale", "enterprise"], "description": "Customer plan at time of survey" },
+      "survey_date": { "type": "date", "required": true, "description": "Date survey was completed" },
+      "follow_up_status": { "type": "string", "enum": ["none", "scheduled", "completed", "declined"], "description": "Follow-up action status" }
+    }
+  },
+  {
+    "name": "fb_feature_requests",
+    "displayName": "Feature Requests",
+    "description": "Customer feature requests with voting, prioritization, use case documentation, and delivery tracking",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Feature request title" },
+      "description": { "type": "string", "required": true, "description": "Detailed feature description" },
+      "use_case": { "type": "string", "required": true, "description": "Business use case driving the request" },
+      "requester_email": { "type": "string", "required": true, "description": "Original requester email" },
+      "requester_company": { "type": "string", "description": "Requester company name" },
+      "status": { "type": "string", "required": true, "enum": ["submitted", "under_review", "planned", "in_progress", "shipped", "declined"], "description": "Feature request lifecycle status" },
+      "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"], "description": "Internal priority assessment" },
+      "votes": { "type": "number", "description": "Number of customer votes" },
+      "product_area": { "type": "string", "description": "Product area the feature belongs to" },
+      "submitted_at": { "type": "date", "required": true, "description": "Submission date" },
+      "shipped_at": { "type": "date", "description": "Date the feature was shipped" },
+      "source_ticket_id": { "type": "string", "description": "Support ticket that originated this request" }
+    }
+  }
+]

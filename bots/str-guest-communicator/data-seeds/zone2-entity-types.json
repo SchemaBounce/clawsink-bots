@@ -1,0 +1,71 @@
+{
+  "entityTypes": [
+    {
+      "name": "str_messages",
+      "displayName": "Guest Messages",
+      "description": "Inbound and outbound guest messages across all booking channels",
+      "domain": "guest-relations",
+      "sampleFields": ["guest_id", "booking_id", "property_id", "channel", "direction", "message_type", "content", "status", "responded_at"],
+      "fields": {
+        "guest_id": {"type": "string", "required": true, "description": "Reference to str_guests"},
+        "booking_id": {"type": "string", "description": "Reference to str_bookings (if applicable)"},
+        "property_id": {"type": "string", "required": true, "description": "Reference to str_properties"},
+        "channel": {"type": "string", "required": true, "description": "Source platform (airbnb, vrbo, etc.)"},
+        "direction": {"type": "string", "required": true, "enum": ["inbound", "outbound"], "description": "Message direction"},
+        "message_type": {"type": "string", "enum": ["pre_booking_inquiry", "check_in_instructions", "during_stay_request", "post_stay_followup", "emergency", "general"], "description": "Message category"},
+        "content": {"type": "string", "required": true, "description": "Message content"},
+        "status": {"type": "string", "enum": ["pending", "drafted", "sent", "escalated"], "description": "Message processing status"},
+        "responded_at": {"type": "datetime", "description": "When the response was sent"}
+      }
+    },
+    {
+      "name": "str_guests",
+      "displayName": "Guests",
+      "description": "Guest profiles with communication preferences and stay history",
+      "domain": "guest-relations",
+      "sampleFields": ["name", "email", "phone", "channel", "total_stays", "average_rating_given", "language", "notes"],
+      "fields": {
+        "name": {"type": "string", "required": true, "description": "Guest full name"},
+        "email": {"type": "string", "description": "Guest email"},
+        "phone": {"type": "string", "description": "Guest phone number"},
+        "channel": {"type": "string", "description": "Primary booking channel"},
+        "total_stays": {"type": "integer", "description": "Number of completed stays"},
+        "average_rating_given": {"type": "number", "description": "Average rating this guest gives"},
+        "language": {"type": "string", "description": "Preferred language"},
+        "notes": {"type": "string", "description": "Host notes about this guest"}
+      }
+    },
+    {
+      "name": "str_bookings",
+      "displayName": "Bookings",
+      "description": "Reservation records across all booking channels",
+      "domain": "guest-relations",
+      "sampleFields": ["guest_id", "property_id", "channel", "check_in", "check_out", "status", "guests_count", "total_price", "nightly_rate"],
+      "fields": {
+        "guest_id": {"type": "string", "required": true, "description": "Reference to str_guests"},
+        "property_id": {"type": "string", "required": true, "description": "Reference to str_properties"},
+        "channel": {"type": "string", "required": true, "description": "Booking platform"},
+        "check_in": {"type": "date", "required": true, "description": "Check-in date"},
+        "check_out": {"type": "date", "required": true, "description": "Check-out date"},
+        "status": {"type": "string", "required": true, "enum": ["inquiry", "pending", "confirmed", "checked_in", "checked_out", "cancelled"], "description": "Booking status"},
+        "guests_count": {"type": "integer", "description": "Number of guests"},
+        "total_price": {"type": "number", "description": "Total booking price"},
+        "nightly_rate": {"type": "number", "description": "Nightly rate for this booking"}
+      }
+    },
+    {
+      "name": "str_findings",
+      "displayName": "STR Findings",
+      "description": "Guest communication findings and response time metrics",
+      "domain": "guest-relations",
+      "sampleFields": ["severity", "finding_type", "summary", "response_time_avg"]
+    },
+    {
+      "name": "str_alerts",
+      "displayName": "STR Alerts",
+      "description": "Guest emergency and escalation alerts",
+      "domain": "guest-relations",
+      "sampleFields": ["severity", "title", "description", "guest_id", "property_id"]
+    }
+  ]
+}

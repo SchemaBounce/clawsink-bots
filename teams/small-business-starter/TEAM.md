@@ -17,6 +17,13 @@ bots:
   - ref: "bots/customer-support@1.0.0"
   - ref: "bots/marketing-growth@1.0.0"
   - ref: "bots/legal-compliance@1.0.0"
+dataKits:
+  - ref: "data-kits/crm-contacts@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "General Small Business"
   context: "Solo founder or small team looking to automate operations"

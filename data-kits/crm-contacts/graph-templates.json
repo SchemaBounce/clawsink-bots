@@ -1,0 +1,25 @@
+{
+  "edgeTypes": [
+    {
+      "label": "WORKS_AT",
+      "description": "Links a contact to the company they work at",
+      "fromEntity": "crm_contacts",
+      "toEntity": "crm_companies",
+      "properties": {
+        "title": "string",
+        "since": "date",
+        "is_primary_contact": "boolean"
+      }
+    },
+    {
+      "label": "RELATED_TO",
+      "description": "Links a deal to the contacts involved in the opportunity",
+      "fromEntity": "crm_deals",
+      "toEntity": "crm_contacts",
+      "properties": {
+        "role": "string",
+        "influence_level": "string"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "con_knowledge_artifacts",
+      "description": "Semantic search over consulting knowledge base — frameworks, templates, methodologies, and case studies",
+      "sourceEntity": "con_knowledge_artifacts",
+      "embeddingFields": ["title", "content", "methodology"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

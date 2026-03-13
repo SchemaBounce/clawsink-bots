@@ -31,6 +31,16 @@ plugins:
     config:
       embedding_model: "text-embedding-3-small"
       max_results: 20
+dataKits:
+  - ref: "data-kits/saas@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/customer-feedback@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/content-marketing@1.0.0"
+    required: false
+    installSampleData: false
 orgChart:
   lead: sales-pipeline
   roles:

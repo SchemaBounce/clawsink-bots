@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "saas_nps_scores",
+      "description": "Semantic search over NPS free-text feedback for sentiment analysis and theme detection",
+      "sourceEntity": "saas_nps_scores",
+      "embeddingFields": ["feedback_text"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

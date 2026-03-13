@@ -1,0 +1,34 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all properties and their upcoming bookings. Identify checkout/check-in pairs that need turnover scheduling. Check for any same-day turnovers that need priority assignment."
+    },
+    {
+      "namespace": "cleaner_roster",
+      "key": "init",
+      "value": "No cleaners registered yet. Will track per cleaner: name, phone, availability days/hours, assigned properties, on-time completion rate, quality score average, backup status (primary vs. backup for each property)."
+    },
+    {
+      "namespace": "cleaner_roster",
+      "key": "scheduling_rules",
+      "value": "Scheduling rules: Assign primary cleaner first, fall back to backup if primary unavailable. Same-day turnovers get assigned 24 hours in advance. Standard turnovers assigned 48 hours in advance. Never assign more than 3 turnovers per cleaner per day. Allow 30 minutes travel time between properties."
+    },
+    {
+      "namespace": "maintenance_log",
+      "key": "init",
+      "value": "No maintenance issues logged yet. Will track: property, issue description, severity (cosmetic/functional/safety), reported date, resolution status. Safety issues escalate immediately to Property Manager."
+    },
+    {
+      "namespace": "maintenance_log",
+      "key": "cleaning_checklist",
+      "value": "Standard cleaning checklist: Kitchen (counters, appliances, dishes, trash), Bathrooms (toilet, shower, sink, mirrors, towels), Bedrooms (linens, make beds, dust), Living areas (vacuum/mop, dust, organize), Exterior (sweep porch/patio, check outdoor furniture), Supplies (toilet paper, paper towels, soap, shampoo, coffee), Final (thermostat to welcome temp, lights off except entry, lock all doors)."
+    },
+    {
+      "namespace": "maintenance_log",
+      "key": "turnaround_targets",
+      "value": "Turnaround time targets by property size: Studio/1BR — 1.5 hours. 2BR — 2 hours. 3BR — 2.5 hours. 4BR+ — 3 hours. Deep clean (every 5th turnover): add 1 hour. Post-pet stay: add 30 minutes."
+    }
+  ]
+}

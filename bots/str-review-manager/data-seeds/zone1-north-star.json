@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "review_response_target",
+      "value": "Draft host response within 24 hours of review posting. Negative reviews (3 stars or below) escalated immediately.",
+      "description": "Response time targets for review management"
+    },
+    {
+      "key": "rating_alert_thresholds",
+      "value": "Property average drops below 4.5: alert. Property average drops below 4.3: critical alert. Three consecutive reviews below 4 stars: pattern alert.",
+      "description": "When rating trends should trigger alerts"
+    }
+  ]
+}

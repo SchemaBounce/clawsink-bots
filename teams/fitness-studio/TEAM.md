@@ -19,6 +19,16 @@ bots:
   - ref: "bots/marketing-growth@1.0.0"
   - ref: "bots/accountant@1.0.0"
   - ref: "bots/content-scheduler@1.0.0"
+dataKits:
+  - ref: "data-kits/fitness@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/crm-contacts@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/customer-feedback@1.0.0"
+    required: false
+    installSampleData: false
 requirements:
   minTier: "starter"
 northStar:

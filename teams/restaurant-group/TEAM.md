@@ -20,6 +20,19 @@ bots:
   - ref: "bots/inventory-alert@1.0.0"
   - ref: "bots/customer-support@1.0.0"
   - ref: "bots/marketing-growth@1.0.0"
+dataKits:
+  - ref: "data-kits/restaurant@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/crm-contacts@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/customer-feedback@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "Restaurant / Food Service"
   context: "Restaurant owners or small chains managing daily operations — food costs, inventory waste, customer complaints, and local marketing"

@@ -1,0 +1,388 @@
+{
+  "records": {
+    "saas_accounts": [
+      {
+        "company_name": "Acme Corp",
+        "domain": "acmecorp.com",
+        "plan_tier": "professional",
+        "mrr": 2499.00,
+        "status": "active",
+        "employee_count": 150,
+        "industry": "Manufacturing",
+        "signup_date": "2025-06-15",
+        "owner_email": "sarah.chen@acmecorp.com",
+        "tags": ["mid-market", "manufacturing"]
+      },
+      {
+        "company_name": "Bright Analytics",
+        "domain": "brightanalytics.io",
+        "plan_tier": "enterprise",
+        "mrr": 8999.00,
+        "status": "active",
+        "employee_count": 520,
+        "industry": "Technology",
+        "signup_date": "2025-03-01",
+        "owner_email": "james.wu@brightanalytics.io",
+        "tags": ["enterprise", "technology", "champion"]
+      },
+      {
+        "company_name": "CloudFirst Solutions",
+        "domain": "cloudfirst.dev",
+        "plan_tier": "starter",
+        "mrr": 149.00,
+        "status": "active",
+        "employee_count": 12,
+        "industry": "Technology",
+        "signup_date": "2025-11-20",
+        "owner_email": "maria.gonzalez@cloudfirst.dev",
+        "tags": ["startup", "technology"]
+      },
+      {
+        "company_name": "DataWave Inc",
+        "domain": "datawave.com",
+        "plan_tier": "professional",
+        "mrr": 1899.00,
+        "status": "past_due",
+        "employee_count": 85,
+        "industry": "Financial Services",
+        "signup_date": "2025-08-10",
+        "owner_email": "tom.baker@datawave.com",
+        "tags": ["mid-market", "fintech", "at-risk"]
+      },
+      {
+        "company_name": "EduLearn Platform",
+        "domain": "edulearn.co",
+        "plan_tier": "free",
+        "mrr": 0,
+        "status": "trial",
+        "employee_count": 5,
+        "industry": "Education",
+        "signup_date": "2026-02-28",
+        "owner_email": "priya.sharma@edulearn.co",
+        "tags": ["trial", "education"]
+      },
+      {
+        "company_name": "GreenField Logistics",
+        "domain": "greenfieldlogistics.com",
+        "plan_tier": "professional",
+        "mrr": 2499.00,
+        "status": "active",
+        "employee_count": 210,
+        "industry": "Logistics",
+        "signup_date": "2025-04-22",
+        "owner_email": "david.park@greenfieldlogistics.com",
+        "tags": ["mid-market", "logistics"]
+      },
+      {
+        "company_name": "Pixel Perfect Design",
+        "domain": "pixelperfect.studio",
+        "plan_tier": "starter",
+        "mrr": 299.00,
+        "status": "churned",
+        "employee_count": 18,
+        "industry": "Creative Services",
+        "signup_date": "2025-09-05",
+        "owner_email": "lisa.kim@pixelperfect.studio",
+        "tags": ["churned", "creative"]
+      }
+    ],
+    "saas_subscriptions": [
+      {
+        "account_id": "acme-corp",
+        "plan_name": "Professional",
+        "billing_cycle": "annual",
+        "amount": 24990.00,
+        "status": "active",
+        "start_date": "2025-06-15",
+        "renewal_date": "2026-06-15",
+        "seats": 25,
+        "discount_percent": 17
+      },
+      {
+        "account_id": "bright-analytics",
+        "plan_name": "Enterprise",
+        "billing_cycle": "annual",
+        "amount": 95988.00,
+        "status": "active",
+        "start_date": "2025-03-01",
+        "renewal_date": "2026-03-01",
+        "seats": 100,
+        "discount_percent": 11
+      },
+      {
+        "account_id": "cloudfirst-solutions",
+        "plan_name": "Starter",
+        "billing_cycle": "monthly",
+        "amount": 149.00,
+        "status": "active",
+        "start_date": "2025-11-20",
+        "renewal_date": "2026-04-20",
+        "seats": 5,
+        "discount_percent": 0
+      },
+      {
+        "account_id": "datawave-inc",
+        "plan_name": "Professional",
+        "billing_cycle": "quarterly",
+        "amount": 5397.00,
+        "status": "past_due",
+        "start_date": "2025-08-10",
+        "renewal_date": "2026-02-10",
+        "seats": 15,
+        "discount_percent": 5
+      },
+      {
+        "account_id": "edulearn-platform",
+        "plan_name": "Free Trial",
+        "billing_cycle": "monthly",
+        "amount": 0,
+        "status": "trialing",
+        "start_date": "2026-02-28",
+        "renewal_date": "2026-03-28",
+        "seats": 3,
+        "discount_percent": 0
+      },
+      {
+        "account_id": "greenfield-logistics",
+        "plan_name": "Professional",
+        "billing_cycle": "annual",
+        "amount": 24990.00,
+        "status": "active",
+        "start_date": "2025-04-22",
+        "renewal_date": "2026-04-22",
+        "seats": 30,
+        "discount_percent": 17
+      },
+      {
+        "account_id": "pixel-perfect-design",
+        "plan_name": "Starter",
+        "billing_cycle": "monthly",
+        "amount": 299.00,
+        "status": "cancelled",
+        "start_date": "2025-09-05",
+        "cancelled_at": "2026-01-15",
+        "seats": 8,
+        "discount_percent": 0
+      }
+    ],
+    "saas_feature_usage": [
+      {
+        "account_id": "acme-corp",
+        "feature_name": "Dashboard Builder",
+        "feature_category": "core",
+        "usage_count": 342,
+        "unique_users": 12,
+        "first_used_at": "2025-06-16",
+        "last_used_at": "2026-03-12",
+        "is_activated": true
+      },
+      {
+        "account_id": "acme-corp",
+        "feature_name": "API Integrations",
+        "feature_category": "integration",
+        "usage_count": 1580,
+        "unique_users": 4,
+        "first_used_at": "2025-07-01",
+        "last_used_at": "2026-03-13",
+        "is_activated": true
+      },
+      {
+        "account_id": "bright-analytics",
+        "feature_name": "Advanced Reports",
+        "feature_category": "reporting",
+        "usage_count": 2105,
+        "unique_users": 45,
+        "first_used_at": "2025-03-02",
+        "last_used_at": "2026-03-13",
+        "is_activated": true
+      },
+      {
+        "account_id": "bright-analytics",
+        "feature_name": "Team Management",
+        "feature_category": "admin",
+        "usage_count": 89,
+        "unique_users": 3,
+        "first_used_at": "2025-03-05",
+        "last_used_at": "2026-03-10",
+        "is_activated": true
+      },
+      {
+        "account_id": "cloudfirst-solutions",
+        "feature_name": "Dashboard Builder",
+        "feature_category": "core",
+        "usage_count": 28,
+        "unique_users": 2,
+        "first_used_at": "2025-11-21",
+        "last_used_at": "2026-03-08",
+        "is_activated": true
+      },
+      {
+        "account_id": "datawave-inc",
+        "feature_name": "Dashboard Builder",
+        "feature_category": "core",
+        "usage_count": 5,
+        "unique_users": 1,
+        "first_used_at": "2025-08-11",
+        "last_used_at": "2025-12-20",
+        "is_activated": false
+      },
+      {
+        "account_id": "greenfield-logistics",
+        "feature_name": "Workflow Automations",
+        "feature_category": "advanced",
+        "usage_count": 756,
+        "unique_users": 8,
+        "first_used_at": "2025-05-10",
+        "last_used_at": "2026-03-13",
+        "is_activated": true
+      },
+      {
+        "account_id": "greenfield-logistics",
+        "feature_name": "API Integrations",
+        "feature_category": "integration",
+        "usage_count": 3200,
+        "unique_users": 5,
+        "first_used_at": "2025-05-15",
+        "last_used_at": "2026-03-13",
+        "is_activated": true
+      }
+    ],
+    "saas_onboarding_progress": [
+      {
+        "account_id": "edulearn-platform",
+        "step_name": "Create Account",
+        "step_order": 1,
+        "status": "completed",
+        "started_at": "2026-02-28",
+        "completed_at": "2026-02-28",
+        "duration_minutes": 3,
+        "assigned_to": "priya.sharma@edulearn.co"
+      },
+      {
+        "account_id": "edulearn-platform",
+        "step_name": "Invite Team Members",
+        "step_order": 2,
+        "status": "completed",
+        "started_at": "2026-02-28",
+        "completed_at": "2026-03-01",
+        "duration_minutes": 15,
+        "assigned_to": "priya.sharma@edulearn.co"
+      },
+      {
+        "account_id": "edulearn-platform",
+        "step_name": "Connect First Data Source",
+        "step_order": 3,
+        "status": "in_progress",
+        "started_at": "2026-03-02",
+        "duration_minutes": null,
+        "assigned_to": "priya.sharma@edulearn.co"
+      },
+      {
+        "account_id": "edulearn-platform",
+        "step_name": "Build First Dashboard",
+        "step_order": 4,
+        "status": "not_started",
+        "assigned_to": "priya.sharma@edulearn.co"
+      },
+      {
+        "account_id": "edulearn-platform",
+        "step_name": "Set Up Alerts",
+        "step_order": 5,
+        "status": "not_started",
+        "assigned_to": "priya.sharma@edulearn.co"
+      },
+      {
+        "account_id": "cloudfirst-solutions",
+        "step_name": "Create Account",
+        "step_order": 1,
+        "status": "completed",
+        "started_at": "2025-11-20",
+        "completed_at": "2025-11-20",
+        "duration_minutes": 2,
+        "assigned_to": "maria.gonzalez@cloudfirst.dev"
+      },
+      {
+        "account_id": "cloudfirst-solutions",
+        "step_name": "Invite Team Members",
+        "step_order": 2,
+        "status": "completed",
+        "started_at": "2025-11-20",
+        "completed_at": "2025-11-21",
+        "duration_minutes": 10,
+        "assigned_to": "maria.gonzalez@cloudfirst.dev"
+      },
+      {
+        "account_id": "cloudfirst-solutions",
+        "step_name": "Connect First Data Source",
+        "step_order": 3,
+        "status": "completed",
+        "started_at": "2025-11-21",
+        "completed_at": "2025-11-22",
+        "duration_minutes": 45,
+        "assigned_to": "maria.gonzalez@cloudfirst.dev"
+      }
+    ],
+    "saas_nps_scores": [
+      {
+        "account_id": "acme-corp",
+        "respondent_email": "sarah.chen@acmecorp.com",
+        "score": 9,
+        "category": "promoter",
+        "feedback_text": "The platform has transformed how we track production metrics. Dashboard builder is incredibly intuitive and the API integrations save us hours every week.",
+        "submitted_at": "2026-01-15",
+        "survey_trigger": "quarterly",
+        "follow_up_status": "no_action"
+      },
+      {
+        "account_id": "bright-analytics",
+        "respondent_email": "james.wu@brightanalytics.io",
+        "score": 10,
+        "category": "promoter",
+        "feedback_text": "Best analytics platform we've used. The team management features and advanced reporting capabilities are exactly what we needed at our scale. Already recommended to three other companies.",
+        "submitted_at": "2026-02-01",
+        "survey_trigger": "quarterly",
+        "follow_up_status": "no_action"
+      },
+      {
+        "account_id": "datawave-inc",
+        "respondent_email": "tom.baker@datawave.com",
+        "score": 4,
+        "category": "detractor",
+        "feedback_text": "Onboarding was confusing and we still haven't figured out how to connect our PostgreSQL database. Support response times have been slow. Considering switching to a competitor.",
+        "submitted_at": "2025-12-10",
+        "survey_trigger": "post_onboarding",
+        "follow_up_status": "contacted"
+      },
+      {
+        "account_id": "greenfield-logistics",
+        "respondent_email": "david.park@greenfieldlogistics.com",
+        "score": 8,
+        "category": "passive",
+        "feedback_text": "Good product overall. The workflow automations are powerful but the learning curve is steep. Would love more template workflows for logistics use cases.",
+        "submitted_at": "2026-01-20",
+        "survey_trigger": "quarterly",
+        "follow_up_status": "no_action"
+      },
+      {
+        "account_id": "pixel-perfect-design",
+        "respondent_email": "lisa.kim@pixelperfect.studio",
+        "score": 3,
+        "category": "detractor",
+        "feedback_text": "The starter plan is too limited for a design agency. We needed more integrations with Figma and Adobe tools but they're only available on Professional. Price jump was too steep for our size.",
+        "submitted_at": "2025-12-20",
+        "survey_trigger": "quarterly",
+        "follow_up_status": "resolved"
+      },
+      {
+        "account_id": "cloudfirst-solutions",
+        "respondent_email": "maria.gonzalez@cloudfirst.dev",
+        "score": 7,
+        "category": "passive",
+        "feedback_text": "Decent starter experience. We're a small team so the price point works. Would appreciate better developer docs and a CLI tool for automation.",
+        "submitted_at": "2026-02-15",
+        "survey_trigger": "post_onboarding",
+        "follow_up_status": "no_action"
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+[
+  {
+    "name": "con_engagements",
+    "displayName": "Engagements",
+    "description": "Active consulting projects with scope, timeline, and billing configuration",
+    "fields": {
+      "title": {"type": "string", "required": true, "description": "Engagement title"},
+      "client_id": {"type": "string", "required": true, "description": "Reference to con_clients"},
+      "status": {"type": "string", "required": true, "enum": ["proposal", "active", "on_hold", "completed", "cancelled"], "description": "Current engagement status"},
+      "engagement_type": {"type": "string", "required": true, "enum": ["strategy", "operations", "technology", "organizational", "due_diligence", "transformation"], "description": "Type of consulting engagement"},
+      "start_date": {"type": "date", "required": true, "description": "Engagement start date"},
+      "end_date": {"type": "date", "description": "Planned or actual end date"},
+      "budget": {"type": "number", "required": true, "description": "Total engagement budget in USD"},
+      "billing_model": {"type": "string", "required": true, "enum": ["time_and_materials", "fixed_fee", "retainer", "success_fee"], "description": "How the engagement is billed"},
+      "lead_consultant": {"type": "string", "required": true, "description": "Name of the engagement lead"},
+      "team_size": {"type": "number", "description": "Number of consultants assigned"}
+    }
+  },
+  {
+    "name": "con_time_entries",
+    "displayName": "Time Entries",
+    "description": "Consultant time tracking records with billable classification",
+    "fields": {
+      "engagement_id": {"type": "string", "required": true, "description": "Reference to con_engagements"},
+      "consultant_name": {"type": "string", "required": true, "description": "Name of the consultant"},
+      "date": {"type": "date", "required": true, "description": "Date of work performed"},
+      "hours": {"type": "number", "required": true, "description": "Hours worked"},
+      "billable": {"type": "boolean", "required": true, "description": "Whether time is billable to client"},
+      "activity_type": {"type": "string", "required": true, "enum": ["research", "analysis", "client_meeting", "workshop", "deliverable_creation", "travel", "internal", "admin"], "description": "Category of work performed"},
+      "description": {"type": "string", "required": true, "description": "Description of work performed"},
+      "hourly_rate": {"type": "number", "description": "Billing rate for this entry in USD"}
+    }
+  },
+  {
+    "name": "con_deliverables",
+    "displayName": "Deliverables",
+    "description": "Work products and outputs tied to consulting engagements",
+    "fields": {
+      "title": {"type": "string", "required": true, "description": "Deliverable title"},
+      "engagement_id": {"type": "string", "required": true, "description": "Reference to con_engagements"},
+      "deliverable_type": {"type": "string", "required": true, "enum": ["report", "presentation", "model", "workshop_output", "implementation_plan", "assessment", "playbook"], "description": "Type of deliverable"},
+      "status": {"type": "string", "required": true, "enum": ["draft", "in_review", "approved", "delivered", "archived"], "description": "Current status"},
+      "due_date": {"type": "date", "required": true, "description": "Delivery deadline"},
+      "owner": {"type": "string", "required": true, "description": "Consultant responsible for this deliverable"},
+      "description": {"type": "string", "description": "Summary of deliverable contents"},
+      "hours_invested": {"type": "number", "description": "Total hours spent creating this deliverable"},
+      "knowledge_artifacts_used": {"type": "array", "description": "List of con_knowledge_artifacts IDs leveraged"}
+    }
+  },
+  {
+    "name": "con_clients",
+    "displayName": "Clients",
+    "description": "Client organizations with contract and relationship details",
+    "fields": {
+      "name": {"type": "string", "required": true, "description": "Client organization name"},
+      "industry": {"type": "string", "required": true, "description": "Client industry sector"},
+      "size": {"type": "string", "enum": ["startup", "smb", "mid_market", "enterprise", "public_sector"], "description": "Organization size category"},
+      "primary_contact": {"type": "string", "required": true, "description": "Main client contact name"},
+      "contact_email": {"type": "string", "required": true, "description": "Primary contact email"},
+      "relationship_start": {"type": "date", "description": "Date client relationship began"},
+      "lifetime_revenue": {"type": "number", "description": "Total revenue from this client in USD"},
+      "nps_score": {"type": "number", "description": "Net Promoter Score from last survey (-100 to 100)"},
+      "account_tier": {"type": "string", "enum": ["strategic", "key", "standard", "dormant"], "description": "Client account classification"},
+      "notes": {"type": "string", "description": "Relationship notes and context"}
+    }
+  },
+  {
+    "name": "con_knowledge_artifacts",
+    "displayName": "Knowledge Artifacts",
+    "description": "Reusable frameworks, templates, and methodologies from past engagements",
+    "fields": {
+      "title": {"type": "string", "required": true, "description": "Artifact title"},
+      "content": {"type": "string", "required": true, "description": "Summary of the artifact content and methodology"},
+      "artifact_type": {"type": "string", "required": true, "enum": ["framework", "template", "case_study", "methodology", "benchmark", "tool", "checklist"], "description": "Type of knowledge artifact"},
+      "domain": {"type": "string", "required": true, "description": "Business domain this artifact applies to"},
+      "methodology": {"type": "string", "description": "Specific methodology or approach used"},
+      "source_engagement_id": {"type": "string", "description": "Engagement that originally produced this artifact"},
+      "reuse_count": {"type": "number", "description": "Number of times this artifact has been used in engagements"},
+      "last_updated": {"type": "date", "description": "Last revision date"},
+      "tags": {"type": "array", "description": "Searchable topic tags"},
+      "quality_rating": {"type": "number", "description": "Peer-reviewed quality score (1-5)"}
+    }
+  }
+]

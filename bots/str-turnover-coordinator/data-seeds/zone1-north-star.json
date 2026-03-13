@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "turnover_time_windows",
+      "value": "Standard window: checkout 11:00 AM to check-in 3:00 PM (4 hours). Minimum safe window: 3 hours. Back-to-back same-day turnovers flagged as high priority.",
+      "description": "Time constraints for turnover scheduling"
+    },
+    {
+      "key": "late_turnover_threshold",
+      "value": "Alert fires when cleaning has not started and check-in is within 2 hours. Critical alert when check-in is within 1 hour and turnover incomplete.",
+      "description": "When to escalate late or at-risk turnovers"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all properties and their current listing descriptions across channels. Audit listing completeness and identify content gaps. Establish content calendar for the next quarter."
+    },
+    {
+      "namespace": "seo_insights",
+      "key": "airbnb_listing_tips",
+      "value": "Airbnb listing optimization: Title limited to 50 chars — lead with unique selling point ('Oceanfront Cottage' not 'Nice Beach House'). First 3 lines of description are visible without clicking 'Read more' — put best content there. Use all 5 highlight sections. Mention neighborhood, walkability, and proximity to attractions. Update photos seasonally."
+    },
+    {
+      "namespace": "seo_insights",
+      "key": "vrbo_listing_tips",
+      "value": "VRBO listing optimization: Headline can be longer (80 chars). Emphasize family-friendly features: safety gates, high chairs, game rooms, pool fences. Detail the full amenity list — VRBO guests search by amenities more than Airbnb guests. Include accurate square footage. Highlight nearby family activities."
+    },
+    {
+      "namespace": "seo_insights",
+      "key": "lodgify_seo",
+      "value": "Direct booking SEO: Use location + property type keywords in title and URL slug ('myrtle-beach-oceanfront-condo'). Write 300+ word descriptions with natural keyword usage. Include FAQ section for long-tail search queries. Blog posts about local attractions drive organic traffic to direct booking site."
+    },
+    {
+      "namespace": "seo_insights",
+      "key": "facebook_marketplace",
+      "value": "Facebook Marketplace tips: Price must be the first thing visible. Use bright, high-quality hero photo (living room or outdoor space, not bedroom). Keep description under 200 words — casual tone, bullet points. Re-post every 2 weeks to refresh algorithm visibility. Respond to comments quickly — engagement boosts reach."
+    },
+    {
+      "namespace": "content_calendar",
+      "key": "init",
+      "value": "No content calendar established yet. Will create quarterly content plan aligned with seasonal demand: pre-season listing refreshes, seasonal promotion campaigns, holiday-specific content, off-season deal pushes."
+    },
+    {
+      "namespace": "seo_insights",
+      "key": "photo_requirements",
+      "value": "Photo requirements per platform: Airbnb minimum 5, recommended 30+ (including 1 cover photo at 3:2 ratio). VRBO minimum 6, recommended 25+ (1 hero image). All platforms: natural lighting, wide-angle shots, show every room, include exterior and neighborhood. Seasonal photo updates improve click-through rates by 15-25%."
+    }
+  ]
+}

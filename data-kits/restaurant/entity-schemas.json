@@ -1,0 +1,276 @@
+[
+  {
+    "name": "rest_menu_items",
+    "displayName": "Menu Items",
+    "description": "Dishes and beverages available on the restaurant menu with costing and dietary information",
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the dish or beverage"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "description": "Menu section this item belongs to",
+        "enum": ["antipasti", "primi", "secondi", "contorni", "dolci", "bevande", "vini"]
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "Short description of the dish for the menu"
+      },
+      "price": {
+        "type": "number",
+        "required": true,
+        "description": "Selling price in local currency"
+      },
+      "cost": {
+        "type": "number",
+        "required": true,
+        "description": "Ingredient cost per serving"
+      },
+      "ingredients": {
+        "type": "array",
+        "required": false,
+        "description": "List of primary ingredients"
+      },
+      "allergens": {
+        "type": "array",
+        "required": false,
+        "description": "Allergen declarations (gluten, dairy, nuts, shellfish, etc.)"
+      },
+      "active": {
+        "type": "boolean",
+        "required": true,
+        "description": "Whether this item is currently on the menu"
+      },
+      "prep_time_minutes": {
+        "type": "number",
+        "required": false,
+        "description": "Average preparation time in minutes"
+      },
+      "image_url": {
+        "type": "string",
+        "required": false,
+        "description": "URL to dish photo for digital menus"
+      }
+    }
+  },
+  {
+    "name": "rest_reservations",
+    "displayName": "Reservations",
+    "description": "Table reservations with party details and status tracking",
+    "fields": {
+      "guest_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name the reservation is under"
+      },
+      "phone": {
+        "type": "string",
+        "required": false,
+        "description": "Contact phone number for confirmation"
+      },
+      "email": {
+        "type": "string",
+        "required": false,
+        "description": "Contact email address"
+      },
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Reservation date (ISO 8601)"
+      },
+      "time": {
+        "type": "string",
+        "required": true,
+        "description": "Reservation time (HH:MM format)"
+      },
+      "party_size": {
+        "type": "number",
+        "required": true,
+        "description": "Number of guests"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Current reservation status",
+        "enum": ["confirmed", "seated", "completed", "no-show", "cancelled"]
+      },
+      "table_number": {
+        "type": "number",
+        "required": false,
+        "description": "Assigned table number"
+      },
+      "special_requests": {
+        "type": "string",
+        "required": false,
+        "description": "Dietary needs, celebrations, seating preferences"
+      },
+      "source": {
+        "type": "string",
+        "required": false,
+        "description": "Booking channel",
+        "enum": ["phone", "website", "walk-in", "opentable", "resy"]
+      }
+    }
+  },
+  {
+    "name": "rest_suppliers",
+    "displayName": "Suppliers",
+    "description": "Food and beverage suppliers with delivery and payment details",
+    "fields": {
+      "company_name": {
+        "type": "string",
+        "required": true,
+        "description": "Supplier business name"
+      },
+      "contact_name": {
+        "type": "string",
+        "required": false,
+        "description": "Primary contact person"
+      },
+      "phone": {
+        "type": "string",
+        "required": true,
+        "description": "Order phone number"
+      },
+      "email": {
+        "type": "string",
+        "required": false,
+        "description": "Order email address"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "description": "Type of goods supplied",
+        "enum": ["produce", "meat", "seafood", "dairy", "dry-goods", "beverages", "wine", "equipment", "packaging"]
+      },
+      "delivery_days": {
+        "type": "array",
+        "required": false,
+        "description": "Days of the week deliveries are made"
+      },
+      "minimum_order": {
+        "type": "number",
+        "required": false,
+        "description": "Minimum order value in local currency"
+      },
+      "payment_terms": {
+        "type": "string",
+        "required": false,
+        "description": "Payment terms (e.g., Net 30, COD)",
+        "enum": ["cod", "net-7", "net-14", "net-30", "net-60"]
+      },
+      "rating": {
+        "type": "number",
+        "required": false,
+        "description": "Internal supplier rating (1-5)"
+      }
+    }
+  },
+  {
+    "name": "rest_daily_covers",
+    "displayName": "Daily Covers",
+    "description": "Per-service revenue and guest count metrics for tracking daily performance",
+    "fields": {
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Service date (ISO 8601)"
+      },
+      "service": {
+        "type": "string",
+        "required": true,
+        "description": "Which service period",
+        "enum": ["lunch", "dinner", "brunch"]
+      },
+      "covers": {
+        "type": "number",
+        "required": true,
+        "description": "Total number of guests served"
+      },
+      "revenue": {
+        "type": "number",
+        "required": true,
+        "description": "Total revenue for this service"
+      },
+      "food_revenue": {
+        "type": "number",
+        "required": false,
+        "description": "Revenue from food items only"
+      },
+      "beverage_revenue": {
+        "type": "number",
+        "required": false,
+        "description": "Revenue from beverages only"
+      },
+      "average_check": {
+        "type": "number",
+        "required": false,
+        "description": "Average spend per guest"
+      },
+      "table_turns": {
+        "type": "number",
+        "required": false,
+        "description": "Average number of seatings per table"
+      },
+      "weather": {
+        "type": "string",
+        "required": false,
+        "description": "Weather conditions (correlates with traffic)",
+        "enum": ["sunny", "cloudy", "rainy", "snowy", "hot"]
+      }
+    }
+  },
+  {
+    "name": "rest_reviews",
+    "displayName": "Reviews",
+    "description": "Customer reviews and ratings from various platforms",
+    "fields": {
+      "platform": {
+        "type": "string",
+        "required": true,
+        "description": "Source platform for the review",
+        "enum": ["google", "yelp", "tripadvisor", "opentable", "internal"]
+      },
+      "rating": {
+        "type": "number",
+        "required": true,
+        "description": "Star rating (1-5)"
+      },
+      "review_text": {
+        "type": "string",
+        "required": false,
+        "description": "Full text of the customer review"
+      },
+      "reviewer_name": {
+        "type": "string",
+        "required": false,
+        "description": "Name or handle of the reviewer"
+      },
+      "date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the review was posted (ISO 8601)"
+      },
+      "sentiment": {
+        "type": "string",
+        "required": false,
+        "description": "AI-detected sentiment",
+        "enum": ["positive", "neutral", "negative", "mixed"]
+      },
+      "menu_items_mentioned": {
+        "type": "array",
+        "required": false,
+        "description": "Menu items specifically mentioned in the review"
+      },
+      "response": {
+        "type": "string",
+        "required": false,
+        "description": "Owner/manager response to the review"
+      }
+    }
+  }
+]

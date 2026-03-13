@@ -19,6 +19,16 @@ bots:
   - ref: "bots/shipping-tracker@1.0.0"
   - ref: "bots/data-quality-monitor@1.0.0"
   - ref: "bots/sre-devops@1.0.0"
+dataKits:
+  - ref: "data-kits/manufacturing@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/it-operations@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/compliance-governance@1.0.0"
+    required: false
+    installSampleData: false
 requirements:
   minTier: "scale"
 northStar:

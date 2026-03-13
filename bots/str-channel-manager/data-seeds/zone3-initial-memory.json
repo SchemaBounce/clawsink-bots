@@ -1,0 +1,34 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all properties and their active channel listings. Establish baseline sync status across all platforms. Check for any existing calendar conflicts."
+    },
+    {
+      "namespace": "channel_quirks",
+      "key": "airbnb",
+      "value": "Airbnb iCal sync has 15-30 minute propagation delay. Superhost requirements: 90% response rate, <1% cancellation rate, 4.8+ overall rating, 10+ stays/year. Instant Book listings rank higher in search. Photo minimum: 5, recommended: 20+."
+    },
+    {
+      "namespace": "channel_quirks",
+      "key": "vrbo",
+      "value": "VRBO Premiere Partner requirements: accept instant booking, competitive pricing, high response rate, quality photos. VRBO skews toward families and larger groups. Property descriptions should emphasize space, safety features, and proximity to family attractions."
+    },
+    {
+      "namespace": "channel_quirks",
+      "key": "lodgify",
+      "value": "Lodgify is a direct booking website builder — sync focuses on availability and rate parity with OTA channels. Direct bookings save 15-20% in platform fees. SEO optimization matters for direct booking visibility."
+    },
+    {
+      "namespace": "channel_quirks",
+      "key": "facebook_marketplace",
+      "value": "Facebook Marketplace listings expire and need re-posting every 7-14 days. Informal tone performs better. Price must be prominently displayed. Engagement (likes, comments, shares) drives visibility in the algorithm."
+    },
+    {
+      "namespace": "sync_history",
+      "key": "init",
+      "value": "No sync history recorded yet. Will track: sync success/failure timestamps per channel per property, conflict detection history, listing health score trends."
+    }
+  ]
+}

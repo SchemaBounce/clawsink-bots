@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:healthcare:defaults",
+  "entries": [
+    {
+      "key": "kpi:patient_wait_time",
+      "value": "Patient wait time (check-in to provider encounter) should be under 15 minutes. Track separately for scheduled vs walk-in/urgent. Wait times over 20 minutes correlate strongly with negative patient satisfaction scores and increased no-shows.",
+      "category": "kpi",
+      "tags": ["operations", "patient-experience", "throughput"]
+    },
+    {
+      "key": "kpi:no_show_rate",
+      "value": "No-show rate should stay below 10%. National average is 18-23% for primary care. Implement confirmation texts (48h + 2h before), waitlist backfill, and track by day-of-week and provider. Chronic no-show patients (3+ in 12 months) need outreach.",
+      "category": "kpi",
+      "tags": ["operations", "scheduling", "revenue"]
+    },
+    {
+      "key": "kpi:claim_denial_rate",
+      "value": "First-pass claim denial rate should be under 5%. Industry average is 5-10%. Track by denial reason code: eligibility (CO-4), authorization (CO-15), coding (CO-16), timely filing (CO-29). Appeals should be filed within 30 days of denial.",
+      "category": "kpi",
+      "tags": ["financial", "billing", "revenue-cycle"]
+    },
+    {
+      "key": "kpi:credential_expiry",
+      "value": "All provider credentials must be tracked with 90-day, 60-day, and 30-day expiry alerts. Expired credentials = cannot bill insurance. DEA registration and state medical license are the highest priority. Board certification lapses affect payer contracts.",
+      "category": "kpi",
+      "tags": ["compliance", "credentialing", "risk"]
+    },
+    {
+      "key": "kpi:hipaa_compliance_score",
+      "value": "HIPAA compliance must be 100% on all required items. Annual risk assessment is mandatory. Security awareness training for all staff annually. Business Associate Agreements (BAAs) required for all vendors with PHI access. Breach notification within 60 days.",
+      "category": "kpi",
+      "tags": ["compliance", "hipaa", "audit"]
+    },
+    {
+      "key": "threshold:claim_aging",
+      "value": "Claims over 30 days without payment need follow-up. Claims over 90 days are at risk of timely filing denial. Claims over 120 days should be escalated to a supervisor. Track AR aging buckets: 0-30, 31-60, 61-90, 91-120, 120+ days.",
+      "category": "threshold",
+      "tags": ["financial", "accounts-receivable", "billing"]
+    },
+    {
+      "key": "threshold:appointment_utilization",
+      "value": "Provider schedule utilization should be 85-95%. Below 80% indicates underutilization (lost revenue). Above 95% leaves no buffer for urgent visits and causes burnout. Track separately for each provider and visit type.",
+      "category": "threshold",
+      "tags": ["operations", "scheduling", "capacity"]
+    },
+    {
+      "key": "compliance:hipaa_checklist",
+      "value": "HIPAA minimum requirements: (1) Designated Privacy Officer, (2) Written P&P manual, (3) Annual risk assessment, (4) Staff training records, (5) BAAs with all vendors, (6) Incident response plan, (7) Physical safeguards (locked records), (8) Technical safeguards (encryption, access controls), (9) Breach notification procedures, (10) Patient rights documentation.",
+      "category": "compliance",
+      "tags": ["hipaa", "audit", "checklist"]
+    },
+    {
+      "key": "best-practice:patient_intake",
+      "value": "Digital intake forms reduce check-in time by 8-12 minutes. Verify insurance eligibility before every visit (real-time eligibility check). Collect copay at time of service. Update demographics and pharmacy information at every annual visit.",
+      "category": "best-practice",
+      "tags": ["operations", "patient-experience", "intake"]
+    },
+    {
+      "key": "terminology:cpt_codes",
+      "value": "Common primary care CPT codes: 99213 (established, low complexity), 99214 (established, moderate), 99215 (established, high), 99203 (new patient, low), 99204 (new patient, moderate), 99395-99397 (preventive visits by age). E/M coding determines reimbursement level.",
+      "category": "terminology",
+      "tags": ["glossary", "billing", "coding"]
+    }
+  ]
+}

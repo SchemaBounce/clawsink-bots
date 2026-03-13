@@ -8,6 +8,8 @@ A Team is a coordinated group of bots that work together under a shared North St
 
 **Relationship to MCP Servers**: Teams can declare shared MCP server instances. See [tools/README.md](../tools/README.md) for the MCP server format.
 
+**Relationship to Data Kits**: Teams bundle Data Kits via `dataKits[].ref: "data-kits/{name}@{version}"`. Activating a team auto-installs its referenced kits. See [data-kits/README.md](../data-kits/README.md) for the kit format.
+
 ## Directory Structure
 
 ```
@@ -42,6 +44,10 @@ mcpServers:              # Shared MCP servers for this team (optional)
   - ref: string          # Reference: "tools/{server-name}"
     reason: string       # Why this team needs this server
     config: object       # Team-wide defaults (bots can override)
+dataKits:                # Domain data packages bundled with this team (optional)
+  - ref: string          # Reference: "data-kits/{name}@{version}"
+    required: boolean    # true = primary kit for this team; false = supplementary
+    installSampleData: boolean  # Whether to seed sample data (default: false)
 northStar:
   industry: string       # Target industry for this team
   context: string        # Description of the ideal user/scenario
@@ -138,6 +144,18 @@ Team-level `plugins[]` install shared plugins available to all bots in the team.
 
 Team-level `mcpServers[]` creates a single shared server instance for all bots in the team. Individual bots can override `config` in their own `mcpServers[]` section — bot config is merged on top of team config.
 
+## Team-Level Data Kits
+
+Team-level `dataKits[]` bundles domain data packages that auto-install when the team is activated. Each kit provides entity schemas, graph relationship templates, vector search configurations, and memory bootstraps that the team's bots are designed to use.
+
+- **`required: true`**: Primary kit for this team — installed automatically, cannot be skipped
+- **`required: false`**: Supplementary kit — installed by default but user can opt out
+- **`installSampleData: false`**: Default; set to `true` to seed example records during installation
+
+Installation is idempotent — if a kit is already installed (e.g., from another team), it is skipped. Kits use entity prefixes to avoid name collisions when multiple kits coexist.
+
+See [data-kits/README.md](../data-kits/README.md) for the full kit manifest specification.
+
 ## Validation
 
 1. `TEAM.md` has valid YAML frontmatter with `kind: Team`
@@ -154,6 +172,8 @@ Team-level `mcpServers[]` creates a single shared server instance for all bots i
 12. All bots in `escalation.paths[].chain` are members of the team
 13. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
 14. No conflicting MCP server configs between team-level and bot-level declarations
+15. All `dataKits[].ref` reference valid `data-kits/` directories containing `KIT.md`
+16. No duplicate kit references within a single team
 
 ## What the Platform Does
 
@@ -166,6 +186,8 @@ Team-level `mcpServers[]` creates a single shared server instance for all bots i
 | `orgChart.roles` | Create the team's reporting hierarchy, visible in the org chart view |
 | `orgChart.roles[].domain` | Group bots by domain — bots in the same domain share working data |
 | `orgChart.escalation` | Set up escalation routing that overrides the global defaults |
+| `dataKits[].ref` | Auto-install referenced Data Kits (entity schemas, graph templates, vector collections, memory bootstraps) |
+| `dataKits[].installSampleData` | Optionally seed sample data from the kit |
 
 Team-level plugins and MCP servers are shared — you don't need to redeclare them on every bot. Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
 

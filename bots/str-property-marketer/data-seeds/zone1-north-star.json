@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "content_approval_flow",
+      "value": "All listing descriptions and promotional content require Property Manager approval before publishing. Social media posts under 280 characters can be queued without approval.",
+      "description": "Content approval workflow rules"
+    },
+    {
+      "key": "listing_refresh_cadence",
+      "value": "Review and refresh listing descriptions quarterly. Update photos seasonally. Refresh Facebook Marketplace posts every 2 weeks (algorithm rewards fresh listings).",
+      "description": "How often listing content should be reviewed and updated"
+    }
+  ]
+}

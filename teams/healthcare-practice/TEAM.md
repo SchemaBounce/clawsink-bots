@@ -20,6 +20,19 @@ bots:
   - ref: "bots/accountant@1.0.0"
   - ref: "bots/meeting-summarizer@1.0.0"
   - ref: "bots/hr-onboarding@1.0.0"
+dataKits:
+  - ref: "data-kits/healthcare@1.0.0"
+    required: true
+    installSampleData: false
+  - ref: "data-kits/compliance-governance@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/financial-ops@1.0.0"
+    required: false
+    installSampleData: false
+  - ref: "data-kits/hr-people@1.0.0"
+    required: false
+    installSampleData: false
 northStar:
   industry: "Healthcare / Medical Practice"
   context: "Medical practices, dental offices, or clinics managing patient communications, regulatory compliance, staff scheduling, and billing"

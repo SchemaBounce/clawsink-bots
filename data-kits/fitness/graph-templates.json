@@ -1,0 +1,24 @@
+{
+  "edgeTypes": [
+    {
+      "label": "ATTENDS",
+      "description": "Links a member to a class through an attendance record",
+      "fromEntity": "fit_members",
+      "toEntity": "fit_classes",
+      "properties": {
+        "attendance_date": "string",
+        "status": "string"
+      }
+    },
+    {
+      "label": "HAS_MEMBERSHIP",
+      "description": "Connects a member to their membership plan",
+      "fromEntity": "fit_members",
+      "toEntity": "fit_memberships",
+      "properties": {
+        "start_date": "string",
+        "status": "string"
+      }
+    }
+  ]
+}

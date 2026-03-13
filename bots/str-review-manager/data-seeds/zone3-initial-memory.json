@@ -1,0 +1,34 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all properties and check for existing reviews across platforms. Establish baseline rating per property. Identify any reviews without host responses that need immediate attention."
+    },
+    {
+      "namespace": "response_templates",
+      "key": "positive_review_airbnb",
+      "value": "Positive review template (Airbnb tone — warm, personal): 'Thank you so much, [Guest Name]! We loved having you and [reference something specific they mentioned]. [Property Name] is special to us and it means a lot that you enjoyed [specific aspect]. You're welcome back anytime — we'd love to host you again!'"
+    },
+    {
+      "namespace": "response_templates",
+      "key": "positive_review_vrbo",
+      "value": "Positive review template (VRBO tone — professional, appreciative): 'Thank you for the wonderful review, [Guest Name]. We're delighted to hear that [specific aspect] met your expectations. We take pride in maintaining [Property Name] to the highest standard and your feedback confirms our efforts. We hope to welcome you and your family back soon.'"
+    },
+    {
+      "namespace": "response_templates",
+      "key": "negative_review_response",
+      "value": "Negative review response framework: 1) Thank them for the feedback. 2) Acknowledge the specific issue without being defensive. 3) Explain what has been done to address it (concrete action, not vague promises). 4) Invite them to contact directly for resolution. Never: argue, blame the guest, make excuses, or use passive-aggressive language."
+    },
+    {
+      "namespace": "review_patterns",
+      "key": "init",
+      "value": "No review patterns identified yet. Will track recurring themes per property: cleanliness, location accuracy, communication, check-in experience, amenity quality, noise, value for money. Three or more mentions of the same issue triggers a pattern alert."
+    },
+    {
+      "namespace": "review_patterns",
+      "key": "escalation_criteria",
+      "value": "Escalation criteria: 1-2 stars = immediate escalation to Guest Communicator + Property Manager. 3 stars = escalation within 24 hours. Mention of safety issue in any review = immediate escalation regardless of rating. Guest threatens legal action or health department = immediate escalation. Review mentions unauthorized party or property damage = immediate escalation."
+    }
+  ]
+}

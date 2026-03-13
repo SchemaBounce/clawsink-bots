@@ -1,0 +1,277 @@
+[
+  {
+    "name": "hr_employees",
+    "displayName": "Employees",
+    "description": "Staff records with role, department, compensation, and reporting structure",
+    "fields": {
+      "first_name": {
+        "type": "string",
+        "required": true,
+        "description": "Employee first name"
+      },
+      "last_name": {
+        "type": "string",
+        "required": true,
+        "description": "Employee last name"
+      },
+      "email": {
+        "type": "string",
+        "required": true,
+        "description": "Work email address"
+      },
+      "department": {
+        "type": "string",
+        "required": true,
+        "description": "Department name"
+      },
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Job title"
+      },
+      "employment_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["full_time", "part_time", "contractor", "intern"],
+        "description": "Employment type"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "on_leave", "terminated", "onboarding"],
+        "description": "Current employment status"
+      },
+      "manager_id": {
+        "type": "string",
+        "description": "Reference to hr_employees (direct manager)"
+      },
+      "hire_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date of hire"
+      },
+      "location": {
+        "type": "string",
+        "description": "Office location or 'Remote'"
+      },
+      "annual_salary": {
+        "type": "number",
+        "description": "Annual salary in USD (null for contractors)"
+      }
+    }
+  },
+  {
+    "name": "hr_onboarding_tasks",
+    "displayName": "Onboarding Tasks",
+    "description": "Checklist items for new hire onboarding",
+    "fields": {
+      "employee_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to hr_employees (the new hire)"
+      },
+      "task_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the onboarding task"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "enum": ["it_setup", "paperwork", "training", "introductions", "compliance", "equipment"],
+        "description": "Task category"
+      },
+      "assigned_to": {
+        "type": "string",
+        "required": true,
+        "description": "Person responsible for completing this task (email or name)"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["pending", "in_progress", "completed", "blocked"],
+        "description": "Task completion status"
+      },
+      "due_date": {
+        "type": "date",
+        "required": true,
+        "description": "Task deadline"
+      },
+      "completed_at": {
+        "type": "date",
+        "description": "Actual completion date"
+      },
+      "notes": {
+        "type": "string",
+        "description": "Additional notes or instructions"
+      },
+      "priority": {
+        "type": "string",
+        "required": true,
+        "enum": ["high", "medium", "low"],
+        "description": "Task priority"
+      }
+    }
+  },
+  {
+    "name": "hr_leave_requests",
+    "displayName": "Leave Requests",
+    "description": "Employee time-off requests with approval tracking",
+    "fields": {
+      "employee_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to hr_employees"
+      },
+      "leave_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["vacation", "sick", "personal", "parental", "bereavement", "jury_duty", "unpaid"],
+        "description": "Type of leave requested"
+      },
+      "start_date": {
+        "type": "date",
+        "required": true,
+        "description": "Leave start date"
+      },
+      "end_date": {
+        "type": "date",
+        "required": true,
+        "description": "Leave end date (inclusive)"
+      },
+      "days_requested": {
+        "type": "number",
+        "required": true,
+        "description": "Number of business days requested"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["pending", "approved", "denied", "cancelled"],
+        "description": "Approval status"
+      },
+      "approved_by": {
+        "type": "string",
+        "description": "Manager who approved or denied the request"
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for the leave request"
+      },
+      "submitted_at": {
+        "type": "date",
+        "required": true,
+        "description": "Date the request was submitted"
+      }
+    }
+  },
+  {
+    "name": "hr_performance_reviews",
+    "displayName": "Performance Reviews",
+    "description": "Periodic employee performance evaluations with ratings and goals",
+    "fields": {
+      "employee_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to hr_employees (the person being reviewed)"
+      },
+      "reviewer_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to hr_employees (the manager conducting the review)"
+      },
+      "review_period": {
+        "type": "string",
+        "required": true,
+        "description": "Review period label (e.g., 'H2 2025', 'Q1 2026')"
+      },
+      "overall_rating": {
+        "type": "number",
+        "required": true,
+        "description": "Overall performance rating (1.0-5.0)"
+      },
+      "rating_label": {
+        "type": "string",
+        "required": true,
+        "enum": ["needs_improvement", "meets_expectations", "exceeds_expectations", "outstanding"],
+        "description": "Rating category label"
+      },
+      "strengths": {
+        "type": "string",
+        "description": "Key strengths identified during the review"
+      },
+      "areas_for_improvement": {
+        "type": "string",
+        "description": "Areas where the employee should improve"
+      },
+      "goals_next_period": {
+        "type": "array",
+        "description": "Goals set for the next review period"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["draft", "submitted", "acknowledged", "completed"],
+        "description": "Review workflow status"
+      },
+      "completed_at": {
+        "type": "date",
+        "description": "Date the review was finalized"
+      }
+    }
+  },
+  {
+    "name": "hr_policies",
+    "displayName": "Company Policies",
+    "description": "Company policies, handbooks, and compliance documents searchable by employees",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Policy title"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "enum": ["general", "leave", "compensation", "conduct", "safety", "remote_work", "compliance", "benefits"],
+        "description": "Policy category"
+      },
+      "content": {
+        "type": "string",
+        "required": true,
+        "description": "Full policy text content"
+      },
+      "applicability": {
+        "type": "string",
+        "required": true,
+        "enum": ["all_employees", "full_time_only", "managers_only", "contractors", "us_only", "global"],
+        "description": "Who this policy applies to"
+      },
+      "effective_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the policy takes effect"
+      },
+      "last_updated": {
+        "type": "date",
+        "required": true,
+        "description": "Date of last revision"
+      },
+      "version": {
+        "type": "string",
+        "required": true,
+        "description": "Policy version number"
+      },
+      "owner": {
+        "type": "string",
+        "required": true,
+        "description": "Person responsible for maintaining this policy"
+      },
+      "requires_acknowledgment": {
+        "type": "boolean",
+        "required": true,
+        "description": "Whether employees must acknowledge reading this policy"
+      }
+    }
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover all properties and their current pricing. Establish baseline rates per property. Identify market type (urban, beach, mountain, rural) for each property to calibrate seasonal models."
+    },
+    {
+      "namespace": "seasonal_data",
+      "key": "beach_markets",
+      "value": "Beach market seasonality: Peak Jun-Aug (1.5-2x base rate), shoulder Apr-May and Sep-Oct (1.1-1.3x), low Nov-Mar (0.7-0.9x). Spring break week in March can spike to 1.8x. Holiday weekends (Memorial Day, Labor Day, 4th of July) at peak rates with 3-night minimum."
+    },
+    {
+      "namespace": "seasonal_data",
+      "key": "urban_markets",
+      "value": "Urban market seasonality: More event-driven than calendar-driven. Weekdays can outperform weekends (business travel). Conference/convention weeks spike 1.5-2x. Avoid Sunday-Wednesday discounts during convention season. Summer slightly higher for tourism markets, lower for business-district properties."
+    },
+    {
+      "namespace": "seasonal_data",
+      "key": "mountain_markets",
+      "value": "Mountain/ski market seasonality: Winter peak Dec-Mar (1.5-2.5x base rate), especially Christmas-New Year and Presidents' Day week. Summer hiking season Jul-Aug (1.2-1.5x). Shoulder seasons (Apr-May, Oct-Nov) are lowest (0.6-0.8x). Fall foliage weekends in Oct can spike."
+    },
+    {
+      "namespace": "market_patterns",
+      "key": "booking_velocity",
+      "value": "Booking velocity benchmarks: If a date 30+ days out has no bookings, rate may be too high. If a date books within 24 hours of listing, rate was likely too low. Optimal booking window: 2-4 weeks ahead for most markets. Last-minute (under 7 days) bookings acceptable at discounted rates to avoid vacancy."
+    },
+    {
+      "namespace": "market_patterns",
+      "key": "competitor_tracking",
+      "value": "Competitor rate tracking methodology: Monitor 5-10 comparable properties (same bedroom count, similar amenities, within 2 miles). Track their rate changes weekly. If 3+ competitors drop rates simultaneously, likely responding to market signal — investigate before matching. Never race to the bottom — differentiate on quality and reviews."
+    }
+  ]
+}

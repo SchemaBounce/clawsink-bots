@@ -1,0 +1,24 @@
+{
+  "edgeTypes": [
+    {
+      "label": "SUBSCRIBED_TO",
+      "description": "Links a SaaS account to its active or historical subscription",
+      "fromEntity": "saas_accounts",
+      "toEntity": "saas_subscriptions",
+      "properties": {
+        "since": "date",
+        "is_primary": "boolean"
+      }
+    },
+    {
+      "label": "USES_FEATURE",
+      "description": "Links a SaaS account to a product feature it has adopted",
+      "fromEntity": "saas_accounts",
+      "toEntity": "saas_feature_usage",
+      "properties": {
+        "adoption_date": "date",
+        "usage_frequency": "string"
+      }
+    }
+  ]
+}

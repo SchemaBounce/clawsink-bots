@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "hc_compliance_items",
+      "description": "Semantic search over compliance requirements and descriptions for audit preparation and gap analysis",
+      "sourceEntity": "hc_compliance_items",
+      "embeddingFields": ["requirement", "description"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}
