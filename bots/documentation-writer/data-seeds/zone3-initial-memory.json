@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "doc_standards",
+      "key": "init",
+      "value": "No documentation standards loaded yet. Read from North Star on first run."
+    },
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover documentation structure and conventions from repository."
+    }
+  ]
+}

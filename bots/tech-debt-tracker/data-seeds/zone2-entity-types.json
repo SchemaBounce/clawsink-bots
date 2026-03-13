@@ -1,0 +1,82 @@
+{
+  "entityTypes": [
+    {
+      "name": "tech_debt_items",
+      "displayName": "Tech Debt Items",
+      "description": "Individual technical debt items identified from code review findings and quality metrics",
+      "domain": "engineering",
+      "sampleFields": ["area", "severity", "description", "evidence", "estimated_effort", "suggested_approach", "status"],
+      "fields": {
+        "area": {
+          "type": "string",
+          "required": true,
+          "description": "Module, service, or component where the debt exists"
+        },
+        "severity": {
+          "type": "string",
+          "required": true,
+          "description": "Debt severity: low, medium, high, or critical"
+        },
+        "description": {
+          "type": "string",
+          "required": true,
+          "description": "What the debt is and why it matters"
+        },
+        "evidence": {
+          "type": "string",
+          "required": true,
+          "description": "Data backing this debt item — review findings, metrics, or patterns"
+        },
+        "estimated_effort": {
+          "type": "string",
+          "required": false,
+          "description": "Estimated remediation effort in hours"
+        },
+        "suggested_approach": {
+          "type": "string",
+          "required": false,
+          "description": "Recommended refactoring approach"
+        },
+        "status": {
+          "type": "string",
+          "required": true,
+          "description": "Debt lifecycle status: identified, acknowledged, planned, or resolved"
+        }
+      }
+    },
+    {
+      "name": "quality_trends",
+      "displayName": "Quality Trends",
+      "description": "Per-module, per-period quality metric trends tracked over time",
+      "domain": "engineering",
+      "sampleFields": ["period", "module", "metrics", "trend_direction", "notes"],
+      "fields": {
+        "period": {
+          "type": "string",
+          "required": true,
+          "description": "Time period for this trend snapshot (e.g., 2025-W03, 2025-01)"
+        },
+        "module": {
+          "type": "string",
+          "required": true,
+          "description": "Module or service being measured"
+        },
+        "metrics": {
+          "type": "object",
+          "required": true,
+          "description": "Quality metrics object with coverage, complexity, and duplication values"
+        },
+        "trend_direction": {
+          "type": "string",
+          "required": true,
+          "description": "Trend direction: improving, stable, or degrading"
+        },
+        "notes": {
+          "type": "string",
+          "required": false,
+          "description": "Analyst notes on the trend or contributing factors"
+        }
+      }
+    }
+  ]
+}

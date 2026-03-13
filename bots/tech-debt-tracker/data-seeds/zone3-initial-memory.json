@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "debt_patterns",
+      "key": "init",
+      "value": "No debt patterns identified yet. Will populate after first analysis of review findings and quality metrics."
+    },
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Query review_findings and code_quality_metrics to establish baseline."
+    }
+  ]
+}

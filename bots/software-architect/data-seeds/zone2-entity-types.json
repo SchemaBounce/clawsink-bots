@@ -1,0 +1,19 @@
+{
+  "entityTypes": [
+    {
+      "name": "implementation_plans",
+      "description": "Structured implementation plans produced by the planner sub-agent, linking issues to code changes",
+      "fields": ["title", "issue_ref", "risk_level", "approach", "files_affected", "test_strategy", "status", "pr_url"]
+    },
+    {
+      "name": "code_sessions",
+      "description": "Audit records for Claude Code sessions tracking implementation execution and outcomes",
+      "fields": ["session_id", "implementation_plan_ref", "status", "files_changed", "tests_passed", "test_output", "duration_seconds", "retry_count"]
+    },
+    {
+      "name": "architecture_decisions",
+      "description": "Architecture decision records capturing context, rationale, and consequences of technical choices",
+      "fields": ["title", "context", "decision", "consequences", "status", "affected_areas"]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "entityTypes": [
+    {
+      "name": "doc_updates",
+      "displayName": "Doc Updates",
+      "description": "Documentation update records tracking which files were changed and the associated PR",
+      "domain": "engineering",
+      "sampleFields": ["implementation_ref", "doc_type", "files_updated", "pr_url", "status"],
+      "fields": {
+        "implementation_ref": {
+          "type": "string",
+          "required": true,
+          "description": "Reference to the implementation plan or PR that triggered this doc update"
+        },
+        "doc_type": {
+          "type": "string",
+          "required": true,
+          "description": "Type of documentation updated: readme, api-docs, guide, or changelog"
+        },
+        "files_updated": {
+          "type": "array",
+          "required": true,
+          "description": "List of documentation file paths that were modified"
+        },
+        "pr_url": {
+          "type": "string",
+          "required": true,
+          "description": "URL of the documentation pull request"
+        },
+        "status": {
+          "type": "string",
+          "required": true,
+          "description": "Update status: pending or completed"
+        }
+      }
+    },
+    {
+      "name": "doc_findings",
+      "displayName": "Doc Findings",
+      "description": "Documentation gap findings identifying areas where docs are missing, outdated, or incorrect",
+      "domain": "engineering",
+      "sampleFields": ["gap_type", "affected_area", "priority", "description"],
+      "fields": {
+        "gap_type": {
+          "type": "string",
+          "required": true,
+          "description": "Type of documentation gap: missing, outdated, incorrect, or none"
+        },
+        "affected_area": {
+          "type": "string",
+          "required": false,
+          "description": "Module, feature, or section affected by the documentation gap"
+        },
+        "priority": {
+          "type": "string",
+          "required": false,
+          "description": "Gap priority: low, medium, or high"
+        },
+        "description": {
+          "type": "string",
+          "required": true,
+          "description": "Description of the documentation gap and what needs to be addressed"
+        }
+      }
+    }
+  ]
+}

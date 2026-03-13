@@ -85,6 +85,10 @@ mcpServers:              # Custom MCP servers this bot requires (optional)
     required: boolean    # true (default) = bot won't start without it
     reason: string       # Why this bot needs this server
     config: object       # Bot-specific config overrides (no secrets)
+egress:                  # External network access policy (optional)
+  mode: string           # "open" | "llm-only" | "restricted" | "none" (default: llm-only)
+  allowedDomains:        # Only used when mode is "restricted"
+    - string             # Exact domain or wildcard: "api.stripe.com", "*.github.com"
 requirements:
   minTier: string        # Minimum workspace tier
 ---
@@ -149,6 +153,25 @@ The `mcpServers:` section declares MCP server dependencies. See [tools/README.md
 - `required` defaults to `true` — the bot won't start without this server
 - `config` is merged with team-level config (bot overrides team)
 - `config` must NEVER contain secrets
+
+## Egress Section
+
+The `egress:` section declares which external HTTPS endpoints the bot needs to reach via the proxy token system (`request_proxy_token` → `execute_proxy_call`). When a bot is deployed to a seat, the `egress` section auto-populates the seat's `manifest.egressPolicy`. The admin can override it per-seat.
+
+- `mode` defaults to `llm-only` (no proxy calls allowed, LLM calls via ClawShell still work)
+- `open` allows the agent to reach any public HTTPS endpoint
+- `restricted` limits the agent to only the domains listed in `allowedDomains`
+- `none` blocks all external access (both proxy calls and direct HTTP)
+- Wildcard domains: `*.stripe.com` matches `sub.stripe.com` but NOT `stripe.com.evil.tld`
+
+```yaml
+egress:
+  mode: restricted
+  allowedDomains:
+    - "api.stripe.com"
+    - "*.github.com"
+    - "hooks.slack.com"
+```
 
 ## SOUL.md Format
 
