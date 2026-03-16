@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "industry_landscape",
+      "value": "Track the data integration and streaming industry — product announcements, feature releases, pricing changes, and positioning shifts from market participants. Focus on real-time CDC, ELT/ETL, and infrastructure-as-code segments.",
+      "description": "Defines the scope of industry landscape tracking"
+    },
+    {
+      "key": "feature_parity_categories",
+      "value": "Compare across these dimensions: ingestion connectors, real-time latency, transformation capabilities, infrastructure management, pricing model, developer experience, security and compliance, and ecosystem integrations.",
+      "description": "Dimensions used for feature parity analysis against industry alternatives"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "entityTypes": [
+    {
+      "name": "mi_findings",
+      "displayName": "Market Intelligence Findings",
+      "description": "Industry insights, feature gap analyses, and positioning observations",
+      "domain": "management",
+      "sampleFields": ["severity", "category", "source", "description", "implication", "recommendation", "confidence"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity"},
+        "category": {"type": "string", "required": true, "enum": ["feature_gap", "positioning_shift", "emerging_trend", "pricing_change", "ecosystem_update"], "description": "Finding category"},
+        "source": {"type": "string", "description": "Where the insight originated (e.g., product announcement, deal feedback, industry report)"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding description"},
+        "implication": {"type": "string", "description": "What this means for SchemaBounce strategy"},
+        "recommendation": {"type": "string", "description": "Suggested action or response"},
+        "confidence": {"type": "number", "description": "Confidence score (0-100)"}
+      }
+    },
+    {
+      "name": "mi_alerts",
+      "displayName": "Market Intelligence Alerts",
+      "description": "Time-sensitive industry events requiring immediate attention",
+      "domain": "management",
+      "sampleFields": ["severity", "title", "description", "action_required", "market_participant"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Recommended immediate action"},
+        "market_participant": {"type": "string", "description": "Industry alternative or market participant involved"}
+      }
+    },
+    {
+      "name": "mi_landscape_reports",
+      "displayName": "Market Landscape Reports",
+      "description": "Periodic market landscape briefings with feature parity and trend analysis",
+      "domain": "management",
+      "sampleFields": ["period", "summary", "feature_gaps", "positioning_shifts", "emerging_trends", "deal_impact_correlation"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Reporting period (e.g., 2026-W11)"},
+        "summary": {"type": "string", "required": true, "description": "Executive summary of the market landscape"},
+        "feature_gaps": {"type": "array", "description": "List of identified feature parity gaps with industry alternatives"},
+        "positioning_shifts": {"type": "array", "description": "Observed changes in market participant positioning or messaging"},
+        "emerging_trends": {"type": "array", "description": "New patterns, technologies, or market movements to watch"},
+        "deal_impact_correlation": {"type": "string", "description": "Correlation between feature gaps and deal outcomes from sales pipeline"}
+      }
+    }
+  ]
+}

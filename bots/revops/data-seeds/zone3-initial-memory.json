@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover available pipeline_reports, campaigns, churn_scores, and revenue_data. Establish baseline metrics."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No patterns learned yet. Will populate as attribution and forecast cycles complete."
+    },
+    {
+      "namespace": "revenue_baselines",
+      "key": "init",
+      "value": "No baselines established. First run will calculate initial blended CAC, LTV, and LTV:CAC ratio from available data."
+    },
+    {
+      "namespace": "attribution_models",
+      "key": "init",
+      "value": "No attribution model state. First run will build initial channel-to-deal mapping and per-channel CAC calculations."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "revenue_targets",
+      "value": "Define your revenue targets here. Example: ARR target $2M, MRR growth 10% QoQ, net revenue retention 110%.",
+      "description": "Revenue targets used to measure forecast accuracy and identify gaps"
+    },
+    {
+      "key": "attribution_model",
+      "value": "multi-touch",
+      "description": "Attribution method for mapping deals to channels — first-touch, last-touch, or multi-touch"
+    }
+  ]
+}

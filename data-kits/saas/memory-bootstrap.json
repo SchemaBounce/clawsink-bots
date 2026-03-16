@@ -60,6 +60,102 @@
       "value": "Always analyze SaaS metrics by signup cohort (weekly or monthly). Blended averages hide trends. A rising blended churn rate might mask improving recent cohorts diluted by a bad legacy cohort.",
       "category": "best-practice",
       "tags": ["analysis", "cohorts", "methodology"]
+    },
+    {
+      "key": "kpi:mttr",
+      "value": "Mean Time to Resolve (MTTR) target is <1 hour for sev1/sev2 incidents. Measures elapsed time from incident detection to full resolution. Track by severity level — sev1 <30 min, sev2 <1 hour, sev3 <4 hours, sev4 <24 hours.",
+      "category": "kpi",
+      "tags": ["incidents", "reliability", "sre"]
+    },
+    {
+      "key": "kpi:mttd",
+      "value": "Mean Time to Detect (MTTD) target is <5 minutes. Measures elapsed time from failure occurrence to detection via monitoring or alerting. Low MTTD requires comprehensive observability — synthetic checks, anomaly detection, and real-user monitoring.",
+      "category": "kpi",
+      "tags": ["incidents", "monitoring", "sre"]
+    },
+    {
+      "key": "kpi:uptime",
+      "value": "Target uptime is 99.95%, allowing a maximum of 21.9 minutes of unplanned downtime per month. Track as (total_minutes - downtime_minutes) / total_minutes * 100. Scheduled maintenance windows are excluded from uptime calculations.",
+      "category": "kpi",
+      "tags": ["reliability", "sla", "uptime"]
+    },
+    {
+      "key": "kpi:deploy_frequency",
+      "value": "Target is daily deployments to production. Higher deployment frequency correlates with smaller blast radius per deploy, faster feedback loops, and lower change failure rate. Track deploys per day per service.",
+      "category": "kpi",
+      "tags": ["deployments", "dora", "velocity"]
+    },
+    {
+      "key": "kpi:content_engagement",
+      "value": "Blog posts should target >3 minutes average read time and >3% click-through rate from search. Low engagement signals content-audience mismatch or weak titles. Track by content type — tutorials typically outperform announcements.",
+      "category": "kpi",
+      "tags": ["content", "engagement", "marketing"]
+    },
+    {
+      "key": "kpi:content_velocity",
+      "value": "Target minimum of 2 quality content pieces per week. Consistency matters more than volume. Track pipeline health: ideas → drafts → published. A healthy pipeline has 3x more ideas than published pieces.",
+      "category": "kpi",
+      "tags": ["content", "velocity", "marketing"]
+    },
+    {
+      "key": "kpi:cac_payback",
+      "value": "Customer Acquisition Cost (CAC) payback period target is <12 months. Calculate as CAC / (MRR * gross_margin). Payback >18 months signals unsustainable growth. Segment by channel — product-led typically has the shortest payback.",
+      "category": "kpi",
+      "tags": ["sales", "acquisition", "unit-economics"]
+    },
+    {
+      "key": "kpi:ltv_cac_ratio",
+      "value": "LTV/CAC ratio target is >3x. Healthy range is 3-5x. Below 3x means acquisition is too expensive relative to customer value. Above 5x may indicate underinvestment in growth. LTV = ARPU * gross_margin / churn_rate.",
+      "category": "kpi",
+      "tags": ["sales", "unit-economics", "ltv"]
+    },
+    {
+      "key": "kpi:pipeline_velocity",
+      "value": "Track average days per deal stage and total sales cycle length. Pipeline velocity = (number_of_deals * average_deal_value * win_rate) / sales_cycle_days. Increasing velocity without sacrificing win rate is the goal.",
+      "category": "kpi",
+      "tags": ["sales", "pipeline", "velocity"]
+    },
+    {
+      "key": "kpi:win_rate",
+      "value": "Sales win rate target is >25% of qualified opportunities. Track by deal source — inbound typically has higher win rates than outbound. Segment by deal size and plan tier for actionable insights.",
+      "category": "kpi",
+      "tags": ["sales", "pipeline", "conversion"]
+    },
+    {
+      "key": "kpi:first_response_time",
+      "value": "Support first response time target is <2 hours during business hours. Critical priority tickets should receive a response within 30 minutes. Track by priority level and channel — chat and phone should be near-instant.",
+      "category": "kpi",
+      "tags": ["support", "sla", "response-time"]
+    },
+    {
+      "key": "kpi:resolution_time",
+      "value": "Support ticket resolution target is <24 hours for high priority and <4 hours for critical. Track median resolution time, not average, to avoid skew from outliers. Segment by category for process improvement.",
+      "category": "kpi",
+      "tags": ["support", "sla", "resolution"]
+    },
+    {
+      "key": "kpi:csat",
+      "value": "Customer satisfaction score (CSAT) target is >4.2 out of 5. Measure after each resolved ticket. Scores below 3.5 should trigger a review of the support interaction. Track trends by agent, category, and priority.",
+      "category": "kpi",
+      "tags": ["support", "satisfaction", "quality"]
+    },
+    {
+      "key": "kpi:net_revenue_retention",
+      "value": "Net Revenue Retention (NRR) target is >110%. NRR = (starting_MRR + expansion - contraction - churn) / starting_MRR * 100. NRR >100% means the business grows even with zero new customers. Best-in-class SaaS achieves >130%.",
+      "category": "kpi",
+      "tags": ["revenue", "retention", "expansion"]
+    },
+    {
+      "key": "kpi:gross_revenue_retention",
+      "value": "Gross Revenue Retention (GRR) target is >90%. GRR = (starting_MRR - contraction - churn) / starting_MRR * 100. GRR cannot exceed 100% (excludes expansion). Below 85% indicates a leaky bucket that growth cannot fill.",
+      "category": "kpi",
+      "tags": ["revenue", "retention", "churn"]
+    },
+    {
+      "key": "kpi:expansion_rate",
+      "value": "Expansion revenue target is >20% of total MRR growth. Track expansion sources: seat additions, plan upgrades, cross-sells, and usage overages. High expansion rates signal strong product-market fit and effective account management.",
+      "category": "kpi",
+      "tags": ["revenue", "expansion", "growth"]
     }
   ]
 }

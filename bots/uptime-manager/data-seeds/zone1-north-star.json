@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "status_page_config",
+      "value": "Components: API, Dashboard, Pipelines, Webhooks. Update frequency: real-time on incident, daily summary otherwise. Public status page enabled.",
+      "description": "Status page component mapping and update preferences — customize to match your services"
+    },
+    {
+      "key": "sla_windows",
+      "value": "30-day rolling: 99.9% (43.2min budget). 90-day rolling: 99.9% (129.6min budget). Calendar year: 99.95% (262.8min budget).",
+      "description": "SLA compliance windows and downtime budgets — customize to match your SLA commitments"
+    }
+  ]
+}
