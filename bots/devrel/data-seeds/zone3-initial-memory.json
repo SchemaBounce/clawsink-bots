@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover available GitHub activity data. Establish baseline community metrics."
+    },
+    {
+      "namespace": "community_baselines",
+      "key": "defaults",
+      "value": "No baselines established yet. First run will capture initial metrics as the baseline for future comparisons."
+    },
+    {
+      "namespace": "friction_tracker",
+      "key": "init",
+      "value": "No friction points tracked yet. Will populate as issue themes and pain patterns are detected."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No patterns learned yet. Will populate as community trends and recurring themes are identified."
+    }
+  ]
+}

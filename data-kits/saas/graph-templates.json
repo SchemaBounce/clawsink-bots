@@ -19,6 +19,73 @@
         "adoption_date": "date",
         "usage_frequency": "string"
       }
+    },
+    {
+      "label": "CAUSED_BY",
+      "description": "Links a production incident to the deployment that triggered it",
+      "fromEntity": "saas_incidents",
+      "toEntity": "saas_deployments",
+      "properties": {
+        "trigger_type": "string",
+        "detection_method": "string"
+      }
+    },
+    {
+      "label": "SUBMITTED_BY",
+      "description": "Links a support ticket to the account that submitted it",
+      "fromEntity": "saas_support_tickets",
+      "toEntity": "saas_accounts",
+      "properties": {
+        "channel": "string"
+      }
+    },
+    {
+      "label": "REQUESTED_BY",
+      "description": "Links a feature request to the account that requested it",
+      "fromEntity": "saas_feature_requests",
+      "toEntity": "saas_accounts",
+      "properties": {
+        "source": "string",
+        "vote_weight": "number"
+      }
+    },
+    {
+      "label": "RELATES_TO_DEAL",
+      "description": "Links a support ticket to a deal it may impact",
+      "fromEntity": "saas_support_tickets",
+      "toEntity": "saas_deals",
+      "properties": {
+        "impact_on_deal": "string"
+      }
+    },
+    {
+      "label": "RESOLVED_FOR",
+      "description": "Links an incident to an account that was affected by it",
+      "fromEntity": "saas_incidents",
+      "toEntity": "saas_accounts",
+      "properties": {
+        "affected_duration_minutes": "number",
+        "compensation_offered": "boolean"
+      }
+    },
+    {
+      "label": "DEPLOYED_TO_ACCOUNT",
+      "description": "Links a deployment to an account it was rolled out to",
+      "fromEntity": "saas_deployments",
+      "toEntity": "saas_accounts",
+      "properties": {
+        "deploy_group": "string"
+      }
+    },
+    {
+      "label": "TRACKS_PRODUCT",
+      "description": "Links a market landscape entry to a related product in the landscape",
+      "fromEntity": "saas_market_landscape",
+      "toEntity": "saas_market_landscape",
+      "properties": {
+        "relationship_type": "string",
+        "overlap_areas": "string"
+      }
     }
   ]
 }

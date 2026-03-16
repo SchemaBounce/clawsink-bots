@@ -248,5 +248,600 @@
         "description": "Status of follow-up action for detractors"
       }
     }
+  },
+  {
+    "name": "saas_incidents",
+    "displayName": "Incidents",
+    "description": "Production incident tracking with severity, impact, and resolution details",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Short title summarizing the incident"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Detailed description of what happened"
+      },
+      "severity": {
+        "type": "string",
+        "required": true,
+        "enum": ["sev1", "sev2", "sev3", "sev4"],
+        "description": "Incident severity level (sev1 = critical, sev4 = minor)"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["detected", "investigating", "mitigating", "resolved", "postmortem"],
+        "description": "Current incident lifecycle status"
+      },
+      "resolution": {
+        "type": "string",
+        "description": "Description of how the incident was resolved"
+      },
+      "root_cause": {
+        "type": "string",
+        "description": "Identified root cause of the incident"
+      },
+      "incident_commander": {
+        "type": "string",
+        "required": true,
+        "description": "Person leading the incident response"
+      },
+      "affected_services": {
+        "type": "array",
+        "description": "List of services impacted by the incident"
+      },
+      "detected_at": {
+        "type": "date",
+        "required": true,
+        "description": "When the incident was first detected (ISO 8601)"
+      },
+      "resolved_at": {
+        "type": "date",
+        "description": "When the incident was fully resolved"
+      },
+      "customer_impact": {
+        "type": "string",
+        "enum": ["none", "degraded", "partial_outage", "full_outage"],
+        "description": "Level of customer-facing impact"
+      },
+      "affected_account_count": {
+        "type": "number",
+        "description": "Number of customer accounts affected"
+      },
+      "is_recurring": {
+        "type": "boolean",
+        "description": "Whether this incident is a repeat of a previous one"
+      },
+      "related_deployment_version": {
+        "type": "string",
+        "description": "Version of the deployment that may have caused this incident"
+      }
+    }
+  },
+  {
+    "name": "saas_deployments",
+    "displayName": "Deployments",
+    "description": "Deployment records with versioning, rollback tracking, and deploy type",
+    "fields": {
+      "version": {
+        "type": "string",
+        "required": true,
+        "description": "Version being deployed (e.g., v2.4.1)"
+      },
+      "service_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the service being deployed"
+      },
+      "environment": {
+        "type": "string",
+        "required": true,
+        "enum": ["staging", "canary", "production"],
+        "description": "Target deployment environment"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["pending", "in_progress", "succeeded", "failed", "rolled_back"],
+        "description": "Current deployment status"
+      },
+      "deploy_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["rolling", "blue_green", "canary", "recreate", "hotfix"],
+        "description": "Deployment strategy used"
+      },
+      "deployer": {
+        "type": "string",
+        "required": true,
+        "description": "Person or system that initiated the deploy"
+      },
+      "commit_sha": {
+        "type": "string",
+        "description": "Git commit SHA being deployed"
+      },
+      "change_summary": {
+        "type": "string",
+        "description": "Brief summary of changes in this deployment"
+      },
+      "started_at": {
+        "type": "date",
+        "required": true,
+        "description": "When the deployment started (ISO 8601)"
+      },
+      "completed_at": {
+        "type": "date",
+        "description": "When the deployment finished"
+      },
+      "rollback_version": {
+        "type": "string",
+        "description": "Version to roll back to if this deploy fails"
+      },
+      "is_rollback": {
+        "type": "boolean",
+        "description": "Whether this deployment is itself a rollback"
+      }
+    }
+  },
+  {
+    "name": "saas_content",
+    "displayName": "Content",
+    "description": "Content assets with engagement metrics and publishing workflow",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Title of the content piece"
+      },
+      "body": {
+        "type": "string",
+        "description": "Full body text of the content"
+      },
+      "content_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["blog_post", "docs_page", "tutorial", "changelog", "case_study", "api_reference", "video_script", "webinar"],
+        "description": "Type of content asset"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["idea", "draft", "review", "scheduled", "published", "archived"],
+        "description": "Current publishing workflow status"
+      },
+      "author": {
+        "type": "string",
+        "required": true,
+        "description": "Author of the content"
+      },
+      "target_audience": {
+        "type": "string",
+        "enum": ["developers", "devops", "product_managers", "executives", "general"],
+        "description": "Primary target audience for this content"
+      },
+      "keywords": {
+        "type": "array",
+        "description": "SEO and discovery keywords"
+      },
+      "publish_date": {
+        "type": "date",
+        "description": "Date the content was or will be published"
+      },
+      "views": {
+        "type": "number",
+        "description": "Total page views"
+      },
+      "unique_visitors": {
+        "type": "number",
+        "description": "Unique visitors who viewed this content"
+      },
+      "avg_time_on_page_seconds": {
+        "type": "number",
+        "description": "Average time readers spend on this page in seconds"
+      },
+      "engagement_rate": {
+        "type": "number",
+        "description": "Engagement rate as a decimal (e.g., 0.045 = 4.5%)"
+      },
+      "conversion_count": {
+        "type": "number",
+        "description": "Number of conversions attributed to this content"
+      }
+    }
+  },
+  {
+    "name": "saas_community_metrics",
+    "displayName": "Community Metrics",
+    "description": "Cross-platform community engagement and growth tracking",
+    "fields": {
+      "platform": {
+        "type": "string",
+        "required": true,
+        "enum": ["github", "discord", "slack_community", "forum", "stack_overflow", "twitter", "linkedin", "youtube"],
+        "description": "Community platform being tracked"
+      },
+      "metric_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date of the metric snapshot (ISO 8601)"
+      },
+      "followers_or_members": {
+        "type": "number",
+        "required": true,
+        "description": "Total followers or community members on this platform"
+      },
+      "new_members_period": {
+        "type": "number",
+        "description": "New members added during this reporting period"
+      },
+      "active_contributors": {
+        "type": "number",
+        "description": "Number of members who actively contributed"
+      },
+      "posts_or_contributions": {
+        "type": "number",
+        "description": "Total posts, comments, or contributions in the period"
+      },
+      "github_stars": {
+        "type": "number",
+        "description": "GitHub repository star count (GitHub platform only)"
+      },
+      "github_open_issues": {
+        "type": "number",
+        "description": "Open issue count (GitHub platform only)"
+      },
+      "github_open_prs": {
+        "type": "number",
+        "description": "Open pull request count (GitHub platform only)"
+      },
+      "engagement_rate": {
+        "type": "number",
+        "description": "Engagement rate as a decimal (active / total members)"
+      },
+      "sentiment_trend": {
+        "type": "string",
+        "enum": ["improving", "stable", "declining"],
+        "description": "Overall sentiment direction for this platform"
+      }
+    }
+  },
+  {
+    "name": "saas_deals",
+    "displayName": "Deals",
+    "description": "Sales pipeline deals with stage tracking and win/loss analysis",
+    "fields": {
+      "deal_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name or title of the deal"
+      },
+      "account_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to saas_accounts"
+      },
+      "stage": {
+        "type": "string",
+        "required": true,
+        "enum": ["prospecting", "discovery", "demo", "proposal", "negotiation", "closed_won", "closed_lost"],
+        "description": "Current deal stage in the pipeline"
+      },
+      "deal_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["new_business", "expansion", "renewal", "upsell", "cross_sell"],
+        "description": "Type of sales opportunity"
+      },
+      "annual_value": {
+        "type": "number",
+        "required": true,
+        "description": "Annual contract value of the deal"
+      },
+      "probability": {
+        "type": "number",
+        "description": "Win probability as a percentage (0-100)"
+      },
+      "expected_close_date": {
+        "type": "date",
+        "required": true,
+        "description": "Expected date the deal will close"
+      },
+      "owner": {
+        "type": "string",
+        "required": true,
+        "description": "Sales rep who owns this deal"
+      },
+      "source": {
+        "type": "string",
+        "enum": ["inbound", "outbound", "referral", "partner", "event", "product_led"],
+        "description": "How this deal originated"
+      },
+      "created_at": {
+        "type": "date",
+        "required": true,
+        "description": "When the deal was created (ISO 8601)"
+      },
+      "closed_at": {
+        "type": "date",
+        "description": "When the deal was closed (won or lost)"
+      },
+      "lost_reason": {
+        "type": "string",
+        "enum": ["price", "timing", "no_budget", "no_decision", "chose_alternative", "feature_gap", "other"],
+        "description": "Reason the deal was lost (closed_lost only)"
+      },
+      "plan_tier": {
+        "type": "string",
+        "enum": ["starter", "professional", "enterprise"],
+        "description": "Plan tier the deal is targeting"
+      }
+    }
+  },
+  {
+    "name": "saas_revenue_metrics",
+    "displayName": "Revenue Metrics",
+    "description": "Periodic MRR/ARR snapshots with retention and expansion metrics",
+    "fields": {
+      "period_start": {
+        "type": "date",
+        "required": true,
+        "description": "Start date of the reporting period"
+      },
+      "period_end": {
+        "type": "date",
+        "required": true,
+        "description": "End date of the reporting period"
+      },
+      "period_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["weekly", "monthly", "quarterly"],
+        "description": "Type of reporting period"
+      },
+      "total_mrr": {
+        "type": "number",
+        "required": true,
+        "description": "Total monthly recurring revenue at period end"
+      },
+      "new_mrr": {
+        "type": "number",
+        "required": true,
+        "description": "MRR from new customers acquired in this period"
+      },
+      "expansion_mrr": {
+        "type": "number",
+        "required": true,
+        "description": "MRR increase from existing customer upgrades"
+      },
+      "contraction_mrr": {
+        "type": "number",
+        "required": true,
+        "description": "MRR decrease from existing customer downgrades"
+      },
+      "churned_mrr": {
+        "type": "number",
+        "required": true,
+        "description": "MRR lost from customer cancellations"
+      },
+      "net_new_mrr": {
+        "type": "number",
+        "required": true,
+        "description": "Net change in MRR (new + expansion - contraction - churned)"
+      },
+      "total_arr": {
+        "type": "number",
+        "description": "Annual recurring revenue (MRR * 12)"
+      },
+      "net_revenue_retention": {
+        "type": "number",
+        "description": "Net revenue retention rate as a percentage"
+      },
+      "gross_revenue_retention": {
+        "type": "number",
+        "description": "Gross revenue retention rate as a percentage"
+      },
+      "active_accounts": {
+        "type": "number",
+        "description": "Total number of active paying accounts"
+      },
+      "arpu": {
+        "type": "number",
+        "description": "Average revenue per user/account"
+      }
+    }
+  },
+  {
+    "name": "saas_support_tickets",
+    "displayName": "Support Tickets",
+    "description": "Customer support ticket lifecycle with SLA tracking and satisfaction",
+    "fields": {
+      "subject": {
+        "type": "string",
+        "required": true,
+        "description": "Subject line of the support ticket"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Detailed description of the issue"
+      },
+      "account_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to saas_accounts"
+      },
+      "submitter_email": {
+        "type": "string",
+        "required": true,
+        "description": "Email of the person who submitted the ticket"
+      },
+      "priority": {
+        "type": "string",
+        "required": true,
+        "enum": ["low", "medium", "high", "critical"],
+        "description": "Ticket priority level"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "enum": ["bug", "question", "feature_request", "billing", "onboarding", "integration", "performance", "security", "data_issue"],
+        "description": "Issue category for routing and reporting"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["open", "in_progress", "waiting_customer", "waiting_internal", "resolved", "closed"],
+        "description": "Current ticket status"
+      },
+      "channel": {
+        "type": "string",
+        "required": true,
+        "enum": ["email", "chat", "phone", "portal", "api"],
+        "description": "Channel through which the ticket was submitted"
+      },
+      "assignee": {
+        "type": "string",
+        "description": "Support agent assigned to this ticket"
+      },
+      "created_at": {
+        "type": "date",
+        "required": true,
+        "description": "When the ticket was created (ISO 8601)"
+      },
+      "first_response_at": {
+        "type": "date",
+        "description": "When the first response was sent"
+      },
+      "resolved_at": {
+        "type": "date",
+        "description": "When the ticket was resolved"
+      },
+      "satisfaction_score": {
+        "type": "number",
+        "description": "Customer satisfaction score (1-5)"
+      },
+      "escalated": {
+        "type": "boolean",
+        "description": "Whether this ticket was escalated"
+      },
+      "tags": {
+        "type": "array",
+        "description": "Tags for categorization and filtering"
+      }
+    }
+  },
+  {
+    "name": "saas_market_landscape",
+    "displayName": "Market Landscape",
+    "description": "Industry product tracking with positioning and feature comparisons",
+    "fields": {
+      "product_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the product being tracked"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "description": "Product category or market segment"
+      },
+      "positioning": {
+        "type": "string",
+        "enum": ["market_leader", "established", "emerging", "niche"],
+        "description": "Market positioning of this product"
+      },
+      "target_market": {
+        "type": "string",
+        "enum": ["smb", "mid_market", "enterprise", "all_segments"],
+        "description": "Primary target market segment"
+      },
+      "pricing_model": {
+        "type": "string",
+        "enum": ["freemium", "usage_based", "seat_based", "flat_rate", "hybrid"],
+        "description": "Pricing model used by this product"
+      },
+      "key_features": {
+        "type": "array",
+        "description": "Notable features of this product"
+      },
+      "differentiators": {
+        "type": "array",
+        "description": "Key differentiators from other products in the landscape"
+      },
+      "last_updated": {
+        "type": "date",
+        "description": "When this landscape entry was last reviewed"
+      },
+      "notes": {
+        "type": "string",
+        "description": "Free-text notes about this product"
+      }
+    }
+  },
+  {
+    "name": "saas_feature_requests",
+    "displayName": "Feature Requests",
+    "description": "Customer feature requests with voting, prioritization, and delivery tracking",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Short title of the feature request"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Detailed description of the requested feature"
+      },
+      "requested_by": {
+        "type": "string",
+        "description": "Name or email of the person who requested the feature"
+      },
+      "account_id": {
+        "type": "string",
+        "description": "Reference to saas_accounts (if from a customer)"
+      },
+      "source": {
+        "type": "string",
+        "required": true,
+        "enum": ["support_ticket", "sales_call", "community", "internal", "feedback_form"],
+        "description": "How this feature request was submitted"
+      },
+      "priority": {
+        "type": "string",
+        "enum": ["low", "medium", "high", "critical"],
+        "description": "Internal priority assessment"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["submitted", "under_review", "planned", "in_progress", "shipped", "declined"],
+        "description": "Current status of the feature request"
+      },
+      "votes": {
+        "type": "number",
+        "description": "Number of customer votes for this feature"
+      },
+      "category": {
+        "type": "string",
+        "description": "Product area or category this feature belongs to"
+      },
+      "target_release": {
+        "type": "string",
+        "description": "Planned release version or milestone"
+      },
+      "shipped_version": {
+        "type": "string",
+        "description": "Version in which this feature was shipped"
+      },
+      "created_at": {
+        "type": "date",
+        "required": true,
+        "description": "When the feature request was created (ISO 8601)"
+      }
+    }
   }
 ]

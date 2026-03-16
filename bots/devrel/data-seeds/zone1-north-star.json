@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "community_goals",
+      "value": "GitHub stars growth: 10% month-over-month. Issue response time: <24h. Community sentiment: net positive. Active contributors: growing quarter-over-quarter.",
+      "description": "Default community health targets — customize to match your actual goals"
+    }
+  ]
+}

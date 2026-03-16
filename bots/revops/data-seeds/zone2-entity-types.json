@@ -1,0 +1,62 @@
+{
+  "entityTypes": [
+    {
+      "name": "revops_findings",
+      "displayName": "RevOps Findings",
+      "description": "Revenue operations analysis findings and insights",
+      "domain": "finance",
+      "sampleFields": ["severity", "category", "description", "recommendation", "metrics"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity level"},
+        "category": {"type": "string", "required": true, "enum": ["attribution", "cac-ltv", "conversion", "forecast", "general"], "description": "Finding category"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding description"},
+        "recommendation": {"type": "string", "description": "Recommended action based on finding"},
+        "metrics": {"type": "object", "description": "Supporting quantitative metrics"}
+      }
+    },
+    {
+      "name": "revops_alerts",
+      "displayName": "RevOps Alerts",
+      "description": "Urgent revenue operations alerts requiring immediate attention",
+      "domain": "finance",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action to resolve"},
+        "acknowledged": {"type": "boolean", "description": "Whether alert has been acknowledged"}
+      }
+    },
+    {
+      "name": "revops_forecasts",
+      "displayName": "RevOps Forecasts",
+      "description": "Revenue forecasts with monthly and quarterly projections",
+      "domain": "finance",
+      "sampleFields": ["period", "forecast_type", "projected_revenue", "confidence", "assumptions", "risks"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Forecast period (e.g., 2026-Q2, 2026-04)"},
+        "forecast_type": {"type": "string", "required": true, "enum": ["monthly", "quarterly"], "description": "Forecast granularity"},
+        "projected_revenue": {"type": "number", "required": true, "description": "Projected revenue amount"},
+        "confidence": {"type": "string", "enum": ["low", "medium", "high"], "description": "Confidence level in the projection"},
+        "assumptions": {"type": "string", "description": "Key assumptions underlying the forecast"},
+        "risks": {"type": "string", "description": "Identified risks to achieving the forecast"}
+      }
+    },
+    {
+      "name": "revops_metrics",
+      "displayName": "RevOps Metrics",
+      "description": "Core revenue operations metrics tracked over time",
+      "domain": "finance",
+      "sampleFields": ["blended_cac", "ltv", "ltv_cac_ratio", "conversion_rate", "churn_rate", "expansion_revenue_rate"],
+      "fields": {
+        "blended_cac": {"type": "number", "required": true, "description": "Blended customer acquisition cost across all channels"},
+        "ltv": {"type": "number", "required": true, "description": "Customer lifetime value"},
+        "ltv_cac_ratio": {"type": "number", "required": true, "description": "LTV to CAC ratio — healthy is above 3:1"},
+        "conversion_rate": {"type": "number", "required": true, "description": "Overall pipeline-to-close conversion rate"},
+        "churn_rate": {"type": "number", "required": true, "description": "Monthly or annual customer churn rate"},
+        "expansion_revenue_rate": {"type": "number", "description": "Revenue expansion rate from existing customers"}
+      }
+    }
+  ]
+}

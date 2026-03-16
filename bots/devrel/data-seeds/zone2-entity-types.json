@@ -1,0 +1,47 @@
+{
+  "entityTypes": [
+    {
+      "name": "devrel_findings",
+      "displayName": "DevRel Findings",
+      "description": "Developer community insights, friction points, and advocacy observations",
+      "domain": "marketing",
+      "sampleFields": ["severity", "category", "description", "evidence", "recommendation"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity level"},
+        "category": {"type": "string", "required": true, "enum": ["friction", "sentiment", "growth", "advocacy", "documentation"], "description": "Finding category"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding description"},
+        "evidence": {"type": "string", "description": "Supporting data — issue links, metrics, quotes"},
+        "recommendation": {"type": "string", "description": "Recommended action to address the finding"}
+      }
+    },
+    {
+      "name": "devrel_alerts",
+      "displayName": "DevRel Alerts",
+      "description": "Urgent community health alerts requiring immediate attention",
+      "domain": "marketing",
+      "sampleFields": ["severity", "title", "description", "action_required", "acknowledged"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "action_required": {"type": "string", "description": "Required action to resolve"},
+        "acknowledged": {"type": "boolean", "description": "Whether alert has been acknowledged"}
+      }
+    },
+    {
+      "name": "devrel_community_metrics",
+      "displayName": "Community Metrics",
+      "description": "Periodic snapshots of developer community health metrics",
+      "domain": "marketing",
+      "sampleFields": ["period", "stars", "open_issues", "avg_response_time", "active_contributors", "sentiment_score"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Time period for this snapshot"},
+        "stars": {"type": "number", "required": true, "description": "Total GitHub stars count"},
+        "open_issues": {"type": "number", "description": "Current open issue count"},
+        "avg_response_time": {"type": "number", "description": "Average issue response time in hours"},
+        "active_contributors": {"type": "number", "description": "Contributors active in this period"},
+        "sentiment_score": {"type": "number", "description": "Community sentiment score (-1.0 to 1.0)"}
+      }
+    }
+  ]
+}

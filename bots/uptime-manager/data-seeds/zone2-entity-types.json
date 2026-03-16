@@ -1,0 +1,65 @@
+{
+  "entityTypes": [
+    {
+      "name": "uptime_findings",
+      "displayName": "Uptime Findings",
+      "description": "Uptime observations and reliability analysis results",
+      "domain": "operations",
+      "sampleFields": ["severity", "component", "description", "recommendation", "uptime_impact"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding severity level"},
+        "component": {"type": "string", "required": true, "description": "Affected service component"},
+        "description": {"type": "string", "required": true, "description": "Detailed finding description"},
+        "recommendation": {"type": "string", "description": "Recommended action to improve uptime"},
+        "uptime_impact": {"type": "string", "description": "How this finding affects uptime percentage"}
+      }
+    },
+    {
+      "name": "uptime_alerts",
+      "displayName": "Uptime Alerts",
+      "description": "Urgent uptime alerts requiring immediate attention",
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "description", "sla_window_affected", "acknowledged"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Alert severity"},
+        "title": {"type": "string", "required": true, "description": "Alert title"},
+        "description": {"type": "string", "required": true, "description": "Alert details"},
+        "sla_window_affected": {"type": "string", "description": "Which SLA window is impacted"},
+        "acknowledged": {"type": "boolean", "description": "Whether alert has been acknowledged"}
+      }
+    },
+    {
+      "name": "uptime_incidents",
+      "displayName": "Uptime Incidents",
+      "description": "Customer-facing incidents with status page tracking",
+      "domain": "operations",
+      "sampleFields": ["incident_ref", "title", "customer_status", "status_page_updated", "communication_sent", "started_at", "resolved_at", "postmortem_completed"],
+      "fields": {
+        "incident_ref": {"type": "string", "required": true, "description": "Unique incident reference identifier"},
+        "title": {"type": "string", "required": true, "description": "Incident title for status page"},
+        "customer_status": {"type": "string", "required": true, "enum": ["operational", "degraded_performance", "partial_outage", "major_outage"], "description": "Customer-facing status"},
+        "status_page_updated": {"type": "boolean", "description": "Whether the status page has been updated"},
+        "communication_sent": {"type": "boolean", "description": "Whether customer communication has been sent"},
+        "started_at": {"type": "date", "description": "Incident start time"},
+        "resolved_at": {"type": "date", "description": "Incident resolution time"},
+        "postmortem_completed": {"type": "boolean", "description": "Whether postmortem has been completed"}
+      }
+    },
+    {
+      "name": "uptime_sla_reports",
+      "displayName": "Uptime SLA Reports",
+      "description": "Periodic SLA compliance reports with uptime calculations",
+      "domain": "operations",
+      "sampleFields": ["period", "target_uptime", "actual_uptime", "budget_remaining_minutes", "incidents_count", "longest_incident_minutes", "compliance_status"],
+      "fields": {
+        "period": {"type": "string", "required": true, "description": "Reporting period (e.g., 30-day, 90-day, calendar year)"},
+        "target_uptime": {"type": "number", "required": true, "description": "Target uptime percentage (e.g., 99.9)"},
+        "actual_uptime": {"type": "number", "required": true, "description": "Actual uptime percentage achieved"},
+        "budget_remaining_minutes": {"type": "number", "description": "Remaining downtime budget in minutes"},
+        "incidents_count": {"type": "number", "description": "Total incidents in the reporting period"},
+        "longest_incident_minutes": {"type": "number", "description": "Duration of the longest incident in minutes"},
+        "compliance_status": {"type": "string", "required": true, "enum": ["compliant", "warning", "breached"], "description": "SLA compliance status"}
+      }
+    }
+  ]
+}

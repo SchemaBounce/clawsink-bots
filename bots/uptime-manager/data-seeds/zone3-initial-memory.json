@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Discover available incidents and sre_alerts data. Establish baseline uptime metrics and status page state."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No patterns learned yet. Will populate as incidents and SLA trends are detected."
+    },
+    {
+      "namespace": "sla_tracker",
+      "key": "init",
+      "value": "No SLA data yet. Will begin tracking 30-day, 90-day, and calendar year uptime on first incident data ingestion."
+    },
+    {
+      "namespace": "incident_history",
+      "key": "init",
+      "value": "No incident history yet. Will record resolved incidents and postmortem summaries for pattern detection."
+    }
+  ]
+}
