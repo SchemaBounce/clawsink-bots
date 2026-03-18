@@ -90,4 +90,7 @@ A growth-focused team for SaaS companies. Predicts churn, optimizes sales pipeli
 
 SaaS companies focused on retention, growth, and customer success.
 
-For comprehensive coverage across engineering, product, growth, revenue, and customer success, see the [SaaS Command Center](../saas-command-center/) team (18 bots).
+For broader operational coverage, see the tiered SaaS teams:
+- **[SaaS Starter](../saas-starter/)** (6 bots) — core essentials across all domains
+- **[SaaS Professional](../saas-professional/)** (12 bots) — engineering, product, growth, revenue, and customer success
+- **[SaaS Command Center](../saas-command-center/)** (18 bots) — full-scale operational coverage
