@@ -5,9 +5,9 @@ metadata:
   name: saas-command-center
   displayName: "SaaS Command Center"
   version: "1.0.0"
-  description: "Run your entire SaaS company — 18 bots covering engineering, product, growth, revenue, and customer success under unified coordination"
+  description: "Run your entire SaaS company at scale — 18 bots covering engineering, product, growth, revenue, and customer success under unified coordination"
   category: saas
-  tags: ["saas", "full-stack", "engineering", "growth", "revenue", "product", "customer-success", "flagship"]
+  tags: ["saas", "scale", "full-stack", "engineering", "growth", "revenue", "product", "customer-success", "flagship"]
   author: "schemabounce"
   license: "MIT"
   estimatedMonthlyCost: "varies"
@@ -271,6 +271,12 @@ On the growth side, Marketing Growth coordinates Blog Writer, Developer Relation
 - Revenue Operations detects CAC/LTV shift -> finding to Sales Pipeline, Executive Assistant
 - Customer Support routes feature requests -> finding to Product Owner
 - Customer Support escalates critical issue -> alert to Executive Assistant
+
+## Smaller Tiers
+
+For smaller teams that don't need full 18-bot coverage:
+- **[SaaS Starter](../saas-starter/)** (6 bots) — core essentials: engineering, growth, revenue, customer support
+- **[SaaS Professional](../saas-professional/)** (12 bots) — adds product management, content, bug triage, onboarding, and churn prediction
 
 ## Getting Started
 
