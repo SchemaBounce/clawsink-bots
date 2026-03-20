@@ -12,6 +12,29 @@ agent:
   capabilities: ["writing", "research", "seo"]
   hostingMode: "openclaw"
   defaultDomain: "content"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS read zone1 keys (brand_voice, product_catalog, company_glossary) before writing any content — every post must match the established tone, use correct product names, and reference current features.
+    - ALWAYS check the editorial_calendar memory namespace before selecting a topic to avoid duplicate coverage. Mark topics as "in-progress" when starting a draft.
+    - NEVER auto-publish content. All posts must be submitted as blog_drafts entities with status "draft" and routed to executive-assistant for human review.
+    - NEVER include pricing specifics, competitor names, or unreleased feature details unless explicitly present in product_catalog zone1 data.
+    - Orchestrate sub-agents in strict sequence: researcher validates topic feasibility first, writer drafts from research notes, editor reviews against brand_voice. Do not skip the editor pass.
+    - When receiving a request from marketing-growth, extract the target topic, audience, and publish window — store these in editorial_calendar memory before beginning research.
+    - After completing a draft, send a finding to marketing-growth (for promotion planning) and to social-media-strategist (for social distribution) with the blog title, summary, and target publish date.
+    - If the researcher sub-agent cannot find sufficient source material, send a request to executive-assistant explaining the gap rather than producing a thin post.
+    - Alternate content sections (SchemaBounce vs OpenCLAW) across consecutive runs. Track the last section in editorial_calendar memory.
+    - Cap each blog post at 1500 words unless the request explicitly specifies long-form content.
+  toolInstructions: |
+    ## Tool Usage
+    - Query `blog_topics` entities to discover approved and requested topics. Filter by status "approved" or "requested" and prioritize by date.
+    - Query `product_docs` entities to gather accurate technical details for blog content. Use keyword search matching the current topic.
+    - Write `blog_drafts` entities for every completed post. Required fields: title, section (schemabounce|openclaw), category, content_markdown, status ("draft"), word_count, target_publish_date.
+    - Write `editorial_notes` entities to record editor feedback, revision history, and style corrections for future reference.
+    - Use `editorial_calendar` memory namespace to track: upcoming topics, last published section, assigned deadlines, and topic status (planned/in-progress/submitted/published).
+    - Use `writing_notes` memory namespace for the current run's research notes, outline drafts, and source references. Clear after the post is submitted.
+    - Use `topic_research` memory namespace to store reusable research (product comparisons, technical explanations) that may apply to future posts.
+    - Search `product_docs` with semantic queries when writing technical tutorials — prefer exact product terminology from company_glossary zone1 data.
+    - Entity IDs for blog_drafts should follow the pattern: `blog-{section}-{date}-{slug}` (e.g., `blog-schemabounce-2026-03-19-cdc-patterns`).
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -35,13 +58,19 @@ messaging:
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "draft blog post ready for review" }
     - { type: "request", to: ["executive-assistant"], when: "missing context or unable to write" }
+    - { type: "finding", to: ["marketing-growth"], when: "blog post published — ready for promotion" }
+    - { type: "finding", to: ["social-media-strategist"], when: "new blog content available for social distribution" }
 data:
   entityTypesRead: ["blog_topics", "product_docs"]
   entityTypesWrite: ["blog_drafts", "editorial_notes"]
   memoryNamespaces: ["editorial_calendar", "writing_notes", "topic_research"]
 zones:
   zone1Read: ["brand_voice", "product_catalog", "company_glossary"]
-  zone2Domains: ["content"]
+  zone2Domains: ["content", "marketing"]
+skills:
+  - ref: "skills/report-generation@1.0.0"
+  - ref: "skills/trend-analysis@1.0.0"
+  - ref: "skills/sentiment-analysis@1.0.0"
 plugins:
   - ref: "composio@latest"
     slot: "oauth"

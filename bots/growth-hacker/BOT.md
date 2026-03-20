@@ -12,6 +12,29 @@ agent:
   capabilities: ["analytics", "strategy"]
   hostingMode: "openclaw"
   defaultDomain: "marketing"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS read zone1 keys (mission, industry, stage, priorities) before designing experiments — experiments must target the company's current growth stage and priority channels.
+    - ALWAYS check experiment_log memory for running experiments before launching new ones. Limit concurrent experiments to 3 per channel to maintain statistical validity.
+    - NEVER modify live experiments mid-run. If an experiment needs adjustment, mark it as "killed" in growth_experiments and create a new experiment entity with the revised parameters.
+    - NEVER exceed budget guardrails. If acquisition_metrics show a channel's CAC exceeding 3x the target, kill all experiments on that channel and escalate to executive-assistant immediately.
+    - Apply kill criteria rigorously — when an experiment meets its kill conditions, mark it "killed" in the same run. Do not carry underperforming experiments hoping they improve.
+    - When campaign_results are created (automation trigger), analyze ROI within the same run and write a growth_findings entity with the result and recommended next action.
+    - Send experiment results that affect campaign strategy to marketing-growth with specific recommendations: scale, pivot, or kill, along with supporting metrics.
+    - Send CAC impact findings to revops when acquisition channel changes meaningfully affect customer acquisition cost.
+    - Update channel_performance memory each run with per-channel metrics: CAC, conversion_rate, volume, trend. Use this for cross-channel comparison and budget allocation recommendations.
+    - Track viral_coefficients memory for referral and viral loop experiments. A viral coefficient below 0.5 triggers an escalation; above 1.0 triggers a scale recommendation.
+  toolInstructions: |
+    ## Tool Usage
+    - Query `acquisition_metrics` entities to pull per-channel acquisition data: impressions, clicks, signups, CAC, conversion_rate. Filter by channel and date range.
+    - Query `campaign_results` entities to analyze completed campaign outcomes. Join with growth_experiments entities by experiment name to evaluate hypothesis outcomes.
+    - Query `conversion_funnels` entities to map stage-by-stage drop-off rates. Identify the highest-leverage optimization points (largest absolute drop-offs).
+    - Write `growth_experiments` entities for each new experiment. Required fields: name, hypothesis, channel, status (planned|running|completed|killed), metric, baseline, target, start_date, sample_size_needed, current_result, kill_criteria, confidence_level.
+    - Write `growth_findings` entities for analysis results and recommendations. Required fields: finding_type (experiment_result|channel_analysis|funnel_insight|viral_update), channel, metric_name, metric_value, baseline_value, change_percentage, recommendation (scale|pivot|kill|investigate).
+    - Use `experiment_log` memory namespace to maintain the master list of all experiments: running, completed, and killed. Key format: `exp-{channel}-{name}`. Store: status, start_date, current_metrics.
+    - Use `channel_performance` memory namespace to store per-channel rolling performance. Key format: `channel-{name}`. Store: current_cac, conversion_rate, volume, trend, last_updated.
+    - Use `viral_coefficients` memory namespace to track referral loop metrics. Key format: `viral-{loop-name}`. Store: k_factor, cycle_time_days, trend.
+    - Entity IDs for growth_experiments should follow: `exp-{channel}-{short-name}-{version}` (e.g., `exp-referral-incentive-test-v2`).
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -32,13 +55,18 @@ messaging:
     - { type: "request", from: ["executive-assistant"] }
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "breakthrough experiment result or critical channel underperformance" }
+    - { type: "finding", to: ["marketing-growth"], when: "experiment results affecting campaign strategy or channel allocation" }
+    - { type: "finding", to: ["revops"], when: "CAC impact from acquisition channel changes" }
 data:
   entityTypesRead: ["acquisition_metrics", "campaign_results", "conversion_funnels"]
   entityTypesWrite: ["growth_experiments", "growth_findings"]
   memoryNamespaces: ["experiment_log", "channel_performance", "viral_coefficients"]
 zones:
   zone1Read: ["mission", "industry", "stage", "priorities"]
-  zone2Domains: ["marketing"]
+  zone2Domains: ["marketing", "growth"]
+egress:
+  mode: "restricted"
+  allowedDomains: ["www.googleapis.com", "analyticsdata.googleapis.com"]
 skills:
   - ref: "skills/ab-testing@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"

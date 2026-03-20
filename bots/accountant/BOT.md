@@ -12,6 +12,31 @@ agent:
   capabilities: ["finance", "analytics"]
   hostingMode: "openclaw"
   defaultDomain: "finance"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS read North Star `budget_constraints` at run start — every spending assessment must compare against these limits
+    - ALWAYS categorize every new transaction and invoice — nothing stays uncategorized after a run
+    - ALWAYS check for duplicate invoices by matching vendor, amount, and date before processing
+    - NEVER modify transaction amounts or invoice totals — flag discrepancies as `acct_findings`, do not correct them
+    - NEVER expose raw financial figures in messages to non-finance bots — use percentage deviations and categories only
+    - NEVER delete or archive financial records — only add status flags and findings
+    - Escalation: payment failures and billing system errors trigger immediate alert to executive-assistant
+    - Budget anomalies and overspend trends go to business-analyst as type=finding for cross-domain context
+    - Store learned categorization rules in `learned_patterns` memory to improve accuracy over time
+    - Store budget threshold overrides in `thresholds` memory — update when North Star budget_constraints change
+  toolInstructions: |
+    ## Tool Usage
+    - Query `transactions` for new and uncategorized transaction records — filter by `status` and `created_at`
+    - Query `invoices` for unmatched and pending invoices — check against existing purchase orders
+    - Query `inv_findings` from inventory-manager for cost-of-goods signals that affect financial analysis
+    - Write to `acct_findings` with fields: `category`, `finding_type` (anomaly/trend/categorization), `amount_impact`, `severity`, `details`
+    - Write to `acct_alerts` only for critical payment failures or billing errors requiring immediate attention
+    - Write to `transactions` to update categorization fields (category, subcategory, tags) on existing records
+    - Write to `invoices` to update matching status and flags on existing records
+    - Use `working_notes` memory for in-progress categorization and matching work between runs
+    - Use `learned_patterns` memory to store vendor categorization rules and recurring charge patterns
+    - Use `thresholds` memory to store per-category budget limits and alert thresholds
+    - Search transactions by `vendor` and `amount` to detect duplicates; by `category` to assess budget utilization
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
@@ -39,7 +64,9 @@ data:
   memoryNamespaces: ["working_notes", "learned_patterns", "thresholds"]
 zones:
   zone1Read: ["mission", "budget_constraints", "industry"]
-  zone2Domains: ["finance"]
+  zone2Domains: ["finance", "operations"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/invoice-categorization@1.0.0"
   - ref: "skills/expense-tracking@1.0.0"

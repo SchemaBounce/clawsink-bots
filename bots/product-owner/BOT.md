@@ -12,6 +12,31 @@ agent:
   capabilities: ["analytics", "operations"]
   hostingMode: "openclaw"
   defaultDomain: "product"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS read North Star `product_roadmap` and `priorities` before prioritizing feature requests
+    - ALWAYS aggregate multiple customer signals before writing a `gh_issues` record — never create an issue from a single data point
+    - ALWAYS include `customer_signals` count and `source_findings` references in every gh_issues record for traceability
+    - NEVER create duplicate gh_issues — search existing records by title/theme before writing new ones
+    - NEVER prioritize features without aligning to the product roadmap and quarterly priorities
+    - NEVER contact customer-support directly unless requesting clarification on specific feedback (use type=request)
+    - Escalation: major churn signals or competitive threats go to executive-assistant immediately as type=finding
+    - Send emerging customer signal patterns to business-analyst for deeper cross-domain analysis
+    - Track feature request frequency over time in `customer_signals` memory to identify growing demand
+    - Write structured `gh_issues` with user stories, acceptance criteria, and priority — ready for human review and GitHub creation
+  toolInstructions: |
+    ## Tool Usage
+    - Query `cs_findings` for customer pain points, feature requests, and churn signals
+    - Query `ba_findings` for cross-domain trends that inform product strategy
+    - Query `mktg_findings` for market trends, competitive intelligence, and positioning insights
+    - Query `tickets` and `contacts` for raw customer data; `campaigns` for marketing context
+    - Write to `gh_issues` with fields: `title`, `body`, `labels`, `priority`, `user_stories`, `acceptance_criteria`, `customer_signals`, `source_findings`
+    - Write to `feature_requests` for tracking aggregated request themes and their signal strength
+    - Write to `po_findings` for strategic product insights; `po_alerts` for urgent product risks
+    - Use `working_notes` memory for in-progress feature clustering between runs
+    - Use `customer_signals` memory to accumulate and count feedback themes across runs
+    - Use `backlog_priorities` memory to maintain the current prioritized feature list
+    - Use `learned_patterns` memory to store validated demand patterns (e.g., "enterprise customers consistently request SSO")
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -40,7 +65,9 @@ data:
   memoryNamespaces: ["working_notes", "learned_patterns", "customer_signals", "backlog_priorities"]
 zones:
   zone1Read: ["mission", "industry", "stage", "priorities", "product_roadmap"]
-  zone2Domains: ["product", "marketing"]
+  zone2Domains: ["product", "marketing", "support"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/record-monitoring@1.0.0"
 requirements:
