@@ -43,6 +43,16 @@ agent:
   capabilities: [string] # OpenClaw capability identifiers
   hostingMode: string    # "openclaw" (managed) or "self-hosted"
   defaultDomain: string  # ADL domain this bot operates in
+  instructions: |        # Operating rules → injected as AGENTS.md in runtime
+    ## Operating Rules
+    - Rule 1: domain-specific behavioral rule
+    - Rule 2: what to always do before acting
+    - Rule 3: escalation criteria
+  toolInstructions: |    # Tool conventions → injected as TOOLS.md in runtime
+    ## Tool Usage
+    - Use adl_query_records with entity_type="x" for lookups
+    - Write findings with adl_upsert_record to entity_type="x_findings"
+    - Store unstructured analysis with adl_add_memory
 model:
   provider: string       # "anthropic" or "openai"
   preferred: string      # Model ID for normal runs
@@ -97,6 +107,35 @@ requirements:
 
 Extended documentation here. Renders as the bot's marketplace page.
 ```
+
+## Bootstrap Instructions (`agent.instructions` + `agent.toolInstructions`)
+
+The `agent:` block contains two fields that become the bot's runtime system prompt sections:
+
+| Field | Runtime Section | Purpose |
+|-------|----------------|---------|
+| `agent.instructions` | **AGENTS.md** | Operating rules, guardrails, escalation criteria, cross-bot coordination |
+| `agent.toolInstructions` | **TOOLS.md** | Tool usage conventions, entity type patterns, memory namespace rules |
+
+Both are YAML multiline strings (`|`) nested inside the `agent:` block. They are injected into every agent run alongside SOUL.md and IDENTITY.md.
+
+### Writing Good Instructions
+
+- 5-10 bullet points covering ALWAYS/NEVER rules specific to this bot's domain
+- Reference actual entity types from `data.entityTypesRead` and `data.entityTypesWrite`
+- Reference actual memory namespaces from `data.memoryNamespaces`
+- Reference actual messaging targets from `messaging.sendsTo`
+- Include escalation criteria: when to alert vs. log as finding
+- Include token budget awareness if the bot has expensive analysis patterns
+
+### Writing Good Tool Instructions
+
+- Which entity types to query with `adl_query_records` and their filter patterns
+- Which entity types to write with `adl_upsert_record` and their ID format conventions
+- When to use `adl_add_memory` (unstructured) vs `adl_write_memory` (structured)
+- When to use `adl_semantic_search` vs `adl_query_records`
+- Batch operation preferences (`bulk_upsert` for >3 records)
+- Memory namespace conventions from `data.memoryNamespaces`
 
 ## Skills Section
 
@@ -193,13 +232,30 @@ You are {Display Name}, a persistent AI team member for this business.
 3. {Third mandatory behavior}
 
 ## Run Protocol
-1. Read messages (adl_read_messages)
-2. Read memory (adl_read_memory, namespace="working_notes")
-3. Query data (adl_query_records, entity_type="{relevant_types}")
-4. Analyze and act
-5. Write findings (adl_write_record, entity_type="{role}_findings")
-6. Update memory (adl_write_memory)
-7. Message relevant bots (adl_send_message) if escalation needed
+1. Check automations (adl_list_triggers) — what is already automated?
+2. Read messages (adl_read_messages)
+3. Read memory (adl_read_memory, namespace="working_notes")
+4. Query data (adl_query_records, entity_type="{relevant_types}")
+5. Analyze and act
+6. Write findings (adl_write_record, entity_type="{role}_findings")
+7. Update memory — use adl_add_memory for unstructured text, adl_write_memory for structured data
+8. Message relevant bots (adl_send_message) if escalation needed
+
+## Memory Zone Rules
+
+Your memory access is governed by a four-zone security model:
+
+1. **Your private memory** — Plain namespaces (e.g., "working_notes") are auto-scoped to your private zone. No other agent can access them.
+2. **North Star (read-only)** — You can read `northstar:*` keys but CANNOT write to them. Escalate changes to humans.
+3. **Domain shared memory** — Read and write `domain:{your-domain}:*`. Cannot access other domains without an explicit grant.
+4. **Shared memory** — Read and write `shared:*` for cross-team data visible to all agents.
+
+## Memory Tool Selection
+
+- **`adl_add_memory`** — Preferred for unstructured text (findings, analysis, notes). Extracts facts and stores with embeddings.
+- **`adl_write_memory`** — Use for structured data (JSON, thresholds). Stored as-is.
+- **`adl_search_memory`** — Semantic search across memory. Best with `adl_add_memory` content.
+- **`adl_read_memory`** — Exact key lookup.
 
 ## Entity Types
 - Read: {comma-separated list}
@@ -316,31 +372,39 @@ Bootstrap private memory entries.
 ## Validation
 
 1. `BOT.md` has valid YAML frontmatter with `kind: Bot` and all required fields
-2. `SOUL.md` exists and is under 800 tokens
-3. `data-seeds/` contains all three zone files with valid JSON
-4. `metadata.name` matches the directory name
-5. All `skills[].ref` reference existing skill directories with matching versions
-6. All `messaging.sendsTo[].to` reference valid bot names or system targets
-7. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
-8. All files in `agents/` have valid YAML frontmatter with `name` and `description`
-9. Agent `name` matches the filename (e.g., `researcher.md` -> `name: researcher`)
-10. Agent `tools` only references valid ADL tool names
-11. All `plugins[].ref` are valid npm package specs (name + semver range)
-12. All `plugins[].reason` are non-empty strings
-13. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
-14. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
-15. All `mcpServers[].reason` are non-empty strings
-16. No `mcpServers[].config` values contain secrets
+2. `SOUL.md` exists and is under 800 tokens (~600 words)
+3. `SOUL.md` contains required sections: Mission, Mandates, Run Protocol, Memory Zone Rules, Memory Tool Selection, Entity Types, Escalation
+4. `data-seeds/` contains all three zone files with valid JSON
+5. `data-seeds/zone3-initial-memory.json` uses plain namespaces (NOT `northstar:` or `domain:` prefixed)
+6. `metadata.name` matches the directory name under `bots/`
+7. All `skills[].ref` reference existing skill directories with matching versions
+8. All `messaging.sendsTo[].to` reference valid bot names or system targets
+9. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
+10. `agent.instructions` is present and contains domain-specific operating rules (not generic boilerplate)
+11. `agent.toolInstructions` is present and references actual entity types from `data.entityTypesRead` / `data.entityTypesWrite`
+12. `egress` block is present with an explicit `mode` value
+13. All files in `agents/` have valid YAML frontmatter with `name` and `description`
+14. Agent `name` matches the filename (e.g., `researcher.md` -> `name: researcher`)
+15. Agent `tools` only references valid ADL tool names
+16. All `plugins[].ref` are valid npm package specs (name + semver range)
+17. All `plugins[].reason` are non-empty strings
+18. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
+19. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
+20. All `mcpServers[].reason` are non-empty strings
+21. No `mcpServers[].config` values contain secrets
 
 ## What the Platform Does
 
 | You Provide | The Platform Will |
 |-------------|-------------------|
-| `SOUL.md` | Use it as the bot's identity on every run |
+| `SOUL.md` | Use it as the bot's identity (system prompt section `# SOUL.md`) on every run |
+| `agent.instructions` | Inject as `# AGENTS.md` section — operating rules and guardrails |
+| `agent.toolInstructions` | Inject as `# TOOLS.md` section — tool usage conventions |
 | `skills[].ref` | Append each skill's `prompt.md` to the bot's instructions |
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data — North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |
+| `egress` | Configure the bot's external network access policy (proxy token allowlist) |
 | `schedule.default` | Run the bot on the declared schedule (user can adjust) |
 | `trigger` | Run the bot in response to data change events on the declared entity type |
 | `messaging` | Connect the bot to the message system so it can communicate with other bots |
