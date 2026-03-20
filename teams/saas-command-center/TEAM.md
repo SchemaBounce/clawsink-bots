@@ -5,7 +5,7 @@ metadata:
   name: saas-command-center
   displayName: "SaaS Command Center"
   version: "1.0.0"
-  description: "Run your entire SaaS company at scale — 18 bots covering engineering, product, growth, revenue, and customer success under unified coordination"
+  description: "Run your entire SaaS company at scale — 19 bots covering engineering, product, growth, revenue, customer success, and platform optimization under unified coordination"
   category: saas
   tags: ["saas", "scale", "full-stack", "engineering", "growth", "revenue", "product", "customer-success", "flagship"]
   author: "schemabounce"
@@ -32,6 +32,7 @@ bots:
   - ref: "bots/market-intelligence@1.0.0"
   - ref: "bots/revops@1.0.0"
   - ref: "bots/uptime-manager@1.0.0"
+  - ref: "bots/platform-optimizer@1.0.0"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"
@@ -185,6 +186,11 @@ orgChart:
       role: specialist
       reportsTo: executive-assistant
       domain: customer-success
+    # --- Platform ---
+    - bot: platform-optimizer
+      role: specialist
+      reportsTo: executive-assistant
+      domain: platform-ops
   escalation:
     critical: executive-assistant
     unhandled: executive-assistant
@@ -216,6 +222,9 @@ orgChart:
       - name: "Market Threat"
         trigger: "market_threat_detected"
         chain: [market-intelligence, product-owner, executive-assistant]
+      - name: "Platform Health Degradation"
+        trigger: "platform_health_critical"
+        chain: [platform-optimizer, executive-assistant]
 ---
 # SaaS Command Center
 

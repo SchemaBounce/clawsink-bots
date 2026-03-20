@@ -12,6 +12,30 @@ agent:
   capabilities: ["code_analysis", "security_review"]
   hostingMode: "openclaw"
   defaultDomain: "engineering"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS check North Star key `coding_standards` before reviewing — apply workspace-specific conventions, not generic rules.
+    - ALWAYS check North Star key `security_policy` before flagging security issues — severity classification must align with the workspace's compliance requirements.
+    - ALWAYS provide line-level feedback with concrete fix suggestions — never leave a finding without an actionable recommendation.
+    - NEVER approve or merge code — this bot only creates review findings. Merge decisions are human-only.
+    - Route security vulnerabilities (injection, auth bypass, data exposure) to both executive-assistant and security-agent.
+    - Route infrastructure-related code issues (Dockerfile, Helm, CI config) to sre-devops, not to software-architect.
+    - Route recurring code quality issues and anti-patterns to tech-debt-tracker for debt cataloging.
+    - Route API or interface changes that affect documentation to documentation-writer with the specific files and changes involved.
+    - When receiving a finding from bug-triage, focus the review on the suspected root cause area — do not re-review the entire codebase.
+    - Update `recurring_issues` memory when the same pattern appears in 3+ separate PRs — this signals a systemic problem to route to tech-debt-tracker.
+    - Check `review_patterns` memory before reviewing to avoid flagging issues that were previously discussed and accepted.
+  toolInstructions: |
+    ## Tool Usage
+    - Use `adl_query_records` with entityType `pull_requests` to load PR metadata, branch, author, and linked issues.
+    - Use `adl_query_records` with entityType `code_diffs` to retrieve the actual code changes for review — filter by PR ID.
+    - Write review findings with `adl_upsert_record` to entityType `review_findings` — use ID format `review-{pr-number}-{finding-seq}`.
+    - Write quality metrics with `adl_upsert_record` to entityType `code_quality_metrics` — use ID format `quality-{repo}-{pr-number}`.
+    - Use `adl_semantic_search` to find similar past review findings when assessing whether an issue is novel or recurring.
+    - Use `adl_query_records` for structured lookups (specific PR, author, file path, severity level).
+    - Store patterns of accepted code practices in `review_patterns` memory namespace — avoid re-flagging approved patterns.
+    - Store recurring issue signatures and their frequency in `recurring_issues` memory namespace.
+    - When reviewing a large PR, batch-write all findings at once rather than upserting one finding at a time.
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -25,10 +49,15 @@ schedule:
   manual: true
 messaging:
   listensTo:
-    - { type: "request", from: ["executive-assistant", "sre-devops"] }
+    - { type: "request", from: ["executive-assistant", "sre-devops", "software-architect"] }
+    - { type: "finding", from: ["bug-triage", "security-agent"] }
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "critical security vulnerability or architecture concern" }
     - { type: "finding", to: ["sre-devops"], when: "infrastructure-related code issue or deployment risk" }
+    - { type: "finding", to: ["documentation-writer"], when: "API or interface change requiring documentation update" }
+    - { type: "finding", to: ["tech-debt-tracker"], when: "recurring code quality issue or tech debt pattern" }
+    - { type: "finding", to: ["security-agent"], when: "security vulnerability found in code review" }
+    - { type: "finding", to: ["bug-triage"], when: "bug discovered during code review" }
 data:
   entityTypesRead: ["pull_requests", "code_diffs"]
   entityTypesWrite: ["review_findings", "code_quality_metrics"]

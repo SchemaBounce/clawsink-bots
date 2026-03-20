@@ -12,6 +12,30 @@ agent:
   capabilities: ["analytics", "research"]
   hostingMode: "openclaw"
   defaultDomain: "design"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS categorize incoming `user_feedback` records by theme (onboarding, navigation, performance, accessibility, etc.) and severity before analysis
+    - ALWAYS include evidence count and affected user personas in every `ux_findings` record
+    - ALWAYS check `pain_points` memory for existing themes before creating new findings — merge signals into existing themes when possible
+    - NEVER write a finding without a concrete recommendation — every pain point must include a suggested improvement
+    - NEVER report individual feedback items as findings — cluster at least 3 signals into a theme first
+    - NEVER modify support ticket or customer data — only read and analyze
+    - Escalation: usability issues causing measurable churn or data loss go to executive-assistant immediately
+    - Send actionable UX patterns with clear fix recommendations to product-owner as type=finding
+    - Maintain `research_backlog` memory for emerging patterns that need more data before becoming findings
+    - Score pain points by frequency, severity, and user segment impact to prioritize recommendations
+  toolInstructions: |
+    ## Tool Usage
+    - Query `user_feedback` for raw feedback records — filter by `created_at` for new items since last run
+    - Query `usage_analytics` for quantitative signals (drop-off rates, feature adoption, session duration)
+    - Query `support_tickets` for recurring usability complaints and error reports
+    - Write to `ux_findings` with fields: `severity`, `theme`, `pain_point`, `evidence_count`, `user_impact`, `recommendation`, `source_feedback`, `affected_personas`
+    - Write to `usability_reports` for periodic summaries with trend data across multiple themes
+    - Use `user_patterns` memory to store validated behavioral patterns across runs
+    - Use `pain_points` memory to accumulate and score pain point themes over time
+    - Use `research_backlog` memory to track emerging patterns needing more evidence
+    - Search feedback records by theme tags to cluster related signals efficiently
+    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `ux_20260319_001`)
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -39,7 +63,9 @@ data:
   memoryNamespaces: ["user_patterns", "pain_points", "research_backlog"]
 zones:
   zone1Read: ["mission", "industry", "stage", "priorities"]
-  zone2Domains: ["design"]
+  zone2Domains: ["design", "support", "product"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/brand-audit@1.0.0"
 automations:

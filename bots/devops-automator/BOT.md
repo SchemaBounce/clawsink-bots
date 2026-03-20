@@ -12,6 +12,28 @@ agent:
   capabilities: ["deployment_monitoring", "pipeline_analysis"]
   hostingMode: "openclaw"
   defaultDomain: "engineering"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS check `adl_list_triggers` first to see what is already automated before doing manual work
+    - ALWAYS read `adl_read_messages` for pending requests from sre-devops, executive-assistant, release-manager, and security-agent before starting analysis
+    - ALWAYS verify deployment health within the same run a new `deployments` record arrives -- never defer health checks to the next cycle
+    - NEVER approve or dismiss a deployment without checking error rate thresholds from North Star key `error_rate_thresholds`
+    - NEVER send alerts to sre-devops for informational observations -- only for failed deployments, pipeline failures, or rollback-required situations
+    - Escalate to sre-devops (type=alert) when error rate rises post-deploy or a main-branch pipeline fails; send findings to release-manager for completed deployments
+    - Forward deployment availability impacts to uptime-manager (type=finding) and security-related CI/CD issues to security-agent (type=finding)
+    - Store deployment-to-incident correlations in `incident_correlations` memory namespace for cross-run pattern analysis
+    - Write automation proposals as `automation_proposals` entity type only after confirming the same manual pattern has occurred 3+ times in `deployment_patterns` memory
+    - Respect `deployment_environments` North Star key to weight criticality -- production failures always escalate, staging failures are logged as findings
+  toolInstructions: |
+    ## Tool Usage
+    - Query `deployments` records to get recent rollout events; filter by environment and status fields
+    - Query `infrastructure_events` to correlate infra incidents with deployment windows; use time-range filters matching the deployment timestamp
+    - Query `pipeline_runs` to assess build success rates, duration trends, and flaky test patterns by branch
+    - Write `devops_findings` with severity field (critical/high/medium/low) and always include the deployment ID or pipeline run ID as a reference
+    - Write `automation_proposals` with a clear trigger definition (entityType + eventType + condition) so proposals can be converted to `adl_create_trigger` calls
+    - Use `deployment_patterns` memory namespace to persist pipeline flakiness scores, MTTR averages, and recurring failure signatures across runs
+    - Use `incident_correlations` memory namespace to map deployment IDs to incident timelines for regression tracking
+    - Use `adl_semantic_search` against `devops_findings` to find similar past incidents before creating duplicate findings
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
@@ -28,17 +50,23 @@ schedule:
     intensive: "@every 1h"
 messaging:
   listensTo:
-    - { type: "request", from: ["sre-devops", "executive-assistant"] }
+    - { type: "request", from: ["sre-devops", "executive-assistant", "release-manager"] }
     - { type: "alert", from: ["sre-devops"] }
+    - { type: "finding", from: ["security-agent"] }
   sendsTo:
     - { type: "alert", to: ["sre-devops"], when: "failed deployment, pipeline failure, or rollback needed" }
+    - { type: "finding", to: ["release-manager"], when: "deployment completed or release pipeline status update" }
+    - { type: "finding", to: ["uptime-manager"], when: "deployment affecting service availability" }
 data:
   entityTypesRead: ["deployments", "infrastructure_events", "pipeline_runs"]
   entityTypesWrite: ["devops_findings", "automation_proposals"]
   memoryNamespaces: ["deployment_patterns", "incident_correlations"]
 zones:
   zone1Read: ["mission"]
-  zone2Domains: ["engineering"]
+  zone2Domains: ["engineering", "operations"]
+egress:
+  mode: "restricted"
+  allowedDomains: ["api.github.com", "api.gitlab.com", "circleci.com"]
 skills: []
 automations:
   triggers:

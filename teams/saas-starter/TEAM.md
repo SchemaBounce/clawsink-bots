@@ -5,7 +5,7 @@ metadata:
   name: saas-starter
   displayName: "SaaS Starter"
   version: "1.0.0"
-  description: "Essential SaaS operations for small teams — 6 bots covering engineering, growth, revenue, and customer success"
+  description: "Essential SaaS operations for small teams — 7 bots covering engineering, growth, revenue, customer success, and platform optimization"
   category: saas
   tags: ["saas", "starter", "small-team", "engineering", "growth", "revenue", "customer-success"]
   author: "schemabounce"
@@ -20,6 +20,7 @@ bots:
   - ref: "bots/marketing-growth@1.0.0"
   - ref: "bots/sales-pipeline@1.0.0"
   - ref: "bots/customer-support@1.0.0"
+  - ref: "bots/platform-optimizer@1.0.0"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"
@@ -83,6 +84,11 @@ orgChart:
       role: specialist
       reportsTo: executive-assistant
       domain: customer-success
+    # --- Platform ---
+    - bot: platform-optimizer
+      role: support
+      reportsTo: executive-assistant
+      domain: platform-ops
   escalation:
     critical: executive-assistant
     unhandled: executive-assistant
@@ -99,6 +105,9 @@ orgChart:
       - name: "Customer Escalation"
         trigger: "customer_escalation"
         chain: [customer-support, executive-assistant]
+      - name: "Platform Health Degradation"
+        trigger: "platform_health_critical"
+        chain: [platform-optimizer, executive-assistant]
 ---
 # SaaS Starter
 

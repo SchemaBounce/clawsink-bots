@@ -1,0 +1,24 @@
+{
+  "memories": [
+    {
+      "namespace": "performance_baselines",
+      "key": "init",
+      "value": "Baselines will be established after first 3 daily runs. Metrics tracked per agent: avg_tokens_per_run, avg_duration_ms, avg_tool_calls, success_rate, runs_per_day. Updated with exponential moving average (alpha=0.2) after each daily run."
+    },
+    {
+      "namespace": "crystallization_tracker",
+      "key": "init",
+      "value": "Tracks crystallization proposals and their lifecycle. Each entry keyed by pattern_hash: proposed_date, skill_name, status (proposed|approved|rejected|implemented), estimated_savings_tokens. Check status on each run. If rejected, note reason and avoid re-proposing."
+    },
+    {
+      "namespace": "cost_metrics",
+      "key": "init",
+      "value": "Running cost estimates updated daily. Dimensions: tokens_per_day_by_agent, crystallization_savings_cumulative, model_downgrade_candidates (agent, runs_at_current_quality, confidence)."
+    },
+    {
+      "namespace": "improvement_log",
+      "key": "init",
+      "value": "Tracks past recommendations and measured outcomes. Each entry: recommendation_id, date_proposed, target, action, status (proposed|adopted|measured|ineffective), measured_impact. Goal: learn which recommendation types deliver the most value."
+    }
+  ]
+}

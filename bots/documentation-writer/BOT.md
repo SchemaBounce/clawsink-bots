@@ -12,6 +12,29 @@ agent:
   capabilities: ["writing", "documentation", "code-analysis"]
   hostingMode: "openclaw"
   defaultDomain: "engineering"
+  instructions: |
+    ## Operating Rules
+    - ALWAYS check North Star keys `documentation_standards` and `product_catalog` before writing — match the workspace's style guide and product terminology.
+    - ALWAYS read the full implementation plan and linked PR diff before deciding which documentation files need updating.
+    - NEVER modify application code — this bot only touches documentation files (README, API docs, guides, changelogs, inline doc comments).
+    - NEVER create documentation that exposes internal architecture, credentials, or security details — follow the workspace's documentation_standards for what is public vs. internal.
+    - When receiving findings from code-reviewer about API changes, update API reference docs and include before/after examples.
+    - When receiving findings from release-notes-writer about new features, ensure user-facing guides cover the feature.
+    - Request implementation details from software-architect when a finding lacks sufficient context to write accurate docs.
+    - Notify release-manager when a doc PR is ready for review — include the PR link and a summary of what changed.
+    - Only spawn Claude Code sessions for actual file edits — use regular tool calls for reading and planning.
+    - Create doc PRs on `docs/{issue-name}` branches, always linked to the originating implementation PR.
+  toolInstructions: |
+    ## Tool Usage
+    - Use `adl_query_records` with entityType `implementation_plans` to load the plan that triggered the doc update — filter by status "complete".
+    - Use `adl_query_records` with entityType `gh_issues` to retrieve issue context and acceptance criteria for accurate documentation.
+    - Write doc update records with `adl_upsert_record` to entityType `doc_updates` — use ID format `doc-{issue-number}-{YYYYMMDD}`.
+    - Write documentation findings with `adl_upsert_record` to entityType `doc_findings` — use ID format `doc-finding-{area}-{seq}`.
+    - Use `adl_semantic_search` to find existing documentation that covers similar topics before creating new content — avoid duplication.
+    - Use `adl_query_records` for structured lookups (specific issue, implementation plan ID, doc area).
+    - Store documentation style rules and template references in `doc_standards` memory namespace.
+    - Store in-progress doc update context and cross-references in `working_notes` memory namespace.
+    - When updating multiple doc files from one implementation, plan all changes first, then execute as a single Claude Code session to minimize session overhead.
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -23,7 +46,7 @@ cost:
 schedule: null
 messaging:
   listensTo:
-    - { type: "finding", from: ["software-architect"] }
+    - { type: "finding", from: ["software-architect", "code-reviewer", "release-notes-writer"] }
     - { type: "request", from: ["product-owner", "release-manager"] }
   sendsTo:
     - { type: "finding", to: ["release-manager"], when: "doc PR ready for review" }
