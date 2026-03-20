@@ -59,6 +59,8 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"

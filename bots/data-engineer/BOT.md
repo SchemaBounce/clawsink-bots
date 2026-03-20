@@ -65,6 +65,8 @@ data:
 zones:
   zone1Read: ["mission", "tech_stack"]
   zone2Domains: ["engineering", "operations"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/record-monitoring@1.0.0"
 automations:

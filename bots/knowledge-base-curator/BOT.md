@@ -60,6 +60,8 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["general", "support"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/record-monitoring@1.0.0"
 plugins:

@@ -67,6 +67,8 @@ data:
 zones:
   zone1Read: ["brand_voice", "product_catalog", "company_glossary"]
   zone2Domains: ["content", "marketing"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"

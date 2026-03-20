@@ -72,6 +72,8 @@ data:
 zones:
   zone1Read: ["mission", "industry", "stage"]
   zone2Domains: ["support", "customer_success"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/notification-dispatch@1.0.0"
 automations:

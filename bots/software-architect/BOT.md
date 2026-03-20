@@ -64,6 +64,8 @@ data:
 zones:
   zone1Read: ["repository_config", "architecture_principles"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/implementation-planning@1.0.0"
   - ref: "skills/test-generation@1.0.0"

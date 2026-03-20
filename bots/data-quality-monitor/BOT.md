@@ -62,6 +62,8 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/cdc-event-analysis@1.0.0"
   - ref: "skills/data-validation@1.0.0"
