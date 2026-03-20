@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "data_freshness_targets",
+      "value": "Define per-domain data freshness requirements. Example: engineering=5min, finance=1h, marketing=24h. The platform optimizer uses these to prevent over-aggressive schedule relaxation.",
+      "description": "Minimum data freshness requirements per domain — prevents optimizer from recommending schedules that violate business needs"
+    }
+  ]
+}

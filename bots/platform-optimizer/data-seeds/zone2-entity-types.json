@@ -1,0 +1,60 @@
+{
+  "entityTypes": [
+    {
+      "name": "opt_findings",
+      "displayName": "Optimizer Findings",
+      "description": "Platform optimization insights from the platform-optimizer bot",
+      "domain": "platform-ops",
+      "fields": {
+        "category": { "type": "string", "required": true, "enum": ["crystallization", "agent_efficiency", "data_health", "storage", "pipeline", "cross_bot"] },
+        "severity": { "type": "string", "required": true, "enum": ["low", "medium", "high", "critical"] },
+        "finding": { "type": "string", "required": true, "description": "What was found" },
+        "evidence": { "type": "string", "required": true, "description": "Supporting data and metrics" },
+        "recommendation": { "type": "string", "description": "Recommended action" },
+        "estimated_impact": { "type": "string", "description": "Estimated tokens saved or improvement expected" }
+      }
+    },
+    {
+      "name": "opt_alerts",
+      "displayName": "Optimizer Alerts",
+      "description": "Critical platform health alerts requiring immediate attention",
+      "domain": "platform-ops",
+      "fields": {
+        "severity": { "type": "string", "required": true, "enum": ["high", "critical"] },
+        "title": { "type": "string", "required": true },
+        "description": { "type": "string", "required": true },
+        "action_required": { "type": "string", "required": true },
+        "acknowledged": { "type": "boolean" }
+      }
+    },
+    {
+      "name": "opt_recommendations",
+      "displayName": "Optimization Recommendations",
+      "description": "Actionable optimization recommendations with priority and estimated savings",
+      "domain": "platform-ops",
+      "fields": {
+        "target": { "type": "string", "required": true, "description": "Target agent, entity type, namespace, or collection" },
+        "action": { "type": "string", "required": true },
+        "rationale": { "type": "string", "required": true },
+        "priority": { "type": "string", "required": true, "enum": ["low", "medium", "high"] },
+        "estimated_savings": { "type": "string" },
+        "status": { "type": "string", "enum": ["proposed", "adopted", "measured", "ineffective"] }
+      }
+    },
+    {
+      "name": "platform_health_reports",
+      "displayName": "Platform Health Reports",
+      "description": "Daily comprehensive platform optimization reports",
+      "domain": "platform-ops",
+      "fields": {
+        "report_date": { "type": "date", "required": true },
+        "crystallization_metrics": { "type": "object", "required": true, "description": "Flywheel metrics: total skills, new candidates, proposals, savings" },
+        "agent_efficiency_scores": { "type": "object", "required": true, "description": "Per-agent grades and token trends" },
+        "data_health_summary": { "type": "object", "description": "Entity types, stale types, duplicate risks" },
+        "storage_utilization": { "type": "object", "description": "Records, memory, vectors, tier headroom" },
+        "pipeline_health": { "type": "object", "description": "Pipeline throughput, latency, freshness" },
+        "top_recommendations": { "type": "array", "description": "Top 5 prioritized recommendations" }
+      }
+    }
+  ]
+}

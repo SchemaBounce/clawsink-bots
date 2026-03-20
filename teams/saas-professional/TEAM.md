@@ -5,7 +5,7 @@ metadata:
   name: saas-professional
   displayName: "SaaS Professional"
   version: "1.0.0"
-  description: "Growing SaaS operations — 12 bots covering engineering, product, growth, revenue, and customer success with deeper domain coverage"
+  description: "Growing SaaS operations — 13 bots covering engineering, product, growth, revenue, customer success, and platform optimization"
   category: saas
   tags: ["saas", "professional", "mid-size", "engineering", "product", "growth", "revenue", "customer-success"]
   author: "schemabounce"
@@ -26,6 +26,7 @@ bots:
   - ref: "bots/customer-onboarding@1.0.0"
   - ref: "bots/churn-predictor@1.0.0"
   - ref: "bots/customer-support@1.0.0"
+  - ref: "bots/platform-optimizer@1.0.0"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"
@@ -136,6 +137,11 @@ orgChart:
       role: specialist
       reportsTo: executive-assistant
       domain: customer-success
+    # --- Platform ---
+    - bot: platform-optimizer
+      role: specialist
+      reportsTo: executive-assistant
+      domain: platform-ops
   escalation:
     critical: executive-assistant
     unhandled: executive-assistant
@@ -161,6 +167,9 @@ orgChart:
       - name: "Customer Escalation"
         trigger: "customer_escalation"
         chain: [customer-support, executive-assistant]
+      - name: "Platform Health Degradation"
+        trigger: "platform_health_critical"
+        chain: [platform-optimizer, executive-assistant]
 ---
 # SaaS Professional
 
