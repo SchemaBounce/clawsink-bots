@@ -1,6 +1,6 @@
 # ADL Taxonomy — Single Source of Truth
 
-> **Design doc:** `/mnt/c/git/frontend/docs/plans/2026-03-12-adl-taxonomy-design.md`
+> **Design doc:** See `frontend` repo: `docs/plans/2026-03-12-adl-taxonomy-design.md`
 > **Always loaded** — this repo defines the marketplace blueprints.
 
 ## The 4 Entities

@@ -19,8 +19,8 @@
         "check_out_time": "10:00",
         "cleaning_fee": 175.00,
         "pet_policy": "dogs_only",
-        "wifi_password": "BeachLife2026!",
-        "lockbox_code": "7428",
+        "wifi_password": "${WIFI_PASSWORD}",
+        "lockbox_code": "${LOCKBOX_CODE}",
         "status": "active",
         "description": "Charming 3-bedroom beach bungalow just 200 steps from the Gulf. Renovated kitchen, private pool and hot tub, covered patio with gulf breeze. Perfect for families and small groups looking for a quintessential beach vacation.",
         "neighborhood_guide": "Walk to Flora-Bama Lounge (5 min), The Hangout (10 min). Grocery: Publix 2 miles north. Dining: Fisherman's Corner for fresh catch, LuLu's for family-friendly. Parasailing and dolphin cruises at the public beach pier (0.5 miles). Rent bikes at Island Cycles."
@@ -43,8 +43,8 @@
         "check_out_time": "11:00",
         "cleaning_fee": 95.00,
         "pet_policy": "no_pets",
-        "wifi_password": "NashLoft508!",
-        "lockbox_code": "5082",
+        "wifi_password": "${WIFI_PASSWORD}",
+        "lockbox_code": "${LOCKBOX_CODE}",
         "status": "active",
         "description": "Stylish 1-bedroom loft in the heart of downtown Nashville. Floor-to-ceiling windows, exposed brick, designer furnishings. Walk to Broadway honky-tonks, the Ryman, and 100+ restaurants. In-building gym and EV charging. Keypad entry for self check-in.",
         "neighborhood_guide": "Broadway honky-tonks (3 min walk). The Ryman Auditorium (5 min). Best coffee: Barista Parlor (2 blocks). Fine dining: The Catbird Seat (reservations essential). Late night: Robert's Western World. Grocery: Turnip Truck (4 blocks). Uber/Lyft everywhere, or rent a scooter."
@@ -67,8 +67,8 @@
         "check_out_time": "10:00",
         "cleaning_fee": 225.00,
         "pet_policy": "all_pets",
-        "wifi_password": "MistyRidge1203",
-        "lockbox_code": "1203",
+        "wifi_password": "${WIFI_PASSWORD}",
+        "lockbox_code": "${LOCKBOX_CODE}",
         "status": "active",
         "description": "Stunning 4-bedroom luxury cabin on Timber Ridge with panoramic Smoky Mountain views. Stone fireplace, game room with pool table, wraparound deck with hot tub overlooking the valley. 15 minutes to downtown Gatlinburg, 10 minutes to national park entrance.",
         "neighborhood_guide": "Great Smoky Mountains National Park entrance at Sugarlands (10 min drive). Downtown Gatlinburg strip (15 min). Ober Gatlinburg ski resort (20 min). Best pancakes: Pancake Pantry. Moonshine tastings: Ole Smoky Distillery. Hiking: Laurel Falls (easy), Chimney Tops (moderate), Mt. LeConte (strenuous). Bear sightings are common — use bear-proof bins."
