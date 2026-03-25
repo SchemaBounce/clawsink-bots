@@ -63,6 +63,8 @@ data:
 zones:
   zone1Read: ["mission", "team_size", "sprint_cadence"]
   zone2Domains: ["management", "engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/sprint-planning@1.0.0"
 automations:

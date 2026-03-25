@@ -65,6 +65,8 @@ data:
 zones:
   zone1Read: ["quality_standards", "tech_stack"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"

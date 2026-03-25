@@ -53,13 +53,13 @@ schedule:
 messaging:
   listensTo:
     - { type: "alert", from: ["*"] }
-    - { type: "finding", from: ["business-analyst", "accountant", "legal-compliance", "product-owner", "mentor-coach"] }
+    - { type: "finding", from: ["business-analyst", "accountant", "legal-compliance", "product-owner", "mentor-coach", "platform-optimizer"] }
     - { type: "text", from: ["*"] }
   sendsTo:
     - { type: "request", to: ["business-analyst", "sre-devops", "accountant", "mentor-coach"], when: "needs cross-domain analysis" }
     - { type: "text", to: ["*"], when: "daily briefing distribution" }
 data:
-  entityTypesRead: ["sre_findings", "de_findings", "ba_findings", "acct_findings", "cs_findings", "inv_findings", "legal_findings", "mktg_findings", "sec_findings", "po_findings", "mentor_findings", "tasks", "team_health_reports", "sre_alerts", "de_alerts", "acct_alerts", "cs_alerts", "inv_alerts", "legal_alerts", "mktg_alerts", "sec_alerts", "po_alerts", "mentor_alerts"]
+  entityTypesRead: ["sre_findings", "de_findings", "ba_findings", "acct_findings", "cs_findings", "inv_findings", "legal_findings", "mktg_findings", "sec_findings", "po_findings", "mentor_findings", "opt_findings", "platform_health_reports", "tasks", "team_health_reports", "sre_alerts", "de_alerts", "acct_alerts", "cs_alerts", "inv_alerts", "legal_alerts", "mktg_alerts", "sec_alerts", "po_alerts", "mentor_alerts", "opt_alerts"]
   entityTypesWrite: ["ea_findings", "ea_alerts", "tasks"]
   memoryNamespaces: ["working_notes", "learned_patterns", "follow_ups"]
 zones:

@@ -584,7 +584,7 @@
         "conversion_count": 42
       },
       {
-        "title": "Infrastructure as Code for Data Pipelines: Kolumn vs dbt Compared",
+        "title": "Infrastructure as Code for Data Pipelines: Kolumn vs Legacy Transform Tools",
         "body": "A technical comparison of IaC approaches for data infrastructure, covering schema management, real-time triggers, and full-stack control.",
         "content_type": "blog_post",
         "status": "draft",

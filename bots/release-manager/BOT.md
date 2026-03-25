@@ -69,6 +69,8 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills: []
 automations:
   triggers:

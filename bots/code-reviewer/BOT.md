@@ -65,6 +65,8 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/code-review@1.0.0"
 automations:

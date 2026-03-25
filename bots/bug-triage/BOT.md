@@ -62,6 +62,8 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"

@@ -58,6 +58,8 @@ data:
 zones:
   zone1Read: ["documentation_standards", "product_catalog"]
   zone2Domains: ["engineering"]
+egress:
+  mode: "none"
 skills:
   - ref: "skills/pr-creation@1.0.0"
 mcpServers:
