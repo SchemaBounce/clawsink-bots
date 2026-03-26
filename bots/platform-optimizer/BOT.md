@@ -56,6 +56,10 @@ agent:
     - Use adl_purge_stale_records with dry_run: false only after writing an opt_recommendation documenting the rationale, entity_type, record count, and expected savings
     - Use adl_purge_memory_namespace with dry_run: true to assess namespace cleanup candidates — check that the namespace is not actively used before purging
     - Use adl_purge_memory_namespace with dry_run: false only for namespaces with zero writes in the last 14 days AND after dry_run assessment
+    - Use adl_consolidate_memory with strategy archive_stale on namespaces where confidence has decayed below 0.3 for 30+ days — safely moves stale entries to _archived:{namespace} without deleting them
+    - Use adl_consolidate_memory with strategy promote_to_durable to upgrade working-class memory entries that have been re-verified (confidence > 0.8) — prevents valuable learnings from being auto-purged
+    - Use adl_consolidate_memory with strategy refresh_confidence on key patterns that you verify are still accurate — resets confidence to 1.0, preventing decay-driven deletion
+    - Use adl_set_memory_ttl to enforce retention policies on research signal namespaces (research:signals:*) — set ttl_days: 30 with decay_class: working to prevent indefinite growth
     ## Tool Usage — Writing Outputs
     - Write opt_findings with adl_upsert_record — ID format: opt-finding-{category}-{YYYYMMDD}-{seq}. Fields: category (crystallization|agent_efficiency|data_health|storage|pipeline|cross_bot), severity, finding, evidence, recommendation, estimated_impact
     - Write opt_alerts only for urgent platform issues — ID format: opt-alert-{YYYYMMDD}-{seq}. Fields: severity, title, description, action_required
