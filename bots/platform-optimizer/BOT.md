@@ -37,18 +37,18 @@ agent:
     - Cap your own token usage: quick health checks under 15,000 tokens; daily analysis under 45,000 tokens
   toolInstructions: |
     ## Tool Usage — Primary Data Sources
-    - Query agent_runs via adl_query_records with agent_id filter to analyze per-agent token consumption, duration, tool_calls, and status patterns
-    - Use get_stats to get aggregated workspace-level statistics (total records, memory entries, graph edges, vector count)
-    - Use discover_skills to enumerate the crystallization skill catalog — check tier, usage_count, avg_latency_ms
-    - Use propose_crystallization when you identify a repeating pattern with 3+ occurrences that has NOT been crystallized — include the pattern hash, description, and suggested skill name
-    - Use get_harmony_score to read the latest team harmony metrics
-    - Use get_calibration to assess prediction accuracy across the workspace
-    - Use get_loop_signals to read feedback loop signals for agent performance trends
-    - Use list_namespaces to enumerate all memory namespaces and detect bloat or orphaned namespaces
+    - Query agent_runs via adl_query_records with entity_type: "agent_runs" and agent_id filter to analyze per-agent token consumption, duration, tool_calls, and status patterns
+    - Use adl_get_data_stats to get aggregated workspace-level statistics (per-entity-type record counts, soft-deleted totals, memory namespace counts, graph edge count)
+    - Use adl_discover_skills to enumerate the crystallization skill catalog — check tier, usage_count, avg_latency_ms
+    - Crystallization proposals happen automatically via the system crystallization-detector job (hourly) — you monitor results by querying adl_query_records with entity_type: "adl_crystallization_candidates"
+    - Query team harmony metrics via adl_query_records with entity_type: "team_health_reports" — produced by the mentor-coach bot
+    - Query calibration data via adl_query_records with entity_type: "health_reports" — check prediction accuracy metrics
+    - Query loop signals via adl_read_memory in the shared:loop_signals namespace for agent performance trend data
+    - Use adl_get_namespace_stats to enumerate all memory namespaces with entry counts, sizes, and timestamps — detect bloat or orphaned namespaces
     - Use adl_list_entity_types to get record counts per entity type — detect growth anomalies and stale types
-    - Use list_collections to check vector collection sizes and HNSW parameters
-    - Use semantic_search against previous opt_findings to avoid duplicating past recommendations
-    - Use list_edges to sample graph edge health (stale edges, orphaned nodes)
+    - Use adl_semantic_search with query describing what you are looking for to check vector collection health and find relevant embeddings
+    - Use adl_semantic_search against previous opt_findings to avoid duplicating past recommendations
+    - Use adl_search_graph to sample graph edge health (stale edges, orphaned nodes) — query from known entity types
     ## Tool Usage — Data Maintenance
     - Use adl_get_data_stats to get per-entity-type record counts, soft-deleted totals, and growth trends — run this on every daily analysis
     - Use adl_get_namespace_stats to enumerate memory namespace sizes, detect bloat (10,000+ entries), and find orphaned namespaces (no recent writes)
@@ -61,7 +61,7 @@ agent:
     - Use adl_consolidate_memory with strategy refresh_confidence on key patterns that you verify are still accurate — resets confidence to 1.0, preventing decay-driven deletion
     - Use adl_set_memory_ttl to enforce retention policies on research signal namespaces (research:signals:*) — set ttl_days: 30 with decay_class: working to prevent indefinite growth
     ## Tool Usage — Writing Outputs
-    - Write opt_findings with adl_upsert_record — ID format: opt-finding-{category}-{YYYYMMDD}-{seq}. Fields: category (crystallization|agent_efficiency|data_health|storage|pipeline|cross_bot), severity, finding, evidence, recommendation, estimated_impact
+    - Write opt_findings with adl_write_record — ID format: opt-finding-{category}-{YYYYMMDD}-{seq}. Fields: category (crystallization|agent_efficiency|data_health|storage|pipeline|cross_bot), severity, finding, evidence, recommendation, estimated_impact
     - Write opt_alerts only for urgent platform issues — ID format: opt-alert-{YYYYMMDD}-{seq}. Fields: severity, title, description, action_required
     - Write opt_recommendations for actionable items — ID format: opt-rec-{target}-{YYYYMMDD}-{seq}. Fields: target, action, rationale, priority, estimated_savings, status
     - Write platform_health_reports for daily comprehensive reports — ID format: health-{YYYYMMDD}. Fields: report_date, crystallization_metrics, agent_efficiency_scores, data_health_summary, storage_utilization, top_recommendations
