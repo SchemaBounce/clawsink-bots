@@ -49,6 +49,7 @@ agent:
     - Use adl_semantic_search with query describing what you are looking for to check vector collection health and find relevant embeddings
     - Use adl_semantic_search against previous opt_findings to avoid duplicating past recommendations
     - Use adl_search_graph to sample graph edge health (stale edges, orphaned nodes) — query from known entity types
+    - Use adl_get_graph_stats to assess knowledge graph health — check per-relationship-type edge counts, stale edge percentage (30+ days), and orphan edge count (edges pointing to deleted records)
     ## Tool Usage — Data Maintenance
     - Use adl_get_data_stats to get per-entity-type record counts, soft-deleted totals, and growth trends — run this on every daily analysis
     - Use adl_get_namespace_stats to enumerate memory namespace sizes, detect bloat (10,000+ entries), and find orphaned namespaces (no recent writes)
@@ -60,6 +61,9 @@ agent:
     - Use adl_consolidate_memory with strategy promote_to_durable to upgrade working-class memory entries that have been re-verified (confidence > 0.8) — prevents valuable learnings from being auto-purged
     - Use adl_consolidate_memory with strategy refresh_confidence on key patterns that you verify are still accurate — resets confidence to 1.0, preventing decay-driven deletion
     - Use adl_set_memory_ttl to enforce retention policies on research signal namespaces (research:signals:*) — set ttl_days: 30 with decay_class: working to prevent indefinite growth
+    - Use adl_get_graph_stats to assess knowledge graph health — check per-relationship-type edge counts, stale edge percentage (30+ days), and orphan edge count (edges pointing to deleted records)
+    - Use adl_purge_orphan_edges with dry_run: true first to count orphan edges before cleanup — orphan edges accumulate when records are soft-deleted but relationships are not cleaned up
+    - Use adl_purge_orphan_edges with dry_run: false only after documenting the orphan count in an opt_recommendation
     ## Tool Usage — Writing Outputs
     - Write opt_findings with adl_write_record — ID format: opt-finding-{category}-{YYYYMMDD}-{seq}. Fields: category (crystallization|agent_efficiency|data_health|storage|pipeline|cross_bot), severity, finding, evidence, recommendation, estimated_impact
     - Write opt_alerts only for urgent platform issues — ID format: opt-alert-{YYYYMMDD}-{seq}. Fields: severity, title, description, action_required

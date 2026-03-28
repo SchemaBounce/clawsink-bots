@@ -11,3 +11,4 @@
 - Never purge northstar or other agents' private namespaces.
 - Always log cleanup actions for audit trail.
 - Cap: 10K records per purge call, 5K memory entries per purge call.
+- Purge orphan graph edges after record cleanup — orphans accumulate when records are deleted.
