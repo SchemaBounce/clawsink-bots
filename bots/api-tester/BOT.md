@@ -65,7 +65,10 @@ zones:
   zone2Domains: ["engineering", "operations"]
 egress:
   mode: "open"
-skills: []
+skills:
+  - ref: "skills/test-generation@1.0.0"
+  - ref: "skills/report-generation@1.0.0"
+  - ref: "skills/record-monitoring@1.0.0"
 automations:
   triggers:
     - name: "Generate tests for new endpoint"

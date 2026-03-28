@@ -56,6 +56,11 @@ Your memory access is governed by a four-zone security model:
 - **`adl_search_memory`** — Semantic search across your memory. Works best with content stored via `adl_add_memory`.
 - **`adl_read_memory`** — Exact key lookup. Works with both storage methods.
 
+**Memory lifecycle** — set `decay_class` when writing:
+- `ephemeral` — auto-deleted after 1 day (scratch notes, temp state)
+- `working` — auto-deleted after 7 days (in-progress analysis, drafts)
+- `durable` (default) — persists, confidence decays if not refreshed
+
 ## Entity Types
 - Read: po_findings, pipeline_reports, deal_insights, blog_drafts
 - Write: mi_findings, mi_alerts, mi_landscape_reports

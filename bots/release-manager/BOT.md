@@ -71,7 +71,10 @@ zones:
   zone2Domains: ["engineering"]
 egress:
   mode: "none"
-skills: []
+skills:
+  - ref: "skills/report-generation@1.0.0"
+  - ref: "skills/pr-creation@1.0.0"
+  - ref: "skills/notification-dispatch@1.0.0"
 automations:
   triggers:
     - name: "Generate release notes"

@@ -67,7 +67,10 @@ zones:
 egress:
   mode: "restricted"
   allowedDomains: ["api.github.com", "api.gitlab.com", "circleci.com"]
-skills: []
+skills:
+  - ref: "skills/pipeline-monitoring@1.0.0"
+  - ref: "skills/incident-triage@1.0.0"
+  - ref: "skills/notification-dispatch@1.0.0"
 automations:
   triggers:
     - name: "Verify deployment health"
