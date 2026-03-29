@@ -25,20 +25,19 @@ agent:
     - Update performance_data memory at the end of each run with publishing outcomes (on-time rate, missed deadlines, rescheduled items).
     - Runs weekdays at 9 AM — process all incoming requests accumulated overnight in a single batch to minimize message overhead.
   toolInstructions: |
-    ## Tool Usage
-    - Query `content_calendar` entities to view the full publishing schedule across all channels. Filter by date range (current week + next week) for planning runs.
-    - Query `channel_configs` entities to retrieve per-channel publishing rules: max posts per day, allowed time windows, required lead time, and format constraints.
-    - Write `scheduled_posts` entities for each confirmed publishing slot. Required fields: channel, scheduled_date, scheduled_time, content_type, content_ref (ID of the blog_draft or content_calendar_item), status (scheduled|pending_content|published|missed), assigned_bot.
-    - Write `content_plans` entities for weekly or monthly publishing plans. Fields: plan_period, channels[], total_slots, filled_slots, gap_analysis, utilization_percentage.
-    - Use `editorial_calendar` memory namespace to maintain a rolling view of the next 30 days of scheduled content. Key format: `slot-{channel}-{date}-{time}`. Store: content_ref, status, assigned_bot.
-    - Use `performance_data` memory namespace to track publishing reliability metrics: on_time_rate, avg_lead_time_hours, missed_deadline_count, rescheduled_count. Update weekly.
-    - When creating scheduled_posts, validate that the scheduled_time falls within the channel's allowed publishing window (from channel_configs). Reject and log items outside the window.
-    - Entity IDs for scheduled_posts should follow: `sched-{channel}-{date}-{sequence}` (e.g., `sched-blog-2026-03-19-01`).
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

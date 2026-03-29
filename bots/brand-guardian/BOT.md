@@ -25,23 +25,21 @@ agent:
     - Listen for marketing-growth findings to proactively review associated content before it goes live
     - Track brand drift trends over time — gradual erosion is harder to detect than sudden violations
   toolInstructions: |
-    ## Tool Usage
-    - Query `content_items` for new content to review — in CDC mode, the triggering item is provided; in scheduled mode, filter by `created_at` since last run
-    - Query `brand_guidelines` for the active tone, visual identity, messaging, and terminology standards
-    - Query `brand_assets` for approved brand materials to compare against
-    - Write to `brand_scores` with fields: `content_id`, `overall_score`, `tone_score`, `visual_score`, `messaging_score`, `terminology_score`, `violations`, `suggestions`, `reviewed_at`
-    - Write to `brand_findings` with fields: `content_id`, `severity`, `violation_type`, `details`, `correction`, `guideline_ref`
-    - Use `brand_drift_log` memory to track cumulative drift patterns and trend direction across runs
-    - Use `guideline_updates` memory to store guideline version changes and threshold adjustments
-    - Search `content_items` by `content_type` and `status` to prioritize high-visibility content for review
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `brand_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 10000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 schedule:
   default: "@weekly"

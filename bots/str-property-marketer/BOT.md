@@ -25,25 +25,21 @@ agent:
     - When creating social media posts, reference the property's strongest review themes and unique amenities — generic posts do not drive engagement.
     - Always check str_channel_listings for current platform requirements (photo minimums, character limits) before drafting content.
   toolInstructions: |
-    ## Tool Usage
-    - Use adl_query_records with entity_type="str_properties" to retrieve property attributes, amenities, and location details for content generation.
-    - Use adl_query_records with entity_type="str_reviews" to extract recurring guest themes and specific phrases to incorporate into listings.
-    - Use adl_query_records with entity_type="str_channel_listings" to check current listing state and platform-specific requirements per property.
-    - Use adl_query_records with entity_type="str_bookings" to analyze booking patterns for seasonal promotion timing.
-    - Use adl_query_records with entity_type="mkt_content" to check existing drafts and approved content before creating new versions.
-    - Use adl_upsert_record with entity_type="mkt_content" for listing descriptions, promotional copy, and content drafts — always include property_id, channel, and content_type fields.
-    - Use adl_upsert_record with entity_type="mkt_social_posts" for social media post drafts with platform, scheduled_date, and content fields.
-    - Use adl_upsert_record with entity_type="str_findings" for content recommendations and optimization suggestions sent to str-property-manager.
-    - Write to working_notes for per-run content generation summaries; write to content_calendar for scheduled content plans; write to seo_insights for keyword and performance tracking.
-    - Use adl_semantic_search to find review themes by description (e.g., "guests mentioning hot tub") or past content that performed well — use adl_query_records for specific property or channel lookups.
-    - Structure entity_id values as "{property_id}:{channel}:{content_type}" for mkt_content (e.g., "prop_42:airbnb:description"), "{property_id}:{date}" for mkt_social_posts.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
   thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 schedule:
   default: "@weekly"

@@ -25,22 +25,19 @@ agent:
     - Never include cleaner personal contact information in findings or alerts — reference cleaner_id only.
     - Prioritize turnovers by check-in time (earliest first), then by back-to-back status, then by property size (larger units need more time).
   toolInstructions: |
-    ## Tool Usage
-    - Use adl_query_records with entity_type="str_bookings" filtered by checkout_date and checkin_date within the next 48 hours to identify upcoming turnover windows.
-    - Use adl_query_records with entity_type="str_turnovers" filtered by property_id and date to check existing assignments before creating new ones — avoid duplicate schedules.
-    - Use adl_query_records with entity_type="str_properties" to retrieve property size, cleaning requirements, and special instructions per unit.
-    - Use adl_upsert_record with entity_type="str_turnovers" to create and update cleaning assignments — always include property_id, scheduled_date, time_window, cleaner_id, status, and priority fields.
-    - Use adl_upsert_record with entity_type="str_findings" for turnover completion summaries, maintenance issue reports, and cleaner performance observations.
-    - Use adl_upsert_record with entity_type="str_alerts" only for late cleanings, missed turnovers, and urgent maintenance issues that affect guest readiness.
-    - Write to working_notes for per-run scheduling summaries; write to cleaner_roster for persistent cleaner performance data; write to maintenance_log for recurring property issues.
-    - Use adl_semantic_search to find past maintenance issues by description (e.g., "dishwasher not working") across properties — use adl_query_records for specific property_id or date-based lookups.
-    - Structure entity_id values as "{property_id}:{date}" for str_turnovers (e.g., "prop_42:2026-03-19") to ensure one turnover record per property per day.
-    - Batch-query upcoming bookings in a single adl_query_records call with date range filter rather than querying property by property — reduces tool calls on portfolios with many units.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

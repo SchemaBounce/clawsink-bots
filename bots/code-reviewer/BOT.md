@@ -26,24 +26,22 @@ agent:
     - Update `recurring_issues` memory when the same pattern appears in 3+ separate PRs — this signals a systemic problem to route to tech-debt-tracker.
     - Check `review_patterns` memory before reviewing to avoid flagging issues that were previously discussed and accepted.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `pull_requests` to load PR metadata, branch, author, and linked issues.
-    - Use `adl_query_records` with entityType `code_diffs` to retrieve the actual code changes for review — filter by PR ID.
-    - Write review findings with `adl_upsert_record` to entityType `review_findings` — use ID format `review-{pr-number}-{finding-seq}`.
-    - Write quality metrics with `adl_upsert_record` to entityType `code_quality_metrics` — use ID format `quality-{repo}-{pr-number}`.
-    - Use `adl_semantic_search` to find similar past review findings when assessing whether an issue is novel or recurring.
-    - Use `adl_query_records` for structured lookups (specific PR, author, file path, severity level).
-    - Store patterns of accepted code practices in `review_patterns` memory namespace — avoid re-flagging approved patterns.
-    - Store recurring issue signatures and their frequency in `recurring_issues` memory namespace.
-    - When reviewing a large PR, batch-write all findings at once rather than upserting one finding at a time.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 30000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: null
   manual: true

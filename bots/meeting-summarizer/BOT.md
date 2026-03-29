@@ -25,21 +25,19 @@ agent:
     - Track decision patterns in `decision_log` memory to provide context when the same topic resurfaces
     - Cross-reference `attendee_lists` with action items to ensure every assigned task has a valid owner
   toolInstructions: |
-    ## Tool Usage
-    - Query `meeting_notes` for raw meeting content to summarize — process all unprocessed notes since last run
-    - Query `attendee_lists` for participant information, roles, and departments for each meeting
-    - Write to `meeting_summaries` with fields: `meeting_id`, `date`, `attendees`, `summary`, `decisions`, `action_items`, `follow_ups`, `next_meeting`
-    - Write to `action_items` with fields: `title`, `assignee`, `due_date`, `status`, `meeting_ref`, `priority`, `context`
-    - Use `decision_log` memory to store key decisions with their meeting context for future reference
-    - Use `recurring_themes` memory to track topics that appear across multiple meetings and their resolution status
-    - Search `meeting_notes` by `processed` status flag to find unsummarized meetings
-    - Search `action_items` by `status` and `due_date` to identify overdue items from previous meetings
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `mtg_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

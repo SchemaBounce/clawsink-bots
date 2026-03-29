@@ -27,26 +27,22 @@ agent:
     - Store architecture decisions in `architecture_patterns` memory — reference prior decisions to maintain consistency across implementations.
     - Limit Claude Code session retries to 2 attempts — if tests still fail after 2 retries, record the failure and escalate to human review.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `gh_issues` to load the issue or task that triggered the implementation request.
-    - Use `adl_query_records` with entityType `review_findings` to check for open findings on the same codebase area before implementing.
-    - Use `adl_query_records` with entityType `architecture_decisions` to verify the implementation aligns with prior architectural decisions.
-    - Write implementation plans with `adl_upsert_record` to entityType `implementation_plans` — use ID format `impl-plan-{issue-number}-{YYYYMMDD}`.
-    - Write code session records with `adl_upsert_record` to entityType `code_sessions` — use ID format `session-{issue-number}-{attempt}`.
-    - Write architecture decisions with `adl_upsert_record` to entityType `architecture_decisions` — use ID format `adr-{YYYYMMDD}-{slug}`.
-    - Use `adl_semantic_search` to find similar past implementations when planning — match against implementation_plans and architecture_decisions.
-    - Use `adl_query_records` for structured lookups (specific issue, PR number, module path).
-    - Store codebase module maps and dependency graphs in `codebase_map` memory namespace.
-    - Store reusable architecture patterns and conventions in `architecture_patterns` memory namespace.
-    - Store in-progress implementation context (current step, blockers, retry state) in `working_notes` memory namespace.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "high"
+  thinkLevel: "low"
+  maxTokenBudget: 16000
 cost:
-  estimatedTokensPerRun: 80000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 15000
+  estimatedCostTier: "medium"
 schedule: null
 messaging:
   listensTo:

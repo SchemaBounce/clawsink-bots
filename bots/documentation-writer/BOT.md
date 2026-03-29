@@ -25,23 +25,21 @@ agent:
     - Only spawn Claude Code sessions for actual file edits — use regular tool calls for reading and planning.
     - Create doc PRs on `docs/{issue-name}` branches, always linked to the originating implementation PR.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `implementation_plans` to load the plan that triggered the doc update — filter by status "complete".
-    - Use `adl_query_records` with entityType `gh_issues` to retrieve issue context and acceptance criteria for accurate documentation.
-    - Write doc update records with `adl_upsert_record` to entityType `doc_updates` — use ID format `doc-{issue-number}-{YYYYMMDD}`.
-    - Write documentation findings with `adl_upsert_record` to entityType `doc_findings` — use ID format `doc-finding-{area}-{seq}`.
-    - Use `adl_semantic_search` to find existing documentation that covers similar topics before creating new content — avoid duplication.
-    - Use `adl_query_records` for structured lookups (specific issue, implementation plan ID, doc area).
-    - Store documentation style rules and template references in `doc_standards` memory namespace.
-    - Store in-progress doc update context and cross-references in `working_notes` memory namespace.
-    - When updating multiple doc files from one implementation, plan all changes first, then execute as a single Claude Code session to minimize session overhead.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 16000
 cost:
-  estimatedTokensPerRun: 40000
+  estimatedTokensPerRun: 15000
   estimatedCostTier: "medium"
 schedule: null
 messaging:

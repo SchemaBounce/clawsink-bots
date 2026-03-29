@@ -25,26 +25,22 @@ agent:
     - Track friction points in friction_tracker memory with a count — only graduate to a finding when the count reaches the threshold.
     - Review blog_drafts and doc_updates from blog-writer and documentation-writer each run to identify content that could address active friction points.
   toolInstructions: |
-    ## Tool Usage
-    - Query `po_findings` entities to understand current product priorities and avoid reporting friction points already acknowledged by the product team.
-    - Query `blog_drafts` entities to check if upcoming content addresses known community questions or friction points.
-    - Query `cs_findings` entities to correlate support issues with developer community patterns.
-    - Query `doc_updates` entities to identify recently updated documentation that may resolve active friction points.
-    - Write `devrel_findings` entities for actionable community insights. Required fields: finding_type (friction_point|growth_metric|sentiment_shift), severity, affected_area, evidence_count, recommended_action.
-    - Write `devrel_alerts` entities only for critical events (community backlash, sudden sentiment drop). Include timeline and affected channels.
-    - Write `devrel_community_metrics` entities for periodic snapshots. Fields: github_stars, open_issues, avg_response_time_hours, active_contributors_30d, discussion_volume.
-    - Use `community_baselines` memory namespace to store rolling averages for all tracked metrics. Compare each run's values against these baselines.
-    - Use `friction_tracker` memory namespace to maintain running counts of friction point occurrences. Key format: `friction-{category}-{short-description}`.
-    - Use `learned_patterns` memory namespace to store confirmed community behavior patterns (e.g., "issue volume spikes after major releases for 48h").
-    - Use the GitHub MCP server tools for repo-level queries (stars, issues, PRs, discussions) — prefer API calls over scraping.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 20000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:

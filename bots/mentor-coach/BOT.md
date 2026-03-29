@@ -25,25 +25,22 @@ agent:
     - When harmony scores drop across multiple bots, flag as a systemic issue rather than individual bot problems
     - Score dimensions: finding quality, finding frequency, escalation accuracy, memory usage, cross-bot collaboration
   toolInstructions: |
-    ## Tool Usage
-    - Query ALL `*_findings` entity types each run: `sre_findings`, `de_findings`, `ba_findings`, `acct_findings`, `cs_findings`, `inv_findings`, `legal_findings`, `mktg_findings`, `ea_findings`, `sec_findings`, `po_findings`
-    - Write to `team_health_reports` with fields: `period`, `overall_score`, `bot_scores`, `highlights`, `coaching`, `harmony`
-    - Write to `mentor_findings` with fields: `bot_name`, `issue`, `severity`, `evidence`, `recommendation`
-    - Write to `mentor_alerts` only for critical team-wide failures requiring immediate attention
-    - Use `working_notes` memory for in-progress analysis between runs
-    - Use `learned_patterns` memory to store recurring team behavior patterns
-    - Use `team_baselines` memory to store per-bot score baselines for trend detection
-    - Use `improvement_log` memory to track coaching recommendations and their outcomes over time
-    - Search findings by `created_at` to focus on the current reporting period (weekly by default)
-    - Count findings per bot per period to assess output frequency as a health signal
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@weekly"
   recommendations:

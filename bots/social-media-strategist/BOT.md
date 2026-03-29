@@ -25,23 +25,21 @@ agent:
     - Track content themes in content_themes memory with performance scores. Retire themes that underperform for 3+ consecutive posts and amplify high-performers.
     - Monitor the social_metrics automation trigger — when engagement data updates, flag significant changes (>25% deviation from posting_cadence baseline) immediately.
   toolInstructions: |
-    ## Tool Usage
-    - Query `social_metrics` entities to analyze current engagement rates, reach, impressions, and follower growth per platform. Filter by date range matching your analysis window.
-    - Query `engagement_data` entities for granular post-level performance data. Use this to identify which content formats and themes resonate most.
-    - Query `industry_posts` entities to monitor trending topics and content strategies in the broader industry — use for inspiration, not imitation.
-    - Write `social_strategy` entities for strategic recommendations and analysis summaries. Required fields: strategy_period, platform_focus[], content_mix (percentage by type), key_themes[], posting_frequency, performance_vs_prior.
-    - Write `content_calendar_items` entities for specific scheduled content. Required fields: platform, scheduled_date, scheduled_time, content_type (post|carousel|thread|video|story), theme, topic, hook, hashtags[], target_engagement_rate, status (planned|scheduled|published).
-    - Use `platform_performance` memory namespace to store per-platform rolling metrics: avg_engagement_rate, best_posting_times[], top_content_types[], follower_growth_rate. Update each run.
-    - Use `content_themes` memory namespace to track theme performance. Key format: `theme-{platform}-{theme-slug}`. Store: posts_count, avg_engagement, trend (rising|stable|declining).
-    - Use `posting_cadence` memory namespace to store optimal posting frequency and time slots per platform, derived from engagement_data analysis.
-    - Entity IDs for content_calendar_items should follow: `social-{platform}-{date}-{sequence}` (e.g., `social-linkedin-2026-03-19-01`).
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 10000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 schedule:
   default: "@daily"

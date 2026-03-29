@@ -25,25 +25,22 @@ agent:
     - When executive-assistant sends an ad-hoc request, prioritize it in the current run and deliver findings within the same execution cycle.
     - Review po_findings each run to avoid reporting feature gaps the product team has already acknowledged or planned.
   toolInstructions: |
-    ## Tool Usage
-    - Query `po_findings` entities to check which feature gaps are already on the product roadmap before creating duplicate findings.
-    - Query `pipeline_reports` and `deal_insights` entities from sales-pipeline to identify feature-related deal loss patterns. Filter by loss_reason containing feature keywords.
-    - Query `blog_drafts` entities to identify content that could be leveraged for positioning (e.g., a technical comparison post supports a messaging angle).
-    - Write `mi_findings` entities for individual insights. Required fields: finding_type (feature_gap|positioning_shift|emerging_trend|capability_change), industry_segment, evidence_summary, confidence (low|medium|high), recommended_action.
-    - Write `mi_alerts` entities only for urgent market events (major vendor acquisition, paradigm-shifting announcement). Include event_date and impact_assessment.
-    - Write `mi_landscape_reports` entities weekly. Fields: report_date, period_covered, announcements[], feature_parity_changes[], positioning_shifts[], emerging_trends[], executive_summary.
-    - Use `landscape_baselines` memory namespace to store the current known state of industry capabilities. Compare each run's findings against this baseline to detect genuine changes.
-    - Use `feature_gaps` memory namespace to maintain a running inventory of capability differences. Key format: `gap-{category}-{short-description}`. Track deal_count (how many lost deals cite this gap).
-    - Use `learned_patterns` memory namespace to store validated market dynamics (e.g., "vendors announce CDC features at data conferences in Q3").
-    - Prefer date-bounded searches (last 7 days for weekly runs) when querying external news or announcements to limit token consumption.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@weekly"
   cronExpression: "0 8 * * 1"

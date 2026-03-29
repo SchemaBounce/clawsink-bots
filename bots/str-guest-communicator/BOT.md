@@ -25,25 +25,22 @@ agent:
     - Store reusable response patterns in response_templates namespace; store per-guest context (preferences, issues) in guest_context namespace.
     - Log response time metrics in str_findings after each run so str-property-manager can track Superhost compliance.
   toolInstructions: |
-    ## Tool Usage
-    - Use adl_query_records with entity_type="str_messages" filtered by guest_id or booking_id to load conversation history before replying.
-    - Use adl_query_records with entity_type="str_bookings" to verify booking status, check-in/check-out dates, and property assignment before sharing sensitive details.
-    - Use adl_query_records with entity_type="str_guests" to retrieve guest name, contact preferences, and past stay history for personalization.
-    - Use adl_query_records with entity_type="str_properties" to pull property-specific details (amenities, house rules, directions) for accurate responses.
-    - Use adl_upsert_record with entity_type="str_messages" to log outbound messages with timestamp, channel, and message content.
-    - Use adl_upsert_record with entity_type="str_findings" for response time metrics and communication pattern observations.
-    - Use adl_upsert_record with entity_type="str_alerts" only for guest emergencies and escalation-worthy situations.
-    - Write to working_notes for per-run summaries; write to guest_context for persistent guest preferences and issue history; write to response_templates for reusable message patterns.
-    - Use adl_semantic_search to find relevant response templates by situation description (e.g., "early check-in request") — use adl_query_records when filtering by specific guest_id or booking_id.
-    - Structure entity_id values as "{booking_id}:{sequence}" for str_messages (e.g., "bk_123:004") to maintain chronological order per conversation.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 15000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 15m"
   recommendations:

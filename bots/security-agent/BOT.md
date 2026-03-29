@@ -25,24 +25,22 @@ agent:
     - Only access external CVE sources (nvd.nist.gov, cve.org, osv.dev, api.github.com) via allowed egress -- never attempt to reach other domains
     - Maintain a running vulnerability count by severity in `working_notes` memory for trend reporting via the scheduled-report skill
   toolInstructions: |
-    ## Tool Usage
-    - Query `sre_findings` and `de_findings` to ingest cross-team security-relevant observations; filter by created_at for records since last run
-    - Query `pipeline_status` to check for unencrypted sinks, public endpoints, or misconfigured pipeline security settings
-    - Query `incidents` to correlate active incidents with potential security causes (unauthorized access, privilege escalation)
-    - Write `sec_findings` with fields: severity (critical/high/medium/low), category (vulnerability/policy/exposure/rotation), affected_component, remediation
-    - Write `sec_alerts` only for critical/active threats -- include evidence summary and recommended immediate action
-    - Write `vulnerability_scans` with structured scan results: cve_id, affected_versions, exploitability_score, patch_available
-    - Use `vulnerability_database` memory namespace to persist known CVEs, their status (open/mitigated/patched), and first-seen timestamps
-    - Use `rotation_schedule` memory namespace to track secret expiry dates and last-rotation timestamps per secret identifier
-    - Use `learned_patterns` memory namespace to store security anti-patterns found in findings for faster future detection
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:

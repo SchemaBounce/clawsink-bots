@@ -25,25 +25,22 @@ agent:
     - Tag ba_findings with the domains involved (e.g., `domains: ["finance", "operations"]`) so executive-assistant can route them
     - Focus on actionable recommendations — every finding should answer "so what?" and "now what?"
   toolInstructions: |
-    ## Tool Usage
-    - Query domain findings each run: `sre_findings`, `de_findings`, `acct_findings`, `cs_findings`, `inv_findings`, `legal_findings`, `mktg_findings`
-    - Query operational data for deeper analysis: `transactions`, `pipeline_status`, `incidents`
-    - Write to `ba_findings` with fields: `insight`, `domains`, `evidence`, `trend_direction`, `recommended_actions`, `priority`
-    - Write to `ba_alerts` only for urgent cross-domain risks requiring immediate executive attention
-    - Use `working_notes` memory for in-progress correlation analysis between runs
-    - Use `learned_patterns` memory to store validated cross-domain correlations (e.g., "support ticket spikes follow deployment incidents")
-    - Use `trend_baselines` memory to store metric baselines for anomaly detection across runs
-    - Search findings by domain prefix (e.g., `sre_*`, `acct_*`) to systematically scan each domain
-    - Filter by `created_at` to focus on new findings since last run stored in `working_notes`
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `ba_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 30000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 12h"
   recommendations:

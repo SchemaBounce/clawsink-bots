@@ -25,25 +25,22 @@ agent:
     - When a finding spans multiple domains, tag it as cross-domain and include source bot references
     - Write `ea_findings` for synthesized insights, `ea_alerts` only for items requiring immediate human attention, `tasks` for trackable action items
   toolInstructions: |
-    ## Tool Usage
-    - Query ALL `*_findings` entity types each run: `sre_findings`, `de_findings`, `ba_findings`, `acct_findings`, `cs_findings`, `inv_findings`, `legal_findings`, `mktg_findings`, `sec_findings`, `po_findings`, `mentor_findings`
-    - Query ALL `*_alerts` entity types: `sre_alerts`, `de_alerts`, `acct_alerts`, `cs_alerts`, `inv_alerts`, `legal_alerts`, `mktg_alerts`, `sec_alerts`, `po_alerts`, `mentor_alerts`
-    - Query `tasks` and `team_health_reports` for open action items and team status
-    - Write to `ea_findings` with fields: `summary`, `priority`, `source_bots`, `domains`, `recommended_actions`
-    - Write to `tasks` with fields: `title`, `assignee`, `due_date`, `status`, `source_finding`
-    - Use `working_notes` memory for in-progress synthesis between runs
-    - Use `learned_patterns` memory to store recurring cross-domain correlations
-    - Use `follow_ups` memory to track action items and their completion status across runs
-    - Search records by `created_at` descending to focus on findings since last run
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `ea_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 35000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 4h"
   recommendations:

@@ -25,23 +25,21 @@ agent:
     - On latency regressions, record the percentage increase and the specific P50/P95/P99 values — never report raw numbers without baseline context.
     - Do not re-test endpoints that have been marked as deprecated in the `api_endpoints` entity unless explicitly requested.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `api_endpoints` to load the current endpoint inventory and their expected schemas.
-    - Use `adl_query_records` with entityType `test_suites` to retrieve configured test cases and their expected outcomes.
-    - Write test results with `adl_upsert_record` to entityType `test_results` — use ID format `test-{endpoint-slug}-{YYYYMMDD}-{seq}`.
-    - Write health reports with `adl_upsert_record` to entityType `api_health_reports` — use ID format `health-{api-name}-{YYYYMMDD}`.
-    - Use `adl_semantic_search` to find similar past test failures when investigating a new failure pattern.
-    - Use `adl_query_records` for structured lookups (specific endpoint, date range, status code filters).
-    - Store latency baselines (P50/P95/P99) per endpoint in `endpoint_baselines` memory namespace.
-    - Store recurring failure signatures and their resolution context in `failure_patterns` memory namespace.
-    - When generating tests for a new endpoint, batch-write all test cases in a single upsert operation rather than individual writes.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 10000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 schedule:
   default: "@daily"
@@ -65,7 +63,10 @@ zones:
   zone2Domains: ["engineering", "operations"]
 egress:
   mode: "open"
-skills: []
+skills:
+  - ref: "skills/test-generation@1.0.0"
+  - ref: "skills/report-generation@1.0.0"
+  - ref: "skills/record-monitoring@1.0.0"
 automations:
   triggers:
     - name: "Generate tests for new endpoint"

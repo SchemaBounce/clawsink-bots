@@ -25,23 +25,22 @@ agent:
     - Track emerging topics in trending_topics memory — promote to a finding only when a topic appears across 2+ platforms or persists for 3+ consecutive runs.
     - Given hourly scheduling, keep each run focused and efficient — process only new mentions since the last run timestamp.
   toolInstructions: |
-    ## Tool Usage
-    - Query `social_mentions` entities to pull recent brand mentions across platforms. Filter by timestamp > last_run_time to process only new data.
-    - Query `brand_keywords` entities to get the current list of monitored keywords, brand names, and product terms. Use these as search filters.
-    - Write `sentiment_reports` entities for periodic summaries. Required fields: report_date, platform, mention_count, avg_sentiment_score, sentiment_distribution (positive|neutral|negative counts), top_themes[], notable_mentions[].
-    - Write `mention_alerts` entities only for escalation events (reputation crisis, viral negative content). Required fields: severity (critical|high), platform, trigger_description, mention_volume, sentiment_score, recommended_response_urgency.
-    - Use `sentiment_baselines` memory namespace to store rolling averages per platform: avg_sentiment_score, avg_mention_volume, baseline_date. Update every run.
-    - Use `trending_topics` memory namespace to track emerging themes. Key format: `trend-{platform}-{topic-slug}`. Store: first_seen, run_count, platforms_seen[], growing (boolean).
-    - When searching social_mentions, use the brand_keywords entity list as the filter set rather than hardcoding search terms — this allows the keyword list to evolve without changing agent behavior.
-    - For sentiment scoring, use the sentiment-analysis skill. Classify each mention as positive (>0.6), neutral (0.3-0.6), or negative (<0.3).
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 6000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@hourly"
 messaging:

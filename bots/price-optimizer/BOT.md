@@ -25,25 +25,21 @@ agent:
     - When multiple market_prices events arrive in batch, group by product category and analyze category-level trends before individual SKU recommendations.
     - Consider both margin preservation and competitive positioning — recommendations should reference the pricing_rules entity for configured floor/ceiling constraints.
   toolInstructions: |
-    ## Tool Usage
-    - The CDC trigger delivers a `market_prices` entity update — extract sku_id, new_price, old_price, source, and timestamp from the event payload.
-    - Query `market_prices` records for the affected SKU to get the full price history and multi-source comparison.
-    - Query `pricing_rules` records to retrieve floor price, ceiling price, target margin, and competitive positioning strategy for the SKU.
-    - Write `price_recommendations` with fields: sku_id, current_price, recommended_price, reason, expected_margin_impact_pct, expected_volume_impact_pct, confidence, valid_until.
-    - Write `pricing_alerts` with fields: sku_id, alert_type (margin_squeeze/market_disruption/opportunity), severity, details.
-    - Read `price_history` memory to get stored historical prices and trend data for the affected SKU and category.
-    - Write to `price_history` memory with the latest market price data point after processing each CDC event.
-    - Read `elasticity_models` memory to get demand elasticity coefficients for the SKU or category — use to predict volume impact of price changes.
-    - Write to `elasticity_models` memory when enough new data points accumulate to recalibrate elasticity estimates.
-    - Entity IDs: `price_recommendations:{sku_id}:{date}`, `pricing_alerts:{sku_id}:{alert_type}:{date}`.
-    - Use `adl_search_records` with entity_type "price_recommendations" to check for recent active recommendations before creating conflicting ones.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 6000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "market_prices"

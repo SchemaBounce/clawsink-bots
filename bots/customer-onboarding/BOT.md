@@ -25,23 +25,21 @@ agent:
     - Escalate to executive-assistant only for critical failures: onboarding system errors, blocked customers with no workaround, or customers explicitly requesting cancellation during onboarding.
     - Update completion_rates memory at the end of each run with aggregate metrics: completion rate, average time to complete, most common stall points.
   toolInstructions: |
-    ## Tool Usage
-    - Query `customers` entities to retrieve new customer details from the CDC trigger event. Extract: customer_id, product_tier, signup_source, and any special requirements.
-    - Query `onboarding_templates` entities to load the appropriate onboarding sequence for the customer's product tier. Match on tier and signup_source fields.
-    - Write `onboarding_tasks` entities for each step in the onboarding sequence. Required fields: customer_id, task_order, task_name, task_description, status (pending|in_progress|completed|stalled), due_date, assigned_to (human|automated).
-    - Write `welcome_messages` entities for the initial outreach. Required fields: customer_id, message_type (welcome|setup_guide|check_in), content, channel (email|in_app), sent_status (queued|sent), scheduled_send_time.
-    - Use `onboarding_progress` memory namespace to track per-customer state. Key format: `onboard-{customer_id}`. Store: current_step, start_date, last_activity, stall_count, completion_percentage.
-    - Use `completion_rates` memory namespace for aggregate metrics. Store: overall_completion_rate, avg_days_to_complete, top_stall_points[], customers_in_progress_count, last_updated.
-    - When processing CDC trigger events, extract the full customer entity payload — do not make additional queries if the trigger event contains sufficient data.
-    - Entity IDs for onboarding_tasks should follow: `onboard-{customer_id}-{task_order}` (e.g., `onboard-cust-12345-01`).
-    - Entity IDs for welcome_messages should follow: `welcome-{customer_id}-{message_type}` (e.g., `welcome-cust-12345-welcome`).
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 5000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "customers"

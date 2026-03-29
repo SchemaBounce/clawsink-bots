@@ -24,25 +24,22 @@ agent:
     - Adapt report format over time using `stakeholder_preferences` memory — learn what level of detail the human operator values
     - When multiple domains show correlated trends, call them out as systemic patterns rather than listing separately
   toolInstructions: |
-    ## Tool Usage
-    - Query `transactions` and `invoices` for financial metrics; `acct_findings` for financial analysis
-    - Query `tasks`, `stories`, `bugs`, `velocity_metrics` for engineering productivity
-    - Query `experiments`, `experiment_metrics`, `conversion_funnels` for growth analytics
-    - Query `inventory_items` for operational metrics; `support_tickets` for customer health; `incidents` for reliability
-    - Write to `executive_summaries` with fields: `period`, `headline`, `kpi_snapshot`, `trends`, `recommended_actions`, `risk_flags`
-    - Write to `kpi_reports` with fields: `kpi_name`, `current_value`, `baseline`, `trend`, `deviation_pct`, `domains_affected`
-    - Use `reporting_templates` memory to store and refine report structures across runs
-    - Use `kpi_baselines` memory to store reference values for deviation detection
-    - Use `stakeholder_preferences` memory to learn reporting depth and focus areas
-    - Search records with date filters to scope data to the reporting period (weekly by default)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@weekly"
   recommendations:

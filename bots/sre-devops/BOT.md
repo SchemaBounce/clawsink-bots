@@ -25,26 +25,22 @@ agent:
     - On each scheduled run, compare current metrics against `learned_patterns` to detect drift — do not treat every threshold crossing as novel.
     - When sending alerts to uptime-manager, include affected service names, duration, and customer-facing impact assessment.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `pipeline_status` to check throughput, latency, and error rates per pipeline.
-    - Use `adl_query_records` with entityType `incidents` to load open and recent incidents for correlation.
-    - Use `adl_query_records` with entityType `infrastructure_metrics` to pull CPU, memory, DLQ depth, and retry exhaustion data.
-    - Use `adl_query_records` with entityType `de_findings` to cross-check data-engineer signals before escalating pipeline issues.
-    - Write findings with `adl_upsert_record` to entityType `sre_findings` — use ID format `sre-finding-{service}-{YYYYMMDD}-{seq}`.
-    - Write alerts with `adl_upsert_record` to entityType `sre_alerts` — use ID format `sre-alert-{severity}-{service}-{timestamp}`.
-    - Write or update incidents with `adl_upsert_record` to entityType `incidents` — preserve existing incident IDs when updating status.
-    - Use `adl_semantic_search` when investigating an anomaly to find similar past incidents or patterns across all entity types.
-    - Use `adl_query_records` for structured lookups (specific service, time range, severity); use `adl_semantic_search` for fuzzy pattern matching ("similar outage last month").
-    - Store learned thresholds and false-positive notes in `thresholds` namespace; store cross-run investigation context in `working_notes`; store recurring patterns in `learned_patterns`.
-    - Prefer batch reads — query all metrics for a service in one call rather than individual metric queries.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 12000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 4h"
   recommendations:

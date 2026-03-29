@@ -25,25 +25,22 @@ agent:
     - Send rate adjustment recommendations to str-property-manager as findings with per-property breakdown, not portfolio-level summaries.
     - Never include competitor property names or exact competitor URLs in findings — reference market averages and percentile positions instead.
   toolInstructions: |
-    ## Tool Usage
-    - Use adl_query_records with entity_type="str_pricing_calendar" filtered by property_id and date range to load current rates, minimum stays, and discount rules before recommending changes.
-    - Use adl_query_records with entity_type="str_bookings" to analyze booking velocity, lead times, and occupancy patterns for demand forecasting.
-    - Use adl_query_records with entity_type="str_properties" to retrieve property attributes (bedrooms, location, amenities) needed for comp-set analysis.
-    - Use adl_query_records with entity_type="str_channel_listings" to check per-channel listing status and availability before pricing recommendations.
-    - Use adl_upsert_record with entity_type="str_pricing_calendar" to write rate recommendations — always include property_id, date, recommended_rate, and rationale fields.
-    - Use adl_upsert_record with entity_type="str_findings" for market analysis summaries and rate adjustment recommendations.
-    - Use adl_upsert_record with entity_type="str_alerts" only for pricing anomalies (competitor drops >30%, demand spikes, revenue risk).
-    - Write to working_notes for per-run analysis; write to market_patterns for persistent demand signals; write to seasonal_data for historical seasonal benchmarks.
-    - Use adl_semantic_search to find historical market patterns by description (e.g., "spring break demand surge") — use adl_query_records for specific date-range or property-level lookups.
-    - Structure entity_id values as "{property_id}:{date}" for str_pricing_calendar (e.g., "prop_42:2026-03-20") to ensure one rate record per property per night.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "high"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 30000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:

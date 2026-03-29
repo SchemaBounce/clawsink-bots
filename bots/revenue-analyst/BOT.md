@@ -25,22 +25,19 @@ agent:
     - Update `revenue_baselines` memory at the end of every run with the latest computed baselines so future runs have fresh comparison points.
     - Tag all revenue_reports and trend_findings with the analysis period and data freshness timestamp.
   toolInstructions: |
-    ## Tool Usage
-    - Query `revenue_data` records filtered by date range — use the last 7 days for daily trend and last 90 days for baseline computation.
-    - Query `sales_metrics` for pipeline velocity and conversion data that contextualizes revenue movements.
-    - Write `revenue_reports` with fields: period, total_revenue, delta_vs_baseline, delta_vs_prior_period, top_contributors, narrative.
-    - Write `trend_findings` with fields: trend_name, direction (up/down/flat), magnitude_pct, confidence, start_date, supporting_data.
-    - Read `revenue_baselines` memory namespace to get stored baseline values (rolling averages, seasonal adjustments) from prior runs.
-    - Write to `revenue_baselines` memory to update rolling averages and seasonal factors after each analysis cycle.
-    - Read `forecast_models` memory to retrieve prior forecast accuracy metrics — use to weight current forecast confidence.
-    - Write to `forecast_models` memory with updated model parameters after each forecasting cycle.
-    - Entity IDs follow pattern `revenue_reports:{period}:{date}`, `trend_findings:{trend_name}:{date}`.
-    - Use `adl_search_records` to find existing reports for the same period before creating duplicates.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

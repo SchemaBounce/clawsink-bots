@@ -25,25 +25,22 @@ agent:
     - Maintain `research_backlog` memory for emerging patterns that need more data before becoming findings
     - Score pain points by frequency, severity, and user segment impact to prioritize recommendations
   toolInstructions: |
-    ## Tool Usage
-    - Query `user_feedback` for raw feedback records — filter by `created_at` for new items since last run
-    - Query `usage_analytics` for quantitative signals (drop-off rates, feature adoption, session duration)
-    - Query `support_tickets` for recurring usability complaints and error reports
-    - Write to `ux_findings` with fields: `severity`, `theme`, `pain_point`, `evidence_count`, `user_impact`, `recommendation`, `source_feedback`, `affected_personas`
-    - Write to `usability_reports` for periodic summaries with trend data across multiple themes
-    - Use `user_patterns` memory to store validated behavioral patterns across runs
-    - Use `pain_points` memory to accumulate and score pain point themes over time
-    - Use `research_backlog` memory to track emerging patterns needing more evidence
-    - Search feedback records by theme tags to cluster related signals efficiently
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `ux_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 20000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@weekly"
   recommendations:

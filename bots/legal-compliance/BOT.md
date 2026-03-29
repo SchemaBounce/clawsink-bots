@@ -25,25 +25,22 @@ agent:
     - Track regulatory change patterns in `learned_patterns` memory to anticipate future compliance requirements
     - Maintain `compliance_calendar` memory with all known deadlines (contract renewals, certification expirations, filing dates)
   toolInstructions: |
-    ## Tool Usage
-    - Query `contracts` for active contracts, renewal dates, and compliance clauses — filter by `expiry_date` for deadline tracking
-    - Query `companies` for counterparty information relevant to contract and compliance context
-    - Write to `legal_findings` with fields: `finding_type` (contract/regulatory/compliance), `framework`, `severity`, `details`, `deadline`, `recommended_action`
-    - Write to `legal_alerts` only for imminent compliance violations or missed regulatory deadlines
-    - Write to `contracts` to update compliance status flags and review notes on existing records
-    - Use `working_notes` memory for in-progress contract reviews and regulatory analysis between runs
-    - Use `learned_patterns` memory to store regulatory change patterns and industry-specific compliance trends
-    - Use `compliance_calendar` memory to maintain a consolidated view of all compliance deadlines and renewal dates
-    - Search contracts by `expiry_date` range to identify upcoming renewals; by `compliance_status` for gap analysis
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `legal_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 20000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@weekly"
   recommendations:

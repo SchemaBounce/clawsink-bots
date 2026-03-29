@@ -25,21 +25,19 @@ agent:
     - Store each completed release notes document in `release_history` memory for cross-release formatting consistency.
     - When the same feature spans multiple commits, consolidate into a single user-facing line item.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `commits` to load all commits in the target version range — filter by date or tag.
-    - Use `adl_query_records` with entityType `tickets` to retrieve linked issue context, descriptions, and acceptance criteria.
-    - Write release notes with `adl_upsert_record` to entityType `release_notes` — use ID format `release-notes-{version}`.
-    - Write changelogs with `adl_upsert_record` to entityType `changelogs` — use ID format `changelog-{version}-{YYYYMMDD}`.
-    - Use `adl_semantic_search` to find past release notes for similar features to maintain consistent tone and format.
-    - Use `adl_query_records` for structured lookups (specific commit range, ticket IDs, author, date range).
-    - Store feature categorization rules and custom category mappings in `feature_categories` memory namespace.
-    - Store finalized release notes for reference in `release_history` memory namespace.
-    - Batch-read all commits and tickets for the version range in a single query before drafting — avoid incremental reads during writing.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

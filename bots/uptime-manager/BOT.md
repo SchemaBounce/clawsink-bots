@@ -26,27 +26,22 @@ agent:
     - Update `sla_tracker` memory with each uptime calculation so trends are available without re-querying all historical data.
     - Store incident resolution patterns in `learned_patterns` memory to improve future severity classification.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `sre_findings` to load infrastructure findings from sre-devops for correlation.
-    - Use `adl_query_records` with entityType `sre_alerts` to load active alerts and verify whether an incident is already tracked.
-    - Use `adl_query_records` with entityType `incidents` to load open and recently resolved incidents for postmortem generation and deduplication.
-    - Use `adl_query_records` with entityType `test_results` to cross-reference api-tester results with incident timelines.
-    - Use `adl_query_records` with entityType `pipeline_status` to assess pipeline health during incident correlation.
-    - Write uptime findings with `adl_upsert_record` to entityType `uptime_findings` — use ID format `uptime-finding-{component}-{YYYYMMDD}`.
-    - Write uptime alerts with `adl_upsert_record` to entityType `uptime_alerts` — use ID format `uptime-alert-{severity}-{component}-{timestamp}`.
-    - Write incident records with `adl_upsert_record` to entityType `uptime_incidents` — use ID format `uptime-incident-{YYYYMMDD}-{seq}`.
-    - Write SLA reports with `adl_upsert_record` to entityType `uptime_sla_reports` — use ID format `sla-report-{window}-{YYYYMMDD}`.
-    - Use `adl_semantic_search` to find similar past incidents and postmortems when investigating a new outage — match on service name and symptoms.
-    - Use `adl_query_records` for structured lookups (specific component, time range, severity, incident status).
-    - Store rolling SLA calculations in `sla_tracker` memory; store incident timelines and resolutions in `incident_history` memory; use `working_notes` for in-progress investigation context.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 12000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 2h"
   recommendations:

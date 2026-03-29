@@ -25,22 +25,21 @@ agent:
     - When processing CDC events from customer-onboarding or customer-support findings, cross-reference with existing churn_scores before creating duplicates.
     - Respect token budget — if the event batch is large, prioritize high-activity-drop accounts over minor fluctuations.
   toolInstructions: |
-    ## Tool Usage
-    - Query `user_activity` records to get raw engagement events — filter by time window (last 7-30 days) relative to the triggering event.
-    - Query `engagement_metrics` records for pre-aggregated metrics — use these for trend comparison rather than re-aggregating raw activity.
-    - Write `churn_scores` with fields: account_id, score (0-100), risk_level (low/medium/high/critical), signals (array of contributing factors), scored_at timestamp.
-    - Write `retention_alerts` only for actionable cases — include recommended_action and urgency fields.
-    - Read `activity_baselines` memory namespace to retrieve per-account or per-cohort baseline activity levels from prior runs.
-    - Write to `churn_indicators` memory namespace to persist newly discovered churn patterns (e.g., "accounts dropping below 3 logins/week within 14 days churn at 72%").
-    - Use `adl_search_records` with entity_type "churn_scores" to check for existing scores before writing duplicates for the same account.
-    - Entity IDs follow the pattern `{entity_type}:{natural_key}` — for churn_scores use `churn_scores:{account_id}`.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 5000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "user_activity"

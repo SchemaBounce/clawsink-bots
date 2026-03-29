@@ -25,27 +25,22 @@ agent:
     - When ingesting findings from sales-pipeline, marketing-growth, or business-analyst, tag the source in revops_findings metadata for attribution traceability.
     - Spawn sub-agents (attribution-modeler, forecast-builder) for heavy computation — keep the main loop for coordination and synthesis.
   toolInstructions: |
-    ## Tool Usage
-    - Query `pipeline_reports` and `deal_insights` to build the pipeline snapshot — filter by stage and close date for forecast relevance.
-    - Query `campaigns` and `mktg_findings` for marketing spend and channel performance data needed for CAC calculation.
-    - Query `churn_scores` to factor retention risk into revenue forecasts — high-risk accounts should be weighted down in pipeline value.
-    - Query `revenue_data` for historical revenue actuals — compare against forecasts to calibrate model accuracy.
-    - Query `ba_findings` for cross-functional business insights that may affect revenue assumptions.
-    - Write `revops_findings` for analysis narratives — include metric_name, current_value, baseline_value, delta_pct, and interpretation.
-    - Write `revops_forecasts` with fields: period, forecast_value, confidence_low, confidence_high, assumptions, model_version.
-    - Write `revops_metrics` for point-in-time KPIs: CAC, LTV, LTV_CAC_ratio, net_revenue_retention, pipeline_coverage.
-    - Write `revops_alerts` only for threshold breaches — include threshold_name, threshold_value, actual_value, severity.
-    - Read/write `attribution_models` memory to persist and evolve the attribution model state across runs.
-    - Read/write `learned_patterns` memory to track recurring revenue patterns (e.g., seasonal dips, cohort behaviors).
-    - Entity IDs: `revops_forecasts:{period}`, `revops_metrics:{metric_name}:{date}`, `revops_findings:{topic}:{date}`.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 30000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:
