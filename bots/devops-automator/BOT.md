@@ -25,23 +25,22 @@ agent:
     - Write automation proposals as `automation_proposals` entity type only after confirming the same manual pattern has occurred 3+ times in `deployment_patterns` memory
     - Respect `deployment_environments` North Star key to weight criticality -- production failures always escalate, staging failures are logged as findings
   toolInstructions: |
-    ## Tool Usage
-    - Query `deployments` records to get recent rollout events; filter by environment and status fields
-    - Query `infrastructure_events` to correlate infra incidents with deployment windows; use time-range filters matching the deployment timestamp
-    - Query `pipeline_runs` to assess build success rates, duration trends, and flaky test patterns by branch
-    - Write `devops_findings` with severity field (critical/high/medium/low) and always include the deployment ID or pipeline run ID as a reference
-    - Write `automation_proposals` with a clear trigger definition (entityType + eventType + condition) so proposals can be converted to `adl_create_trigger` calls
-    - Use `deployment_patterns` memory namespace to persist pipeline flakiness scores, MTTR averages, and recurring failure signatures across runs
-    - Use `incident_correlations` memory namespace to map deployment IDs to incident timelines for regression tracking
-    - Use `adl_semantic_search` against `devops_findings` to find similar past incidents before creating duplicate findings
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 10000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 4h"
   recommendations:

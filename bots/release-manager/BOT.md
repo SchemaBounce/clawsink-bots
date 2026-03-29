@@ -26,25 +26,21 @@ agent:
     - When receiving findings from documentation-writer confirming doc PR readiness, include the doc PR link in the release plan.
     - Update `versioning_decisions` memory with each version bump decision and its rationale for future reference.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `releases` to load previous release metadata and version history.
-    - Use `adl_query_records` with entityType `changelogs` to retrieve existing changelog entries for gap analysis.
-    - Use `adl_query_records` with entityType `pull_requests` to aggregate merged PRs since the last release tag — filter by merge date.
-    - Use `adl_query_records` with entityType `review_findings` to verify all findings are resolved before release.
-    - Write release notes with `adl_upsert_record` to entityType `release_notes` — use ID format `release-{version}-notes`.
-    - Write release plans with `adl_upsert_record` to entityType `release_plans` — use ID format `release-plan-{version}-{YYYYMMDD}`.
-    - Use `adl_semantic_search` to find past release notes with similar change types for consistent formatting and tone.
-    - Use `adl_query_records` for structured lookups (specific version, date range, PR status).
-    - Store version bump history and decision rationale in `versioning_decisions` memory namespace.
-    - Store release timelines, blockers, and stakeholder approvals in `release_history` memory namespace.
-    - When generating a release plan, batch-read all PRs, changelogs, and review findings in parallel before writing the plan.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 10000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 schedule:
   default: "@weekly"

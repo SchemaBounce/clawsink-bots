@@ -26,23 +26,19 @@ agent:
     - When marketing-growth sends demand forecast findings, factor projected demand into reorder timing calculations.
     - Use automation-first principle: deterministic reorder triggers (stock below threshold + no pending PO) should become `adl_create_trigger` automations.
   toolInstructions: |
-    ## Tool Usage
-    - Query `transactions` records to calculate consumption velocity — filter by recent period (30-90 days) and group by SKU for rate computation.
-    - Query `companies` records to retrieve vendor details — delivery performance, pricing tiers, lead times, and reliability scores.
-    - Write `inv_findings` with fields: finding_type (reorder_recommendation/vendor_analysis/cost_trend), sku_ids, recommended_action, cost_impact, urgency.
-    - Write `inv_alerts` only for time-sensitive procurement issues — include sku_id, current_stock, days_until_stockout, recommended_action.
-    - Read `stock_levels` memory for running inventory positions and depletion rates tracked across runs.
-    - Write to `stock_levels` memory with updated positions after each analysis cycle.
-    - Read/write `learned_patterns` memory to persist seasonal demand patterns, vendor reliability scores, and lead time actuals.
-    - Read/write `working_notes` memory for in-progress procurement evaluations that span multiple runs.
-    - Use `adl_list_triggers` to check what automated reorder flows exist, and `adl_create_trigger` to set up new ones for deterministic stock monitoring.
-    - Entity IDs: `inv_findings:{finding_type}:{sku_id}:{date}`, `inv_alerts:{sku_id}:{date}`.
-    - When orders.created trigger fires, query the order to extract line items and decrement stock_levels memory accordingly.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

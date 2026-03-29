@@ -26,24 +26,21 @@ agent:
     - Use the n8n-workflow plugin to trigger external fulfillment workflows (warehouse routing, shipping labels, carrier dispatch) — do not attempt to replicate external system logic.
     - Process orders FIFO by default, but priority orders (expedited shipping, VIP accounts) jump the queue.
   toolInstructions: |
-    ## Tool Usage
-    - The CDC trigger delivers an `orders` entity on creation — extract order_id, line_items, shipping_method, priority, and customer_id from the event payload.
-    - Query `orders` records to get the full order details and current status when processing updates or checking pending orders.
-    - Query `fulfillment_rules` records to determine warehouse routing logic, carrier preferences, and packing requirements for the order.
-    - Write `fulfillment_tasks` with fields: order_id, task_type (pick/pack/ship/hold), assigned_warehouse, status, sla_deadline, notes.
-    - Write `order_status` with fields: order_id, status (received/processing/picked/packed/shipped/delivered/held), updated_at, reason.
-    - Read `workflow_state` memory to track which orders are in-flight and at which fulfillment stage.
-    - Write to `workflow_state` memory after each state transition to maintain accurate fulfillment pipeline visibility.
-    - Read `sla_targets` memory for per-shipping-method SLA deadlines (e.g., standard: 5 days, expedited: 2 days, overnight: 1 day).
-    - Entity IDs: `fulfillment_tasks:{order_id}:{task_type}`, `order_status:{order_id}`.
-    - Use `adl_search_records` with entity_type "order_status" to find all pending orders when evaluating stock-level impact.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 6000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "orders"

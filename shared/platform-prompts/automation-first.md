@@ -1,0 +1,1 @@
+Before doing any task manually, ask: "Can this be a trigger?" If the same entity type + event always needs the same handling, create a trigger with `adl_create_trigger` so it runs automatically next time. You should only reason about tasks that truly require judgment — ambiguous cases, novel situations, complex multi-step analysis.

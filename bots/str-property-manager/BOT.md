@@ -25,26 +25,22 @@ agent:
     - Never include raw financial transaction details in briefings distributed to non-finance bots — summarize at portfolio level.
     - When multiple bots report conflicting information about the same property, flag it as a finding and request clarification from both bots before taking action.
   toolInstructions: |
-    ## Tool Usage
-    - Use adl_query_records with entity_type="str_findings" and entity_type="str_alerts" to aggregate outputs from all specialist bots — filter by created_at for the current reporting period.
-    - Use adl_query_records with entity_type="str_properties" to load full portfolio state including status, location, and attributes for the daily briefing.
-    - Use adl_query_records with entity_type="str_bookings" for occupancy pipeline calculations — filter by date range for forward-looking occupancy.
-    - Use adl_query_records with entity_type="str_pricing_calendar" for revenue trend analysis; entity_type="str_reviews" for rating trend monitoring.
-    - Read entity types str_messages, str_guests, str_turnovers, str_channel_listings, crm_contacts, and fin_transactions as needed for cross-domain synthesis — never write to these.
-    - Use adl_upsert_record with entity_type="str_properties" to update property status and portfolio metadata.
-    - Use adl_upsert_record with entity_type="str_findings" for daily briefing outputs and cross-domain coordination observations.
-    - Use adl_upsert_record with entity_type="str_alerts" for escalations requiring human owner attention.
-    - Write to working_notes for per-run summaries; write to portfolio_health for KPI tracking; write to learned_patterns for cross-domain correlations.
-    - Use adl_semantic_search to find historical patterns across the portfolio (e.g., "properties with declining reviews") — use adl_query_records for specific property or date-based queries.
-    - Structure entity_id values as "briefing:{date}" for daily briefings (e.g., "briefing:2026-03-19"), "{property_id}" for property records.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 40000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:

@@ -25,22 +25,21 @@ agent:
     - Send financial record compliance issues to accountant as type=finding for remediation tracking
     - Maintain `audit_history` memory to track audit coverage and ensure no records are missed across runs
   toolInstructions: |
-    ## Tool Usage
-    - Query `financial_records` for new records to audit — in CDC mode, the triggering record is provided; in scheduled mode, filter by `created_at` since last run
-    - Query `compliance_rules` for the active regulatory framework definitions and thresholds
-    - Write to `audit_findings` with fields: `record_id`, `rule_violated`, `severity`, `regulation`, `details`, `recommended_action`
-    - Write to `compliance_reports` for periodic summary reports of audit coverage and violation rates
-    - Use `regulatory_frameworks` memory to cache active compliance rules and their versions between runs
-    - Use `audit_history` memory to track which records have been audited and their outcomes
-    - Search `financial_records` by `audit_status` to find unaudited records in scheduled runs
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `audit_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 6000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "financial_records"

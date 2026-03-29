@@ -25,23 +25,22 @@ agent:
     - Continuously update `baseline_stats` memory with field-level distribution statistics to improve anomaly detection over time
     - Write `dq_scores` for every validated batch to maintain a running quality scorecard per entity type
   toolInstructions: |
-    ## Tool Usage
-    - Read records of ANY entity type (entityTypesRead=*) via `adl_query_records` to validate incoming data against rules
-    - Query records by entity type to perform referential integrity checks -- e.g., verify a referenced customer_id exists in the customers entity type
-    - Write `dq_findings` with fields: entity_type, record_id, rule_violated (completeness/format/consistency/referential), severity, field_name, expected_value, actual_value
-    - Write `dq_scores` with fields: entity_type, batch_timestamp, records_checked, pass_count, fail_count, score_pct -- one per entity type per validation run
-    - Use `quality_rules` memory namespace to store validation rules per entity type: required_fields, format_patterns, value_ranges, cross-field constraints
-    - Use `baseline_stats` memory namespace to store per-field statistical baselines: mean, stddev, null_rate, distinct_count, value_distribution
-    - Use `adl_semantic_search` to find similar past dq_findings before writing duplicates -- deduplicate on entity_type + field_name + rule_violated
-    - Batch validation preferred: process all records from a single CDC event together rather than one-by-one to stay within token budget
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 6000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 trigger:
   entityType: "*"
   eventType: "created"

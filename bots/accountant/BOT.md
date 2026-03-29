@@ -25,23 +25,19 @@ agent:
     - Store learned categorization rules in `learned_patterns` memory to improve accuracy over time
     - Store budget threshold overrides in `thresholds` memory — update when North Star budget_constraints change
   toolInstructions: |
-    ## Tool Usage
-    - Query `transactions` for new and uncategorized transaction records — filter by `status` and `created_at`
-    - Query `invoices` for unmatched and pending invoices — check against existing purchase orders
-    - Query `inv_findings` from inventory-manager for cost-of-goods signals that affect financial analysis
-    - Write to `acct_findings` with fields: `category`, `finding_type` (anomaly/trend/categorization), `amount_impact`, `severity`, `details`
-    - Write to `acct_alerts` only for critical payment failures or billing errors requiring immediate attention
-    - Write to `transactions` to update categorization fields (category, subcategory, tags) on existing records
-    - Write to `invoices` to update matching status and flags on existing records
-    - Use `working_notes` memory for in-progress categorization and matching work between runs
-    - Use `learned_patterns` memory to store vendor categorization rules and recurring charge patterns
-    - Use `thresholds` memory to store per-category budget limits and alert thresholds
-    - Search transactions by `vendor` and `amount` to detect duplicates; by `category` to assess budget utilization
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

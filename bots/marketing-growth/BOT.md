@@ -25,22 +25,19 @@ agent:
     - Log all pattern observations in learned_patterns memory before sending findings externally — this prevents repeat analysis of the same trend.
     - Review cs_findings from customer-support at the start of every run to surface content topics driven by real user pain points.
   toolInstructions: |
-    ## Tool Usage
-    - Query `campaigns` entities to pull current campaign status, spend, and conversion metrics. Filter by active status and date range.
-    - Query `contacts` entities read-only to understand audience segments — never write to contacts.
-    - Query `cs_findings` entities to identify support themes that suggest content gaps or campaign messaging misalignment.
-    - Write `mktg_findings` entities for all non-critical insights. Include fields: finding_type, channel, metric_name, metric_value, trend_direction, recommended_action.
-    - Write `mktg_alerts` entities only for escalation-worthy events (campaign failure, significant metric drop). Include severity and affected campaign ID.
-    - Write `campaigns` entities to update campaign status or metadata — never delete campaign records.
-    - Use `content_calendar` memory namespace to track upcoming content deadlines, assigned writers, and publishing slots.
-    - Use `working_notes` memory namespace for within-run scratch calculations and intermediate analysis results.
-    - Use `learned_patterns` memory namespace to store confirmed trends (e.g., "LinkedIn posts outperform Twitter for technical content by 2x"). Check this namespace before re-analyzing known patterns.
-    - When searching entities, prefer date-bounded queries (last 7 days for daily runs, last 30 days for trend analysis) to limit token usage.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

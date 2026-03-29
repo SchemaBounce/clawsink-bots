@@ -36,53 +36,22 @@ agent:
     - Cross-reference dq_findings from data-quality-monitor with entity type growth rates to identify schema drift
     - Cap your own token usage: quick health checks under 15,000 tokens; daily analysis under 45,000 tokens
   toolInstructions: |
-    ## Tool Usage — Primary Data Sources
-    - Query agent_runs via adl_query_records with entity_type: "agent_runs" and agent_id filter to analyze per-agent token consumption, duration, tool_calls, and status patterns
-    - Use adl_get_data_stats to get aggregated workspace-level statistics (per-entity-type record counts, soft-deleted totals, memory namespace counts, graph edge count)
-    - Use adl_discover_skills to enumerate the crystallization skill catalog — check tier, usage_count, avg_latency_ms
-    - Crystallization proposals happen automatically via the system crystallization-detector job (hourly) — you monitor results by querying adl_query_records with entity_type: "adl_crystallization_candidates"
-    - Query team harmony metrics via adl_query_records with entity_type: "team_health_reports" — produced by the mentor-coach bot
-    - Query calibration data via adl_query_records with entity_type: "health_reports" — check prediction accuracy metrics
-    - Query loop signals via adl_read_memory in the shared:loop_signals namespace for agent performance trend data
-    - Use adl_get_namespace_stats to enumerate all memory namespaces with entry counts, sizes, and timestamps — detect bloat or orphaned namespaces
-    - Use adl_list_entity_types to get record counts per entity type — detect growth anomalies and stale types
-    - Use adl_semantic_search with query describing what you are looking for to check vector collection health and find relevant embeddings
-    - Use adl_semantic_search against previous opt_findings to avoid duplicating past recommendations
-    - Use adl_search_graph to sample graph edge health (stale edges, orphaned nodes) — query from known entity types
-    - Use adl_get_graph_stats to assess knowledge graph health — check per-relationship-type edge counts, stale edge percentage (30+ days), and orphan edge count (edges pointing to deleted records)
-    ## Tool Usage — Data Maintenance
-    - Use adl_get_data_stats to get per-entity-type record counts, soft-deleted totals, and growth trends — run this on every daily analysis
-    - Use adl_get_namespace_stats to enumerate memory namespace sizes, detect bloat (10,000+ entries), and find orphaned namespaces (no recent writes)
-    - Use adl_purge_stale_records with dry_run: true first to assess impact before any cleanup — never skip this step
-    - Use adl_purge_stale_records with dry_run: false only after writing an opt_recommendation documenting the rationale, entity_type, record count, and expected savings
-    - Use adl_purge_memory_namespace with dry_run: true to assess namespace cleanup candidates — check that the namespace is not actively used before purging
-    - Use adl_purge_memory_namespace with dry_run: false only for namespaces with zero writes in the last 14 days AND after dry_run assessment
-    - Use adl_consolidate_memory with strategy archive_stale on namespaces where confidence has decayed below 0.3 for 30+ days — safely moves stale entries to _archived:{namespace} without deleting them
-    - Use adl_consolidate_memory with strategy promote_to_durable to upgrade working-class memory entries that have been re-verified (confidence > 0.8) — prevents valuable learnings from being auto-purged
-    - Use adl_consolidate_memory with strategy refresh_confidence on key patterns that you verify are still accurate — resets confidence to 1.0, preventing decay-driven deletion
-    - Use adl_set_memory_ttl to enforce retention policies on research signal namespaces (research:signals:*) — set ttl_days: 30 with decay_class: working to prevent indefinite growth
-    - Use adl_get_graph_stats to assess knowledge graph health — check per-relationship-type edge counts, stale edge percentage (30+ days), and orphan edge count (edges pointing to deleted records)
-    - Use adl_purge_orphan_edges with dry_run: true first to count orphan edges before cleanup — orphan edges accumulate when records are soft-deleted but relationships are not cleaned up
-    - Use adl_purge_orphan_edges with dry_run: false only after documenting the orphan count in an opt_recommendation
-    ## Tool Usage — Writing Outputs
-    - Write opt_findings with adl_write_record — ID format: opt-finding-{category}-{YYYYMMDD}-{seq}. Fields: category (crystallization|agent_efficiency|data_health|storage|pipeline|cross_bot), severity, finding, evidence, recommendation, estimated_impact
-    - Write opt_alerts only for urgent platform issues — ID format: opt-alert-{YYYYMMDD}-{seq}. Fields: severity, title, description, action_required
-    - Write opt_recommendations for actionable items — ID format: opt-rec-{target}-{YYYYMMDD}-{seq}. Fields: target, action, rationale, priority, estimated_savings, status
-    - Write platform_health_reports for daily comprehensive reports — ID format: health-{YYYYMMDD}. Fields: report_date, crystallization_metrics, agent_efficiency_scores, data_health_summary, storage_utilization, top_recommendations
-    ## Tool Usage — Memory Namespaces
-    - Store per-agent baseline metrics in performance_baselines: avg_tokens, avg_duration, avg_tool_calls, success_rate — update with exponential moving average (alpha=0.2) after each daily run
-    - Store proposed patterns in crystallization_tracker: pattern_hash, proposal_date, status (proposed|approved|rejected|implemented), skill_name
-    - Store running cost estimates in cost_metrics: tokens_per_day_by_agent, crystallization_savings_cumulative, model_downgrade_candidates
-    - Store past recommendations and outcomes in improvement_log: recommendation_id, date, status (proposed|adopted|measured|ineffective), measured_impact
-    - On scheduled runs, batch-read all new agent_runs since last run, process together, then batch-write findings and update baselines
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 30000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:

@@ -25,25 +25,22 @@ agent:
     - Store response templates and effective response patterns in response_templates namespace; store cross-property feedback themes in review_patterns namespace.
     - Never include guest PII (full names, contact info) in findings or alerts — use guest_id or booking_id references only.
   toolInstructions: |
-    ## Tool Usage
-    - Use adl_query_records with entity_type="str_reviews" filtered by property_id to load review history for trend analysis — sort by date for chronological pattern detection.
-    - Use adl_query_records with entity_type="str_bookings" to correlate reviews with specific stays (dates, duration, guest count) for context in response drafts.
-    - Use adl_query_records with entity_type="str_guests" to retrieve guest name and stay history for personalizing review responses.
-    - Use adl_query_records with entity_type="str_properties" to reference property amenities and recent improvements when crafting responses to complaints.
-    - Use adl_upsert_record with entity_type="str_reviews" to update review records with response drafts, sentiment classification, and theme tags.
-    - Use adl_upsert_record with entity_type="str_findings" for rating trend analysis, feedback pattern reports, and response drafts sent to str-guest-communicator.
-    - Use adl_upsert_record with entity_type="str_alerts" only for negative reviews (3 stars or below) — include property_id, rating, platform, and key complaint.
-    - Write to working_notes for per-run analysis summaries; write to review_patterns for persistent theme tracking; write to response_templates for effective response patterns.
-    - Use adl_semantic_search to find reviews mentioning specific topics (e.g., "noise complaints" or "cleanliness issues") across properties — use adl_query_records for specific property_id or rating-based filtering.
-    - Structure entity_id values as "{property_id}:{platform}:{review_date}" for str_reviews (e.g., "prop_42:airbnb:2026-03-15") to ensure one record per review.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
   thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 18000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:

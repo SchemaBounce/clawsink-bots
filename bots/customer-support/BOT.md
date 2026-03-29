@@ -26,27 +26,22 @@ agent:
     - Use automation-first principle: if a ticket type can be triaged deterministically (known pattern + known response), create a trigger with `adl_create_trigger` rather than handling manually every run.
     - Correlate sre_findings with open tickets — if an infra issue explains multiple tickets, batch-update them rather than treating each independently.
   toolInstructions: |
-    ## Tool Usage
-    - Query `tickets` records filtered by status (open, pending) to identify items needing triage — sort by created_at to handle oldest first.
-    - Query `contacts` and `companies` to enrich ticket context — identify VIP accounts, high-value customers, or accounts with prior churn signals.
-    - Query `sre_findings` to check if current customer complaints correlate with known infrastructure issues.
-    - Write `cs_findings` with fields: finding_type (trend/pattern/resolution), affected_accounts, severity, recommendation, evidence.
-    - Write `cs_alerts` only for critical escalations — include account_id, issue_summary, impact_assessment, recommended_action.
-    - Write/update `tickets` to change status, add triage notes, assign severity — always include the triage_reason field.
-    - Read `customer_health` memory to get per-account health scores and complaint history from prior runs.
-    - Write to `customer_health` memory to update health scores after each triage cycle.
-    - Read/write `learned_patterns` memory to persist support patterns (e.g., "users on plan X report issue Y at 3x the rate").
-    - Read/write `working_notes` memory for cross-run context on in-progress investigations.
-    - Entity IDs: `tickets:{ticket_id}`, `cs_findings:{finding_type}:{date}`, `cs_alerts:{account_id}:{date}`.
-    - Use `adl_search_records` with entity_type "tickets" to find related tickets for the same account before escalating.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 10000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 2h"
   recommendations:

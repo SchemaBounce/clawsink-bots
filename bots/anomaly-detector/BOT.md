@@ -25,22 +25,21 @@ agent:
     - Update `detection_models` memory namespace with refined baseline parameters after each run to improve accuracy over time
     - This bot has egress mode=none -- all analysis must use data already available within ADL records and memory
   toolInstructions: |
-    ## Tool Usage
-    - Query `metrics` records to ingest incoming time-series data points; filter by metric_name and use time-range filters for recent windows
-    - Query `alert_rules` records to load user-configured thresholds (metric_name, operator, threshold_value, severity) that override statistical defaults
-    - Write `anomaly_findings` with fields: metric_name, timestamp, observed_value, baseline_mean, baseline_stddev, deviation_sigma, severity, anomaly_type (spike/drop/trend_break/seasonal)
-    - Write `anomaly_alerts` only for critical/high severity -- include metric_name, deviation_magnitude, recommended_action, and affected_service if known
-    - Use `metric_baselines` memory namespace to store per-metric rolling statistics: mean, stddev, min, max, sample_count, last_updated -- update after every run
-    - Use `detection_models` memory namespace to store model parameters: seasonal_period, trend_direction, noise_floor, sensitivity_multiplier per metric
-    - Batch processing preferred: analyze all metrics from a single CDC trigger together to detect correlated multi-metric anomalies
-    - Use `adl_semantic_search` against `anomaly_findings` to check for recurring anomaly patterns before creating duplicate findings
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 5000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "metrics"

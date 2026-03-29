@@ -25,21 +25,19 @@ agent:
     - Use gog plugin for scheduling orientation sessions on Google Calendar and sharing documents via Drive
     - Track completion rates in `completion_rates` memory to identify recurring onboarding bottlenecks
   toolInstructions: |
-    ## Tool Usage
-    - Query `employees` for new hire records — filter by `start_date` and `onboarding_status` to find employees needing onboarding
-    - Query `onboarding_templates` for role-specific and department-specific checklist templates
-    - Write to `onboarding_checklists` with fields: `employee_id`, `template_used`, `items`, `start_date`, `target_completion`, `status`
-    - Write to `hr_tasks` with fields: `title`, `employee_id`, `assignee`, `due_date`, `status`, `checklist_ref`, `task_type` (provisioning/training/documentation/orientation)
-    - Use `onboarding_metrics` memory to track aggregate onboarding duration, completion rates, and bottleneck stages
-    - Use `completion_rates` memory to store per-department and per-role completion time averages
-    - Search `onboarding_checklists` by `status` to find in-progress and overdue onboarding processes
-    - Search `hr_tasks` by `status` and `due_date` to identify blocked or overdue tasks
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `hr_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

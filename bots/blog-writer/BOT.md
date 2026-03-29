@@ -25,23 +25,21 @@ agent:
     - Alternate content sections (SchemaBounce vs OpenCLAW) across consecutive runs. Track the last section in editorial_calendar memory.
     - Cap each blog post at 1500 words unless the request explicitly specifies long-form content.
   toolInstructions: |
-    ## Tool Usage
-    - Query `blog_topics` entities to discover approved and requested topics. Filter by status "approved" or "requested" and prioritize by date.
-    - Query `product_docs` entities to gather accurate technical details for blog content. Use keyword search matching the current topic.
-    - Write `blog_drafts` entities for every completed post. Required fields: title, section (schemabounce|openclaw), category, content_markdown, status ("draft"), word_count, target_publish_date.
-    - Write `editorial_notes` entities to record editor feedback, revision history, and style corrections for future reference.
-    - Use `editorial_calendar` memory namespace to track: upcoming topics, last published section, assigned deadlines, and topic status (planned/in-progress/submitted/published).
-    - Use `writing_notes` memory namespace for the current run's research notes, outline drafts, and source references. Clear after the post is submitted.
-    - Use `topic_research` memory namespace to store reusable research (product comparisons, technical explanations) that may apply to future posts.
-    - Search `product_docs` with semantic queries when writing technical tutorials — prefer exact product terminology from company_glossary zone1 data.
-    - Entity IDs for blog_drafts should follow the pattern: `blog-{section}-{date}-{slug}` (e.g., `blog-schemabounce-2026-03-19-cdc-patterns`).
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 16000
 cost:
-  estimatedTokensPerRun: 35000
+  estimatedTokensPerRun: 15000
   estimatedCostTier: "medium"
 schedule:
   default: "@weekly"

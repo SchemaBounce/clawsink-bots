@@ -25,24 +25,22 @@ agent:
     - Store channel-specific API quirks and rate limits in the channel_quirks memory namespace so future runs avoid repeating failed patterns.
     - Never expose API credentials or auth tokens in findings or alert messages.
   toolInstructions: |
-    ## Tool Usage
-    - Use adl_query_records with entity_type="str_channel_listings" to retrieve current listing state per property per channel before any sync operation.
-    - Use adl_query_records with entity_type="str_bookings" filtered by date range to detect calendar overlaps across channels.
-    - Use adl_query_records with entity_type="str_pricing_calendar" to verify rate consistency across platforms — read only, never write pricing records.
-    - Use adl_upsert_record with entity_type="str_channel_listings" to update sync status, listing health scores, and platform metadata.
-    - Use adl_upsert_record with entity_type="str_findings" for listing health observations and channel-specific compliance issues.
-    - Use adl_upsert_record with entity_type="str_alerts" only for calendar conflicts and sync failures — not routine status updates.
-    - Write to working_notes namespace for per-run sync summaries; write to channel_quirks for persistent platform-specific gotchas; write to sync_history for audit trail of sync operations.
-    - Use adl_semantic_search when looking for past sync failures or channel quirks by description — use adl_query_records when filtering by specific property_id, channel, or date.
-    - Structure entity_id values as "{property_id}:{channel}" for str_channel_listings (e.g., "prop_42:airbnb") to ensure one record per property per platform.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 20000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 2h"
   recommendations:

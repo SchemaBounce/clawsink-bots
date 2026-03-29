@@ -25,25 +25,22 @@ agent:
     - When receiving findings from api-tester, correlate test failures with known debt areas to surface compounding risks.
     - Update `debt_patterns` memory when patterns emerge across 3+ findings — flag the pattern as systemic.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `review_findings` to load code review findings as input for debt analysis.
-    - Use `adl_query_records` with entityType `code_quality_metrics` to retrieve coverage, complexity, and duplication metrics per module.
-    - Use `adl_query_records` with entityType `gh_issues` to check if a debt item already has a tracked issue.
-    - Write debt items with `adl_upsert_record` to entityType `tech_debt_items` — use ID format `debt-{module}-{category}-{seq}`.
-    - Write quality trends with `adl_upsert_record` to entityType `quality_trends` — use ID format `trend-{module}-{YYYYMMDD}`.
-    - Use `adl_semantic_search` to find similar past debt items and quality trends when assessing whether a finding is novel or part of an existing pattern.
-    - Use `adl_query_records` for structured lookups (specific module, severity, category, date range).
-    - Store recurring debt signatures, their frequency counts, and typical remediation approaches in `debt_patterns` memory namespace.
-    - Store in-progress analysis context and cross-finding correlations in `working_notes` memory namespace.
-    - On scheduled runs, batch-read all new review_findings and code_quality_metrics since the last run, process them together, then batch-write all new debt items and trend updates.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@weekly"
   recommendations:

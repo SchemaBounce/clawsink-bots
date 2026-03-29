@@ -25,22 +25,19 @@ agent:
     - Prioritize actionable improvements (merge duplicates, update outdated steps, fill gaps) over cosmetic suggestions.
     - Track content quality scores in memory across runs to measure improvement trajectory, not just point-in-time state.
   toolInstructions: |
-    ## Tool Usage
-    - Query `kb_articles` records to retrieve the current article inventory — filter by last_updated to focus on potentially stale content.
-    - Query `usage_analytics` records for article view counts, search-to-click ratios, and bounce rates — these identify underperforming content.
-    - Write `kb_updates` with fields: article_id (if updating), title, action (create/update/merge/archive), content_outline, priority, reason.
-    - Write `organization_suggestions` with fields: suggestion_type (restructure/consolidate/retag), affected_articles (array), rationale, expected_impact.
-    - Read `content_quality` memory to get per-article quality scores, staleness timestamps, and audit history from prior runs.
-    - Write to `content_quality` memory with updated quality scores and audit timestamps after each review cycle.
-    - Read `search_patterns` memory to retrieve user search query patterns — high-frequency queries with no matching article indicate gaps.
-    - Write to `search_patterns` memory with newly observed search patterns from usage_analytics data.
-    - Use the memory-lancedb plugin for semantic similarity search — find articles covering overlapping topics for consolidation candidates.
-    - Entity IDs: `kb_updates:{article_id}:{date}`, `organization_suggestions:{suggestion_type}:{date}`.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

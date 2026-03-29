@@ -25,24 +25,21 @@ agent:
     - Update `stock_levels` memory after every CDC event to maintain an accurate running view of inventory positions.
     - Process CDC events in order — if multiple inventory updates arrive in batch, process sequentially by timestamp to avoid stale threshold comparisons.
   toolInstructions: |
-    ## Tool Usage
-    - The CDC trigger delivers an `inventory` entity update — extract sku_id, quantity, warehouse_id, and timestamp from the event payload.
-    - Query `inventory` records to get the full current state for the affected SKU across all warehouses if the event is warehouse-specific.
-    - Query `reorder_rules` records filtered by sku_id to retrieve threshold, reorder_quantity, lead_time_days, and preferred_vendor.
-    - Write `inventory_alerts` with fields: sku_id, warehouse_id, current_quantity, threshold, alert_type (low_stock/stock_out/rapid_depletion), severity.
-    - Write `reorder_requests` with fields: sku_id, requested_quantity, preferred_vendor, urgency, triggered_by (alert reference).
-    - Read `stock_levels` memory to get the prior quantity for rate-of-change calculation (current - previous / time delta).
-    - Write to `stock_levels` memory with the updated quantity and timestamp after processing each event.
-    - Read `reorder_thresholds` memory for any dynamically adjusted thresholds (e.g., seasonal adjustments from inventory-manager).
-    - Use `adl_search_records` with entity_type "inventory_alerts" and sku_id filter to check for existing active alerts before creating duplicates.
-    - Entity IDs: `inventory_alerts:{sku_id}:{warehouse_id}:{date}`, `reorder_requests:{sku_id}:{date}`.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 5000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "inventory"

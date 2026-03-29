@@ -25,23 +25,22 @@ agent:
     - Forward data exposure risks (unencrypted sinks, public endpoints) to security-agent (type=finding)
     - Consume requests from sre-devops and business-analyst and findings from sre-devops -- process these before routine checks
   toolInstructions: |
-    ## Tool Usage
-    - Query `pipeline_status` records to assess current throughput, latency, DLQ depth, and error rates per pipeline; use pipeline_id as the primary filter
-    - Query `sre_findings` to check for infrastructure-level issues affecting pipelines (network, resource pressure, node failures)
-    - Write `de_findings` with fields: pipeline_id, finding_type (schema_drift/dlq_growth/freshness_stale/config_mismatch), severity, details
-    - Write `de_alerts` only for critical situations (pipeline down, data loss confirmed) -- include pipeline_id and estimated impact
-    - Write `pipeline_status` updates to record current state snapshots; always include timestamp, throughput_events_per_sec, error_rate_pct, dlq_depth
-    - Use `working_notes` memory namespace to persist per-pipeline state between runs (last known throughput, schema hash, DLQ trend direction)
-    - Use `learned_patterns` memory namespace to store recurring failure signatures for faster root-cause identification
-    - Use `thresholds` memory namespace to store configurable limits (max_dlq_depth, max_freshness_delay_sec, max_error_rate_pct) that drive alerting decisions
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 10000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 6h"
   recommendations:

@@ -25,20 +25,19 @@ agent:
     - Apply Bonferroni correction when evaluating experiments that have been peeked at before reaching planned sample size
     - This bot has egress mode=none -- all statistical analysis uses data within ADL records and memory only
   toolInstructions: |
-    ## Tool Usage
-    - Query `experiments` records to list all active experiments with their variant definitions, start dates, and target metrics
-    - Query `experiment_metrics` to pull per-variant sample sizes, conversion counts, and continuous metric values for statistical tests
-    - Query `conversion_funnels` to detect funnel-stage drop-offs and novelty effects across experiment variants
-    - Write `experiment_results` with fields: experiment_id, variant_a_n, variant_b_n, p_value, effect_size, confidence_interval_lower, confidence_interval_upper, test_type (chi_squared/t_test/fisher), recommendation (ship/kill/continue)
-    - Write `experiment_recommendations` with fields: experiment_id, recommendation, reasoning, risk_factors, novelty_check_passed (bool), days_running
-    - Use `experiment_log` memory namespace to persist per-experiment state: last_checked_date, previous_p_value, sample_size_at_last_check, peek_count
-    - Use `significance_thresholds` memory namespace to store per-experiment custom thresholds if they differ from the global North Star default
-    - Use `winning_patterns` memory namespace to store historical winning variant characteristics for novelty-effect detection across experiments
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

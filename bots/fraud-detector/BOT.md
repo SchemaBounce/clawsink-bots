@@ -25,23 +25,21 @@ agent:
     - Flagged fraudulent transactions go to accountant as type=finding for financial impact assessment
     - Update `fraud_patterns` memory when new fraud signatures are confirmed to improve future detection
   toolInstructions: |
-    ## Tool Usage
-    - Query `transactions` — in CDC mode, the triggering transaction is provided; analyze amount, vendor, frequency, geography, and timing
-    - Query `fraud_rules` for active fraud detection rules, thresholds, and known bad-actor patterns
-    - Write to `fraud_scores` with fields: `transaction_id`, `risk_score`, `risk_factors`, `velocity_check`, `geo_check`, `amount_check`, `pattern_match`, `recommendation`
-    - Write to `fraud_alerts` only for high-confidence fraud detections requiring immediate attention
-    - Use `fraud_patterns` memory to store and retrieve learned fraud signatures (velocity anomalies, geographic clusters, amount patterns)
-    - Use `risk_thresholds` memory to cache current risk policy thresholds from North Star between runs
-    - Search `transactions` by `vendor`, `amount` range, and `created_at` window for velocity analysis
-    - Compare current transaction against recent transaction history for the same vendor/account to detect anomalies
-    - Entity IDs follow `{prefix}_{YYYYMMDD}_{seq}` convention (e.g., `fraud_20260319_001`)
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 6000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "transactions"

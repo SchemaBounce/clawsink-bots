@@ -25,23 +25,22 @@ agent:
     - Track resource utilization trends in `capacity_trends` memory to forecast when thresholds will be breached (weeks/months ahead)
     - Complete all analysis within token budget -- if data volume is large, sample representative time windows rather than processing everything
   toolInstructions: |
-    ## Tool Usage
-    - Query `infra_metrics` records for CPU, memory, disk, network utilization; filter by service/node and use time-range for the reporting window (last 6 hours)
-    - Query `service_status` records to check uptime, health check results, and service availability across all monitored services
-    - Write `health_reports` with fields: report_period, overall_health (green/yellow/red), service_summaries (array), capacity_warnings (array), trend_highlights (array), recommendations
-    - Write `infra_alerts` only for critical health degradation discovered during report generation -- include affected_service, metric_name, current_value, threshold
-    - Use `performance_baselines` memory namespace to store per-service baseline metrics: avg_cpu, avg_memory, avg_latency, p99_latency, uptime_pct -- update after each report
-    - Use `capacity_trends` memory namespace to store utilization growth rates and projected breach dates per resource (disk, CPU, memory per service)
-    - Use `adl_semantic_search` against previous `health_reports` to identify recurring themes and track whether past recommendations were addressed
-    - Leverage the scheduled-report skill for consistent report formatting and delivery cadence
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
-  estimatedCostTier: "medium"
+  estimatedCostTier: "low"
 schedule:
   default: "0 */6 * * *"
 messaging:

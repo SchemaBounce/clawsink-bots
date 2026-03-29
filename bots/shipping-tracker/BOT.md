@@ -25,25 +25,21 @@ agent:
     - When a delivery exception occurs (damaged, refused, returned), include the exception code and recommended next action in the shipping_alerts record.
     - Process shipment CDC events promptly — stale tracking data leads to late customer notifications and SLA breaches going undetected.
   toolInstructions: |
-    ## Tool Usage
-    - The CDC trigger delivers a `shipments` entity update — extract shipment_id, tracking_number, carrier, status, location, and timestamp from the event payload.
-    - Query `shipments` records to get the full shipment history including origin, destination, and all prior status updates for context.
-    - Query `delivery_slas` records to retrieve the SLA deadline for the shipment's service level (standard, expedited, overnight).
-    - Write `shipping_alerts` with fields: shipment_id, order_id, alert_type (delay/exception/lost/returned), carrier, expected_delivery, revised_delivery, details.
-    - Write `delivery_predictions` with fields: shipment_id, predicted_delivery_date, confidence, factors (array of contributing signals), carrier_avg_for_route.
-    - Read `carrier_performance` memory to get historical delivery time distributions per carrier and route — use for anomaly detection and prediction.
-    - Write to `carrier_performance` memory with actual transit times after delivery confirmation to continuously improve the baseline.
-    - Read `route_patterns` memory for known route-specific delay patterns and seasonal effects.
-    - Write to `route_patterns` memory when new patterns are detected (e.g., holiday season delays, regional disruptions).
-    - Entity IDs: `shipping_alerts:{shipment_id}:{alert_type}`, `delivery_predictions:{shipment_id}`.
-    - Use `adl_search_records` with entity_type "shipping_alerts" filtered by shipment_id to avoid duplicate alerts for the same event.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 5000
+  estimatedTokensPerRun: 8000
   estimatedCostTier: "low"
 trigger:
   entityType: "shipments"

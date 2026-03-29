@@ -25,20 +25,19 @@ agent:
     - Update conversion_rates memory each run with stage-to-stage conversion percentages and stage_durations memory with average days per stage.
     - When receiving onboarding feedback from customer-onboarding, log patterns in stage_durations memory to identify whether sales handoff quality affects onboarding success.
   toolInstructions: |
-    ## Tool Usage
-    - Query `deals` entities to pull current deal status, stage, value, age, and close probability. Filter by pipeline stage and last-updated date for daily analysis.
-    - Query `pipeline_stages` entities to understand the defined sales stages, their sequence, and expected duration benchmarks.
-    - Write `pipeline_reports` entities for daily and weekly summaries. Required fields: report_date, report_type (daily|weekly), total_pipeline_value, deal_count_by_stage, conversion_rates, avg_stage_duration, forecast_accuracy, coverage_ratio.
-    - Write `deal_insights` entities for individual deal-level observations. Required fields: deal_id (anonymized), insight_type (stalled|at_risk|fast_track|lost_reason|won_pattern), stage, days_in_stage, recommended_action.
-    - Use `conversion_rates` memory namespace to store stage-to-stage conversion baselines. Key format: `conv-{from_stage}-{to_stage}`. Store: rate, sample_size, last_updated, trend.
-    - Use `stage_durations` memory namespace to store average time spent in each stage. Key format: `duration-{stage_name}`. Store: avg_days, median_days, p90_days, last_updated.
-    - When searching deals, bound queries to active pipeline (exclude closed-won and closed-lost older than 30 days) to keep token usage efficient.
-    - Entity IDs for pipeline_reports should follow: `pipeline-{report_type}-{date}` (e.g., `pipeline-daily-2026-03-19`).
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

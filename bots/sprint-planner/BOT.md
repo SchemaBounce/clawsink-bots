@@ -25,23 +25,22 @@ agent:
     - Consume findings from product-owner and tech-debt-tracker to update backlog priorities before planning
     - Flag dependency risks at least 2 days before sprint start by checking task dependency fields in `stories` and `tasks` records
   toolInstructions: |
-    ## Tool Usage
-    - Query `tasks`, `stories`, and `bugs` records to build the current backlog; filter by status=backlog or status=ready
-    - Query `velocity_metrics` to compute trailing 3-sprint average; group by sprint identifier and sum completed story points
-    - Write `sprint_plans` records with fields: sprint_id, planned_points, capacity_percentage, included_items (array of task/story IDs), risk_flags
-    - Write `priority_recommendations` records with RICE breakdown fields: reach, impact, confidence, effort, score, and recommended_priority
-    - Use `sprint_history` memory namespace to persist completed sprint summaries (planned vs delivered points, carryover items)
-    - Use `velocity_trends` memory namespace to store per-sprint velocity and rolling averages for trend detection
-    - Use `team_capacity` memory namespace to track team member availability, PTO, and capacity adjustments per sprint
-    - When creating triggers via `adl_create_trigger`, use entityType=tasks eventType=created to auto-score new backlog items with RICE
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "medium"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@weekly"
   recommendations:

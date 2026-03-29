@@ -25,21 +25,19 @@ agent:
     - Track resolution times in `resolution_times` memory — use this data to estimate fix timelines in triage decisions.
     - Consider `team_capacity` when assigning severity and routing — P2 bugs should not be routed to overloaded teams without noting the capacity constraint.
   toolInstructions: |
-    ## Tool Usage
-    - Use `adl_query_records` with entityType `bug_reports` to load incoming bugs awaiting triage — filter by status "open" or "new".
-    - Use `adl_query_records` with entityType `team_capacity` to check current workload before routing bugs to specific teams.
-    - Write triage decisions with `adl_upsert_record` to entityType `triage_decisions` — use ID format `triage-{bug-id}-{YYYYMMDD}`.
-    - Write severity scores with `adl_upsert_record` to entityType `severity_scores` — use ID format `severity-{bug-id}`.
-    - Use `adl_semantic_search` to find similar past bugs when a report description is ambiguous — match against historical triage_decisions and bug_reports.
-    - Use `adl_query_records` for structured lookups (specific bug ID, severity level, category, date range).
-    - Store recurring bug signatures and their typical root causes in `bug_patterns` memory namespace.
-    - Store average resolution times per category and severity in `resolution_times` memory namespace.
-    - When processing a batch of new bug reports, read all at once with a single query, triage sequentially, then batch-write all triage_decisions.
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
-  thinkLevel: null
+  fallback: "claude-haiku-4-5-20251001"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
   estimatedTokensPerRun: 8000
   estimatedCostTier: "low"

@@ -25,26 +25,22 @@ agent:
     - Track feature request frequency over time in `customer_signals` memory to identify growing demand
     - Write structured `gh_issues` with user stories, acceptance criteria, and priority — ready for human review and GitHub creation
   toolInstructions: |
-    ## Tool Usage
-    - Query `cs_findings` for customer pain points, feature requests, and churn signals
-    - Query `ba_findings` for cross-domain trends that inform product strategy
-    - Query `mktg_findings` for market trends, competitive intelligence, and positioning insights
-    - Query `tickets` and `contacts` for raw customer data; `campaigns` for marketing context
-    - Write to `gh_issues` with fields: `title`, `body`, `labels`, `priority`, `user_stories`, `acceptance_criteria`, `customer_signals`, `source_findings`
-    - Write to `feature_requests` for tracking aggregated request themes and their signal strength
-    - Write to `po_findings` for strategic product insights; `po_alerts` for urgent product risks
-    - Use `working_notes` memory for in-progress feature clustering between runs
-    - Use `customer_signals` memory to accumulate and count feedback themes across runs
-    - Use `backlog_priorities` memory to maintain the current prioritized feature list
-    - Use `learned_patterns` memory to store validated demand patterns (e.g., "enterprise customers consistently request SSO")
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: null
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@every 12h"
   recommendations:

@@ -25,24 +25,22 @@ agent:
     - Update channel_performance memory each run with per-channel metrics: CAC, conversion_rate, volume, trend. Use this for cross-channel comparison and budget allocation recommendations.
     - Track viral_coefficients memory for referral and viral loop experiments. A viral coefficient below 0.5 triggers an escalation; above 1.0 triggers a scale recommendation.
   toolInstructions: |
-    ## Tool Usage
-    - Query `acquisition_metrics` entities to pull per-channel acquisition data: impressions, clicks, signups, CAC, conversion_rate. Filter by channel and date range.
-    - Query `campaign_results` entities to analyze completed campaign outcomes. Join with growth_experiments entities by experiment name to evaluate hypothesis outcomes.
-    - Query `conversion_funnels` entities to map stage-by-stage drop-off rates. Identify the highest-leverage optimization points (largest absolute drop-offs).
-    - Write `growth_experiments` entities for each new experiment. Required fields: name, hypothesis, channel, status (planned|running|completed|killed), metric, baseline, target, start_date, sample_size_needed, current_result, kill_criteria, confidence_level.
-    - Write `growth_findings` entities for analysis results and recommendations. Required fields: finding_type (experiment_result|channel_analysis|funnel_insight|viral_update), channel, metric_name, metric_value, baseline_value, change_percentage, recommendation (scale|pivot|kill|investigate).
-    - Use `experiment_log` memory namespace to maintain the master list of all experiments: running, completed, and killed. Key format: `exp-{channel}-{name}`. Store: status, start_date, current_metrics.
-    - Use `channel_performance` memory namespace to store per-channel rolling performance. Key format: `channel-{name}`. Store: current_cac, conversion_rate, volume, trend, last_updated.
-    - Use `viral_coefficients` memory namespace to track referral loop metrics. Key format: `viral-{loop-name}`. Store: k_factor, cycle_time_days, trend.
-    - Entity IDs for growth_experiments should follow: `exp-{channel}-{short-name}-{version}` (e.g., `exp-referral-incentive-test-v2`).
+    ## Tool Usage — Minimal Calls
+    - Target: 3-5 tool calls per run, never more than 8
+    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
+    - Step 2: `adl_read_messages` — check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
+    - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
+  preferred: "claude-haiku-4-5-20251001"
   fallback: "claude-haiku-4-5-20251001"
-  thinkLevel: "medium"
+  thinkLevel: "low"
+  maxTokenBudget: 8000
 cost:
-  estimatedTokensPerRun: 25000
-  estimatedCostTier: "high"
+  estimatedTokensPerRun: 8000
+  estimatedCostTier: "low"
 schedule:
   default: "@daily"
   recommendations:
