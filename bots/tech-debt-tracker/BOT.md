@@ -68,6 +68,10 @@ skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Tracks technical debt issues across repositories"
 requirements:
   minTier: "starter"
 ---

@@ -69,6 +69,10 @@ egress:
   allowedDomains: ["nvd.nist.gov", "cve.org", "osv.dev", "api.github.com"]
 skills:
   - ref: "skills/scheduled-report@1.0.0"
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Scans repository code for security vulnerabilities"
 requirements:
   minTier: "starter"
 ---

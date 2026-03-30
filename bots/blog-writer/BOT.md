@@ -78,6 +78,10 @@ plugins:
     config:
       apps: ["blog"]
       scopes: ["blog:write"]
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Publishes blog posts via pull requests to content repository"
 requirements:
   minTier: "starter"
 ---

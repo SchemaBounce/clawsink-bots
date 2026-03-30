@@ -74,6 +74,10 @@ plugins:
     config:
       apps: ["stripe"]
       scopes: ["charges:read", "subscriptions:read"]
+mcpServers:
+  - ref: "tools/stripe"
+    required: false
+    reason: "Revenue operations analysis including CAC/LTV from payment data"
 egress:
   mode: "restricted"
   allowedDomains: ["api.stripe.com"]

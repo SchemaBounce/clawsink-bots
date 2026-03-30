@@ -68,6 +68,10 @@ skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/sla-compliance@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"
+mcpServers:
+  - ref: "tools/slack"
+    required: false
+    reason: "Posts service status updates during incidents"
 egress:
   mode: "restricted"
   allowedDomains: ["api.statuspage.io", "*.atlassian.net"]

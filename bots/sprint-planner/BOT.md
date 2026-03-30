@@ -78,6 +78,13 @@ plugins:
     slot: "channel"
     required: false
     reason: "Sends sprint plan summaries, velocity alerts, and overcommitment warnings to team channels"
+mcpServers:
+  - ref: "tools/jira"
+    required: false
+    reason: "Manages sprints, creates and assigns issues, tracks velocity"
+  - ref: "tools/linear"
+    required: false
+    reason: "Manages cycles, creates and assigns issues in Linear"
 requirements:
   minTier: "starter"
 ---

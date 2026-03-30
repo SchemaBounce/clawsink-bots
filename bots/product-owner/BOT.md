@@ -66,6 +66,13 @@ egress:
   mode: "none"
 skills:
   - ref: "skills/record-monitoring@1.0.0"
+mcpServers:
+  - ref: "tools/jira"
+    required: false
+    reason: "Prioritizes backlog, creates feature requests, manages roadmap"
+  - ref: "tools/linear"
+    required: false
+    reason: "Prioritizes backlog and roadmap in Linear"
 requirements:
   minTier: "starter"
 ---

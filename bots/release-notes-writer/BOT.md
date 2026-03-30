@@ -62,6 +62,10 @@ egress:
 skills:
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Lists commits and merged PRs to generate changelogs"
 requirements:
   minTier: "starter"
 ---

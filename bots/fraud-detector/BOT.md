@@ -65,6 +65,10 @@ egress:
   allowedDomains: []
 skills:
   - ref: "skills/cdc-event-analysis@1.0.0"
+mcpServers:
+  - ref: "tools/stripe"
+    required: false
+    reason: "Monitors charges for suspicious patterns and fraud signals"
 requirements:
   minTier: "starter"
 ---

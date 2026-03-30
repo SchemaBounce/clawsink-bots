@@ -101,10 +101,17 @@ Provides comprehensive GitHub API tools for bots that manage code, issues, pull 
 
 ## Which Bots Use This
 
-- **code-reviewer** -- Reviews PRs, adds comments, approves/requests changes
-- **bug-triage** -- Creates issues from triage findings, searches existing issues for duplicates
+- **devrel** -- Monitors repo stars, issues, contributions, and community activity
+- **software-architect** -- Creates branches, PRs, manages issues for architecture work
+- **documentation-writer** -- Creates documentation PRs
+- **code-reviewer** -- Reviews PRs, adds comments
+- **bug-triage** -- Creates bug issues, searches for duplicates
 - **release-manager** -- Creates release branches, merges PRs, tags releases
-- **release-notes-writer** -- Lists commits and PRs to generate changelogs
+- **release-notes-writer** -- Lists commits and merged PRs for changelogs
+- **devops-automator** -- Monitors CI/CD pipelines and GitHub Actions
+- **security-agent** -- Scans repos for security vulnerabilities
+- **tech-debt-tracker** -- Tracks technical debt across repos
+- **blog-writer** -- Publishes posts via PR to content repo
 
 ## Setup
 

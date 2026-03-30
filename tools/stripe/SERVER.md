@@ -63,8 +63,11 @@ Provides Stripe payment and billing tools for bots that manage financial operati
 ## Which Bots Use This
 
 - **accountant** -- Reconciles invoices, tracks payments, monitors disputes
-- **revenue-analyst** -- Analyzes MRR/ARR trends, subscription metrics
-- **fraud-detector** -- Monitors charges for suspicious patterns, reviews disputes
+- **revenue-analyst** -- Analyzes MRR/ARR trends and subscription metrics
+- **fraud-detector** -- Monitors charges for suspicious patterns
+- **revops** -- Revenue operations and CAC/LTV analysis
+- **sales-pipeline** -- Verifies deal payments and tracks revenue
+- **churn-predictor** -- Analyzes subscription churn signals
 
 ## Setup
 

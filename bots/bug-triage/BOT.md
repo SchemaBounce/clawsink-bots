@@ -66,6 +66,16 @@ skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Creates bug issues, searches for duplicates, labels and assigns issues"
+  - ref: "tools/jira"
+    required: false
+    reason: "Creates and tracks bugs in Jira project"
+  - ref: "tools/linear"
+    required: false
+    reason: "Creates and tracks bugs in Linear"
 requirements:
   minTier: "starter"
 ---

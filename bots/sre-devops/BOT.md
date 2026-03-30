@@ -73,6 +73,10 @@ skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/pipeline-monitoring@1.0.0"
   - ref: "skills/sla-compliance@1.0.0"
+mcpServers:
+  - ref: "tools/slack"
+    required: false
+    reason: "Posts incident alerts and status updates to operations channels"
 automations:
   triggers:
     - name: "Runbook lookup on new incident"

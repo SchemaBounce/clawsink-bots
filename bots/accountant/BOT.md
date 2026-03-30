@@ -67,6 +67,10 @@ skills:
   - ref: "skills/invoice-categorization@1.0.0"
   - ref: "skills/expense-tracking@1.0.0"
   - ref: "skills/budget-monitoring@1.0.0"
+mcpServers:
+  - ref: "tools/stripe"
+    required: false
+    reason: "Reconciles invoices, tracks payments, monitors billing disputes"
 automations:
   triggers:
     - name: "Categorize new transaction"

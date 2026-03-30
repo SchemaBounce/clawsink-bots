@@ -81,6 +81,10 @@ plugins:
   - ref: "n8n-workflow@latest"
     required: true
     reason: "Triggers CI/CD pipelines, deployment rollbacks, and infrastructure automation workflows in external systems"
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Monitors CI/CD pipelines and GitHub Actions workflows"
 requirements:
   minTier: "starter"
 ---

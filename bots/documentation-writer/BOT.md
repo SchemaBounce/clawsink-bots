@@ -41,7 +41,18 @@ model:
 cost:
   estimatedTokensPerRun: 15000
   estimatedCostTier: "medium"
-schedule: null
+schedule:
+  default: null
+  tasks:
+    - name: "Implementation Scan"
+      cronExpression: "0 */6 * * *"
+      description: "Check for new implementation-complete findings from software-architect. Identify which documentation files need updating."
+    - name: "Doc Review"
+      cronExpression: "0 17 * * *"
+      description: "Review pending doc PRs and editor feedback. Apply revisions and update working_notes memory."
+    - name: "Quarterly Doc Audit"
+      cronExpression: "0 10 1 1,4,7,10 *"
+      description: "Comprehensive documentation audit. Cross-reference product_catalog with existing docs to find coverage gaps."
 messaging:
   listensTo:
     - { type: "finding", from: ["software-architect", "code-reviewer", "release-notes-writer"] }
@@ -67,6 +78,9 @@ mcpServers:
   - ref: "tools/github"
     required: true
     reason: "Creates doc PRs linked to implementation PRs"
+  - ref: "tools/notion"
+    required: false
+    reason: "Updates documentation pages in Notion workspace"
 requirements:
   minTier: "team"
 ---

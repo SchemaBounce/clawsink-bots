@@ -68,6 +68,10 @@ plugins:
     reason: "Google Calendar for meeting context and attendee lists, Drive for storing and sharing summaries"
     config:
       scopes: ["calendar.readonly", "drive"]
+mcpServers:
+  - ref: "tools/notion"
+    required: false
+    reason: "Publishes meeting summaries and action items to Notion pages"
 requirements:
   minTier: "starter"
 ---
