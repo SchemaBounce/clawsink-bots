@@ -59,6 +59,23 @@ schedule:
     standard: "@daily"
     intensive: "@every 4h"
   cronExpression: "0 5 * * *"
+  tasks:
+    - name: "Crystallization Scan"
+      cronExpression: "0 5 * * *"
+      timezone: "UTC"
+      prompt: "Scan for crystallization opportunities. Use adl_list_query_patterns to find tool call patterns with 3+ occurrences in the last 7 days. Cross-reference with adl_list_crystallization_candidates to avoid duplicates. For qualifying patterns, call adl_propose_crystallization with the detected SQL template. Track proposals in crystallization_tracker memory."
+    - name: "Agent Performance Review"
+      cronExpression: "0 6 * * *"
+      timezone: "UTC"
+      prompt: "Review performance of all agents. Query agent_runs for the last 7 days. For each agent, analyze: success rate, average token usage, model cost efficiency. For agents consistently using expensive models on simple tasks (5+ runs with <2K output tokens), propose a model downgrade via adl_write_record entity_type='agent_proposal' with type='model_change'. For agents with excessive schedule frequency relative to data change rate, propose schedule_change."
+    - name: "Platform Health Report"
+      cronExpression: "0 7 * * *"
+      timezone: "UTC"
+      prompt: "Generate the daily platform health report. Aggregate: crystallization metrics (skills count, usage, token savings), agent efficiency scores (per-agent tokens/run graded A-F), data health (entity growth, staleness), storage utilization. Write to platform_health_reports entity type. Send summary to executive-assistant via adl_send_message."
+    - name: "Weekly Cost Analysis"
+      cronExpression: "0 9 * * 1"
+      timezone: "UTC"
+      prompt: "Deep dive into workspace costs. Calculate per-agent token costs for the past 7 days. Quantify crystallization savings (skill executions × estimated token savings per call). Analyze model routing effectiveness (auto vs fixed). Compare total costs to previous week. For any agent where costs could be reduced >20% with a model switch or schedule change, create an agent_proposal record with type, rationale, proposedConfig, and estimatedImpact."
 messaging:
   listensTo:
     - { type: "request", from: ["executive-assistant"] }
