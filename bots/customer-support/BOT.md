@@ -93,6 +93,10 @@ plugins:
     slot: "channel"
     required: false
     reason: "Sends ticket escalation and SLA breach notifications to support Teams channels"
+mcpServers:
+  - ref: "tools/slack"
+    required: false
+    reason: "Monitors support channels for customer issues and escalations"
 requirements:
   minTier: "starter"
 ---

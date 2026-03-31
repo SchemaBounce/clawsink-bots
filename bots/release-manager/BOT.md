@@ -82,6 +82,13 @@ plugins:
   - ref: "n8n-workflow@latest"
     required: true
     reason: "Triggers release pipelines, version tagging, and deployment promotion workflows"
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Creates release branches, merges PRs, creates releases and tags"
+  - ref: "tools/slack"
+    required: false
+    reason: "Announces releases to engineering channels"
 requirements:
   minTier: "starter"
 ---

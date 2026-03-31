@@ -67,6 +67,10 @@ egress:
   mode: "none"
 skills:
   - ref: "skills/code-review@1.0.0"
+mcpServers:
+  - ref: "tools/github"
+    required: false
+    reason: "Reviews pull requests, adds code review comments, searches for related issues"
 automations:
   triggers:
     - name: "Review new pull request"

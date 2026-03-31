@@ -212,69 +212,109 @@ egress:
     - "hooks.slack.com"
 ```
 
-## SOUL.md Format
+## SOUL.md — Agent Identity Specification
 
-The agent's identity document. Injected as system context on every run. Keep under 800 tokens.
+### Purpose
+
+SOUL.md defines WHO the agent is -- personality, expertise, decision-making authority, and communication style. It is the LLM system prompt, injected every turn. It is NOT instructions (those go in BOT.md `agent.instructions` which becomes AGENTS.md) and NOT tool usage conventions (those go in BOT.md `agent.toolInstructions` which becomes TOOLS.md).
+
+### Architecture Context
+
+OpenClaw injects bootstrap files into every LLM call:
+
+| File | Source | Purpose |
+|------|--------|---------|
+| **SOUL.md** | `bots/{name}/SOUL.md` | System prompt (identity, personality, expertise) |
+| **AGENTS.md** | BOT.md `agent.instructions` | Operating instructions |
+| **TOOLS.md** | BOT.md `agent.toolInstructions` | Tool conventions |
+| **IDENTITY.md** | Generated from BOT.md metadata | Lightweight metadata (name, emoji, vibe) |
+| **USER.md** | Workspace user profile | User profile (injected in main session only) |
+
+SOUL.md is for IDENTITY. AGENTS.md is for INSTRUCTIONS. Never mix them.
 
 ### Required Sections
 
 ```markdown
 # {Display Name}
 
-You are {Display Name}, a persistent AI team member for this business.
+I am {Name}, the {role descriptor} for {domain/context}.
 
 ## Mission
-{One sentence defining the bot's core purpose}
+{One compelling sentence about WHY this role exists -- the outcome, not the task}
+
+## Expertise
+{2-3 sentences about deep domain knowledge. What does this agent understand
+that others don't? What patterns does it recognize? What connections does it make?}
+
+## Decision Authority
+- I decide: {what this agent handles autonomously -- scoring, prioritization, classification}
+- I escalate: {what requires human judgment or cross-team coordination}
+
+## Communication Style
+{How this agent communicates -- tone, format, emphasis. What it never does.
+How it frames recommendations.}
+```
+
+### Rules
+
+1. **First person**: Always "I am", never "You are"
+2. **Under 800 tokens**: Injected every LLM turn, tokens cost money
+3. **No tool references**: Never mention `adl_query_records`, `adl_write_memory`, etc. -- those belong in TOOLS.md
+4. **No entity type lists**: Never list `entityTypesRead/Write` -- those belong in BOT.md `data` section
+5. **No run protocols**: Never write "Step 1: Query records, Step 2: Analyze..." -- those belong in AGENTS.md
+6. **No memory namespace lists**: Never list working_notes, learned_patterns, etc.
+7. **Domain knowledge YES**: Scoring thresholds, decision frameworks, industry rules ARE identity ("I require p < 0.05 before declaring a winner")
+8. **Personality YES**: Preferences, style, what the agent cares about ARE identity ("I never round numbers" or "I lead with the one thing that matters most")
+
+### Anti-Patterns
+
+**BAD** -- instructions masquerading as identity:
+
+```markdown
+You are Accountant, a persistent AI team member responsible for financial tracking.
 
 ## Mandates
-1. {First mandatory behavior — executed every run}
-2. {Second mandatory behavior}
-3. {Third mandatory behavior}
-
-## Run Protocol
-1. Check automations (adl_list_triggers) — what is already automated?
-2. Read messages (adl_read_messages)
-3. Read memory (adl_read_memory, namespace="working_notes")
-4. Query data (adl_query_records, entity_type="{relevant_types}")
-5. Analyze and act
-6. Write findings (adl_write_record, entity_type="{role}_findings")
-7. Update memory — use adl_add_memory for unstructured text, adl_write_memory for structured data
-8. Message relevant bots (adl_send_message) if escalation needed
-
-## Memory Zone Rules
-
-Your memory access is governed by a four-zone security model:
-
-1. **Your private memory** — Plain namespaces (e.g., "working_notes") are auto-scoped to your private zone. No other agent can access them.
-2. **North Star (read-only)** — You can read `northstar:*` keys but CANNOT write to them. Escalate changes to humans.
-3. **Domain shared memory** — Read and write `domain:{your-domain}:*`. Cannot access other domains without an explicit grant.
-4. **Shared memory** — Read and write `shared:*` for cross-team data visible to all agents.
-
-## Memory Tool Selection
-
-- **`adl_add_memory`** — Preferred for unstructured text (findings, analysis, notes). Extracts facts and stores with embeddings.
-- **`adl_write_memory`** — Use for structured data (JSON, thresholds). Stored as-is.
-- **`adl_search_memory`** — Semantic search across memory. Best with `adl_add_memory` content.
-- **`adl_read_memory`** — Exact key lookup.
-
-**Memory lifecycle** — set `decay_class` when writing:
-- `ephemeral` — auto-deleted after 1 day (scratch notes, temp state)
-- `working` — auto-deleted after 7 days (in-progress analysis, drafts)
-- `durable` (default) — persists, confidence decays if not refreshed
+1. Always categorize transactions
+2. Check for duplicates
+3. Run budget comparison
 
 ## Entity Types
-- Read: {comma-separated list}
-- Write: {role}_findings, {role}_alerts
+- Read: transactions, invoices, budgets
+- Write: acct_findings
 
-## Sub-Agent Workflow (if applicable)
-{Describe the orchestration flow between sub-agents.
-Each sub-agent is defined in agents/*.md with its own system prompt.
-The parent bot spawns them via sessions_spawn and orchestrates the pipeline.}
-
-## Escalation
-- Critical: message executive-assistant type=alert
-- Cross-domain: message {relevant-bot} type=finding
+## Run Protocol
+1. adl_read_memory key "last_run"
+2. adl_query_records entity_type="transactions"
+3. Process and categorize
+4. adl_write_memory updated timestamp
 ```
+
+Problems: "You are" instead of "I am". Mandates are instructions (belong in AGENTS.md). Entity Types are data declarations (belong in BOT.md). Run Protocol is a step-by-step procedure with tool names (belongs in AGENTS.md/TOOLS.md).
+
+**GOOD** -- identity-focused:
+
+```markdown
+# Accountant
+
+I am the Accountant, the financial guardian of this business.
+
+## Mission
+Provide financial clarity that enables good decisions -- every transaction tells a story, every anomaly is a clue.
+
+## Expertise
+I categorize with precision, budget with discipline, and flag fraud with urgency. I understand that a duplicate invoice is not just a clerical error -- it is a control failure. I know the difference between a seasonal spending pattern and a budget breach.
+
+## Decision Authority
+- I decide: categorization, budget threshold alerts, anomaly flagging with deviation percentages
+- I escalate: payment failures, billing system errors, suspected fraud patterns
+
+## Communication Style
+Precise, factual, and structured. I report in percentages and deviations, not adjectives. I never round, never guess, and never let an uncategorized transaction sit overnight.
+```
+
+### Relationship to Scheduled Tasks
+
+SOUL.md defines HOW the agent works (personality, expertise). Scheduled tasks (BOT.md `schedule.tasks[]`) define WHAT the agent does and WHEN. The SOUL provides the consistent identity across all tasks -- a Guest Communicator checking Airbnb uses the same warm hospitality tone as when checking Facebook.
 
 ## Sub-Agents (`agents/` directory)
 
@@ -378,25 +418,27 @@ Bootstrap private memory entries.
 
 1. `BOT.md` has valid YAML frontmatter with `kind: Bot` and all required fields
 2. `SOUL.md` exists and is under 800 tokens (~600 words)
-3. `SOUL.md` contains required sections: Mission, Mandates, Run Protocol, Memory Zone Rules, Memory Tool Selection, Entity Types, Escalation
-4. `data-seeds/` contains all three zone files with valid JSON
-5. `data-seeds/zone3-initial-memory.json` uses plain namespaces (NOT `northstar:` or `domain:` prefixed)
-6. `metadata.name` matches the directory name under `bots/`
-7. All `skills[].ref` reference existing skill directories with matching versions
-8. All `messaging.sendsTo[].to` reference valid bot names or system targets
-9. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
-10. `agent.instructions` is present and contains domain-specific operating rules (not generic boilerplate)
-11. `agent.toolInstructions` is present and references actual entity types from `data.entityTypesRead` / `data.entityTypesWrite`
-12. `egress` block is present with an explicit `mode` value
-13. All files in `agents/` have valid YAML frontmatter with `name` and `description`
-14. Agent `name` matches the filename (e.g., `researcher.md` -> `name: researcher`)
-15. Agent `tools` only references valid ADL tool names
-16. All `plugins[].ref` are valid npm package specs (name + semver range)
-17. All `plugins[].reason` are non-empty strings
-18. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
-19. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
-20. All `mcpServers[].reason` are non-empty strings
-21. No `mcpServers[].config` values contain secrets
+3. `SOUL.md` contains required sections: Mission, Expertise, Decision Authority, Communication Style
+4. `SOUL.md` uses first person ("I am") not second person ("You are")
+5. `SOUL.md` contains no tool references, entity type lists, run protocols, or memory namespace lists (those belong in AGENTS.md/TOOLS.md/BOT.md)
+6. `data-seeds/` contains all three zone files with valid JSON
+7. `data-seeds/zone3-initial-memory.json` uses plain namespaces (NOT `northstar:` or `domain:` prefixed)
+8. `metadata.name` matches the directory name under `bots/`
+9. All `skills[].ref` reference existing skill directories with matching versions
+10. All `messaging.sendsTo[].to` reference valid bot names or system targets
+11. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
+12. `agent.instructions` is present and contains domain-specific operating rules (not generic boilerplate)
+13. `agent.toolInstructions` is present and references actual entity types from `data.entityTypesRead` / `data.entityTypesWrite`
+14. `egress` block is present with an explicit `mode` value
+15. All files in `agents/` have valid YAML frontmatter with `name` and `description`
+16. Agent `name` matches the filename (e.g., `researcher.md` -> `name: researcher`)
+17. Agent `tools` only references valid ADL tool names
+18. All `plugins[].ref` are valid npm package specs (name + semver range)
+19. All `plugins[].reason` are non-empty strings
+20. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
+21. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
+22. All `mcpServers[].reason` are non-empty strings
+23. No `mcpServers[].config` values contain secrets
 
 ## What the Platform Does
 

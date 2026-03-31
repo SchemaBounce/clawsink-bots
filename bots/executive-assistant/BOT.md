@@ -77,6 +77,10 @@ plugins:
     slot: "channel"
     required: false
     reason: "Distributes daily briefings and priority alerts to Teams channels"
+mcpServers:
+  - ref: "tools/slack"
+    required: false
+    reason: "Posts daily briefings and critical alerts to leadership channels"
 requirements:
   minTier: "starter"
 ---

@@ -43,6 +43,10 @@ cost:
   estimatedCostTier: "low"
 schedule:
   default: "@daily"
+  recommendations:
+    light: "@every 2d"
+    standard: "@daily"
+    intensive: "@every 12h"
 messaging:
   listensTo:
     - { type: "request", from: ["executive-assistant"] }
@@ -69,6 +73,10 @@ plugins:
     slot: "oauth"
     required: true
     reason: "OAuth access to CRM platforms (Salesforce, HubSpot, Pipedrive) for reading deal stages and pipeline data"
+mcpServers:
+  - ref: "tools/stripe"
+    required: false
+    reason: "Verifies deal payments and tracks payment-linked revenue"
 requirements:
   minTier: "starter"
 ---

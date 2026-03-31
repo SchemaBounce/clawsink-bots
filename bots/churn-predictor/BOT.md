@@ -66,6 +66,10 @@ egress:
   mode: "none"
 skills:
   - ref: "skills/cdc-event-analysis@1.0.0"
+mcpServers:
+  - ref: "tools/stripe"
+    required: false
+    reason: "Analyzes subscription churn signals from billing data"
 requirements:
   minTier: "starter"
 ---

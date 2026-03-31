@@ -43,6 +43,10 @@ cost:
   estimatedCostTier: "low"
 schedule:
   default: "@daily"
+  recommendations:
+    light: "@every 2d"
+    standard: "@daily"
+    intensive: "@every 12h"
 messaging:
   listensTo:
     - { type: "request", from: ["executive-assistant"] }
@@ -62,6 +66,10 @@ egress:
   allowedDomains: ["api.stripe.com"]
 skills:
   - ref: "skills/scheduled-report@1.0.0"
+mcpServers:
+  - ref: "tools/stripe"
+    required: false
+    reason: "Analyzes MRR/ARR trends and subscription metrics from Stripe"
 requirements:
   minTier: "starter"
 ---

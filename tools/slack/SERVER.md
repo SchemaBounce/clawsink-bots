@@ -56,10 +56,11 @@ Provides Slack workspace tools for bots that need to post updates, read channels
 
 ## Which Bots Use This
 
-- **executive-assistant** -- Posts daily briefings to leadership channels
-- **customer-support** -- Monitors support channels, posts escalation summaries
+- **executive-assistant** -- Posts briefings to leadership channels
+- **customer-support** -- Monitors support channels
 - **sre-devops** -- Posts incident alerts and status updates
 - **release-manager** -- Announces releases to engineering channels
+- **uptime-manager** -- Posts status updates during incidents
 
 ## Setup
 

@@ -66,6 +66,10 @@ plugins:
     slot: "memory"
     required: true
     reason: "Semantic recall of article content for gap detection, duplicate identification, and content quality tracking across runs"
+mcpServers:
+  - ref: "tools/notion"
+    required: false
+    reason: "Manages knowledge base articles and documentation in Notion"
 requirements:
   minTier: "starter"
 ---
