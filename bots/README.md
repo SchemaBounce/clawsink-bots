@@ -69,7 +69,7 @@ schedule:
     intensive: string
 messaging:
   listensTo:
-    - type: string       # Message type: alert, request, finding, text
+    - type: string       # Message type: alert, request, finding, text, approval, decision, info, directive
       from: [string]     # Bot names or ["*"] for all
   sendsTo:
     - type: string
