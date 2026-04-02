@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -61,16 +61,30 @@ data:
 zones:
   zone1Read: ["mission", "budget_constraints", "industry"]
   zone2Domains: ["finance", "operations"]
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: false
+    browsing: false
+    crawling: false
+mcpServers:
+  - ref: "tools/stripe"
+    required: false
+    reason: "Reconciles invoices, tracks payments, monitors billing disputes"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send invoice notifications, payment reminders, and budget alerts to stakeholders"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to accounting SaaS tools like QuickBooks, Xero, and expense management platforms"
 egress:
   mode: "none"
 skills:
   - ref: "skills/invoice-categorization@1.0.0"
   - ref: "skills/expense-tracking@1.0.0"
   - ref: "skills/budget-monitoring@1.0.0"
-mcpServers:
-  - ref: "tools/stripe"
-    required: false
-    reason: "Reconciles invoices, tracks payments, monitors billing disputes"
 automations:
   triggers:
     - name: "Categorize new transaction"

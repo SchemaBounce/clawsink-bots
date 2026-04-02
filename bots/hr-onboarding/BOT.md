@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]
@@ -56,12 +56,38 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["hr"]
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+  voice:
+    required: false
+    provider: elevenlabs
 egress:
   mode: "none"
 skills:
   - ref: "skills/follow-up-tracking@1.0.0"
   - ref: "skills/task-management@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send onboarding welcome emails, checklist reminders, and task notifications to new hires"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for onboarding best practices and compliance requirements by role"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse HR platforms and benefits portals to verify onboarding resource links"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to HRIS, payroll, and benefits SaaS platforms for onboarding automation"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate voice welcome messages and onboarding orientation audio guides"
 plugins:
   - ref: "n8n-workflow@latest"
     required: true

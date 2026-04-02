@@ -95,6 +95,22 @@ mcpServers:              # Custom MCP servers this bot requires (optional)
     required: boolean    # true (default) = bot won't start without it
     reason: string       # Why this bot needs this server
     config: object       # Bot-specific config overrides (no secrets)
+presence:                # External identity requirements (optional)
+  email:
+    required: boolean    # true = provision on activation; false = optional setup later
+    provider: string     # "agentmail" (only supported provider for v1)
+    displayName: string  # Template: "{bot-name}@{workspace}.agents.schemabounce.com"
+  web:
+    browsing: boolean    # Needs hyperbrowser for interactive web automation
+    search: boolean      # Needs exa for semantic web search
+    crawling: boolean    # Needs firecrawl for fast data extraction
+  voice:
+    required: boolean    # Requires admin approval (recurring cost)
+    provider: string     # "elevenlabs"
+    voiceProfile: string # Voice style hint: "professional", "friendly", "authoritative"
+  phone:
+    required: boolean    # Requires admin approval (real phone number + cost)
+    provider: string     # "agentphone"
 egress:                  # External network access policy (optional)
   mode: string           # "open" | "llm-only" | "restricted" | "none" (default: llm-only)
   allowedDomains:        # Only used when mode is "restricted"
@@ -192,6 +208,50 @@ The `mcpServers:` section declares MCP server dependencies. See [tools/README.md
 - `required` defaults to `true` — the bot won't start without this server
 - `config` is merged with team-level config (bot overrides team)
 - `config` must NEVER contain secrets
+
+## Presence Section
+
+The `presence:` section declares what external identity capabilities a bot needs. Unlike `mcpServers:` (which connects tools) or `plugins:` (which extends the runtime), `presence:` triggers **identity provisioning** — creating email addresses, phone numbers, or voice identities when the bot is deployed as an agent.
+
+### Sub-Sections
+
+| Sub-section | What it provisions | Provider | Admin approval? |
+|-------------|-------------------|----------|-----------------|
+| `email` | Email inbox (send/receive) | `agentmail` | No |
+| `web.browsing` | Browser access (interactive) | `hyperbrowser` | No |
+| `web.search` | Semantic web search | `exa` | No |
+| `web.crawling` | Fast data extraction | `firecrawl` | No |
+| `voice` | Voice identity (TTS/STT/calls) | `elevenlabs` | Yes |
+| `phone` | Phone number (SMS/calls) | `agentphone` | Yes |
+
+### How Presence Works with MCP Servers
+
+Every `presence:` provider has a corresponding MCP server in `tools/`. The bot should declare BOTH:
+
+1. `presence:` — tells the platform to **provision** the identity on activation
+2. `mcpServers:` — gives the bot **tool access** to use the provisioned identity
+
+```yaml
+# Example: bot with email presence
+presence:
+  email:
+    required: true
+    provider: agentmail
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send weekly reports and respond to client emails"
+```
+
+Web capabilities (`web.browsing`, `web.search`, `web.crawling`) don't provision external accounts — they only need tool access. You can declare them in `presence:` for documentation and set `true/false`, but the actual capability comes from the matching `mcpServers:` entry.
+
+### Field Rules
+
+- `presence.email.required: true` means activation FAILS if email can't be provisioned
+- `presence.voice` and `presence.phone` always require admin approval regardless of `required` value
+- `presence.email.displayName` supports templates: `{bot-name}`, `{workspace}` are substituted at runtime
+- If a bot declares `presence.email` without a matching `mcpServers` entry for `tools/agentmail`, validation fails
+- Omit `presence:` entirely for internal-only bots that don't need external identity
 
 ## Egress Section
 
@@ -439,6 +499,9 @@ Bootstrap private memory entries.
 21. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
 22. All `mcpServers[].reason` are non-empty strings
 23. No `mcpServers[].config` values contain secrets
+24. Every `presence:` provider has a matching `mcpServers[].ref` entry (e.g., `presence.email.provider: agentmail` requires `mcpServers: [{ref: "tools/agentmail"}]`)
+25. `presence.email.displayName` only uses supported template variables (`{bot-name}`, `{workspace}`)
+26. `presence:` sub-sections only reference supported providers (`agentmail`, `elevenlabs`, `agentphone`, `hyperbrowser`, `exa`, `firecrawl`)
 
 ## What the Platform Does
 
@@ -451,6 +514,7 @@ Bootstrap private memory entries.
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data — North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |
+| `presence` | Provision external identities (email, phone, voice) and auto-add provider domains to egress |
 | `egress` | Configure the bot's external network access policy (proxy token allowlist) |
 | `schedule.default` | Run the bot on the declared schedule (user can adjust) |
 | `trigger` | Run the bot in response to data change events on the declared entity type |

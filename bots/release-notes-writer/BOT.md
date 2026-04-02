@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]
@@ -57,6 +57,10 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+presence:
+  web:
+    search: true
+    browsing: true
 egress:
   mode: "none"
 skills:
@@ -66,6 +70,15 @@ mcpServers:
   - ref: "tools/github"
     required: false
     reason: "Lists commits and merged PRs to generate changelogs"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for related library changelogs and release note formatting best practices"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse issue trackers and PR descriptions to enrich release note context"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to project management tools to link release notes with completed stories and tickets"
 requirements:
   minTier: "starter"
 ---

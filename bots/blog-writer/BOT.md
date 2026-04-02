@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -65,6 +65,14 @@ data:
 zones:
   zone1Read: ["brand_voice", "product_catalog", "company_glossary"]
   zone2Domains: ["content", "marketing"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: false
+    crawling: true
 egress:
   mode: "none"
 skills:
@@ -82,6 +90,18 @@ mcpServers:
   - ref: "tools/github"
     required: false
     reason: "Publishes blog posts via pull requests to content repository"
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send editorial notifications and draft review requests to content stakeholders"
+  - ref: "tools/exa"
+    required: true
+    reason: "Research trending topics, competitor content, and industry news for blog post ideation"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl reference articles and documentation sources for research material"
+  - ref: "tools/composio"
+    required: false
+    reason: "Publish drafts to CMS platforms and coordinate with marketing automation tools"
 requirements:
   minTier: "starter"
 ---

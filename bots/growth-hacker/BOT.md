@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: growth-hacker
   displayName: "Growth Hacker"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Rapid experimentation, viral loop design, and acquisition channel optimization."
   category: marketing
   tags: ["growth", "experiments", "acquisition", "viral", "funnels", "optimization"]
@@ -62,12 +62,32 @@ data:
 zones:
   zone1Read: ["mission", "industry", "stage", "priorities"]
   zone2Domains: ["marketing", "growth"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    crawling: true
 egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com", "analyticsdata.googleapis.com"]
 skills:
   - ref: "skills/ab-testing@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Email growth experiment results and channel performance reports to stakeholders"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for growth tactics, viral loop case studies, and channel benchmarks"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl competitor landing pages and funnel structures for optimization ideas"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to Google Ads, Meta Ads, and analytics platforms for campaign data"
 automations:
   triggers:
     - entityType: "campaign_results"

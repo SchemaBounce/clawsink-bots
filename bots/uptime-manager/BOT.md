@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: uptime-manager
   displayName: "Uptime Manager"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Manages status pages, tracks SLA compliance, monitors uptime percentages, and produces incident postmortems."
   category: operations
   tags: ["uptime", "status-page", "sla", "postmortem", "incident-communication"]
@@ -72,6 +72,19 @@ mcpServers:
   - ref: "tools/slack"
     required: false
     reason: "Posts service status updates during incidents"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for known outage reports and cloud provider status updates during incidents"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse status pages and incident reports from upstream service providers"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to Statuspage.io and incident management tools for automated status updates"
+presence:
+  web:
+    browsing: true
+    search: true
 egress:
   mode: "restricted"
   allowedDomains: ["api.statuspage.io", "*.atlassian.net"]

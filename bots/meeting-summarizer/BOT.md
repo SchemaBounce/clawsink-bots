@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: meeting-summarizer
   displayName: "Meeting Summarizer"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Summarizes meeting notes and creates action items."
   category: productivity
   tags: ["meetings", "notes", "actions"]
@@ -56,6 +56,10 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["general"]
+presence:
+  email:
+    required: true
+    provider: agentmail
 egress:
   mode: "none"
 skills:
@@ -72,6 +76,12 @@ mcpServers:
   - ref: "tools/notion"
     required: false
     reason: "Publishes meeting summaries and action items to Notion pages"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Email meeting summaries, action items, and follow-up reminders to attendees"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to calendar and project management tools for meeting context and task assignment"
 requirements:
   minTier: "starter"
 ---

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: business-analyst
   displayName: "Business Analyst"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Cross-domain analysis, trend detection, and strategic recommendations from all bot findings."
   category: management
   tags: ["analysis", "trends", "strategy", "cross-domain", "insights"]
@@ -61,6 +61,27 @@ data:
 zones:
   zone1Read: ["mission", "industry", "stage", "priorities"]
   zone2Domains: ["management", "operations", "finance", "support", "engineering"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+    crawling: true
+mcpServers:
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send strategic insight reports and cross-domain analysis summaries to stakeholders"
+  - ref: "tools/exa"
+    required: true
+    reason: "Research industry trends, competitor intelligence, and market data for strategic analysis"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse analyst reports, financial dashboards, and industry publications"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl industry benchmark reports and competitive intelligence sources"
 egress:
   mode: "none"
 skills:

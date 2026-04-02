@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: order-fulfillment
   displayName: "Order Fulfillment"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Orchestrates order processing workflows from receipt through delivery."
   category: ecommerce
   tags: ["orders", "fulfillment", "workflow", "cdc"]
@@ -63,8 +63,19 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["operations"]
+presence:
+  email:
+    required: true
+    provider: agentmail
 egress:
   mode: "none"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send order confirmation emails, shipping notifications, and fulfillment updates to customers"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to shipping carriers, warehouse management, and e-commerce platforms for order processing"
 skills:
   - ref: "skills/cdc-event-analysis@1.0.0"
 plugins:

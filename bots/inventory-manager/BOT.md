@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-manager
   displayName: "Inventory & Acquisition Manager"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Stock level monitoring, reorder calculations, vendor tracking, acquisition pipeline management."
   category: operations
   tags: ["inventory", "stock", "vendors", "reorder", "acquisition", "procurement"]
@@ -64,8 +64,28 @@ data:
 zones:
   zone1Read: ["mission", "industry", "budget_constraints", "reorder_policy"]
   zone2Domains: ["operations", "strategy"]
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
 egress:
   mode: "none"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send reorder alerts, stock reports, and vendor communications to procurement teams"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for supplier pricing, lead time data, and supply chain disruption news"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse vendor portals and supplier catalogs to verify pricing and availability"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to ERP, procurement, and supply chain SaaS platforms for order management"
 skills:
   - ref: "skills/record-monitoring@1.0.0"
 automations:

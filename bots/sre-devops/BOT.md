@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -77,6 +77,19 @@ mcpServers:
   - ref: "tools/slack"
     required: false
     reason: "Posts incident alerts and status updates to operations channels"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for known outage reports, CVE advisories, and infrastructure incident patterns"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse cloud provider status pages and monitoring dashboards for incident correlation"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to PagerDuty, Datadog, and OpsGenie for incident management workflows"
+presence:
+  web:
+    browsing: true
+    search: true
 automations:
   triggers:
     - name: "Runbook lookup on new incident"

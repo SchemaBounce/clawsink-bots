@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: marketing-growth
   displayName: "Marketing & Growth"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Content calendar management, SEO tracking, campaign metric analysis, social scheduling."
   category: marketing
   tags: ["marketing", "growth", "seo", "campaigns", "content", "social"]
@@ -65,9 +65,29 @@ data:
 zones:
   zone1Read: ["mission", "industry", "stage", "priorities", "growth_targets"]
   zone2Domains: ["marketing", "growth"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    crawling: true
 egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com", "analyticsdata.googleapis.com"]
+mcpServers:
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for SEO trends, content marketing benchmarks, and campaign performance data"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl competitor content and landing pages to identify content gaps and SEO opportunities"
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send campaign performance reports and content calendar updates to stakeholders"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to Google Analytics, Mailchimp, and social media platforms for campaign metrics"
 skills:
   - ref: "skills/scheduled-report@1.0.0"
 plugins:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-onboarding
   displayName: "Customer Onboarding"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Triggers and manages onboarding workflows for new customers."
   category: saas
   tags: ["onboarding", "customers", "workflow", "cdc"]
@@ -62,6 +62,39 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["customer_success", "sales"]
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+    crawling: false
+  voice:
+    required: false
+    provider: elevenlabs
+  phone:
+    required: false
+    provider: agentphone
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send welcome emails, onboarding step instructions, and progress updates to new customers"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for customer company information and industry context to personalize onboarding"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse customer websites to understand their business for tailored onboarding"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate voice-based onboarding walkthroughs and tutorial narrations"
+  - ref: "tools/agentphone"
+    required: false
+    reason: "Make onboarding check-in calls and send SMS reminders for stalled customers"
+  - ref: "tools/composio"
+    required: true
+    reason: "Sync onboarding status with CRM and customer success platforms"
 egress:
   mode: "none"
 skills:

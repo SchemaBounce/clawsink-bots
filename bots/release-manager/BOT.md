@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]
@@ -65,6 +65,10 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+presence:
+  web:
+    search: true
+    browsing: true
 egress:
   mode: "none"
 skills:
@@ -89,6 +93,15 @@ mcpServers:
   - ref: "tools/slack"
     required: false
     reason: "Announces releases to engineering channels"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for dependency advisories, security bulletins, and release best practices"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse CI/CD dashboards and deployment status pages to verify release readiness"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to CI/CD platforms, project management tools, and deployment services"
 requirements:
   minTier: "starter"
 ---

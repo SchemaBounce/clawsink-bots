@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -77,6 +77,25 @@ mcpServers:
   - ref: "tools/stripe"
     required: false
     reason: "Verifies deal payments and tracks payment-linked revenue"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send deal alerts and pipeline health summaries to sales stakeholders"
+  - ref: "tools/exa"
+    required: false
+    reason: "Research prospect companies and competitive intelligence for deal qualification"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse prospect websites and LinkedIn profiles for deal enrichment"
+  - ref: "tools/composio"
+    required: true
+    reason: "Connect to CRM platforms (Salesforce, HubSpot, Pipedrive) for deal data sync"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
 requirements:
   minTier: "starter"
 ---

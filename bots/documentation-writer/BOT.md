@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -71,6 +71,14 @@ egress:
   mode: "none"
 skills:
   - ref: "skills/pr-creation@1.0.0"
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: false
+    crawling: true
 mcpServers:
   - ref: "tools/claude-code"
     required: true
@@ -81,6 +89,18 @@ mcpServers:
   - ref: "tools/notion"
     required: false
     reason: "Updates documentation pages in Notion workspace"
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send doc review requests and update notifications to engineering stakeholders"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for API documentation standards, technical writing guides, and reference material"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl existing documentation sites to identify gaps and outdated content"
+  - ref: "tools/composio"
+    required: false
+    reason: "Sync documentation status with project management and knowledge base platforms"
 requirements:
   minTier: "team"
 ---

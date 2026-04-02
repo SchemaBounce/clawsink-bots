@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-manager
   displayName: "Property Manager"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Lead coordinator for short-term rental operations — consolidates reports, manages portfolio dashboard, coordinates specialists."
   category: operations
   tags: ["str", "property-management", "portfolio", "coordination", "lead", "hospitality"]
@@ -67,6 +67,38 @@ egress:
 skills:
   - ref: "skills/daily-briefing@1.0.0"
   - ref: "skills/cross-domain-synthesis@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send daily portfolio briefings and critical alerts to property owners"
+  - ref: "tools/exa"
+    required: false
+    reason: "Research local market trends, regulatory changes, and property management best practices"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse booking platform dashboards and local government sites for regulatory updates"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate voice briefings for property owners who prefer audio updates"
+  - ref: "tools/agentphone"
+    required: false
+    reason: "Make urgent calls to property owners for critical maintenance or guest emergencies"
+  - ref: "tools/composio"
+    required: true
+    reason: "Connect to property management platforms for portfolio-wide operations and reporting"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
+  voice:
+    required: false
+    provider: elevenlabs
+  phone:
+    required: false
+    provider: agentphone
 requirements:
   minTier: "starter"
 ---

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -93,10 +93,42 @@ plugins:
     slot: "channel"
     required: false
     reason: "Sends ticket escalation and SLA breach notifications to support Teams channels"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+    crawling: false
+  voice:
+    required: false
+    provider: elevenlabs
+  phone:
+    required: false
+    provider: agentphone
 mcpServers:
   - ref: "tools/slack"
     required: false
     reason: "Monitors support channels for customer issues and escalations"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send ticket updates, resolution confirmations, and follow-up emails to customers"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search knowledge bases and documentation for answers to customer questions"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse product documentation and help center pages to assist with customer issues"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate voice responses for phone-based support escalations"
+  - ref: "tools/agentphone"
+    required: false
+    reason: "Make outbound support calls for critical issues and churn-risk callbacks"
+  - ref: "tools/composio"
+    required: true
+    reason: "Sync ticket data with helpdesk, CRM, and customer success platforms"
 requirements:
   minTier: "starter"
 ---

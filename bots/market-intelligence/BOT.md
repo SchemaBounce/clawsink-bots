@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: market-intelligence
   displayName: "Market Intelligence"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Track industry landscape, product announcements, feature parity gaps, and positioning shifts."
   category: management
   tags: ["market-analysis", "industry", "landscape", "positioning", "feature-parity"]
@@ -63,6 +63,27 @@ data:
 zones:
   zone1Read: ["mission", "industry", "stage", "priorities", "product_catalog"]
   zone2Domains: ["growth", "product"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+    crawling: true
+mcpServers:
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for industry news, product announcements, and competitive positioning shifts"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse competitor websites and product pages to track feature changes and pricing updates"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl industry blogs, press releases, and analyst reports for landscape analysis"
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send market intelligence briefings and competitive alerts to stakeholders"
 skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"

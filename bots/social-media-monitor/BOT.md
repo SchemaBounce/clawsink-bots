@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-monitor
   displayName: "Social Media Monitor"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Monitors brand mentions and sentiment across platforms."
   category: marketing
   tags: ["social-media", "sentiment", "brand"]
@@ -63,6 +63,21 @@ egress:
 skills:
   - ref: "skills/scheduled-report@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
+mcpServers:
+  - ref: "tools/exa"
+    required: true
+    reason: "Search social media and news for brand mentions, trending topics, and sentiment signals"
+  - ref: "tools/hyperbrowser"
+    required: true
+    reason: "Browse social media platforms and news sites to analyze brand mention context"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl review sites and forums for comprehensive brand sentiment data"
+presence:
+  web:
+    browsing: true
+    search: true
+    crawling: true
 plugins:
   - ref: "composio@latest"
     slot: "oauth"

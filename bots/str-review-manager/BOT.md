@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-review-manager
   displayName: "Review Manager"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Monitors reviews across all platforms, drafts host responses, identifies feedback patterns, tracks rating trends."
   category: support
   tags: ["str", "review-management", "reputation", "guest-feedback", "ratings", "hospitality"]
@@ -69,6 +69,26 @@ egress:
   allowedDomains: ["api.airbnb.com", "api.vrbo.com", "app.lodgify.com"]
 skills:
   - ref: "skills/review-response-generation@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send review summaries, rating trend alerts, and response drafts to property owners"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for review management best practices and competitor review patterns"
+  - ref: "tools/hyperbrowser"
+    required: true
+    reason: "Browse Airbnb, VRBO, and Lodgify review pages to monitor new reviews and ratings"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to review management and reputation monitoring platforms"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
 requirements:
   minTier: "starter"
 ---

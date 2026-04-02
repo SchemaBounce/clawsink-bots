@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: fraud-detector
   displayName: "Fraud Detector"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Scores new transactions for fraud risk using pattern analysis and anomaly detection."
   category: fintech
   tags: ["fraud", "transactions", "risk", "cdc"]
@@ -60,6 +60,12 @@ data:
 zones:
   zone1Read: ["mission", "risk_policy"]
   zone2Domains: ["finance", "revenue"]
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
 egress:
   mode: "restricted"
   allowedDomains: []
@@ -69,6 +75,15 @@ mcpServers:
   - ref: "tools/stripe"
     required: false
     reason: "Monitors charges for suspicious patterns and fraud signals"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send fraud alerts and risk reports to compliance and finance teams"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for known fraud patterns, breach disclosures, and threat intelligence"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to payment platforms and financial SaaS tools for fraud signal enrichment"
 requirements:
   minTier: "starter"
 ---

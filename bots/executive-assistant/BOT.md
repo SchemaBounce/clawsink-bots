@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
@@ -77,10 +77,36 @@ plugins:
     slot: "channel"
     required: false
     reason: "Distributes daily briefings and priority alerts to Teams channels"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+    crawling: false
+  voice:
+    required: false
+    provider: elevenlabs
 mcpServers:
   - ref: "tools/slack"
     required: false
     reason: "Posts daily briefings and critical alerts to leadership channels"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send daily briefings, priority alerts, and follow-up reminders to executives"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for industry news, competitor updates, and market context for briefings"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse business dashboards and analytics platforms for KPI data"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate audio briefings for on-the-go executive consumption"
+  - ref: "tools/composio"
+    required: true
+    reason: "Sync tasks and follow-ups with calendar, CRM, and project management tools"
 requirements:
   minTier: "starter"
 ---

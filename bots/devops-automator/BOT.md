@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -81,10 +81,24 @@ plugins:
   - ref: "n8n-workflow@latest"
     required: true
     reason: "Triggers CI/CD pipelines, deployment rollbacks, and infrastructure automation workflows in external systems"
+presence:
+  web:
+    search: true
+    browsing: true
+    crawling: false
 mcpServers:
   - ref: "tools/github"
     required: false
     reason: "Monitors CI/CD pipelines and GitHub Actions workflows"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for deployment best practices, incident postmortems, and infrastructure documentation"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse cloud provider consoles, monitoring dashboards, and CI/CD pipeline UIs"
+  - ref: "tools/composio"
+    required: false
+    reason: "Integrate with PagerDuty, Datadog, and other DevOps SaaS platforms"
 requirements:
   minTier: "starter"
 ---

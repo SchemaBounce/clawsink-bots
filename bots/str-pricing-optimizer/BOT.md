@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-pricing-optimizer
   displayName: "Dynamic Pricing"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Analyzes market conditions, competitor rates, and demand patterns to optimize nightly rates and maximize revenue."
   category: finance
   tags: ["str", "dynamic-pricing", "revenue-management", "rate-optimization", "hospitality"]
@@ -68,6 +68,26 @@ egress:
   allowedDomains: ["api.airdna.co", "api.alltherooms.com"]
 skills:
   - ref: "skills/dynamic-pricing@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send pricing recommendations and revenue reports to property owners"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for local events, competitor pricing, and market demand data for rate optimization"
+  - ref: "tools/hyperbrowser"
+    required: true
+    reason: "Browse Airbnb, VRBO, and AirDNA to analyze competitor rates and occupancy trends"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to revenue management and property management platforms for pricing sync"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
 requirements:
   minTier: "starter"
 ---

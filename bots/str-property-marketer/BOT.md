@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-marketer
   displayName: "Property Marketer"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Creates listing descriptions, manages social media, generates seasonal promotions, and optimizes property visibility across platforms."
   category: marketing
   tags: ["str", "listing-optimization", "social-media", "property-marketing", "seo", "hospitality"]
@@ -67,6 +67,30 @@ egress:
   allowedDomains: ["graph.facebook.com", "api.instagram.com", "api.pinterest.com"]
 skills:
   - ref: "skills/listing-optimization@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send listing draft approvals and marketing calendar updates to property owners"
+  - ref: "tools/exa"
+    required: true
+    reason: "Research SEO keywords, trending travel topics, and competitor listing strategies"
+  - ref: "tools/hyperbrowser"
+    required: true
+    reason: "Browse booking platform listings to analyze competitor descriptions and photo strategies"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl travel blogs and review sites for guest language and trending destination content"
+  - ref: "tools/composio"
+    required: true
+    reason: "Connect to social media and content scheduling platforms for property promotion"
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
+    crawling: true
 requirements:
   minTier: "starter"
 ---

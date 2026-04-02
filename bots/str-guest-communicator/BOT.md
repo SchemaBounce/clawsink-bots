@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-guest-communicator
   displayName: "Guest Communicator"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Auto-responds to guest messages across all channels — handles pre-booking, check-in, during-stay, and post-stay communication."
   category: support
   tags: ["str", "guest-communication", "messaging", "superhost", "response-time", "hospitality"]
@@ -69,6 +69,38 @@ egress:
   allowedDomains: ["api.airbnb.com", "ws.airbnb.com", "api.vrbo.com", "app.lodgify.com", "graph.facebook.com"]
 skills:
   - ref: "skills/guest-message-templating@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send and receive guest communications for booking inquiries, check-in instructions, and follow-ups"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for local restaurant recommendations, attractions, and event info for guest requests"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse booking platform messaging interfaces and local business pages for guest support"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate voice messages for personalized guest welcome and check-in instructions"
+  - ref: "tools/agentphone"
+    required: false
+    reason: "Handle urgent guest phone calls for emergencies and time-sensitive requests"
+  - ref: "tools/composio"
+    required: true
+    reason: "Connect to booking platforms for guest messaging and reservation management"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
+  voice:
+    required: false
+    provider: elevenlabs
+  phone:
+    required: false
+    provider: agentphone
 requirements:
   minTier: "starter"
 ---

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]
@@ -70,6 +70,26 @@ egress:
 skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Email content calendars, campaign briefs, and performance reports to marketing team"
+  - ref: "tools/exa"
+    required: true
+    reason: "Research trending social topics, competitor content strategies, and industry engagement patterns"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl competitor social profiles and industry blogs for content inspiration"
+  - ref: "tools/composio"
+    required: true
+    reason: "Connect to social media scheduling and analytics platforms for content distribution"
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    crawling: true
 automations:
   triggers:
     - entityType: "social_metrics"

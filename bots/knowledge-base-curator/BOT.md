@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: knowledge-base-curator
   displayName: "Knowledge Base Curator"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Organizes and updates knowledge base articles."
   category: productivity
   tags: ["knowledge", "documentation", "organization"]
@@ -57,6 +57,10 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["general", "support"]
+presence:
+  web:
+    search: true
+    crawling: true
 egress:
   mode: "none"
 skills:
@@ -70,6 +74,12 @@ mcpServers:
   - ref: "tools/notion"
     required: false
     reason: "Manages knowledge base articles and documentation in Notion"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for authoritative sources to verify and enrich knowledge base content"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl product documentation and help sites to identify content gaps and outdated information"
 requirements:
   minTier: "starter"
 ---

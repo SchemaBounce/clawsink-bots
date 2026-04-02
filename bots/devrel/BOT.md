@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devrel
   displayName: "Developer Relations"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Monitors developer community health, GitHub activity, friction points, and developer advocacy."
   category: marketing
   tags: ["developer-relations", "community", "github", "open-source", "advocacy"]
@@ -75,10 +75,30 @@ plugins:
     config:
       apps: ["github", "discord"]
       scopes: ["repo:read", "issues:read"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: false
+    crawling: true
 mcpServers:
   - ref: "tools/github"
     required: true
     reason: "Monitors repo stars, issues, contributions, and community activity"
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send community updates, contributor recognition, and developer newsletter content"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search developer forums, Stack Overflow, and tech blogs for community sentiment and friction points"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl developer community sites and forums for feedback aggregation"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to Discord, community management, and developer analytics platforms"
 egress:
   mode: "restricted"
   allowedDomains: ["*.github.com", "api.github.com", "discord.com", "api.stackexchange.com"]
