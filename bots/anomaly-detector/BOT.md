@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
@@ -70,84 +70,120 @@ setup:
   steps:
     - id: configure-metric-baselines
       name: "Set metric baselines"
-      description: "Configure initial baseline values for key metrics so the bot can detect deviations from normal ranges."
+      description: "Configure initial baseline values for key metrics so the bot can detect deviations from normal ranges"
       type: config
       group: configuration
       priority: required
-      reason: "The bot compares incoming metrics against baselines stored in the metric_baselines memory namespace. Without initial baselines, all values appear normal."
+      target:
+        namespace: metric_baselines
+        key: initial_baselines
+      reason: "Compares incoming metrics against baselines — without initial values, all readings appear normal"
       ui:
-        target:
-          namespace: "metric_baselines"
-          key: "initial_baselines"
-    - id: seed-metrics-entity
-      name: "Seed metrics records"
-      description: "Ensure at least a few metrics records exist so the bot has data to analyze on first run."
+        inputType: text
+        placeholder: '{"cpu_usage": 45, "error_rate": 0.02, "latency_p99": 200}'
+    - id: seed-metrics-data
+      name: "Import metrics records"
+      description: "Ensure metrics records exist so the bot has historical data for anomaly comparison"
       type: data_presence
+      entityType: metrics
+      minCount: 5
       group: data
       priority: required
-      reason: "The bot is CDC-triggered on entityType=metrics. Without existing records, it has no historical context for comparison."
+      reason: "CDC-triggered on metrics entity — without historical records, no baseline context for comparison"
       ui:
-        entityType: "metrics"
-        minCount: 5
-    - id: configure-alert-rules
-      name: "Configure alert rules"
-      description: "Optionally seed alert_rules records with custom thresholds that override default statistical detection."
-      type: data_presence
-      group: data
-      priority: recommended
-      reason: "User-configured thresholds in alert_rules override default 2-sigma detection, letting operators tune sensitivity per metric."
-      ui:
-        entityType: "alert_rules"
-        minCount: 1
-    - id: set-north-star-mission
-      name: "Define North Star mission"
-      description: "Set the workspace North Star mission so the bot understands which metrics matter most to the business."
+        actionLabel: "Import Metrics"
+        emptyState: "No metrics found. Import initial metrics or wait for your monitoring pipeline to create them."
+    - id: set-mission
+      name: "Set workspace mission"
+      description: "Business context helps prioritize which anomalies are critical vs informational"
       type: north_star
+      key: mission
       group: configuration
       priority: required
-      reason: "The bot reads zone1 mission to prioritize which anomalies are critical vs informational."
+      reason: "Mission context determines which metrics matter most and how anomalies are prioritized"
       ui:
-        key: "mission"
+        inputType: text
+        placeholder: "e.g., Real-time fraud detection platform for FinTech companies"
+    - id: configure-alert-rules
+      name: "Configure custom alert rules"
+      description: "Custom thresholds that override default 2-sigma statistical detection per metric"
+      type: data_presence
+      entityType: alert_rules
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "User-configured thresholds in alert_rules let operators tune sensitivity per metric"
+      ui:
+        actionLabel: "Add Alert Rules"
+        emptyState: "No custom alert rules. Default 2-sigma detection will be used."
     - id: verify-sre-devops-active
       name: "Ensure SRE/DevOps bot is active"
-      description: "The anomaly detector escalates infrastructure anomalies to sre-devops. Confirm that bot is deployed."
+      description: "Anomaly detector escalates infrastructure anomalies to sre-devops for incident response"
       type: manual
       group: external
       priority: recommended
-      reason: "Critical and high-severity infrastructure anomalies are sent to sre-devops. Without it, those alerts go unprocessed."
+      reason: "Critical infrastructure anomalies are routed to sre-devops — without it, alerts go unprocessed"
       ui:
+        actionLabel: "I've verified SRE/DevOps is deployed"
         instructions: "Deploy the sre-devops bot from the marketplace, or confirm it is already active in your workspace."
 goals:
-  - id: anomalies-detected
-    name: "Anomalies detected"
-    description: "Total anomaly findings written across all severity levels."
-    metricType: count
-    target: "> 0 per week"
+  - name: detect_anomalies
+    description: "Identify statistical anomalies in incoming metrics data"
     category: primary
+    metric:
+      type: count
+      entity: anomaly_findings
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when new metrics data exists"
     feedback:
-      question: "Are the detected anomalies relevant and actionable?"
-      options: ["yes", "mostly", "too noisy", "missing real issues"]
-  - id: critical-alert-rate
-    name: "Critical alert accuracy"
-    description: "Percentage of critical/high alerts that corresponded to real incidents."
-    metricType: rate
-    target: "> 80%"
+      enabled: true
+      entityType: anomaly_findings
+      actions:
+        - { value: relevant, label: "Relevant anomaly" }
+        - { value: false_positive, label: "False positive" }
+        - { value: missed, label: "Missed a real issue" }
+  - name: critical_alert_accuracy
+    description: "Percentage of critical/high alerts that correspond to real incidents"
     category: primary
+    metric:
+      type: rate
+      numerator: { entity: anomaly_alerts, filter: { feedback: "relevant" } }
+      denominator: { entity: anomaly_alerts, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: monthly
     feedback:
-      question: "Were critical alerts genuine issues that needed attention?"
-      options: ["yes", "some false positives", "mostly false positives"]
-  - id: baseline-freshness
-    name: "Baseline freshness"
-    description: "The metric_baselines memory namespace is updated after each run."
-    metricType: boolean
-    target: "updated within last 24h"
+      enabled: true
+      entityType: anomaly_alerts
+      actions:
+        - { value: relevant, label: "Real incident" }
+        - { value: false_positive, label: "False alarm" }
+  - name: detection_latency
+    description: "Time from metric record creation to anomaly finding generation"
+    category: secondary
+    metric:
+      type: threshold
+      measurement: avg_minutes_to_detect
+    target:
+      operator: "<"
+      value: 5
+      period: per_run
+  - name: baseline_freshness
+    description: "Metric baselines updated regularly from operational experience"
     category: health
-  - id: detection-latency
-    name: "Detection latency"
-    description: "Time between metric record creation and anomaly finding generation."
-    metricType: threshold
-    target: "< 5 minutes"
-    category: primary
+    metric:
+      type: count
+      source: memory
+      namespace: detection_models
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Anomaly Detector
