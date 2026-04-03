@@ -32,7 +32,8 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:api.github.com)",
       "Bash(git check-ignore:*)",
-      "Bash(chmod +x /mnt/c/git/clawsink-bots/.git/hooks/pre-commit)"
+      "Bash(chmod +x /mnt/c/git/clawsink-bots/.git/hooks/pre-commit)",
+      "Read(//tmp/**)"
     ]
   }
 }
