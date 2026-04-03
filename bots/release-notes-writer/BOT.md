@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]
@@ -57,6 +57,10 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+presence:
+  web:
+    search: true
+    browsing: true
 egress:
   mode: "none"
 skills:
@@ -66,8 +70,137 @@ mcpServers:
   - ref: "tools/github"
     required: false
     reason: "Lists commits and merged PRs to generate changelogs"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for related library changelogs and release note formatting best practices"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse issue trackers and PR descriptions to enrich release note context"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to project management tools to link release notes with completed stories and tickets"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-github
+      name: "Connect GitHub"
+      description: "Links your code repository so the bot can read commits, PRs, and tags"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: required
+      reason: "Primary data source — commit history and merged PRs drive release note content"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+        helpUrl: "https://docs.schemabounce.com/integrations/github"
+    - id: connect-project-tracker
+      name: "Connect project management tool"
+      description: "Links your issue tracker so release notes can reference completed stories and tickets"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Ticket context enriches release notes — without it, notes are commit-message-only"
+      ui:
+        icon: composio
+        actionLabel: "Connect Project Tracker"
+    - id: set-release-format
+      name: "Choose release note format"
+      description: "Select the output format for generated release notes"
+      type: config
+      group: configuration
+      target: { namespace: release_history, key: output_format }
+      priority: recommended
+      reason: "Consistent formatting across releases improves developer experience"
+      ui:
+        inputType: select
+        options:
+          - { value: changelog, label: "Changelog (CHANGELOG.md style)" }
+          - { value: narrative, label: "Narrative (blog-post style)" }
+          - { value: both, label: "Both formats" }
+        default: changelog
+    - id: set-audience
+      name: "Define target audience"
+      description: "Who reads these release notes — affects language and detail level"
+      type: config
+      group: configuration
+      target: { namespace: feature_categories, key: audience }
+      priority: recommended
+      reason: "Customer-facing notes exclude internal changes; developer notes include everything"
+      ui:
+        inputType: select
+        options:
+          - { value: customer, label: "Customers (external-facing)" }
+          - { value: developer, label: "Developers (technical)" }
+          - { value: mixed, label: "Mixed audience" }
+        default: customer
+    - id: import-commits
+      name: "Import commit history"
+      description: "Historical commits help establish categorization patterns and formatting consistency"
+      type: data_presence
+      entityType: commits
+      minCount: 50
+      group: data
+      priority: recommended
+      reason: "Past commit data trains the bot's category assignment and consolidation patterns"
+      ui:
+        actionLabel: "Import Commits"
+        emptyState: "No commit history found. Connect GitHub first, then import."
+        helpUrl: "https://docs.schemabounce.com/data/import"
+goals:
+  - name: generate_release_notes
+    description: "Produce complete release notes for each requested version range"
+    category: primary
+    metric:
+      type: count
+      entity: release_notes
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when release is requested"
+  - name: categorization_accuracy
+    description: "All changes correctly categorized (Features, Bug Fixes, Breaking, etc.)"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: release_notes, filter: { review_status: "approved" } }
+      denominator: { entity: release_notes, filter: { review_status: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.90
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: release_notes
+      actions:
+        - { value: approved, label: "Looks good" }
+        - { value: needs_edit, label: "Needs editing" }
+        - { value: wrong_category, label: "Miscategorized items" }
+  - name: breaking_change_coverage
+    description: "Every breaking change is highlighted with migration instructions"
+    category: secondary
+    metric:
+      type: boolean
+      check: breaking_changes_documented
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+  - name: formatting_consistency
+    description: "Maintain consistent formatting and category structure across releases"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: feature_categories
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Release Notes Writer

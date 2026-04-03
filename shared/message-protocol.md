@@ -4,10 +4,21 @@
 
 | Type | Semantics | Response Expected | Urgency |
 |------|-----------|-------------------|---------|
-| `alert` | Urgent — recipient must act on next run | Acknowledge + action | High |
+| `alert` | Urgent — recipient must act on next run | Acknowledge + action | Critical/High |
 | `request` | Ask another bot for analysis or data | Response with findings | Medium |
 | `finding` | Informational — "this is relevant to you" | Read and incorporate | Low |
 | `text` | General communication | Optional | None |
+| `approval` | Request approval for a proposed action | Approve or reject | Medium |
+| `decision` | Request a decision from a supervisor | Decision response | High |
+| `info` | Purely informational — no action expected | None | None |
+| `directive` | Command from a supervisor bot | Execute and confirm | High |
+| `command` | System-level command (internal use) | Execute | High |
+| `event` | System event notification (internal use) | Process | Varies |
+| `broadcast` | Message to all bots in a domain | Read | Low |
+
+### Core Types (Use These)
+
+Most bots should use `alert`, `finding`, `request`, and `text`. The extended types (`approval`, `decision`, `directive`, `info`) are for specialized coordination patterns like org chart escalation chains and supervisor workflows.
 
 ## Message Envelope
 
@@ -16,7 +27,7 @@ All inter-bot messages use `adl_send_message` with this structure:
 ```json
 {
   "to": "bot-name",
-  "type": "alert | request | finding | text",
+  "type": "alert | request | finding | text | approval | decision | info | directive",
   "subject": "Short subject line (<80 chars)",
   "body": "<Toon Card JSON or plain text>"
 }

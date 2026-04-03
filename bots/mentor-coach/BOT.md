@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: mentor-coach
   displayName: "Mentor / Coach"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Bot team performance analysis, process improvement, harmony monitoring, weekly team health reports."
   category: management
   tags: ["mentor", "coaching", "team-health", "performance", "harmony", "process-improvement"]
@@ -72,6 +72,87 @@ plugins:
     reason: "Cross-run learning from 11 bot finding streams; retains team performance baselines and coaching history across runs"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: verify-bot-team-deployed
+      name: "Deploy bot team members"
+      description: "Ensure at least several bots from the team are active and producing findings records the mentor can evaluate."
+      type: manual
+      group: external
+      priority: required
+      reason: "The mentor reads findings from ALL 11 bot streams. Without active bots producing findings, there is nothing to evaluate."
+      ui:
+        instructions: "Deploy at least 3-5 bots from the marketplace (e.g., sre-devops, accountant, customer-support) so the mentor has findings to analyze."
+    - id: seed-findings-records
+      name: "Ensure findings exist"
+      description: "Confirm that at least some bot finding records exist across the entity types the mentor reads."
+      type: data_presence
+      group: data
+      priority: required
+      reason: "The mentor scores bots based on finding quality, frequency, and escalation accuracy. Without findings data, health reports are empty."
+      ui:
+        entityType: "sre_findings"
+        minCount: 3
+    - id: set-north-star-mission
+      name: "Define North Star mission"
+      description: "Set the workspace mission and priorities so the mentor understands the business context for evaluating bot performance."
+      type: north_star
+      group: configuration
+      priority: required
+      reason: "The mentor reads zone1 mission and priorities to contextualize which bots matter most and what constitutes good performance."
+      ui:
+        key: "mission"
+    - id: set-north-star-priorities
+      name: "Define team priorities"
+      description: "Set the workspace priorities so the mentor knows which domains and goals to weight highest in team health scoring."
+      type: north_star
+      group: configuration
+      priority: recommended
+      reason: "Priorities help the mentor weight coaching recommendations toward the most impactful areas."
+      ui:
+        key: "priorities"
+    - id: configure-team-baselines
+      name: "Set team performance baselines"
+      description: "Optionally seed the team_baselines memory with expected performance ranges per bot for more accurate initial scoring."
+      type: config
+      group: configuration
+      priority: optional
+      reason: "Without initial baselines, the mentor learns them over 2-3 runs. Seeding accelerates accurate scoring from the first report."
+      ui:
+        target:
+          namespace: "team_baselines"
+          key: "initial_baselines"
+goals:
+  - id: health-reports-generated
+    name: "Team health reports generated"
+    description: "Weekly team health reports produced on schedule with per-bot scores and coaching recommendations."
+    metricType: count
+    target: ">= 1 per week"
+    category: primary
+    feedback:
+      question: "Are the team health reports insightful and the coaching recommendations actionable?"
+      options: ["yes", "insightful but not actionable", "too generic", "missing key issues"]
+  - id: bot-coverage
+    name: "Bot coverage"
+    description: "Percentage of active bots in the workspace that have scores in the latest health report."
+    metricType: rate
+    target: "> 80%"
+    category: primary
+  - id: coaching-follow-through
+    name: "Coaching follow-through"
+    description: "Percentage of previous coaching recommendations that show improvement in subsequent reports."
+    metricType: rate
+    target: "> 50%"
+    category: primary
+    feedback:
+      question: "Are the coaching recommendations leading to real improvements?"
+      options: ["yes", "some improvement", "no change", "bots getting worse"]
+  - id: improvement-log-freshness
+    name: "Improvement log freshness"
+    description: "The improvement_log memory is updated each run with tracked recommendation follow-through."
+    metricType: boolean
+    target: "updated within last 7d"
+    category: health
 ---
 
 # Mentor / Coach

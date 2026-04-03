@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devrel
   displayName: "Developer Relations"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Monitors developer community health, GitHub activity, friction points, and developer advocacy."
   category: marketing
   tags: ["developer-relations", "community", "github", "open-source", "advocacy"]
@@ -75,15 +75,154 @@ plugins:
     config:
       apps: ["github", "discord"]
       scopes: ["repo:read", "issues:read"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: false
+    crawling: true
 mcpServers:
   - ref: "tools/github"
     required: true
     reason: "Monitors repo stars, issues, contributions, and community activity"
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send community updates, contributor recognition, and developer newsletter content"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search developer forums, Stack Overflow, and tech blogs for community sentiment and friction points"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl developer community sites and forums for feedback aggregation"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to Discord, community management, and developer analytics platforms"
 egress:
   mode: "restricted"
   allowedDomains: ["*.github.com", "api.github.com", "discord.com", "api.stackexchange.com"]
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-community-goals
+      name: "Define community goals"
+      description: "Growth targets, engagement benchmarks, and response time SLAs"
+      type: north_star
+      key: community_goals
+      group: configuration
+      priority: required
+      reason: "Cannot measure community health without defined engagement targets"
+      ui:
+        inputType: text
+        placeholder: '{"star_growth_monthly": 50, "issue_response_hours": 24, "active_contributors": 20}'
+    - id: set-product-catalog
+      name: "Define product catalog"
+      description: "Current features and roadmap context for community questions"
+      type: north_star
+      key: product_catalog
+      group: configuration
+      priority: required
+      reason: "Cannot correlate friction points with product capabilities without product context"
+      ui:
+        inputType: text
+        placeholder: "e.g., CDC pipelines, Kolumn CLI, SaaS connectors, workflow engine"
+    - id: connect-github
+      name: "Connect GitHub for community monitoring"
+      description: "Tracks repo stars, issues, PRs, discussions, and contributor activity"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: required
+      reason: "Primary data source for developer community health metrics"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+    - id: connect-exa
+      name: "Connect Exa for sentiment scanning"
+      description: "Search developer forums, Stack Overflow, and tech blogs for community sentiment"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Required for scanning developer forums and detecting friction points beyond GitHub"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa"
+    - id: set-friction-threshold
+      name: "Configure friction point threshold"
+      description: "Number of occurrences before a friction point escalates to a finding"
+      type: config
+      group: configuration
+      target: { namespace: friction_tracker, key: escalation_threshold }
+      priority: recommended
+      reason: "Controls signal-to-noise ratio for developer friction reporting"
+      ui:
+        inputType: text
+        placeholder: '{"min_occurrences": 3, "min_affected_developers": 3}'
+        default: '{"min_occurrences": 3, "min_affected_developers": 3}'
+    - id: connect-firecrawl
+      name: "Connect Firecrawl for forum crawling"
+      description: "Crawl developer community sites and forums for feedback aggregation"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: optional
+      reason: "Expands community coverage beyond GitHub and search-indexed forums"
+      ui:
+        icon: globe
+        actionLabel: "Connect Firecrawl"
+goals:
+  - name: friction_point_detection
+    description: "Identify recurring developer friction points before they become churn risks"
+    category: primary
+    metric:
+      type: count
+      entity: devrel_findings
+      filter: { finding_type: "friction_point", severity: "high" }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when friction signals exist in community channels"
+  - name: community_health_tracking
+    description: "Track community metrics against baselines every run"
+    category: primary
+    metric:
+      type: boolean
+      check: "baselines_compared_and_updated"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: sentiment_accuracy
+    description: "Improve sentiment analysis accuracy through correlation with support data"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: devrel_findings, filter: { corroborated_by_support: true } }
+      denominator: { entity: devrel_findings, filter: { sentiment: "negative" } }
+    target:
+      operator: ">"
+      value: 0.7
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: devrel_findings
+      actions:
+        - { value: confirmed, label: "Real issue" }
+        - { value: false_positive, label: "Not a concern" }
+  - name: baseline_freshness
+    description: "Keep community baselines current for accurate trend detection"
+    category: health
+    metric:
+      type: boolean
+      check: "community_baselines_updated_this_run"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
 ---
 
 # Developer Relations

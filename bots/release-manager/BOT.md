@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]
@@ -65,6 +65,10 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["engineering"]
+presence:
+  web:
+    search: true
+    browsing: true
 egress:
   mode: "none"
 skills:
@@ -89,8 +93,143 @@ mcpServers:
   - ref: "tools/slack"
     required: false
     reason: "Announces releases to engineering channels"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for dependency advisories, security bulletins, and release best practices"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse CI/CD dashboards and deployment status pages to verify release readiness"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to CI/CD platforms, project management tools, and deployment services"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-github
+      name: "Connect GitHub"
+      description: "Links your repositories so the bot can track PRs, releases, and tags"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: required
+      reason: "Primary data source for merged PRs, release branches, and version tags"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+        helpUrl: "https://docs.schemabounce.com/integrations/github"
+    - id: set-versioning-strategy
+      name: "Define versioning strategy"
+      description: "Set your semantic versioning policy so the bot recommends correct version bumps"
+      type: north_star
+      key: versioning_strategy
+      group: configuration
+      priority: required
+      reason: "Cannot recommend version bumps without knowing the workspace semver policy"
+      ui:
+        inputType: select
+        options:
+          - { value: semver_strict, label: "Strict SemVer (breaking=major, feature=minor, fix=patch)" }
+          - { value: semver_0x, label: "0.x SemVer (breaking=minor, feature=minor, fix=patch)" }
+          - { value: calver, label: "Calendar Versioning (YYYY.MM.patch)" }
+          - { value: custom, label: "Custom (define in release_cadence)" }
+        default: semver_strict
+    - id: set-release-cadence
+      name: "Set release cadence"
+      description: "Define your target release frequency for scheduling and readiness checks"
+      type: north_star
+      key: release_cadence
+      group: configuration
+      priority: required
+      reason: "Release cadence drives schedule planning and readiness evaluation"
+      ui:
+        inputType: select
+        options:
+          - { value: weekly, label: "Weekly releases" }
+          - { value: biweekly, label: "Biweekly releases" }
+          - { value: monthly, label: "Monthly releases" }
+          - { value: on_demand, label: "On-demand (manual trigger)" }
+        default: biweekly
+    - id: connect-exa
+      name: "Connect Exa for advisories"
+      description: "Search for dependency advisories, security bulletins, and release best practices"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Security advisory awareness is critical before cutting a release"
+      ui:
+        icon: exa
+        actionLabel: "Connect Exa"
+    - id: connect-slack
+      name: "Connect Slack for announcements"
+      description: "Posts release announcements and readiness updates to engineering channels"
+      type: mcp_connection
+      ref: tools/slack
+      group: connections
+      priority: recommended
+      reason: "Team-wide release communication and deployment coordination"
+      ui:
+        icon: slack
+        actionLabel: "Connect Slack"
+    - id: import-releases
+      name: "Import release history"
+      description: "Previous releases provide version history context for bump recommendations"
+      type: data_presence
+      entityType: releases
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Release history establishes baseline for version sequencing and changelog generation"
+      ui:
+        actionLabel: "Import Releases"
+        emptyState: "No release history found. Import previous releases or start fresh with the next version."
+goals:
+  - name: generate_release_plans
+    description: "Produce complete release plans with categorized changes and version recommendations"
+    category: primary
+    metric:
+      type: count
+      entity: release_plans
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "when merged PRs exist since last release"
+  - name: changelog_completeness
+    description: "Every release plan includes all merged PRs categorized as features, fixes, or breaking"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: release_notes, filter: { pr_coverage: "complete" } }
+      denominator: { entity: release_notes }
+    target:
+      operator: ">="
+      value: 1.0
+      period: per_run
+  - name: versioning_consistency
+    description: "Track version bump decisions to maintain consistent versioning over time"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: versioning_decisions
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: breaking_change_detection
+    description: "All breaking changes flagged prominently before release approval"
+    category: secondary
+    metric:
+      type: boolean
+      check: breaking_changes_flagged_in_plan
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+      condition: "when breaking changes exist"
 ---
 
 # Release Manager

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: bug-triage
   displayName: "Bug Triage"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Triages bug reports by severity and assigns owners."
   category: engineering
   tags: ["bugs", "triage", "severity"]
@@ -66,6 +66,11 @@ skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
+presence:
+  web:
+    search: true
+    browsing: true
+    crawling: false
 mcpServers:
   - ref: "tools/github"
     required: false
@@ -76,8 +81,130 @@ mcpServers:
   - ref: "tools/linear"
     required: false
     reason: "Creates and tracks bugs in Linear"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for known bugs, CVEs, and related issue reports across public trackers"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse error tracking dashboards and stack trace analysis tools"
+  - ref: "tools/composio"
+    required: false
+    reason: "Sync triage decisions with project management and incident tracking SaaS tools"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-issue-tracker
+      name: "Connect issue tracker"
+      description: "Links your bug tracking system so triage decisions sync back automatically"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: required
+      reason: "Primary system of record for bug reports — creates issues, detects duplicates, assigns owners"
+      ui:
+        icon: github
+        actionLabel: "Connect Issue Tracker"
+        helpUrl: "https://docs.schemabounce.com/integrations/github"
+    - id: import-bug-reports
+      name: "Import existing bug reports"
+      description: "Seed with open bugs so triage starts immediately on the current backlog"
+      type: data_presence
+      entityType: bug_reports
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Bot needs bug reports to triage — without them there is nothing to classify"
+      ui:
+        actionLabel: "Import Bugs"
+        emptyState: "No bug reports found. Import from your issue tracker or wait for API Tester findings."
+    - id: set-severity-policy
+      name: "Define severity policy"
+      description: "Map P0-P4 severity levels to response time expectations and routing rules"
+      type: config
+      group: configuration
+      target: { namespace: bug_patterns, key: severity_policy }
+      priority: recommended
+      reason: "Consistent triage requires agreed severity definitions and SLA expectations"
+      ui:
+        inputType: json
+        placeholder: '{"P0": "1h response", "P1": "4h response", "P2": "24h response", "P3": "next sprint", "P4": "backlog"}'
+    - id: import-team-capacity
+      name: "Import team capacity"
+      description: "Current team workload data helps route bugs to teams with bandwidth"
+      type: data_presence
+      entityType: team_capacity
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Routing considers capacity — without it, overloaded teams receive unfairly"
+      ui:
+        actionLabel: "Import Capacity"
+        emptyState: "No team capacity data. The bot will still triage but cannot optimize routing by workload."
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Search for known bugs, CVEs, and related issue reports across public trackers"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: optional
+      reason: "Enriches triage with external context — known CVEs, upstream issues, community reports"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa Search"
+goals:
+  - name: bugs_triaged
+    description: "Produce a triage_decision for every incoming bug report"
+    category: primary
+    metric:
+      type: count
+      entity: triage_decisions
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when new bug_reports exist"
+    feedback:
+      enabled: true
+      entityType: triage_decisions
+      actions:
+        - { value: correct, label: "Good triage" }
+        - { value: wrong_severity, label: "Severity was wrong" }
+        - { value: wrong_owner, label: "Routed to wrong team" }
+        - { value: duplicate_missed, label: "Was a duplicate" }
+  - name: severity_accuracy
+    description: "Severity assignments confirmed correct by engineering leads"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: triage_decisions, filter: { feedback: "correct" } }
+      denominator: { entity: triage_decisions, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.80
+      period: monthly
+  - name: pattern_learning
+    description: "Build bug pattern memory from triage history to improve future classifications"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: bug_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: critical_escalation_speed
+    description: "P0 bugs escalated to executive-assistant within the same run"
+    category: secondary
+    metric:
+      type: boolean
+      measurement: p0_escalated_same_run
+    target:
+      operator: "=="
+      value: true
+      period: per_run
 ---
 
 # Bug Triage

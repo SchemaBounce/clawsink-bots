@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Receives tasks and GitHub issues, plans implementations, spawns Claude Code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -73,8 +73,135 @@ mcpServers:
   - ref: "tools/github"
     required: true
     reason: "Creates branches, pull requests, and manages issues"
+  - ref: "tools/exa"
+    required: false
+    reason: "Research library documentation, API references, and best practices for implementation decisions"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse documentation sites and Stack Overflow for technical reference during implementation"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to project management and CI/CD tools for implementation tracking"
+presence:
+  web:
+    browsing: true
+    search: true
 requirements:
   minTier: "team"
+setup:
+  steps:
+    - id: connect-github
+      name: "Connect GitHub"
+      description: "Links your GitHub repository for issue reading, branch creation, and PR management"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: required
+      reason: "Primary interface for reading issues, creating branches, and submitting pull requests"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+        helpUrl: "https://docs.schemabounce.com/integrations/github"
+    - id: connect-claude-code
+      name: "Connect Claude Code"
+      description: "Enables spawning sandboxed coding sessions for implementation"
+      type: mcp_connection
+      ref: tools/claude-code
+      group: connections
+      priority: required
+      reason: "Core implementation capability — without this the bot cannot write or test code"
+      ui:
+        icon: code
+        actionLabel: "Connect Claude Code"
+    - id: set-repo-config
+      name: "Set repository configuration"
+      description: "Repository URL, main branch, test commands, and build commands"
+      type: north_star
+      key: repository_config
+      group: configuration
+      priority: required
+      reason: "Branch names, test commands, and build steps vary per project — the bot needs these to operate correctly"
+      ui:
+        inputType: text
+        placeholder: '{"repo_url": "https://github.com/org/repo", "main_branch": "main", "test_cmd": "npm test", "build_cmd": "npm run build"}'
+        helpUrl: "https://docs.schemabounce.com/bots/software-architect/repo-config"
+    - id: set-architecture-principles
+      name: "Define architecture principles"
+      description: "Coding standards, design patterns, and architectural constraints"
+      type: north_star
+      key: architecture_principles
+      group: configuration
+      priority: recommended
+      reason: "Guides implementation decisions and ensures consistency across code sessions"
+      ui:
+        inputType: text
+        placeholder: '{"language": "TypeScript", "patterns": ["clean-architecture"], "testing": "jest"}'
+    - id: import-issues
+      name: "Import GitHub issues"
+      description: "Existing issues give the bot work items to plan and implement"
+      type: data_presence
+      entityType: gh_issues
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "The bot needs issues or tasks to begin planning implementations"
+      ui:
+        actionLabel: "Sync Issues"
+        emptyState: "No issues found. Create GitHub issues or send requests from product-owner."
+goals:
+  - name: pr_delivery
+    description: "Deliver working pull requests from assigned issues"
+    category: primary
+    metric:
+      type: count
+      entity: code_sessions
+      filter: { status: "pr_created" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when implementation requests exist"
+    feedback:
+      enabled: true
+      entityType: implementation_plans
+      actions:
+        - { value: merged, label: "PR merged" }
+        - { value: revision_needed, label: "Needed revision" }
+        - { value: rejected, label: "PR rejected" }
+  - name: test_pass_rate
+    description: "PRs should pass all tests before submission"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: code_sessions, filter: { tests_passing: true } }
+      denominator: { entity: code_sessions, filter: { status: "pr_created" } }
+    target:
+      operator: ">"
+      value: 0.95
+      period: monthly
+  - name: plan_before_code
+    description: "Every implementation must have a structured plan before coding begins"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: code_sessions, filter: { has_plan: true } }
+      denominator: { entity: code_sessions }
+    target:
+      operator: "=="
+      value: 1.0
+      period: monthly
+  - name: architecture_knowledge
+    description: "Build and maintain architecture decision records for consistency"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: architecture_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Software Architect

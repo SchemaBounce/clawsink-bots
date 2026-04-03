@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-review-manager
   displayName: "Review Manager"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Monitors reviews across all platforms, drafts host responses, identifies feedback patterns, tracks rating trends."
   category: support
   tags: ["str", "review-management", "reputation", "guest-feedback", "ratings", "hospitality"]
@@ -69,8 +69,150 @@ egress:
   allowedDomains: ["api.airbnb.com", "api.vrbo.com", "app.lodgify.com"]
 skills:
   - ref: "skills/review-response-generation@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send review summaries, rating trend alerts, and response drafts to property owners"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for review management best practices and competitor review patterns"
+  - ref: "tools/hyperbrowser"
+    required: true
+    reason: "Browse Airbnb, VRBO, and Lodgify review pages to monitor new reviews and ratings"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to review management and reputation monitoring platforms"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-agentmail
+      name: "Connect AgentMail"
+      description: "Send review summaries, rating trend alerts, and response drafts to property owners"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Review alerts and response drafts must be delivered to property owners for approval"
+      ui:
+        icon: agentmail
+        actionLabel: "Connect AgentMail"
+    - id: connect-hyperbrowser
+      name: "Connect Hyperbrowser"
+      description: "Browse Airbnb, VRBO, and Lodgify review pages to monitor new reviews and ratings"
+      type: mcp_connection
+      ref: tools/hyperbrowser
+      group: connections
+      priority: required
+      reason: "Direct platform browsing is the primary method for discovering new reviews across channels"
+      ui:
+        icon: hyperbrowser
+        actionLabel: "Connect Hyperbrowser"
+    - id: set-booking-channels
+      name: "Define review platforms"
+      description: "Select which booking platforms to monitor for reviews"
+      type: north_star
+      key: booking_channels
+      group: configuration
+      priority: required
+      reason: "Review monitoring scope must match where properties are listed — different platforms require different response tones"
+      ui:
+        inputType: multi-select
+        options:
+          - { value: airbnb, label: "Airbnb" }
+          - { value: vrbo, label: "VRBO" }
+          - { value: lodgify, label: "Lodgify" }
+          - { value: booking_com, label: "Booking.com" }
+          - { value: google, label: "Google Reviews" }
+        default: [airbnb]
+    - id: import-properties
+      name: "Import property listings"
+      description: "Property data is needed to track per-property rating trends"
+      type: data_presence
+      entityType: str_properties
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Per-property rating trend analysis requires knowing which properties to monitor"
+      ui:
+        actionLabel: "Import Properties"
+        emptyState: "No properties found. Import property listings so reviews can be tracked per property."
+    - id: import-reviews
+      name: "Seed initial reviews"
+      description: "Import existing reviews to establish rating baselines and detect trend direction"
+      type: data_presence
+      entityType: str_reviews
+      minCount: 5
+      group: data
+      priority: recommended
+      reason: "Pattern analysis requires at least 5 reviews — single-review conclusions are misleading"
+      ui:
+        actionLabel: "Import Reviews"
+        emptyState: "No reviews found. Import existing reviews from your platforms to establish baseline ratings."
+    - id: connect-exa
+      name: "Connect Exa for best practices"
+      description: "Search for review management strategies and competitor review response patterns"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: recommended
+      reason: "Industry best practices improve response quality and reputation management strategy"
+      ui:
+        icon: exa
+        actionLabel: "Connect Exa"
+goals:
+  - name: review_response_coverage
+    description: "Draft responses for all new reviews to maintain high host response rate"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_reviews, filter: { response_drafted: true } }
+      denominator: { entity: str_reviews, filter: { status: "new" } }
+    target:
+      operator: ">="
+      value: 0.95
+      period: weekly
+  - name: negative_review_escalation
+    description: "Escalate all reviews rated 3 stars or below within the same run cycle"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_alerts, filter: { alert_type: "negative_review" } }
+      denominator: { entity: str_reviews, filter: { rating_lte: 3 } }
+    target:
+      operator: "=="
+      value: 1.0
+      period: per_run
+      condition: "when negative reviews exist"
+  - name: rating_trend_monitoring
+    description: "Track per-property rating trends and flag properties dropping below 4.5 average"
+    category: health
+    metric:
+      type: boolean
+      check: review_patterns_namespace_updated
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+  - name: positive_theme_sharing
+    description: "Share recurring positive guest themes with str-property-marketer for listing optimization"
+    category: secondary
+    metric:
+      type: count
+      entity: str_findings
+      filter: { finding_type: "positive_theme", recipient: "str-property-marketer" }
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "when recurring positive themes are detected"
 ---
 
 # Review Manager

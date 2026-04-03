@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: compliance-auditor
   displayName: "Compliance Auditor"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Checks regulatory compliance on new financial records."
   category: fintech
   tags: ["compliance", "audit", "regulatory", "cdc"]
@@ -60,12 +60,150 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["compliance", "finance"]
+presence:
+  email:
+    required: true
+    provider: agentmail
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send compliance violation notices and audit reports to regulatory contacts"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to compliance management and document signing platforms"
 egress:
   mode: "none"
 skills:
   - ref: "skills/cdc-event-analysis@1.0.0"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-mission
+      name: "Define compliance mission"
+      description: "Regulatory context and compliance objectives for your organization"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Audit scope and severity classification depend on your compliance obligations"
+      ui:
+        inputType: text
+        placeholder: "e.g., Maintain PCI DSS Level 1 compliance for all payment processing"
+        prefillFrom: "workspace.mission"
+    - id: set-regulatory-frameworks
+      name: "Configure regulatory frameworks"
+      description: "Active regulations the bot audits against (PCI DSS, SOX, GDPR, AML)"
+      type: memory_seed
+      namespace: regulatory_frameworks
+      group: configuration
+      priority: required
+      reason: "Cannot audit records without knowing which regulations apply"
+      ui:
+        inputType: text
+        placeholder: '{"frameworks": ["PCI_DSS_v4", "SOX", "AML_BSA"], "jurisdiction": "US"}'
+        helpUrl: "https://docs.schemabounce.com/bots/compliance-auditor/frameworks"
+    - id: connect-agentmail
+      name: "Verify email identity"
+      description: "Bot sends compliance violation notices and audit reports"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Compliance violation notices and audit reports must be delivered to regulatory contacts"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+    - id: import-financial-records
+      name: "Verify financial record data"
+      description: "Financial records are the primary input for compliance auditing"
+      type: data_presence
+      entityType: financial_records
+      minCount: 1
+      group: data
+      priority: required
+      reason: "The bot audits financial records — needs data to begin auditing"
+      ui:
+        actionLabel: "Check Financial Records"
+        emptyState: "No financial records found. Connect your financial system or import records to begin auditing."
+    - id: import-compliance-rules
+      name: "Import compliance rules"
+      description: "Predefined compliance rules for automated checking"
+      type: data_presence
+      entityType: compliance_rules
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Structured compliance rules enable consistent automated auditing"
+      ui:
+        actionLabel: "Check Compliance Rules"
+        emptyState: "No compliance rules found. Import your regulatory rule set for structured auditing."
+    - id: connect-composio
+      name: "Connect compliance platform"
+      description: "Sync audit findings with your GRC or compliance management platform"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: optional
+      reason: "Automated sync with compliance management and document signing platforms"
+      ui:
+        icon: integration
+        actionLabel: "Connect Compliance Platform"
+goals:
+  - name: audit_coverage
+    description: "Every new financial record audited against all active frameworks"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: audit_findings, filter: { status: { "$exists": true } } }
+      denominator: { entity: financial_records }
+    target:
+      operator: ">"
+      value: 0.99
+      period: daily
+      condition: "no financial record remains unaudited"
+  - name: violation_detection
+    description: "Flag compliance violations with specific regulation citations"
+    category: primary
+    metric:
+      type: count
+      entity: audit_findings
+      filter: { violation: true }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when violations exist in financial data"
+  - name: audit_accuracy
+    description: "Audit findings confirmed as valid by compliance team"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: audit_findings, filter: { feedback: "confirmed" } }
+      denominator: { entity: audit_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.9
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: audit_findings
+      actions:
+        - { value: confirmed, label: "Valid violation" }
+        - { value: false_positive, label: "False positive" }
+        - { value: severity_wrong, label: "Wrong severity level" }
+  - name: audit_trail_integrity
+    description: "Maintain complete audit history with no gaps in coverage"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: audit_history
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Compliance Auditor

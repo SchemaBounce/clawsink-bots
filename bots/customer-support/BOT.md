@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -93,12 +93,184 @@ plugins:
     slot: "channel"
     required: false
     reason: "Sends ticket escalation and SLA breach notifications to support Teams channels"
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+    crawling: false
+  voice:
+    required: false
+    provider: elevenlabs
+  phone:
+    required: false
+    provider: agentphone
 mcpServers:
   - ref: "tools/slack"
     required: false
     reason: "Monitors support channels for customer issues and escalations"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send ticket updates, resolution confirmations, and follow-up emails to customers"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search knowledge bases and documentation for answers to customer questions"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse product documentation and help center pages to assist with customer issues"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate voice responses for phone-based support escalations"
+  - ref: "tools/agentphone"
+    required: false
+    reason: "Make outbound support calls for critical issues and churn-risk callbacks"
+  - ref: "tools/composio"
+    required: true
+    reason: "Sync ticket data with helpdesk, CRM, and customer success platforms"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-helpdesk
+      name: "Connect helpdesk platform"
+      description: "Links your helpdesk so the bot can read and triage tickets"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source for ticket triage and customer health monitoring"
+      ui:
+        icon: helpdesk
+        actionLabel: "Connect Helpdesk"
+        helpUrl: "https://docs.schemabounce.com/integrations/helpdesk"
+    - id: set-sla-targets
+      name: "Define SLA response times"
+      description: "Set response time targets by ticket priority level"
+      type: config
+      group: configuration
+      target: { namespace: customer_health, key: sla_targets }
+      priority: required
+      reason: "Cannot triage by urgency or detect SLA breaches without defined targets"
+      ui:
+        inputType: text
+        placeholder: '{"critical": "1h", "high": "4h", "medium": "24h", "low": "72h"}'
+        helpUrl: "https://docs.schemabounce.com/bots/customer-support/sla"
+    - id: set-industry
+      name: "Set business industry"
+      description: "Determines support patterns and triage priorities"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Industry context shapes triage priorities and escalation sensitivity"
+      ui:
+        inputType: select
+        options:
+          - { value: saas, label: "SaaS / Software" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: healthcare, label: "Healthcare" }
+        prefillFrom: "workspace.industry"
+    - id: connect-slack
+      name: "Connect Slack"
+      description: "Monitors support channels and posts escalation alerts"
+      type: mcp_connection
+      ref: tools/slack
+      group: connections
+      priority: recommended
+      reason: "Real-time support channel monitoring and team notifications"
+      ui:
+        icon: slack
+        actionLabel: "Connect Slack"
+    - id: import-contacts
+      name: "Import customer contacts"
+      description: "Customer data enables health scoring and churn detection"
+      type: data_presence
+      entityType: contacts
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Customer context improves triage accuracy and enables churn prediction"
+      ui:
+        actionLabel: "Import Contacts"
+        emptyState: "No contacts found. Import from your CRM or helpdesk."
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends ticket updates and follow-ups via email"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Sends ticket updates, resolution confirmations, and follow-up emails"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+goals:
+  - name: resolve_tickets
+    description: "Triage and resolve tickets without human intervention"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: tickets, filter: { status: "resolved", resolved_by: "bot" } }
+      denominator: { entity: tickets, filter: { status: "resolved" } }
+    target:
+      operator: ">"
+      value: 0.5
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: cs_findings
+      actions:
+        - { value: helpful, label: "Helpful resolution" }
+        - { value: wrong, label: "Wrong resolution" }
+        - { value: incomplete, label: "Incomplete" }
+  - name: sla_compliance
+    description: "Maintain SLA compliance across all ticket priorities"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: tickets, filter: { sla_breached: false } }
+      denominator: { entity: tickets }
+    target:
+      operator: ">"
+      value: 0.95
+      period: weekly
+  - name: first_response_time
+    description: "Time from ticket creation to first bot triage action"
+    category: secondary
+    metric:
+      type: threshold
+      measurement: avg_minutes_to_first_response
+    target:
+      operator: "<"
+      value: 30
+      period: daily
+  - name: churn_signal_detection
+    description: "Identify and escalate churn risk patterns from support data"
+    category: secondary
+    metric:
+      type: count
+      entity: cs_findings
+      filter: { category: "churn_risk" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when churn signals exist in ticket data"
+  - name: pattern_learning
+    description: "Build knowledge from resolved tickets to improve future triage"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: learned_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Customer Support

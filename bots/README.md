@@ -69,7 +69,7 @@ schedule:
     intensive: string
 messaging:
   listensTo:
-    - type: string       # Message type: alert, request, finding, text
+    - type: string       # Message type: alert, request, finding, text, approval, decision, info, directive
       from: [string]     # Bot names or ["*"] for all
   sendsTo:
     - type: string
@@ -95,12 +95,88 @@ mcpServers:              # Custom MCP servers this bot requires (optional)
     required: boolean    # true (default) = bot won't start without it
     reason: string       # Why this bot needs this server
     config: object       # Bot-specific config overrides (no secrets)
+presence:                # External identity requirements (optional)
+  email:
+    required: boolean    # true = provision on activation; false = optional setup later
+    provider: string     # "agentmail" (only supported provider for v1)
+    displayName: string  # Template: "{bot-name}@{workspace}.agents.schemabounce.com"
+  web:
+    browsing: boolean    # Needs hyperbrowser for interactive web automation
+    search: boolean      # Needs exa for semantic web search
+    crawling: boolean    # Needs firecrawl for fast data extraction
+  voice:
+    required: boolean    # Requires admin approval (recurring cost)
+    provider: string     # "elevenlabs"
+    voiceProfile: string # Voice style hint: "professional", "friendly", "authoritative"
+  phone:
+    required: boolean    # Requires admin approval (real phone number + cost)
+    provider: string     # "agentphone"
 egress:                  # External network access policy (optional)
   mode: string           # "open" | "llm-only" | "restricted" | "none" (default: llm-only)
   allowedDomains:        # Only used when mode is "restricted"
     - string             # Exact domain or wildcard: "api.stripe.com", "*.github.com"
 requirements:
   minTier: string        # Minimum workspace tier
+setup:                   # Per-bot setup steps (optional)
+  steps:
+    - id: string              # Unique within bot (kebab-case)
+      name: string            # Human-readable (<60 chars)
+      description: string     # What this does and why (<200 chars)
+      type: string            # mcp_connection | secret | config | data_presence | north_star | manual
+      group: string           # connections | configuration | data | external
+      priority: string        # required | recommended | optional
+      reason: string          # Why the bot needs this (<200 chars)
+      ref: string             # mcp_connection: "tools/{name}"
+      secretName: string      # secret: workspace secret key name
+      entityType: string      # data_presence: entity type to check
+      minCount: int           # data_presence: minimum record count
+      target:                 # config: where value is stored
+        namespace: string
+        key: string
+      key: string             # north_star: zone1 key name
+      ui:                     # Frontend rendering hints
+        icon: string
+        inputType: string     # password | text | number | slider | select | toggle
+        actionLabel: string
+        placeholder: string
+        helpUrl: string
+        validationHint: string
+        instructions: string  # Multi-line (manual type)
+        min: number
+        max: number
+        step: number
+        unit: string
+        default: any
+        options:
+          - value: string
+            label: string
+        prefillFrom: string   # Auto-fill source (e.g., "workspace.industry")
+        emptyState: string    # data_presence: empty message
+goals:                   # Success metrics (optional)
+  - name: string              # Unique within bot (snake_case)
+    description: string       # Human-readable (<120 chars)
+    category: string          # primary | secondary | health
+    metric:
+      type: string            # count | rate | threshold | boolean
+      entity: string          # Entity type to measure
+      filter: object          # Field-value filter (optional)
+      source: string          # "memory" for memory-based metrics
+      namespace: string       # Memory namespace (when source=memory)
+      numerator: { entity: string, filter: object }   # rate type
+      denominator: { entity: string, filter: object }  # rate type
+      measurement: string     # threshold type: what's measured
+      check: string           # boolean type: what to check
+    target:
+      operator: string        # > | < | >= | <= | == | between
+      value: number           # Target value
+      period: string          # per_run | daily | weekly | monthly
+      condition: string       # Human-readable qualifier (optional)
+    feedback:                 # User feedback loop (optional)
+      enabled: boolean
+      entityType: string      # Which records get feedback buttons
+      actions:
+        - value: string
+          label: string
 ---
 
 # {Display Name}
@@ -193,6 +269,50 @@ The `mcpServers:` section declares MCP server dependencies. See [tools/README.md
 - `config` is merged with team-level config (bot overrides team)
 - `config` must NEVER contain secrets
 
+## Presence Section
+
+The `presence:` section declares what external identity capabilities a bot needs. Unlike `mcpServers:` (which connects tools) or `plugins:` (which extends the runtime), `presence:` triggers **identity provisioning** — creating email addresses, phone numbers, or voice identities when the bot is deployed as an agent.
+
+### Sub-Sections
+
+| Sub-section | What it provisions | Provider | Admin approval? |
+|-------------|-------------------|----------|-----------------|
+| `email` | Email inbox (send/receive) | `agentmail` | No |
+| `web.browsing` | Browser access (interactive) | `hyperbrowser` | No |
+| `web.search` | Semantic web search | `exa` | No |
+| `web.crawling` | Fast data extraction | `firecrawl` | No |
+| `voice` | Voice identity (TTS/STT/calls) | `elevenlabs` | Yes |
+| `phone` | Phone number (SMS/calls) | `agentphone` | Yes |
+
+### How Presence Works with MCP Servers
+
+Every `presence:` provider has a corresponding MCP server in `tools/`. The bot should declare BOTH:
+
+1. `presence:` — tells the platform to **provision** the identity on activation
+2. `mcpServers:` — gives the bot **tool access** to use the provisioned identity
+
+```yaml
+# Example: bot with email presence
+presence:
+  email:
+    required: true
+    provider: agentmail
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send weekly reports and respond to client emails"
+```
+
+Web capabilities (`web.browsing`, `web.search`, `web.crawling`) don't provision external accounts — they only need tool access. You can declare them in `presence:` for documentation and set `true/false`, but the actual capability comes from the matching `mcpServers:` entry.
+
+### Field Rules
+
+- `presence.email.required: true` means activation FAILS if email can't be provisioned
+- `presence.voice` and `presence.phone` always require admin approval regardless of `required` value
+- `presence.email.displayName` supports templates: `{bot-name}`, `{workspace}` are substituted at runtime
+- If a bot declares `presence.email` without a matching `mcpServers` entry for `tools/agentmail`, validation fails
+- Omit `presence:` entirely for internal-only bots that don't need external identity
+
 ## Egress Section
 
 The `egress:` section declares which external HTTPS endpoints the bot needs to reach via the proxy token system (`request_proxy_token` → `execute_proxy_call`). When a bot is deployed to a seat, the `egress` section auto-populates the seat's `manifest.egressPolicy`. The admin can override it per-seat.
@@ -210,6 +330,182 @@ egress:
     - "api.stripe.com"
     - "*.github.com"
     - "hooks.slack.com"
+```
+
+## Setup Section
+
+The `setup:` section declares per-bot prerequisite steps that must be completed before the bot can do its job. Each step is typed so the platform can validate it automatically and the frontend can render a setup modal.
+
+### Step Types
+
+| Type | Auto-validates? | How | Frontend Component |
+|------|----------------|-----|-------------------|
+| `mcp_connection` | Yes | Ping MCP server, check tools accessible | Connect button + status badge |
+| `secret` | Yes | Check workspace secrets for named key (non-empty) | Masked text input + save |
+| `config` | Yes | Check memory namespace/key exists, type-validate | Varies by `ui.inputType` |
+| `data_presence` | Yes | Query entity type, check count >= minCount | Count badge + import button |
+| `north_star` | Yes | Check zone1 for key presence | Input (pre-filled from workspace) |
+| `manual` | No | User attestation (checkbox) | Checkbox + instruction card |
+
+### Step Groups
+
+Steps are grouped for UI rendering:
+
+| Group | Contains | Modal section |
+|-------|---------|--------------|
+| `connections` | MCP server connections, OAuth flows | "Connect Your Services" |
+| `configuration` | Thresholds, preferences, North Star values | "Configure Settings" |
+| `data` | Required entity records, imports | "Prepare Your Data" |
+| `external` | Manual steps done outside the platform | "External Setup" |
+
+### Readiness Levels
+
+The platform derives a readiness level from step completion:
+
+| Level | Condition | Bot Behavior |
+|-------|-----------|-------------|
+| `blocked` | Any `required` step incomplete | Bot will NOT run. Schedule skipped. |
+| `operational` | All `required` steps complete | Bot runs. May have reduced capability. |
+| `fully_configured` | All `required` + `recommended` complete | Bot runs at full capability. |
+| `optimized` | All steps complete | Bot has every possible advantage. |
+
+### ADL Integration
+
+Setup status is stored as a `bot_setup_status` entity in the ADL. Bots can read their own setup status on each run to adjust behavior (skip actions that require missing connections, report setup issues in their run report). The platform-optimizer bot reads setup status across all bots to identify systematic gaps and recommend fixes.
+
+### UI Contract
+
+The frontend renders setup steps as a modal:
+- Steps grouped by `group` (connections -> configuration -> data -> external)
+- Within groups, ordered by priority (required first)
+- Each step renders as its type-specific component using `ui:` hints
+- Progress bar: "N of M required steps complete"
+- "Activate Bot" button enabled when all `required` steps are green
+- Re-validation on revisit (connections may have broken)
+
+### Example
+
+```yaml
+setup:
+  steps:
+    - id: connect_stripe
+      name: "Connect Stripe"
+      description: "Reads transaction data for fraud pattern analysis"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source for transaction monitoring"
+      ui:
+        icon: stripe
+        actionLabel: "Connect Stripe"
+    - id: fraud_threshold
+      name: "Set fraud score threshold"
+      description: "Transactions above this score are flagged for review"
+      type: config
+      group: configuration
+      target: { namespace: thresholds, key: fraud_score_cutoff }
+      priority: required
+      reason: "Cannot flag transactions without a detection threshold"
+      ui:
+        inputType: slider
+        min: 0.5
+        max: 0.99
+        step: 0.01
+        default: 0.8
+    - id: enable_webhooks
+      name: "Enable payment webhooks"
+      description: "Set up your payment processor to send real-time events"
+      type: manual
+      group: external
+      priority: recommended
+      reason: "Real-time transaction feed for immediate detection"
+      ui:
+        actionLabel: "I've enabled webhooks"
+        instructions: |
+          1. Go to Stripe Dashboard -> Developers -> Webhooks
+          2. Add your SchemaBounce webhook endpoint
+          3. Select events: charge.succeeded, charge.failed, charge.disputed
+```
+
+## Goals Section
+
+The `goals:` section declares what success looks like for this bot. Goals are named, measurable, and the bot self-reports progress against them in a structured `run_report` each execution.
+
+### Goal Categories
+
+| Category | Purpose | Dashboard Placement |
+|----------|---------|-------------------|
+| `primary` | Core mission metrics -- why this bot exists | Front and center, big numbers |
+| `secondary` | Quality/efficiency metrics | Expandable detail section |
+| `health` | Bot self-improvement and operational health | Status indicators (green/yellow/red) |
+
+### Metric Types
+
+| Type | Measures | Example |
+|------|---------|---------|
+| `count` | Entity records matching criteria | "Flagged 12 transactions" |
+| `rate` | Ratio of two entity counts | "85% detection accuracy" |
+| `threshold` | Numeric value against a target | "Avg 3.2 min response time" |
+| `boolean` | Did/didn't happen | "Published weekly report: yes" |
+
+### User Feedback Loop
+
+Goals with `feedback.enabled: true` render action buttons on entity records in the UI. Users can confirm or reject bot output (e.g., "Confirmed fraud" / "Not fraud"). Feedback is stored on the entity record and read by the bot on subsequent runs to improve `rate`-type metrics.
+
+### Run Reports
+
+Every bot writes a `run_report` entity as its last action each run. The run report includes goal status, setup issues, blockers, and an overall productivity assessment. See [shared/output-format.md](../shared/output-format.md) for the full schema.
+
+### ADL Integration
+
+Goal health is aggregated by the platform into `bot_goal_health` entity records. Bots can read their own goal trends. The platform-optimizer bot reads goal health across all bots and recommends improvements.
+
+### Example
+
+```yaml
+goals:
+  - name: flag_suspicious_transactions
+    description: "Identify and flag potentially fraudulent transactions"
+    category: primary
+    metric:
+      type: count
+      entity: fraud_findings
+      filter: { severity: ["high", "critical"] }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when new transactions exist"
+  - name: detection_accuracy
+    description: "Minimize false positives in fraud flagging"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: fraud_findings, filter: { feedback: "confirmed" } }
+      denominator: { entity: fraud_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.85
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: fraud_findings
+      actions:
+        - { value: confirmed, label: "Confirmed fraud" }
+        - { value: false_positive, label: "Not fraud" }
+  - name: pattern_learning
+    description: "Continuously improve by learning new fraud patterns"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: learned_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ```
 
 ## SOUL.md — Agent Identity Specification
@@ -439,6 +735,24 @@ Bootstrap private memory entries.
 21. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
 22. All `mcpServers[].reason` are non-empty strings
 23. No `mcpServers[].config` values contain secrets
+24. Every `presence:` provider has a matching `mcpServers[].ref` entry (e.g., `presence.email.provider: agentmail` requires `mcpServers: [{ref: "tools/agentmail"}]`)
+25. `presence.email.displayName` only uses supported template variables (`{bot-name}`, `{workspace}`)
+26. `presence:` sub-sections only reference supported providers (`agentmail`, `elevenlabs`, `agentphone`, `hyperbrowser`, `exa`, `firecrawl`)
+27. `setup.steps[].id` is unique within the bot and kebab-case
+28. `setup.steps[].type` is one of: `mcp_connection`, `secret`, `config`, `data_presence`, `north_star`, `manual`
+29. `setup.steps[].group` is one of: `connections`, `configuration`, `data`, `external`
+30. `setup.steps[].priority` is one of: `required`, `recommended`, `optional`
+31. `setup.steps[]` with `type: mcp_connection` must have `ref` pointing to a valid `tools/` directory
+32. `setup.steps[]` with `type: secret` must have `secretName` as a non-empty string
+33. `setup.steps[]` with `type: config` must have `target.namespace` and `target.key`
+34. `setup.steps[]` with `type: data_presence` must have `entityType` referencing a type in `data.entityTypesRead` or `data.entityTypesWrite`
+35. `goals[].name` is unique within the bot and snake_case
+36. `goals[].category` is one of: `primary`, `secondary`, `health`
+37. `goals[].metric.type` is one of: `count`, `rate`, `threshold`, `boolean`
+38. `goals[]` with `metric.type: rate` must have both `numerator` and `denominator`
+39. `goals[].target.period` is one of: `per_run`, `daily`, `weekly`, `monthly`
+40. `goals[]` with `feedback.enabled: true` must have at least 2 `feedback.actions`
+41. At least one `goals[]` entry with `category: primary` is required if `goals:` is present
 
 ## What the Platform Does
 
@@ -451,12 +765,15 @@ Bootstrap private memory entries.
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data — North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |
+| `presence` | Provision external identities (email, phone, voice) and auto-add provider domains to egress |
 | `egress` | Configure the bot's external network access policy (proxy token allowlist) |
 | `schedule.default` | Run the bot on the declared schedule (user can adjust) |
 | `trigger` | Run the bot in response to data change events on the declared entity type |
 | `messaging` | Connect the bot to the message system so it can communicate with other bots |
 | `agents/*.md` | Make sub-agents available for the bot to spawn during its runs |
 | `model.preferred` / `fallback` | Select the LLM the bot uses |
+| `setup.steps` | Render a setup modal with typed validation; derive readiness level; write `bot_setup_status` to ADL |
+| `goals` | Track goal achievement from run reports; compute `bot_goal_health`; render success dashboard |
 
 Every field you declare gets acted on. Don't declare plugins or MCP servers the bot doesn't actually use. Data seeds are merged non-destructively. Skills are composed in the order listed.
 

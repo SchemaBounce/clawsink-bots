@@ -171,8 +171,67 @@ Never put secrets in SERVER.md — only declare variable names. Users configure 
 
 ## Available Servers
 
+### Workspace Integration Servers
+
+These servers connect agents to specific SaaS platforms your team already uses.
+
 | Server | Description | Transport | Key Tools |
 |--------|-------------|-----------|-----------|
 | [github](github/) | GitHub API for issues, PRs, repos, and actions | stdio | `create_issue`, `create_pull_request`, `search_code` |
 | [slack](slack/) | Slack workspace messaging and channels | stdio | `slack_post_message`, `slack_search_messages`, `slack_list_channels` |
 | [stripe](stripe/) | Stripe payments, billing, and subscriptions | stdio | `stripe_list_customers`, `stripe_list_invoices`, `stripe_create_refund` |
+| [jira](jira/) | Jira project management and issue tracking | stdio | `create_issue`, `transition_issue`, `search_issues` |
+| [linear](linear/) | Linear issue tracking and project management | stdio | `create_issue`, `search_issues`, `list_cycles` |
+| [notion](notion/) | Notion pages, databases, and wikis | stdio | `search`, `query_database`, `create_database_item` |
+| [claude-code](claude-code/) | Sandboxed code implementation and PR creation | streamable-http | `code_session_create`, `code_session_execute` |
+
+### Agent Presence Servers
+
+These servers give agents their own internet identity and presence. They work with the `presence:` section in BOT.md to automatically provision external identities on activation.
+
+| Server | Description | Transport | Key Tools | Presence Type |
+|--------|-------------|-----------|-----------|---------------|
+| [agentmail](agentmail/) | Email identity — send, receive, manage email | stdio (npm) | `send_message`, `reply_to_message`, `list_threads` | `presence.email` |
+| [hyperbrowser](hyperbrowser/) | Cloud browser — browse, scrape, automate the web | stdio (npm) | `scrape_webpage`, `browser_use_agent`, `extract_structured_data` | `presence.web.browsing` |
+| [exa](exa/) | Semantic web search — token-efficient, embedding-based | stdio (npm) | `web_search_exa`, `get_code_context_exa`, `crawling_exa` | `presence.web.search` |
+| [firecrawl](firecrawl/) | Web crawling — fast data extraction without browser | stdio (npm) | `firecrawl_scrape`, `firecrawl_crawl`, `firecrawl_search` | `presence.web.crawling` |
+| [elevenlabs](elevenlabs/) | Voice and audio — TTS, STT, voice cloning, phone calls | stdio (Python/uvx) | `text_to_speech`, `speech_to_text`, `make_outbound_call` | `presence.voice` |
+| [composio](composio/) | SaaS gateway — 500+ app integrations with managed OAuth | stdio (npm) | `execute_composio_tool`, `initiate_connection`, `search_composio_tools` | N/A (SaaS integration) |
+| [agentphone](agentphone/) | Phone and SMS — provision numbers, texts, calls | stdio (npm) | `send_sms`, `make_call`, `buy_number` | `presence.phone` |
+
+### Presence vs MCP Servers
+
+The `presence:` section in BOT.md and the `mcpServers:` section serve complementary purposes:
+
+| Concern | `presence:` | `mcpServers:` |
+|---------|-------------|---------------|
+| **What it does** | Declares identity to **provision** (email address, phone number) | Declares tools to **connect** (send_email, make_call) |
+| **When it runs** | On bot activation — creates external accounts | On bot execution — starts MCP server process |
+| **What it creates** | `agent_external_identities` record with lifecycle | `agent_mcp_grants` record with tool access |
+| **Example** | "This bot needs an email address" | "This bot needs the send_email tool" |
+
+A bot that needs email typically declares BOTH:
+
+```yaml
+presence:
+  email:
+    required: true
+    provider: agentmail
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send and receive email for client communication"
+```
+
+### Auto-Provisioning Rules
+
+| Capability | Auto-provision? | Admin approval? | Why |
+|-----------|----------------|-----------------|-----|
+| Email | Yes | No | Low cost, high value |
+| Web browsing/search/crawling | Yes (no provisioning needed) | No | Just tool access |
+| Voice | No | Yes | Recurring cost |
+| Phone | No | Yes | Real phone number + cost |
+
+### Note on ElevenLabs
+
+ElevenLabs is the only **Python-based** MCP server. It requires `uvx` (from the `uv` package manager) instead of `npx`. The transport config uses `command: "uvx"` with `args: ["elevenlabs-mcp"]`.

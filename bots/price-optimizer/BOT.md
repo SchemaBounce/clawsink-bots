@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: price-optimizer
   displayName: "Price Optimizer"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Adjusts pricing recommendations based on market price changes."
   category: ecommerce
   tags: ["pricing", "optimization", "market-analysis", "cdc"]
@@ -59,12 +59,144 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["strategy", "operations"]
+presence:
+  web:
+    search: true
+    crawling: true
 egress:
   mode: "none"
+mcpServers:
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for competitor pricing, market price benchmarks, and pricing trend data"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl competitor product pages and pricing tables for real-time price comparison"
 skills:
   - ref: "skills/cdc-event-analysis@1.0.0"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-exa
+      name: "Connect Exa for market data"
+      description: "Enables searching for competitor pricing, market benchmarks, and pricing trends"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Primary source for competitive pricing intelligence and market price benchmarks"
+      ui:
+        icon: exa
+        actionLabel: "Connect Exa"
+    - id: import-pricing-rules
+      name: "Import pricing rules"
+      description: "Define floor prices, ceiling prices, and margin constraints per product category"
+      type: data_presence
+      entityType: pricing_rules
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot generate safe recommendations without price floor/ceiling constraints"
+      ui:
+        actionLabel: "Add Pricing Rules"
+        emptyState: "No pricing rules found. Define min/max prices and margin targets per category."
+        helpUrl: "https://docs.schemabounce.com/bots/price-optimizer/rules"
+    - id: set-mission
+      name: "Set business mission"
+      description: "Helps the bot balance margin preservation vs. competitive positioning"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Pricing strategy must align with overall business goals and market position"
+      ui:
+        inputType: textarea
+        placeholder: "e.g., Premium positioning with best-in-class margins in enterprise SaaS"
+    - id: set-elasticity-baseline
+      name: "Set initial elasticity estimates"
+      description: "Provide rough demand sensitivity so the bot starts with reasonable assumptions"
+      type: config
+      group: configuration
+      target: { namespace: elasticity_models, key: baseline_elasticity }
+      priority: recommended
+      reason: "Without elasticity data, price recommendations cannot predict volume impact"
+      ui:
+        inputType: select
+        options:
+          - { value: inelastic, label: "Inelastic (luxury/essential goods)" }
+          - { value: moderate, label: "Moderate elasticity (default)" }
+          - { value: elastic, label: "Highly elastic (commodity/competitive)" }
+        default: moderate
+    - id: import-market-prices
+      name: "Import market price data"
+      description: "Baseline market prices improve initial recommendation quality"
+      type: data_presence
+      entityType: market_prices
+      minCount: 10
+      group: data
+      priority: recommended
+      reason: "Historical price data enables trend analysis and prevents overreaction to noise"
+      ui:
+        actionLabel: "Import Market Prices"
+        emptyState: "No market price data found. Import via CSV or wait for CDC events from your pricing source."
+    - id: connect-firecrawl
+      name: "Connect Firecrawl for competitor pricing"
+      description: "Crawl competitor product pages for real-time price comparison data"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: optional
+      reason: "Direct competitor price monitoring improves recommendation accuracy"
+      ui:
+        icon: firecrawl
+        actionLabel: "Connect Firecrawl"
+goals:
+  - name: generate_price_recommendations
+    description: "Produce actionable price recommendations when market prices change"
+    category: primary
+    metric:
+      type: count
+      entity: price_recommendations
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when market_prices events exist"
+  - name: recommendation_quality
+    description: "Recommendations include margin and volume impact estimates"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: price_recommendations, filter: { expected_margin_impact: { "$exists": true } } }
+      denominator: { entity: price_recommendations }
+    target:
+      operator: ">="
+      value: 1.0
+      period: weekly
+  - name: price_history_growth
+    description: "Continuously build market price history for better trend analysis"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: price_history
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: constraint_compliance
+    description: "All recommendations respect configured price floor and ceiling constraints"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: price_recommendations, filter: { within_constraints: true } }
+      denominator: { entity: price_recommendations }
+    target:
+      operator: "=="
+      value: 1.0
+      period: weekly
 ---
 
 # Price Optimizer

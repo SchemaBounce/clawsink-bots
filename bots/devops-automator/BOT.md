@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -81,12 +81,139 @@ plugins:
   - ref: "n8n-workflow@latest"
     required: true
     reason: "Triggers CI/CD pipelines, deployment rollbacks, and infrastructure automation workflows in external systems"
+presence:
+  web:
+    search: true
+    browsing: true
+    crawling: false
 mcpServers:
   - ref: "tools/github"
     required: false
     reason: "Monitors CI/CD pipelines and GitHub Actions workflows"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for deployment best practices, incident postmortems, and infrastructure documentation"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse cloud provider consoles, monitoring dashboards, and CI/CD pipeline UIs"
+  - ref: "tools/composio"
+    required: false
+    reason: "Integrate with PagerDuty, Datadog, and other DevOps SaaS platforms"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-deployment-environments
+      name: "Define deployment environments"
+      description: "Your environments and their criticality (production, staging, dev)"
+      type: north_star
+      key: deployment_environments
+      group: configuration
+      priority: required
+      reason: "Cannot weight deployment severity without knowing environment criticality"
+      ui:
+        inputType: text
+        placeholder: '{"production": "critical", "staging": "high", "dev": "low"}'
+    - id: set-error-thresholds
+      name: "Set error rate thresholds"
+      description: "Error rate limits that trigger rollback recommendations"
+      type: north_star
+      key: error_rate_thresholds
+      group: configuration
+      priority: required
+      reason: "Cannot recommend rollbacks without defined error rate limits"
+      ui:
+        inputType: text
+        placeholder: '{"production": 0.01, "staging": 0.05, "dev": 0.10}'
+    - id: import-deployments
+      name: "Connect deployment data"
+      description: "Deployment records with environment, version, and status"
+      type: data_presence
+      entityType: deployments
+      minCount: 1
+      group: data
+      priority: required
+      reason: "No deployment data means no health verification or pattern analysis"
+      ui:
+        actionLabel: "Import Deployments"
+        emptyState: "No deployment data found. Connect your CI/CD pipeline or import deployment records."
+    - id: connect-github
+      name: "Connect GitHub for CI/CD monitoring"
+      description: "Monitor GitHub Actions workflows and pipeline runs"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: recommended
+      reason: "Enables real-time CI/CD pipeline monitoring and failure detection"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+    - id: connect-composio
+      name: "Connect incident management tools"
+      description: "Integrate with PagerDuty, Datadog, or OpsGenie for alerting"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated incident creation and on-call notification for failed deployments"
+      ui:
+        icon: pagerduty
+        actionLabel: "Connect Incident Management"
+    - id: set-pipeline-patterns
+      name: "Configure automation pattern threshold"
+      description: "Number of times a manual pattern must repeat before proposing automation"
+      type: config
+      group: configuration
+      target: { namespace: deployment_patterns, key: automation_threshold }
+      priority: optional
+      reason: "Controls when the bot starts suggesting automation for repetitive tasks"
+      ui:
+        inputType: text
+        placeholder: '{"repeat_count": 3}'
+        default: '{"repeat_count": 3}'
+goals:
+  - name: deployment_verification
+    description: "Verify health of every deployment within the same run cycle"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: deployments, filter: { health_checked: true } }
+      denominator: { entity: deployments, filter: { status: "completed" } }
+    target:
+      operator: ">"
+      value: 0.95
+      period: per_run
+  - name: failed_deployment_escalation
+    description: "Escalate all failed production deployments to SRE within the same run"
+    category: primary
+    metric:
+      type: boolean
+      check: "failed_prod_deployments_escalated"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: automation_proposals
+    description: "Identify and propose automation for repetitive manual operations"
+    category: secondary
+    metric:
+      type: count
+      entity: automation_proposals
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+  - name: incident_correlation_accuracy
+    description: "Correlate deployment events with incidents before escalating"
+    category: health
+    metric:
+      type: rate
+      numerator: { entity: devops_findings, filter: { correlated: true } }
+      denominator: { entity: devops_findings }
+    target:
+      operator: ">"
+      value: 0.85
+      period: monthly
 ---
 
 # DevOps Automator

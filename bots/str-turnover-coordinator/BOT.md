@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-turnover-coordinator
   displayName: "Turnover Coordinator"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Manages cleaning schedules between guests, tracks turnover status, ensures properties are guest-ready, flags maintenance issues."
   category: operations
   tags: ["str", "turnover", "cleaning", "maintenance", "scheduling", "hospitality"]
@@ -67,8 +67,132 @@ egress:
   mode: "none"
 skills:
   - ref: "skills/turnover-scheduling@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send cleaning schedules, turnover alerts, and maintenance reports to cleaning teams and property owners"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to cleaning service scheduling platforms for automated turnover coordination"
+presence:
+  email:
+    required: true
+    provider: agentmail
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-agentmail
+      name: "Connect AgentMail"
+      description: "Send cleaning schedules, turnover alerts, and maintenance reports to cleaning teams and property owners"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Cleaning teams and property owners need timely turnover assignments and late-cleaning alerts"
+      ui:
+        icon: agentmail
+        actionLabel: "Connect AgentMail"
+    - id: set-cleaning-service
+      name: "Configure cleaning service"
+      description: "Identify your cleaning service provider so assignments are routed correctly"
+      type: north_star
+      key: cleaning_service
+      group: configuration
+      priority: required
+      reason: "Turnover assignment routing depends on whether you use in-house cleaners, a service company, or a mix"
+      ui:
+        inputType: select
+        options:
+          - { value: in_house, label: "In-house cleaning team" }
+          - { value: service_company, label: "External cleaning service" }
+          - { value: mixed, label: "Mixed (in-house + external)" }
+        default: in_house
+    - id: set-check-in-method
+      name: "Define check-in method"
+      description: "Set your check-in process so the bot understands timing requirements"
+      type: north_star
+      key: check_in_method
+      group: configuration
+      priority: recommended
+      reason: "Self-check-in properties have flexible windows; meet-and-greet requires stricter turnover timing"
+      ui:
+        inputType: select
+        options:
+          - { value: self_checkin, label: "Self check-in (lockbox/smart lock)" }
+          - { value: meet_and_greet, label: "Meet-and-greet (host present)" }
+          - { value: front_desk, label: "Front desk / reception" }
+        default: self_checkin
+    - id: import-properties
+      name: "Import property listings"
+      description: "Property data provides size, location, and cleaning requirements for scheduling"
+      type: data_presence
+      entityType: str_properties
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot generate cleaning assignments without knowing property details — size determines cleaning time"
+      ui:
+        actionLabel: "Import Properties"
+        emptyState: "No properties found. Import your property listings to start scheduling turnovers."
+    - id: import-bookings
+      name: "Import booking calendar"
+      description: "Active bookings drive the turnover schedule — checkout/check-in times determine cleaning windows"
+      type: data_presence
+      entityType: str_bookings
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Turnovers are generated from checkout/check-in pairs — no bookings means no turnovers to schedule"
+      ui:
+        actionLabel: "Import Bookings"
+        emptyState: "No bookings found. Import your booking calendar to generate turnover schedules."
+goals:
+  - name: on_time_turnovers
+    description: "Ensure turnovers are completed before guest check-in time"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_turnovers, filter: { status: "completed", completed_before_checkin: true } }
+      denominator: { entity: str_turnovers, filter: { status: "completed" } }
+    target:
+      operator: ">="
+      value: 0.95
+      period: weekly
+  - name: late_turnover_alerting
+    description: "Alert str-guest-communicator when cleaning has not started 2 hours before check-in"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_alerts, filter: { alert_type: "late_turnover" } }
+      denominator: { entity: str_turnovers, filter: { started_late: true } }
+    target:
+      operator: "=="
+      value: 1.0
+      period: per_run
+      condition: "when late turnovers are detected"
+  - name: maintenance_issue_logging
+    description: "Log all maintenance issues discovered during turnovers as findings to str-property-manager"
+    category: secondary
+    metric:
+      type: count
+      entity: str_findings
+      filter: { finding_type: "maintenance_issue" }
+    target:
+      operator: ">="
+      value: 0
+      period: weekly
+      condition: "logged whenever cleaners report issues"
+  - name: cleaner_roster_maintained
+    description: "Track cleaner performance metrics to assign high-priority turnovers to top performers"
+    category: health
+    metric:
+      type: boolean
+      check: cleaner_roster_namespace_updated
+    target:
+      operator: "=="
+      value: true
+      period: per_run
 ---
 
 # Turnover Coordinator

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -65,6 +65,14 @@ data:
 zones:
   zone1Read: ["brand_voice", "product_catalog", "company_glossary"]
   zone2Domains: ["content", "marketing"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: false
+    crawling: true
 egress:
   mode: "none"
 skills:
@@ -82,8 +90,142 @@ mcpServers:
   - ref: "tools/github"
     required: false
     reason: "Publishes blog posts via pull requests to content repository"
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send editorial notifications and draft review requests to content stakeholders"
+  - ref: "tools/exa"
+    required: true
+    reason: "Research trending topics, competitor content, and industry news for blog post ideation"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl reference articles and documentation sources for research material"
+  - ref: "tools/composio"
+    required: false
+    reason: "Publish drafts to CMS platforms and coordinate with marketing automation tools"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-brand-voice
+      name: "Define brand voice"
+      description: "Tone, style guidelines, and terminology preferences for all content"
+      type: north_star
+      key: brand_voice
+      group: configuration
+      priority: required
+      reason: "Every blog post must match the established brand tone and style"
+      ui:
+        inputType: text
+        placeholder: "e.g., Technical but approachable, developer-focused, no marketing jargon"
+        helpUrl: "https://docs.schemabounce.com/bots/blog-writer/brand-voice"
+    - id: set-product-catalog
+      name: "Define product catalog"
+      description: "Current features, product names, and positioning for accurate references"
+      type: north_star
+      key: product_catalog
+      group: configuration
+      priority: required
+      reason: "Prevents referencing outdated features or using incorrect product names"
+      ui:
+        inputType: text
+        placeholder: "Product names, feature list, positioning summary"
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Research trending topics and industry news for blog ideation"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Research capability is essential for factual, well-sourced blog content"
+      ui:
+        icon: search
+        actionLabel: "Connect Web Search"
+    - id: connect-github
+      name: "Connect GitHub for publishing"
+      description: "Publishes blog posts via pull requests to your content repository"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: recommended
+      reason: "Enables automated draft submission via PR to content repo"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+    - id: set-company-glossary
+      name: "Define company glossary"
+      description: "Technical terms, acronyms, and product-specific terminology"
+      type: north_star
+      key: company_glossary
+      group: configuration
+      priority: recommended
+      reason: "Ensures consistent terminology across all blog posts"
+      ui:
+        inputType: text
+        placeholder: "e.g., CDC = Change Data Capture, Kolumn = our IaC tool"
+    - id: connect-firecrawl
+      name: "Connect web crawler"
+      description: "Crawls reference articles and documentation for deeper research"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: optional
+      reason: "Enables crawling reference material for more thorough research"
+      ui:
+        icon: crawl
+        actionLabel: "Connect Crawler"
+goals:
+  - name: publish_cadence
+    description: "Produce one blog draft per scheduled run"
+    category: primary
+    metric:
+      type: count
+      entity: blog_drafts
+    target:
+      operator: ">="
+      value: 1
+      period: per_run
+      condition: "when no editorial calendar conflict"
+  - name: content_quality
+    description: "Drafts approved without major revisions"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: blog_drafts, filter: { review_status: "approved" } }
+      denominator: { entity: blog_drafts, filter: { review_status: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: blog_drafts
+      actions:
+        - { value: approved, label: "Approved as-is" }
+        - { value: minor_edits, label: "Minor edits needed" }
+        - { value: major_revisions, label: "Major revisions" }
+        - { value: rejected, label: "Rejected" }
+  - name: topic_diversity
+    description: "Alternate between product sections to maintain balanced coverage"
+    category: secondary
+    metric:
+      type: boolean
+      check: "alternated_sections_since_last_run"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: research_depth
+    description: "Posts backed by sufficient source material"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: topic_research
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "research notes exist for current topic"
 ---
 
 # Blog Writer

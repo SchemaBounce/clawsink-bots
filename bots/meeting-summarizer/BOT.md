@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: meeting-summarizer
   displayName: "Meeting Summarizer"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Summarizes meeting notes and creates action items."
   category: productivity
   tags: ["meetings", "notes", "actions"]
@@ -56,6 +56,10 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["general"]
+presence:
+  email:
+    required: true
+    provider: agentmail
 egress:
   mode: "none"
 skills:
@@ -72,8 +76,119 @@ mcpServers:
   - ref: "tools/notion"
     required: false
     reason: "Publishes meeting summaries and action items to Notion pages"
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Email meeting summaries, action items, and follow-up reminders to attendees"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to calendar and project management tools for meeting context and task assignment"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-google-workspace
+      name: "Connect Google Workspace"
+      description: "Links Google Calendar and Drive for meeting context and summary storage"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Calendar provides meeting context, attendees, and agendas; Drive stores summaries"
+      ui:
+        icon: google
+        actionLabel: "Connect Google Workspace"
+        helpUrl: "https://docs.schemabounce.com/integrations/google"
+    - id: connect-agentmail
+      name: "Connect email for summaries"
+      description: "Enables emailing meeting summaries and action item reminders to attendees"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Primary delivery channel for meeting summaries and follow-up reminders"
+      ui:
+        icon: email
+        actionLabel: "Connect Email"
+    - id: set-mission
+      name: "Set organization mission"
+      description: "Helps the bot prioritize which decisions and action items are most relevant"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: recommended
+      reason: "Mission context improves summary relevance and action item prioritization"
+      ui:
+        inputType: textarea
+        placeholder: "e.g., We build real-time data infrastructure for enterprises"
+    - id: import-meeting-notes
+      name: "Import initial meeting notes"
+      description: "Provides baseline data for the bot to start generating summaries"
+      type: data_presence
+      entityType: meeting_notes
+      minCount: 1
+      group: data
+      priority: required
+      reason: "The bot needs meeting notes to process — without input data it cannot run"
+      ui:
+        actionLabel: "Add Meeting Notes"
+        emptyState: "No meeting notes found. Paste notes, upload a transcript, or connect your calendar."
+        helpUrl: "https://docs.schemabounce.com/bots/meeting-summarizer/getting-started"
+    - id: connect-notion
+      name: "Connect Notion for summaries"
+      description: "Publishes meeting summaries and action items directly to Notion pages"
+      type: mcp_connection
+      ref: tools/notion
+      group: connections
+      priority: optional
+      reason: "Team knowledge base integration for searchable meeting history"
+      ui:
+        icon: notion
+        actionLabel: "Connect Notion"
+goals:
+  - name: extract_action_items
+    description: "Extract clear, attributed action items from every meeting"
+    category: primary
+    metric:
+      type: count
+      entity: action_items
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when meeting notes exist"
+  - name: summary_completeness
+    description: "Every processed meeting produces a structured summary"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: meeting_summaries }
+      denominator: { entity: meeting_notes, filter: { status: "processed" } }
+    target:
+      operator: ">="
+      value: 1.0
+      period: per_run
+  - name: recurring_theme_tracking
+    description: "Identify and flag topics that recur across multiple meetings"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: recurring_themes
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: summary_delivery
+    description: "Summaries delivered to attendees promptly after processing"
+    category: secondary
+    metric:
+      type: boolean
+      check: email_sent_after_summary
+    target:
+      operator: "=="
+      value: true
+      period: per_run
 ---
 
 # Meeting Summarizer

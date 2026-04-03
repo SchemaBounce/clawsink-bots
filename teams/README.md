@@ -66,6 +66,19 @@ orgChart:
       - name: string     # Human-readable escalation path name
         trigger: string  # What triggers it (e.g., "stock_critical", "churn_high")
         chain: [string]  # Ordered bot chain, first to last (last = final escalation)
+teamGoals:               # Team-level success metrics (optional)
+  - name: string              # Unique within team (snake_case)
+    description: string       # Human-readable (<120 chars)
+    category: string          # primary | secondary | health
+    composedFrom:
+      - bot: string           # Bot name (must match bots[].ref)
+        goal: string          # Goal name from that bot's goals[]
+        weight: number        # 0-1 (optional, weights sum to 1)
+    aggregation: string       # average | sum | min | max | worst (default: average)
+    target:
+      operator: string        # > | < | >= | <= | == | between
+      value: number
+      period: string          # daily | weekly | monthly
 ---
 
 # {Display Name}
@@ -156,6 +169,62 @@ Installation is idempotent — if a kit is already installed (e.g., from another
 
 See [data-kits/README.md](../data-kits/README.md) for the full kit manifest specification.
 
+## Team Goals Section
+
+The `teamGoals:` section declares team-level success metrics that compose from individual bot goals. This enables rollup: bot goals → team health → workspace ROI.
+
+### How Team Goals Compose
+
+Each team goal references one or more bot goals via `composedFrom`. The platform reads the individual bot `bot_goal_health` records and aggregates them using the specified `aggregation` method and optional `weight` values.
+
+| Aggregation | Behavior |
+|-------------|----------|
+| `average` | Weighted average of member bot goal values (default) |
+| `sum` | Sum of all member bot goal values |
+| `min` | Minimum value across member bots (best case) |
+| `max` | Maximum value across member bots (worst case) |
+| `worst` | Lowest achievement rate across member bots (bottleneck identifier) |
+
+### Team Health Derivation
+
+The platform computes team health as a weighted composite:
+- **40%** — Member bot readiness (average setup completion across all bots)
+- **40%** — Member bot goal achievement (average primary goal achievement rate)
+- **20%** — Inter-bot communication health (messages flowing as declared in messaging)
+
+### Example
+
+```yaml
+teamGoals:
+  - name: issue_resolution_rate
+    description: "Customer issues resolved without human intervention"
+    category: primary
+    composedFrom:
+      - bot: customer-support
+        goal: resolve_tickets
+        weight: 0.7
+      - bot: knowledge-base-curator
+        goal: answer_coverage
+        weight: 0.3
+    target:
+      operator: ">"
+      value: 0.7
+      period: weekly
+  - name: team_responsiveness
+    description: "Average time from issue to first bot action"
+    category: secondary
+    composedFrom:
+      - bot: customer-support
+        goal: first_response_time
+      - bot: social-media-monitor
+        goal: mention_response_time
+    aggregation: average
+    target:
+      operator: "<"
+      value: 15
+      period: daily
+```
+
 ## Validation
 
 1. `TEAM.md` has valid YAML frontmatter with `kind: Team`
@@ -174,6 +243,13 @@ See [data-kits/README.md](../data-kits/README.md) for the full kit manifest spec
 14. No conflicting MCP server configs between team-level and bot-level declarations
 15. All `dataKits[].ref` reference valid `data-kits/` directories containing `KIT.md`
 16. No duplicate kit references within a single team
+17. `teamGoals[].name` is unique within the team and snake_case
+18. `teamGoals[].category` is one of: `primary`, `secondary`, `health`
+19. `teamGoals[].composedFrom[].bot` must reference a bot in `bots[].ref`
+20. `teamGoals[].composedFrom[].goal` must reference a valid goal name from the referenced bot's `goals[]`
+21. `teamGoals[].composedFrom[].weight` values must sum to 1.0 when weights are specified
+22. `teamGoals[].aggregation` is one of: `average`, `sum`, `min`, `max`, `worst`
+23. `teamGoals[].target.period` is one of: `daily`, `weekly`, `monthly`
 
 ## What the Platform Does
 
@@ -188,6 +264,7 @@ See [data-kits/README.md](../data-kits/README.md) for the full kit manifest spec
 | `orgChart.escalation` | Set up escalation routing that overrides the global defaults |
 | `dataKits[].ref` | Auto-install referenced Data Kits (entity schemas, graph templates, vector collections, memory bootstraps) |
 | `dataKits[].installSampleData` | Optionally seed sample data from the kit |
+| `teamGoals` | Aggregate member bot goal health into team-level metrics; render team health dashboard |
 
 Team-level plugins and MCP servers are shared — you don't need to redeclare them on every bot. Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
 

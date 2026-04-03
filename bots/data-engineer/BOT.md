@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-engineer
   displayName: "Data Engineer"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Monitors Kolumn schemas, CDC pipeline health, DLQ depth, and sink configuration drift."
   category: engineering
   tags: ["data", "schemas", "cdc", "pipelines", "kolumn", "drift"]
@@ -64,6 +64,21 @@ data:
 zones:
   zone1Read: ["mission", "tech_stack"]
   zone2Domains: ["engineering", "operations"]
+presence:
+  web:
+    search: true
+    browsing: true
+    crawling: false
+mcpServers:
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for pipeline troubleshooting guides, connector documentation, and data engineering best practices"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse database documentation, cloud provider dashboards, and pipeline monitoring UIs"
+  - ref: "tools/composio"
+    required: false
+    reason: "Integrate with data catalog and pipeline orchestration SaaS tools"
 egress:
   mode: "none"
 skills:
@@ -77,6 +92,111 @@ automations:
       promptTemplate: "New records were created. Run data quality checks — validate required fields, check for duplicates, verify referential integrity, and flag anomalies."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-tech-stack
+      name: "Define data stack"
+      description: "Your databases, CDC sources, and sink destinations"
+      type: north_star
+      key: tech_stack
+      group: configuration
+      priority: required
+      reason: "Cannot monitor pipeline health without knowing the source and sink technologies"
+      ui:
+        inputType: text
+        placeholder: "e.g., PostgreSQL CDC, Kafka, BigQuery sink, S3 sink"
+    - id: set-freshness-thresholds
+      name: "Set data freshness thresholds"
+      description: "Maximum acceptable data age per pipeline before alerting"
+      type: config
+      group: configuration
+      target: { namespace: thresholds, key: freshness_limits }
+      priority: required
+      reason: "Cannot detect stale data without defined freshness targets"
+      ui:
+        inputType: text
+        placeholder: '{"critical_pipelines": "5m", "standard_pipelines": "30m", "batch_pipelines": "6h"}'
+        default: '{"critical_pipelines": "5m", "standard_pipelines": "30m", "batch_pipelines": "6h"}'
+    - id: import-pipeline-status
+      name: "Connect pipeline monitoring data"
+      description: "Pipeline throughput, error rates, and DLQ metrics"
+      type: data_presence
+      entityType: pipeline_status
+      minCount: 1
+      group: data
+      priority: required
+      reason: "No pipeline data means no health monitoring capability"
+      ui:
+        actionLabel: "Import Pipeline Data"
+        emptyState: "No pipeline data found. Set up a CDC pipeline or import pipeline metrics."
+    - id: connect-exa
+      name: "Connect Exa for troubleshooting research"
+      description: "Search connector docs and pipeline troubleshooting guides"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: recommended
+      reason: "Enables research into connector issues and data engineering best practices"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa"
+    - id: set-dlq-thresholds
+      name: "Configure DLQ alert thresholds"
+      description: "Dead letter queue depth thresholds per pipeline"
+      type: config
+      group: configuration
+      target: { namespace: thresholds, key: dlq_limits }
+      priority: recommended
+      reason: "Custom DLQ thresholds reduce false alerts on high-volume pipelines"
+      ui:
+        inputType: text
+        placeholder: '{"warning": 50, "critical": 200}'
+        default: '{"warning": 50, "critical": 200}'
+goals:
+  - name: detect_schema_drift
+    description: "Detect schema mismatches between source and sink configurations"
+    category: primary
+    metric:
+      type: count
+      entity: de_findings
+      filter: { finding_type: "schema_drift" }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when schema changes exist in source databases"
+  - name: pipeline_health_coverage
+    description: "Monitor all active pipelines every run cycle"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: pipeline_status, filter: { checked_this_run: true } }
+      denominator: { entity: pipeline_status }
+    target:
+      operator: ">"
+      value: 0.95
+      period: per_run
+  - name: dlq_response_time
+    description: "Flag DLQ growth within one run cycle of detection"
+    category: secondary
+    metric:
+      type: boolean
+      check: "dlq_growth_flagged_same_cycle"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: data_freshness_compliance
+    description: "Maintain data freshness within configured thresholds"
+    category: health
+    metric:
+      type: rate
+      numerator: { entity: pipeline_status, filter: { freshness_ok: true } }
+      denominator: { entity: pipeline_status }
+    target:
+      operator: ">"
+      value: 0.95
+      period: weekly
 ---
 
 # Data Engineer

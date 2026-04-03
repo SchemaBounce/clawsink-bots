@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]
@@ -56,12 +56,38 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["hr"]
+presence:
+  email:
+    required: true
+    provider: agentmail
+  web:
+    search: true
+    browsing: true
+  voice:
+    required: false
+    provider: elevenlabs
 egress:
   mode: "none"
 skills:
   - ref: "skills/follow-up-tracking@1.0.0"
   - ref: "skills/task-management@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: true
+    reason: "Send onboarding welcome emails, checklist reminders, and task notifications to new hires"
+  - ref: "tools/exa"
+    required: true
+    reason: "Search for onboarding best practices and compliance requirements by role"
+  - ref: "tools/hyperbrowser"
+    required: false
+    reason: "Browse HR platforms and benefits portals to verify onboarding resource links"
+  - ref: "tools/composio"
+    required: false
+    reason: "Connect to HRIS, payroll, and benefits SaaS platforms for onboarding automation"
+  - ref: "tools/elevenlabs"
+    required: false
+    reason: "Generate voice welcome messages and onboarding orientation audio guides"
 plugins:
   - ref: "n8n-workflow@latest"
     required: true
@@ -73,6 +99,123 @@ plugins:
       scopes: ["calendar.events", "drive.readonly"]
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-mission
+      name: "Set company mission"
+      description: "Company context used to personalize onboarding welcome materials"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Onboarding checklists and welcome content are tailored to company context"
+      ui:
+        inputType: text
+        placeholder: "We help businesses move data in real-time..."
+    - id: connect-agentmail
+      name: "Verify email identity"
+      description: "Bot sends onboarding emails, reminders, and task notifications to new hires"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Email is the primary communication channel for onboarding workflows"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Search for onboarding best practices and compliance requirements"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Research role-specific onboarding requirements and compliance checklists"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa Search"
+    - id: import-templates
+      name: "Create onboarding templates"
+      description: "Role-based onboarding templates drive checklist generation"
+      type: data_presence
+      entityType: onboarding_templates
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Without templates, the bot cannot generate role-specific checklists"
+      ui:
+        actionLabel: "Create Template"
+        emptyState: "No onboarding templates found. Create at least one role-based template."
+    - id: import-employees
+      name: "Import employee records"
+      description: "Employee data enables personalized onboarding and department routing"
+      type: data_presence
+      entityType: employees
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Employee records are needed to assign onboarding checklists"
+      ui:
+        actionLabel: "Import Employees"
+        emptyState: "No employee records found. Import from your HRIS or enter manually."
+    - id: connect-composio
+      name: "Connect HRIS platform"
+      description: "Links payroll, benefits, and HR management platforms"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated sync with HRIS for employee data and onboarding status"
+      ui:
+        icon: composio
+        actionLabel: "Connect HRIS"
+goals:
+  - name: checklist_completion
+    description: "Onboarding checklists completed within SLA for each new hire"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: onboarding_checklists, filter: { status: "completed" } }
+      denominator: { entity: onboarding_checklists }
+    target:
+      operator: ">"
+      value: 0.90
+      period: monthly
+      condition: "90% of onboarding checklists completed on time"
+  - name: task_creation
+    description: "Every new hire gets a personalized checklist with all required tasks"
+    category: primary
+    metric:
+      type: count
+      entity: hr_tasks
+      filter: { status: { "$exists": true } }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "tasks created for every pending onboarding"
+  - name: bottleneck_detection
+    description: "Identify and report recurring onboarding delays"
+    category: secondary
+    metric:
+      type: boolean
+      check: "bottleneck_analysis_completed"
+    target:
+      operator: "=="
+      value: 1
+      period: monthly
+  - name: completion_tracking
+    description: "Onboarding completion rates tracked across departments"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: completion_rates
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # HR Onboarding

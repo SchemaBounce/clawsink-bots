@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-marketer
   displayName: "Property Marketer"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Creates listing descriptions, manages social media, generates seasonal promotions, and optimizes property visibility across platforms."
   category: marketing
   tags: ["str", "listing-optimization", "social-media", "property-marketing", "seo", "hospitality"]
@@ -67,8 +67,158 @@ egress:
   allowedDomains: ["graph.facebook.com", "api.instagram.com", "api.pinterest.com"]
 skills:
   - ref: "skills/listing-optimization@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send listing draft approvals and marketing calendar updates to property owners"
+  - ref: "tools/exa"
+    required: true
+    reason: "Research SEO keywords, trending travel topics, and competitor listing strategies"
+  - ref: "tools/hyperbrowser"
+    required: true
+    reason: "Browse booking platform listings to analyze competitor descriptions and photo strategies"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl travel blogs and review sites for guest language and trending destination content"
+  - ref: "tools/composio"
+    required: true
+    reason: "Connect to social media and content scheduling platforms for property promotion"
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    browsing: true
+    search: true
+    crawling: true
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-exa
+      name: "Connect Exa for SEO research"
+      description: "Search for trending travel keywords, competitor listing strategies, and destination content"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "SEO keyword research and competitor analysis are essential for listing optimization"
+      ui:
+        icon: exa
+        actionLabel: "Connect Exa"
+    - id: connect-hyperbrowser
+      name: "Connect Hyperbrowser"
+      description: "Browse booking platform listings to analyze competitor descriptions and photo strategies"
+      type: mcp_connection
+      ref: tools/hyperbrowser
+      group: connections
+      priority: required
+      reason: "Direct platform browsing needed to audit competitor listings and verify content requirements"
+      ui:
+        icon: hyperbrowser
+        actionLabel: "Connect Hyperbrowser"
+    - id: connect-composio
+      name: "Connect social media platforms"
+      description: "Links social media and content scheduling platforms for property promotion"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Social media posting and content scheduling require platform connections"
+      ui:
+        icon: composio
+        actionLabel: "Connect Composio"
+    - id: set-market-type
+      name: "Set market type"
+      description: "Define your rental market so seasonal promotions align with demand patterns"
+      type: north_star
+      key: market_type
+      group: configuration
+      priority: required
+      reason: "Seasonal content strategy depends on market type — beach peaks summer, ski peaks winter, urban is year-round"
+      ui:
+        inputType: select
+        options:
+          - { value: beach, label: "Beach / Coastal" }
+          - { value: mountain, label: "Mountain / Ski" }
+          - { value: urban, label: "Urban / City" }
+          - { value: rural, label: "Rural / Countryside" }
+          - { value: lake, label: "Lake / Waterfront" }
+        default: beach
+    - id: set-booking-channels
+      name: "Define booking channels"
+      description: "List the platforms where your properties are listed so content is tailored per platform"
+      type: north_star
+      key: booking_channels
+      group: configuration
+      priority: recommended
+      reason: "Each platform has different SEO rules and content requirements — Airbnb, VRBO, Lodgify, Facebook Marketplace"
+      ui:
+        inputType: multi-select
+        options:
+          - { value: airbnb, label: "Airbnb" }
+          - { value: vrbo, label: "VRBO" }
+          - { value: lodgify, label: "Lodgify" }
+          - { value: facebook_marketplace, label: "Facebook Marketplace" }
+          - { value: booking_com, label: "Booking.com" }
+        default: [airbnb]
+    - id: import-properties
+      name: "Import property listings"
+      description: "Property data provides the foundation for generating tailored listing descriptions"
+      type: data_presence
+      entityType: str_properties
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot generate listing content without property details — amenities, location, photos"
+      ui:
+        actionLabel: "Import Properties"
+        emptyState: "No properties found. Import your property listings to start generating optimized content."
+goals:
+  - name: listing_content_produced
+    description: "Generate platform-optimized listing descriptions for properties"
+    category: primary
+    metric:
+      type: count
+      entity: mkt_content
+      filter: { content_type: "listing_description" }
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "when properties exist without optimized listings"
+  - name: social_media_engagement
+    description: "Create social media posts that showcase properties and drive booking interest"
+    category: primary
+    metric:
+      type: count
+      entity: mkt_social_posts
+    target:
+      operator: ">="
+      value: 4
+      period: monthly
+      condition: "at least one post per week on standard schedule"
+  - name: content_calendar_maintained
+    description: "Keep the content calendar current with seasonal promotions and posting schedule"
+    category: health
+    metric:
+      type: boolean
+      check: content_calendar_namespace_updated
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+  - name: review_theme_incorporation
+    description: "Incorporate positive guest review themes from str-review-manager into listing descriptions"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: mkt_content, filter: { incorporates_review_themes: true } }
+      denominator: { entity: mkt_content }
+    target:
+      operator: ">="
+      value: 0.8
+      period: quarterly
 ---
 
 # Property Marketer

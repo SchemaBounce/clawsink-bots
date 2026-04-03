@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-quality-monitor
   displayName: "Data Quality Monitor"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Validates data quality rules on incoming records across all entity types."
   category: engineering
   tags: ["data-quality", "validation", "cdc"]
@@ -68,6 +68,86 @@ skills:
   - ref: "skills/data-validation@1.0.0"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: configure-quality-rules
+      name: "Define quality rules"
+      description: "Seed the quality_rules memory namespace with validation rules (required fields, format patterns, cross-field logic) for your entity types."
+      type: config
+      group: configuration
+      priority: required
+      reason: "The bot reads quality_rules before every validation pass. Without rules, it falls back to generic null/type checks only."
+      ui:
+        target:
+          namespace: "quality_rules"
+          key: "rules"
+    - id: seed-entity-records
+      name: "Ensure records exist"
+      description: "Have at least a few records of any entity type so the bot can establish baseline statistics on first run."
+      type: data_presence
+      group: data
+      priority: required
+      reason: "The bot is CDC-triggered on entityType=* created events. It needs existing records to build baseline_stats for distribution analysis."
+      ui:
+        entityType: "*"
+        minCount: 10
+    - id: set-north-star-mission
+      name: "Define North Star mission"
+      description: "Set the workspace mission so the bot understands which entity types and quality dimensions are highest priority."
+      type: north_star
+      group: configuration
+      priority: required
+      reason: "The bot reads zone1 mission to prioritize which data quality failures warrant critical alerts vs informational findings."
+      ui:
+        key: "mission"
+    - id: verify-data-engineer-active
+      name: "Ensure Data Engineer bot is active"
+      description: "The data quality monitor sends pipeline-level degradation findings to data-engineer. Confirm that bot is deployed."
+      type: manual
+      group: external
+      priority: recommended
+      reason: "Pipeline-level quality issues are routed to data-engineer for root cause analysis. Without it, those findings go unprocessed."
+      ui:
+        instructions: "Deploy the data-engineer bot from the marketplace, or confirm it is already active in your workspace."
+    - id: configure-dq-thresholds
+      name: "Set quality score thresholds"
+      description: "Optionally configure what dq_scores levels constitute critical, warning, and healthy quality for each entity type."
+      type: config
+      group: configuration
+      priority: recommended
+      reason: "Custom thresholds let you tune when the bot escalates vs logs. Defaults use 90% healthy, 70% warning, below 70% critical."
+      ui:
+        target:
+          namespace: "quality_rules"
+          key: "score_thresholds"
+goals:
+  - id: records-validated
+    name: "Records validated"
+    description: "Total records processed through quality validation rules."
+    metricType: count
+    target: "> 0 per day"
+    category: primary
+    feedback:
+      question: "Are the quality checks catching real data issues?"
+      options: ["yes", "mostly", "too many false positives", "missing real problems"]
+  - id: quality-score-coverage
+    name: "Quality score coverage"
+    description: "Percentage of entity types with active dq_scores being maintained."
+    metricType: rate
+    target: "> 90%"
+    category: primary
+  - id: critical-issue-detection
+    name: "Critical issue detection"
+    description: "Critical data quality issues are detected and escalated within one run cycle."
+    metricType: boolean
+    target: "true"
+    category: health
+  - id: baseline-stats-freshness
+    name: "Baseline stats freshness"
+    description: "The baseline_stats memory is updated with current field distributions after each run."
+    metricType: boolean
+    target: "updated within last 24h"
+    category: health
 ---
 
 # Data Quality Monitor

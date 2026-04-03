@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: content-scheduler
   displayName: "Content Scheduler"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Plans and schedules content calendar across channels."
   category: marketing
   tags: ["content", "calendar", "planning"]
@@ -59,6 +59,27 @@ data:
 zones:
   zone1Read: ["mission"]
   zone2Domains: ["marketing", "content"]
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    browsing: false
+    crawling: true
+mcpServers:
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Send content deadline reminders and publishing schedule notifications to creators"
+  - ref: "tools/exa"
+    required: false
+    reason: "Search for optimal publishing times and trending content topics"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl competitor content calendars and publishing patterns"
+  - ref: "tools/composio"
+    required: false
+    reason: "Sync content schedules with CMS, social media, and marketing automation platforms"
 egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com"]
@@ -72,6 +93,131 @@ plugins:
       scopes: ["calendar.events"]
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-mission
+      name: "Define brand mission"
+      description: "Brand direction ensures scheduled content aligns with company voice and goals"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Content scheduling decisions must reflect current brand direction and priorities"
+      ui:
+        inputType: text
+        placeholder: "e.g., Position our brand as the thought leader in real-time data infrastructure"
+        prefillFrom: "workspace.mission"
+    - id: configure-channels
+      name: "Set up content channels"
+      description: "Define publishing channels with frequency limits and time zone preferences"
+      type: data_presence
+      entityType: channel_configs
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot schedule content without knowing which channels are available and their constraints"
+      ui:
+        actionLabel: "Configure Channels"
+        emptyState: "No channels configured. Add at least one publishing channel (blog, social, newsletter) to begin scheduling."
+    - id: connect-google-calendar
+      name: "Connect Google Calendar"
+      description: "Sync editorial calendar with Google Calendar for team visibility"
+      type: plugin_connection
+      ref: gog
+      group: connections
+      priority: recommended
+      reason: "Team-visible calendar ensures content creators know their deadlines"
+      ui:
+        icon: calendar
+        actionLabel: "Connect Google Calendar"
+    - id: connect-composio
+      name: "Connect CMS and social platforms"
+      description: "Sync schedules with your CMS, social media, and marketing automation tools"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated sync keeps publishing schedules consistent across platforms"
+      ui:
+        icon: integration
+        actionLabel: "Connect Publishing Platforms"
+    - id: connect-exa
+      name: "Connect Exa for publishing insights"
+      description: "Research optimal publishing times and trending content topics"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: optional
+      reason: "Data-driven scheduling based on audience engagement patterns"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa"
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends deadline reminders and schedule notifications to content creators"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: optional
+      reason: "Email reminders help content creators meet their publishing deadlines"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+goals:
+  - name: schedule_coverage
+    description: "All content calendar slots filled with scheduled posts"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: scheduled_posts, filter: { status: "scheduled" } }
+      denominator: { entity: content_calendar, filter: { slot_type: "open" } }
+    target:
+      operator: ">"
+      value: 0.85
+      period: weekly
+      condition: "at least 85% of available slots filled"
+  - name: on_time_publishing
+    description: "Scheduled posts published on time without missed deadlines"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: scheduled_posts, filter: { published_on_time: true } }
+      denominator: { entity: scheduled_posts, filter: { status: "published" } }
+    target:
+      operator: ">"
+      value: 0.9
+      period: weekly
+  - name: scheduling_quality
+    description: "Content scheduling decisions rated effective by marketing team"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: scheduled_posts, filter: { feedback: "good_timing" } }
+      denominator: { entity: scheduled_posts, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.75
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: scheduled_posts
+      actions:
+        - { value: good_timing, label: "Good timing" }
+        - { value: wrong_time, label: "Wrong time slot" }
+        - { value: conflict, label: "Scheduling conflict" }
+        - { value: missed_opportunity, label: "Missed better slot" }
+  - name: calendar_health
+    description: "Track editorial calendar performance data and improve scheduling"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: performance_data
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Content Scheduler

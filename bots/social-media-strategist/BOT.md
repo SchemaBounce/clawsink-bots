@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.0"
+  version: "1.0.2"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]
@@ -70,6 +70,26 @@ egress:
 skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
+mcpServers:
+  - ref: "tools/agentmail"
+    required: false
+    reason: "Email content calendars, campaign briefs, and performance reports to marketing team"
+  - ref: "tools/exa"
+    required: true
+    reason: "Research trending social topics, competitor content strategies, and industry engagement patterns"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl competitor social profiles and industry blogs for content inspiration"
+  - ref: "tools/composio"
+    required: true
+    reason: "Connect to social media scheduling and analytics platforms for content distribution"
+presence:
+  email:
+    required: false
+    provider: agentmail
+  web:
+    search: true
+    crawling: true
 automations:
   triggers:
     - entityType: "social_metrics"
@@ -82,6 +102,136 @@ plugins:
     reason: "OAuth access to social platform APIs (Twitter/X, LinkedIn, Instagram) for reading engagement metrics and posting content"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-social-platforms
+      name: "Connect social media platforms"
+      description: "Links your social media accounts so the bot can read engagement data and plan content"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source for engagement metrics, posting schedules, and content performance"
+      ui:
+        icon: social
+        actionLabel: "Connect Social Accounts"
+        helpUrl: "https://docs.schemabounce.com/integrations/social-media"
+    - id: connect-search
+      name: "Connect web search"
+      description: "Enables research on trending topics, competitor strategies, and industry content"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Trend research and competitor content analysis require web search access"
+      ui:
+        icon: search
+        actionLabel: "Connect Search"
+    - id: set-industry
+      name: "Set business industry"
+      description: "Determines relevant content themes, hashtags, and audience targeting"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Industry context drives content strategy, trending topic relevance, and audience expectations"
+      ui:
+        inputType: select
+        options:
+          - { value: saas, label: "SaaS / Software" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: healthcare, label: "Healthcare" }
+          - { value: media, label: "Media / Publishing" }
+        prefillFrom: "workspace.industry"
+    - id: set-brand-voice
+      name: "Define brand voice guidelines"
+      description: "Sets the tone and style for all social content"
+      type: config
+      group: configuration
+      target: { namespace: content_themes, key: brand_voice }
+      priority: recommended
+      reason: "Consistent brand voice across platforms improves engagement and recognition"
+      ui:
+        inputType: text
+        placeholder: '{"tone": "professional-friendly", "vocabulary": "accessible", "emoji_usage": "moderate"}'
+        helpUrl: "https://docs.schemabounce.com/bots/social-media-strategist/brand-voice"
+    - id: import-social-metrics
+      name: "Import social media metrics"
+      description: "Historical engagement data establishes baselines for content optimization"
+      type: data_presence
+      entityType: social_metrics
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Baseline engagement data is needed to measure content performance and identify trends"
+      ui:
+        actionLabel: "Import Metrics"
+        emptyState: "No social metrics found. Connect your social accounts to start tracking."
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends content calendars and performance reports via email"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: recommended
+      reason: "Email delivery for content calendar briefs and weekly engagement reports"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+goals:
+  - name: content_calendar_output
+    description: "Produce scheduled content calendar items across platforms"
+    category: primary
+    metric:
+      type: count
+      entity: content_calendar_items
+      filter: { status: "planned" }
+    target:
+      operator: ">"
+      value: 5
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: social_strategy
+      actions:
+        - { value: on_brand, label: "On brand" }
+        - { value: off_brand, label: "Off brand" }
+        - { value: wrong_platform, label: "Wrong platform" }
+  - name: engagement_trend_detection
+    description: "Identify significant engagement changes and report actionable insights"
+    category: primary
+    metric:
+      type: count
+      entity: social_strategy
+      filter: { category: "engagement_trend" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when engagement data is available"
+  - name: theme_performance_tracking
+    description: "Track and rotate content themes based on performance data"
+    category: secondary
+    metric:
+      type: count
+      source: memory
+      namespace: content_themes
+    target:
+      operator: ">"
+      value: 3
+      period: monthly
+      condition: "cumulative themes with performance scores"
+  - name: platform_coverage
+    description: "Maintain active content planning across all connected platforms"
+    category: health
+    metric:
+      type: boolean
+      check: "content_calendar_items exist for each connected platform in the last 7 days"
+    target:
+      operator: "=="
+      value: true
+      period: weekly
 ---
 
 # Social Media Strategist
