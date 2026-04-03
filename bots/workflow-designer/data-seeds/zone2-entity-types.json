@@ -1,0 +1,14 @@
+{
+  "entityTypes": [
+    {
+      "name": "workflows",
+      "description": "Multi-step workflow definitions with nodes and edges",
+      "fields": ["name", "description", "nodes", "edges", "status", "createdBy"]
+    },
+    {
+      "name": "wd_findings",
+      "description": "Workflow design findings and recommendations",
+      "fields": ["workflow_id", "finding_type", "severity", "description", "suggestion"]
+    }
+  ]
+}

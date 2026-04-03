@@ -1,0 +1,22 @@
+{
+  "namespaces": [
+    {
+      "namespace": "workflow_patterns",
+      "entries": [
+        {
+          "key": "init",
+          "value": "No patterns learned yet. Will populate as workflows are created."
+        }
+      ]
+    },
+    {
+      "namespace": "design_notes",
+      "entries": [
+        {
+          "key": "init",
+          "value": "First run. Ask about the user's business before designing."
+        }
+      ]
+    }
+  ]
+}
