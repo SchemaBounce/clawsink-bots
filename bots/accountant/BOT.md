@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -99,6 +99,148 @@ automations:
       promptTemplate: "A new invoice arrived. Match it to existing purchase orders, verify amounts, and flag discrepancies or duplicates."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-budget-constraints
+      name: "Define budget constraints"
+      description: "Monthly or quarterly budget limits by spending category"
+      type: north_star
+      key: budget_constraints
+      group: configuration
+      priority: required
+      reason: "Cannot monitor spending or detect overspend without budget limits"
+      ui:
+        inputType: text
+        placeholder: '{"engineering": 50000, "marketing": 25000, "operations": 15000}'
+        helpUrl: "https://docs.schemabounce.com/bots/accountant/budgets"
+    - id: set-industry
+      name: "Set business industry"
+      description: "Industry context shapes expense categorization and compliance rules"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Categorization rules and financial compliance vary by industry"
+      ui:
+        inputType: select
+        options:
+          - { value: saas, label: "SaaS / Software" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: healthcare, label: "Healthcare" }
+          - { value: professional_services, label: "Professional Services" }
+        prefillFrom: "workspace.industry"
+    - id: connect-accounting
+      name: "Connect accounting platform"
+      description: "Links your accounting software for transaction and invoice data"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated sync with QuickBooks, Xero, or other accounting platforms"
+      ui:
+        icon: accounting
+        actionLabel: "Connect Accounting Software"
+        helpUrl: "https://docs.schemabounce.com/integrations/accounting"
+    - id: connect-stripe
+      name: "Connect Stripe for billing"
+      description: "Reconciles invoices and tracks payment disputes"
+      type: mcp_connection
+      ref: tools/stripe
+      group: connections
+      priority: recommended
+      reason: "Automated invoice reconciliation and billing dispute monitoring"
+      ui:
+        icon: stripe
+        actionLabel: "Connect Stripe"
+    - id: import-transactions
+      name: "Import historical transactions"
+      description: "Past transactions enable better categorization and anomaly baselines"
+      type: data_presence
+      entityType: transactions
+      minCount: 10
+      group: data
+      priority: recommended
+      reason: "Historical data improves categorization accuracy and anomaly detection"
+      ui:
+        actionLabel: "Import Transactions"
+        emptyState: "No transactions found. Import from your accounting platform or CSV."
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends invoice notifications, payment reminders, and budget alerts"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Sends invoice notifications, payment reminders, and budget alerts to stakeholders"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+goals:
+  - name: categorize_transactions
+    description: "Every transaction categorized within one run cycle"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: transactions, filter: { category: { "$exists": true } } }
+      denominator: { entity: transactions }
+    target:
+      operator: ">"
+      value: 0.99
+      period: daily
+      condition: "no transaction remains uncategorized overnight"
+  - name: detect_anomalies
+    description: "Flag billing anomalies and duplicate invoices"
+    category: primary
+    metric:
+      type: count
+      entity: acct_findings
+      filter: { category: ["billing_anomaly", "duplicate_invoice", "budget_overspend"] }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when anomalies exist in financial data"
+  - name: categorization_accuracy
+    description: "Transactions correctly categorized based on user feedback"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: acct_findings, filter: { feedback: "correct" } }
+      denominator: { entity: acct_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.9
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: acct_findings
+      actions:
+        - { value: correct, label: "Correct categorization" }
+        - { value: wrong_category, label: "Wrong category" }
+        - { value: missed, label: "Missed anomaly" }
+  - name: budget_monitoring
+    description: "Track spending against budget limits and alert on overspend"
+    category: secondary
+    metric:
+      type: boolean
+      check: "budget_comparison_completed"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: categorization_learning
+    description: "Build categorization rules from confirmed patterns"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: learned_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Accountant

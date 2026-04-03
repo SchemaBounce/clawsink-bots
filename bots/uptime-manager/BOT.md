@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: uptime-manager
   displayName: "Uptime Manager"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Manages status pages, tracks SLA compliance, monitors uptime percentages, and produces incident postmortems."
   category: operations
   tags: ["uptime", "status-page", "sla", "postmortem", "incident-communication"]
@@ -90,6 +90,122 @@ egress:
   allowedDomains: ["api.statuspage.io", "*.atlassian.net"]
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-sla-targets
+      name: "Define SLA targets"
+      description: "Set your uptime SLA targets per window so the bot tracks compliance accurately"
+      type: north_star
+      key: sla_targets
+      group: configuration
+      priority: required
+      reason: "SLA budget calculations and breach warnings require workspace-specific uptime targets"
+      ui:
+        inputType: text
+        placeholder: '{"30d": "99.9%", "90d": "99.95%", "yearly": "99.95%"}'
+        helpText: "Define uptime percentage targets for 30-day, 90-day, and calendar-year windows"
+    - id: set-severity-definitions
+      name: "Configure incident severity levels"
+      description: "Define how incidents are classified so customer communication matches the actual impact"
+      type: north_star
+      key: incident_severity_definitions
+      group: configuration
+      priority: required
+      reason: "Severity classification drives status page updates, escalation paths, and customer messaging"
+      ui:
+        inputType: text
+        placeholder: '{"critical": "Full outage", "major": "Degraded for most users", "minor": "Partial impact", "maintenance": "Planned"}'
+        helpText: "Map severity levels to impact descriptions for consistent incident communication"
+    - id: set-status-page-config
+      name: "Configure status page"
+      description: "Map your services to status page components so updates target the right sections"
+      type: north_star
+      key: status_page_config
+      group: configuration
+      priority: recommended
+      reason: "Status page component mapping ensures infrastructure alerts update the correct public-facing service status"
+      ui:
+        inputType: text
+        placeholder: '{"components": ["API", "Dashboard", "Webhooks", "Database"]}'
+        helpText: "List your status page components and their mapping to internal services"
+    - id: connect-composio
+      name: "Connect incident management tools"
+      description: "Links to Statuspage.io and incident management platforms for automated status updates"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated status page updates reduce response time during active incidents"
+      ui:
+        icon: composio
+        actionLabel: "Connect Composio"
+    - id: connect-slack
+      name: "Connect Slack for incident updates"
+      description: "Posts service status updates and incident notifications to team channels"
+      type: mcp_connection
+      ref: tools/slack
+      group: connections
+      priority: recommended
+      reason: "Real-time incident communication keeps engineering and support teams aligned"
+      ui:
+        icon: slack
+        actionLabel: "Connect Slack"
+    - id: import-incidents
+      name: "Import incident history"
+      description: "Historical incidents provide baseline for pattern detection and repeat incident identification"
+      type: data_presence
+      entityType: incidents
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Cross-referencing new alerts against incident history detects recurring issues on the same component"
+      ui:
+        actionLabel: "Import Incidents"
+        emptyState: "No incident history found. Import previous incidents or start fresh — history will build over time."
+goals:
+  - name: sla_compliance_tracking
+    description: "Calculate and report rolling uptime against SLA targets on every scheduled run"
+    category: primary
+    metric:
+      type: threshold
+      measurement: uptime_percentage
+    target:
+      operator: ">="
+      value: 99.9
+      period: monthly
+      condition: "measured against configured sla_targets"
+  - name: postmortem_completeness
+    description: "Every resolved incident has a postmortem record — no incident closed without documentation"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: uptime_incidents, filter: { has_postmortem: true } }
+      denominator: { entity: uptime_incidents, filter: { status: "resolved" } }
+    target:
+      operator: "=="
+      value: 1.0
+      period: per_run
+  - name: sla_budget_alerting
+    description: "Escalate to executive-assistant when SLA budget consumption exceeds 80% in any window"
+    category: secondary
+    metric:
+      type: boolean
+      check: sla_budget_alert_sent_when_threshold_exceeded
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+      condition: "when budget consumption exceeds 80%"
+  - name: sla_tracker_maintained
+    description: "Keep sla_tracker memory current with each uptime calculation for trend analysis"
+    category: health
+    metric:
+      type: boolean
+      check: sla_tracker_namespace_updated
+    target:
+      operator: "=="
+      value: true
+      period: per_run
 ---
 
 # Uptime Manager

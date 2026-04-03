@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -105,6 +105,140 @@ automations:
       promptTemplate: "Infrastructure metric anomaly detected. Correlate with recent deployments, check for cascading failures, and determine if escalation is needed."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-tech-stack
+      name: "Define tech stack"
+      description: "Your infrastructure components, cloud providers, and key services"
+      type: north_star
+      key: tech_stack
+      group: configuration
+      priority: required
+      reason: "Cannot evaluate infrastructure health without knowing what to monitor"
+      ui:
+        inputType: text
+        placeholder: "e.g., AWS EKS, PostgreSQL, Redis, Datadog, ArgoCD"
+    - id: set-sla-targets
+      name: "Define SLA targets"
+      description: "Uptime, latency, and data freshness targets for your services"
+      type: north_star
+      key: sla_targets
+      group: configuration
+      priority: required
+      reason: "Cannot detect SLA breaches without defined targets"
+      ui:
+        inputType: text
+        placeholder: '{"uptime": "99.9%", "p99_latency": "500ms", "freshness": "5min"}'
+    - id: import-pipeline-status
+      name: "Connect pipeline monitoring"
+      description: "Pipeline health metrics feed the bot's monitoring loop"
+      type: data_presence
+      entityType: pipeline_status
+      minCount: 1
+      group: data
+      priority: required
+      reason: "No pipeline data means no infrastructure monitoring capability"
+      ui:
+        actionLabel: "Import Pipeline Status"
+        emptyState: "No pipeline data found. Set up a data pipeline or import metrics."
+    - id: connect-slack
+      name: "Connect Slack for incident alerts"
+      description: "Posts incident alerts and status updates to operations channels"
+      type: mcp_connection
+      ref: tools/slack
+      group: connections
+      priority: recommended
+      reason: "Real-time incident alerting to your ops team"
+      ui:
+        icon: slack
+        actionLabel: "Connect Slack"
+    - id: connect-pagerduty
+      name: "Connect PagerDuty / OpsGenie"
+      description: "Integrates with incident management for automated escalation"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Enables automated incident creation and on-call notification"
+      ui:
+        icon: pagerduty
+        actionLabel: "Connect Incident Management"
+        helpUrl: "https://docs.schemabounce.com/integrations/incident-management"
+    - id: set-alert-thresholds
+      name: "Configure alert thresholds"
+      description: "Error rate and latency thresholds for anomaly detection"
+      type: config
+      group: configuration
+      target: { namespace: thresholds, key: alert_thresholds }
+      priority: recommended
+      reason: "Custom thresholds reduce false positive alerts"
+      ui:
+        inputType: text
+        placeholder: '{"error_rate": 0.05, "latency_p99_ms": 500, "dlq_depth": 100}'
+        default: '{"error_rate": 0.05, "latency_p99_ms": 500, "dlq_depth": 100}'
+goals:
+  - name: detect_incidents
+    description: "Identify infrastructure incidents from metric anomalies"
+    category: primary
+    metric:
+      type: count
+      entity: incidents
+      filter: { detected_by: "sre-devops" }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when anomalies exist in infrastructure metrics"
+  - name: sla_compliance
+    description: "Track and maintain SLA compliance across all services"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: pipeline_status, filter: { sla_breached: false } }
+      denominator: { entity: pipeline_status }
+    target:
+      operator: ">"
+      value: 0.99
+      period: weekly
+  - name: false_alert_reduction
+    description: "Reduce noise by learning from false positive alerts"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: sre_findings, filter: { feedback: "confirmed" } }
+      denominator: { entity: sre_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.9
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: sre_findings
+      actions:
+        - { value: confirmed, label: "Real issue" }
+        - { value: false_positive, label: "False alarm" }
+  - name: incident_correlation
+    description: "Correlate incidents with upstream causes before escalating"
+    category: health
+    metric:
+      type: boolean
+      check: "correlated_with_upstream_before_escalation"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: threshold_calibration
+    description: "Improve detection thresholds from operational experience"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: learned_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # SRE / DevOps Bot

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -98,6 +98,126 @@ presence:
     search: true
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-crm
+      name: "Connect CRM platform"
+      description: "Links your CRM so the bot can read deals, pipeline stages, and conversion data"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source — deal stage data and pipeline metrics come from the CRM"
+      ui:
+        icon: composio
+        actionLabel: "Connect CRM"
+        helpUrl: "https://docs.schemabounce.com/integrations/crm"
+    - id: connect-email
+      name: "Connect email for deal alerts"
+      description: "Send pipeline health summaries and stalled deal alerts to sales leadership"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Sales stakeholders need real-time alerts on pipeline health and critical deal changes"
+      ui:
+        icon: email
+        actionLabel: "Connect Email"
+    - id: set-mission
+      name: "Set company mission and stage"
+      description: "Aligns pipeline analysis with your company's current goals and growth stage"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Pipeline recommendations differ for seed-stage vs growth-stage companies"
+      ui:
+        inputType: text
+        placeholder: "e.g., Series B SaaS company targeting mid-market enterprise"
+    - id: set-pipeline-coverage
+      name: "Set pipeline coverage target"
+      description: "Minimum pipeline-to-quota ratio before the bot triggers a health alert"
+      type: config
+      group: configuration
+      target: { namespace: conversion_rates, key: coverage_target }
+      priority: recommended
+      reason: "Industry standard is 3x coverage — adjust based on your sales cycle and win rate"
+      ui:
+        inputType: slider
+        min: 2.0
+        max: 5.0
+        step: 0.5
+        default: 3.0
+    - id: import-deals
+      name: "Import historical deals"
+      description: "Past deal data establishes conversion rate baselines and stage duration norms"
+      type: data_presence
+      entityType: deals
+      minCount: 50
+      group: data
+      priority: recommended
+      reason: "At least 50 closed deals needed for meaningful stage-to-stage conversion baselines"
+      ui:
+        actionLabel: "Import Deals"
+        emptyState: "No deal history found. Connect your CRM first to pull historical data."
+        helpUrl: "https://docs.schemabounce.com/data/import"
+    - id: connect-stripe
+      name: "Connect Stripe for payment verification"
+      description: "Verify deal payments and track payment-linked revenue"
+      type: mcp_connection
+      ref: tools/stripe
+      group: connections
+      priority: recommended
+      reason: "Payment verification closes the loop between pipeline and actual revenue"
+      ui:
+        icon: stripe
+        actionLabel: "Connect Stripe"
+goals:
+  - name: pipeline_health_monitoring
+    description: "Produce daily pipeline health reports with conversion and velocity metrics"
+    category: primary
+    metric:
+      type: count
+      entity: pipeline_reports
+    target:
+      operator: ">="
+      value: 1
+      period: daily
+  - name: stalled_deal_detection
+    description: "Identify deals stalled beyond 2x average stage duration"
+    category: primary
+    metric:
+      type: count
+      entity: deal_insights
+      filter: { insight_type: "stalled_deal" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when stalled deals exist"
+  - name: conversion_baseline_accuracy
+    description: "Stage-to-stage conversion rates tracked and updated each run"
+    category: secondary
+    metric:
+      type: count
+      source: memory
+      namespace: conversion_rates
+    target:
+      operator: ">"
+      value: 0
+      period: daily
+      condition: "updated each run"
+  - name: handoff_quality
+    description: "Closed-won deals trigger onboarding handoff within the same run"
+    category: health
+    metric:
+      type: boolean
+      check: onboarding_handoff_sent
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+      condition: "when deals close"
 ---
 
 # Sales Pipeline

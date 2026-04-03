@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: product-owner
   displayName: "Product Owner"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Customer feedback aggregation, market analysis, feature prioritization, backlog management via structured GitHub issue specs."
   category: management
   tags: ["product", "backlog", "feedback", "market-analysis", "prioritization", "github-issues"]
@@ -94,6 +94,122 @@ mcpServers:
     reason: "Connect to product management and customer feedback SaaS platforms"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-product-roadmap
+      name: "Define product roadmap"
+      description: "Set your current roadmap so features are prioritized against strategic goals"
+      type: north_star
+      key: product_roadmap
+      group: configuration
+      priority: required
+      reason: "Cannot prioritize feature requests without a roadmap to align against"
+      ui:
+        inputType: textarea
+        placeholder: "e.g., Q2: self-serve onboarding, Q3: enterprise SSO, Q4: marketplace launch"
+    - id: set-priorities
+      name: "Set quarterly priorities"
+      description: "Define the top priorities for feature evaluation and backlog ordering"
+      type: north_star
+      key: priorities
+      group: configuration
+      priority: required
+      reason: "Priorities determine which customer signals get escalated vs. deferred"
+      ui:
+        inputType: textarea
+        placeholder: "e.g., 1. Reduce churn 2. Increase enterprise adoption 3. Improve onboarding"
+    - id: connect-exa
+      name: "Connect Exa for market research"
+      description: "Enables searching for customer feedback trends and competitive product capabilities"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Market intelligence and feature trend research for informed prioritization"
+      ui:
+        icon: exa
+        actionLabel: "Connect Exa"
+    - id: connect-agentmail
+      name: "Connect email for stakeholder updates"
+      description: "Sends feature prioritization updates, roadmap changes, and issue specs to stakeholders"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Primary channel for stakeholder communication and feature update delivery"
+      ui:
+        icon: email
+        actionLabel: "Connect Email"
+    - id: connect-project-tracker
+      name: "Connect project tracker"
+      description: "Links Jira or Linear so the bot can manage backlog and create feature requests"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Backlog management and feature request tracking in your existing project tool"
+      ui:
+        icon: composio
+        actionLabel: "Connect Project Tracker"
+        helpUrl: "https://docs.schemabounce.com/integrations/project-management"
+    - id: import-cs-findings
+      name: "Import customer support findings"
+      description: "Seed the bot with existing customer feedback for immediate signal clustering"
+      type: data_presence
+      entityType: cs_findings
+      minCount: 5
+      group: data
+      priority: recommended
+      reason: "Pre-existing customer signals enable immediate feature opportunity analysis"
+      ui:
+        actionLabel: "Import Findings"
+        emptyState: "No customer support findings yet. The bot will begin processing once customer-support sends findings."
+goals:
+  - name: produce_feature_specs
+    description: "Generate structured GitHub issue specs from aggregated customer signals"
+    category: primary
+    metric:
+      type: count
+      entity: gh_issues
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when customer signals exist"
+  - name: signal_aggregation
+    description: "Cluster customer feedback into themes before creating feature specs"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: gh_issues, filter: { customer_signals: { "$gt": 1 } } }
+      denominator: { entity: gh_issues }
+    target:
+      operator: ">="
+      value: 0.8
+      period: monthly
+  - name: customer_signal_tracking
+    description: "Continuously track and accumulate customer feedback patterns"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: customer_signals
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: roadmap_alignment
+    description: "Feature specs reference and align with the defined product roadmap"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: gh_issues, filter: { roadmap_aligned: true } }
+      denominator: { entity: gh_issues }
+    target:
+      operator: ">="
+      value: 0.9
+      period: monthly
 ---
 
 # Product Owner

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revops
   displayName: "Revenue Operations"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "CAC/LTV analysis, pipeline-to-revenue attribution, conversion funnel optimization, and revenue forecasting."
   category: finance
   tags: ["revenue-operations", "attribution", "cac-ltv", "forecasting", "conversion"]
@@ -102,6 +102,138 @@ egress:
   allowedDomains: ["api.stripe.com"]
 requirements:
   minTier: "team"
+setup:
+  steps:
+    - id: connect-payment-platform
+      name: "Connect payment platform"
+      description: "Links your payment processor for revenue reconciliation and subscription data"
+      type: mcp_connection
+      ref: tools/stripe
+      group: connections
+      priority: required
+      reason: "Revenue operations requires payment data for CAC/LTV calculations and revenue attribution"
+      ui:
+        icon: stripe
+        actionLabel: "Connect Stripe"
+        helpUrl: "https://docs.schemabounce.com/integrations/stripe"
+    - id: connect-crm
+      name: "Connect CRM platform"
+      description: "Links your CRM for pipeline data, deal attribution, and conversion tracking"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Pipeline-to-revenue attribution requires CRM deal data — cannot compute CAC or funnel metrics without it"
+      ui:
+        icon: composio
+        actionLabel: "Connect CRM"
+    - id: set-revenue-targets
+      name: "Set revenue targets"
+      description: "ARR, MRR, or revenue growth targets that anchor all forecasts and alerts"
+      type: north_star
+      key: revenue_targets
+      group: configuration
+      priority: required
+      reason: "Forecasts without targets are meaningless — this is the benchmark for all analysis"
+      ui:
+        inputType: text
+        placeholder: "e.g., $5M ARR, 15% QoQ growth"
+    - id: set-growth-targets
+      name: "Set growth targets"
+      description: "Customer acquisition and expansion targets for CAC/LTV analysis"
+      type: north_star
+      key: growth_targets
+      group: configuration
+      priority: required
+      reason: "CAC thresholds and LTV:CAC ratio targets depend on growth goals"
+      ui:
+        inputType: text
+        placeholder: "e.g., 500 new customers/quarter, 120% NRR"
+    - id: set-attribution-model
+      name: "Choose attribution model"
+      description: "How pipeline deals are attributed to originating marketing channels"
+      type: config
+      group: configuration
+      target: { namespace: attribution_models, key: attribution_method }
+      priority: recommended
+      reason: "Attribution method affects all channel ROI calculations"
+      ui:
+        inputType: select
+        options:
+          - { value: first_touch, label: "First-touch attribution" }
+          - { value: last_touch, label: "Last-touch attribution" }
+          - { value: multi_touch, label: "Multi-touch (linear)" }
+          - { value: w_shaped, label: "W-shaped (weighted)" }
+        default: multi_touch
+    - id: import-pipeline-data
+      name: "Import pipeline history"
+      description: "Historical deal data enables accurate conversion rate baselines and CAC calculations"
+      type: data_presence
+      entityType: pipeline_reports
+      minCount: 50
+      group: data
+      priority: recommended
+      reason: "At least 50 historical deals needed for meaningful conversion and velocity baselines"
+      ui:
+        actionLabel: "Import Pipeline Data"
+        emptyState: "No pipeline history found. Connect your CRM first to pull historical deals."
+        helpUrl: "https://docs.schemabounce.com/data/import"
+    - id: connect-email
+      name: "Connect email for reports"
+      description: "Email revenue forecasts and CAC/LTV reports to leadership"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: recommended
+      reason: "Automated delivery of revenue briefings to executive stakeholders"
+      ui:
+        icon: email
+        actionLabel: "Connect Email"
+goals:
+  - name: revenue_forecast_accuracy
+    description: "Revenue forecasts within 15% of actual results"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: revops_forecasts, filter: { accuracy: "within_threshold" } }
+      denominator: { entity: revops_forecasts }
+    target:
+      operator: ">"
+      value: 0.85
+      period: monthly
+  - name: ltv_cac_monitoring
+    description: "Track and alert when LTV:CAC ratio drops below healthy threshold"
+    category: primary
+    metric:
+      type: threshold
+      measurement: ltv_cac_ratio
+    target:
+      operator: ">="
+      value: 3.0
+      period: weekly
+  - name: attribution_coverage
+    description: "Percentage of closed deals with channel attribution assigned"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: revops_findings, filter: { has_attribution: true } }
+      denominator: { entity: revops_findings, filter: { finding_type: "deal_closed" } }
+    target:
+      operator: ">"
+      value: 0.90
+      period: monthly
+  - name: cross_functional_data_flow
+    description: "Consistently receiving and processing inputs from sales, marketing, and CS"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: attribution_models
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "updated from cross-functional inputs"
 ---
 
 # Revenue Operations

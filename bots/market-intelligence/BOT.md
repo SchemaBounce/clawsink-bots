@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: market-intelligence
   displayName: "Market Intelligence"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Track industry landscape, product announcements, feature parity gaps, and positioning shifts."
   category: management
   tags: ["market-analysis", "industry", "landscape", "positioning", "feature-parity"]
@@ -97,6 +97,130 @@ egress:
   allowedDomains: ["newsapi.org", "api.rss2json.com", "*.producthunt.com"]
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-industry
+      name: "Set business industry"
+      description: "Industry context scopes which market segments and trends to monitor"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Market intelligence must be scoped to the relevant industry landscape"
+      ui:
+        inputType: select
+        options:
+          - { value: data_integration, label: "Data Integration / ETL" }
+          - { value: saas, label: "SaaS / Software" }
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: devtools, label: "Developer Tools / Infrastructure" }
+        prefillFrom: "workspace.industry"
+    - id: set-product-catalog
+      name: "Define product capabilities"
+      description: "Current product features used for feature parity gap analysis"
+      type: north_star
+      key: product_catalog
+      group: configuration
+      priority: required
+      reason: "Feature gap analysis requires knowing what the product currently offers"
+      ui:
+        inputType: text
+        placeholder: '["real-time CDC", "50+ sink connectors", "IaC config management", "workflow automation"]'
+        helpUrl: "https://docs.schemabounce.com/bots/market-intelligence/product-catalog"
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Search for industry news, product announcements, and positioning shifts"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Market monitoring requires searching industry news and product announcements"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa Search"
+    - id: set-priorities
+      name: "Define monitoring priorities"
+      description: "Which market dimensions to prioritize in analysis"
+      type: north_star
+      key: priorities
+      group: configuration
+      priority: recommended
+      reason: "Focus monitoring on the competitive dimensions that matter most"
+      ui:
+        inputType: text
+        placeholder: '["real-time latency positioning", "open-source alternatives", "enterprise feature parity"]'
+    - id: connect-firecrawl
+      name: "Connect web crawler"
+      description: "Crawl industry blogs, press releases, and product pages for landscape analysis"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: recommended
+      reason: "Deep crawling of product pages and analyst reports enriches landscape briefings"
+      ui:
+        icon: crawl
+        actionLabel: "Connect Firecrawl"
+    - id: import-deal-insights
+      name: "Import deal insights"
+      description: "Lost deal reasons help correlate feature gaps with revenue impact"
+      type: data_presence
+      entityType: deal_insights
+      minCount: 5
+      group: data
+      priority: recommended
+      reason: "Deal loss data enables feature gap prioritization by revenue impact"
+      ui:
+        actionLabel: "Import Deal Insights"
+        emptyState: "No deal insights found. Pair with sales-pipeline bot or import manually."
+goals:
+  - name: weekly_landscape_report
+    description: "Produce a market landscape briefing every run cycle"
+    category: primary
+    metric:
+      type: count
+      entity: mi_landscape_reports
+    target:
+      operator: ">="
+      value: 1
+      period: weekly
+      condition: "one landscape report per weekly run"
+  - name: feature_gap_tracking
+    description: "Maintain current feature parity analysis with gap status"
+    category: primary
+    metric:
+      type: count
+      source: memory
+      namespace: feature_gaps
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "feature gaps tracked and updated each cycle"
+  - name: deal_correlation
+    description: "Correlate feature gaps with deal loss patterns when data available"
+    category: secondary
+    metric:
+      type: count
+      entity: mi_findings
+      filter: { type: "deal_gap_correlation" }
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "when deal_insights data exists"
+  - name: landscape_baselines
+    description: "Market baselines maintained to distinguish real shifts from noise"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: landscape_baselines
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "cumulative growth"
 ---
 
 # Market Intelligence

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ux-researcher
   displayName: "UX Researcher"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "User research synthesis, feedback analysis, and usability insight generation."
   category: design
   tags: ["ux", "research", "usability", "feedback", "user-experience", "design"]
@@ -87,6 +87,128 @@ automations:
       prompt: "Categorize this feedback by theme and severity."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-exa
+      name: "Connect Exa for UX research"
+      description: "Search for UX best practices, competitor product experiences, and usability benchmarks"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "UX benchmark research and competitor analysis require web search capabilities"
+      ui:
+        icon: exa
+        actionLabel: "Connect Exa"
+    - id: connect-hyperbrowser
+      name: "Connect Hyperbrowser"
+      description: "Browse competitor products and review sites to analyze user experience patterns"
+      type: mcp_connection
+      ref: tools/hyperbrowser
+      group: connections
+      priority: required
+      reason: "Direct product browsing is needed to evaluate competitor UX flows and identify patterns"
+      ui:
+        icon: hyperbrowser
+        actionLabel: "Connect Hyperbrowser"
+    - id: set-industry
+      name: "Define your industry"
+      description: "Industry context shapes which UX benchmarks and best practices are most relevant"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "UX standards differ by industry — e-commerce checkout patterns differ from SaaS onboarding patterns"
+      ui:
+        inputType: select
+        options:
+          - { value: saas, label: "SaaS / Software" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: fintech, label: "FinTech / Banking" }
+          - { value: healthcare, label: "Healthcare" }
+          - { value: marketplace, label: "Marketplace / Platform" }
+          - { value: media, label: "Media / Content" }
+          - { value: other, label: "Other" }
+        default: saas
+    - id: import-feedback
+      name: "Import user feedback"
+      description: "User feedback records are the primary data source for pain point analysis"
+      type: data_presence
+      entityType: user_feedback
+      minCount: 3
+      group: data
+      priority: required
+      reason: "Findings require at least 3 clustered signals — individual feedback items are not reported as findings"
+      ui:
+        actionLabel: "Import Feedback"
+        emptyState: "No user feedback found. Import feedback from surveys, support tickets, or in-app feedback tools."
+    - id: set-priorities
+      name: "Set product priorities"
+      description: "Current priorities help the bot focus UX analysis on the areas that matter most"
+      type: north_star
+      key: priorities
+      group: configuration
+      priority: recommended
+      reason: "Pain point recommendations are more actionable when aligned with current product focus areas"
+      ui:
+        inputType: text
+        placeholder: "e.g., onboarding conversion, mobile experience, accessibility"
+        helpText: "List your current product focus areas so UX findings are prioritized accordingly"
+    - id: connect-firecrawl
+      name: "Connect Firecrawl for qualitative research"
+      description: "Crawl user forums, review sites, and community discussions for qualitative feedback"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: recommended
+      reason: "Community discussions and review sites provide unfiltered qualitative user sentiment"
+      ui:
+        icon: firecrawl
+        actionLabel: "Connect Firecrawl"
+goals:
+  - name: pain_point_identification
+    description: "Cluster user feedback into themed pain points with actionable recommendations"
+    category: primary
+    metric:
+      type: count
+      entity: ux_findings
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "when user_feedback records exist with sufficient volume"
+  - name: recommendation_quality
+    description: "Every UX finding includes a concrete improvement recommendation — no pain points without solutions"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: ux_findings, filter: { has_recommendation: true } }
+      denominator: { entity: ux_findings }
+    target:
+      operator: "=="
+      value: 1.0
+      period: per_run
+  - name: pain_points_memory_maintained
+    description: "Keep pain_points memory current to merge new signals into existing themes"
+    category: health
+    metric:
+      type: boolean
+      check: pain_points_namespace_updated
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+  - name: critical_ux_escalation
+    description: "Escalate usability issues causing measurable churn or data loss to executive-assistant"
+    category: secondary
+    metric:
+      type: boolean
+      check: critical_ux_issues_escalated
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+      condition: "when churn-causing or data-loss UX issues are detected"
 ---
 
 # UX Researcher

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: legal-compliance
   displayName: "Legal & Compliance"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Contract review queue, GDPR/SOC2 compliance tracking, regulatory change monitoring."
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
@@ -77,6 +77,128 @@ skills:
   - ref: "skills/record-monitoring@1.0.0"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-compliance-requirements
+      name: "Define compliance frameworks"
+      description: "Which regulatory frameworks to actively monitor (GDPR, SOC2, PCI, HIPAA, etc.)"
+      type: north_star
+      key: compliance_requirements
+      group: configuration
+      priority: required
+      reason: "Cannot scope compliance monitoring without knowing which frameworks apply"
+      ui:
+        inputType: text
+        placeholder: '["GDPR", "SOC2", "PCI-DSS"]'
+        helpUrl: "https://docs.schemabounce.com/bots/legal-compliance/frameworks"
+    - id: set-industry
+      name: "Set business industry"
+      description: "Industry determines which regulatory changes are relevant"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Regulatory monitoring must be scoped to industry-relevant legislation"
+      ui:
+        inputType: select
+        options:
+          - { value: saas, label: "SaaS / Software" }
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: healthcare, label: "Healthcare" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: professional_services, label: "Professional Services" }
+        prefillFrom: "workspace.industry"
+    - id: connect-agentmail
+      name: "Verify email identity"
+      description: "Bot sends compliance alerts, contract reminders, and deadline notifications"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Compliance deadline alerts and contract renewal reminders require email"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+    - id: import-contracts
+      name: "Import contracts"
+      description: "Existing contracts needed for review queue and expiry tracking"
+      type: data_presence
+      entityType: contracts
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot monitor contract deadlines or review queue without contract records"
+      ui:
+        actionLabel: "Import Contracts"
+        emptyState: "No contracts found. Import from your contract management system."
+    - id: connect-composio
+      name: "Connect contract management platform"
+      description: "Links your CLM or legal tech platform for automated contract sync"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated contract data import keeps the review queue current"
+      ui:
+        icon: composio
+        actionLabel: "Connect CLM Platform"
+    - id: set-compliance-calendar
+      name: "Set initial compliance deadlines"
+      description: "Known certification expirations, filing dates, and audit windows"
+      type: manual
+      instructions: "Enter your key compliance deadlines: certification renewal dates, regulatory filing deadlines, and upcoming audit windows. The bot will track these in its compliance calendar."
+      group: configuration
+      priority: recommended
+      reason: "Pre-loading known deadlines prevents missed compliance dates"
+      ui:
+        actionLabel: "Enter Deadlines"
+goals:
+  - name: deadline_monitoring
+    description: "No compliance deadlines missed — all tracked and alerted in advance"
+    category: primary
+    metric:
+      type: count
+      entity: legal_alerts
+      filter: { type: "deadline_breach" }
+    target:
+      operator: "=="
+      value: 0
+      period: monthly
+      condition: "zero missed compliance deadlines"
+  - name: contract_review
+    description: "Expiring contracts flagged at least 30 days before deadline"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: legal_findings, filter: { type: "contract_expiry", advance_days: { "$gte": 30 } } }
+      denominator: { entity: contracts, filter: { status: "expiring" } }
+    target:
+      operator: ">"
+      value: 0.95
+      period: monthly
+      condition: "95% of expiring contracts flagged with 30+ days notice"
+  - name: compliance_posture
+    description: "All configured frameworks assessed each review cycle"
+    category: secondary
+    metric:
+      type: boolean
+      check: "all_frameworks_reviewed"
+    target:
+      operator: "=="
+      value: 1
+      period: weekly
+  - name: regulatory_tracking
+    description: "Regulatory change patterns tracked for anticipatory compliance"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: learned_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Legal & Compliance

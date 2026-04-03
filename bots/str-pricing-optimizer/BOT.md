@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-pricing-optimizer
   displayName: "Dynamic Pricing"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Analyzes market conditions, competitor rates, and demand patterns to optimize nightly rates and maximize revenue."
   category: finance
   tags: ["str", "dynamic-pricing", "revenue-management", "rate-optimization", "hospitality"]
@@ -90,6 +90,149 @@ presence:
     search: true
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-search
+      name: "Connect web search"
+      description: "Enables market research, competitor pricing analysis, and local event discovery"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Rate optimization requires real-time data on local events, competitor pricing, and demand signals"
+      ui:
+        icon: search
+        actionLabel: "Connect Search"
+        helpUrl: "https://docs.schemabounce.com/integrations/exa"
+    - id: connect-browser
+      name: "Connect web browser"
+      description: "Browses Airbnb, VRBO, and AirDNA for competitor rate and occupancy data"
+      type: mcp_connection
+      ref: tools/hyperbrowser
+      group: connections
+      priority: required
+      reason: "Competitor rate analysis requires browsing actual listing pages and market data platforms"
+      ui:
+        icon: browser
+        actionLabel: "Connect Browser"
+    - id: set-target-occupancy
+      name: "Set target occupancy rate"
+      description: "Your occupancy goal — pricing recommendations stay within this guardrail"
+      type: north_star
+      key: target_occupancy_rate
+      group: configuration
+      priority: required
+      reason: "Rate recommendations are bounded to avoid pushing occupancy below 50% of this target"
+      ui:
+        inputType: text
+        placeholder: "75"
+        helpUrl: "https://docs.schemabounce.com/bots/str-pricing-optimizer/occupancy"
+    - id: set-market-type
+      name: "Set market type"
+      description: "Determines seasonal patterns — beach peaks in summer, ski in winter"
+      type: north_star
+      key: market_type
+      group: configuration
+      priority: required
+      reason: "Seasonal pricing adjustments depend entirely on the market type"
+      ui:
+        inputType: select
+        options:
+          - { value: urban, label: "Urban / City" }
+          - { value: beach, label: "Beach / Coastal" }
+          - { value: mountain, label: "Mountain / Ski" }
+          - { value: rural, label: "Rural / Countryside" }
+          - { value: lake, label: "Lake / Waterfront" }
+    - id: set-average-rate
+      name: "Set average nightly rate"
+      description: "Baseline rate for the portfolio — used as a reference for rate recommendations"
+      type: north_star
+      key: average_nightly_rate
+      group: configuration
+      priority: required
+      reason: "Rate change alerts use this baseline to flag recommendations exceeding 30% deviation"
+      ui:
+        inputType: text
+        placeholder: "150"
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends pricing recommendations and revenue reports via email"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Pricing reports and rate adjustment recommendations are delivered by email"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+    - id: import-pricing-calendar
+      name: "Import pricing calendar"
+      description: "Current rates and availability are needed as the baseline for optimization"
+      type: data_presence
+      entityType: str_pricing_calendar
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Cannot recommend rate changes without knowing current pricing and availability"
+      ui:
+        actionLabel: "Import Calendar"
+        emptyState: "No pricing data found. Connect your PMS to import current rates."
+goals:
+  - name: rate_optimization_output
+    description: "Produce actionable rate recommendations for the portfolio"
+    category: primary
+    metric:
+      type: count
+      entity: str_pricing_calendar
+      filter: { status: "recommended" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when properties have upcoming unbooked dates"
+    feedback:
+      enabled: true
+      entityType: str_findings
+      actions:
+        - { value: accepted, label: "Rate accepted" }
+        - { value: too_high, label: "Rate too high" }
+        - { value: too_low, label: "Rate too low" }
+  - name: gap_night_detection
+    description: "Identify and price orphan nights between bookings to maximize occupancy"
+    category: primary
+    metric:
+      type: count
+      entity: str_findings
+      filter: { category: "gap_night" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when gap nights exist in the booking calendar"
+  - name: market_intelligence
+    description: "Track competitor rates and demand patterns for pricing context"
+    category: secondary
+    metric:
+      type: count
+      source: memory
+      namespace: market_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: seasonal_data_coverage
+    description: "Build and maintain seasonal pricing patterns per market type"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: seasonal_data
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Dynamic Pricing

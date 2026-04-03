@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-channel-manager
   displayName: "Channel Manager"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Syncs listings across Airbnb, VRBO, Lodgify, and Facebook Marketplace — detects calendar conflicts and monitors listing health."
   category: operations
   tags: ["str", "channel-management", "airbnb", "vrbo", "lodgify", "calendar-sync", "hospitality"]
@@ -90,6 +90,136 @@ presence:
     search: true
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-pms
+      name: "Connect property management platform"
+      description: "Links your PMS for automated listing synchronization across channels"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary integration for syncing listings, calendars, and availability across booking platforms"
+      ui:
+        icon: property
+        actionLabel: "Connect PMS"
+        helpUrl: "https://docs.schemabounce.com/integrations/property-management"
+    - id: connect-browser
+      name: "Connect web browser"
+      description: "Enables browsing Airbnb, VRBO, and Lodgify to verify listing accuracy"
+      type: mcp_connection
+      ref: tools/hyperbrowser
+      group: connections
+      priority: required
+      reason: "Listing health verification requires browsing actual platform pages to check sync status"
+      ui:
+        icon: browser
+        actionLabel: "Connect Browser"
+    - id: set-booking-channels
+      name: "Set active booking channels"
+      description: "Which platforms your properties are listed on"
+      type: north_star
+      key: booking_channels
+      group: configuration
+      priority: required
+      reason: "The bot needs to know which channels to monitor for calendar conflicts and sync issues"
+      ui:
+        inputType: text
+        placeholder: '["airbnb", "vrbo", "lodgify", "facebook_marketplace"]'
+        helpUrl: "https://docs.schemabounce.com/bots/str-channel-manager/channels"
+    - id: set-primary-channel
+      name: "Set primary booking channel"
+      description: "The channel that takes priority when sync conflicts arise"
+      type: north_star
+      key: primary_channel
+      group: configuration
+      priority: required
+      reason: "Conflict resolution requires knowing which channel is authoritative for availability"
+      ui:
+        inputType: select
+        options:
+          - { value: airbnb, label: "Airbnb" }
+          - { value: vrbo, label: "VRBO" }
+          - { value: lodgify, label: "Lodgify" }
+          - { value: facebook_marketplace, label: "Facebook Marketplace" }
+    - id: import-listings
+      name: "Import channel listings"
+      description: "Existing listings enable sync monitoring and health scoring"
+      type: data_presence
+      entityType: str_channel_listings
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Cannot detect calendar conflicts or monitor listing health without listing data"
+      ui:
+        actionLabel: "Import Listings"
+        emptyState: "No listings found. Connect your PMS to import listings from all channels."
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends sync reports and calendar conflict alerts to property owners"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Calendar conflict alerts and sync failure reports are sent via email"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+goals:
+  - name: calendar_sync_accuracy
+    description: "Keep availability calendars consistent across all booking channels"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_channel_listings, filter: { sync_status: "synced" } }
+      denominator: { entity: str_channel_listings }
+    target:
+      operator: ">"
+      value: 0.95
+      period: daily
+    feedback:
+      enabled: true
+      entityType: str_findings
+      actions:
+        - { value: correct, label: "Sync accurate" }
+        - { value: missed_conflict, label: "Missed a conflict" }
+        - { value: false_alarm, label: "False alarm" }
+  - name: conflict_detection
+    description: "Detect and alert on calendar conflicts before they become double-bookings"
+    category: primary
+    metric:
+      type: count
+      entity: str_alerts
+      filter: { category: "calendar_conflict" }
+    target:
+      operator: ">="
+      value: 0
+      period: weekly
+      condition: "zero conflicts is the ideal — alerts prove detection is working when issues arise"
+  - name: listing_health_monitoring
+    description: "Track listing health scores across all platforms"
+    category: secondary
+    metric:
+      type: count
+      entity: str_findings
+      filter: { category: "listing_health" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when listings exist across channels"
+  - name: channel_knowledge
+    description: "Build knowledge of platform-specific quirks and rate limits"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: channel_quirks
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Channel Manager

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-guest-communicator
   displayName: "Guest Communicator"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Auto-responds to guest messages across all channels — handles pre-booking, check-in, during-stay, and post-stay communication."
   category: support
   tags: ["str", "guest-communication", "messaging", "superhost", "response-time", "hospitality"]
@@ -103,6 +103,134 @@ presence:
     provider: agentphone
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-booking-platforms
+      name: "Connect booking platforms"
+      description: "Links your booking platforms for guest messaging and reservation access"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source for guest messages, booking details, and reservation status"
+      ui:
+        icon: property
+        actionLabel: "Connect Platforms"
+        helpUrl: "https://docs.schemabounce.com/integrations/booking-platforms"
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends and receives guest communications via email"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Guest inquiries, check-in instructions, and follow-ups require email capability"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+    - id: set-check-in-method
+      name: "Set check-in method"
+      description: "How guests access the property — determines what instructions are sent"
+      type: north_star
+      key: check_in_method
+      group: configuration
+      priority: required
+      reason: "Check-in instructions vary by method (smart lock, lockbox, in-person) and must be accurate"
+      ui:
+        inputType: select
+        options:
+          - { value: smart_lock, label: "Smart Lock (code)" }
+          - { value: lockbox, label: "Lockbox" }
+          - { value: in_person, label: "In-Person Key Handoff" }
+          - { value: keypad, label: "Keypad Entry" }
+    - id: set-booking-channels
+      name: "Set active booking channels"
+      description: "Which platforms guests book through — determines communication tone"
+      type: north_star
+      key: booking_channels
+      group: configuration
+      priority: required
+      reason: "Tone and format must adapt per platform (casual on Airbnb, formal on VRBO)"
+      ui:
+        inputType: text
+        placeholder: '["airbnb", "vrbo", "lodgify", "facebook_marketplace"]'
+    - id: set-access-credentials
+      name: "Store property access credentials"
+      description: "Door codes, wifi passwords, and entry instructions per property"
+      type: secret
+      secretName: property_access_credentials
+      group: configuration
+      priority: required
+      reason: "Check-in messages include door codes and wifi — these must be stored securely"
+      ui:
+        inputType: text
+        placeholder: '{"door_code": "****", "wifi_password": "****", "lockbox_location": "..."}'
+        helpUrl: "https://docs.schemabounce.com/bots/str-guest-communicator/credentials"
+    - id: import-bookings
+      name: "Import active bookings"
+      description: "Current bookings provide guest context for communication"
+      type: data_presence
+      entityType: str_bookings
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Guest context (dates, property, status) is needed to personalize messages"
+      ui:
+        actionLabel: "Import Bookings"
+        emptyState: "No bookings found. Connect your booking platforms to import reservations."
+goals:
+  - name: response_time
+    description: "Respond to guest messages within 15 minutes to protect Superhost status"
+    category: primary
+    metric:
+      type: threshold
+      measurement: avg_minutes_to_first_response
+    target:
+      operator: "<"
+      value: 15
+      period: daily
+    feedback:
+      enabled: true
+      entityType: str_findings
+      actions:
+        - { value: helpful, label: "Helpful response" }
+        - { value: inaccurate, label: "Inaccurate info" }
+        - { value: wrong_tone, label: "Wrong tone" }
+  - name: message_coverage
+    description: "All guest messages receive a response — no unanswered inquiries"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_messages, filter: { direction: "outbound", in_reply_to: "exists" } }
+      denominator: { entity: str_messages, filter: { direction: "inbound", requires_response: true } }
+    target:
+      operator: ">"
+      value: 0.95
+      period: weekly
+  - name: escalation_accuracy
+    description: "Emergencies are escalated immediately — no missed lockouts or safety issues"
+    category: secondary
+    metric:
+      type: count
+      entity: str_alerts
+      filter: { category: "guest_emergency" }
+    target:
+      operator: ">="
+      value: 0
+      period: weekly
+      condition: "alerts prove the escalation path is working when emergencies arise"
+  - name: response_template_growth
+    description: "Build reusable response patterns from successful guest interactions"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: response_templates
+    target:
+      operator: ">"
+      value: 5
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Guest Communicator

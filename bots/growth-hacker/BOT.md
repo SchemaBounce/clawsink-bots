@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: growth-hacker
   displayName: "Growth Hacker"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Rapid experimentation, viral loop design, and acquisition channel optimization."
   category: marketing
   tags: ["growth", "experiments", "acquisition", "viral", "funnels", "optimization"]
@@ -95,6 +95,132 @@ automations:
       prompt: "Analyze campaign ROI and recommend next action."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-industry
+      name: "Set business industry"
+      description: "Industry context determines relevant growth benchmarks and channel strategies"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Growth tactics and acquisition channels vary significantly by industry"
+      ui:
+        inputType: select
+        options:
+          - { value: saas, label: "SaaS / Software" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: marketplace, label: "Marketplace" }
+          - { value: consumer, label: "Consumer App" }
+        prefillFrom: "workspace.industry"
+    - id: set-growth-stage
+      name: "Set growth stage"
+      description: "Current growth stage determines experiment priorities and risk tolerance"
+      type: north_star
+      key: stage
+      group: configuration
+      priority: required
+      reason: "Pre-PMF companies need different experiments than scaling companies"
+      ui:
+        inputType: select
+        options:
+          - { value: pre_pmf, label: "Pre-Product-Market Fit" }
+          - { value: early_growth, label: "Early Growth" }
+          - { value: scaling, label: "Scaling" }
+          - { value: mature, label: "Mature / Optimization" }
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Search for growth tactics, case studies, and channel benchmarks"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Growth experiments require external research on tactics and benchmarks"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa Search"
+    - id: connect-composio
+      name: "Connect ad platforms"
+      description: "Links Google Ads, Meta Ads, and analytics for campaign data"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated campaign data import enables ROI analysis and channel optimization"
+      ui:
+        icon: composio
+        actionLabel: "Connect Ad Platforms"
+    - id: import-acquisition-metrics
+      name: "Import acquisition metrics"
+      description: "Historical channel performance data enables baseline comparisons"
+      type: data_presence
+      entityType: acquisition_metrics
+      minCount: 5
+      group: data
+      priority: recommended
+      reason: "Baselines from existing channel data improve experiment design and kill criteria"
+      ui:
+        actionLabel: "Import Metrics"
+        emptyState: "No acquisition metrics found. Import from your analytics platform or enter manually."
+    - id: set-priorities
+      name: "Define growth priorities"
+      description: "Which channels and metrics to prioritize for experimentation"
+      type: north_star
+      key: priorities
+      group: configuration
+      priority: recommended
+      reason: "Focus experiments on the channels that matter most to your growth goals"
+      ui:
+        inputType: text
+        placeholder: '["reduce CAC on paid channels", "increase referral viral coefficient", "optimize conversion funnel"]'
+goals:
+  - name: run_experiments
+    description: "Maintain active growth experiments across priority channels"
+    category: primary
+    metric:
+      type: count
+      entity: growth_experiments
+      filter: { status: "running" }
+    target:
+      operator: ">="
+      value: 1
+      period: weekly
+      condition: "at least one active experiment at all times"
+  - name: analyze_campaign_roi
+    description: "Every campaign result analyzed with clear next-action recommendation"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: growth_findings, filter: { source: "campaign_analysis" } }
+      denominator: { entity: campaign_results }
+    target:
+      operator: ">"
+      value: 0.95
+      period: weekly
+      condition: "all campaign results get ROI analysis within one run cycle"
+  - name: kill_underperformers
+    description: "Experiments meeting kill criteria are stopped promptly"
+    category: secondary
+    metric:
+      type: boolean
+      check: "kill_criteria_enforced"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: channel_tracking
+    description: "Channel performance memory updated with per-channel metrics each run"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: channel_performance
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "cumulative growth"
 ---
 
 # Growth Hacker

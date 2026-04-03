@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-manager
   displayName: "Property Manager"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Lead coordinator for short-term rental operations — consolidates reports, manages portfolio dashboard, coordinates specialists."
   category: operations
   tags: ["str", "property-management", "portfolio", "coordination", "lead", "hospitality"]
@@ -101,6 +101,147 @@ presence:
     provider: agentphone
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-pms
+      name: "Connect property management platform"
+      description: "Links your PMS for portfolio-wide operations, reporting, and coordination"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Central integration for portfolio data, property status, and cross-bot coordination"
+      ui:
+        icon: property
+        actionLabel: "Connect PMS"
+        helpUrl: "https://docs.schemabounce.com/integrations/property-management"
+    - id: setup-email
+      name: "Verify email identity"
+      description: "Bot sends daily portfolio briefings and critical alerts to property owners"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Owner communication, daily briefings, and emergency alerts require email capability"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+    - id: set-property-count
+      name: "Set property count"
+      description: "Number of properties in the portfolio — drives briefing scope and alert thresholds"
+      type: north_star
+      key: property_count
+      group: configuration
+      priority: required
+      reason: "Portfolio-level KPIs and alert thresholds scale with property count"
+      ui:
+        inputType: text
+        placeholder: "5"
+        helpUrl: "https://docs.schemabounce.com/bots/str-property-manager/setup"
+    - id: set-target-occupancy
+      name: "Set target occupancy rate"
+      description: "Portfolio occupancy goal — used in daily briefings and performance tracking"
+      type: north_star
+      key: target_occupancy_rate
+      group: configuration
+      priority: required
+      reason: "Daily briefings compare actual occupancy against this target to flag underperformance"
+      ui:
+        inputType: text
+        placeholder: "75"
+    - id: set-market-type
+      name: "Set market type"
+      description: "Market context for seasonal adjustments and cross-domain coordination"
+      type: north_star
+      key: market_type
+      group: configuration
+      priority: recommended
+      reason: "Seasonal patterns and market benchmarks differ by market type"
+      ui:
+        inputType: select
+        options:
+          - { value: urban, label: "Urban / City" }
+          - { value: beach, label: "Beach / Coastal" }
+          - { value: mountain, label: "Mountain / Ski" }
+          - { value: rural, label: "Rural / Countryside" }
+          - { value: lake, label: "Lake / Waterfront" }
+    - id: import-properties
+      name: "Import property records"
+      description: "Property data is the foundation for all portfolio management"
+      type: data_presence
+      entityType: str_properties
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot generate briefings, track status, or coordinate bots without property records"
+      ui:
+        actionLabel: "Import Properties"
+        emptyState: "No properties found. Connect your PMS to import your portfolio."
+goals:
+  - name: daily_briefing_delivery
+    description: "Produce and distribute daily portfolio briefings to all specialist bots"
+    category: primary
+    metric:
+      type: count
+      entity: str_findings
+      filter: { category: "daily_briefing" }
+    target:
+      operator: ">="
+      value: 1
+      period: daily
+    feedback:
+      enabled: true
+      entityType: str_findings
+      actions:
+        - { value: useful, label: "Useful briefing" }
+        - { value: missing_data, label: "Missing data" }
+        - { value: too_long, label: "Too detailed" }
+  - name: alert_acknowledgment
+    description: "All specialist bot alerts are acknowledged and actioned within the same run"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_findings, filter: { category: "alert_response" } }
+      denominator: { entity: str_alerts, filter: { status: "received" } }
+    target:
+      operator: ">"
+      value: 0.95
+      period: weekly
+  - name: portfolio_status_coverage
+    description: "Every property has an up-to-date status (active, blocked, maintenance, seasonal)"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: str_properties, filter: { status: "exists" } }
+      denominator: { entity: str_properties }
+    target:
+      operator: "=="
+      value: 1.0
+      period: weekly
+  - name: cross_domain_coordination
+    description: "Detect and act on cross-domain correlations (e.g., review trends triggering cleaning changes)"
+    category: secondary
+    metric:
+      type: count
+      entity: str_findings
+      filter: { category: "cross_domain" }
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "when correlations exist across specialist domains"
+  - name: portfolio_health_tracking
+    description: "Maintain week-over-week KPI trend data for portfolio performance"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: portfolio_health
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Property Manager

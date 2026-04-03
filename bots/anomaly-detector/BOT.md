@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
@@ -66,6 +66,88 @@ skills:
   - ref: "skills/anomaly-detection@1.0.0"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: configure-metric-baselines
+      name: "Set metric baselines"
+      description: "Configure initial baseline values for key metrics so the bot can detect deviations from normal ranges."
+      type: config
+      group: configuration
+      priority: required
+      reason: "The bot compares incoming metrics against baselines stored in the metric_baselines memory namespace. Without initial baselines, all values appear normal."
+      ui:
+        target:
+          namespace: "metric_baselines"
+          key: "initial_baselines"
+    - id: seed-metrics-entity
+      name: "Seed metrics records"
+      description: "Ensure at least a few metrics records exist so the bot has data to analyze on first run."
+      type: data_presence
+      group: data
+      priority: required
+      reason: "The bot is CDC-triggered on entityType=metrics. Without existing records, it has no historical context for comparison."
+      ui:
+        entityType: "metrics"
+        minCount: 5
+    - id: configure-alert-rules
+      name: "Configure alert rules"
+      description: "Optionally seed alert_rules records with custom thresholds that override default statistical detection."
+      type: data_presence
+      group: data
+      priority: recommended
+      reason: "User-configured thresholds in alert_rules override default 2-sigma detection, letting operators tune sensitivity per metric."
+      ui:
+        entityType: "alert_rules"
+        minCount: 1
+    - id: set-north-star-mission
+      name: "Define North Star mission"
+      description: "Set the workspace North Star mission so the bot understands which metrics matter most to the business."
+      type: north_star
+      group: configuration
+      priority: required
+      reason: "The bot reads zone1 mission to prioritize which anomalies are critical vs informational."
+      ui:
+        key: "mission"
+    - id: verify-sre-devops-active
+      name: "Ensure SRE/DevOps bot is active"
+      description: "The anomaly detector escalates infrastructure anomalies to sre-devops. Confirm that bot is deployed."
+      type: manual
+      group: external
+      priority: recommended
+      reason: "Critical and high-severity infrastructure anomalies are sent to sre-devops. Without it, those alerts go unprocessed."
+      ui:
+        instructions: "Deploy the sre-devops bot from the marketplace, or confirm it is already active in your workspace."
+goals:
+  - id: anomalies-detected
+    name: "Anomalies detected"
+    description: "Total anomaly findings written across all severity levels."
+    metricType: count
+    target: "> 0 per week"
+    category: primary
+    feedback:
+      question: "Are the detected anomalies relevant and actionable?"
+      options: ["yes", "mostly", "too noisy", "missing real issues"]
+  - id: critical-alert-rate
+    name: "Critical alert accuracy"
+    description: "Percentage of critical/high alerts that corresponded to real incidents."
+    metricType: rate
+    target: "> 80%"
+    category: primary
+    feedback:
+      question: "Were critical alerts genuine issues that needed attention?"
+      options: ["yes", "some false positives", "mostly false positives"]
+  - id: baseline-freshness
+    name: "Baseline freshness"
+    description: "The metric_baselines memory namespace is updated after each run."
+    metricType: boolean
+    target: "updated within last 24h"
+    category: health
+  - id: detection-latency
+    name: "Detection latency"
+    description: "Time between metric record creation and anomaly finding generation."
+    metricType: threshold
+    target: "< 5 minutes"
+    category: primary
 ---
 
 # Anomaly Detector

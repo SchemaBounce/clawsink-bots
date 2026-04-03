@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-reporter
   displayName: "Executive Reporter"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "C-suite executive summaries, KPI dashboards, and cross-domain business intelligence."
   category: analytics
   tags: ["executive", "reports", "KPI", "dashboards", "business-intelligence", "c-suite"]
@@ -88,6 +88,123 @@ automations:
   triggers: []
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-company-goals
+      name: "Define company goals"
+      description: "Current quarter/year business objectives and KPI targets"
+      type: north_star
+      key: company_goals
+      group: configuration
+      priority: required
+      reason: "Cannot generate meaningful executive reports without business objectives to measure against"
+      ui:
+        inputType: text
+        placeholder: '{"q1_revenue": "$2M", "nps_target": 50, "churn_target": "< 5%"}'
+    - id: set-reporting-cadence
+      name: "Set reporting cadence"
+      description: "Preferred reporting frequency and delivery timing"
+      type: north_star
+      key: reporting_cadence
+      group: configuration
+      priority: required
+      reason: "Controls when reports are generated and delivered to stakeholders"
+      ui:
+        inputType: text
+        placeholder: '{"frequency": "weekly", "delivery_day": "Monday", "delivery_time": "09:00"}'
+    - id: set-mission
+      name: "Define company mission"
+      description: "Company mission provides strategic context for all executive summaries"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: recommended
+      reason: "Aligns report narrative with company direction and strategic priorities"
+      ui:
+        inputType: text
+        placeholder: "e.g., Enable real-time data infrastructure for every business"
+    - id: connect-exa
+      name: "Connect Exa for market context"
+      description: "Search for industry benchmarks and market data to contextualize KPIs"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Executive reports need industry context — benchmarks, competitor signals, market trends"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa"
+    - id: connect-agentmail
+      name: "Connect email for report delivery"
+      description: "Distribute executive summaries and KPI reports to C-suite"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: recommended
+      reason: "Primary delivery channel for weekly executive summaries"
+      ui:
+        icon: mail
+        actionLabel: "Connect Email"
+    - id: set-kpi-baselines
+      name: "Configure KPI baselines"
+      description: "Baseline values for key metrics to detect significant deviations"
+      type: config
+      group: configuration
+      target: { namespace: kpi_baselines, key: initial_baselines }
+      priority: recommended
+      reason: "Trend analysis requires baselines — without them, first reports lack historical context"
+      ui:
+        inputType: text
+        placeholder: '{"mrr": 100000, "nps": 45, "churn_rate": 0.06, "uptime": 0.999}'
+goals:
+  - name: report_generation
+    description: "Generate executive summaries on schedule with cross-domain coverage"
+    category: primary
+    metric:
+      type: count
+      entity: executive_summaries
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+  - name: kpi_deviation_detection
+    description: "Flag KPI deviations beyond threshold before the next reporting cycle"
+    category: primary
+    metric:
+      type: boolean
+      check: "critical_kpi_deviations_reported"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+      condition: "when KPI deviation exceeds 10% from baseline"
+  - name: report_accuracy
+    description: "Include both quantitative metrics and qualitative context in every report"
+    category: secondary
+    metric:
+      type: boolean
+      check: "report_includes_metrics_and_context"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+    feedback:
+      enabled: true
+      entityType: executive_summaries
+      actions:
+        - { value: useful, label: "Actionable" }
+        - { value: too_detailed, label: "Too detailed" }
+        - { value: missing_context, label: "Missing context" }
+  - name: baseline_maintenance
+    description: "Keep KPI baselines current for accurate trend reporting"
+    category: health
+    metric:
+      type: boolean
+      check: "kpi_baselines_updated_after_report"
+    target:
+      operator: "=="
+      value: 1
+      period: weekly
 ---
 
 # Executive Reporter

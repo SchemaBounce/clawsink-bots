@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: tech-debt-tracker
   displayName: "Tech Debt Tracker"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Analyzes code review findings and quality metrics to identify technical debt patterns, track debt over time, and suggest refactoring priorities."
   category: engineering
   tags: ["tech-debt", "code-quality", "refactoring", "engineering"]
@@ -74,6 +74,118 @@ mcpServers:
     reason: "Tracks technical debt issues across repositories"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-quality-standards
+      name: "Define quality standards"
+      description: "Set coverage thresholds, complexity limits, and acceptable duplication levels"
+      type: north_star
+      key: quality_standards
+      group: configuration
+      priority: required
+      reason: "Cannot classify debt severity without workspace-specific quality thresholds"
+      ui:
+        inputType: json
+        placeholder: '{"min_coverage": 80, "max_complexity": 15, "max_duplication_pct": 5}'
+    - id: set-tech-stack
+      name: "Set tech stack"
+      description: "Languages, frameworks, and tools in use — contextualizes debt analysis"
+      type: north_star
+      key: tech_stack
+      group: configuration
+      priority: required
+      reason: "Debt classification and remediation advice depend on the technology context"
+      ui:
+        inputType: text
+        placeholder: "TypeScript, React, Go, PostgreSQL"
+    - id: connect-github
+      name: "Connect GitHub"
+      description: "Tracks technical debt issues and correlates with code review findings"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: recommended
+      reason: "Enables issue tracking, duplicate detection, and PR-level debt correlation"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+    - id: import-review-findings
+      name: "Import code review findings"
+      description: "Seed with existing findings so debt patterns are detected from day one"
+      type: data_presence
+      entityType: review_findings
+      minCount: 5
+      group: data
+      priority: recommended
+      reason: "Pattern detection requires multiple findings — sparse data delays actionable insights"
+      ui:
+        actionLabel: "Import Findings"
+        emptyState: "No review findings yet. Code Reviewer bot will generate these, or import from your code quality tool."
+    - id: import-quality-metrics
+      name: "Import quality metrics"
+      description: "Baseline coverage, complexity, and duplication data for trend tracking"
+      type: data_presence
+      entityType: code_quality_metrics
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Trend analysis needs at least one data point to establish a baseline"
+      ui:
+        actionLabel: "Import Metrics"
+        emptyState: "No quality metrics found. Connect your CI pipeline or import a coverage report."
+goals:
+  - name: debt_items_identified
+    description: "Identify and classify technical debt items from review findings and quality metrics"
+    category: primary
+    metric:
+      type: count
+      entity: tech_debt_items
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when new findings or metrics exist"
+    feedback:
+      enabled: true
+      entityType: tech_debt_items
+      actions:
+        - { value: accurate, label: "Good classification" }
+        - { value: overstated, label: "Severity too high" }
+        - { value: understated, label: "Severity too low" }
+        - { value: duplicate, label: "Already tracked elsewhere" }
+  - name: trend_reporting
+    description: "Produce quality trend data showing debt trajectory over time"
+    category: primary
+    metric:
+      type: count
+      entity: quality_trends
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+  - name: pattern_detection_health
+    description: "Continuously learn systemic debt patterns from recurring findings"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: debt_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: remediation_routing
+    description: "Route actionable debt items to software-architect or sprint-planner"
+    category: secondary
+    metric:
+      type: count
+      entity: tech_debt_items
+      filter: { status: "routed" }
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
 ---
 
 # Tech Debt Tracker

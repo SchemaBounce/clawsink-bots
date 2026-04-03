@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "SchemaBounce-recommended bot — maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -34,6 +34,10 @@ agent:
     - When you detect an agent consistently failing (3+ consecutive failed runs), send an alert to executive-assistant
     - When you propose crystallization, track the proposal ID in crystallization_tracker memory and check its status on subsequent runs
     - Cross-reference dq_findings from data-quality-monitor with entity type growth rates to identify schema drift
+    - ALWAYS read bot_setup_status records to identify bots with incomplete setup — recommend specific setup steps that would improve bot effectiveness
+    - ALWAYS read bot_goal_health records to identify underperforming bots — correlate poor goal achievement with missing setup steps or configuration issues
+    - ALWAYS read run_report records to detect bots reporting "blocked" or "limited" overall status — these need immediate attention
+    - When a bot consistently reports setup_issues in run_reports, write an opt_recommendation with the specific step_id and estimated impact of completing that step
     - Cap your own token usage: quick health checks under 15,000 tokens; daily analysis under 45,000 tokens
   toolInstructions: |
     ## Tool Usage — Minimal Calls
@@ -86,7 +90,7 @@ messaging:
     - { type: "finding", to: ["mentor-coach"], when: "agent efficiency recommendation that affects team coaching priorities" }
     - { type: "finding", to: ["data-engineer"], when: "pipeline optimization recommendation or data freshness concern" }
 data:
-  entityTypesRead: ["agent_runs", "dq_findings", "dq_scores", "pipeline_status", "health_reports", "infra_metrics", "team_health_reports", "mentor_findings"]
+  entityTypesRead: ["agent_runs", "dq_findings", "dq_scores", "pipeline_status", "health_reports", "infra_metrics", "team_health_reports", "mentor_findings", "bot_setup_status", "bot_goal_health", "run_report"]
   entityTypesWrite: ["opt_findings", "opt_alerts", "opt_recommendations", "platform_health_reports"]
   memoryNamespaces: ["performance_baselines", "crystallization_tracker", "cost_metrics", "improvement_log"]
 zones:
@@ -109,6 +113,128 @@ plugins:
       max_results: 20
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-mission
+      name: "Set workspace mission"
+      description: "Business context helps prioritize which optimizations matter most"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Cannot prioritize optimizations without understanding business goals"
+      ui:
+        inputType: text
+        placeholder: "e.g., Real-time fraud detection platform for FinTech companies"
+    - id: set-priorities
+      name: "Set workspace priorities"
+      description: "Current priorities guide which agents and costs to focus on"
+      type: north_star
+      key: priorities
+      group: configuration
+      priority: required
+      reason: "Optimization recommendations must align with business priorities"
+      ui:
+        inputType: text
+        placeholder: "e.g., Reduce LLM costs, improve agent reliability, accelerate crystallization"
+    - id: deploy-agents
+      name: "Deploy at least 3 agents"
+      description: "Platform optimizer needs agents to analyze — no agents means nothing to optimize"
+      type: data_presence
+      entityType: agent_runs
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot generate performance insights without agent run data"
+      ui:
+        actionLabel: "View Deployed Agents"
+        emptyState: "No agent runs found. Deploy and run agents first."
+    - id: set-freshness-targets
+      name: "Set data freshness targets"
+      description: "Defines acceptable data staleness thresholds per entity type"
+      type: north_star
+      key: data_freshness_targets
+      group: configuration
+      priority: recommended
+      reason: "Freshness targets guide stale data purge recommendations"
+      ui:
+        inputType: text
+        placeholder: '{"default": "7d", "agent_runs": "90d", "findings": "30d"}'
+    - id: install-memory-plugin
+      name: "Verify memory plugin"
+      description: "LanceDB memory plugin enables cross-run recall for baseline tracking"
+      type: manual
+      group: external
+      priority: recommended
+      reason: "Performance baselines and crystallization tracking require persistent vector memory"
+      ui:
+        actionLabel: "I've verified the memory plugin is installed"
+        instructions: "The memory-lancedb plugin should be installed automatically with the bot. Verify it appears in the agent's plugin list."
+goals:
+  - name: crystallization_acceleration
+    description: "Identify and propose crystallization candidates from repeating patterns"
+    category: primary
+    metric:
+      type: count
+      entity: opt_recommendations
+      filter: { type: "crystallization" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when qualifying patterns exist (3+ occurrences in 7 days)"
+  - name: cost_optimization
+    description: "Reduce workspace LLM costs through model and schedule recommendations"
+    category: primary
+    metric:
+      type: count
+      entity: opt_recommendations
+      filter: { type: ["model_change", "schedule_change"] }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when optimization opportunities exist"
+    feedback:
+      enabled: true
+      entityType: opt_recommendations
+      actions:
+        - { value: accepted, label: "Accepted recommendation" }
+        - { value: rejected, label: "Rejected — not applicable" }
+        - { value: deferred, label: "Deferred — will review later" }
+  - name: health_report_delivery
+    description: "Produce daily platform health reports consistently"
+    category: secondary
+    metric:
+      type: count
+      entity: platform_health_reports
+    target:
+      operator: ">="
+      value: 1
+      period: daily
+  - name: recommendation_quality
+    description: "Recommendations accepted by operators over time"
+    category: health
+    metric:
+      type: rate
+      numerator: { entity: opt_recommendations, filter: { feedback: "accepted" } }
+      denominator: { entity: opt_recommendations, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.7
+      period: monthly
+  - name: improvement_tracking
+    description: "Track whether recommendations lead to measurable improvements"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: improvement_log
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 # Platform Optimizer
 

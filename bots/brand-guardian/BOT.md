@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: brand-guardian
   displayName: "Brand Guardian"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Brand consistency monitoring, guideline enforcement, and asset review."
   category: design
   tags: ["brand", "consistency", "guidelines", "design", "content-review", "brand-audit"]
@@ -92,6 +92,135 @@ automations:
       prompt: "Check this content against brand guidelines."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: import-brand-guidelines
+      name: "Import brand guidelines"
+      description: "Upload your tone, visual, messaging, and terminology guidelines"
+      type: data_presence
+      entityType: brand_guidelines
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Cannot score content without brand guidelines to compare against"
+      ui:
+        actionLabel: "Import Guidelines"
+        emptyState: "No brand guidelines found. Add your brand voice, visual identity, and messaging standards."
+    - id: set-industry
+      name: "Set business industry"
+      description: "Industry context shapes brand tone expectations and benchmark comparisons"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Brand standards differ by industry — B2B SaaS vs retail vs healthcare require different baselines"
+      ui:
+        inputType: select
+        options:
+          - { value: saas, label: "SaaS / Software" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: fintech, label: "FinTech / Financial" }
+          - { value: healthcare, label: "Healthcare" }
+          - { value: media, label: "Media / Publishing" }
+          - { value: other, label: "Other" }
+        prefillFrom: "workspace.industry"
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Search for brand mentions and competitor messaging across the web"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Core capability — monitors external brand presence and competitor positioning"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa Search"
+    - id: connect-agentmail
+      name: "Connect email notifications"
+      description: "Send brand violation alerts and guideline updates to content creators"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: recommended
+      reason: "Direct notification to content creators accelerates brand issue resolution"
+      ui:
+        icon: mail
+        actionLabel: "Connect AgentMail"
+    - id: import-content
+      name: "Import existing content"
+      description: "Seed with existing content items for an initial brand consistency audit"
+      type: data_presence
+      entityType: content_items
+      minCount: 5
+      group: data
+      priority: recommended
+      reason: "Initial audit establishes a brand drift baseline and surfaces existing issues"
+      ui:
+        actionLabel: "Import Content"
+        emptyState: "No content items yet. Import existing marketing materials or wait for new content to flow in."
+    - id: connect-firecrawl
+      name: "Connect web crawler"
+      description: "Crawl published content pages to audit brand consistency across channels"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: optional
+      reason: "Automated crawling of published pages catches live brand inconsistencies"
+      ui:
+        icon: globe
+        actionLabel: "Connect Firecrawl"
+goals:
+  - name: content_scored
+    description: "Score every new content item against brand guidelines"
+    category: primary
+    metric:
+      type: count
+      entity: brand_scores
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when new content_items exist"
+    feedback:
+      enabled: true
+      entityType: brand_scores
+      actions:
+        - { value: accurate, label: "Score reflects reality" }
+        - { value: too_strict, label: "Score too low — content is fine" }
+        - { value: too_lenient, label: "Score too high — missed issues" }
+  - name: average_brand_score
+    description: "Maintain high average brand score across all reviewed content"
+    category: primary
+    metric:
+      type: threshold
+      measurement: avg_overall_score
+    target:
+      operator: ">"
+      value: 75
+      period: weekly
+  - name: drift_detection_health
+    description: "Track cumulative brand drift patterns over time"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: brand_drift_log
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: violation_resolution
+    description: "Brand findings acknowledged and addressed by content creators"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: brand_findings, filter: { status: "resolved" } }
+      denominator: { entity: brand_findings }
+    target:
+      operator: ">"
+      value: 0.70
+      period: monthly
 ---
 
 # Brand Guardian

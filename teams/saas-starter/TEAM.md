@@ -108,6 +108,61 @@ orgChart:
       - name: "Platform Health Degradation"
         trigger: "platform_health_critical"
         chain: [platform-optimizer, executive-assistant]
+teamGoals:
+  - name: engineering_reliability
+    description: "Infrastructure incidents detected and resolved proactively"
+    category: primary
+    composedFrom:
+      - bot: sre-devops
+        goal: sla_compliance
+        weight: 0.6
+      - bot: sre-devops
+        goal: detect_incidents
+        weight: 0.4
+    target:
+      operator: ">"
+      value: 0.95
+      period: weekly
+  - name: customer_health
+    description: "Customer issues resolved with high SLA compliance"
+    category: primary
+    composedFrom:
+      - bot: customer-support
+        goal: resolve_tickets
+        weight: 0.5
+      - bot: customer-support
+        goal: sla_compliance
+        weight: 0.5
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+  - name: team_responsiveness
+    description: "Average time from issue detection to first bot action across all domains"
+    category: secondary
+    composedFrom:
+      - bot: sre-devops
+        goal: detect_incidents
+      - bot: customer-support
+        goal: first_response_time
+    aggregation: worst
+    target:
+      operator: "<"
+      value: 30
+      period: daily
+  - name: workforce_learning
+    description: "All bots continuously improving from operational experience"
+    category: health
+    composedFrom:
+      - bot: sre-devops
+        goal: threshold_calibration
+      - bot: customer-support
+        goal: pattern_learning
+    aggregation: worst
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
 ---
 # SaaS Starter
 

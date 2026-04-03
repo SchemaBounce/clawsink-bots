@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -103,6 +103,119 @@ mcpServers:
     reason: "Sync documentation status with project management and knowledge base platforms"
 requirements:
   minTier: "team"
+setup:
+  steps:
+    - id: set-doc-standards
+      name: "Define documentation standards"
+      description: "Style guide, structure conventions, and file organization rules"
+      type: north_star
+      key: documentation_standards
+      group: configuration
+      priority: required
+      reason: "Cannot write consistent documentation without style and structure guidelines"
+      ui:
+        inputType: text
+        placeholder: "e.g., Google developer docs style, markdown format, API docs in /docs/api/"
+    - id: set-product-catalog
+      name: "Define product catalog"
+      description: "Product features and capabilities referenced in documentation"
+      type: north_star
+      key: product_catalog
+      group: configuration
+      priority: required
+      reason: "Cannot write accurate feature documentation without product context"
+      ui:
+        inputType: text
+        placeholder: "e.g., CDC pipelines, REST API, SDK, CLI, webhooks, workflow engine"
+    - id: connect-github
+      name: "Connect GitHub for doc PRs"
+      description: "Creates documentation PRs linked to implementation PRs"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: required
+      reason: "Required to create doc branches and PRs in your repository"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+    - id: connect-claude-code
+      name: "Connect Claude Code for file edits"
+      description: "Spawns code sessions to update documentation files in the repository"
+      type: mcp_connection
+      ref: tools/claude-code
+      group: connections
+      priority: required
+      reason: "Required to edit documentation files in the codebase"
+      ui:
+        icon: code
+        actionLabel: "Connect Claude Code"
+    - id: import-implementation-plans
+      name: "Connect implementation plan data"
+      description: "Implementation plans from software-architect that trigger doc updates"
+      type: data_presence
+      entityType: implementation_plans
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Doc updates are triggered by implementation completions — no plans means no automatic doc work"
+      ui:
+        actionLabel: "Import Implementation Plans"
+        emptyState: "No implementation plans found. The bot will activate when software-architect sends findings."
+    - id: connect-notion
+      name: "Connect Notion for wiki updates"
+      description: "Updates documentation pages in Notion workspace"
+      type: mcp_connection
+      ref: tools/notion
+      group: connections
+      priority: optional
+      reason: "Enables documentation sync to Notion-based knowledge bases"
+      ui:
+        icon: notion
+        actionLabel: "Connect Notion"
+goals:
+  - name: doc_coverage
+    description: "Create documentation updates for every completed implementation"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: doc_updates, filter: { status: "pr_created" } }
+      denominator: { entity: implementation_plans, filter: { status: "complete" } }
+    target:
+      operator: ">"
+      value: 0.9
+      period: monthly
+  - name: doc_pr_turnaround
+    description: "Create doc PRs within 24 hours of implementation completion"
+    category: primary
+    metric:
+      type: boolean
+      check: "doc_pr_created_within_sla"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+      condition: "when new implementation-complete findings exist"
+  - name: quarterly_audit_coverage
+    description: "Identify documentation gaps during quarterly audits"
+    category: secondary
+    metric:
+      type: count
+      entity: doc_findings
+      filter: { finding_type: "coverage_gap" }
+    target:
+      operator: ">="
+      value: 0
+      period: quarterly
+  - name: doc_standards_compliance
+    description: "All doc updates follow workspace documentation standards"
+    category: health
+    metric:
+      type: boolean
+      check: "doc_standards_read_before_writing"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
 ---
 
 # Documentation Writer

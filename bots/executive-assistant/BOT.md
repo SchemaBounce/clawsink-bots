@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
@@ -109,6 +109,118 @@ mcpServers:
     reason: "Sync tasks and follow-ups with calendar, CRM, and project management tools"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-mission
+      name: "Define company mission"
+      description: "Your company's mission statement — bots align all findings to this"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Cannot prioritize or contextualize findings without the company mission"
+      ui:
+        inputType: text
+        placeholder: "e.g., Enable real-time data infrastructure for every business"
+    - id: set-priorities
+      name: "Set quarterly priorities"
+      description: "Top 3-5 business priorities used to rank findings by impact"
+      type: north_star
+      key: priorities
+      group: configuration
+      priority: required
+      reason: "Cannot rank findings without knowing what matters most this quarter"
+      ui:
+        inputType: text
+        placeholder: "e.g., 1. Reduce churn below 5%, 2. Ship v2 API, 3. SOC 2 certification"
+    - id: set-stage
+      name: "Define business stage"
+      description: "Current business stage adjusts briefing formality and detail level"
+      type: north_star
+      key: stage
+      group: configuration
+      priority: recommended
+      reason: "Adapts briefing tone and focus areas to your growth stage"
+      ui:
+        inputType: text
+        placeholder: "e.g., seed, series-a, growth, enterprise"
+    - id: connect-agentmail
+      name: "Connect email for briefing delivery"
+      description: "Sends daily briefings and priority alerts to executive inboxes"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Primary delivery channel for daily briefings and urgent alerts"
+      ui:
+        icon: mail
+        actionLabel: "Connect Email"
+    - id: connect-slack
+      name: "Connect Slack for real-time alerts"
+      description: "Posts critical alerts and briefing summaries to leadership channels"
+      type: mcp_connection
+      ref: tools/slack
+      group: connections
+      priority: recommended
+      reason: "Enables real-time alert delivery to leadership channels"
+      ui:
+        icon: slack
+        actionLabel: "Connect Slack"
+    - id: connect-composio
+      name: "Connect task management tools"
+      description: "Sync follow-up items with calendar, CRM, and project management"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Enables action item tracking across calendar and project management tools"
+      ui:
+        icon: composio
+        actionLabel: "Connect Task Management"
+goals:
+  - name: briefing_completeness
+    description: "Include all bot domains in every briefing — never skip a domain"
+    category: primary
+    metric:
+      type: boolean
+      check: "all_domains_read_before_briefing"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
+  - name: alert_triage
+    description: "Triage every alert received — no alert goes unacknowledged"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: ea_findings, filter: { source_type: "alert", triaged: true } }
+      denominator: { entity: ea_findings, filter: { source_type: "alert" } }
+    target:
+      operator: "=="
+      value: 1.0
+      period: per_run
+  - name: follow_up_tracking
+    description: "Track and resurface incomplete action items across runs"
+    category: secondary
+    metric:
+      type: count
+      entity: tasks
+      filter: { status: "open" }
+    target:
+      operator: ">="
+      value: 0
+      period: per_run
+      condition: "open items are surfaced in every briefing"
+  - name: cross_domain_coverage
+    description: "Read findings from all active domains before synthesizing"
+    category: health
+    metric:
+      type: boolean
+      check: "zone1_keys_read_before_output"
+    target:
+      operator: "=="
+      value: 1
+      period: per_run
 ---
 
 # Executive Assistant

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: knowledge-base-curator
   displayName: "Knowledge Base Curator"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Organizes and updates knowledge base articles."
   category: productivity
   tags: ["knowledge", "documentation", "organization"]
@@ -82,6 +82,113 @@ mcpServers:
     reason: "Crawl product documentation and help sites to identify content gaps and outdated information"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-mission
+      name: "Set product/company mission"
+      description: "Company context used to evaluate KB article relevance and accuracy"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "KB quality audits must be grounded in what the product actually does"
+      ui:
+        inputType: text
+        placeholder: "We help businesses move data in real-time..."
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Search for authoritative sources to verify and enrich KB content"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Content verification and gap filling require external source research"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa Search"
+    - id: import-kb-articles
+      name: "Import knowledge base articles"
+      description: "Existing articles are needed for quality auditing and gap analysis"
+      type: data_presence
+      entityType: kb_articles
+      minCount: 5
+      group: data
+      priority: required
+      reason: "Cannot audit or organize content without existing KB articles"
+      ui:
+        actionLabel: "Import Articles"
+        emptyState: "No KB articles found. Import from your knowledge base platform."
+    - id: connect-firecrawl
+      name: "Connect web crawler"
+      description: "Crawl product docs and help sites to identify content gaps"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: recommended
+      reason: "Crawling existing documentation surfaces outdated pages and broken links"
+      ui:
+        icon: crawl
+        actionLabel: "Connect Firecrawl"
+    - id: import-usage-analytics
+      name: "Import search analytics"
+      description: "User search patterns reveal which topics need better coverage"
+      type: data_presence
+      entityType: usage_analytics
+      minCount: 10
+      group: data
+      priority: recommended
+      reason: "Search analytics identify high-demand topics with low or missing coverage"
+      ui:
+        actionLabel: "Import Analytics"
+        emptyState: "No usage analytics found. Import search logs from your KB platform."
+goals:
+  - name: content_quality_audit
+    description: "Audit KB articles for accuracy, freshness, and completeness each run"
+    category: primary
+    metric:
+      type: count
+      entity: kb_updates
+      filter: { type: { "$in": ["outdated_flag", "update_suggestion", "gap_draft"] } }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "at least one actionable improvement per weekly run"
+  - name: gap_coverage
+    description: "High-search topics have corresponding KB articles"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: kb_articles, filter: { coverage_status: "covered" } }
+      denominator: { entity: usage_analytics, filter: { search_volume: { "$gt": 10 } } }
+    target:
+      operator: ">"
+      value: 0.80
+      period: monthly
+      condition: "80% of high-demand topics have KB coverage"
+  - name: duplicate_detection
+    description: "Identify and suggest consolidation of near-duplicate articles"
+    category: secondary
+    metric:
+      type: count
+      entity: organization_suggestions
+      filter: { type: "duplicate_merge" }
+    target:
+      operator: ">="
+      value: 0
+      period: monthly
+  - name: quality_score_tracking
+    description: "Content quality scores tracked and improving over time"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: content_quality
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "cumulative growth"
 ---
 
 # Knowledge Base Curator

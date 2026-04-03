@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: order-fulfillment
   displayName: "Order Fulfillment"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Orchestrates order processing workflows from receipt through delivery."
   category: ecommerce
   tags: ["orders", "fulfillment", "workflow", "cdc"]
@@ -84,6 +84,126 @@ plugins:
     reason: "Triggers fulfillment workflows in external systems (warehouse routing, shipping labels, carrier dispatch)"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-ecommerce-platform
+      name: "Connect e-commerce platform"
+      description: "Links your store so the bot can receive and process incoming orders"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source for orders, inventory status, and fulfillment workflows"
+      ui:
+        icon: composio
+        actionLabel: "Connect E-commerce Platform"
+        helpUrl: "https://docs.schemabounce.com/integrations/ecommerce"
+    - id: set-sla-targets
+      name: "Define fulfillment SLA targets"
+      description: "Set processing time targets by order priority and shipping method"
+      type: config
+      group: configuration
+      target: { namespace: sla_targets, key: fulfillment_sla }
+      priority: required
+      reason: "Cannot monitor SLA compliance without defined fulfillment time targets"
+      ui:
+        inputType: form
+        fields:
+          - { name: standard_hours, label: "Standard shipping SLA (hours)", type: number, default: 48 }
+          - { name: expedited_hours, label: "Expedited shipping SLA (hours)", type: number, default: 24 }
+          - { name: priority_hours, label: "Priority/VIP SLA (hours)", type: number, default: 12 }
+    - id: connect-agentmail
+      name: "Connect email for notifications"
+      description: "Enables sending order confirmations, shipping updates, and fulfillment alerts"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Customer-facing order status communication and internal fulfillment alerts"
+      ui:
+        icon: email
+        actionLabel: "Connect Email"
+    - id: set-mission
+      name: "Set business mission"
+      description: "Helps the bot understand order priority and fulfillment context"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: recommended
+      reason: "Mission context guides fulfillment prioritization and escalation decisions"
+      ui:
+        inputType: textarea
+        placeholder: "e.g., Fast, reliable delivery for our e-commerce customers"
+    - id: import-fulfillment-rules
+      name: "Import fulfillment rules"
+      description: "Routing rules determine which warehouse handles each order"
+      type: data_presence
+      entityType: fulfillment_rules
+      minCount: 1
+      group: data
+      priority: recommended
+      reason: "Without routing rules, orders cannot be assigned to warehouses automatically"
+      ui:
+        actionLabel: "Add Fulfillment Rules"
+        emptyState: "No fulfillment rules found. Define warehouse routing, carrier preferences, and priority rules."
+        helpUrl: "https://docs.schemabounce.com/bots/order-fulfillment/rules"
+    - id: import-orders
+      name: "Import existing orders"
+      description: "Seed the bot with in-flight orders for immediate processing"
+      type: data_presence
+      entityType: orders
+      minCount: 1
+      group: data
+      priority: optional
+      reason: "Existing orders give the bot immediate work and establish processing patterns"
+      ui:
+        actionLabel: "Import Orders"
+        emptyState: "No orders found. Connect your e-commerce platform or import via CSV."
+goals:
+  - name: fulfill_orders
+    description: "Process incoming orders through the complete fulfillment lifecycle"
+    category: primary
+    metric:
+      type: count
+      entity: fulfillment_tasks
+      filter: { status: "completed" }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when new orders exist"
+  - name: sla_compliance
+    description: "Fulfill orders within their designated SLA time windows"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: fulfillment_tasks, filter: { sla_met: true } }
+      denominator: { entity: fulfillment_tasks, filter: { status: "completed" } }
+    target:
+      operator: ">="
+      value: 0.95
+      period: weekly
+  - name: order_processing_health
+    description: "No orders stuck in processing without status updates"
+    category: health
+    metric:
+      type: count
+      entity: order_status
+      filter: { status: "stuck", age_hours: { "$gt": 24 } }
+    target:
+      operator: "=="
+      value: 0
+      period: daily
+  - name: inventory_sync
+    description: "Stock decrements sent to inventory after every fulfillment"
+    category: secondary
+    metric:
+      type: boolean
+      check: inventory_alert_sent_after_fulfillment
+    target:
+      operator: "=="
+      value: true
+      period: per_run
 ---
 
 # Order Fulfillment

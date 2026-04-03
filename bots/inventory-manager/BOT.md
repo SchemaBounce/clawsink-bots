@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-manager
   displayName: "Inventory & Acquisition Manager"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Stock level monitoring, reorder calculations, vendor tracking, acquisition pipeline management."
   category: operations
   tags: ["inventory", "stock", "vendors", "reorder", "acquisition", "procurement"]
@@ -103,6 +103,141 @@ automations:
       promptTemplate: "Stock level dropped below threshold. Evaluate whether a reorder is needed based on consumption rate and lead time."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-reorder-policy
+      name: "Define reorder policy"
+      description: "Reorder thresholds, lead times, and EOQ parameters for procurement"
+      type: north_star
+      key: reorder_policy
+      group: configuration
+      priority: required
+      reason: "Cannot generate reorder recommendations without defined thresholds and lead times"
+      ui:
+        inputType: text
+        placeholder: '{"default_lead_days": 7, "safety_stock_multiplier": 1.5, "reorder_method": "eoq"}'
+        helpUrl: "https://docs.schemabounce.com/bots/inventory-manager/reorder-policy"
+    - id: set-budget-constraints
+      name: "Set procurement budget"
+      description: "Budget limits for procurement spending by category or period"
+      type: north_star
+      key: budget_constraints
+      group: configuration
+      priority: required
+      reason: "Reorder recommendations must respect procurement budget limits"
+      ui:
+        inputType: text
+        placeholder: '{"monthly_procurement_limit": 50000, "per_order_max": 10000}'
+    - id: connect-agentmail
+      name: "Verify email identity"
+      description: "Bot sends reorder alerts, stock reports, and vendor communications"
+      type: mcp_connection
+      ref: tools/agentmail
+      group: connections
+      priority: required
+      reason: "Email alerts are critical for time-sensitive reorder notifications"
+      ui:
+        icon: email
+        actionLabel: "Verify Email"
+    - id: connect-exa
+      name: "Connect web search"
+      description: "Search for supplier pricing, lead time data, and supply chain news"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "Supply chain research and vendor pricing lookups require web search"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa Search"
+    - id: import-transactions
+      name: "Import inventory transactions"
+      description: "Historical purchase and consumption data for demand forecasting"
+      type: data_presence
+      entityType: transactions
+      minCount: 10
+      group: data
+      priority: recommended
+      reason: "Historical data improves consumption velocity calculations and reorder timing"
+      ui:
+        actionLabel: "Import Transactions"
+        emptyState: "No transactions found. Import from your ERP or inventory system."
+    - id: connect-composio
+      name: "Connect ERP / procurement platform"
+      description: "Links your ERP or procurement system for order management"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: recommended
+      reason: "Automated sync with ERP enables real-time stock level tracking"
+      ui:
+        icon: composio
+        actionLabel: "Connect ERP"
+    - id: set-industry
+      name: "Set business industry"
+      description: "Industry context determines seasonal patterns and vendor benchmarks"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: recommended
+      reason: "Seasonal demand patterns and vendor expectations vary by industry"
+      ui:
+        inputType: select
+        options:
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: manufacturing, label: "Manufacturing" }
+          - { value: food_beverage, label: "Food & Beverage" }
+          - { value: healthcare, label: "Healthcare / Pharma" }
+          - { value: wholesale, label: "Wholesale / Distribution" }
+        prefillFrom: "workspace.industry"
+goals:
+  - name: prevent_stockouts
+    description: "No critical stock-outs — all SKUs stay above safety stock thresholds"
+    category: primary
+    metric:
+      type: count
+      entity: inv_alerts
+      filter: { severity: "critical", type: "stockout" }
+    target:
+      operator: "=="
+      value: 0
+      period: weekly
+      condition: "zero critical stock-out alerts"
+  - name: reorder_recommendations
+    description: "Generate timely reorder recommendations before stock hits threshold"
+    category: primary
+    metric:
+      type: count
+      entity: inv_findings
+      filter: { type: "reorder_recommendation" }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when stock approaches reorder point"
+  - name: vendor_cost_tracking
+    description: "Track vendor pricing trends and flag cost increases"
+    category: secondary
+    metric:
+      type: count
+      entity: inv_findings
+      filter: { type: "cost_analysis" }
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+  - name: stock_level_memory
+    description: "Stock levels and consumption patterns tracked across runs"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: stock_levels
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "cumulative growth"
 ---
 
 # Inventory & Acquisition Manager

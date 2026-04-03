@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: fraud-detector
   displayName: "Fraud Detector"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Scores new transactions for fraud risk using pattern analysis and anomaly detection."
   category: fintech
   tags: ["fraud", "transactions", "risk", "cdc"]
@@ -86,6 +86,142 @@ mcpServers:
     reason: "Connect to payment platforms and financial SaaS tools for fraud signal enrichment"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-payment-processor
+      name: "Connect payment processor"
+      description: "Links your payment platform so the bot can analyze transactions"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source for transaction monitoring and fraud pattern analysis"
+      ui:
+        icon: stripe
+        actionLabel: "Connect Payment Processor"
+        helpUrl: "https://docs.schemabounce.com/integrations/payments"
+    - id: set-risk-policy
+      name: "Define risk policy"
+      description: "Set your organization's fraud risk tolerance and escalation thresholds"
+      type: north_star
+      key: risk_policy
+      group: configuration
+      priority: required
+      reason: "Cannot score transactions without defined risk thresholds"
+      ui:
+        inputType: select
+        options:
+          - { value: conservative, label: "Conservative (flag more, fewer misses)" }
+          - { value: balanced, label: "Balanced (default)" }
+          - { value: permissive, label: "Permissive (fewer flags, faster throughput)" }
+        default: balanced
+    - id: set-industry
+      name: "Set business industry"
+      description: "Fraud patterns differ significantly across industries"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Industry-specific fraud detection models and pattern libraries"
+      ui:
+        inputType: select
+        options:
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: saas, label: "SaaS / Software" }
+          - { value: gaming, label: "Gaming / Entertainment" }
+        prefillFrom: "workspace.industry"
+    - id: fraud-score-threshold
+      name: "Set fraud score threshold"
+      description: "Transactions scoring above this are flagged for review"
+      type: config
+      group: configuration
+      target: { namespace: risk_thresholds, key: fraud_score_cutoff }
+      priority: required
+      reason: "Cannot flag transactions without a detection threshold"
+      ui:
+        inputType: slider
+        min: 0.5
+        max: 0.99
+        step: 0.01
+        default: 0.8
+    - id: connect-slack
+      name: "Connect Slack for alerts"
+      description: "Posts critical fraud alerts to your security or finance channel"
+      type: mcp_connection
+      ref: tools/slack
+      group: connections
+      priority: recommended
+      reason: "Real-time team alerting for high-severity fraud detection"
+      ui:
+        icon: slack
+        actionLabel: "Connect Slack"
+    - id: import-transactions
+      name: "Import historical transactions"
+      description: "Baseline data improves initial detection accuracy and reduces false positives"
+      type: data_presence
+      entityType: transactions
+      minCount: 100
+      group: data
+      priority: recommended
+      reason: "Pattern baseline for anomaly detection — without history, all transactions look novel"
+      ui:
+        actionLabel: "Import Transactions"
+        emptyState: "No transaction history found. Import via CSV or connect your payment processor first."
+        helpUrl: "https://docs.schemabounce.com/data/import"
+goals:
+  - name: flag_suspicious_transactions
+    description: "Identify and flag potentially fraudulent transactions"
+    category: primary
+    metric:
+      type: count
+      entity: fraud_scores
+      filter: { risk_level: ["high", "critical"] }
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when new transactions exist"
+  - name: detection_accuracy
+    description: "Maximize confirmed fraud rate among flagged transactions"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: fraud_scores, filter: { feedback: "confirmed" } }
+      denominator: { entity: fraud_scores, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.85
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: fraud_scores
+      actions:
+        - { value: confirmed, label: "Confirmed fraud" }
+        - { value: false_positive, label: "Not fraud" }
+        - { value: needs_review, label: "Needs review" }
+  - name: pattern_learning
+    description: "Continuously improve by learning new fraud signatures"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: fraud_patterns
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: escalation_speed
+    description: "Critical fraud flagged within minutes of transaction"
+    category: secondary
+    metric:
+      type: threshold
+      measurement: avg_minutes_to_flag
+    target:
+      operator: "<"
+      value: 5
+      period: per_run
 ---
 
 # Fraud Detector

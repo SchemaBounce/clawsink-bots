@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: marketing-growth
   displayName: "Marketing & Growth"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Content calendar management, SEO tracking, campaign metric analysis, social scheduling."
   category: marketing
   tags: ["marketing", "growth", "seo", "campaigns", "content", "social"]
@@ -97,6 +97,129 @@ plugins:
     reason: "OAuth access to marketing platforms (Google Ads, Meta Ads, Mailchimp) for pulling campaign metrics and SEO data"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-marketing-platform
+      name: "Connect marketing platform"
+      description: "Links your marketing tools so the bot can pull campaign metrics and SEO data"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source for campaign metrics, SEO rankings, and channel performance"
+      ui:
+        icon: composio
+        actionLabel: "Connect Marketing Platform"
+        helpUrl: "https://docs.schemabounce.com/integrations/marketing"
+    - id: set-growth-targets
+      name: "Define growth targets"
+      description: "Set your quarterly growth KPIs so the bot can benchmark campaign performance"
+      type: north_star
+      key: growth_targets
+      group: configuration
+      priority: required
+      reason: "Cannot evaluate campaign success without defined growth targets"
+      ui:
+        inputType: textarea
+        placeholder: "e.g., 20% MQL increase, 15% organic traffic growth, $50 target CAC"
+    - id: set-industry
+      name: "Set business industry"
+      description: "Marketing benchmarks and channel strategies vary by industry"
+      type: north_star
+      key: industry
+      group: configuration
+      priority: required
+      reason: "Industry context shapes content strategy and channel prioritization"
+      ui:
+        inputType: select
+        options:
+          - { value: fintech, label: "FinTech / Payments" }
+          - { value: ecommerce, label: "E-commerce / Retail" }
+          - { value: saas, label: "SaaS / Software" }
+          - { value: healthcare, label: "Healthcare" }
+          - { value: other, label: "Other" }
+        prefillFrom: "workspace.industry"
+    - id: connect-exa
+      name: "Connect Exa for SEO research"
+      description: "Enables search for SEO trends, content benchmarks, and marketing intelligence"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: required
+      reason: "SEO tracking and content gap analysis require web search capabilities"
+      ui:
+        icon: exa
+        actionLabel: "Connect Exa"
+    - id: import-campaigns
+      name: "Import existing campaigns"
+      description: "Historical campaign data establishes performance baselines for trend analysis"
+      type: data_presence
+      entityType: campaigns
+      minCount: 5
+      group: data
+      priority: recommended
+      reason: "Performance baselines prevent false-positive trend alerts on initial runs"
+      ui:
+        actionLabel: "Import Campaigns"
+        emptyState: "No campaign data found. Import via CSV or connect your marketing platform first."
+        helpUrl: "https://docs.schemabounce.com/data/import"
+    - id: connect-firecrawl
+      name: "Connect Firecrawl for content analysis"
+      description: "Crawl competitor content and landing pages to identify content gaps"
+      type: mcp_connection
+      ref: tools/firecrawl
+      group: connections
+      priority: optional
+      reason: "Competitor content analysis improves SEO recommendations and content calendar"
+      ui:
+        icon: firecrawl
+        actionLabel: "Connect Firecrawl"
+goals:
+  - name: identify_growth_opportunities
+    description: "Surface actionable growth insights from campaign and channel data"
+    category: primary
+    metric:
+      type: count
+      entity: mktg_findings
+      filter: { finding_type: ["growth_opportunity", "channel_insight"] }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when campaign data exists"
+  - name: content_calendar_coverage
+    description: "Maintain a populated content calendar with upcoming scheduled content"
+    category: primary
+    metric:
+      type: count
+      source: memory
+      namespace: content_calendar
+    target:
+      operator: ">"
+      value: 3
+      period: weekly
+      condition: "rolling content pipeline"
+  - name: campaign_monitoring_health
+    description: "Regularly process campaign data without gaps or stale runs"
+    category: health
+    metric:
+      type: boolean
+      check: last_run_completed_successfully
+    target:
+      operator: "=="
+      value: true
+      period: per_schedule
+  - name: seo_trend_detection
+    description: "Detect meaningful SEO ranking changes and organic traffic shifts"
+    category: secondary
+    metric:
+      type: count
+      entity: mktg_findings
+      filter: { finding_type: "seo_change" }
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
 ---
 
 # Marketing & Growth

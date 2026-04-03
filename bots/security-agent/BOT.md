@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: security-agent
   displayName: "Security Agent"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Vulnerability scanning, security policy audits, CVE monitoring, pen test posture checks, secret rotation tracking."
   category: operations
   tags: ["security", "pentest", "vulnerabilities", "cve", "policy", "compliance", "secrets"]
@@ -88,6 +88,137 @@ presence:
     search: true
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-github
+      name: "Connect GitHub"
+      description: "Links your code repositories for vulnerability scanning and dependency analysis"
+      type: mcp_connection
+      ref: tools/github
+      group: connections
+      priority: required
+      reason: "Repository access is essential for code security scanning and dependency CVE checks"
+      ui:
+        icon: github
+        actionLabel: "Connect GitHub"
+        helpUrl: "https://docs.schemabounce.com/integrations/github"
+    - id: set-security-policy
+      name: "Define security policy"
+      description: "Set your organization's security policy baseline for vulnerability assessment"
+      type: north_star
+      key: security_policy
+      group: configuration
+      priority: required
+      reason: "Cannot evaluate findings without a defined security policy — severity thresholds and acceptable risk vary by org"
+      ui:
+        inputType: select
+        options:
+          - { value: strict, label: "Strict (zero tolerance for medium+ CVEs)" }
+          - { value: standard, label: "Standard (critical and high only)" }
+          - { value: risk_based, label: "Risk-based (weighted by exploitability)" }
+        default: standard
+    - id: set-tech-stack
+      name: "Declare tech stack"
+      description: "List your primary languages, frameworks, and infrastructure so CVE monitoring is targeted"
+      type: north_star
+      key: tech_stack
+      group: configuration
+      priority: required
+      reason: "CVE monitoring without tech stack context produces noise — targeted scanning reduces false positives"
+      ui:
+        inputType: text
+        placeholder: "e.g., Go, Node.js, PostgreSQL, Kubernetes, AWS"
+    - id: set-compliance-requirements
+      name: "Set compliance requirements"
+      description: "Regulatory frameworks that apply to your organization"
+      type: north_star
+      key: compliance_requirements
+      group: configuration
+      priority: recommended
+      reason: "Compliance context shapes which findings are policy violations vs informational"
+      ui:
+        inputType: select
+        options:
+          - { value: soc2, label: "SOC 2 Type II" }
+          - { value: pci_dss, label: "PCI DSS" }
+          - { value: hipaa, label: "HIPAA" }
+          - { value: gdpr, label: "GDPR" }
+          - { value: none, label: "No specific framework" }
+        default: none
+    - id: set-rotation-policy
+      name: "Set secret rotation schedule"
+      description: "How frequently secrets and credentials should be rotated"
+      type: config
+      group: configuration
+      target: { namespace: rotation_schedule, key: rotation_interval_days }
+      priority: recommended
+      reason: "Rotation tracking requires knowing the expected interval to flag overdue secrets"
+      ui:
+        inputType: select
+        options:
+          - { value: 30, label: "30 days (strict)" }
+          - { value: 60, label: "60 days (standard)" }
+          - { value: 90, label: "90 days (relaxed)" }
+        default: 90
+    - id: import-findings
+      name: "Import existing security findings"
+      description: "Prior scan results establish a vulnerability baseline and track remediation progress"
+      type: data_presence
+      entityType: sre_findings
+      minCount: 10
+      group: data
+      priority: recommended
+      reason: "Baseline findings prevent re-alerting on known issues and enable trend tracking"
+      ui:
+        actionLabel: "Import Findings"
+        emptyState: "No prior security findings found. The bot will establish baselines from its first scan."
+        helpUrl: "https://docs.schemabounce.com/data/import"
+goals:
+  - name: vulnerability_detection
+    description: "Identify and classify security vulnerabilities from infrastructure and code findings"
+    category: primary
+    metric:
+      type: count
+      entity: sec_findings
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when new findings exist from SRE, data, or code review"
+  - name: critical_response_time
+    description: "Critical vulnerabilities escalated within the same run they are detected"
+    category: primary
+    metric:
+      type: boolean
+      check: critical_escalation_sent
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+      condition: "when critical findings detected"
+  - name: rotation_compliance
+    description: "All tracked secrets rotated within policy threshold"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: sec_findings, filter: { finding_type: "rotation_overdue" } }
+      denominator: { entity: sec_findings, filter: { finding_type: "rotation_tracked" } }
+    target:
+      operator: "<"
+      value: 0.10
+      period: monthly
+  - name: vulnerability_trend_tracking
+    description: "Maintain running vulnerability counts by severity for trend analysis"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: vulnerability_database
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "updated each run"
 ---
 
 # Security Agent

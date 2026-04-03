@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: churn-predictor
   displayName: "Churn Predictor"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Analyzes user activity patterns to predict and flag churn risk."
   category: saas
   tags: ["churn", "retention", "analytics", "cdc"]
@@ -83,6 +83,131 @@ mcpServers:
     reason: "Crawl customer review sites and forums for churn sentiment signals"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-mission
+      name: "Define product mission"
+      description: "Product mission shapes how churn risk is interpreted and prioritized"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Churn risk scoring must align with what the business considers critical retention"
+      ui:
+        inputType: text
+        placeholder: "e.g., Deliver the most reliable real-time data platform for growing teams"
+        prefillFrom: "workspace.mission"
+    - id: connect-stripe
+      name: "Connect Stripe for billing signals"
+      description: "Subscription downgrades, failed payments, and cancellation signals from billing"
+      type: mcp_connection
+      ref: tools/stripe
+      group: connections
+      priority: recommended
+      reason: "Billing churn signals (downgrades, failed payments) are strong predictors"
+      ui:
+        icon: stripe
+        actionLabel: "Connect Stripe"
+    - id: import-activity-data
+      name: "Import user activity baseline"
+      description: "Historical activity data establishes normal engagement patterns for comparison"
+      type: data_presence
+      entityType: user_activity
+      minCount: 50
+      group: data
+      priority: required
+      reason: "Cannot detect activity drops without a baseline of normal engagement"
+      ui:
+        actionLabel: "Check Activity Data"
+        emptyState: "No user activity data found. Connect your product analytics or import activity records."
+    - id: import-engagement-metrics
+      name: "Import engagement metrics"
+      description: "Feature usage and session metrics help identify disengagement patterns"
+      type: data_presence
+      entityType: engagement_metrics
+      minCount: 10
+      group: data
+      priority: recommended
+      reason: "Multi-signal churn prediction requires engagement metrics alongside activity data"
+      ui:
+        actionLabel: "Check Engagement Data"
+        emptyState: "No engagement metrics found. Import feature usage data for better churn predictions."
+    - id: connect-exa
+      name: "Connect Exa for benchmarks"
+      description: "Research industry churn benchmarks and retention best practices"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: optional
+      reason: "Industry churn rate benchmarks contextualize your churn scores"
+      ui:
+        icon: search
+        actionLabel: "Connect Exa"
+goals:
+  - name: churn_risk_scoring
+    description: "Score every active account for churn risk on each run"
+    category: primary
+    metric:
+      type: count
+      entity: churn_scores
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when user activity data exists"
+  - name: multi_signal_accuracy
+    description: "Every churn score backed by at least two corroborating signals"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: churn_scores, filter: { signal_count: { "$gte": 2 } } }
+      denominator: { entity: churn_scores }
+    target:
+      operator: ">"
+      value: 0.95
+      period: weekly
+  - name: prediction_quality
+    description: "High-risk predictions confirmed by actual churn or save actions"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: churn_scores, filter: { feedback: "confirmed" } }
+      denominator: { entity: churn_scores, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.7
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: churn_scores
+      actions:
+        - { value: confirmed, label: "Customer did churn" }
+        - { value: false_positive, label: "False alarm - customer stayed" }
+        - { value: saved, label: "Intervention saved the account" }
+  - name: early_warning_coverage
+    description: "Flag at-risk accounts before they reach cancellation"
+    category: secondary
+    metric:
+      type: count
+      entity: retention_alerts
+      filter: { severity: "high" }
+    target:
+      operator: ">"
+      value: 0
+      period: weekly
+      condition: "when high-risk accounts exist"
+  - name: baseline_learning
+    description: "Continuously refine activity baselines and churn indicator patterns"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: activity_baselines
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
 ---
 
 # Churn Predictor

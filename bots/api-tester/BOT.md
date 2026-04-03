@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: api-tester
   displayName: "API Tester"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "API endpoint testing, performance benchmarking, and health monitoring."
   category: engineering
   tags: ["api-testing", "performance", "health-monitoring", "regression", "benchmarks"]
@@ -91,6 +91,116 @@ automations:
       promptTemplate: "Generate test cases for this new API endpoint."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-api-base-url
+      name: "Set API base URL"
+      description: "The root URL of the API under test — all endpoint paths are relative to this"
+      type: north_star
+      key: api_base_url
+      group: configuration
+      priority: required
+      reason: "Cannot test endpoints without knowing where the API lives"
+      ui:
+        inputType: text
+        placeholder: "https://api.example.com/v1"
+    - id: set-latency-thresholds
+      name: "Define latency thresholds"
+      description: "Acceptable P50/P95/P99 latency targets for regression detection"
+      type: config
+      group: configuration
+      target: { namespace: endpoint_baselines, key: latency_thresholds }
+      priority: required
+      reason: "Regression detection requires defined performance baselines"
+      ui:
+        inputType: json
+        placeholder: '{"p50_ms": 200, "p95_ms": 500, "p99_ms": 1000}'
+    - id: import-endpoints
+      name: "Import API endpoints"
+      description: "Seed endpoint inventory so testing begins immediately"
+      type: data_presence
+      entityType: api_endpoints
+      minCount: 1
+      group: data
+      priority: required
+      reason: "Bot needs endpoint definitions to generate and run test cases"
+      ui:
+        actionLabel: "Import Endpoints"
+        emptyState: "No endpoints found. Import an OpenAPI spec or add endpoints manually."
+    - id: set-api-auth
+      name: "Configure API authentication"
+      description: "Auth credentials for the API under test — stored securely as a workspace secret"
+      type: secret
+      secretName: api_test_credentials
+      group: configuration
+      priority: recommended
+      reason: "Most APIs require authentication — without it, tests only cover public endpoints"
+      ui:
+        inputType: secret
+        placeholder: "Bearer token or API key"
+    - id: connect-composio
+      name: "Connect project management"
+      description: "Syncs test results with your project tracker to auto-create tickets"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: optional
+      reason: "Auto-creates tickets from test failures so nothing falls through the cracks"
+      ui:
+        icon: composio
+        actionLabel: "Connect Project Tool"
+goals:
+  - name: endpoints_tested
+    description: "Test all registered endpoints on each scheduled run"
+    category: primary
+    metric:
+      type: count
+      entity: test_results
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when api_endpoints records exist"
+    feedback:
+      enabled: true
+      entityType: test_results
+      actions:
+        - { value: accurate, label: "Correct result" }
+        - { value: false_positive, label: "Flagged but actually fine" }
+        - { value: missed, label: "Missed a real issue" }
+  - name: regression_detection
+    description: "Detect latency regressions exceeding defined thresholds"
+    category: primary
+    metric:
+      type: count
+      entity: api_health_reports
+      filter: { regression_detected: true }
+    target:
+      operator: ">="
+      value: 0
+      period: per_run
+  - name: baseline_coverage
+    description: "Maintain up-to-date performance baselines for all active endpoints"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: endpoint_baselines
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: critical_escalation_speed
+    description: "5xx and auth bypass findings routed to sre-devops within the same run"
+    category: secondary
+    metric:
+      type: boolean
+      measurement: critical_findings_routed_same_run
+    target:
+      operator: "=="
+      value: true
+      period: per_run
 ---
 
 # API Tester

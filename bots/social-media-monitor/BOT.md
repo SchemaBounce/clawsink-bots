@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-monitor
   displayName: "Social Media Monitor"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Monitors brand mentions and sentiment across platforms."
   category: marketing
   tags: ["social-media", "sentiment", "brand"]
@@ -85,6 +85,131 @@ plugins:
     reason: "OAuth access to social platform APIs (Twitter/X, LinkedIn, Instagram) for pulling brand mentions and sentiment data"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: connect-social-platforms
+      name: "Connect social media platforms"
+      description: "Links your social accounts (Twitter/X, LinkedIn, Instagram) for brand mention monitoring"
+      type: mcp_connection
+      ref: tools/composio
+      group: connections
+      priority: required
+      reason: "Primary data source — cannot monitor brand mentions without social platform access"
+      ui:
+        icon: composio
+        actionLabel: "Connect Social Accounts"
+        helpUrl: "https://docs.schemabounce.com/integrations/social"
+    - id: set-brand-keywords
+      name: "Define brand keywords"
+      description: "Keywords and phrases to monitor across all platforms"
+      type: config
+      group: configuration
+      target: { namespace: sentiment_baselines, key: brand_keywords }
+      priority: required
+      reason: "Mention monitoring requires knowing what to track — company name, product names, key personnel"
+      ui:
+        inputType: text
+        placeholder: "e.g., YourBrand, @yourbrand, #yourbrand, CEO name"
+    - id: set-mission
+      name: "Set brand context"
+      description: "Describe your brand so the bot can distinguish relevant mentions from noise"
+      type: north_star
+      key: mission
+      group: configuration
+      priority: required
+      reason: "Brand context filters noise — a fintech company named 'Mercury' needs context to avoid astronomy mentions"
+      ui:
+        inputType: text
+        placeholder: "e.g., B2B SaaS platform for data engineering teams"
+    - id: set-crisis-threshold
+      name: "Set crisis alert threshold"
+      description: "Number of negative engagements that trigger a reputation crisis alert"
+      type: config
+      group: configuration
+      target: { namespace: sentiment_baselines, key: crisis_engagement_threshold }
+      priority: recommended
+      reason: "Tuning the crisis threshold avoids alert fatigue from normal negative mentions"
+      ui:
+        inputType: slider
+        min: 10
+        max: 200
+        step: 10
+        default: 50
+    - id: connect-web-search
+      name: "Connect web search for mentions"
+      description: "Searches beyond social platforms for brand mentions in blogs, forums, and news"
+      type: mcp_connection
+      ref: tools/exa
+      group: connections
+      priority: recommended
+      reason: "Brand mentions on blogs, forums, and news sites supplement social platform data"
+      ui:
+        icon: search
+        actionLabel: "Connect Web Search"
+    - id: import-mentions
+      name: "Import historical mentions"
+      description: "Past mention data establishes sentiment baselines and normal mention volume"
+      type: data_presence
+      entityType: social_mentions
+      minCount: 100
+      group: data
+      priority: recommended
+      reason: "Sentiment baselines require historical data — without it, all activity looks anomalous"
+      ui:
+        actionLabel: "Import Mentions"
+        emptyState: "No mention history found. Connect social platforms first to start collecting data."
+        helpUrl: "https://docs.schemabounce.com/data/import"
+goals:
+  - name: mention_coverage
+    description: "Capture and analyze brand mentions across all connected platforms"
+    category: primary
+    metric:
+      type: count
+      entity: sentiment_reports
+    target:
+      operator: ">="
+      value: 1
+      period: daily
+  - name: crisis_detection_speed
+    description: "Reputation crises flagged within one hourly run of onset"
+    category: primary
+    metric:
+      type: boolean
+      check: crisis_alert_sent
+    target:
+      operator: "=="
+      value: true
+      period: per_run
+      condition: "when crisis threshold exceeded"
+  - name: sentiment_trend_accuracy
+    description: "Sentiment shifts correctly identified against rolling baselines"
+    category: secondary
+    metric:
+      type: rate
+      numerator: { entity: mention_alerts, filter: { alert_validated: true } }
+      denominator: { entity: mention_alerts, filter: { alert_validated: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.80
+      period: monthly
+    feedback:
+      enabled: true
+      entityType: mention_alerts
+      actions:
+        - { value: true, label: "Accurate alert" }
+        - { value: false, label: "False alarm" }
+  - name: baseline_freshness
+    description: "Sentiment baselines updated every run to keep comparisons current"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: sentiment_baselines
+    target:
+      operator: ">"
+      value: 0
+      period: daily
+      condition: "updated each run"
 ---
 
 # Social Media Monitor

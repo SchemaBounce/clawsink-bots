@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sprint-planner
   displayName: "Sprint Planner"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Sprint planning, backlog prioritization, and velocity tracking."
   category: project-management
   tags: ["sprints", "backlog", "velocity", "prioritization", "agile", "RICE"]
@@ -87,6 +87,124 @@ mcpServers:
     reason: "Manages cycles, creates and assigns issues in Linear"
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-team-size
+      name: "Set team size"
+      description: "Number of team members for capacity planning"
+      type: north_star
+      key: team_size
+      group: configuration
+      priority: required
+      reason: "Cannot calculate sprint capacity without knowing how many people are on the team"
+      ui:
+        inputType: number
+        min: 1
+        max: 50
+        default: 5
+    - id: set-sprint-cadence
+      name: "Set sprint cadence"
+      description: "Sprint length in weeks — controls planning cycle and velocity window"
+      type: north_star
+      key: sprint_cadence
+      group: configuration
+      priority: required
+      reason: "Velocity tracking and sprint planning require a defined iteration length"
+      ui:
+        inputType: select
+        options:
+          - { value: "1 week", label: "1 week" }
+          - { value: "2 weeks", label: "2 weeks (default)" }
+          - { value: "3 weeks", label: "3 weeks" }
+          - { value: "4 weeks", label: "4 weeks" }
+        default: "2 weeks"
+    - id: import-backlog
+      name: "Import backlog items"
+      description: "Seed the backlog with existing stories and tasks so prioritization starts immediately"
+      type: data_presence
+      entityType: tasks
+      minCount: 5
+      group: data
+      priority: required
+      reason: "RICE scoring and sprint planning require backlog items to prioritize"
+      ui:
+        actionLabel: "Import Backlog"
+        emptyState: "No backlog items found. Import via CSV or connect your project management tool."
+    - id: connect-project-tracker
+      name: "Connect project tracker"
+      description: "Syncs stories, tasks, and sprint data with Jira or Linear"
+      type: mcp_connection
+      ref: tools/jira
+      group: connections
+      priority: recommended
+      reason: "Two-way sync keeps sprint plans current with the team's actual work tracker"
+      ui:
+        icon: jira
+        actionLabel: "Connect Project Tracker"
+    - id: connect-teams
+      name: "Connect Microsoft Teams"
+      description: "Posts sprint plans and velocity alerts to your team channel"
+      type: mcp_connection
+      ref: tools/microsoft-teams
+      group: connections
+      priority: optional
+      reason: "Team notifications for sprint plans, overcommitment warnings, and velocity trends"
+      ui:
+        icon: teams
+        actionLabel: "Connect Teams"
+goals:
+  - name: sprint_plans_delivered
+    description: "Generate actionable sprint plans on each planning cycle"
+    category: primary
+    metric:
+      type: count
+      entity: sprint_plans
+    target:
+      operator: ">"
+      value: 0
+      period: per_run
+      condition: "when scheduled run fires"
+    feedback:
+      enabled: true
+      entityType: sprint_plans
+      actions:
+        - { value: adopted, label: "Plan adopted as-is" }
+        - { value: modified, label: "Plan adopted with changes" }
+        - { value: rejected, label: "Plan not useful" }
+  - name: velocity_accuracy
+    description: "Planned story points should match actual completion within 20%"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: sprint_plans, filter: { velocity_variance_pct: { "$lte": 20 } } }
+      denominator: { entity: sprint_plans, filter: { status: "completed" } }
+    target:
+      operator: ">"
+      value: 0.75
+      period: monthly
+  - name: velocity_trend_tracking
+    description: "Maintain up-to-date velocity trends across sprints"
+    category: health
+    metric:
+      type: count
+      source: memory
+      namespace: velocity_trends
+    target:
+      operator: ">"
+      value: 0
+      period: monthly
+      condition: "cumulative growth"
+  - name: dependency_risk_detection
+    description: "Flag blocked dependencies before sprint commitment"
+    category: secondary
+    metric:
+      type: count
+      entity: priority_recommendations
+      filter: { type: "blocked_dependency" }
+    target:
+      operator: ">="
+      value: 0
+      period: per_run
 ---
 
 # Sprint Planner

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: experiment-tracker
   displayName: "Experiment Tracker"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "A/B experiment monitoring, statistical analysis, and ship/kill recommendations."
   category: analytics
   tags: ["experiments", "ab-testing", "statistics", "conversion", "growth"]
@@ -72,6 +72,95 @@ automations:
       promptTemplate: "Re-evaluate statistical significance for this experiment. Check sample size, calculate p-value, and update recommendation if threshold met."
 requirements:
   minTier: "starter"
+setup:
+  steps:
+    - id: set-significance-level
+      name: "Set significance level"
+      description: "Configure the p-value threshold for declaring experiment winners (default: 0.05)."
+      type: north_star
+      group: configuration
+      priority: required
+      reason: "The bot reads North Star key significance_level before every evaluation. Without it, defaults to 0.05 but explicit setting ensures team alignment."
+      ui:
+        key: "significance_level"
+    - id: set-minimum-sample-size
+      name: "Set minimum sample size"
+      description: "Configure the minimum number of observations per variant before significance can be declared."
+      type: north_star
+      group: configuration
+      priority: required
+      reason: "The bot requires BOTH p < threshold AND minimum sample size met. This prevents premature winner declarations."
+      ui:
+        key: "minimum_sample_size"
+    - id: seed-experiments
+      name: "Create experiment records"
+      description: "Seed at least one experiments record with variant definitions, metric targets, and start date."
+      type: data_presence
+      group: data
+      priority: required
+      reason: "The bot queries experiments records to know which A/B tests to evaluate. Without them, it has nothing to analyze."
+      ui:
+        entityType: "experiments"
+        minCount: 1
+    - id: seed-experiment-metrics
+      name: "Feed experiment metrics"
+      description: "Ensure experiment_metrics records are flowing in from your analytics pipeline with per-variant conversion data."
+      type: data_presence
+      group: data
+      priority: required
+      reason: "Statistical calculations require ongoing metric data per variant. The bot cannot compute significance without observations."
+      ui:
+        entityType: "experiment_metrics"
+        minCount: 10
+    - id: set-north-star-mission
+      name: "Define North Star mission"
+      description: "Set the workspace mission so the bot understands business context for experiment prioritization."
+      type: north_star
+      group: configuration
+      priority: recommended
+      reason: "Mission context helps the bot prioritize which experiments get flagged first and weight business impact in recommendations."
+      ui:
+        key: "mission"
+    - id: verify-product-owner-active
+      name: "Ensure Product Owner bot is active"
+      description: "Ship/kill recommendations are sent to product-owner. Confirm that bot is deployed to receive them."
+      type: manual
+      group: external
+      priority: recommended
+      reason: "Experiment recommendations route to product-owner for decision-making. Without it, recommendations go unprocessed."
+      ui:
+        instructions: "Deploy the product-owner bot from the marketplace, or confirm it is already active in your workspace."
+goals:
+  - id: experiments-evaluated
+    name: "Experiments evaluated"
+    description: "Number of active experiments with up-to-date significance calculations."
+    metricType: count
+    target: "> 0 per run"
+    category: primary
+    feedback:
+      question: "Are the ship/kill recommendations aligned with your business judgment?"
+      options: ["yes", "mostly", "too conservative", "too aggressive"]
+  - id: significance-accuracy
+    name: "Significance accuracy"
+    description: "Percentage of shipped experiments that maintained their lift after 30 days (no novelty effect regression)."
+    metricType: rate
+    target: "> 75%"
+    category: primary
+    feedback:
+      question: "Did shipped experiments maintain their predicted lift in production?"
+      options: ["yes", "partially", "no - novelty effect", "not enough data yet"]
+  - id: stale-experiment-detection
+    name: "Stale experiment detection"
+    description: "Experiments running past 4 weeks without significance are flagged for kill consideration."
+    metricType: boolean
+    target: "true"
+    category: health
+  - id: recommendation-timeliness
+    name: "Recommendation timeliness"
+    description: "Ship/kill recommendations are generated within one run cycle of reaching significance."
+    metricType: threshold
+    target: "< 24 hours"
+    category: primary
 ---
 
 # Experiment Tracker
