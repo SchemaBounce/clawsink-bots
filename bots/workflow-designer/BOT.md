@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Expert workflow architect — designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -402,7 +402,9 @@ zones:
   zone2Domains: ["engineering"]
 egress:
   mode: "llm-only"
-skills: []
+skills:
+  - ref: "skills/workflow-designer@1.0.0"
+  - ref: "skills/pipeline-proposer@1.0.0"
 plugins: []
 mcpServers: []
 requirements:
