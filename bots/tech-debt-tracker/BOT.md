@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: tech-debt-tracker
   displayName: "Tech Debt Tracker"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Analyzes code review findings and quality metrics to identify technical debt patterns, track debt over time, and suggest refactoring priorities."
   category: engineering
   tags: ["tech-debt", "code-quality", "refactoring", "engineering"]
@@ -65,6 +65,8 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Receives tasks and GitHub issues, plans implementations, spawns Claude Code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -63,6 +63,8 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/implementation-planning@1.0.0"
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"

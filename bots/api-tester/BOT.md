@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: api-tester
   displayName: "API Tester"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "API endpoint testing, performance benchmarking, and health monitoring."
   category: engineering
   tags: ["api-testing", "performance", "health-monitoring", "regression", "benchmarks"]
@@ -79,6 +79,8 @@ mcpServers:
 egress:
   mode: "open"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: marketing-growth
   displayName: "Marketing & Growth"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Content calendar management, SEO tracking, campaign metric analysis, social scheduling."
   category: marketing
   tags: ["marketing", "growth", "seo", "campaigns", "content", "social"]
@@ -89,6 +89,8 @@ mcpServers:
     required: false
     reason: "Connect to Google Analytics, Mailchimp, and social media platforms for campaign metrics"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
 plugins:
   - ref: "composio@latest"

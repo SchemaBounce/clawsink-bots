@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-review-manager
   displayName: "Review Manager"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Monitors reviews across all platforms, drafts host responses, identifies feedback patterns, tracks rating trends."
   category: support
   tags: ["str", "review-management", "reputation", "guest-feedback", "ratings", "hospitality"]
@@ -68,6 +68,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.airbnb.com", "api.vrbo.com", "app.lodgify.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/review-response-generation@1.0.0"
 mcpServers:
   - ref: "tools/agentmail"

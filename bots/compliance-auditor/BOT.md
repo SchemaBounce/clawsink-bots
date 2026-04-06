@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: compliance-auditor
   displayName: "Compliance Auditor"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Checks regulatory compliance on new financial records."
   category: fintech
   tags: ["compliance", "audit", "regulatory", "cdc"]
@@ -74,6 +74,8 @@ mcpServers:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/cdc-event-analysis@1.0.0"
 requirements:
   minTier: "starter"

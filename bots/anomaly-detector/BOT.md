@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
@@ -63,6 +63,9 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/data-ops@1.0.0"
   - ref: "skills/anomaly-detection@1.0.0"
 requirements:
   minTier: "starter"

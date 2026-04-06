@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-marketer
   displayName: "Property Marketer"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Creates listing descriptions, manages social media, generates seasonal promotions, and optimizes property visibility across platforms."
   category: marketing
   tags: ["str", "listing-optimization", "social-media", "property-marketing", "seo", "hospitality"]
@@ -66,6 +66,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["graph.facebook.com", "api.instagram.com", "api.pinterest.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/listing-optimization@1.0.0"
 mcpServers:
   - ref: "tools/agentmail"

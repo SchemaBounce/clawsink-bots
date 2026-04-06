@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -70,6 +70,9 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.pagerduty.com", "api.datadoghq.com", "api.opsgenie.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/workflow-ops@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/pipeline-monitoring@1.0.0"
   - ref: "skills/sla-compliance@1.0.0"

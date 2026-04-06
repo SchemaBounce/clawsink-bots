@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revenue-analyst
   displayName: "Revenue Analyst"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Daily revenue analysis and trend reporting."
   category: finance
   tags: ["revenue", "analytics", "trends"]
@@ -69,6 +69,9 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.stripe.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/data-ops@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
 mcpServers:
   - ref: "tools/stripe"

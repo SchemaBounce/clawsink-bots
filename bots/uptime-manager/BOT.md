@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: uptime-manager
   displayName: "Uptime Manager"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Manages status pages, tracks SLA compliance, monitors uptime percentages, and produces incident postmortems."
   category: operations
   tags: ["uptime", "status-page", "sla", "postmortem", "incident-communication"]
@@ -65,6 +65,9 @@ zones:
   zone1Read: ["mission", "sla_targets", "incident_severity_definitions", "status_page_config"]
   zone2Domains: ["operations", "support"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/workflow-ops@1.0.0"
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/sla-compliance@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"

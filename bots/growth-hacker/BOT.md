@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: growth-hacker
   displayName: "Growth Hacker"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Rapid experimentation, viral loop design, and acquisition channel optimization."
   category: marketing
   tags: ["growth", "experiments", "acquisition", "viral", "funnels", "optimization"]
@@ -73,6 +73,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com", "analyticsdata.googleapis.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/ab-testing@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
 mcpServers:
