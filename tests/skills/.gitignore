@@ -1,2 +1,3 @@
 # Test results contain LLM responses — don't commit
 results/
+results-full/
