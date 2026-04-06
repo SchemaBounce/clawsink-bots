@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]
@@ -72,6 +72,8 @@ presence:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"

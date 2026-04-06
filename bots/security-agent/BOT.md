@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: security-agent
   displayName: "Security Agent"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Vulnerability scanning, security policy audits, CVE monitoring, pen test posture checks, secret rotation tracking."
   category: operations
   tags: ["security", "pentest", "vulnerabilities", "cve", "policy", "compliance", "secrets"]
@@ -68,6 +68,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["nvd.nist.gov", "cve.org", "osv.dev", "api.github.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
 mcpServers:
   - ref: "tools/github"

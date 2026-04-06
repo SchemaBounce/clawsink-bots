@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: churn-predictor
   displayName: "Churn Predictor"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Analyzes user activity patterns to predict and flag churn risk."
   category: saas
   tags: ["churn", "retention", "analytics", "cdc"]
@@ -65,6 +65,9 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/data-ops@1.0.0"
   - ref: "skills/cdc-event-analysis@1.0.0"
 presence:
   web:

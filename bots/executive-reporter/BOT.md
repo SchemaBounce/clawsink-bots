@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-reporter
   displayName: "Executive Reporter"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "C-suite executive summaries, KPI dashboards, and cross-domain business intelligence."
   category: analytics
   tags: ["executive", "reports", "KPI", "dashboards", "business-intelligence", "c-suite"]
@@ -83,6 +83,8 @@ mcpServers:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/report-generation@1.0.0"
 automations:
   triggers: []

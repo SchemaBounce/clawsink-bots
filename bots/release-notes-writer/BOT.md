@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]
@@ -64,6 +64,8 @@ presence:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
 mcpServers:

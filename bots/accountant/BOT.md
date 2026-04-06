@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -82,6 +82,9 @@ mcpServers:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/data-ops@1.0.0"
   - ref: "skills/invoice-categorization@1.0.0"
   - ref: "skills/expense-tracking@1.0.0"
   - ref: "skills/budget-monitoring@1.0.0"

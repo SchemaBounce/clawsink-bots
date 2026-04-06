@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -76,6 +76,8 @@ presence:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"

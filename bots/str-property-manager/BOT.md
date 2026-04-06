@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-manager
   displayName: "Property Manager"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Lead coordinator for short-term rental operations — consolidates reports, manages portfolio dashboard, coordinates specialists."
   category: operations
   tags: ["str", "property-management", "portfolio", "coordination", "lead", "hospitality"]
@@ -65,6 +65,8 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/daily-briefing@1.0.0"
   - ref: "skills/cross-domain-synthesis@1.0.0"
 mcpServers:

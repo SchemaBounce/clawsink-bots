@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -67,6 +67,9 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.github.com", "api.gitlab.com", "circleci.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/workflow-ops@1.0.0"
   - ref: "skills/pipeline-monitoring@1.0.0"
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"

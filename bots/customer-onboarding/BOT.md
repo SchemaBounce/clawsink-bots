@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-onboarding
   displayName: "Customer Onboarding"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Triggers and manages onboarding workflows for new customers."
   category: saas
   tags: ["onboarding", "customers", "workflow", "cdc"]
@@ -98,6 +98,8 @@ mcpServers:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/cdc-event-analysis@1.0.0"
 requirements:
   minTier: "starter"

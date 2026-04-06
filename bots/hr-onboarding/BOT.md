@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]
@@ -69,6 +69,8 @@ presence:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/follow-up-tracking@1.0.0"
   - ref: "skills/task-management@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"

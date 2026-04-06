@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-channel-manager
   displayName: "Channel Manager"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Syncs listings across Airbnb, VRBO, Lodgify, and Facebook Marketplace — detects calendar conflicts and monitors listing health."
   category: operations
   tags: ["str", "channel-management", "airbnb", "vrbo", "lodgify", "calendar-sync", "hospitality"]
@@ -67,6 +67,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.airbnb.com", "ws.airbnb.com", "api.vrbo.com", "app.lodgify.com", "graph.facebook.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/channel-listing-sync@1.0.0"
 mcpServers:
   - ref: "tools/agentmail"

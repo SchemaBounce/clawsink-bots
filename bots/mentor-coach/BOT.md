@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: mentor-coach
   displayName: "Mentor / Coach"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Bot team performance analysis, process improvement, harmony monitoring, weekly team health reports."
   category: management
   tags: ["mentor", "coaching", "team-health", "performance", "harmony", "process-improvement"]
@@ -62,6 +62,8 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
   - ref: "skills/cross-domain-synthesis@1.0.0"

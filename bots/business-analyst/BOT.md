@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: business-analyst
   displayName: "Business Analyst"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Cross-domain analysis, trend detection, and strategic recommendations from all bot findings."
   category: management
   tags: ["analysis", "trends", "strategy", "cross-domain", "insights"]
@@ -85,6 +85,9 @@ mcpServers:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/data-ops@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
 plugins:
   - ref: "memory-lancedb@^2.0.0"

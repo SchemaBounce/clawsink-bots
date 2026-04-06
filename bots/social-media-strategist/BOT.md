@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]
@@ -68,6 +68,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.twitter.com", "api.x.com", "api.linkedin.com", "graph.facebook.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
 mcpServers:

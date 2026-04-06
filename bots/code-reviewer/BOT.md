@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: code-reviewer
   displayName: "Code Reviewer"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Automated code review with security, quality, and architecture analysis."
   category: engineering
   tags: ["code-review", "security", "quality", "architecture", "pull-requests"]
@@ -66,6 +66,8 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/code-review@1.0.0"
 presence:
   web:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: market-intelligence
   displayName: "Market Intelligence"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Track industry landscape, product announcements, feature parity gaps, and positioning shifts."
   category: management
   tags: ["market-analysis", "industry", "landscape", "positioning", "feature-parity"]
@@ -85,6 +85,9 @@ mcpServers:
     required: false
     reason: "Send market intelligence briefings and competitive alerts to stakeholders"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/data-ops@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
 plugins:

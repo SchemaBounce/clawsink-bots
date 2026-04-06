@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-turnover-coordinator
   displayName: "Turnover Coordinator"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Manages cleaning schedules between guests, tracks turnover status, ensures properties are guest-ready, flags maintenance issues."
   category: operations
   tags: ["str", "turnover", "cleaning", "maintenance", "scheduling", "hospitality"]
@@ -66,6 +66,8 @@ zones:
 egress:
   mode: "none"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/turnover-scheduling@1.0.0"
 mcpServers:
   - ref: "tools/agentmail"

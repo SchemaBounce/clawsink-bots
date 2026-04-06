@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: legal-compliance
   displayName: "Legal & Compliance"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Contract review queue, GDPR/SOC2 compliance tracking, regulatory change monitoring."
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
@@ -74,6 +74,8 @@ mcpServers:
     required: false
     reason: "Connect to contract management and compliance tracking SaaS platforms"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
 requirements:
   minTier: "starter"

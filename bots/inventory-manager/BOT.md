@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-manager
   displayName: "Inventory & Acquisition Manager"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Stock level monitoring, reorder calculations, vendor tracking, acquisition pipeline management."
   category: operations
   tags: ["inventory", "stock", "vendors", "reorder", "acquisition", "procurement"]
@@ -87,6 +87,9 @@ mcpServers:
     required: false
     reason: "Connect to ERP, procurement, and supply chain SaaS platforms for order management"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/data-ops@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
 automations:
   triggers:

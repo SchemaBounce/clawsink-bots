@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: content-scheduler
   displayName: "Content Scheduler"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Plans and schedules content calendar across channels."
   category: marketing
   tags: ["content", "calendar", "planning"]
@@ -84,6 +84,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com"]
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
 plugins:
   - ref: "gog@latest"

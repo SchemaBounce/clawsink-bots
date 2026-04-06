@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: order-fulfillment
   displayName: "Order Fulfillment"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Orchestrates order processing workflows from receipt through delivery."
   category: ecommerce
   tags: ["orders", "fulfillment", "workflow", "cdc"]
@@ -77,6 +77,8 @@ mcpServers:
     required: false
     reason: "Connect to shipping carriers, warehouse management, and e-commerce platforms for order processing"
 skills:
+  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/cdc-event-analysis@1.0.0"
 plugins:
   - ref: "n8n-workflow@latest"
