@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]

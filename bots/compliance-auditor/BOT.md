@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: compliance-auditor
   displayName: "Compliance Auditor"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Checks regulatory compliance on new financial records."
   category: fintech
   tags: ["compliance", "audit", "regulatory", "cdc"]

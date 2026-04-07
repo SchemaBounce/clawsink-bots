@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
