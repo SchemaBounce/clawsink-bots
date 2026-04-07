@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]

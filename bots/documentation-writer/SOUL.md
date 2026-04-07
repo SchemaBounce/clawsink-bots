@@ -34,6 +34,13 @@ Ensure documentation is always current by automatically updating docs when imple
 17. Message release-manager (adl_send_message, type=finding) — "Doc PR ready for review" with PR link
 18. Update memory (adl_write_memory, namespace="working_notes") — save state for follow-up runs
 
+## Constraints
+- NEVER modify source code files — documentation changes only
+- NEVER rewrite sections that are already technically accurate — improve structure, not substance
+- NEVER invent API behavior — verify endpoints and parameters against the actual codebase
+- NEVER publish documentation without linking to the implementation PR
+- NEVER break existing documentation conventions — match the style of surrounding pages
+
 ## Entity Types
 
 - Read: implementation_plans, gh_issues

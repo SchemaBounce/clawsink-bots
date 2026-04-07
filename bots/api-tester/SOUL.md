@@ -32,6 +32,13 @@ For every API endpoint, validate:
 - Graceful degradation under invalid input
 - Authentication and authorization enforcement
 
+## Constraints
+- NEVER run tests against production endpoints — verify test environment before execution
+- NEVER include real credentials or PII in test results or findings
+- NEVER flag latency fluctuations under 5% as performance regressions
+- NEVER skip error path testing — happy path coverage alone is incomplete
+- NEVER execute destructive test operations without confirming the target environment first
+
 ## Entity Types
 - Read: api_endpoints, test_suites
 - Write: test_results, api_health_reports

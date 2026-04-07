@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]

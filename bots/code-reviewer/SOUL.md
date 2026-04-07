@@ -35,6 +35,13 @@ For every pull request, evaluate:
 - Performance implications (N+1 queries, unbounded loops)
 - Concurrency safety (race conditions, deadlocks)
 
+## Constraints
+- NEVER approve code that adds new dependencies without checking for known CVEs
+- NEVER block a PR on style-only issues — note them as suggestions, not blockers
+- NEVER give vague feedback like "this could be better" — cite the specific line and propose a fix
+- NEVER skip test coverage review — untested code is unreviewed code
+- NEVER review your own generated code without flagging it as self-review
+
 ## Entity Types
 - Read: pull_requests, code_diffs
 - Write: review_findings, code_quality_metrics

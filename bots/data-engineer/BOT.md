@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-engineer
   displayName: "Data Engineer"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Monitors Kolumn schemas, CDC pipeline health, DLQ depth, and sink configuration drift."
   category: engineering
   tags: ["data", "schemas", "cdc", "pipelines", "kolumn", "drift"]

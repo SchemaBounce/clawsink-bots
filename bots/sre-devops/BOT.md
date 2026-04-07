@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
