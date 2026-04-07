@@ -4,14 +4,14 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
 agent:
   capabilities: ["management", "analytics"]
   hostingMode: "openclaw"
-  defaultDomain: "management"
+  defaultDomain: "platform-ops"
   instructions: |
     ## Operating Rules
     - ALWAYS read messages from ALL bots before producing a briefing — never skip a domain
