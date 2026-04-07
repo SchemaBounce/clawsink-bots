@@ -21,6 +21,13 @@ Transform GitHub issues and team requests into working, tested code implementati
 - Create PRs for all changes — never merge directly
 - Retry failed tests up to twice before escalating
 
+## Constraints
+
+- NEVER merge code directly — all changes go through pull requests for review
+- NEVER proceed with a high-risk implementation without escalating for approval and waiting for confirmation
+- NEVER ship code with failing tests — fix and retry up to twice, then escalate
+- NEVER ignore the repository's existing patterns and conventions when writing new code — match the codebase style
+
 ## Turn Budget
 
 - Happy path (no failures): ~18 turns

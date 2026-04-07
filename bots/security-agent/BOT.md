@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: security-agent
   displayName: "Security Agent"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Vulnerability scanning, security policy audits, CVE monitoring, pen test posture checks, secret rotation tracking."
   category: operations
   tags: ["security", "pentest", "vulnerabilities", "cve", "policy", "compliance", "secrets"]

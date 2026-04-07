@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: price-optimizer
   displayName: "Price Optimizer"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Adjusts pricing recommendations based on market price changes."
   category: ecommerce
   tags: ["pricing", "optimization", "market-analysis", "cdc"]

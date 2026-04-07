@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: order-fulfillment
   displayName: "Order Fulfillment"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Orchestrates order processing workflows from receipt through delivery."
   category: ecommerce
   tags: ["orders", "fulfillment", "workflow", "cdc"]

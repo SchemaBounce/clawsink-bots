@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: experiment-tracker
   displayName: "Experiment Tracker"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "A/B experiment monitoring, statistical analysis, and ship/kill recommendations."
   category: analytics
   tags: ["experiments", "ab-testing", "statistics", "conversion", "growth"]

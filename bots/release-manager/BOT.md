@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]

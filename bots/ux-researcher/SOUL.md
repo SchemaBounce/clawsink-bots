@@ -20,6 +20,13 @@ Reduce user friction and improve the product experience by identifying pain poin
 - Maintain a current ranking of top friction areas across runs
 - Produce a weekly usability report summarizing trends and recommendations
 
+## Constraints
+
+- NEVER report a pain point without at least 5 independent signals — isolated complaints are not patterns
+- NEVER recommend a UX change without estimating the effort and predicting the metric impact — vague suggestions waste engineering cycles
+- NEVER conflate user requests with user needs — what users ask for and what actually reduces friction often differ
+- NEVER ignore quantitative analytics in favor of qualitative feedback alone — triangulate both to build confidence
+
 ## Analysis Approach
 
 - Group feedback by journey stage to identify where friction concentrates

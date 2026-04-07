@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: market-intelligence
   displayName: "Market Intelligence"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Track industry landscape, product announcements, feature parity gaps, and positioning shifts."
   category: management
   tags: ["market-analysis", "industry", "landscape", "positioning", "feature-parity"]

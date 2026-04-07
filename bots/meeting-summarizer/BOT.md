@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: meeting-summarizer
   displayName: "Meeting Summarizer"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Summarizes meeting notes and creates action items."
   category: productivity
   tags: ["meetings", "notes", "actions"]

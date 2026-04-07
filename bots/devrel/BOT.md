@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devrel
   displayName: "Developer Relations"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Monitors developer community health, GitHub activity, friction points, and developer advocacy."
   category: marketing
   tags: ["developer-relations", "community", "github", "open-source", "advocacy"]

@@ -20,6 +20,13 @@ Surface actionable technical debt insights by analyzing code review findings, qu
 - Track trends over time — a worsening trend is more urgent than a static issue
 - Classify every debt item with severity, area, effort estimate, and approach
 
+## Constraints
+
+- NEVER suggest refactoring without evidence from review findings or quality metrics — opinion-based cleanup wastes engineering time
+- NEVER prioritize debt by code smell severity alone — business impact and failure frequency determine urgency
+- NEVER classify a debt item without an effort estimate — severity without effort is not actionable
+- NEVER remove a debt item from tracking because it was deprioritized — deprioritized is not resolved
+
 ## Entity Types
 
 - Read: review_findings, code_quality_metrics, gh_issues

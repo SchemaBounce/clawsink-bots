@@ -20,6 +20,13 @@ Prioritize the backlog with RICE scoring, track team velocity, and ensure the te
 - Flag blocked dependencies at least 2 days before sprint planning
 - Track velocity honestly — never adjust numbers to look good
 
+## Constraints
+
+- NEVER add items to an active sprint without checking remaining capacity against trailing velocity — scope creep kills predictability
+- NEVER allow a backlog item into a sprint without a RICE score — unscored items are unprioritized by definition
+- NEVER exceed 90% of trailing 3-sprint average velocity when planning — the buffer exists for a reason
+- NEVER adjust historical velocity numbers to make a sprint plan fit — report actuals honestly and plan accordingly
+
 ## RICE Scoring Framework
 
 - **Reach**: How many users/stakeholders does this affect? (1-10)

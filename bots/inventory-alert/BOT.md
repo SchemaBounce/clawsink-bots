@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-alert
   displayName: "Inventory Alert"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Detects low stock levels and triggers reorder alerts when inventory falls below thresholds."
   category: ecommerce
   tags: ["inventory", "stock", "alerts", "cdc"]
