@@ -1,0 +1,65 @@
+name: Validate Bot Manifests
+
+on:
+  pull_request:
+    branches: [main, development]
+  push:
+    branches: [development]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Skills
+        run: bash tests/skills/validate-format.sh
+
+      - name: Validate Bot SOUL.md
+        run: bash tests/bots/validate-soul.sh
+
+      - name: Validate Bot Manifests
+        run: bash tests/bots/validate-manifest.sh
+
+      - name: Validate Cross-References
+        run: bash tests/bots/validate-integrity.sh
+
+  quality-gate:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check SOUL.md quality scores
+        run: |
+          MISSING=0
+          for soul in bots/*/SOUL.md; do
+            BOT=$(basename $(dirname "$soul"))
+            if ! grep -q "## Constraints" "$soul"; then
+              echo "::warning file=$soul::Missing ## Constraints section"
+              MISSING=$((MISSING + 1))
+            fi
+            if ! grep -q "## Run Protocol" "$soul"; then
+              echo "::warning file=$soul::Missing ## Run Protocol section"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          if [ $MISSING -gt 0 ]; then
+            echo "::warning::$MISSING missing sections found across bot SOUL.md files"
+          fi
+
+      - name: Check skill prompt quality
+        run: |
+          for prompt in skills/*/prompt.md; do
+            SKILL=$(basename $(dirname "$prompt"))
+            LINES=$(wc -l < "$prompt")
+            if [ "$LINES" -lt 6 ]; then
+              echo "::warning file=$prompt::Skill $SKILL has only $LINES lines — consider expanding"
+            fi
+            if ! grep -q "NEVER\|Anti-pattern\|Do not" "$prompt"; then
+              echo "::warning file=$prompt::Skill $SKILL has no anti-patterns"
+            fi
+            if ! grep -q "adl_" "$prompt"; then
+              echo "::warning file=$prompt::Skill $SKILL has no ADL tool references"
+            fi
+          done
