@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@playwright/mcp@latest"]
+  args: ["-y", "@playwright/mcp@0.0.70"]
 env: []
 tools:
   - name: browser_navigate

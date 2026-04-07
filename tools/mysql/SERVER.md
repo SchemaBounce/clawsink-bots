@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@benborla29/mcp-server-mysql"]
+  args: ["-y", "@benborla29/mcp-server-mysql@2.0.8"]
 env:
   - name: MYSQL_HOST
     description: "MySQL server hostname"

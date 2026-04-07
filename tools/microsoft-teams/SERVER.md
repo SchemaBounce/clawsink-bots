@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "teams-mcp-server"]
+  args: ["-y", "teams-mcp-server@1.0.12"]
 env:
   - name: MICROSOFT_CLIENT_ID
     description: "Azure AD application client ID"

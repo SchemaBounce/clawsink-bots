@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "mcp-grafana-npx"]
+  args: ["-y", "mcp-grafana-npx@1.0.1"]
 env:
   - name: GRAFANA_URL
     description: "Grafana instance URL"

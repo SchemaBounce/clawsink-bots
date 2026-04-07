@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "shopify-mcp"]
+  args: ["-y", "shopify-mcp@1.0.8"]
 env:
   - name: SHOPIFY_ACCESS_TOKEN
     description: "Shopify Admin API access token"

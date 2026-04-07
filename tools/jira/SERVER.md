@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-atlassian"]
+  args: ["-y", "@xuandev/atlassian-mcp@1.1.1"]
 env:
   - name: JIRA_API_TOKEN
     description: "Jira API Token for authentication"

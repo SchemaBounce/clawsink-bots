@@ -10,9 +10,8 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "freshdesk-mcp-server"]
+  type: "sse"
+  url: "https://mcp.composio.dev/freshdesk"
 env:
   - name: FRESHDESK_DOMAIN
     description: "Your Freshdesk domain e.g. mycompany.freshdesk.com"

@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@sentry/mcp-server"]
+  args: ["-y", "@sentry/mcp-server@0.31.0"]
 env:
   - name: SENTRY_AUTH_TOKEN
     description: "Sentry auth token with project:read and issue:read scopes"

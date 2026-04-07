@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-stripe", "--tools=all"]
+  args: ["-y", "@stripe/mcp@0.3.3", "--tools=all"]
 env:
   - name: STRIPE_API_KEY
     description: "Stripe API secret key (sk_live_... or sk_test_...)"

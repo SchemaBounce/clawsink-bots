@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "zendesk-mcp-server"]
+  args: ["-y", "zendesk-mcp@1.0.0"]
 env:
   - name: ZENDESK_SUBDOMAIN
     description: "Your Zendesk subdomain e.g. mycompany"

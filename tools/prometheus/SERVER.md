@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "prometheus-mcp"]
+  args: ["-y", "prometheus-mcp@1.1.3"]
 env:
   - name: PROMETHEUS_URL
     description: "Prometheus server URL e.g. http://localhost:9090"

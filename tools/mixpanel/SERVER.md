@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "mixpanel-mcp-server"]
+  args: ["-y", "mixpanel-mcp-server@2.0.2"]
 env:
   - name: MIXPANEL_PROJECT_TOKEN
     description: "Mixpanel project token"

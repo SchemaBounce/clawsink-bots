@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@azure/mcp"]
+  args: ["-y", "@azure/mcp@2.0.0-beta.39"]
 env:
   - name: AZURE_CLIENT_ID
     description: "Azure service principal client ID"

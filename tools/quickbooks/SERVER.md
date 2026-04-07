@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "quickbooks-mcp"]
+  args: ["-y", "quickbooks-mcp@0.5.1"]
 env:
   - name: QUICKBOOKS_CLIENT_ID
     description: "QuickBooks OAuth client ID"

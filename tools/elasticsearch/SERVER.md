@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@elastic/mcp-server-elasticsearch"]
+  args: ["-y", "@elastic/mcp-server-elasticsearch@0.3.1"]
 env:
   - name: ELASTICSEARCH_URL
     description: "Elasticsearch cluster URL e.g. https://localhost:9200"

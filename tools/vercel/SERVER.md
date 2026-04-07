@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "vercel-mcp-server"]
+  args: ["-y", "vercel-mcp-server@1.0.0"]
 env:
   - name: VERCEL_TOKEN
     description: "Vercel API token from vercel.com/account/tokens"

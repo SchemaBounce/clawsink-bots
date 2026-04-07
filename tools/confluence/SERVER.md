@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "confluence-mcp-server"]
+  args: ["-y", "confluence-mcp-server@1.1.0"]
 env:
   - name: CONFLUENCE_URL
     description: "Confluence instance URL"

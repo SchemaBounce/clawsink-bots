@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "discord-mcp-server"]
+  args: ["-y", "discord-mcp-server@1.0.1"]
 env:
   - name: DISCORD_BOT_TOKEN
     description: "Discord bot token from discord.com/developers"

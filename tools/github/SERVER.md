@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-github"]
+  args: ["-y", "@modelcontextprotocol/server-github@2025.4.8"]
 env:
   - name: GITHUB_PERSONAL_ACCESS_TOKEN
     description: "GitHub PAT with repo and issues scope"

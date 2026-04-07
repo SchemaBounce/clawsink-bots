@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "gcp-mcp-server"]
+  args: ["-y", "gcp-mcp-server@1.4.0"]
 env:
   - name: GOOGLE_APPLICATION_CREDENTIALS
     description: "Path to GCP service account JSON key"

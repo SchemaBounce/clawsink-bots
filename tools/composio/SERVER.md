@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@composio/mcp@latest"]
+  args: ["-y", "@composio/mcp@1.0.9"]
 env:
   - name: COMPOSIO_API_KEY
     description: "API key from composio.dev"

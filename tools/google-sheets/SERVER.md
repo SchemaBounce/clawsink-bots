@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "google-sheets-mcp"]
+  args: ["-y", "google-sheets-mcp@1.2.0"]
 env:
   - name: GOOGLE_CLIENT_ID
     description: "Google OAuth client ID"

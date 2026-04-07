@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "airtable-mcp-server"]
+  args: ["-y", "airtable-mcp-server@1.13.0"]
 env:
   - name: AIRTABLE_API_KEY
     description: "Airtable personal access token from airtable.com/create/tokens"

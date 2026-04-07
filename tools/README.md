@@ -169,7 +169,7 @@ The `tools` section is a declarative listing for marketplace display and depende
 
 Never put secrets in SERVER.md — only declare variable names. Users configure actual values in their workspace settings.
 
-## Available Servers (62 total)
+## Available Servers (63 total)
 
 ### Engineering & DevOps
 

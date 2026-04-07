@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@gannonh/firebase-mcp"]
+  args: ["-y", "@gannonh/firebase-mcp@1.4.9"]
 env:
   - name: GOOGLE_APPLICATION_CREDENTIALS
     description: "Path to Firebase service account JSON key"

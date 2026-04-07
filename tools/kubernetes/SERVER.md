@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@strowk/mcp-k8s"]
+  args: ["-y", "@strowk/mcp-k8s@0.6.1"]
 env:
   - name: KUBECONFIG
     description: "Path to kubeconfig file, defaults to ~/.kube/config"

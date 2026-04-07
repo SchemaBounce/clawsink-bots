@@ -10,9 +10,8 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "pagerduty-mcp-server"]
+  type: "sse"
+  url: "https://mcp.composio.dev/pagerduty"
 env:
   - name: PAGERDUTY_API_KEY
     description: "PagerDuty REST API key"

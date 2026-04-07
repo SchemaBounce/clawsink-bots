@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@agentx-ai/mailchimp-mcp-server"]
+  args: ["-y", "@agentx-ai/mailchimp-mcp-server@1.1.1"]
 env:
   - name: MAILCHIMP_API_KEY
     description: "Mailchimp API key from Account > Extras > API keys"

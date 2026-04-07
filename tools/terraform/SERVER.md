@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "terraform-mcp-server"]
+  args: ["-y", "terraform-mcp-server@0.13.0"]
 env:
   - name: TERRAFORM_CLOUD_TOKEN
     description: "Terraform Cloud API token"

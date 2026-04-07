@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "agentmail-mcp"]
+  args: ["-y", "agentmail-mcp@0.2.2"]
 env:
   - name: AGENTMAIL_API_KEY
     description: "API key from agentmail.dev"

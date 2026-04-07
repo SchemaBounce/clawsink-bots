@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@twilio-alpha/mcp"]
+  args: ["-y", "@twilio-alpha/mcp@0.7.0"]
 env:
   - name: TWILIO_ACCOUNT_SID
     description: "Twilio Account SID from twilio.com/console"

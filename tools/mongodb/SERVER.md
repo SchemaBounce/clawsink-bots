@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "mongodb-mcp-server"]
+  args: ["-y", "mongodb-mcp-server@1.9.0"]
 env:
   - name: MONGODB_CONNECTION_STRING
     description: "MongoDB connection URI e.g. mongodb://user:pass@host:27017/db"

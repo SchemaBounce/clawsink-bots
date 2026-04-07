@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@gongrzhe/server-gmail-autoauth-mcp"]
+  args: ["-y", "@gongrzhe/server-gmail-autoauth-mcp@1.1.11"]
 env:
   - name: GOOGLE_CLIENT_ID
     description: "Google OAuth client ID"

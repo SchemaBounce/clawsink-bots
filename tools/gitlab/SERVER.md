@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-gitlab"]
+  args: ["-y", "@modelcontextprotocol/server-gitlab@2025.4.25"]
 env:
   - name: GITLAB_PERSONAL_ACCESS_TOKEN
     description: "GitLab PAT with api scope"

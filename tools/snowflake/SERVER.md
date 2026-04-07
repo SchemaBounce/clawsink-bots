@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "snowflake-mcp-server"]
+  args: ["-y", "snowflake-mcp-server@1.0.4"]
 env:
   - name: SNOWFLAKE_ACCOUNT
     description: "Snowflake account identifier"

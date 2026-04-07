@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "zoom-mcp-server"]
+  args: ["-y", "zoom-mcp-server@0.6.0"]
 env:
   - name: ZOOM_ACCOUNT_ID
     description: "Zoom Server-to-Server OAuth account ID"

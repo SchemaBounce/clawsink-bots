@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "docker-mcp-server"]
+  args: ["-y", "docker-mcp-server@2.1.1"]
 env:
   - name: DOCKER_HOST
     description: "Docker host URL, defaults to local socket"

@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "pipedrive-mcp-server"]
+  args: ["-y", "pipedrive-mcp-server@1.0.2"]
 env:
   - name: PIPEDRIVE_API_TOKEN
     description: "Pipedrive API token from Settings > Personal preferences"

@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@cocal/google-calendar-mcp"]
+  args: ["-y", "@cocal/google-calendar-mcp@2.6.1"]
 env:
   - name: GOOGLE_CLIENT_ID
     description: "Google OAuth client ID"

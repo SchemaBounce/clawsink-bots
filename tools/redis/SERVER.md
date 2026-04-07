@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "redis-mcp"]
+  args: ["-y", "redis-mcp@0.0.4"]
 env:
   - name: REDIS_URL
     description: "Redis connection URL e.g. redis://localhost:6379"

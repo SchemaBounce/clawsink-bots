@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "google-drive-mcp"]
+  args: ["-y", "google-drive-mcp@1.2.0"]
 env:
   - name: GOOGLE_CLIENT_ID
     description: "Google OAuth 2.0 client ID"

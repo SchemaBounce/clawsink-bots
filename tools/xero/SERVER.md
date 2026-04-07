@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "xero-mcp"]
+  args: ["-y", "xero-mcp@1.5.2"]
 env:
   - name: XERO_CLIENT_ID
     description: "Xero OAuth2 client ID"

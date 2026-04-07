@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-postgres"]
+  args: ["-y", "@modelcontextprotocol/server-postgres@0.6.2"]
 env:
   - name: POSTGRES_CONNECTION_STRING
     description: "PostgreSQL connection string e.g. postgresql://user:pass@host:5432/db"
