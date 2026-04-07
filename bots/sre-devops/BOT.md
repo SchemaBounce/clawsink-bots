@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -89,6 +89,24 @@ mcpServers:
   - ref: "tools/composio"
     required: false
     reason: "Connect to PagerDuty, Datadog, and OpsGenie for incident management workflows"
+  - ref: "tools/firebase"
+    required: false
+    reason: "Monitor Firebase logs, analytics, and Crashlytics crash reports"
+  - ref: "tools/datadog"
+    required: false
+    reason: "Query metrics, search logs, and monitor incidents via Datadog"
+  - ref: "tools/aws-cloudwatch"
+    required: false
+    reason: "Query CloudWatch logs, metrics, and alarms"
+  - ref: "tools/grafana"
+    required: false
+    reason: "Search dashboards and query Prometheus metrics via Grafana"
+  - ref: "tools/pagerduty"
+    required: false
+    reason: "Manage incidents, check on-call schedules, and trigger alerts"
+  - ref: "tools/sentry"
+    required: false
+    reason: "Track errors, search issues, and monitor release health"
 presence:
   web:
     browsing: true

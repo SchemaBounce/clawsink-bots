@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -103,6 +103,12 @@ mcpServers:
   - ref: "tools/composio"
     required: false
     reason: "Sync documentation status with project management and knowledge base platforms"
+  - ref: "tools/confluence"
+    required: false
+    reason: "Create and update wiki pages in Confluence"
+  - ref: "tools/google-docs"
+    required: false
+    reason: "Create and edit documentation in Google Docs"
 requirements:
   minTier: "team"
 setup:

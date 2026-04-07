@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -102,6 +102,18 @@ mcpServers:
   - ref: "tools/composio"
     required: false
     reason: "Integrate with PagerDuty, Datadog, and other DevOps SaaS platforms"
+  - ref: "tools/aws"
+    required: false
+    reason: "Manage EC2, S3, Lambda, and other AWS resources"
+  - ref: "tools/gcp"
+    required: false
+    reason: "Manage Google Cloud Compute, Storage, and Cloud Run resources"
+  - ref: "tools/kubernetes"
+    required: false
+    reason: "Manage Kubernetes pods, deployments, and services"
+  - ref: "tools/docker"
+    required: false
+    reason: "Manage Docker containers, images, and registries"
 requirements:
   minTier: "starter"
 setup:

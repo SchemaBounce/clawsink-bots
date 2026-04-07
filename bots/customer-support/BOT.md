@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -131,6 +131,15 @@ mcpServers:
   - ref: "tools/composio"
     required: true
     reason: "Sync ticket data with helpdesk, CRM, and customer success platforms"
+  - ref: "tools/zendesk"
+    required: false
+    reason: "Create, update, and search support tickets in Zendesk"
+  - ref: "tools/freshdesk"
+    required: false
+    reason: "Manage helpdesk tickets, contacts, and canned responses"
+  - ref: "tools/intercom"
+    required: false
+    reason: "Handle customer conversations and manage contact records"
 requirements:
   minTier: "starter"
 setup:

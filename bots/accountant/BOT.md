@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -79,6 +79,12 @@ mcpServers:
   - ref: "tools/composio"
     required: false
     reason: "Connect to accounting SaaS tools like QuickBooks, Xero, and expense management platforms"
+  - ref: "tools/quickbooks"
+    required: false
+    reason: "Create invoices, record payments, track expenses, and generate financial reports"
+  - ref: "tools/xero"
+    required: false
+    reason: "Manage invoices, contacts, bank transactions, and accounting reports"
 egress:
   mode: "none"
 skills:
