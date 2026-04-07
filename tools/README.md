@@ -169,7 +169,7 @@ The `tools` section is a declarative listing for marketplace display and depende
 
 Never put secrets in SERVER.md — only declare variable names. Users configure actual values in their workspace settings.
 
-## Available Servers (63 total)
+## Available Servers (66 total)
 
 ### Engineering & DevOps
 
@@ -184,6 +184,14 @@ Never put secrets in SERVER.md — only declare variable names. Users configure 
 | [terraform](terraform/) | Terraform IaC — plan, apply, state, workspaces | stdio |
 | [kubernetes](kubernetes/) | Kubernetes cluster — pods, deployments, services | stdio |
 | [claude-code](claude-code/) | Sandboxed Claude Code for implementation and PRs | streamable-http |
+| [argocd](argocd/) | Argo CD GitOps — applications, sync, resources, logs | stdio |
+
+### Platform (SchemaBounce + Kolumn)
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [schemabounce](schemabounce/) | SchemaBounce platform — workspaces, pipelines, schemas, ADL | streamable-http |
+| [kolumn](kolumn/) | Kolumn IaC — schema patterns, HCL generation, validation | streamable-http |
 
 ### Communications
 
