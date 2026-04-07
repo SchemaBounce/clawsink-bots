@@ -54,6 +54,55 @@ When processing invoices:
 4. Write categorization as acct_findings
 ```
 
+### prompt.md Quality Requirements
+
+Every skill prompt MUST include:
+
+1. **Numbered steps** with specific ADL tool names (e.g., `adl_query_records`, `adl_upsert_record`)
+2. **Output schema** specifying the entity_type and required fields for records written
+3. **2-3 anti-patterns** using "NEVER X — do Y instead" format
+4. **Numeric anchors** where applicable (thresholds, limits, character counts)
+
+Keep prompts under 25 lines for token efficiency.
+
+#### Good prompt.md (A grade)
+
+```
+1. Read messages (adl_read_messages) — check for requests
+2. Query uncategorized invoices (adl_query_records entity_type: invoices, filter: status=uncategorized)
+3. For each invoice: classify category, normalize vendor name, assess payment urgency
+4. Check for duplicates (same vendor + amount + date within 7-day window)
+5. Write categorization (adl_upsert_record entity_type: acct_findings)
+6. Flag duplicates as high severity (adl_send_message type: alert)
+
+Output: adl_upsert_record entity_type=acct_findings
+Required fields: invoice_id, category, vendor_normalized, urgency, duplicate_flag
+
+Anti-patterns:
+- NEVER categorize uncertain transactions — flag for human review instead
+- NEVER batch invoices older than 90 days with current — process separately
+- NEVER skip duplicate detection — duplicates cause double payments
+```
+
+#### Bad prompt.md (C grade)
+
+```
+1. Get the data
+2. Analyze it
+3. Write results
+4. Send alerts if needed
+```
+
+Problems: no tool names, no entity types, no anti-patterns, no output schema, not actionable.
+
+#### Interaction with SOUL.md
+
+Skills are injected into the agent's prompt alongside SOUL.md. The skill provides the HOW (procedure), while SOUL.md provides the WHO (identity, expertise, constraints). Skills should NOT:
+
+- Redefine the agent's identity or communication style
+- Duplicate constraints that are in SOUL.md or the platform prompt layer
+- Reference specific agents by name (use roles like "domain lead" instead for portability)
+
 ## Field Rules
 
 - `metadata.name` must match the directory name under `skills/`

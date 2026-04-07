@@ -608,9 +608,84 @@ I categorize with precision, budget with discipline, and flag fraud with urgency
 Precise, factual, and structured. I report in percentages and deviations, not adjectives. I never round, never guess, and never let an uncategorized transaction sit overnight.
 ```
 
+### Constraints Section (Required)
+
+Every SOUL.md MUST include a `## Constraints` section with 3-5 domain-specific NEVER rules. These are guardrails that prevent the agent from making domain-specific mistakes.
+
+**Format:** Each constraint uses "NEVER X — Y instead" pattern.
+
+**Rules:**
+- Constraints must be specific to the bot's domain, NOT generic platform rules
+- Generic rules (don't hallucinate, don't exceed tool budget) are handled by the platform prompt layer — do not duplicate them
+- 3-5 constraints per bot (enough to cover key failure modes, not so many they dilute impact)
+
+**Good constraints (domain-specific):**
+
+```markdown
+## Constraints
+- NEVER auto-publish content — always submit as draft for human review
+- NEVER categorize a transaction you're uncertain about — flag for human review instead
+- NEVER assign P0 to more than one issue simultaneously — escalate to executive-assistant
+```
+
+**Bad constraints (too generic — already in platform layer):**
+
+```markdown
+## Constraints
+- NEVER hallucinate data  ← platform layer handles this
+- NEVER exceed 8 tool calls  ← platform layer handles this
+- NEVER send more than 5 messages  ← platform layer handles this
+```
+
+### Run Protocol Section (Required)
+
+Every SOUL.md MUST include a `## Run Protocol` section with 8-10 numbered steps defining the agent's execution sequence. Use specific ADL tool names.
+
+**Standard template:**
+
+```markdown
+## Run Protocol
+1. Read messages (adl_read_messages) — check for requests from other agents
+2. Read memory (adl_read_memory key: last_run_state) — get last run timestamp
+3. Delta query (adl_query_records filter: created_at > {last_run_timestamp}) — only new items
+4. If nothing new and no messages: update last_run_state (adl_write_memory). STOP.
+5. [Domain-specific analysis step]
+6. [Domain-specific processing step]
+7. Write findings (adl_upsert_record entity_type: {role}_findings)
+8. Alert if critical (adl_send_message type: alert to: executive-assistant)
+9. Route non-critical to relevant agent (adl_send_message type: finding)
+10. Update memory (adl_write_memory key: last_run_state with timestamp + summary)
+```
+
+**Rules:**
+- Steps 1-4 (read messages, read memory, delta query, early exit) are standard — always include them
+- Steps 5-6 are domain-specific — customize for the bot's expertise
+- Steps 7-10 (write findings, alert, route, update memory) are standard — always include them
+- The delta-run pattern (step 4) saves tokens by exiting early when nothing changed
+- Use specific tool names (`adl_read_messages`, `adl_query_records`, etc.) — not vague "check for updates"
+
+### Platform Prompt Layer (Automatic)
+
+The OpenCLAW runtime automatically injects a platform-level prompt before every agent's SOUL.md. Bot authors do NOT need to include these rules — they are applied invisibly:
+
+1. **Platform Identity** — positions the agent as a platform worker with cost awareness
+2. **Execution Discipline** — anti-slop, anti-hallucination, numeric output anchors
+3. **Operational Safety** — blast radius awareness, tiered action permissions
+4. **Tool Discipline** — tool selection guidance, call budgets (target 3-5, max 8)
+5. **Output Quality** — false claims mitigation, severity calibration, entity ID discipline
+6. **Memory Discipline** — decay classes, zone rules, tool selection, anti-patterns
+7. **Inter-Agent Communication** — message rate limits, delegation limits, escalation rules
+
+**Output Style Modes** are also automatic based on task type:
+- `terse` for scheduled/CDC runs — records only, no prose
+- `conversational` for chat — natural language, suggest next steps
+- `detailed` for reports — headers, methodology, exec summary
+
+Do NOT duplicate these rules in SOUL.md. Focus SOUL.md on domain-specific identity, expertise, and constraints.
+
 ### Relationship to Scheduled Tasks
 
-SOUL.md defines HOW the agent works (personality, expertise). Scheduled tasks (BOT.md `schedule.tasks[]`) define WHAT the agent does and WHEN. The SOUL provides the consistent identity across all tasks -- a Guest Communicator checking Airbnb uses the same warm hospitality tone as when checking Facebook.
+SOUL.md defines WHO the agent is (identity, expertise, constraints) and HOW it executes (run protocol). Scheduled tasks (BOT.md `schedule.tasks[]`) define WHAT triggers the agent and WHEN. The SOUL provides the consistent identity across all tasks — a Guest Communicator checking Airbnb uses the same warm hospitality tone as when checking Facebook.
 
 ## Sub-Agents (`agents/` directory)
 
