@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: knowledge-base-curator
   displayName: "Knowledge Base Curator"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Organizes and updates knowledge base articles."
   category: productivity
   tags: ["knowledge", "documentation", "organization"]

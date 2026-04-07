@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: shipping-tracker
   displayName: "Shipping Tracker"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Monitors shipment status changes and detects delivery issues."
   category: ecommerce
   tags: ["shipping", "logistics", "tracking", "cdc"]

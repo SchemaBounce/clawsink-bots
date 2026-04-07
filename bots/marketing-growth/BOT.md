@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: marketing-growth
   displayName: "Marketing & Growth"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Content calendar management, SEO tracking, campaign metric analysis, social scheduling."
   category: marketing
   tags: ["marketing", "growth", "seo", "campaigns", "content", "social"]

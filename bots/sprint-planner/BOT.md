@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sprint-planner
   displayName: "Sprint Planner"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Sprint planning, backlog prioritization, and velocity tracking."
   category: project-management
   tags: ["sprints", "backlog", "velocity", "prioritization", "agile", "RICE"]

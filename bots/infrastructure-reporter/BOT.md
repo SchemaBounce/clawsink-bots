@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: infrastructure-reporter
   displayName: "Infrastructure Reporter"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Periodic infrastructure health summary reports."
   category: engineering
   tags: ["infrastructure", "health", "monitoring"]

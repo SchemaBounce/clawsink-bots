@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]

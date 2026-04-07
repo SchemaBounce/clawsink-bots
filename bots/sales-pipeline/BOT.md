@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]

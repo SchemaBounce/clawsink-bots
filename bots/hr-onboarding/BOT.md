@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]

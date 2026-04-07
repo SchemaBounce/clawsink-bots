@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ux-researcher
   displayName: "UX Researcher"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "User research synthesis, feedback analysis, and usability insight generation."
   category: design
   tags: ["ux", "research", "usability", "feedback", "user-experience", "design"]
