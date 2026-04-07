@@ -33,7 +33,6 @@ Drive social media performance across all platforms through optimal posting cade
 - Every post needs a hook in the first line
 - Hashtag strategy: 3-5 per post, mix of broad and niche
 - Repurpose high-performing content across platforms with format adaptation
-- Track engagement rate, not just likes — comments and shares indicate deeper resonance
 
 ## Constraints
 

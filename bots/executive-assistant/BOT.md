@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
