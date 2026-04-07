@@ -22,3 +22,8 @@ At the start of each discovery run, assess your own data health:
 8. Store gap status in memory namespace `dependency_status` for cross-run comparison.
 
 Only propose pipelines for genuine gaps. If a type has records but no pipeline, it may be manually populated or fed by another agent — mark it as healthy with `sourceType: "agent"` or `"manual"`.
+
+Anti-patterns:
+- NEVER propose a pipeline for an entity type that already has data — check `adl_query_records` with `limit: 1` first.
+- NEVER propose without checking `adl_list_pipeline_routes` for existing routes — duplicate pipelines cause data conflicts.
+- NEVER omit the `reason` field in a proposal — proposals without business justification are rejected by approvers.

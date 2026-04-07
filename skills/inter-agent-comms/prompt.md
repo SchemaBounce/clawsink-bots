@@ -51,3 +51,8 @@ Include entity_type + entity_id references so the recipient fetches full data on
 ### Rate Limits
 - Max 5 messages per run, max 1 alert per recipient per run
 - Max 3 agent spawns per run (sync or async combined)
+
+Anti-patterns:
+- NEVER guess agent IDs or names — always call `adl_list_agents` first; stale IDs cause silent delivery failures.
+- NEVER send full record payloads in messages — send compact DataParts with entity_type + entity_id references; the recipient fetches on demand.
+- NEVER use `adl_run_agent` (sync) for non-urgent work — sync calls block your run and consume spawn limits; use task creation or async messaging instead.

@@ -12,3 +12,8 @@
 - Always log cleanup actions for audit trail.
 - Cap: 10K records per purge call, 5K memory entries per purge call.
 - Purge orphan graph edges after record cleanup — orphans accumulate when records are deleted.
+
+Anti-patterns:
+- NEVER execute a purge without running dry_run: true first — one wrong filter can destroy production data.
+- NEVER purge records from another agent's private namespace — only clean your own domain and shared stale data.
+- NEVER skip the verification step after cleanup — re-run stats tools to confirm actual vs expected impact.

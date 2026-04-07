@@ -14,6 +14,11 @@ Your workspace may have external service connections. Use `adl_tool_search("conn
 - Credentials are platform-managed — you never see or handle API keys
 - Some services may have limited scopes — check tool descriptions for what's allowed
 
+Anti-patterns:
+- NEVER call an MCP tool without first verifying the connection exists via `adl_list_connectors` — missing connections cause runtime errors.
+- NEVER hardcode MCP tool names — use `adl_tool_search` to discover available tools; server names and actions change across workspaces.
+- NEVER handle or store API keys for external services — credentials are platform-managed; if a connection is missing, tell the user to add it via the Connections page.
+
 ### Common Services
 - **GitHub**: issues, PRs, repos, actions
 - **Slack**: messages, channels, users

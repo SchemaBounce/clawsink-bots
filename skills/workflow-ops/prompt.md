@@ -20,3 +20,8 @@ Don't ask what happened. Don't request logs. Call these tools in order:
 - nodeType mismatch (type says "upsert_record" but config says "delay") → fix the nodeType
 - Missing required fields (entityType, entity_id) → add them with reasonable defaults
 - Wrong variable references (_current vs _upstream.nodeId) → fix the reference path
+
+Anti-patterns:
+- NEVER update a deployed workflow without pausing it first — only `draft` or `paused` workflows accept updates; deployed updates silently fail.
+- NEVER send partial node/edge arrays in an update — the API replaces the full definition; missing nodes are deleted.
+- NEVER diagnose a workflow failure by asking the user for logs — call `adl_get_workflow_run` immediately to read the per-step error.

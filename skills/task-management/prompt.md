@@ -59,3 +59,8 @@ Use the `adl_query_records` tool:
 - Always update task status — don't leave tasks in "pending" while you work on them
 - Write clear titles and descriptions — other agents and humans read the kanban board
 - If a task is beyond your capabilities, set `status: "blocked"` with a clear reason
+
+Anti-patterns:
+- NEVER leave a task in "pending" while actively working on it — set status to "in_progress" immediately when you start.
+- NEVER assign a task without clear acceptance criteria — vague tasks cannot be verified as complete.
+- NEVER create tasks with generic IDs like "task_1" — use descriptive IDs (e.g., "task_fix_billing_sync") so the kanban board is readable.

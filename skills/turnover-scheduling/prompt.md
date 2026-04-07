@@ -8,3 +8,8 @@ When managing turnovers:
 5. Track turnover status: scheduled, in-progress, completed, issue-reported
 6. Escalate maintenance issues (broken items, deep clean needed) to property manager
 7. Confirm guest-ready status before next check-in
+
+Anti-patterns:
+- NEVER schedule a turnover without verifying the cleaning window (checkout to checkin gap) — overlapping assignments cause guest-facing failures.
+- NEVER auto-assign cleaners without checking availability from memory — double-bookings lead to missed turnovers.
+- NEVER mark a property as guest-ready without confirmed completion status from the cleaner — premature confirmation causes check-in disasters.

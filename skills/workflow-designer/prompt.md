@@ -28,3 +28,8 @@ trigger → filter/condition → agent_action → write result
 - Prefer draft + human review over auto-deploy
 - Include a clear `description` explaining the automation
 
+Anti-patterns:
+- NEVER create a workflow without checking `adl_list_workflows` first — duplicate workflows fire duplicate actions and corrupt data.
+- NEVER auto-deploy a workflow to production — always create as draft and let a human review before deployment.
+- NEVER create a workflow without a trigger node (data_trigger or schedule_trigger) — triggerless workflows never execute.
+

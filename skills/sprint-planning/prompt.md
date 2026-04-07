@@ -8,3 +8,8 @@ When creating sprint plans:
 5. Generate sprint_plans with: sprint goal, selected items, total story points, risk flags
 6. Write priority_recommendations for items that narrowly missed the cut
 7. Message product-owner with sprint proposal for approval
+
+Anti-patterns:
+- NEVER include blocked items in a sprint — check dependency status before selection; blocked work wastes sprint capacity.
+- NEVER plan a sprint without loading velocity_metrics — gut-feel capacity estimates lead to chronic overcommitment.
+- NEVER assign a task without checking the assignee's current workload — overloaded team members silently drop items.
