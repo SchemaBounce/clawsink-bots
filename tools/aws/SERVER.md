@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["awslabs.ccapi-mcp-server"]
+  args: ["awslabs.ccapi-mcp-server==1.0.18"]
 env:
   - name: AWS_ACCESS_KEY_ID
     description: "AWS access key ID"

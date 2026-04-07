@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["todoist-mcp-server"]
+  args: ["todoist-mcp-server==0.1.3"]
 env:
   - name: TODOIST_API_TOKEN
     description: "Todoist API token from todoist.com/prefs/integrations"

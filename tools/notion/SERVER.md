@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-notion"]
+  args: ["-y", "notion-mcp-server@1.0.1"]
 env:
   - name: NOTION_API_KEY
     description: "Notion Internal Integration Token"
