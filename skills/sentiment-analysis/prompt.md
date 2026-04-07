@@ -1,8 +1,23 @@
 ## Sentiment Analysis
 
-1. Receive the text content to analyze (e.g., customer feedback, ticket comments, social posts).
-2. Preprocess the text by normalizing whitespace and removing irrelevant markup.
-3. Classify the overall sentiment as positive, negative, or neutral with a confidence score.
-4. Identify key phrases or topics driving the sentiment.
-5. If multiple segments exist in the text, provide per-segment sentiment breakdowns.
-6. Return structured results with overall classification, confidence, driving phrases, and segment details.
+Classify text sentiment and store structured findings as ADL records.
+
+### Steps
+
+1. `adl_query_records(entity_type=<source_type>)` — fetch unanalyzed records (e.g., `reviews`, `tickets`, `feedback`). Filter: `sentiment_score IS NULL`.
+2. For each record, classify sentiment: `positive` (score 0.6-1.0), `neutral` (0.4-0.6), `negative` (0.0-0.4). Assign a numeric confidence score 0.0-1.0.
+3. Extract top 3 driving phrases — the specific words/phrases that most influenced the classification.
+4. If text has 2+ distinct segments (e.g., "Room was great but staff was rude"), provide per-segment breakdown.
+5. `adl_upsert_record(entity_type="sentiment_findings")` — store: `source_entity_type`, `source_entity_id`, `overall_sentiment`, `score`, `confidence`, `driving_phrases[]`, `segments[]`.
+6. For records scoring below 0.3 with confidence above 0.8: `adl_send_message(type="alert")` to the domain owner agent.
+
+### Output Schema
+
+- `entity_type`: `"sentiment_findings"`
+- Required fields: `source_entity_type`, `source_entity_id`, `overall_sentiment`, `score`, `confidence`, `driving_phrases`, `analyzed_at`
+
+### Anti-Patterns
+
+- NEVER classify without a numeric score — "positive/negative" alone is unusable for trending.
+- NEVER analyze the same record twice — check for existing `sentiment_findings` with matching `source_entity_id` before processing.
+- NEVER send alerts for low-confidence negatives (confidence < 0.8) — flag for human review instead.
