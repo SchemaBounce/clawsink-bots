@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-manager
   displayName: "Inventory & Acquisition Manager"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Stock level monitoring, reorder calculations, vendor tracking, acquisition pipeline management."
   category: operations
   tags: ["inventory", "stock", "vendors", "reorder", "acquisition", "procurement"]
@@ -91,6 +91,13 @@ skills:
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/data-ops@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
+toolPacks:
+  - ref: "packs/ecommerce-toolkit@1.0.0"
+    reason: "Inventory calculations, reorder points, and safety stock analysis"
+  - ref: "packs/data-transform@1.0.0"
+    reason: "Parse and merge inventory feeds from multiple sources"
+  - ref: "packs/datetime-toolkit@1.0.0"
+    reason: "Lead time calculations and delivery date estimation"
 automations:
   triggers:
     - name: "Update stock levels on new order"

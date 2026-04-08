@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-reporter
   displayName: "Executive Reporter"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "C-suite executive summaries, KPI dashboards, and cross-domain business intelligence."
   category: analytics
   tags: ["executive", "reports", "KPI", "dashboards", "business-intelligence", "c-suite"]
@@ -86,6 +86,13 @@ skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/report-generation@1.0.0"
+toolPacks:
+  - ref: "packs/document-gen@1.0.0"
+    reason: "Generate executive reports, formatted tables, and chart data"
+  - ref: "packs/data-transform@1.0.0"
+    reason: "Aggregate and pivot data from multiple domains for reporting"
+  - ref: "packs/math-stats@1.0.0"
+    reason: "Statistical summaries, trend analysis, and percentile rankings"
 automations:
   triggers: []
 requirements:
