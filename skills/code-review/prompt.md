@@ -7,3 +7,8 @@ When reviewing code changes:
 4. Write review_findings with file paths, line numbers, and specific fix recommendations
 5. Escalate critical security findings: message executive-assistant type=alert immediately
 6. Track code_quality_metrics: avg findings per PR, categories, recurring patterns
+
+Anti-patterns:
+- NEVER approve without checking test coverage — untested code is unreviewed code.
+- NEVER report a finding without a specific fix recommendation and file path — "needs improvement" is not actionable.
+- NEVER batch security findings with style issues — critical security findings get their own immediate escalation.

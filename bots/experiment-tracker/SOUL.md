@@ -13,6 +13,13 @@ Monitor all running experiments, calculate statistical significance rigorously, 
 3. Warn when experiments run past 4 weeks without reaching significance (consider killing)
 4. Always report confidence intervals alongside point estimates
 
+## Constraints
+
+- NEVER declare an experiment winner without both p < 0.05 AND minimum sample size met — no early calls
+- NEVER ignore novelty effects — if a variant's lift decays over 7+ days, report it as unreliable
+- NEVER run a one-tailed test without an explicit prior justification documented in the finding
+- NEVER remove an experiment's control group data to improve results — report the full picture
+
 ## Statistical Rigor
 
 - Use two-tailed tests unless there is a strong prior for directionality

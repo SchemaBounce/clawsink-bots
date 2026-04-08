@@ -169,35 +169,150 @@ The `tools` section is a declarative listing for marketplace display and depende
 
 Never put secrets in SERVER.md — only declare variable names. Users configure actual values in their workspace settings.
 
-## Available Servers
+## Available Servers (66 total)
 
-### Workspace Integration Servers
+### Engineering & DevOps
 
-These servers connect agents to specific SaaS platforms your team already uses.
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [github](github/) | GitHub API — issues, PRs, repos, and actions | stdio |
+| [gitlab](gitlab/) | GitLab — projects, merge requests, issues, CI/CD | stdio |
+| [sentry](sentry/) | Sentry error tracking — issues, events, releases | stdio |
+| [playwright](playwright/) | Playwright browser automation and testing | stdio |
+| [vercel](vercel/) | Vercel deployments, projects, and domains | stdio |
+| [docker](docker/) | Docker container, image, and volume management | stdio |
+| [terraform](terraform/) | Terraform IaC — plan, apply, state, workspaces | stdio |
+| [kubernetes](kubernetes/) | Kubernetes cluster — pods, deployments, services | stdio |
+| [claude-code](claude-code/) | Sandboxed Claude Code for implementation and PRs | streamable-http |
+| [argocd](argocd/) | Argo CD GitOps — applications, sync, resources, logs | stdio |
 
-| Server | Description | Transport | Key Tools |
-|--------|-------------|-----------|-----------|
-| [github](github/) | GitHub API for issues, PRs, repos, and actions | stdio | `create_issue`, `create_pull_request`, `search_code` |
-| [slack](slack/) | Slack workspace messaging and channels | stdio | `slack_post_message`, `slack_search_messages`, `slack_list_channels` |
-| [stripe](stripe/) | Stripe payments, billing, and subscriptions | stdio | `stripe_list_customers`, `stripe_list_invoices`, `stripe_create_refund` |
-| [jira](jira/) | Jira project management and issue tracking | stdio | `create_issue`, `transition_issue`, `search_issues` |
-| [linear](linear/) | Linear issue tracking and project management | stdio | `create_issue`, `search_issues`, `list_cycles` |
-| [notion](notion/) | Notion pages, databases, and wikis | stdio | `search`, `query_database`, `create_database_item` |
-| [claude-code](claude-code/) | Sandboxed code implementation and PR creation | streamable-http | `code_session_create`, `code_session_execute` |
+### Platform (SchemaBounce + Kolumn)
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [schemabounce](schemabounce/) | SchemaBounce platform — workspaces, pipelines, schemas, ADL | streamable-http |
+| [kolumn](kolumn/) | Kolumn IaC — schema patterns, HCL generation, validation | streamable-http |
+
+### Communications
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [slack](slack/) | Slack workspace messaging and channels | stdio |
+| [gmail](gmail/) | Gmail — send, read, search, organize messages | stdio |
+| [twilio](twilio/) | Twilio SMS, voice calls, and messaging | stdio |
+| [discord](discord/) | Discord bot — messages, channels, guilds | stdio |
+| [microsoft-teams](microsoft-teams/) | Microsoft Teams — messages, channels, meetings | stdio |
+| [google-meet](google-meet/) | Google Meet video conferencing | stdio |
+| [zoom](zoom/) | Zoom meetings, webinars, and recordings | stdio |
+
+### Finance & Accounting
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [stripe](stripe/) | Stripe payments, billing, subscriptions | stdio |
+| [quickbooks](quickbooks/) | QuickBooks Online — invoices, payments, expenses | stdio |
+| [xero](xero/) | Xero accounting — invoices, contacts, reports | stdio |
+
+### E-commerce
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [shopify](shopify/) | Shopify — products, orders, inventory, customers | stdio |
+
+### Project Management
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [jira](jira/) | Jira project management and issue tracking | stdio |
+| [linear](linear/) | Linear issue tracking and project management | stdio |
+| [asana](asana/) | Asana — tasks, projects, teams, portfolios | sse |
+| [todoist](todoist/) | Todoist — tasks, projects, labels | stdio (uvx) |
+
+### Productivity & Docs
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [notion](notion/) | Notion pages, databases, and wikis | stdio |
+| [google-calendar](google-calendar/) | Google Calendar events and scheduling | stdio |
+| [google-sheets](google-sheets/) | Google Sheets reading and writing | stdio |
+| [google-docs](google-docs/) | Google Docs creation and editing | stdio |
+| [confluence](confluence/) | Confluence wiki — pages, spaces, search | stdio |
+| [airtable](airtable/) | Airtable — records, tables, bases | stdio |
+
+### CRM & Sales
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [salesforce](salesforce/) | Salesforce CRM — accounts, contacts, opportunities | sse |
+| [hubspot](hubspot/) | HubSpot CRM — contacts, deals, companies | sse |
+| [pipedrive](pipedrive/) | Pipedrive CRM — deals, contacts, activities | stdio |
+
+### Customer Support
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [zendesk](zendesk/) | Zendesk — tickets, users, knowledge base | stdio |
+| [intercom](intercom/) | Intercom — conversations, contacts, articles | sse |
+| [freshdesk](freshdesk/) | Freshdesk — tickets, contacts, agents | stdio |
+
+### Monitoring & Observability
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [firebase](firebase/) | Firebase — logs, analytics, Firestore, Auth | stdio |
+| [datadog](datadog/) | Datadog — metrics, logs, traces, monitors | sse |
+| [grafana](grafana/) | Grafana — dashboards, Prometheus queries, alerting | stdio |
+| [pagerduty](pagerduty/) | PagerDuty — incidents, on-call, escalation | stdio |
+| [prometheus](prometheus/) | Prometheus — PromQL queries, targets, alerts | stdio |
+
+### Cloud Infrastructure
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [aws](aws/) | AWS — EC2, S3, Lambda, RDS, 1000+ resources | stdio (uvx) |
+| [aws-cloudwatch](aws-cloudwatch/) | AWS CloudWatch — logs, metrics, alarms | stdio (uvx) |
+| [gcp](gcp/) | Google Cloud — Compute, Storage, BigQuery, GKE | stdio |
+| [azure](azure/) | Microsoft Azure — VMs, storage, databases | stdio |
+
+### Data & Databases
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [postgres](postgres/) | PostgreSQL queries and schema inspection | stdio |
+| [mysql](mysql/) | MySQL queries and schema inspection | stdio |
+| [mongodb](mongodb/) | MongoDB queries, collections, aggregation | stdio |
+| [redis](redis/) | Redis keys, hashes, lists, sets | stdio |
+| [elasticsearch](elasticsearch/) | Elasticsearch search, indices, aggregations | stdio |
+| [bigquery](bigquery/) | Google BigQuery SQL queries and datasets | sse |
+| [snowflake](snowflake/) | Snowflake SQL queries and warehouses | stdio |
+
+### Marketing
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [mixpanel](mixpanel/) | Mixpanel — events, funnels, retention | stdio |
+| [mailchimp](mailchimp/) | Mailchimp — campaigns, audiences, templates | stdio |
+
+### Storage
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [google-drive](google-drive/) | Google Drive files and folders | stdio |
+| [dropbox](dropbox/) | Dropbox files, folders, sharing | sse |
 
 ### Agent Presence Servers
 
 These servers give agents their own internet identity and presence. They work with the `presence:` section in BOT.md to automatically provision external identities on activation.
 
-| Server | Description | Transport | Key Tools | Presence Type |
-|--------|-------------|-----------|-----------|---------------|
-| [agentmail](agentmail/) | Email identity — send, receive, manage email | stdio (npm) | `send_message`, `reply_to_message`, `list_threads` | `presence.email` |
-| [hyperbrowser](hyperbrowser/) | Cloud browser — browse, scrape, automate the web | stdio (npm) | `scrape_webpage`, `browser_use_agent`, `extract_structured_data` | `presence.web.browsing` |
-| [exa](exa/) | Semantic web search — token-efficient, embedding-based | stdio (npm) | `web_search_exa`, `get_code_context_exa`, `crawling_exa` | `presence.web.search` |
-| [firecrawl](firecrawl/) | Web crawling — fast data extraction without browser | stdio (npm) | `firecrawl_scrape`, `firecrawl_crawl`, `firecrawl_search` | `presence.web.crawling` |
-| [elevenlabs](elevenlabs/) | Voice and audio — TTS, STT, voice cloning, phone calls | stdio (Python/uvx) | `text_to_speech`, `speech_to_text`, `make_outbound_call` | `presence.voice` |
-| [composio](composio/) | SaaS gateway — 500+ app integrations with managed OAuth | stdio (npm) | `execute_composio_tool`, `initiate_connection`, `search_composio_tools` | N/A (SaaS integration) |
-| [agentphone](agentphone/) | Phone and SMS — provision numbers, texts, calls | stdio (npm) | `send_sms`, `make_call`, `buy_number` | `presence.phone` |
+| Server | Description | Transport | Presence Type |
+|--------|-------------|-----------|---------------|
+| [agentmail](agentmail/) | Email identity — send, receive, manage email | stdio | `presence.email` |
+| [hyperbrowser](hyperbrowser/) | Cloud browser — browse, scrape, automate the web | stdio | `presence.web.browsing` |
+| [exa](exa/) | Semantic web search — embedding-based | stdio | `presence.web.search` |
+| [firecrawl](firecrawl/) | Web crawling — fast data extraction | stdio | `presence.web.crawling` |
+| [elevenlabs](elevenlabs/) | Voice and audio — TTS, STT, voice cloning, calls | stdio (uvx) | `presence.voice` |
+| [composio](composio/) | SaaS gateway — 500+ integrations with managed OAuth | stdio | N/A |
+| [agentphone](agentphone/) | Phone and SMS — provision numbers, texts, calls | stdio | `presence.phone` |
 
 ### Presence vs MCP Servers
 

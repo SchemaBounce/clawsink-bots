@@ -4,17 +4,17 @@ kind: Skill
 metadata:
   name: task-management
   displayName: "Task Management"
-  version: "1.0.0"
-  description: "Create, update, query, and manage tasks on the workspace kanban board via ADL records."
-  tags: ["tasks", "kanban", "project-management", "coordination"]
+  version: "2.0.0"
+  description: "Create, assign, and track tasks on the workspace kanban board. Assigned tasks auto-wake the target agent."
+  tags: ["tasks", "kanban", "project-management", "coordination", "delegation"]
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_upsert_record", "adl_query"]
+  required: ["adl_upsert_record", "adl_query_records", "adl_list_agents"]
 data:
   producesEntityTypes: ["tasks"]
   consumesEntityTypes: ["tasks"]
 ---
 # Task Management
 
-Enables agents to create, update, and query tasks stored as ADL records. Tasks appear on the workspace kanban board and can be managed by both agents and users.
+Enables agents to create, assign, and track tasks on the workspace kanban board. Tasks are stored as ADL records and visible to both agents and humans. Setting `assignee_agent_id` on a task auto-wakes the assigned agent — no cron or manual trigger needed.

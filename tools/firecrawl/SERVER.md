@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "firecrawl-mcp"]
+  args: ["-y", "firecrawl-mcp@3.11.0"]
 env:
   - name: FIRECRAWL_API_KEY
     description: "API key from firecrawl.dev"

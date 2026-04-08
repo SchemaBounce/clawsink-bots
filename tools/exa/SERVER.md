@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "exa-mcp-server"]
+  args: ["-y", "exa-mcp-server@3.2.0"]
 env:
   - name: EXA_API_KEY
     description: "API key from exa.ai"

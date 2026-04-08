@@ -4,14 +4,14 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.3"
+  version: "1.0.8"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
 agent:
   capabilities: ["management", "analytics"]
   hostingMode: "openclaw"
-  defaultDomain: "management"
+  defaultDomain: "platform-ops"
   instructions: |
     ## Operating Rules
     - ALWAYS read messages from ALL bots before producing a briefing — never skip a domain
@@ -110,6 +110,18 @@ mcpServers:
   - ref: "tools/composio"
     required: true
     reason: "Sync tasks and follow-ups with calendar, CRM, and project management tools"
+  - ref: "tools/google-calendar"
+    required: false
+    reason: "Schedule meetings, check availability, and manage calendar events"
+  - ref: "tools/gmail"
+    required: false
+    reason: "Read, send, and organize email communications"
+  - ref: "tools/google-docs"
+    required: false
+    reason: "Create and edit documents for reports and briefings"
+  - ref: "tools/zoom"
+    required: false
+    reason: "Schedule and manage video conference meetings"
 requirements:
   minTier: "starter"
 setup:

@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "agentphone-mcp"]
+  args: ["-y", "agentphone-mcp@0.2.0"]
 env:
   - name: AGENTPHONE_API_KEY
     description: "API key from agentphone.to"

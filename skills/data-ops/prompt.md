@@ -23,3 +23,8 @@ Use `adl_tool_search` with keywords to discover tools: "records", "memory", "gra
 ### Maintenance
 - `adl_get_data_stats` — storage stats per entity type
 - `adl_purge_stale_records` — soft-delete old records (dry_run first!)
+
+Anti-patterns:
+- NEVER query all records then filter in reasoning — use the `filters` parameter on `adl_query_records` to filter at the database level.
+- NEVER write to `northstar:` memory namespace — it is read-only workspace configuration; use `shared:` for cross-agent data.
+- NEVER call `adl_purge_stale_records` without `dry_run: true` first — verify the impact before any destructive operation.

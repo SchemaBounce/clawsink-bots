@@ -1,8 +1,24 @@
 ## Data Validation
 
-1. Load the schema rules and business constraints for the target entity type.
-2. For each incoming record, check required fields are present and non-null.
-3. Validate field types and formats against the schema (e.g., email format, date ranges, enum values).
-4. Evaluate business constraints such as cross-field dependencies and referential integrity.
-5. Collect all violations per record with field name, rule violated, and expected vs actual value.
-6. Return a validation report listing passed records, failed records, and a summary of violation counts by rule.
+Validate ADL records against schema rules and business constraints, producing structured violation reports.
+
+### Steps
+
+1. `adl_query_records(entity_type="validation_rules")` — load schema rules and business constraints for the target entity type.
+2. `adl_query_records(entity_type=<target_type>)` — fetch records to validate. Use filters to scope (e.g., `validated_at IS NULL`).
+3. For each record, check: (a) required fields present and non-null, (b) type/format correctness (email, date, enum), (c) cross-field constraints (e.g., `end_date > start_date`).
+4. Collect all violations per record: `{ field, rule, expected, actual, severity }`. Severity: `error` (blocks processing), `warning` (allow but flag).
+5. `adl_upsert_record(entity_type="validation_results")` — one record per validated entity: `source_entity_id`, `source_entity_type`, `status` (pass|fail|warn), `violations[]`, `validated_at`.
+6. Compute summary: total records, pass count, fail count, top 3 most-violated rules.
+7. For error-severity failures exceeding 10% of batch: `adl_send_message(type="alert")` to the data owner agent.
+
+### Output Schema
+
+- `entity_type`: `"validation_results"`
+- Required fields: `source_entity_id`, `source_entity_type`, `status`, `violations`, `validated_at`, `rule_version`
+
+### Anti-Patterns
+
+- NEVER silently drop invalid records — always write a `validation_results` entry with the violations.
+- NEVER validate without loading the current rule set — stale rules cause false positives.
+- NEVER mix warnings and errors into a single severity — errors block, warnings inform.

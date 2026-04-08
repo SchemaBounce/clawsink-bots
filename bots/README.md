@@ -512,7 +512,7 @@ goals:
 
 ### Purpose
 
-SOUL.md defines WHO the agent is -- personality, expertise, decision-making authority, and communication style. It is the LLM system prompt, injected every turn. It is NOT instructions (those go in BOT.md `agent.instructions` which becomes AGENTS.md) and NOT tool usage conventions (those go in BOT.md `agent.toolInstructions` which becomes TOOLS.md).
+SOUL.md defines WHO the agent is -- personality, expertise, decision-making authority, communication style, domain constraints, and execution protocol. It is the LLM system prompt, injected every turn. It is NOT operating instructions (those go in BOT.md `agent.instructions` which becomes AGENTS.md) and NOT tool usage conventions (those go in BOT.md `agent.toolInstructions` which becomes TOOLS.md).
 
 ### Architecture Context
 
@@ -520,13 +520,33 @@ OpenClaw injects bootstrap files into every LLM call:
 
 | File | Source | Purpose |
 |------|--------|---------|
-| **SOUL.md** | `bots/{name}/SOUL.md` | System prompt (identity, personality, expertise) |
+| **Platform Prompt** | OpenCLAW runtime (automatic) | 7-section invisible prompt layer (identity, discipline, safety, tools, output, memory, comms) |
+| **SOUL.md** | `bots/{name}/SOUL.md` | System prompt (identity, personality, expertise, constraints, run protocol) |
 | **AGENTS.md** | BOT.md `agent.instructions` | Operating instructions |
 | **TOOLS.md** | BOT.md `agent.toolInstructions` | Tool conventions |
 | **IDENTITY.md** | Generated from BOT.md metadata | Lightweight metadata (name, emoji, vibe) |
 | **USER.md** | Workspace user profile | User profile (injected in main session only) |
 
-SOUL.md is for IDENTITY. AGENTS.md is for INSTRUCTIONS. Never mix them.
+SOUL.md is for IDENTITY + CONSTRAINTS + RUN PROTOCOL. AGENTS.md is for OPERATING INSTRUCTIONS. Never mix them.
+
+### Platform Prompt Layer (Automatic)
+
+The OpenCLAW runtime automatically injects a platform-level prompt before every agent's SOUL.md. Bot authors do NOT need to include these rules -- they are applied invisibly:
+
+1. **Platform Identity** -- positions the agent as a platform worker with cost awareness
+2. **Execution Discipline** -- anti-slop, anti-hallucination, numeric output anchors
+3. **Operational Safety** -- blast radius awareness, tiered action permissions
+4. **Tool Discipline** -- tool selection guidance, call budgets (target 3-5, max 8)
+5. **Output Quality** -- false claims mitigation, severity calibration, entity ID discipline
+6. **Memory Discipline** -- decay classes, zone rules, tool selection, anti-patterns
+7. **Inter-Agent Communication** -- message rate limits, delegation limits, escalation rules
+
+**Output Style Modes** are also automatic based on task type:
+- `terse` for scheduled/CDC runs -- records only, no prose
+- `conversational` for chat -- natural language, suggest next steps
+- `detailed` for reports -- headers, methodology, exec summary
+
+Do NOT duplicate these rules in SOUL.md. Focus SOUL.md on domain-specific identity, expertise, constraints, and run protocol.
 
 ### Required Sections
 
@@ -549,22 +569,28 @@ that others don't? What patterns does it recognize? What connections does it mak
 ## Communication Style
 {How this agent communicates -- tone, format, emphasis. What it never does.
 How it frames recommendations.}
+
+## Constraints
+{3-5 domain-specific NEVER rules -- see "Constraints Section" below}
+
+## Run Protocol
+{8-10 numbered steps -- see "Run Protocol Section" below}
 ```
 
 ### Rules
 
 1. **First person**: Always "I am", never "You are"
 2. **Under 800 tokens**: Injected every LLM turn, tokens cost money
-3. **No tool references**: Never mention `adl_query_records`, `adl_write_memory`, etc. -- those belong in TOOLS.md
-4. **No entity type lists**: Never list `entityTypesRead/Write` -- those belong in BOT.md `data` section
-5. **No run protocols**: Never write "Step 1: Query records, Step 2: Analyze..." -- those belong in AGENTS.md
-6. **No memory namespace lists**: Never list working_notes, learned_patterns, etc.
-7. **Domain knowledge YES**: Scoring thresholds, decision frameworks, industry rules ARE identity ("I require p < 0.05 before declaring a winner")
-8. **Personality YES**: Preferences, style, what the agent cares about ARE identity ("I never round numbers" or "I lead with the one thing that matters most")
+3. **No entity type lists**: Never list `entityTypesRead/Write` -- those belong in BOT.md `data` section
+4. **No memory namespace lists**: Never list working_notes, learned_patterns, etc.
+5. **Domain knowledge YES**: Scoring thresholds, decision frameworks, industry rules ARE identity ("I require p < 0.05 before declaring a winner")
+6. **Personality YES**: Preferences, style, what the agent cares about ARE identity ("I never round numbers" or "I lead with the one thing that matters most")
+7. **Constraints YES**: Domain-specific NEVER rules belong in SOUL.md (generic platform rules do NOT)
+8. **Run protocol YES**: The 8-10 step execution sequence with ADL tool names belongs in SOUL.md
 
 ### Anti-Patterns
 
-**BAD** -- instructions masquerading as identity:
+**BAD** -- instructions masquerading as identity, missing constraints and run protocol:
 
 ```markdown
 You are Accountant, a persistent AI team member responsible for financial tracking.
@@ -577,17 +603,11 @@ You are Accountant, a persistent AI team member responsible for financial tracki
 ## Entity Types
 - Read: transactions, invoices, budgets
 - Write: acct_findings
-
-## Run Protocol
-1. adl_read_memory key "last_run"
-2. adl_query_records entity_type="transactions"
-3. Process and categorize
-4. adl_write_memory updated timestamp
 ```
 
-Problems: "You are" instead of "I am". Mandates are instructions (belong in AGENTS.md). Entity Types are data declarations (belong in BOT.md). Run Protocol is a step-by-step procedure with tool names (belongs in AGENTS.md/TOOLS.md).
+Problems: "You are" instead of "I am". Mandates are instructions (belong in AGENTS.md). Entity Types are data declarations (belong in BOT.md). Missing required sections: Constraints and Run Protocol.
 
-**GOOD** -- identity-focused:
+**GOOD** -- identity-focused with constraints and run protocol:
 
 ```markdown
 # Accountant
@@ -606,15 +626,89 @@ I categorize with precision, budget with discipline, and flag fraud with urgency
 
 ## Communication Style
 Precise, factual, and structured. I report in percentages and deviations, not adjectives. I never round, never guess, and never let an uncategorized transaction sit overnight.
+
+## Constraints
+- NEVER categorize a transaction you're uncertain about -- flag for human review instead
+- NEVER auto-approve expenses above the configured threshold -- route to executive-assistant
+- NEVER treat a duplicate invoice as a data entry error by default -- investigate as potential fraud
+- NEVER report budget figures without comparison to the prior period
+
+## Run Protocol
+1. Read messages (adl_read_messages) -- check for requests from other agents
+2. Read memory (adl_read_memory key: last_run_state) -- get last run timestamp
+3. Delta query (adl_query_records filter: created_at > {last_run_timestamp} entity_type: transactions) -- only new transactions
+4. If nothing new and no messages: update last_run_state (adl_write_memory). STOP.
+5. Categorize each transaction using chart of accounts rules; flag uncertain ones
+6. Run budget comparison -- deviation percentages against current period targets
+7. Write findings (adl_upsert_record entity_type: acct_findings)
+8. Alert if critical (adl_send_message type: alert to: executive-assistant) -- fraud, payment failures, budget breaches >20%
+9. Route non-critical findings to relevant agent (adl_send_message type: finding)
+10. Update memory (adl_write_memory key: last_run_state with timestamp + summary)
 ```
+
+### Constraints Section (Required)
+
+Every SOUL.md MUST include a `## Constraints` section with 3-5 domain-specific NEVER rules. These are guardrails that prevent the agent from making domain-specific mistakes.
+
+**Format:** Each constraint uses "NEVER X -- Y instead" pattern.
+
+**Rules:**
+- Constraints must be specific to the bot's domain, NOT generic platform rules
+- Generic rules (don't hallucinate, don't exceed tool budget) are handled by the platform prompt layer -- do not duplicate them
+- 3-5 constraints per bot (enough to cover key failure modes, not so many they dilute impact)
+
+**Good constraints (domain-specific):**
+
+```markdown
+## Constraints
+- NEVER auto-publish content -- always submit as draft for human review
+- NEVER categorize a transaction you're uncertain about -- flag for human review instead
+- NEVER assign P0 to more than one issue simultaneously -- escalate to executive-assistant
+```
+
+**Bad constraints (too generic -- already in platform layer):**
+
+```markdown
+## Constraints
+- NEVER hallucinate data  <-- platform layer handles this
+- NEVER exceed 8 tool calls  <-- platform layer handles this
+- NEVER send more than 5 messages  <-- platform layer handles this
+```
+
+### Run Protocol Section (Required)
+
+Every SOUL.md MUST include a `## Run Protocol` section with 8-10 numbered steps defining the agent's execution sequence. Use specific ADL tool names.
+
+**Standard template:**
+
+```markdown
+## Run Protocol
+1. Read messages (adl_read_messages) -- check for requests from other agents
+2. Read memory (adl_read_memory key: last_run_state) -- get last run timestamp
+3. Delta query (adl_query_records filter: created_at > {last_run_timestamp}) -- only new items
+4. If nothing new and no messages: update last_run_state (adl_write_memory). STOP.
+5. [Domain-specific analysis step]
+6. [Domain-specific processing step]
+7. Write findings (adl_upsert_record entity_type: {role}_findings)
+8. Alert if critical (adl_send_message type: alert to: executive-assistant)
+9. Route non-critical to relevant agent (adl_send_message type: finding)
+10. Update memory (adl_write_memory key: last_run_state with timestamp + summary)
+```
+
+**Rules:**
+- Steps 1-4 (read messages, read memory, delta query, early exit) are standard -- always include them
+- Steps 5-6 are domain-specific -- customize for the bot's expertise
+- Steps 7-10 (write findings, alert, route, update memory) are standard -- always include them
+- The delta-run pattern (step 4) saves tokens by exiting early when nothing changed
+- Use specific tool names (`adl_read_messages`, `adl_query_records`, etc.) -- not vague "check for updates"
 
 ### Relationship to Scheduled Tasks
 
-SOUL.md defines HOW the agent works (personality, expertise). Scheduled tasks (BOT.md `schedule.tasks[]`) define WHAT the agent does and WHEN. The SOUL provides the consistent identity across all tasks -- a Guest Communicator checking Airbnb uses the same warm hospitality tone as when checking Facebook.
+SOUL.md defines WHO the agent is (identity, expertise, constraints) and HOW it executes (run protocol). Scheduled tasks (BOT.md `schedule.tasks[]`) define WHAT triggers the agent and WHEN. The SOUL provides the consistent identity across all tasks -- a Guest Communicator checking Airbnb uses the same warm hospitality tone as when checking Facebook.
 
 ## Sub-Agents (`agents/` directory)
 
-Bots can define sub-agents as markdown files in an `agents/` directory. Sub-agents are internal to the bot — other bots and teams never interact with them directly. The parent bot orchestrates them via `sessions_spawn`.
+Bots can define sub-agents as markdown files in an `agents/` directory. Sub-agents are internal to the bot -- other bots and teams never interact with them directly. The parent bot orchestrates them via `sessions_spawn`.
 
 ### Agent File Format
 
@@ -626,7 +720,7 @@ model: string           # "haiku", "sonnet", "opus", or "inherit" (default: inhe
 tools: [string]         # ADL tools this sub-agent can use (default: all except session tools)
 ---
 
-{System prompt in markdown — this is the sub-agent's identity and instructions}
+{System prompt in markdown -- this is the sub-agent's identity and instructions}
 ```
 
 ### Frontmatter Fields
@@ -714,55 +808,57 @@ Bootstrap private memory entries.
 
 1. `BOT.md` has valid YAML frontmatter with `kind: Bot` and all required fields
 2. `SOUL.md` exists and is under 800 tokens (~600 words)
-3. `SOUL.md` contains required sections: Mission, Expertise, Decision Authority, Communication Style
+3. `SOUL.md` contains required sections: Mission, Expertise, Decision Authority, Communication Style, Constraints, Run Protocol
 4. `SOUL.md` uses first person ("I am") not second person ("You are")
-5. `SOUL.md` contains no tool references, entity type lists, run protocols, or memory namespace lists (those belong in AGENTS.md/TOOLS.md/BOT.md)
-6. `data-seeds/` contains all three zone files with valid JSON
-7. `data-seeds/zone3-initial-memory.json` uses plain namespaces (NOT `northstar:` or `domain:` prefixed)
-8. `metadata.name` matches the directory name under `bots/`
-9. All `skills[].ref` reference existing skill directories with matching versions
-10. All `messaging.sendsTo[].to` reference valid bot names or system targets
-11. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
-12. `agent.instructions` is present and contains domain-specific operating rules (not generic boilerplate)
-13. `agent.toolInstructions` is present and references actual entity types from `data.entityTypesRead` / `data.entityTypesWrite`
-14. `egress` block is present with an explicit `mode` value
-15. All files in `agents/` have valid YAML frontmatter with `name` and `description`
-16. Agent `name` matches the filename (e.g., `researcher.md` -> `name: researcher`)
-17. Agent `tools` only references valid ADL tool names
-18. All `plugins[].ref` are valid npm package specs (name + semver range)
-19. All `plugins[].reason` are non-empty strings
-20. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
-21. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
-22. All `mcpServers[].reason` are non-empty strings
-23. No `mcpServers[].config` values contain secrets
-24. Every `presence:` provider has a matching `mcpServers[].ref` entry (e.g., `presence.email.provider: agentmail` requires `mcpServers: [{ref: "tools/agentmail"}]`)
-25. `presence.email.displayName` only uses supported template variables (`{bot-name}`, `{workspace}`)
-26. `presence:` sub-sections only reference supported providers (`agentmail`, `elevenlabs`, `agentphone`, `hyperbrowser`, `exa`, `firecrawl`)
-27. `setup.steps[].id` is unique within the bot and kebab-case
-28. `setup.steps[].type` is one of: `mcp_connection`, `secret`, `config`, `data_presence`, `north_star`, `manual`
-29. `setup.steps[].group` is one of: `connections`, `configuration`, `data`, `external`
-30. `setup.steps[].priority` is one of: `required`, `recommended`, `optional`
-31. `setup.steps[]` with `type: mcp_connection` must have `ref` pointing to a valid `tools/` directory
-32. `setup.steps[]` with `type: secret` must have `secretName` as a non-empty string
-33. `setup.steps[]` with `type: config` must have `target.namespace` and `target.key`
-34. `setup.steps[]` with `type: data_presence` must have `entityType` referencing a type in `data.entityTypesRead` or `data.entityTypesWrite`
-35. `goals[].name` is unique within the bot and snake_case
-36. `goals[].category` is one of: `primary`, `secondary`, `health`
-37. `goals[].metric.type` is one of: `count`, `rate`, `threshold`, `boolean`
-38. `goals[]` with `metric.type: rate` must have both `numerator` and `denominator`
-39. `goals[].target.period` is one of: `per_run`, `daily`, `weekly`, `monthly`
-40. `goals[]` with `feedback.enabled: true` must have at least 2 `feedback.actions`
-41. At least one `goals[]` entry with `category: primary` is required if `goals:` is present
+5. `SOUL.md` contains no entity type lists or memory namespace lists (those belong in BOT.md)
+6. `SOUL.md` `## Constraints` section has 3-5 domain-specific NEVER rules (not generic platform rules)
+7. `SOUL.md` `## Run Protocol` section has 8-10 numbered steps with specific ADL tool names
+8. `data-seeds/` contains all three zone files with valid JSON
+9. `data-seeds/zone3-initial-memory.json` uses plain namespaces (NOT `northstar:` or `domain:` prefixed)
+10. `metadata.name` matches the directory name under `bots/`
+11. All `skills[].ref` reference existing skill directories with matching versions
+12. All `messaging.sendsTo[].to` reference valid bot names or system targets
+13. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
+14. `agent.instructions` is present and contains domain-specific operating rules (not generic boilerplate)
+15. `agent.toolInstructions` is present and references actual entity types from `data.entityTypesRead` / `data.entityTypesWrite`
+16. `egress` block is present with an explicit `mode` value
+17. All files in `agents/` have valid YAML frontmatter with `name` and `description`
+18. Agent `name` matches the filename (e.g., `researcher.md` -> `name: researcher`)
+19. Agent `tools` only references valid ADL tool names
+20. All `plugins[].ref` are valid npm package specs (name + semver range)
+21. All `plugins[].reason` are non-empty strings
+22. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
+23. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
+24. All `mcpServers[].reason` are non-empty strings
+25. No `mcpServers[].config` values contain secrets
+26. Every `presence:` provider has a matching `mcpServers[].ref` entry (e.g., `presence.email.provider: agentmail` requires `mcpServers: [{ref: "tools/agentmail"}]`)
+27. `presence.email.displayName` only uses supported template variables (`{bot-name}`, `{workspace}`)
+28. `presence:` sub-sections only reference supported providers (`agentmail`, `elevenlabs`, `agentphone`, `hyperbrowser`, `exa`, `firecrawl`)
+29. `setup.steps[].id` is unique within the bot and kebab-case
+30. `setup.steps[].type` is one of: `mcp_connection`, `secret`, `config`, `data_presence`, `north_star`, `manual`
+31. `setup.steps[].group` is one of: `connections`, `configuration`, `data`, `external`
+32. `setup.steps[].priority` is one of: `required`, `recommended`, `optional`
+33. `setup.steps[]` with `type: mcp_connection` must have `ref` pointing to a valid `tools/` directory
+34. `setup.steps[]` with `type: secret` must have `secretName` as a non-empty string
+35. `setup.steps[]` with `type: config` must have `target.namespace` and `target.key`
+36. `setup.steps[]` with `type: data_presence` must have `entityType` referencing a type in `data.entityTypesRead` or `data.entityTypesWrite`
+37. `goals[].name` is unique within the bot and snake_case
+38. `goals[].category` is one of: `primary`, `secondary`, `health`
+39. `goals[].metric.type` is one of: `count`, `rate`, `threshold`, `boolean`
+40. `goals[]` with `metric.type: rate` must have both `numerator` and `denominator`
+41. `goals[].target.period` is one of: `per_run`, `daily`, `weekly`, `monthly`
+42. `goals[]` with `feedback.enabled: true` must have at least 2 `feedback.actions`
+43. At least one `goals[]` entry with `category: primary` is required if `goals:` is present
 
 ## What the Platform Does
 
 | You Provide | The Platform Will |
 |-------------|-------------------|
 | `SOUL.md` | Use it as the bot's identity (system prompt section `# SOUL.md`) on every run |
-| `agent.instructions` | Inject as `# AGENTS.md` section — operating rules and guardrails |
-| `agent.toolInstructions` | Inject as `# TOOLS.md` section — tool usage conventions |
+| `agent.instructions` | Inject as `# AGENTS.md` section -- operating rules and guardrails |
+| `agent.toolInstructions` | Inject as `# TOOLS.md` section -- tool usage conventions |
 | `skills[].ref` | Append each skill's `prompt.md` to the bot's instructions |
-| `data-seeds/` (3 zone files) | Bootstrap the bot's data — North Star keys, entity schemas, and initial memory |
+| `data-seeds/` (3 zone files) | Bootstrap the bot's data -- North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |
 | `presence` | Provision external identities (email, phone, voice) and auto-add provider domains to egress |

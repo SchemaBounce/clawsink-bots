@@ -1,0 +1,159 @@
+#!/bin/bash
+# ClawSink Bots Pre-Commit Hook
+# Validates changed bot SOUL.md files and skill prompts before commit.
+# Auto-increments patch version for changed bots.
+#
+# Install: ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+# Skip:    git commit --no-verify
+
+set -euo pipefail
+
+BOTS_DIR="bots"
+
+# --- Phase 1: Version bump (existing behavior) ---
+
+staged_files=$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null || true)
+
+if [ -z "$staged_files" ]; then
+  exit 0
+fi
+
+# Find unique bot names that have staged changes
+changed_bots=()
+while IFS= read -r file; do
+  if [[ "$file" == bots/*/BOT.md ]] || \
+     [[ "$file" == bots/*/SOUL.md ]] || \
+     [[ "$file" == bots/*/AGENTS.md ]] || \
+     [[ "$file" == bots/*/TOOLS.md ]] || \
+     [[ "$file" == bots/*/IDENTITY.md ]] || \
+     [[ "$file" == bots/*/agents/* ]] || \
+     [[ "$file" == bots/*/data-seeds/* ]]; then
+    bot_name=$(echo "$file" | cut -d'/' -f2)
+    if [[ ! " ${changed_bots[*]:-} " =~ " ${bot_name} " ]]; then
+      changed_bots+=("$bot_name")
+    fi
+  fi
+done <<< "$staged_files"
+
+if [ ${#changed_bots[@]} -eq 0 ] && ! echo "$staged_files" | grep -q "^skills/"; then
+  exit 0
+fi
+
+bumped=0
+for bot in "${changed_bots[@]}"; do
+  bot_md="${BOTS_DIR}/${bot}/BOT.md"
+  if [ ! -f "$bot_md" ]; then
+    continue
+  fi
+
+  current_version=$(grep -m1 'version:' "$bot_md" | sed 's/.*version: *"\(.*\)"/\1/')
+  if [ -z "$current_version" ]; then
+    continue
+  fi
+
+  IFS='.' read -r major minor patch <<< "$current_version"
+
+  if [ "${BUMP_MINOR:-0}" = "1" ]; then
+    minor=$((minor + 1))
+    patch=0
+  else
+    patch=$((patch + 1))
+  fi
+
+  new_version="${major}.${minor}.${patch}"
+
+  sed -i "s/version: \"${current_version}\"/version: \"${new_version}\"/" "$bot_md"
+  git add "$bot_md"
+
+  bumped=$((bumped + 1))
+done
+
+if [ $bumped -gt 0 ]; then
+  echo "Auto-bumped version for $bumped bot(s)"
+fi
+
+# --- Phase 2: Validate changed SOUL.md files ---
+
+for bot in "${changed_bots[@]}"; do
+  soul_md="${BOTS_DIR}/${bot}/SOUL.md"
+  if [ ! -f "$soul_md" ]; then
+    continue
+  fi
+
+  errors=0
+
+  # Required sections (with common aliases)
+  if ! grep -q "## Mission" "$soul_md"; then
+    echo -e "\033[31mFAIL\033[0m [$bot] SOUL.md missing: ## Mission"
+    errors=$((errors + 1))
+  fi
+  if ! grep -qE "## Expertise|## Mandates|## Testing Strategy|## Review Checklist|## Monitoring Focus" "$soul_md"; then
+    echo -e "\033[31mFAIL\033[0m [$bot] SOUL.md missing: ## Expertise (or ## Mandates)"
+    errors=$((errors + 1))
+  fi
+  if ! grep -qE "## Decision Authority|## Mandates" "$soul_md"; then
+    echo -e "\033[31mFAIL\033[0m [$bot] SOUL.md missing: ## Decision Authority (or ## Mandates)"
+    errors=$((errors + 1))
+  fi
+  if ! grep -q "## Constraints" "$soul_md"; then
+    echo -e "\033[31mFAIL\033[0m [$bot] SOUL.md missing: ## Constraints"
+    errors=$((errors + 1))
+  fi
+  if ! grep -qE "## Run Protocol|## Mandates" "$soul_md"; then
+    echo -e "\033[31mFAIL\033[0m [$bot] SOUL.md missing: ## Run Protocol (or ## Mandates)"
+    errors=$((errors + 1))
+  fi
+  if ! grep -qE "## Communication Style|## Communication|## Writing Style|## Escalation|## Entity Types" "$soul_md"; then
+    echo -e "\033[31mFAIL\033[0m [$bot] SOUL.md missing: ## Communication Style"
+    errors=$((errors + 1))
+  fi
+
+  # Constraints: at least 3 NEVER rules
+  never_count=$(grep -c "NEVER" "$soul_md" 2>/dev/null || true)
+  never_count=$((never_count + 0))
+  if [ "$never_count" -lt 3 ]; then
+    echo -e "\033[33mWARN\033[0m [$bot] Only $never_count NEVER constraints (minimum 3)"
+  fi
+
+  # Run Protocol: at least 6 numbered steps
+  step_count=$(grep -cE "^[0-9]+\." "$soul_md" 2>/dev/null || true)
+  step_count=$((step_count + 0))
+  if [ "$step_count" -lt 6 ]; then
+    echo -e "\033[33mWARN\033[0m [$bot] Run Protocol has only $step_count numbered steps (minimum 6)"
+  fi
+
+  # First person check
+  if grep -qi "^You are" "$soul_md"; then
+    echo -e "\033[33mWARN\033[0m [$bot] Uses 'You are' — should use first person ('I am')"
+  fi
+
+  # ADL tool references
+  if ! grep -q "adl_" "$soul_md"; then
+    echo -e "\033[33mWARN\033[0m [$bot] No adl_ tool references in Run Protocol"
+  fi
+
+  if [ $errors -gt 0 ]; then
+    echo -e "\033[31m✗ $bot has $errors validation error(s) — commit blocked\033[0m"
+    echo "  Fix the issues above or use --no-verify to skip"
+    exit 1
+  fi
+done
+
+# --- Phase 3: Validate changed skill prompts ---
+
+while IFS= read -r file; do
+  if [[ "$file" == skills/*/prompt.md ]] && [ -f "$file" ]; then
+    skill_name=$(echo "$file" | cut -d'/' -f2)
+
+    lines=$(wc -l < "$file")
+    if [ "$lines" -lt 6 ]; then
+      echo -e "\033[33mWARN\033[0m [$skill_name] prompt.md has only $lines lines"
+    fi
+    if ! grep -q "adl_" "$file"; then
+      echo -e "\033[33mWARN\033[0m [$skill_name] prompt.md has no adl_ tool references"
+    fi
+    if ! grep -qiE "NEVER|Anti-pattern|Do not" "$file"; then
+      echo -e "\033[33mWARN\033[0m [$skill_name] prompt.md has no anti-patterns"
+    fi
+  fi
+done <<< "$staged_files"

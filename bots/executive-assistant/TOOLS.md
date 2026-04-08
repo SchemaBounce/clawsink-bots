@@ -7,7 +7,18 @@
 - Query `team_health_reports`: `adl_query_records` — bot team performance from mentor-coach
 - Write `ea_findings`: `adl_upsert_record` — ID format `eaf_{topic}_{date}`, required: priority, source_bots, summary, recommendation
 - Write `ea_alerts`: `adl_upsert_record` — ID format `eaa_{topic}_{date}`, required: severity, action_required, source
-- Write `tasks`: `adl_upsert_record` — ID format `task_{assignee}_{date}_{seq}`, required: assignee, description, due_date, status
+- Write `tasks`: `adl_upsert_record` — ID format `task_{short_description}`, required: title, assignee_agent_id, description, status, priority
+
+# Task Delegation
+
+**Creating tasks auto-wakes the assigned agent.** When you set `assignee_agent_id`, the platform triggers the agent within 60 seconds. Use agent names (e.g. `"workflow-designer"`) — they resolve automatically.
+
+- To delegate: write a task with `assignee_agent_id` set and `status: "pending"`
+- To delegate urgently: use `adl_run_agent(agent_id, prompt, wait=true)` for sync results
+- To delegate multiple: create multiple tasks — each assigned agent wakes independently
+- To check status: query `tasks` filtered by `created_by_agent` = your ID
+
+**Always use `adl_list_agents` first** to discover active agents and their names.
 
 # Memory Usage
 

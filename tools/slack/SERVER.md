@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-slack"]
+  args: ["-y", "@modelcontextprotocol/server-slack@2025.4.25"]
 env:
   - name: SLACK_BOT_TOKEN
     description: "Slack Bot User OAuth Token (xoxb-...)"

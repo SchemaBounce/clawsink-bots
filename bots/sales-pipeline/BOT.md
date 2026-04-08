@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.3"
+  version: "1.0.6"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -91,6 +91,18 @@ mcpServers:
   - ref: "tools/composio"
     required: true
     reason: "Connect to CRM platforms (Salesforce, HubSpot, Pipedrive) for deal data sync"
+  - ref: "tools/salesforce"
+    required: false
+    reason: "Query accounts, contacts, opportunities, and cases in Salesforce CRM"
+  - ref: "tools/hubspot"
+    required: false
+    reason: "Manage contacts, deals, companies, and pipeline stages in HubSpot"
+  - ref: "tools/google-calendar"
+    required: false
+    reason: "Schedule demo calls and follow-up meetings with prospects"
+  - ref: "tools/gmail"
+    required: false
+    reason: "Send personalized follow-up emails to prospects and buyers"
 presence:
   email:
     required: true

@@ -1,8 +1,24 @@
 ## Anomaly Detection
 
-1. Receive the numeric field values and compute descriptive statistics (mean, standard deviation, quartiles).
-2. Apply z-score detection: flag any value where |z| > 3 as an anomaly.
-3. Apply IQR detection: flag any value below Q1 - 1.5*IQR or above Q3 + 1.5*IQR.
-4. Merge results from both methods, deduplicating flagged records.
-5. Classify each anomaly by severity (critical, high, medium, low) based on deviation magnitude.
-6. Return a structured list of anomalies with field name, value, method triggered, and severity.
+Detect statistical anomalies in numeric ADL record fields using z-score and IQR methods.
+
+### Steps
+
+1. `adl_query_records(entity_type=<target_type>)` — fetch records with the numeric field to analyze. Minimum 30 records required for statistical validity.
+2. Compute descriptive stats: mean, standard deviation, Q1, Q3, IQR (Q3 - Q1).
+3. Z-score detection: flag records where `|value - mean| / stddev > 3.0`.
+4. IQR detection: flag records where `value < Q1 - 1.5 * IQR` or `value > Q3 + 1.5 * IQR`.
+5. Merge flagged records from both methods. Classify severity: `critical` (|z| > 5), `high` (|z| > 4), `medium` (|z| > 3), `low` (IQR-only outlier).
+6. `adl_upsert_record(entity_type="anomaly_findings")` — one record per anomaly: `source_entity_id`, `source_entity_type`, `field_name`, `value`, `z_score`, `method`, `severity`, `detected_at`.
+7. For critical/high anomalies: `adl_send_message(type="alert")` to the domain owner with a DataPart containing `entity_id` + `severity` + `value`.
+
+### Output Schema
+
+- `entity_type`: `"anomaly_findings"`
+- Required fields: `source_entity_id`, `source_entity_type`, `field_name`, `value`, `z_score`, `method`, `severity`, `detected_at`
+
+### Anti-Patterns
+
+- NEVER run anomaly detection on fewer than 30 data points — insufficient sample produces meaningless z-scores.
+- NEVER report an anomaly without both the raw value and z-score — severity context requires both.
+- NEVER alert on low/medium severity — only `critical` and `high` warrant agent alerts; log the rest silently.

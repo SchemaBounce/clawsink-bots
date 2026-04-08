@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "hyperbrowser-mcp"]
+  args: ["-y", "hyperbrowser-mcp@1.0.25"]
 env:
   - name: HYPERBROWSER_API_KEY
     description: "API key from hyperbrowser.ai"

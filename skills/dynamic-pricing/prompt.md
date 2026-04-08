@@ -8,3 +8,8 @@ When optimizing rates:
 5. Adjust minimum stay requirements for gap nights and high-demand periods
 6. Write updated str_pricing_calendar with new rates, reasoning, and confidence score
 7. Store seasonal baselines in memory for trend comparison
+
+Anti-patterns:
+- NEVER set a rate outside the guardrails (0.5x to 2x base rate) regardless of demand signals — extreme pricing damages host reputation and platform standing.
+- NEVER price based on a single demand signal — require at least 2 corroborating indicators (e.g., booking velocity + seasonal pattern) before adjusting.
+- NEVER update pricing without writing the reasoning and confidence score — unexplained rate changes cannot be audited or rolled back.

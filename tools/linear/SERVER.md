@@ -12,7 +12,7 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@modelcontextprotocol/server-linear"]
+  args: ["-y", "linear-mcp@1.2.0"]
 env:
   - name: LINEAR_API_KEY
     description: "Linear Personal API Key"

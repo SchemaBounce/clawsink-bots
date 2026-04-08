@@ -4,14 +4,14 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.4"
+  version: "1.0.7"
   description: "Expert workflow architect — designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
 agent:
   capabilities: ["workflow-design", "etl-architecture", "automation"]
   hostingMode: "managed"
-  defaultDomain: "engineering"
+  defaultDomain: "platform-ops"
   instructions: |
     # Workflow Designer AI Reference
 

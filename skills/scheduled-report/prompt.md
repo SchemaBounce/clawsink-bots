@@ -9,3 +9,8 @@
 7. Update the cursor in memory to the current timestamp.
 8. Send a summary message to relevant downstream bots using adl_send_message.
 9. Never re-analyze records from previous runs; always work incrementally.
+
+Anti-patterns:
+- NEVER generate a report without loading the cursor from memory first — missing the cursor causes full re-analysis of historical data.
+- NEVER send the full report body as a message to downstream bots — send a DataPart summary with the report entity_id for on-demand lookup.
+- NEVER skip updating the cursor after a successful run — stale cursors cause duplicate analysis on the next cycle.

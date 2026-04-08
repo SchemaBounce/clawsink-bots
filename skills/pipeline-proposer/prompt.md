@@ -20,3 +20,8 @@ You can propose new data pipelines. Use `adl_tool_search("pipeline")` to discove
 - **Never auto-create** — all pipelines require human approval
 - For SaaS sources, use `connector_id` from `adl_list_connectors` and specify which `objects` to sync
 - Proposals that lack a clear business reason are likely to be rejected
+
+Anti-patterns:
+- NEVER propose a pipeline without checking `adl_list_pipeline_routes` for existing routes — duplicate pipelines cause data conflicts and wasted resources.
+- NEVER auto-create pipelines — all proposals require human approval; use `adl_propose_pipeline_route` which routes to the Automations dashboard.
+- NEVER omit the `reason` field or use generic justifications like "data sync" — approvers need specific business value to approve.
