@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]
@@ -74,6 +74,13 @@ skills:
   - ref: "skills/follow-up-tracking@1.0.0"
   - ref: "skills/task-management@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"
+toolPacks:
+  - ref: "packs/hr-toolkit@1.0.0"
+    reason: "Leave calculations, compensation benchmarking, and onboarding scheduling"
+  - ref: "packs/datetime-toolkit@1.0.0"
+    reason: "Business day calculations and onboarding timeline management"
+  - ref: "packs/document-gen@1.0.0"
+    reason: "Generate onboarding checklists and welcome documents"
 mcpServers:
   - ref: "tools/agentmail"
     required: true

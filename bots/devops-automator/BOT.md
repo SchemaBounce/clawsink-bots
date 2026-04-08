@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -73,6 +73,11 @@ skills:
   - ref: "skills/pipeline-monitoring@1.0.0"
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/notification-dispatch@1.0.0"
+toolPacks:
+  - ref: "packs/devops-toolkit@1.0.0"
+    reason: "Log parsing, code formatting, diff generation, and cron validation"
+  - ref: "packs/security-compliance@1.0.0"
+    reason: "Input sanitization, checksum verification, and audit logging"
 automations:
   triggers:
     - name: "Verify deployment health"

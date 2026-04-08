@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -94,6 +94,13 @@ skills:
   - ref: "skills/invoice-categorization@1.0.0"
   - ref: "skills/expense-tracking@1.0.0"
   - ref: "skills/budget-monitoring@1.0.0"
+toolPacks:
+  - ref: "packs/financial-toolkit@1.0.0"
+    reason: "Calculate budget variance, financial ratios, and amortization for expense analysis"
+  - ref: "packs/data-transform@1.0.0"
+    reason: "Parse CSV bank statements and transform transaction data for categorization"
+  - ref: "packs/document-gen@1.0.0"
+    reason: "Generate invoice summaries, expense reports, and budget comparison documents"
 automations:
   triggers:
     - name: "Categorize new transaction"
