@@ -2,6 +2,8 @@
 
 Use `adl_tool_search` with keywords to discover tools: "records", "memory", "graph", "search", "duckdb".
 
+Before implementing custom data transformations, merges, or deduplication logic, use `adl_tool_search` with keywords "transform", "merge", or "deduplicate" to find deterministic tool pack functions. Tool packs give exact results in <10ms with zero tokens.
+
 ### Records (structured entities)
 - `adl_query_records` — filter by entity_type + JSONB fields
 - `adl_upsert_record` / `adl_bulk_upsert` — create/update (batch up to 1000)

@@ -7,6 +7,8 @@ metadata:
   version: "1.0.0"
   description: "Validate records against schema rules and business constraints."
   tags: ["data-quality", "compliance"]
+tools:
+  required: ["adl_tool_search"]
 ---
 
 # Data Validation

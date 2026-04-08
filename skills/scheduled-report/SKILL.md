@@ -8,7 +8,7 @@ metadata:
   description: "Produces periodic findings by querying domain data on a schedule and synthesizing insights."
   tags: ["reporting", "scheduled", "analytics", "synthesis"]
 tools:
-  required: ["adl_query_records", "adl_write_record", "adl_read_memory", "adl_write_memory", "adl_send_message"]
+  required: ["adl_query_records", "adl_write_record", "adl_read_memory", "adl_write_memory", "adl_send_message", "adl_tool_search"]
 data:
   consumesEntityTypes: ["domain_records"]
   producesEntityTypes: ["periodic_findings", "periodic_reports"]

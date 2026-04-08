@@ -7,6 +7,8 @@ metadata:
   version: "1.0.0"
   description: "Identify trends in time-series data using moving averages and regression."
   tags: ["analytics", "reporting"]
+tools:
+  required: ["adl_tool_search"]
 ---
 
 # Trend Analysis
