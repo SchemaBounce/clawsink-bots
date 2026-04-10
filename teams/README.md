@@ -6,6 +6,8 @@ A Team is a coordinated group of bots that work together under a shared North St
 
 **Relationship to Plugins**: Teams can declare shared plugins available to all member bots. See [plugins/README.md](../plugins/README.md) for the plugin ecosystem.
 
+**Relationship to Tool Packs**: Teams can declare shared native deterministic tool packs for all member bots via `toolPacks[].ref`. See [packs/README.md](../packs/README.md) for the tool pack format.
+
 **Relationship to MCP Servers**: Teams can declare shared MCP server instances. See [tools/README.md](../tools/README.md) for the MCP server format.
 
 **Relationship to Data Kits**: Teams bundle Data Kits via `dataKits[].ref: "data-kits/{name}@{version}"`. Activating a team auto-installs its referenced kits. See [data-kits/README.md](../data-kits/README.md) for the kit format.
@@ -40,6 +42,9 @@ plugins:                 # Shared plugin dependencies for this team (optional)
     slot: string         # Plugin slot if exclusive
     reason: string       # Why this team needs this plugin
     config: object       # Team-wide defaults (bots can override)
+toolPacks:               # Shared native deterministic tools for this team (optional)
+  - ref: string          # Reference: "packs/{name}" or "packs/{name}@{version}"
+    reason: string       # Why this team needs this shared tool pack
 mcpServers:              # Shared MCP servers for this team (optional)
   - ref: string          # Reference: "tools/{server-name}"
     reason: string       # Why this team needs this server
@@ -94,6 +99,7 @@ Extended documentation here. Renders as the team's marketplace page.
 - `estimatedMonthlyCost` is calculated from model costs at default schedules
 - Teams do NOT override individual bot schedules or models — those are bot-level concerns
 - Team-level `plugins` provide shared defaults; individual bot `plugins` can override `config`
+- Team-level `toolPacks` are shared native functions available to all member bots
 
 ## Org Chart
 
@@ -152,6 +158,15 @@ The `shared/escalation-chains.json` file defines global default routing for bots
 ## Team-Level Plugins
 
 Team-level `plugins[]` install shared plugins available to all bots in the team. Bot-level `plugins[]` layer on top. Slot conflicts between team-level and bot-level declarations are rejected at validation time.
+
+## Team-Level Tool Packs
+
+Team-level `toolPacks[]` make shared native deterministic functions available to every bot in the team. Unlike MCP servers, tool packs do not create external connections or require credential setup. Use them when multiple bots need the same structured computation or data-shaping helpers.
+
+- `ref` must point to a valid `packs/` directory containing a `PACK.md`
+- Version suffix is optional; if present, it must be SemVer (`@1.0.0`)
+- `reason` is required and non-empty
+- Team-level and bot-level tool packs compose as a union; there is no config merge layer
 
 ## Team-Level MCP Servers
 
@@ -239,17 +254,20 @@ teamGoals:
 10. All `orgChart.roles[].reportsTo` reference valid bots in the team (or null for lead)
 11. `escalation.critical` and `escalation.unhandled` reference bots in the team
 12. All bots in `escalation.paths[].chain` are members of the team
-13. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
-14. No conflicting MCP server configs between team-level and bot-level declarations
-15. All `dataKits[].ref` reference valid `data-kits/` directories containing `KIT.md`
-16. No duplicate kit references within a single team
-17. `teamGoals[].name` is unique within the team and snake_case
-18. `teamGoals[].category` is one of: `primary`, `secondary`, `health`
-19. `teamGoals[].composedFrom[].bot` must reference a bot in `bots[].ref`
-20. `teamGoals[].composedFrom[].goal` must reference a valid goal name from the referenced bot's `goals[]`
-21. `teamGoals[].composedFrom[].weight` values must sum to 1.0 when weights are specified
-22. `teamGoals[].aggregation` is one of: `average`, `sum`, `min`, `max`, `worst`
-23. `teamGoals[].target.period` is one of: `daily`, `weekly`, `monthly`
+13. All `toolPacks[].ref` reference valid `packs/` directories containing `PACK.md`
+14. All `toolPacks[].reason` are non-empty strings
+15. No duplicate `toolPacks[].ref` entries appear within a single team
+16. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
+17. No conflicting MCP server configs between team-level and bot-level declarations
+18. All `dataKits[].ref` reference valid `data-kits/` directories containing `KIT.md`
+19. No duplicate kit references within a single team
+20. `teamGoals[].name` is unique within the team and snake_case
+21. `teamGoals[].category` is one of: `primary`, `secondary`, `health`
+22. `teamGoals[].composedFrom[].bot` must reference a bot in `bots[].ref`
+23. `teamGoals[].composedFrom[].goal` must reference a valid goal name from the referenced bot's `goals[]`
+24. `teamGoals[].composedFrom[].weight` values must sum to 1.0 when weights are specified
+25. `teamGoals[].aggregation` is one of: `average`, `sum`, `min`, `max`, `worst`
+26. `teamGoals[].target.period` is one of: `daily`, `weekly`, `monthly`
 
 ## What the Platform Does
 
@@ -257,6 +275,7 @@ teamGoals:
 |-------------|-------------------|
 | `bots[].ref` | Activate each bot (full bot activation) |
 | `plugins[]` (team-level) | Install shared plugins available to all bots in the team |
+| `toolPacks[]` (team-level) | Make shared native deterministic functions available to all bots in the team |
 | `mcpServers[]` (team-level) | Make shared MCP server tools available to all bots in the team |
 | `northStar.requiredKeys` | Prompt the user to fill in required business context before bots run |
 | `orgChart.roles` | Create the team's reporting hierarchy, visible in the org chart view |
@@ -266,7 +285,7 @@ teamGoals:
 | `dataKits[].installSampleData` | Optionally seed sample data from the kit |
 | `teamGoals` | Aggregate member bot goal health into team-level metrics; render team health dashboard |
 
-Team-level plugins and MCP servers are shared — you don't need to redeclare them on every bot. Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
+Team-level plugins, tool packs, and MCP servers are shared — you don't need to redeclare them on every bot. Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
 
 ## Canonical Example
 

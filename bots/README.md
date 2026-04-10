@@ -6,6 +6,8 @@ A Bot is a complete agent definition with identity, model, schedule, messaging, 
 
 **Relationship to Skills**: Bots compose skills via `skills[].ref: "skills/{name}@{version}"`. Each skill's `prompt.md` is appended to the bot's system prompt. See [skills/README.md](../skills/README.md) for the skill format.
 
+**Relationship to Tool Packs**: Bots declare native deterministic tool dependencies via `toolPacks[].ref: "packs/{name}@{version}"`. See [packs/README.md](../packs/README.md) for the tool pack format.
+
 **Relationship to Plugins**: Bots declare plugin dependencies via `plugins[].ref`. See [plugins/README.md](../plugins/README.md) for the plugin ecosystem.
 
 **Relationship to MCP Servers**: Bots declare MCP server dependencies via `mcpServers[].ref`. See [tools/README.md](../tools/README.md) for the MCP server format.
@@ -84,6 +86,9 @@ zones:
   zone2Domains: [string] # Shared domains this bot accesses
 skills:                  # Skill composition
   - ref: string          # Reference to shared skill: "skills/{name}@{version}"
+toolPacks:               # Native deterministic tools (optional)
+  - ref: string          # Reference: "packs/{name}" or "packs/{name}@{version}"
+    reason: string       # Why this bot needs this native tool pack
 plugins:                 # OpenCLAW plugin dependencies (optional)
   - ref: string          # npm package + version: "{name}@{version}"
     slot: string         # Plugin slot if exclusive (e.g., "memory", "channel")
@@ -220,6 +225,25 @@ The `skills:` section lists capabilities this bot uses:
 - `ref: "skills/{skill-name}@{version}"` — references a shared skill from the `skills/` directory. The skill's `prompt.md` is appended to the bot's SOUL.md at runtime.
 
 Skills are composed in the order listed. SOUL.md always comes first in the final system prompt.
+
+## Tool Packs Section
+
+The `toolPacks:` section declares native deterministic function bundles that run inside the ADL runtime. Use tool packs when the bot needs structured computation, parsing, formatting, or domain-specific helpers without making external network calls.
+
+- `ref` must point to a valid `packs/` directory containing a `PACK.md`
+- Version suffix is optional; if present, it must be SemVer (`@1.0.0`)
+- `reason` is required and non-empty — explain why the bot needs the pack
+- Tool packs are native platform functions, not external integrations
+
+### Example
+
+```yaml
+toolPacks:
+  - ref: "packs/data-transform@1.0.0"
+    reason: "Normalize CSV uploads and reshape structured records before writing findings"
+  - ref: "packs/document-gen@1.0.0"
+    reason: "Generate deterministic reports and summaries from structured data"
+```
 
 ## Plugins Section
 
@@ -828,27 +852,30 @@ Bootstrap private memory entries.
 20. All `plugins[].ref` are valid npm package specs (name + semver range)
 21. All `plugins[].reason` are non-empty strings
 22. No `plugins[].config` values contain secrets (no fields named `password`, `secret`, `token`, `apiKey`)
-23. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
-24. All `mcpServers[].reason` are non-empty strings
-25. No `mcpServers[].config` values contain secrets
-26. Every `presence:` provider has a matching `mcpServers[].ref` entry (e.g., `presence.email.provider: agentmail` requires `mcpServers: [{ref: "tools/agentmail"}]`)
-27. `presence.email.displayName` only uses supported template variables (`{bot-name}`, `{workspace}`)
-28. `presence:` sub-sections only reference supported providers (`agentmail`, `elevenlabs`, `agentphone`, `hyperbrowser`, `exa`, `firecrawl`)
-29. `setup.steps[].id` is unique within the bot and kebab-case
-30. `setup.steps[].type` is one of: `mcp_connection`, `secret`, `config`, `data_presence`, `north_star`, `manual`
-31. `setup.steps[].group` is one of: `connections`, `configuration`, `data`, `external`
-32. `setup.steps[].priority` is one of: `required`, `recommended`, `optional`
-33. `setup.steps[]` with `type: mcp_connection` must have `ref` pointing to a valid `tools/` directory
-34. `setup.steps[]` with `type: secret` must have `secretName` as a non-empty string
-35. `setup.steps[]` with `type: config` must have `target.namespace` and `target.key`
-36. `setup.steps[]` with `type: data_presence` must have `entityType` referencing a type in `data.entityTypesRead` or `data.entityTypesWrite`
-37. `goals[].name` is unique within the bot and snake_case
-38. `goals[].category` is one of: `primary`, `secondary`, `health`
-39. `goals[].metric.type` is one of: `count`, `rate`, `threshold`, `boolean`
-40. `goals[]` with `metric.type: rate` must have both `numerator` and `denominator`
-41. `goals[].target.period` is one of: `per_run`, `daily`, `weekly`, `monthly`
-42. `goals[]` with `feedback.enabled: true` must have at least 2 `feedback.actions`
-43. At least one `goals[]` entry with `category: primary` is required if `goals:` is present
+23. All `toolPacks[].ref` reference valid `packs/` directories containing `PACK.md`
+24. All `toolPacks[].reason` are non-empty strings
+25. No duplicate `toolPacks[].ref` entries appear within a bot
+26. All `mcpServers[].ref` reference valid `tools/` directories containing `SERVER.md`
+27. All `mcpServers[].reason` are non-empty strings
+28. No `mcpServers[].config` values contain secrets
+29. Every `presence:` provider has a matching `mcpServers[].ref` entry (e.g., `presence.email.provider: agentmail` requires `mcpServers: [{ref: "tools/agentmail"}]`)
+30. `presence.email.displayName` only uses supported template variables (`{bot-name}`, `{workspace}`)
+31. `presence:` sub-sections only reference supported providers (`agentmail`, `elevenlabs`, `agentphone`, `hyperbrowser`, `exa`, `firecrawl`)
+32. `setup.steps[].id` is unique within the bot and kebab-case
+33. `setup.steps[].type` is one of: `mcp_connection`, `secret`, `config`, `data_presence`, `north_star`, `manual`
+34. `setup.steps[].group` is one of: `connections`, `configuration`, `data`, `external`
+35. `setup.steps[].priority` is one of: `required`, `recommended`, `optional`
+36. `setup.steps[]` with `type: mcp_connection` must have `ref` pointing to a valid `tools/` directory
+37. `setup.steps[]` with `type: secret` must have `secretName` as a non-empty string
+38. `setup.steps[]` with `type: config` must have `target.namespace` and `target.key`
+39. `setup.steps[]` with `type: data_presence` must have `entityType` referencing a type in `data.entityTypesRead` or `data.entityTypesWrite`
+40. `goals[].name` is unique within the bot and snake_case
+41. `goals[].category` is one of: `primary`, `secondary`, `health`
+42. `goals[].metric.type` is one of: `count`, `rate`, `threshold`, `boolean`
+43. `goals[]` with `metric.type: rate` must have both `numerator` and `denominator`
+44. `goals[].target.period` is one of: `per_run`, `daily`, `weekly`, `monthly`
+45. `goals[]` with `feedback.enabled: true` must have at least 2 `feedback.actions`
+46. At least one `goals[]` entry with `category: primary` is required if `goals:` is present
 
 ## What the Platform Does
 
@@ -858,6 +885,7 @@ Bootstrap private memory entries.
 | `agent.instructions` | Inject as `# AGENTS.md` section -- operating rules and guardrails |
 | `agent.toolInstructions` | Inject as `# TOOLS.md` section -- tool usage conventions |
 | `skills[].ref` | Append each skill's `prompt.md` to the bot's instructions |
+| `toolPacks[].ref` | Make the declared native deterministic functions available to the bot |
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data -- North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |

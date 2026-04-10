@@ -14,6 +14,7 @@ This repository is **parsed programmatically** to populate the marketplace, agen
 | Bots | [bots/README.md](bots/README.md) |
 | Teams | [teams/README.md](teams/README.md) |
 | Data Kits | [data-kits/README.md](data-kits/README.md) |
+| Tool Packs | [packs/README.md](packs/README.md) |
 | MCP Servers | [tools/README.md](tools/README.md) |
 | Plugins | [plugins/README.md](plugins/README.md) |
 
@@ -25,12 +26,12 @@ clawsink-bots/
 ├── README.md                       # This file
 ├── LICENSE                         # Apache 2.0
 │
-├── skills/                         # 22 reusable skill definitions
+├── skills/                         # 42 reusable skill definitions
 │   └── {skill-name}/
 │       ├── SKILL.md                # Manifest (kind: Skill)
 │       └── prompt.md               # Skill instructions (<200 tokens)
 │
-├── bots/                           # 44 complete agent definitions
+├── bots/                           # 60 complete agent definitions
 │   └── {bot-name}/
 │       ├── BOT.md                  # Manifest (kind: Bot) -- PARSED FOR MARKETPLACE
 │       ├── SOUL.md                 # Agent identity (<800 tokens)
@@ -41,11 +42,11 @@ clawsink-bots/
 │           ├── zone2-entity-types.json
 │           └── zone3-initial-memory.json
 │
-├── teams/                          # 22 coordinated bot groups
+├── teams/                          # 26 coordinated bot groups
 │   └── {team-name}/
 │       └── TEAM.md                 # Manifest (kind: Team) -- PARSED FOR MARKETPLACE
 │
-├── data-kits/                      # 20 full-stack domain data packages
+├── data-kits/                      # 21 full-stack domain data packages
 │   └── {kit-name}/
 │       ├── KIT.md                  # Manifest (kind: DataKit) -- PARSED FOR MARKETPLACE
 │       ├── entity-schemas.json     # Entity type definitions with typed fields
@@ -61,6 +62,11 @@ clawsink-bots/
 │   ├── north-star-template.json    # North Star key template
 │   └── output-format.md           # Standard output formatting
 │
+├── packs/                          # Native deterministic tool pack manifests
+│   ├── README.md                   # Tool pack documentation
+│   └── {pack-name}/
+│       └── PACK.md                 # Manifest (kind: ToolPack) -- PARSED FOR MARKETPLACE
+│
 ├── tools/                          # MCP server definitions
 │   ├── README.md                   # MCP server documentation
 │   └── {server-name}/
@@ -72,7 +78,7 @@ clawsink-bots/
 
 ## How the Marketplace Parser Works
 
-The marketplace reads manifest files (BOT.md, TEAM.md, SKILL.md) and extracts YAML frontmatter to populate UI. Every field in the frontmatter has a specific rendering target.
+The marketplace reads manifest files (`BOT.md`, `TEAM.md`, `SKILL.md`, `PACK.md`, `SERVER.md`, and `KIT.md`) and extracts YAML frontmatter to populate UI. Every field in the frontmatter has a specific rendering target.
 
 ### Bot Page (`/marketplace/bots/{name}`)
 
@@ -90,6 +96,7 @@ The marketplace reads manifest files (BOT.md, TEAM.md, SKILL.md) and extracts YA
 | `messaging.sendsTo` | Communication diagram edges |
 | `messaging.listensTo` | Communication diagram edges |
 | `skills[].ref` | "Capabilities" section |
+| `toolPacks[].ref` | "Native functions" section |
 | `plugins[].ref` | "Required plugins" section |
 | `agents/*.md` (directory listing) | "Sub-agents" section |
 | Markdown body after `---` | Long description / documentation tab |
@@ -111,6 +118,7 @@ The marketplace reads manifest files (BOT.md, TEAM.md, SKILL.md) and extracts YA
 | `orgChart.roles[].domain` | Domain grouping in org chart |
 | `orgChart.escalation.paths` | Escalation flow arrows in org chart |
 | `plugins[].ref` | "Team plugins" section |
+| `toolPacks[].ref` | "Shared native functions" section |
 | Markdown body after `---` | Long description / documentation tab |
 
 ### Org Chart Page (`/workspaces/{id}/agent-data-layer/org-chart`)
@@ -136,6 +144,19 @@ The org chart view renders the team's `orgChart` as an interactive tree:
 | `tools[].name` | "Available tools" list |
 | `tools[].description` | Tool description |
 | `tools[].category` | Tool grouping headers |
+| Markdown body after `---` | Long description / documentation tab |
+
+### Tool Pack Page (`/marketplace/packs/{name}`)
+
+| YAML Field | Renders As |
+|---|---|
+| `metadata.displayName` | Page title, card heading |
+| `metadata.description` | Card subtitle, search snippet |
+| `metadata.category` | Category filter pill |
+| `metadata.tags` | Search index, tag chips |
+| `tools[].name` | "Native functions" list |
+| `tools[].description` | Function description |
+| `tools[].category` | Function grouping headers |
 | Markdown body after `---` | Long description / documentation tab |
 
 ### Data Kit Page (`/marketplace/data-kits/{name}`)
@@ -167,7 +188,7 @@ The org chart view renders the team's `orgChart` as an interactive tree:
 
 ## What Happens When You Activate
 
-Every field in a manifest maps to a platform action. When a bot is activated, the platform uses the manifest to compose its identity, install its plugins and MCP servers, seed its data, register its schedule, and wire its messaging. For teams, the platform also creates the org chart, sets up escalation routing, and deploys shared resources across all member bots.
+Every field in a manifest maps to a platform action. When a bot is activated, the platform uses the manifest to compose its identity, install its plugins, make native tool packs available, connect MCP servers, seed its data, register its schedule, and wire its messaging. For teams, the platform also creates the org chart, sets up escalation routing, and deploys shared resources across all member bots.
 
 See **"What the Platform Does With This Spec"** in [ARCHITECTURE.md](ARCHITECTURE.md) for details on what each field triggers.
 
@@ -190,6 +211,8 @@ Team (restaurant-group)                      ← industry-specific bot group
  ├── Bot (accountant)                        ← top-level agent [specialist]
  │    ├── Skill (invoice-categorization)
  │    ├── Skill (expense-tracking)
+ │    ├── Tool Pack (financial-toolkit)      ← native deterministic functions
+ │    ├── Tool Pack (data-transform)
  │    └── Skill (budget-monitoring)
  ├── Bot (inventory-manager)                 ← top-level agent [specialist]
  │    └── Sub-Agent (stock-analyst)
@@ -198,7 +221,7 @@ Team (restaurant-group)                      ← industry-specific bot group
  └── Bot (marketing-growth)                  ← top-level agent [specialist]
 ```
 
-**Data Kits** are full-stack domain data packages (entity schemas + graph + vectors + memory + sample data). **Skills** are reusable instructions composed into bots. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart, escalation paths, and bundled Data Kits. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
+**Data Kits** are full-stack domain data packages (entity schemas + graph + vectors + memory + sample data). **Skills** are reusable instructions composed into bots. **Tool Packs** are native deterministic platform functions that bots can declare when they need domain-specific computation. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart, escalation paths, and bundled Data Kits. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
 
 ## Creating Your Own Bot Pack
 
@@ -225,6 +248,9 @@ your-org-bots/
 │   └── your-skill/
 │       ├── SKILL.md
 │       └── prompt.md
+├── packs/                # Optional -- native deterministic tool packs
+│   └── your-pack/
+│       └── PACK.md
 └── tools/                # Optional -- MCP server definitions
     └── your-server/
         └── SERVER.md
@@ -277,6 +303,9 @@ zones:
   zone2Domains: ["your-domain"]
 skills:
   - ref: "skills/your-skill@1.0.0"
+toolPacks:                          # Optional -- native deterministic functions
+  - ref: "packs/data-transform@1.0.0"
+    reason: "Parses uploaded CSV files and normalizes inbound records"
 mcpServers:                          # Optional -- MCP servers this bot requires
   - ref: "tools/github"
     required: true
@@ -337,6 +366,9 @@ bots:
   - ref: "bots/bot-a@1.0.0"
   - ref: "bots/bot-b@1.0.0"
   - ref: "bots/bot-c@1.0.0"
+toolPacks:                          # Optional -- shared native functions for all team bots
+  - ref: "packs/data-transform@1.0.0"
+    reason: "Normalize shared CSV and JSON payloads before routing work"
 northStar:
   industry: "Your Industry"
   context: "Who this team is for"
@@ -386,6 +418,8 @@ Checklist:
 [ ] Every bot has data-seeds/ with all 3 zone files (valid JSON)
 [ ] metadata.name matches directory name for every manifest
 [ ] All skills[].ref point to existing skill directories
+[ ] All toolPacks[].ref point to existing packs/ directories
+[ ] Every referenced pack has a PACK.md with kind: ToolPack
 [ ] All messaging.sendsTo[].to reference valid bot names
 [ ] Every TEAM.md has orgChart with exactly one lead
 [ ] Every bot in the team appears exactly once in orgChart.roles
