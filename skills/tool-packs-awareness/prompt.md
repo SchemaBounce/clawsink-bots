@@ -1,6 +1,6 @@
-## Tool Packs Awareness
+## Built-in Tools Awareness
 
-The platform has **deterministic tool pack functions** — Go code that runs in <10ms, zero LLM tokens, exact reproducible results. ALWAYS search before computing manually.
+The platform has **133 built-in deterministic tools** across 15 categories — Go code that runs in <10ms, zero LLM tokens, exact reproducible results. All tools are available to every agent automatically. ALWAYS search before computing manually.
 
 ### Before Any Calculation or Transformation
 1. `adl_tool_search` with keywords (e.g., "amortization", "parse csv", "statistics", "distance")
@@ -8,7 +8,7 @@ The platform has **deterministic tool pack functions** — Go code that runs in 
 3. Call the tool with correct parameters
 4. Use the exact result — do NOT re-interpret or approximate
 
-### Tool Pack Categories (search keywords)
+### Built-in Tool Categories (search keywords)
 - **Data Processing**: parse, transform, validate, merge, deduplicate, pivot, convert
 - **Finance**: amortization, tax, invoice, ratios, depreciation, ROI, forecast
 - **Math & Statistics**: calculate, regression, correlation, outlier, monte carlo, significance

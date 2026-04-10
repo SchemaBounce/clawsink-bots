@@ -1,7 +1,7 @@
 ## Record Monitoring
 
 1. Load monitoring rules, policies, and thresholds from memory.
-2. Use `adl_tool_search` with keywords "validate" or "detect pii" to find deterministic monitoring tools. Prefer tool pack functions for schema validation and PII detection.
+2. Use `adl_tool_search` with keywords "validate" or "detect pii" to find deterministic monitoring tools. Prefer built-in tools for schema validation and PII detection.
 3. Query all monitored_records in your assigned domain scope.
 4. Check each record systematically against every applicable rule. Do not skip records.
 5. For each violation, classify severity (critical, high, medium, low) based on the rule definition.

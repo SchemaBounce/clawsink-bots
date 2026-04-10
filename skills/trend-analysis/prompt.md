@@ -1,7 +1,7 @@
 ## Trend Analysis
 
 1. Receive time-series data points with timestamps and numeric values.
-2. Use `adl_tool_search` with keywords "regression" or "time series" to find deterministic trend computation tools. Prefer tool pack functions over manual calculations.
+2. Use `adl_tool_search` with keywords "regression" or "time series" to find deterministic trend computation tools. Prefer built-in tools over manual calculations.
 3. Compute moving averages over configurable window sizes to smooth short-term noise.
 4. Apply linear regression to identify the overall trend direction and slope.
 5. Detect trend breaks where the direction changes significantly from the established pattern.

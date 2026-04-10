@@ -2,7 +2,7 @@
 
 When optimizing rates:
 1. Query str_bookings and str_pricing_calendar for occupancy trends and historical rates
-2. Use `adl_tool_search` with keywords "pricing" or "break even" to find deterministic rate calculation tools. Prefer tool pack functions for revenue math and threshold computations.
+2. Use `adl_tool_search` with keywords "pricing" or "break even" to find deterministic rate calculation tools. Prefer built-in tools for revenue math and threshold computations.
 3. Identify demand signals: booking velocity, gap nights, seasonal patterns, local events
 4. Apply pricing guardrails: never exceed 2x base rate, never drop below 0.5x base rate
 5. Calculate recommended nightly rate per property per date

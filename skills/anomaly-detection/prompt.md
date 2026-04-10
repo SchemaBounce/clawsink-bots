@@ -5,7 +5,7 @@ Detect statistical anomalies in numeric ADL record fields using z-score and IQR 
 ### Steps
 
 1. `adl_query_records(entity_type=<target_type>)` — fetch records with the numeric field to analyze. Minimum 30 records required for statistical validity.
-2. Use `adl_tool_search` with keywords "statistics" or "outlier" to find deterministic computation tools. Prefer tool pack functions over manual calculations for exact, reproducible results.
+2. Use `adl_tool_search` with keywords "statistics" or "outlier" to find deterministic computation tools. Prefer built-in tools over manual calculations for exact, reproducible results.
 3. Compute descriptive stats: mean, standard deviation, Q1, Q3, IQR (Q3 - Q1).
 4. Z-score detection: flag records where `|value - mean| / stddev > 3.0`.
 5. IQR detection: flag records where `value < Q1 - 1.5 * IQR` or `value > Q3 + 1.5 * IQR`.

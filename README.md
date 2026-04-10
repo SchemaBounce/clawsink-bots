@@ -14,7 +14,7 @@ This repository is **parsed programmatically** to populate the marketplace, agen
 | Bots | [bots/README.md](bots/README.md) |
 | Teams | [teams/README.md](teams/README.md) |
 | Data Kits | [data-kits/README.md](data-kits/README.md) |
-| Tool Packs | [packs/README.md](packs/README.md) |
+| Built-in Tools | [packs/README.md](packs/README.md) |
 | MCP Servers | [tools/README.md](tools/README.md) |
 | Plugins | [plugins/README.md](plugins/README.md) |
 
@@ -62,7 +62,7 @@ clawsink-bots/
 │   ├── north-star-template.json    # North Star key template
 │   └── output-format.md           # Standard output formatting
 │
-├── packs/                          # Native deterministic tool pack manifests
+├── packs/                          # Native deterministic built-in tool manifests
 │   ├── README.md                   # Tool pack documentation
 │   └── {pack-name}/
 │       └── PACK.md                 # Manifest (kind: ToolPack) -- PARSED FOR MARKETPLACE
@@ -146,7 +146,7 @@ The org chart view renders the team's `orgChart` as an interactive tree:
 | `tools[].category` | Tool grouping headers |
 | Markdown body after `---` | Long description / documentation tab |
 
-### Tool Pack Page (`/marketplace/packs/{name}`)
+### Built-in Tools Page (`/marketplace/packs/{name}`)
 
 | YAML Field | Renders As |
 |---|---|
@@ -188,7 +188,7 @@ The org chart view renders the team's `orgChart` as an interactive tree:
 
 ## What Happens When You Activate
 
-Every field in a manifest maps to a platform action. When a bot is activated, the platform uses the manifest to compose its identity, install its plugins, make native tool packs available, connect MCP servers, seed its data, register its schedule, and wire its messaging. For teams, the platform also creates the org chart, sets up escalation routing, and deploys shared resources across all member bots.
+Every field in a manifest maps to a platform action. When a bot is activated, the platform uses the manifest to compose its identity, install its plugins, make native built-in tools available, connect MCP servers, seed its data, register its schedule, and wire its messaging. For teams, the platform also creates the org chart, sets up escalation routing, and deploys shared resources across all member bots.
 
 See **"What the Platform Does With This Spec"** in [ARCHITECTURE.md](ARCHITECTURE.md) for details on what each field triggers.
 
@@ -211,8 +211,8 @@ Team (restaurant-group)                      ← industry-specific bot group
  ├── Bot (accountant)                        ← top-level agent [specialist]
  │    ├── Skill (invoice-categorization)
  │    ├── Skill (expense-tracking)
- │    ├── Tool Pack (financial-toolkit)      ← native deterministic functions
- │    ├── Tool Pack (data-transform)
+ │    ├── Built-in Tools (financial-toolkit)      ← native deterministic functions
+ │    ├── Built-in Tools (data-transform)
  │    └── Skill (budget-monitoring)
  ├── Bot (inventory-manager)                 ← top-level agent [specialist]
  │    └── Sub-Agent (stock-analyst)
@@ -221,7 +221,7 @@ Team (restaurant-group)                      ← industry-specific bot group
  └── Bot (marketing-growth)                  ← top-level agent [specialist]
 ```
 
-**Data Kits** are full-stack domain data packages (entity schemas + graph + vectors + memory + sample data). **Skills** are reusable instructions composed into bots. **Tool Packs** are native deterministic platform functions that bots can declare when they need domain-specific computation. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart, escalation paths, and bundled Data Kits. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
+**Data Kits** are full-stack domain data packages (entity schemas + graph + vectors + memory + sample data). **Skills** are reusable instructions composed into bots. **Built-in Tools** are native deterministic platform functions that bots can declare when they need domain-specific computation. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart, escalation paths, and bundled Data Kits. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
 
 ## Creating Your Own Bot Pack
 
@@ -248,7 +248,7 @@ your-org-bots/
 │   └── your-skill/
 │       ├── SKILL.md
 │       └── prompt.md
-├── packs/                # Optional -- native deterministic tool packs
+├── packs/                # Optional -- native deterministic built-in tools
 │   └── your-pack/
 │       └── PACK.md
 └── tools/                # Optional -- MCP server definitions

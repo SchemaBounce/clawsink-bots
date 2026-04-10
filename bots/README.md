@@ -6,7 +6,7 @@ A Bot is a complete agent definition with identity, model, schedule, messaging, 
 
 **Relationship to Skills**: Bots compose skills via `skills[].ref: "skills/{name}@{version}"`. Each skill's `prompt.md` is appended to the bot's system prompt. See [skills/README.md](../skills/README.md) for the skill format.
 
-**Relationship to Tool Packs**: Bots declare native deterministic tool dependencies via `toolPacks[].ref: "packs/{name}@{version}"`. See [packs/README.md](../packs/README.md) for the tool pack format.
+**Relationship to Built-in Tools**: All 133 built-in deterministic tools are available to every agent automatically. Bots may list `toolPacks[]` in their manifest for documentation purposes — indicating which tool categories the bot is designed to use. See [packs/README.md](../packs/README.md) for the tool catalog.
 
 **Relationship to Plugins**: Bots declare plugin dependencies via `plugins[].ref`. See [plugins/README.md](../plugins/README.md) for the plugin ecosystem.
 
@@ -88,7 +88,7 @@ skills:                  # Skill composition
   - ref: string          # Reference to shared skill: "skills/{name}@{version}"
 toolPacks:               # Native deterministic tools (optional)
   - ref: string          # Reference: "packs/{name}" or "packs/{name}@{version}"
-    reason: string       # Why this bot needs this native tool pack
+    reason: string       # Why this bot needs this native built-in tool
 plugins:                 # OpenCLAW plugin dependencies (optional)
   - ref: string          # npm package + version: "{name}@{version}"
     slot: string         # Plugin slot if exclusive (e.g., "memory", "channel")
@@ -226,9 +226,9 @@ The `skills:` section lists capabilities this bot uses:
 
 Skills are composed in the order listed. SOUL.md always comes first in the final system prompt.
 
-## Tool Packs Section
+## Built-in Tools Section
 
-The `toolPacks:` section declares native deterministic function bundles that run inside the ADL runtime. Use tool packs when the bot needs structured computation, parsing, formatting, or domain-specific helpers without making external network calls.
+The `toolPacks:` section declares native deterministic function bundles that run inside the ADL runtime. Use built-in tools when the bot needs structured computation, parsing, formatting, or domain-specific helpers without making external network calls.
 
 - `ref` must point to a valid `packs/` directory containing a `PACK.md`
 - Version suffix is optional; if present, it must be SemVer (`@1.0.0`)
