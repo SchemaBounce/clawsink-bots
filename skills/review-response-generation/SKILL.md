@@ -10,7 +10,7 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_query_records", "adl_write_record", "adl_read_memory", "adl_semantic_search"]
+  required: ["adl_query_records", "adl_write_record", "adl_read_memory", "adl_semantic_search", "adl_tool_search"]
 data:
   producesEntityTypes: ["str_reviews"]
   consumesEntityTypes: ["str_reviews", "str_bookings", "str_guests", "str_properties"]

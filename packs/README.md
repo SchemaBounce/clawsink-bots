@@ -1,25 +1,30 @@
-# Tool Packs
+# Built-in Tools
 
-Tool packs are collections of deterministic Go functions hosted inside the ADL that agents can use for computation, data processing, and domain-specific operations. Unlike MCP servers (external process tools) and skills (prompt-based guidance), tool packs are **native platform functions** — fast, deterministic, zero LLM tokens.
+This directory catalogs the 133 built-in deterministic tools available to all agents. These are native Go functions hosted inside the ADL -- fast, deterministic, zero LLM tokens. Unlike MCP servers (external process tools) and skills (prompt-based guidance), built-in tools are **native platform functions** that every agent gets automatically.
 
-**Relationship to Bots**: Bots declare tool pack dependencies via `toolPacks[].ref: "packs/{name}"` in BOT.md. This gives the agent access to all tools in the declared packs.
+**All 133 tools are available to every agent.** There is no installation, no opt-in, and no activation step. Every agent in every workspace has access to the full tool catalog from the moment it is created.
 
-**Relationship to Teams**: Teams declare shared tool packs via `toolPacks[]` in TEAM.md, making them available to all member bots.
+**Relationship to Bots**: Bots may list `toolPacks[]` in BOT.md as informational documentation indicating which tool categories the bot is designed to use. This field has no effect on tool availability -- it exists for documentation purposes only.
 
-## Tool Packs vs MCP Servers vs Skills
+**Relationship to Teams**: Teams may list `toolPacks[]` in TEAM.md for documentation purposes. All tools are available to all team bots regardless of what is declared.
 
-| | Tool Packs | MCP Servers | Skills |
+## Built-in Tools vs MCP Servers vs Skills
+
+| | Built-in Tools | MCP Servers | Skills |
 |---|---|---|---|
 | **What** | Native Go functions in the ADL | Standalone processes providing external API tools | Reusable prompt instructions |
 | **How they run** | Inside the ADL infrastructure (same process) | Separate process (stdio, SSE, or HTTP) | Appended to bot's system prompt |
 | **Execution** | Deterministic, <10ms, zero LLM tokens | Network call to external API | LLM follows instructions |
 | **What they provide** | Computation: math, parsing, formatting, analysis | External API access: GitHub, Slack, Stripe | Procedural guidance: how to analyze, categorize |
-| **Where defined** | `packs/{pack-name}/PACK.md` (manifest) + Go in core-api | `tools/{server-name}/SERVER.md` | `skills/{skill-name}/SKILL.md` + `prompt.md` |
+| **Where defined** | `packs/{pack-name}/PACK.md` (catalog) + Go in core-api | `tools/{server-name}/SERVER.md` | `skills/{skill-name}/SKILL.md` + `prompt.md` |
+| **Availability** | **All 133 tools available to every agent automatically** | Must be declared and configured | Composed into bot's system prompt |
 | **Examples** | CSV parsing, financial ratios, PII detection | GitHub issues, Stripe charges, Slack messages | Invoice categorization, anomaly detection |
 
-## How Bots Reference Tool Packs
+## How Agents Access Built-in Tools
 
-Bots declare tool pack dependencies in their `BOT.md` manifest under `toolPacks:`:
+All 133 built-in tools are automatically available to every agent. No declaration, installation, or activation is required. Agents discover tools at runtime via `adl_tool_search` with domain keywords.
+
+Bots may optionally list `toolPacks[]` in their `BOT.md` manifest for documentation purposes -- indicating which tool categories the bot is designed to use:
 
 ```yaml
 toolPacks:
@@ -29,15 +34,11 @@ toolPacks:
     reason: "Calculate amortization, ROI, and financial ratios"
 ```
 
-- `ref` points to a directory under `packs/` containing a `PACK.md`
-- `reason` explains why the bot needs this pack (required, non-empty)
-- Version suffix (`@1.0.0`) is optional — latest is used if omitted
+This field is informational only. All tools are available regardless of what is declared.
 
-## Standard ADL Tools (Always Available)
+## Tool Catalog
 
-Every bot automatically has access to the standard ADL tool set (62 tools). Tool packs supplement these with computation and domain-specific functions that are not always needed by every agent.
-
-## Available Tool Packs
+Every agent has access to the standard ADL tool set (62 core tools) plus all 133 built-in deterministic tools across 15 categories.
 
 | Pack | Tools | Category | Description |
 |------|-------|----------|-------------|
@@ -58,7 +59,9 @@ Every bot automatically has access to the standard ADL tool set (62 tools). Tool
 | [geo-toolkit](geo-toolkit/) | 6 | Geospatial | Distance, geofencing, address parsing |
 | **Total** | **133** | | |
 
-## PACK.md Manifest Format
+## PACK.md Catalog Format
+
+Each PACK.md describes a category of built-in tools for the marketplace catalog. This is a reference document -- it does not control tool availability.
 
 ```yaml
 ---
@@ -75,10 +78,10 @@ metadata:
 tools:
   - name: tool_name
     description: What this tool does
-    category: sub-category     # UI grouping within the pack
+    category: sub-category     # UI grouping within the category
 ---
 
-# Pack Name
+# Category Name
 
 Description and documentation rendered as the marketplace page.
 
@@ -95,4 +98,4 @@ Description, parameters, return value documentation.
 3. `kind` must be `ToolPack`
 4. `tools[]` must list all tools with name and description
 5. Tool names must use snake_case
-6. Each tool name must be globally unique across all packs
+6. Each tool name must be globally unique across all categories

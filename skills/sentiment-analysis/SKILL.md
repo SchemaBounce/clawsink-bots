@@ -7,6 +7,8 @@ metadata:
   version: "1.0.0"
   description: "Analyze text sentiment and classify as positive, negative, or neutral."
   tags: ["nlp", "social"]
+tools:
+  required: ["adl_tool_search"]
 ---
 
 # Sentiment Analysis

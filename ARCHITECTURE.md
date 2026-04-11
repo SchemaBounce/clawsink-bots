@@ -1,14 +1,15 @@
 # ClawSink Bots Specification v2
 
-This is the architectural overview for the composability model: **Skills**, **Bots** (with optional **Sub-Agents**), **Teams**, and **MCP Servers**. Each manifest kind has its own detailed specification in its directory's README.
+This is the architectural overview for the composability model: **Skills**, **Built-in Tools**, **Bots** (with optional **Sub-Agents**), **Teams**, and **MCP Servers**. Each manifest kind has its own detailed specification in its directory's README.
 
 ## Overview
 
-The architecture uses four manifest kinds that compose hierarchically. ClawSink is an abstraction layer **above** agents — it defines what agents are, how they compose, and how they communicate. It does not sit between agents and the runtime.
+The architecture uses five manifest kinds that compose hierarchically. ClawSink is an abstraction layer **above** agents — it defines what agents are, how they compose, and how they communicate. It does not sit between agents and the runtime.
 
 | Kind | Directory | Purpose | Manifest File |
 |------|-----------|---------|---------------|
 | `Skill` | `skills/` | Reusable capability (single responsibility) | `SKILL.md` |
+| `ToolPack` | `packs/` | Native deterministic function bundle | `PACK.md` |
 | `Bot` | `bots/` | Top-level agent definition (identity + skills + sub-agents) | `BOT.md` |
 | `Team` | `teams/` | Coordinated bot group (shared North Star) | `TEAM.md` |
 | `McpServer` | `tools/` | Custom MCP tool server (shared across bots) | `SERVER.md` |
@@ -27,6 +28,8 @@ Team (saas-growth)
  │    ├── Sub-Agent (writer)            ← isolated session, task string only
  │    └── Sub-Agent (editor)            ← isolated session, task string only
  ├── Bot (accountant)                   ← top-level agent
+ │    ├── Built-in Tools (financial-toolkit) ← native deterministic finance functions
+ │    ├── Built-in Tools (data-transform)    ← native deterministic data helpers
  │    ├── Skill (invoice-categorization)
  │    ├── Skill (expense-tracking)
  │    └── Skill (budget-monitoring)
@@ -50,8 +53,9 @@ Each directory contains its own README.md with the complete manifest format, fie
 | Level | Spec Location | What It Covers |
 |-------|---------------|----------------|
 | Skills | [skills/README.md](skills/README.md) | `SKILL.md` manifest + `prompt.md` format |
+| Built-in Tools | [packs/README.md](packs/README.md) | `PACK.md` manifest + native function catalog |
 | Bots | [bots/README.md](bots/README.md) | `BOT.md` manifest + `SOUL.md` + sub-agents + data seeds + plugins + MCP refs |
-| Teams | [teams/README.md](teams/README.md) | `TEAM.md` manifest + org chart + escalation + shared plugins/MCP |
+| Teams | [teams/README.md](teams/README.md) | `TEAM.md` manifest + org chart + escalation + shared plugins/built-in tools/MCP |
 | MCP Servers | [tools/README.md](tools/README.md) | `SERVER.md` manifest + transport + env + tools listing |
 | Plugins | [plugins/README.md](plugins/README.md) | Plugin ecosystem + slot system + installation |
 | Shared Resources | [shared/README.md](shared/README.md) | Escalation chains, message protocol, entity schemas, Toon Card format |
@@ -70,6 +74,7 @@ When a user activates a bot from the marketplace, the platform uses the manifest
 |-------------|-------------------|
 | `SOUL.md` | Use it as the bot's identity on every run |
 | `skills[].ref` | Append each skill's `prompt.md` to the bot's instructions |
+| `toolPacks[].ref` | Make the declared native deterministic functions available to the bot |
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data — North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |
@@ -80,7 +85,8 @@ When a user activates a bot from the marketplace, the platform uses the manifest
 | `model.preferred` / `fallback` | Select the LLM the bot uses |
 
 **What this means for authors:**
-- Every field you declare gets acted on. Don't declare plugins or MCP servers the bot doesn't actually use.
+- Every field you declare gets acted on. Don't declare plugins, built-in tools, or MCP servers the bot doesn't actually use.
+- Tool packs are native platform functions, not external services. Declare only the packs the bot genuinely needs.
 - Data seeds are merged non-destructively — they won't overwrite existing workspace data.
 - Skills are composed in the order listed. SOUL.md always comes first.
 - MCP server `env` variables are resolved from workspace secrets — the manifest only declares the names, never the values.
@@ -93,6 +99,7 @@ When a user activates a team, the platform sets up all member bots as a coordina
 |-------------|-------------------|
 | `bots[].ref` | Activate each bot (full bot activation above) |
 | `plugins[]` (team-level) | Install shared plugins available to all bots in the team |
+| `toolPacks[]` (team-level) | Make shared native deterministic functions available to all bots in the team |
 | `mcpServers[]` (team-level) | Make shared MCP server tools available to all bots in the team |
 | `northStar.requiredKeys` | Prompt the user to fill in required business context before bots run |
 | `orgChart.roles` | Create the team's reporting hierarchy, visible in the org chart view |
@@ -100,11 +107,25 @@ When a user activates a team, the platform sets up all member bots as a coordina
 | `orgChart.escalation` | Set up escalation routing that overrides the global defaults |
 
 **What this means for authors:**
-- Team-level plugins and MCP servers are shared — you don't need to redeclare them on every bot.
+- Team-level plugins, built-in tools, and MCP servers are shared — you don't need to redeclare them on every bot.
 - Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
 - The org chart appears in the workspace console. Users can view reporting lines and escalation paths visually.
 - `northStar.requiredKeys` creates a setup checklist — the user must provide business context (mission, industry, etc.) before the team starts operating.
 - Escalation paths defined here replace the global defaults in `shared/escalation-chains.json` for all bots in the team.
+
+### Built-in Tools Availability
+
+When a bot or team references a built-in tool:
+
+| You Provide | The Platform Will |
+|-------------|-------------------|
+| `toolPacks[].ref` | Register the declared pack's native deterministic functions for the bot or team |
+| `PACK.md` `tools[]` | Render the pack's available function catalog in marketplace surfaces |
+
+**What this means for authors:**
+- Tool packs are native runtime functions. They do not provision credentials, open sockets, or start external processes.
+- Use built-in tools for deterministic computation and data shaping. Use MCP servers for external APIs and connected systems.
+- Tool packs complement skills and MCP servers. They do not replace either surface.
 
 ### MCP Server Deployment
 
@@ -132,6 +153,7 @@ Deactivation is non-destructive. The bot stops running but its working data, mem
 ### Naming
 
 - Skill directories: kebab-case matching `metadata.name`
+- Tool pack directories: kebab-case matching `metadata.name`
 - Bot directories: kebab-case matching `metadata.name`
 - Team directories: kebab-case matching `metadata.name`
 - MCP server directories: kebab-case matching `metadata.name`

@@ -11,7 +11,8 @@
 # 5. model.provider is valid
 # 6. cost.estimatedCostTier is valid
 # 7. Skills refs match pattern skills/{name}@{version}
-# 8. MCP server refs match pattern tools/{name}
+# 8. Tool pack refs match pattern packs/{name}@{version?}
+# 9. MCP server refs match pattern tools/{name}
 #
 # Usage: ./validate-manifest.sh [bot-name]
 
@@ -113,6 +114,15 @@ validate_manifest() {
       warnings=$((warnings + 1))
     fi
   done < <(echo "$frontmatter" | grep "ref:" | grep "skills/" | sed 's/.*ref: *//')
+
+  # Tool pack refs format
+  while IFS= read -r ref; do
+    ref=$(echo "$ref" | tr -d '"' | tr -d ' ')
+    if [ -n "$ref" ] && [[ ! "$ref" =~ ^packs/[a-z0-9-]+(@[0-9]+\.[0-9]+\.[0-9]+)?$ ]]; then
+      echo -e "  ${YELLOW}WARN${NC} Tool pack ref '$ref' doesn't match pattern packs/{name}@{version}"
+      warnings=$((warnings + 1))
+    fi
+  done < <(echo "$frontmatter" | grep "ref:" | grep "packs/" | sed 's/.*ref: *//')
 
   # MCP server refs format
   while IFS= read -r ref; do

@@ -2,9 +2,10 @@
 
 When processing invoices:
 1. Query uncategorized invoices (entity_type="invoices", filter by missing category)
-2. Classify each invoice: expense category (SaaS, payroll, infrastructure, marketing, legal, other), vendor name normalization, payment urgency (overdue, due-soon, routine)
-3. Flag duplicates by matching vendor + amount + date within 7-day window
-4. Write categorization as acct_findings with severity based on urgency
+2. Use `adl_tool_search` with keywords "categorize" or "parse csv" to find deterministic classification tools. Prefer built-in tools for structured data parsing.
+3. Classify each invoice: expense category (SaaS, payroll, infrastructure, marketing, legal, other), vendor name normalization, payment urgency (overdue, due-soon, routine)
+4. Flag duplicates by matching vendor + amount + date within 7-day window
+5. Write categorization as acct_findings with severity based on urgency
 
 Anti-patterns:
 - NEVER skip duplicate detection — check vendor + amount + date within a 7-day window; duplicates cause double payments.

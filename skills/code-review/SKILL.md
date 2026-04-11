@@ -10,7 +10,7 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_query_records", "adl_write_record", "adl_send_message"]
+  required: ["adl_query_records", "adl_write_record", "adl_send_message", "adl_tool_search"]
 data:
   producesEntityTypes: ["review_findings", "code_quality_metrics"]
   consumesEntityTypes: ["pull_requests", "code_diffs"]

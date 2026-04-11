@@ -7,6 +7,8 @@ metadata:
   version: "1.0.0"
   description: "Statistical anomaly detection on numeric fields using z-score and IQR methods."
   tags: ["analytics", "data-quality"]
+tools:
+  required: ["adl_query_records", "adl_upsert_record", "adl_send_message", "adl_tool_search"]
 ---
 
 # Anomaly Detection

@@ -8,7 +8,7 @@ metadata:
   description: "Continuously monitors entity records for compliance violations, quality issues, or policy breaches."
   tags: ["monitoring", "compliance", "quality", "records"]
 tools:
-  required: ["adl_query_records", "adl_write_record", "adl_read_memory", "adl_write_memory"]
+  required: ["adl_query_records", "adl_write_record", "adl_read_memory", "adl_write_memory", "adl_tool_search"]
 data:
   consumesEntityTypes: ["monitored_records"]
   producesEntityTypes: ["monitoring_findings", "compliance_alerts"]

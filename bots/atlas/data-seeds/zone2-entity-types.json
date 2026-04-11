@@ -1,0 +1,41 @@
+{
+  "entityTypes": [
+    {
+      "name": "knowledge",
+      "displayName": "Knowledge",
+      "description": "Stored facts, decisions, and information",
+      "domain": "personal",
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Clear, searchable title"},
+        "content": {"type": "string", "required": true, "description": "The knowledge content"},
+        "tags": {"type": "array", "items": {"type": "string"}, "description": "Categorization tags"},
+        "source": {"type": "string", "description": "Where this knowledge came from"},
+        "confidence": {"type": "string", "enum": ["fact", "decision", "idea", "reference"], "description": "Type of knowledge"}
+      }
+    },
+    {
+      "name": "notes",
+      "displayName": "Notes",
+      "description": "Quick notes, reminders, and thoughts",
+      "domain": "personal",
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Note title"},
+        "content": {"type": "string", "required": true, "description": "Note content"},
+        "tags": {"type": "array", "items": {"type": "string"}, "description": "Categorization tags"},
+        "priority": {"type": "string", "enum": ["low", "normal", "high"], "description": "Note priority"}
+      }
+    },
+    {
+      "name": "bookmarks",
+      "displayName": "Bookmarks",
+      "description": "Saved links, references, and resources",
+      "domain": "personal",
+      "fields": {
+        "title": {"type": "string", "required": true, "description": "Resource title"},
+        "url": {"type": "string", "description": "URL or reference path"},
+        "description": {"type": "string", "description": "Why this resource is useful"},
+        "tags": {"type": "array", "items": {"type": "string"}, "description": "Categorization tags"}
+      }
+    }
+  ]
+}

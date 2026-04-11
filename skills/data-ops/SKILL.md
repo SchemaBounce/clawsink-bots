@@ -10,7 +10,7 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_query_records", "adl_upsert_record", "adl_read_memory", "adl_write_memory", "adl_search_graph", "adl_semantic_search", "adl_query_duckdb"]
+  required: ["adl_query_records", "adl_upsert_record", "adl_read_memory", "adl_write_memory", "adl_search_graph", "adl_semantic_search", "adl_query_duckdb", "adl_tool_search"]
 data:
   producesEntityTypes: []
   consumesEntityTypes: []

@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "mission",
+      "value": "Personal knowledge management — remember everything, find anything",
+      "description": "Atlas core mission for the personal knowledge domain"
+    }
+  ]
+}

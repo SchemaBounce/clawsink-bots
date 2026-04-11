@@ -15,6 +15,18 @@ if ! bash "$SCRIPT_DIR/skills/validate-format.sh"; then
 fi
 echo ""
 
+echo "=== Validating Tool Pack Manifests ==="
+if ! bash "$SCRIPT_DIR/packs/validate-manifest.sh"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
+echo "=== Validating Tool Pack References ==="
+if ! bash "$SCRIPT_DIR/packs/validate-references.sh"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
 echo "=== Validating Bot SOUL.md ==="
 if ! bash "$SCRIPT_DIR/bots/validate-soul.sh"; then
   FAILURES=$((FAILURES + 1))

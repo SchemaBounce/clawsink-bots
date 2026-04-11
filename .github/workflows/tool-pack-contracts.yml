@@ -1,0 +1,153 @@
+name: Tool Pack Contracts
+
+on:
+  pull_request:
+    paths:
+      - 'packs/**'
+      - 'bots/**'
+      - 'teams/**'
+      - 'tests/**'
+      - 'README.md'
+      - '.github/workflows/tool-pack-contracts.yml'
+  workflow_dispatch:
+    inputs:
+      run_runtime_tests:
+        description: Also run pack-related runtime tests from core-api
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  manifest-contracts:
+    name: Manifest Contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run repository validators
+        run: bash tests/validate-all.sh
+
+      - name: Validate pack manifest structure
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for pack_dir in packs/*; do
+            [ -d "$pack_dir" ] || continue
+            pack_name="$(basename "$pack_dir")"
+            pack_file="$pack_dir/PACK.md"
+
+            test -f "$pack_file"
+            grep -q '^---$' "$pack_file"
+            grep -q '^kind: ToolPack$' "$pack_file"
+            grep -q "^  name: ${pack_name}$" "$pack_file"
+            grep -q '^  displayName: ' "$pack_file"
+            grep -q '^  version: ' "$pack_file"
+            grep -q '^  description: ' "$pack_file"
+            grep -q '^  category: ' "$pack_file"
+            grep -q '^tools:$' "$pack_file"
+            grep -q '^  - name: ' "$pack_file"
+          done
+
+      - name: Ensure tool names are globally unique across packs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          grep -h '^  - name: ' packs/*/PACK.md \
+            | sed -E 's/^  - name: //' \
+            | sort > /tmp/pack-tools.txt
+
+          uniq -d /tmp/pack-tools.txt > /tmp/duplicate-tools.txt
+
+          if [ -s /tmp/duplicate-tools.txt ]; then
+            echo "Duplicate tool names found across packs:"
+            while read -r tool_name; do
+              echo "Tool: ${tool_name}"
+              grep -r "  - name: ${tool_name}$" packs/*/PACK.md || true
+            done < /tmp/duplicate-tools.txt
+            exit 1
+          fi
+
+      - name: Ensure bot/team pack references resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          refs=$(grep -roh 'ref: "packs/[^"@]*' bots teams 2>/dev/null | sed -E 's#.*ref: "packs/##' || true)
+
+          if [ -z "$refs" ]; then
+            echo "No pack references found in bots/ or teams/."
+            exit 0
+          fi
+
+          while read -r ref; do
+            [ -z "$ref" ] && continue
+            if [ ! -f "packs/${ref}/PACK.md" ]; then
+              echo "Missing pack manifest for ref packs/${ref}"
+              exit 1
+            fi
+          done <<< "$refs"
+
+      - name: Publish pack catalog artifact
+        shell: bash
+        run: |
+          {
+            echo "pack_name,tool_name"
+            grep -rn '^  - name: ' packs/*/PACK.md \
+              | sed -E 's#packs/([^/]+)/PACK.md:[0-9]+:  - name: (.+)#\1,\2#'
+          } > pack-catalog.csv
+
+      - name: Upload pack catalog artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pack-catalog
+          path: pack-catalog.csv
+          retention-days: 7
+
+  runtime-integration:
+    name: Runtime Integration
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && inputs.run_runtime_tests
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout clawsink-bots
+        uses: actions/checkout@v4
+        with:
+          path: clawsink-bots
+
+      - name: Ensure cross-repo token is configured
+        env:
+          CI_REPO_TOKEN: ${{ secrets.SCHEMABOUNCE_CI_REPO_TOKEN }}
+        run: |
+          if [ -z "$CI_REPO_TOKEN" ]; then
+            echo "SCHEMABOUNCE_CI_REPO_TOKEN is required for core-api checkout."
+            exit 1
+          fi
+
+      - name: Checkout core-api
+        uses: actions/checkout@v4
+        with:
+          repository: SchemaBounce/core-api
+          token: ${{ secrets.SCHEMABOUNCE_CI_REPO_TOKEN }}
+          path: core-api
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: core-api/schemabounce-api/go.mod
+          cache-dependency-path: |
+            core-api/schemabounce-api/go.sum
+            core-api/openclaw-runtime/go.sum
+
+      - name: Run pack-related marketplace tests
+        working-directory: core-api/schemabounce-api
+        run: go test ./internal/clawsink/... ./internal/mcp/...
+
+      - name: Run runtime executor tests
+        working-directory: core-api/openclaw-runtime
+        run: go test ./internal/executor/...
