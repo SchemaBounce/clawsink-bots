@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "knowledge_base",
+      "key": "init",
+      "value": "No knowledge stored yet. I will build your personal knowledge base as you share information with me."
+    },
+    {
+      "namespace": "user_context",
+      "key": "preferences",
+      "value": "Default preferences: concise responses, confirm after storing, proactively connect related concepts."
+    }
+  ]
+}
