@@ -41,15 +41,15 @@ jobs:
             pack_file="$pack_dir/PACK.md"
 
             test -f "$pack_file"
-            rg -q '^---$' "$pack_file"
-            rg -q '^kind: ToolPack$' "$pack_file"
-            rg -q "^  name: ${pack_name}$" "$pack_file"
-            rg -q '^  displayName: ' "$pack_file"
-            rg -q '^  version: ' "$pack_file"
-            rg -q '^  description: ' "$pack_file"
-            rg -q '^  category: ' "$pack_file"
-            rg -q '^tools:$' "$pack_file"
-            rg -q '^  - name: ' "$pack_file"
+            grep -q '^---$' "$pack_file"
+            grep -q '^kind: ToolPack$' "$pack_file"
+            grep -q "^  name: ${pack_name}$" "$pack_file"
+            grep -q '^  displayName: ' "$pack_file"
+            grep -q '^  version: ' "$pack_file"
+            grep -q '^  description: ' "$pack_file"
+            grep -q '^  category: ' "$pack_file"
+            grep -q '^tools:$' "$pack_file"
+            grep -q '^  - name: ' "$pack_file"
           done
 
       - name: Ensure tool names are globally unique across packs
@@ -57,18 +57,17 @@ jobs:
         run: |
           set -euo pipefail
 
-          rg '^  - name: ' packs/*/PACK.md \
-            | sed -E 's#packs/([^/]+)/PACK.md:  - name: #\1\t#' \
-            | awk -F '\t' '{print $2 "\t" $1}' \
-            | sort > /tmp/pack-tools.tsv
+          grep -h '^  - name: ' packs/*/PACK.md \
+            | sed -E 's/^  - name: //' \
+            | sort > /tmp/pack-tools.txt
 
-          cut -f1 /tmp/pack-tools.tsv | uniq -d > /tmp/duplicate-tools.txt
+          uniq -d /tmp/pack-tools.txt > /tmp/duplicate-tools.txt
 
           if [ -s /tmp/duplicate-tools.txt ]; then
             echo "Duplicate tool names found across packs:"
             while read -r tool_name; do
               echo "Tool: ${tool_name}"
-              rg "  - name: ${tool_name}$" packs/*/PACK.md || true
+              grep -r "  - name: ${tool_name}$" packs/*/PACK.md || true
             done < /tmp/duplicate-tools.txt
             exit 1
           fi
@@ -78,7 +77,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          refs=$(rg -o 'ref: "packs/[^"@]+' bots teams 2>/dev/null | sed -E 's#.*ref: "packs/##')
+          refs=$(grep -roh 'ref: "packs/[^"@]*' bots teams 2>/dev/null | sed -E 's#.*ref: "packs/##' || true)
 
           if [ -z "$refs" ]; then
             echo "No pack references found in bots/ or teams/."
@@ -98,8 +97,8 @@ jobs:
         run: |
           {
             echo "pack_name,tool_name"
-            rg '^  - name: ' packs/*/PACK.md \
-              | sed -E 's#packs/([^/]+)/PACK.md:  - name: (.+)#\1,\2#'
+            grep -rn '^  - name: ' packs/*/PACK.md \
+              | sed -E 's#packs/([^/]+)/PACK.md:[0-9]+:  - name: (.+)#\1,\2#'
           } > pack-catalog.csv
 
       - name: Upload pack catalog artifact
