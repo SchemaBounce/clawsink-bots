@@ -36,10 +36,6 @@ plugins:
         alerts: "engineering-alerts"
         releases: "release-updates"
 mcpServers:
-  - ref: "tools/claude-code"
-    reason: "Shared Claude Code service for implementation and documentation bots"
-    config:
-      max_concurrent_sessions: 1
   - ref: "tools/github"
     reason: "Shared GitHub access for all engineering bots"
 dataKits:

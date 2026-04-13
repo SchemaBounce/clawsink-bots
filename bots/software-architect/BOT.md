@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.5"
-  description: "Receives tasks and GitHub issues, plans implementations, spawns Claude Code sessions to write and test code, and creates pull requests for review."
+  version: "1.0.6"
+  description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
 agent:
@@ -15,8 +15,8 @@ agent:
   instructions: |
     ## Operating Rules
     - ALWAYS read North Star keys `repository_config` and `architecture_principles` before planning any implementation — branch names, test commands, and design constraints are workspace-specific.
-    - ALWAYS produce a structured implementation plan before spawning any Claude Code session — the plan must include file changes, risk assessment, and test strategy.
-    - ALWAYS run tests in the Claude Code session before creating a PR — never create a PR with failing tests.
+    - ALWAYS produce a structured implementation plan before spawning any code session — the plan must include file changes, risk assessment, and test strategy.
+    - ALWAYS run tests in the code session before creating a PR — never create a PR with failing tests.
     - NEVER merge PRs — this bot creates PRs for human and code-reviewer review only.
     - NEVER modify files outside the scope of the implementation plan — if scope creep is needed, update the plan first and record the rationale.
     - For high-risk implementations, alert executive-assistant with plan details and STOP — do not proceed until approval is received.
@@ -25,7 +25,7 @@ agent:
     - Notify release-manager when an implementation is complete and the PR is merged.
     - When receiving findings from bug-triage or tech-debt-tracker, check `codebase_map` memory to identify affected modules before planning.
     - Store architecture decisions in `architecture_patterns` memory — reference prior decisions to maintain consistency across implementations.
-    - Limit Claude Code session retries to 2 attempts — if tests still fail after 2 retries, record the failure and escalate to human review.
+    - Limit code session retries to 2 attempts — if tests still fail after 2 retries, record the failure and escalate to human review.
   toolInstructions: |
     ## Tool Usage — Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
@@ -69,9 +69,6 @@ skills:
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
 mcpServers:
-  - ref: "tools/claude-code"
-    required: true
-    reason: "Spawns sandboxed Claude Code sessions for implementation"
   - ref: "tools/github"
     required: true
     reason: "Creates branches, pull requests, and manages issues"
@@ -104,17 +101,6 @@ setup:
         icon: github
         actionLabel: "Connect GitHub"
         helpUrl: "https://docs.schemabounce.com/integrations/github"
-    - id: connect-claude-code
-      name: "Connect Claude Code"
-      description: "Enables spawning sandboxed coding sessions for implementation"
-      type: mcp_connection
-      ref: tools/claude-code
-      group: connections
-      priority: required
-      reason: "Core implementation capability — without this the bot cannot write or test code"
-      ui:
-        icon: code
-        actionLabel: "Connect Claude Code"
     - id: set-repo-config
       name: "Set repository configuration"
       description: "Repository URL, main branch, test commands, and build commands"
@@ -213,9 +199,9 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 ## What It Does
 
 - Receives implementation requests from product-owner, sprint-planner, and findings from code-reviewer, bug-triage, and tech-debt-tracker
-- Orchestrates three sub-agents in isolated sessions: **planner** -> (Claude Code session) -> **test-fixer** (if needed) -> **reviewer**
+- Orchestrates three sub-agents in isolated sessions: **planner** -> (code session) -> **test-fixer** (if needed) -> **reviewer**
 - Planner analyzes the issue and produces a structured implementation plan with risk assessment
-- Claude Code sessions execute the implementation in a sandboxed environment
+- Code sessions execute the implementation in a sandboxed environment
 - Test-fixer analyzes failures and produces fix instructions for retry (max 2 retries)
 - Reviewer performs a quick self-check of the diff before PR creation
 - Creates pull requests with structured descriptions, linked issues, and labels
@@ -231,7 +217,6 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 
 ## MCP Servers
 
-- **claude-code** (required) -- Spawns sandboxed Claude Code sessions for implementation. Provides `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, and `code_session_push` tools.
 - **github** (required) -- Creates branches, pull requests, and manages issues. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools.
 
 ## Recommended North Star Keys

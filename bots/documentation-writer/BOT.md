@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -22,7 +22,7 @@ agent:
     - When receiving findings from release-notes-writer about new features, ensure user-facing guides cover the feature.
     - Request implementation details from software-architect when a finding lacks sufficient context to write accurate docs.
     - Notify release-manager when a doc PR is ready for review — include the PR link and a summary of what changed.
-    - Only spawn Claude Code sessions for actual file edits — use regular tool calls for reading and planning.
+    - Only spawn code sessions for actual file edits — use regular tool calls for reading and planning.
     - Create doc PRs on `docs/{issue-name}` branches, always linked to the originating implementation PR.
   toolInstructions: |
     ## Tool Usage — Minimal Calls
@@ -87,9 +87,6 @@ presence:
     browsing: false
     crawling: true
 mcpServers:
-  - ref: "tools/claude-code"
-    required: true
-    reason: "Spawns code sessions to update documentation files"
   - ref: "tools/github"
     required: true
     reason: "Creates doc PRs linked to implementation PRs"
@@ -151,17 +148,6 @@ setup:
       ui:
         icon: github
         actionLabel: "Connect GitHub"
-    - id: connect-claude-code
-      name: "Connect Claude Code for file edits"
-      description: "Spawns code sessions to update documentation files in the repository"
-      type: mcp_connection
-      ref: tools/claude-code
-      group: connections
-      priority: required
-      reason: "Required to edit documentation files in the codebase"
-      ui:
-        icon: code
-        actionLabel: "Connect Claude Code"
     - id: import-implementation-plans
       name: "Connect implementation plan data"
       description: "Implementation plans from software-architect that trigger doc updates"
@@ -239,7 +225,7 @@ Automatically updates documentation when code implementations complete. Listens 
 
 - Receives implementation-complete signals from software-architect
 - Identifies which documentation files are affected (README, API docs, guides, changelog)
-- Spawns Claude Code sessions to update documentation in the repository
+- Spawns code sessions to update documentation in the repository
 - Creates doc PRs on `docs/[issue-name]` branches, linked to implementation PRs
 - Handles doc update requests from product-owner and release-manager
 - Only modifies documentation files — never touches application code
@@ -248,7 +234,7 @@ Automatically updates documentation when code implementations complete. Listens 
 
 1. Software-architect completes an implementation and sends a finding: "docs need updating"
 2. Documentation Writer reads the implementation plan and identifies affected docs
-3. Spawns a Claude Code session to clone the repo and update doc files
+3. Spawns a code session to clone the repo and update doc files
 4. Creates a doc PR linked to the implementation PR
 5. Notifies release-manager that the doc PR is ready for review
 
