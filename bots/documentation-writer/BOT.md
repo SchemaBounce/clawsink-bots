@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -88,8 +88,8 @@ presence:
     crawling: true
 mcpServers:
   - ref: "tools/codex"
-    required: true
-    reason: "Default coding agent — spawns Codex sessions to update documentation files (managed inference, credit-billed)"
+    required: false
+    reason: "Intended default coding agent for documentation file edits. Preview — backend service not yet deployed; marked optional until GA"
   - ref: "tools/github"
     required: true
     reason: "Creates doc PRs linked to implementation PRs"
@@ -152,13 +152,13 @@ setup:
         icon: github
         actionLabel: "Connect GitHub"
     - id: enable-codex
-      name: "Enable Codex (managed)"
-      description: "Confirms workspace credit balance and provisions the sandboxed Codex service for documentation file edits"
+      name: "Enable Codex (Preview — coming soon)"
+      description: "Confirms workspace credit balance and provisions the sandboxed Codex service for documentation file edits. Preview — backend service is not yet live."
       type: mcp_connection
       ref: tools/codex
       group: connections
-      priority: required
-      reason: "Required to edit documentation files in the codebase — billed from workspace credits, no OpenAI API key needed"
+      priority: recommended
+      reason: "Intended default coding agent for doc file edits — will be required once the backend ships; optional until then"
       ui:
         icon: code
         actionLabel: "Enable Codex"

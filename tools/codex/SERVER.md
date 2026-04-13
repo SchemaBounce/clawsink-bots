@@ -3,10 +3,10 @@ apiVersion: clawsink.schemabounce.com/v1
 kind: McpServer
 metadata:
   name: codex
-  displayName: "Codex"
-  version: "1.0.0"
-  description: "Sandboxed OpenAI Codex sessions for implementation, testing, and PRs — billed via workspace credits"
-  tags: ["codex", "openai", "coding", "implementation", "testing", "managed"]
+  displayName: "Codex (Preview)"
+  version: "0.1.0"
+  description: "[Preview] Sandboxed OpenAI Codex sessions for implementation — managed inference, backend service not yet deployed"
+  tags: ["codex", "openai", "coding", "implementation", "managed", "preview"]
   author: "schemabounce"
   license: "MIT"
 transport:
@@ -14,10 +14,10 @@ transport:
   url: "${CODEX_MCP_URL}/mcp"
 env:
   - name: CODEX_MCP_URL
-    description: "SchemaBounce-managed Codex service URL (injected by platform; never customer-provided)"
+    description: "SchemaBounce-managed Codex service URL (injected by platform; never customer-provided). Not yet deployed — enabling this bot will fail until the backend service is live."
     required: true
   - name: REPO_CLONE_TOKEN
-    description: "Git personal access token for cloning the target repository into the sandbox (repo read/write scope)"
+    description: "Git personal access token with repo read/write scope. Used by the sandboxed container to clone the target repo; kept separate from the tools/github MCP token because the two run in different trust contexts (see README body)."
     required: true
 tools:
   - name: code_session_create
@@ -43,65 +43,82 @@ tools:
     category: session
 ---
 
-# Codex MCP Server
+# Codex MCP Server — Preview
 
-Provides sandboxed OpenAI Codex sessions for bots that need to implement code changes, run tests, and create pull requests. This is a **SchemaBounce-managed service** wrapping the [OpenAI Codex SDK](https://developers.openai.com/codex/sdk) — sessions run on provisioned containers that are automatically cleaned up.
+> ⚠️ **Preview / Not Yet Deployed.** This manifest describes the intended shape of a SchemaBounce-managed MCP service that wraps the [OpenAI Codex SDK](https://developers.openai.com/codex/sdk). The backend service is **not yet built** — enabling this tool in a workspace today will fail to connect because `CODEX_MCP_URL` has no running target. The manifest is landed early so bots can declare their dependency shape, but the MCP server implementation, the managed-inference billing hook, and the sandbox container adapter all still need to be built.
+>
+> **Do not advertise this as a working feature to customers until the backend service is live.**
 
-## Managed Inference — No API Keys Required
+## Intent
 
-**You do not provide an OpenAI API key.** The underlying Codex SDK runs against SchemaBounce's managed OpenAI service, so sessions are authenticated by the platform. Usage is metered per session (compute time + tokens) and deducted from your workspace's **credit balance**, billed monthly like any other ADL inference under `inferenceMode: managed`.
+Once implemented, this MCP server will provide sandboxed coding sessions to bots that need to write and test code (`software-architect`, `documentation-writer`). The SchemaBounce platform will provision isolated containers on demand, each running a Codex SDK instance against the target repository.
 
-This architecture is required by OpenAI's terms of use: customers [may not share API keys with third-party applications](https://community.openai.com/t/is-this-allowed-this-bring-your-own-key-usage/161185), so bring-your-own-key is not an option for Codex. The managed path is the only compliant integration.
+## Managed Inference — Why Not BYOK?
+
+Customers will **not** provide an OpenAI API key. This is non-negotiable: OpenAI staff explicitly stated in the [developer community](https://community.openai.com/t/is-this-allowed-this-bring-your-own-key-usage/161185) that users "are not permitted to share their API keys with others, including via bring-your-own-key applications." The only compliant integration path for Codex inside a third-party SaaS is for SchemaBounce to use its own OpenAI credentials and monetize the wrapping value.
+
+**Note:** One forum response from an OpenAI employee is not a substitute for formal legal review. Before this moves from preview to GA, SchemaBounce should get written confirmation from OpenAI's business / legal team that the managed-inference-for-Codex pattern is acceptable under current business terms.
 
 ## Transport
 
-Uses `streamable-http` transport. The SchemaBounce platform provisions isolated containers on demand, each with a cloned repository and a Codex SDK instance. Bots communicate with the service over HTTP rather than spawning a local process.
+Uses `streamable-http` transport. When the backend service is deployed, it will provision isolated containers on demand; bots will communicate with the service over HTTP rather than spawning a local process.
 
-## Session Lifecycle
+## Session Lifecycle (Adapter Surface)
 
-1. **Create** — `code_session_create` provisions a container, clones the target repo using `REPO_CLONE_TOKEN`, and returns a session ID.
-2. **Execute** — `code_session_execute` sends a task description to the Codex SDK running inside the container. The agent implements the changes autonomously using the default `gpt-5-codex` model.
-3. **Poll** — `code_session_status` returns the current state (`provisioning`, `running`, `completed`, `failed`, `cancelled`).
-4. **Result** — `code_session_result` returns files changed, test output, and a summary of what was done.
-5. **Diff** — `code_session_diff` returns the full git diff of all changes.
-6. **Push** — `code_session_push` commits and pushes changes to a feature branch.
-7. **Cleanup** — Sessions auto-terminate after 15 minutes of inactivity. Use `code_session_cancel` to reclaim resources early.
+The 7 tools below are the **SchemaBounce adapter surface**, not raw Codex SDK methods. The underlying SDK exposes a simpler `thread.run(prompt)` API; this adapter splits that into explicit create / execute / poll / result / diff / push phases so long-running sessions can be tracked across the agentic loop. If the adapter's actual implementation ends up diverging from this shape, this list is the source of truth for what bots will expect.
 
-## Resource Limits
+1. **Create** — `code_session_create` provisions a container and clones the target repo using `REPO_CLONE_TOKEN`.
+2. **Execute** — `code_session_execute` sends the task description to the Codex SDK inside the container. Uses the platform-configured Codex model (default TBD — `codex-mini-latest` is the SDK's CLI default but the production choice will be set by SchemaBounce based on cost/quality trade-offs).
+3. **Poll** — `code_session_status` returns `provisioning` / `running` / `completed` / `failed` / `cancelled`.
+4. **Result** — `code_session_result` returns files changed, test output, summary.
+5. **Diff** — `code_session_diff` returns the full git diff.
+6. **Push** — `code_session_push` commits and pushes to a feature branch.
+7. **Cleanup** — Auto-terminate after 15 minutes of inactivity. `code_session_cancel` for early release.
+
+## Resource Limits (target)
+
+These are design targets for the backend implementation, not enforced by this manifest:
 
 - 1 active session per bot run
 - Maximum 10 minutes per session execution
-- 100MB workspace size limit
-- Sessions auto-cleanup after 15 minutes of inactivity
+- 100 MB workspace size limit
+- Auto-cleanup after 15 minutes of inactivity
 
-## Sandbox & Approval Policies
+## Sandbox & Approval Policies (target)
 
-By default, sessions run with `approval_policy: never` and `sandbox: workspace-write` — the Codex agent has full write access inside the sandboxed container but never touches the host system or external networks other than the cloned repo's Git remote. Escape from the sandbox is not possible; there is no mechanism to execute code outside the provisioned container.
+Target defaults when the service ships: `approval_policy: never`, `sandbox: workspace-write`. The agent will have full write access inside the sandboxed container but never touch the host system or any network other than the cloned repo's Git remote. These are Codex SDK configuration knobs — the backend service has to set them explicitly; they are not enforced by this manifest.
 
-## Which Bots Use This
+## Which Bots Depend on This
 
-- **software-architect** — Implements planned changes, runs tests, and pushes feature branches
-- **documentation-writer** — Generates and updates documentation from code analysis
+- **software-architect** — would spawn coding sessions for issue implementation
+- **documentation-writer** — would spawn coding sessions for documentation file edits
 
-This is SchemaBounce's **default coding agent** for bots that need to write code. Other coding-session providers may be added in the future, but Codex (managed) is the current baseline.
+The manifest pins `required: false` on both bots today so they can still provision in preview workspaces that haven't enabled Codex. When the backend ships and GA is declared, bump to `required: true` in a follow-up commit.
 
-## Billing & Credits
+## Billing & Credits (planned, not wired)
 
-- Each session consumes credits roughly proportional to the underlying Codex token usage plus a flat compute surcharge for the sandboxed container.
-- Credit cost per session is visible in the workspace **Usage & Cost** tab (per-agent breakdown) and in the audit log for each run.
-- The bot will refuse to start a session if the workspace credit balance falls below the session's reserve threshold — no surprise overages.
+Once the backend is built, usage will route through SchemaBounce's existing managed-inference credit ledger (`inferenceMode: managed` in the ADL, per `project_managed_inference.md`). The intent is:
 
-## Setup
+- Per-session cost ≈ underlying Codex token usage + flat compute surcharge for the sandboxed container
+- Credit cost visible in the workspace **Usage & Cost** tab (per-agent)
+- Reserve-on-start check; refuse to start if workspace credit balance is below the session reserve
+
+None of this plumbing exists yet. Treat the billing prose in this document as a design intent, not a promise.
+
+## Two Git Tokens — Why?
+
+Bots that use Codex also typically declare `tools/github` (for issue reads, PR creation, labels). That GitHub MCP runs inside the agent's own execution context using its own auth (installation-scoped). The Codex MCP needs a **separate** Git token (`REPO_CLONE_TOKEN`) because the sandboxed container is a different trust boundary: it's a short-lived worker the platform spins up on behalf of the session, and that worker needs its own credential to clone the customer's repo.
+
+This is UX-awkward (two token pastes for what looks like one integration). A better future state is to have the SchemaBounce-managed Codex service exchange a short-lived token via the customer's GitHub App installation, so no second PAT is required. Tracking that as a follow-up — see the issue tracker for the "unified GitHub auth for Codex sandbox" task.
+
+## Setup (once backend ships)
 
 1. Requires **Team tier or above**.
-2. Add the following to your workspace secrets:
-   - `REPO_CLONE_TOKEN` — a Git personal access token with repo read/write scope for the target repository
-3. Ensure your workspace has a positive credit balance. Top up in Workspace Settings → Billing if needed.
-4. The service starts automatically when a bot that references it runs. `CODEX_MCP_URL` is injected by the platform — you do **not** configure this manually.
+2. Add to workspace secrets: `REPO_CLONE_TOKEN` (Git PAT, repo read/write scope on the target repository).
+3. Ensure the workspace has a positive credit balance.
+4. `CODEX_MCP_URL` is injected by the platform. Customers never set it.
 
-## Team Usage
-
-Add to your `TEAM.md` to share a single Codex service instance across engineering bots:
+## Team Usage (once backend ships)
 
 ```yaml
 mcpServers:
@@ -112,6 +129,14 @@ mcpServers:
       default_branch: "development"
 ```
 
+`max_concurrent_sessions` is intentionally not defaulted here — the platform should apply a tier-based cap, and workspaces can override based on their credit budget.
+
 ## Terms of Use
 
-This MCP server invokes OpenAI's Codex SDK on SchemaBounce's behalf. Usage is subject to both [OpenAI's usage policies](https://openai.com/policies/usage-policies/) and SchemaBounce's own acceptable use policy. Generated code may be subject to third-party open source licenses; review diffs before merging to main.
+- [OpenAI service terms](https://openai.com/policies/service-terms/)
+- [OpenAI business terms](https://openai.com/policies/business-terms)
+- [OpenAI usage policies](https://openai.com/policies/usage-policies/)
+- [Codex SDK docs](https://developers.openai.com/codex/sdk)
+- [BYOK prohibition (OpenAI staff, dev community)](https://community.openai.com/t/is-this-allowed-this-bring-your-own-key-usage/161185)
+
+Generated code may be subject to third-party open source licenses; review diffs before merging.
