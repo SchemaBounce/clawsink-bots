@@ -83,6 +83,36 @@ northStar:
     - revenue_model
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Technology"
+      description: "Engineering, reliability, and platform ops"
+      head: sre-devops
+      children:
+        - name: "Engineering"
+          description: "Code review, bug triage, docs"
+          head: code-reviewer
+        - name: "Platform Ops"
+          description: "Cost, performance, infrastructure"
+          head: platform-optimizer
+    - name: "Growth & Revenue"
+      description: "Top-of-funnel + sales motion"
+      head: marketing-growth
+      children:
+        - name: "Growth"
+          description: "Marketing programs and content"
+          head: blog-writer
+        - name: "Revenue"
+          description: "Sales pipeline, onboarding, retention"
+          head: sales-pipeline
+    - name: "Product"
+      description: "Roadmap and discovery"
+      head: product-owner
+    - name: "Customer Success"
+      description: "Support triage and satisfaction"
+      head: customer-support
+    - name: "Operations"
+      description: "Cross-domain coordination"
+      head: executive-assistant
   roles:
     - bot: executive-assistant
       role: lead

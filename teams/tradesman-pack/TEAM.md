@@ -43,6 +43,23 @@ northStar:
   context: "Small to mid-size contracting business managing projects, estimates, materials, safety compliance, and client relationships"
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Job Management"
+      description: "Dispatch, scheduling, site-visit coordination"
+      head: executive-assistant
+      children:
+        - name: "Materials"
+          description: "Parts stock, truck inventory, reorder triggers"
+          head: inventory-manager
+    - name: "Finance"
+      description: "Invoicing, estimates, cash-flow"
+      head: accountant
+    - name: "Customer Relations"
+      description: "Booking, reminders, post-job feedback"
+      head: customer-support
+    - name: "Compliance"
+      description: "Licenses, permits, liability paperwork"
+      head: legal-compliance
   roles:
     - bot: executive-assistant
       role: lead

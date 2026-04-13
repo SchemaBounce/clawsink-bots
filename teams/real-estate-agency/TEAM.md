@@ -41,6 +41,26 @@ northStar:
     - property_types
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Operations"
+      description: "Office coordination, calendar, daily briefs"
+      head: executive-assistant
+    - name: "Sales"
+      description: "Buyer and seller pipelines, showings, offers"
+      head: sales-pipeline
+      children:
+        - name: "Onboarding"
+          description: "New-client intake and listing kickoff"
+          head: customer-onboarding
+    - name: "Marketing"
+      description: "Listing campaigns, social, open-house promos"
+      head: content-scheduler
+    - name: "Finance"
+      description: "Commission tracking and brokerage accounting"
+      head: accountant
+    - name: "Compliance"
+      description: "Disclosure forms, fair-housing, jurisdictional rules"
+      head: legal-compliance
   roles:
     - bot: executive-assistant
       role: lead

@@ -33,6 +33,30 @@ northStar:
     - distribution_channels
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Editorial"
+      description: "Story pipeline, publishing calendar, voice/tone"
+      head: executive-assistant
+      children:
+        - name: "Writing"
+          description: "Drafting, ghostwriting, long-form pieces"
+          head: blog-writer
+        - name: "Scheduling"
+          description: "Publishing cadence and cross-channel pacing"
+          head: content-scheduler
+        - name: "Brand"
+          description: "Style review and voice guardrails"
+          head: brand-guardian
+    - name: "Distribution"
+      description: "Social, newsletter, and syndication channels"
+      head: social-media-strategist
+      children:
+        - name: "Audience"
+          description: "Comment sentiment and reader intelligence"
+          head: social-media-monitor
+    - name: "Revenue"
+      description: "Ad, subscription, and sponsorship analytics"
+      head: revenue-analyst
   roles:
     - bot: executive-assistant
       role: lead

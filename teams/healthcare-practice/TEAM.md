@@ -45,6 +45,26 @@ northStar:
     - ehr_system
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Administration"
+      description: "Scheduling, meeting notes, staff onboarding"
+      head: executive-assistant
+      children:
+        - name: "Meetings"
+          description: "Summaries of staff and physician huddles"
+          head: meeting-summarizer
+        - name: "HR"
+          description: "Clinician onboarding and credentialing"
+          head: hr-onboarding
+    - name: "Patient Care"
+      description: "Triage of patient questions and complaints"
+      head: customer-support
+    - name: "Compliance"
+      description: "HIPAA controls, audit evidence, policy review"
+      head: compliance-auditor
+    - name: "Billing"
+      description: "Claims, collections, revenue tracking"
+      head: accountant
   roles:
     - bot: executive-assistant
       role: lead

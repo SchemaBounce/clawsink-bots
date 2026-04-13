@@ -31,6 +31,29 @@ northStar:
     - compliance_requirements
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Operations"
+      description: "Cross-functional coordination and daily brief"
+      head: executive-assistant
+      children:
+        - name: "Reporting"
+          description: "Board updates and investor-facing metrics"
+          head: executive-reporter
+    - name: "Finance"
+      description: "Burn rate, runway, unit economics"
+      head: accountant
+    - name: "Product"
+      description: "Roadmap, specs, release planning"
+      head: product-owner
+    - name: "Engineering"
+      description: "Platform and reliability"
+      head: sre-devops
+    - name: "Growth"
+      description: "Marketing, content, top-of-funnel"
+      head: marketing-growth
+    - name: "Customer Relations"
+      description: "Support, feedback, retention"
+      head: customer-support
   roles:
     - bot: executive-assistant
       role: lead

@@ -48,6 +48,29 @@ northStar:
     - booking_channels
 orgChart:
   lead: str-property-manager
+  domains:
+    - name: "Portfolio Management"
+      description: "Oversight across all properties in the portfolio"
+      head: str-property-manager
+    - name: "Channel Ops"
+      description: "Airbnb / VRBO / Booking.com listing sync + calendar"
+      head: str-channel-manager
+    - name: "Guest Relations"
+      description: "Pre-arrival, in-stay, and post-stay guest comms"
+      head: str-guest-communicator
+      children:
+        - name: "Reviews"
+          description: "Review request, response, and sentiment mining"
+          head: str-review-manager
+    - name: "Revenue"
+      description: "Dynamic pricing and ADR/occupancy optimization"
+      head: str-pricing-optimizer
+    - name: "Marketing"
+      description: "Listing copy, photography, and direct-booking promo"
+      head: str-property-marketer
+    - name: "Operations"
+      description: "Cleaning, turnover, maintenance coordination"
+      head: str-turnover-coordinator
   roles:
     - bot: str-property-manager
       role: lead

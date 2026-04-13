@@ -33,6 +33,23 @@ northStar:
   context: "Online retail business managing inventory, orders, customer service, and growth analytics"
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Operations"
+      description: "Cross-domain coordination and daily briefings"
+      head: executive-assistant
+    - name: "Finance"
+      description: "Revenue, expenses, margin tracking"
+      head: accountant
+    - name: "Fulfillment"
+      description: "Inventory and stock movement"
+      head: inventory-manager
+    - name: "Storefront"
+      description: "Customer-facing support + store analytics"
+      head: customer-support
+      children:
+        - name: "Analytics"
+          description: "Conversion, cart, session analysis"
+          head: business-analyst
   roles:
     - bot: executive-assistant
       role: lead

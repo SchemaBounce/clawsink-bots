@@ -63,6 +63,34 @@ northStar:
     - architecture_principles
 orgChart:
   lead: software-architect
+  domains:
+    - name: "Engineering"
+      description: "Architecture decisions and core code stewardship"
+      head: software-architect
+      children:
+        - name: "Documentation"
+          description: "API docs, runbooks, architecture notes"
+          head: documentation-writer
+    - name: "Quality"
+      description: "Review, testing, and tech-debt management"
+      head: code-reviewer
+      children:
+        - name: "API Testing"
+          description: "Contract tests, regression fixtures"
+          head: api-tester
+        - name: "Tech Debt"
+          description: "Refactor tracking and paydown planning"
+          head: tech-debt-tracker
+    - name: "Project Management"
+      description: "Release cadence, scope, sequencing"
+      head: release-manager
+    - name: "DevOps"
+      description: "Pipelines, infra, and deploy automation"
+      head: sre-devops
+      children:
+        - name: "Automation"
+          description: "Pipeline authoring and runbook automation"
+          head: devops-automator
   roles:
     - bot: software-architect
       role: lead

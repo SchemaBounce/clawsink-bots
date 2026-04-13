@@ -43,6 +43,20 @@ dataKits:
     installSampleData: false
 orgChart:
   lead: sales-pipeline
+  domains:
+    - name: "Sales"
+      description: "Pipeline, forecast, opportunity coverage"
+      head: sales-pipeline
+    - name: "Customer Success"
+      description: "Onboarding momentum and retention"
+      head: churn-predictor
+      children:
+        - name: "Onboarding"
+          description: "Time-to-first-value, activation milestones"
+          head: customer-onboarding
+    - name: "Content"
+      description: "Growth-oriented content and email cadence"
+      head: content-scheduler
   roles:
     - bot: sales-pipeline
       role: lead

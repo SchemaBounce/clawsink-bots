@@ -38,6 +38,27 @@ northStar:
     - peak_seasons
 orgChart:
   lead: executive-reporter
+  domains:
+    - name: "Warehouse"
+      description: "Floor-level ops and daily operating reports"
+      head: executive-reporter
+      children:
+        - name: "Inventory"
+          description: "Stock levels, cycle counts, slot optimization"
+          head: inventory-manager
+          children:
+            - name: "Alerts"
+              description: "Low-stock / expiry / misplacement notifications"
+              head: inventory-alert
+    - name: "Shipping"
+      description: "Carrier tracking, inbound + outbound trips"
+      head: shipping-tracker
+    - name: "Fulfillment"
+      description: "Order picks, pack stations, dispatch"
+      head: order-fulfillment
+    - name: "Finance"
+      description: "Freight cost, dwell time, margin per shipment"
+      head: accountant
   roles:
     - bot: executive-reporter
       role: lead

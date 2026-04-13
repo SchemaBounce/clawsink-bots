@@ -36,6 +36,20 @@ dataKits:
     installSampleData: false
 orgChart:
   lead: order-fulfillment
+  domains:
+    - name: "Fulfillment"
+      description: "Order processing, pick/pack/ship coordination"
+      head: order-fulfillment
+    - name: "Storefront"
+      description: "Listings, pricing, inventory surfacing on the shop"
+      head: inventory-alert
+      children:
+        - name: "Pricing"
+          description: "Dynamic pricing, promo windows, margin guardrails"
+          head: price-optimizer
+    - name: "Customer Ops"
+      description: "Post-purchase experience — tracking, delivery, support handoffs"
+      head: shipping-tracker
   roles:
     - bot: order-fulfillment
       role: lead

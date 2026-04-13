@@ -51,6 +51,27 @@ northStar:
     - client_accounts
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Creative"
+      description: "Brand voice, design system, creative oversight"
+      head: executive-assistant
+      children:
+        - name: "Brand"
+          description: "Style guardrails and on-brand review"
+          head: brand-guardian
+          children:
+            - name: "Content"
+              description: "Blog and social authorship under brand guidelines"
+              head: blog-writer
+            - name: "Social"
+              description: "Platform strategy and scheduled posts"
+              head: social-media-strategist
+    - name: "Research"
+      description: "User insight, discovery interviews, synthesis"
+      head: ux-researcher
+    - name: "Growth"
+      description: "Performance marketing and experimentation"
+      head: growth-hacker
   roles:
     - bot: executive-assistant
       role: lead

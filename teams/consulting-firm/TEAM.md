@@ -44,6 +44,27 @@ northStar:
     - engagement_types
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Client Delivery"
+      description: "Engagements, meetings, and client-facing artifacts"
+      head: executive-assistant
+      children:
+        - name: "Meetings"
+          description: "Call transcripts, action items, follow-up briefs"
+          head: meeting-summarizer
+    - name: "Analytics"
+      description: "Business analysis and findings for client and internal ops"
+      head: business-analyst
+    - name: "Finance"
+      description: "Project P&L, billing, revenue trends"
+      head: accountant
+      children:
+        - name: "Revenue"
+          description: "Fee-mix, realization, utilization"
+          head: revenue-analyst
+    - name: "Talent"
+      description: "Team coaching, career paths, mentorship"
+      head: mentor-coach
   roles:
     - bot: executive-assistant
       role: lead

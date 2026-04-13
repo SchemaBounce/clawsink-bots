@@ -21,6 +21,21 @@ requirements:
   minTier: "starter"
 orgChart:
   lead: fraud-detector
+  domains:
+    - name: "Fraud Detection"
+      description: "Real-time transaction scoring and alert routing"
+      head: fraud-detector
+      children:
+        - name: "Anomalies"
+          description: "Statistical outlier detection on spend patterns"
+          head: anomaly-detector
+    - name: "Compliance"
+      description: "Regulatory checks, KYC/AML, audit trails"
+      head: compliance-auditor
+      children:
+        - name: "Finance"
+          description: "Revenue impact analysis of fraud + chargebacks"
+          head: revenue-analyst
   roles:
     - bot: fraud-detector
       role: lead

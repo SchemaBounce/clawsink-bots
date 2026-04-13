@@ -41,6 +41,24 @@ northStar:
     - org_structure
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Administration"
+      description: "People-ops coordination, policy docs, internal comms"
+      head: executive-assistant
+      children:
+        - name: "Knowledge Base"
+          description: "Handbook, runbooks, internal how-tos"
+          head: knowledge-base-curator
+    - name: "Talent"
+      description: "Hiring, onboarding, performance, career development"
+      head: hr-onboarding
+      children:
+        - name: "Coaching"
+          description: "1:1 cadence, mentorship, career-path guidance"
+          head: mentor-coach
+    - name: "Compliance"
+      description: "Labor law, benefits, accommodations"
+      head: legal-compliance
   roles:
     - bot: executive-assistant
       role: lead

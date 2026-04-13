@@ -43,6 +43,31 @@ northStar:
     - seasonal_promotions
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Member Experience"
+      description: "Everything the member sees — bookings, support, retention"
+      head: executive-assistant
+      children:
+        - name: "Support"
+          description: "Front-line member questions, complaint triage"
+          head: customer-support
+          children:
+            - name: "Onboarding"
+              description: "Trial-to-paid, first-week check-ins"
+              head: customer-onboarding
+            - name: "Retention"
+              description: "Churn risk signals and save offers"
+              head: churn-predictor
+    - name: "Marketing"
+      description: "Local promotions, challenges, content calendar"
+      head: marketing-growth
+      children:
+        - name: "Content"
+          description: "Scheduled posts and email campaigns"
+          head: content-scheduler
+    - name: "Finance"
+      description: "Membership revenue, class economics"
+      head: accountant
   roles:
     - bot: executive-assistant
       role: lead
