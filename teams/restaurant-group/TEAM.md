@@ -45,6 +45,27 @@ northStar:
     - reservation_platform
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Front of House"
+      description: "Guest-facing operations — reservations, complaints, host stand"
+      head: executive-assistant
+      children:
+        - name: "Customer Support"
+          description: "Reservation issues, review-site complaints, guest feedback triage"
+          head: customer-support
+    - name: "Kitchen"
+      description: "Back-of-house ops — prep, pars, supplier coordination"
+      head: inventory-manager
+      children:
+        - name: "Inventory"
+          description: "Perishable expiry, stockouts, waste alerts"
+          head: inventory-alert
+    - name: "Finance"
+      description: "Food cost ratio, labor spend, cover revenue trends"
+      head: accountant
+    - name: "Marketing"
+      description: "Local promotions, seasonal menu campaigns, social presence"
+      head: marketing-growth
   roles:
     - bot: executive-assistant
       role: lead
