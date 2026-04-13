@@ -36,6 +36,11 @@ plugins:
         alerts: "engineering-alerts"
         releases: "release-updates"
 mcpServers:
+  - ref: "tools/codex"
+    reason: "Shared default coding agent for implementation and documentation bots — managed OpenAI Codex sessions, billed via workspace credits"
+    config:
+      default_branch: "development"
+      max_concurrent_sessions: 2
   - ref: "tools/github"
     reason: "Shared GitHub access for all engineering bots"
 dataKits:

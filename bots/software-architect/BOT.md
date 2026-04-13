@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.6"
+  version: "1.0.8"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -69,6 +69,9 @@ skills:
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
 mcpServers:
+  - ref: "tools/codex"
+    required: true
+    reason: "Default sandboxed coding agent — spawns Codex sessions for implementation, testing, and PR creation (managed inference, credit-billed)"
   - ref: "tools/github"
     required: true
     reason: "Creates branches, pull requests, and manages issues"
@@ -101,6 +104,18 @@ setup:
         icon: github
         actionLabel: "Connect GitHub"
         helpUrl: "https://docs.schemabounce.com/integrations/github"
+    - id: enable-codex
+      name: "Enable Codex (managed)"
+      description: "Confirms workspace credit balance and provisions the sandboxed Codex service"
+      type: mcp_connection
+      ref: tools/codex
+      group: connections
+      priority: required
+      reason: "Required to spawn coding sessions — billed from workspace credits, no OpenAI API key needed"
+      ui:
+        icon: code
+        actionLabel: "Enable Codex"
+        helpUrl: "https://docs.schemabounce.com/integrations/codex"
     - id: set-repo-config
       name: "Set repository configuration"
       description: "Repository URL, main branch, test commands, and build commands"
@@ -217,6 +232,7 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 
 ## MCP Servers
 
+- **codex** (required) -- Default coding agent. Spawns sandboxed OpenAI Codex sessions for implementation, billed via workspace credits (managed inference — no customer API key). Provides `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools.
 - **github** (required) -- Creates branches, pull requests, and manages issues. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools.
 
 ## Recommended North Star Keys

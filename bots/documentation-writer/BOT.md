@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.7"
+  version: "1.0.9"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -87,6 +87,9 @@ presence:
     browsing: false
     crawling: true
 mcpServers:
+  - ref: "tools/codex"
+    required: true
+    reason: "Default coding agent — spawns Codex sessions to update documentation files (managed inference, credit-billed)"
   - ref: "tools/github"
     required: true
     reason: "Creates doc PRs linked to implementation PRs"
@@ -148,6 +151,18 @@ setup:
       ui:
         icon: github
         actionLabel: "Connect GitHub"
+    - id: enable-codex
+      name: "Enable Codex (managed)"
+      description: "Confirms workspace credit balance and provisions the sandboxed Codex service for documentation file edits"
+      type: mcp_connection
+      ref: tools/codex
+      group: connections
+      priority: required
+      reason: "Required to edit documentation files in the codebase — billed from workspace credits, no OpenAI API key needed"
+      ui:
+        icon: code
+        actionLabel: "Enable Codex"
+        helpUrl: "https://docs.schemabounce.com/integrations/codex"
     - id: import-implementation-plans
       name: "Connect implementation plan data"
       description: "Implementation plans from software-architect that trigger doc updates"
