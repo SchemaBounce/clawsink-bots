@@ -52,6 +52,11 @@ vectorCollections:
   - saas_content
   - saas_feature_requests
   - saas_incidents
+useCases:
+  - "Track every account's subscription tier, plan, and renewal date"
+  - "Measure feature usage per account and surface adoption laggards"
+  - "Tie support tickets, NPS responses, and feature requests to the account"
+  - "Track incidents by affected customer and deployments by service"
 ---
 
 # SaaS Operations

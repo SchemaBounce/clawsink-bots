@@ -29,6 +29,11 @@ graphEdgeTypes:
   - CHECKED
   - USES_EQUIPMENT
 vectorCollections: []
+useCases:
+  - "Plan a production run from the BOM and track yield against target"
+  - "Record QC checks at each station and tag non-conforming output"
+  - "Manage raw-material inventory and reorder points by SKU"
+  - "Schedule equipment maintenance and track downtime"
 ---
 
 # Manufacturing Operations

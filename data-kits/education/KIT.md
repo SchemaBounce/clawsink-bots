@@ -31,6 +31,11 @@ graphEdgeTypes:
   - SUBMITTED_BY
 vectorCollections:
   - edu_courses
+useCases:
+  - "Enroll students in courses and track progress through modules and assessments"
+  - "Schedule instructors across cohorts and balance load"
+  - "Grade assessments and build per-student transcripts"
+  - "Identify at-risk students from engagement and assessment scores"
 ---
 
 # Education Academy

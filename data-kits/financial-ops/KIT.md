@@ -34,6 +34,11 @@ graphEdgeTypes:
   - PAID_BY
   - GENERATES
 vectorCollections: []
+useCases:
+  - "Categorize every transaction and reconcile to the bank feed"
+  - "Issue invoices, track aging, and flag overdue balances"
+  - "Set monthly budgets per category and alert when a line goes over"
+  - "Manage recurring charges like subscriptions and rent, and forecast cash"
 ---
 
 # Financial Operations

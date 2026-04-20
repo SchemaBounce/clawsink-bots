@@ -30,6 +30,11 @@ graphEdgeTypes:
   - RETURN_OF
 vectorCollections:
   - ec_products
+useCases:
+  - "Track every order from cart through fulfillment and return"
+  - "Keep a running catalog with variants, stock, and current plus historical price"
+  - "Segment customers by purchase frequency, LTV, and return rate"
+  - "Flag products with high return rates for quality review"
 ---
 
 # E-Commerce Operations

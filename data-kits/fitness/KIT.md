@@ -28,6 +28,11 @@ graphEdgeTypes:
   - ATTENDS
   - HAS_MEMBERSHIP
 vectorCollections: []
+useCases:
+  - "Sign up a member, assign a membership plan, and auto-bill on renewal"
+  - "Book members into classes and enforce capacity"
+  - "Track attendance per member and flag lapsed visits"
+  - "Pause, resume, or cancel memberships with proration"
 ---
 
 # Fitness Studio

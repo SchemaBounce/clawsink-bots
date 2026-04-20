@@ -28,6 +28,11 @@ graphEdgeTypes:
   - ESTIMATE_FOR
   - USED_IN
 vectorCollections: []
+useCases:
+  - "Estimate a job from takeoffs and labor rates, then compare to actual cost"
+  - "Track material orders, deliveries, and on-site inventory per project"
+  - "Schedule crews across jobs and flag conflicts"
+  - "Log safety incidents, inspections, and toolbox-talk attendance"
 ---
 
 # Residential Construction

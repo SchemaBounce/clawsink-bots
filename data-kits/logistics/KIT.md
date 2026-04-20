@@ -27,6 +27,11 @@ graphEdgeTypes:
   - SHIPPED_VIA
   - FULFILLED_FROM
 vectorCollections: []
+useCases:
+  - "Track each shipment from pickup through delivery with every status change"
+  - "Manage warehouse inventory by bin, with cycle counts and transfers"
+  - "Compare carrier rates and on-time performance per lane"
+  - "Measure fulfillment throughput and exception rate"
 ---
 
 # Logistics & Fulfillment

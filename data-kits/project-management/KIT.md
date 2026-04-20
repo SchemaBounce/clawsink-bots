@@ -29,6 +29,11 @@ graphEdgeTypes:
   - DEPENDS_ON
 vectorCollections:
   - pm_tasks
+useCases:
+  - "Plan a sprint from the backlog, move tasks across states, and chart burndown"
+  - "Link tasks to milestones and surface anything blocked"
+  - "Identify dependencies between work and schedule around them"
+  - "Maintain a risk register with owner, probability, and mitigation"
 ---
 
 # Project Management

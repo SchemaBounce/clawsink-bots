@@ -32,6 +32,11 @@ vectorCollections:
   - fb_tickets
   - fb_reviews
   - fb_feature_requests
+useCases:
+  - "Capture every support ticket with channel, severity, and resolution time"
+  - "Collect and categorize reviews from web, app stores, and in-product prompts"
+  - "Run NPS surveys and segment detractors, passives, and promoters"
+  - "Log feature requests with vote counts to feed the roadmap"
 ---
 
 # Customer Feedback

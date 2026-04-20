@@ -30,6 +30,11 @@ graphEdgeTypes:
   - DEADLINE_FOR
 vectorCollections:
   - law_documents
+useCases:
+  - "Open a matter, track billable time, and bill against retainer or hourly rate"
+  - "Capture every deadline (court, statute, internal) with a day-before alert"
+  - "Store documents by matter with version history and privilege flags"
+  - "Reconcile trust accounts per client to the cent"
 ---
 
 # Legal Practice
