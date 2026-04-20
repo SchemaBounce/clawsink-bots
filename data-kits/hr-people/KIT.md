@@ -30,6 +30,11 @@ graphEdgeTypes:
   - REVIEW_OF
 vectorCollections:
   - hr_policies
+useCases:
+  - "Run onboarding as a checklist per new hire with assigned owners"
+  - "Capture leave requests, approvals, and balances per employee"
+  - "Record performance reviews on a cadence and link them to goals"
+  - "Publish and version company policies, with acknowledgement tracking"
 ---
 
 # HR & People

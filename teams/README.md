@@ -59,6 +59,23 @@ northStar:
   requiredKeys: [string] # North Star keys that must be filled for this team
 orgChart:
   lead: string           # Bot that runs the team (top of chain, reports to human)
+  domains:               # Optional nested domain tree. When present, activation
+                         # pre-creates these domains in the workspace with correct
+                         # parent/child nesting, so agents land in a proper org
+                         # chart instead of a flat list. Backwards-compatible: if
+                         # `domains:` is absent or empty, activation skips domain
+                         # creation (old behavior). Role.domain below still drives
+                         # zone2Domains downstream — the two systems coexist.
+    - name: string       # Display name of the domain (human-readable)
+      description: string      # Optional — one-line "what this domain is for"
+      head: string       # Optional — bot ref (NOT a user ID) whose agent heads
+                         # this domain. Must match an entry in `bots:`. Left
+                         # blank when the domain has no designated lead.
+      children:          # Optional — sub-domains nested under this one.
+        - name: string
+          description: string
+          head: string
+          children: []
   roles:
     - bot: string        # Bot name (must match a bots[].ref entry)
       role: string       # "lead" | "specialist" | "support"

@@ -30,6 +30,11 @@ graphEdgeTypes:
 vectorCollections:
   - rest_menu_items
   - rest_reviews
+useCases:
+  - "Keep a menu with costing and dietary flags, updated by the chef"
+  - "Accept reservations, manage no-shows, and seat parties on the day"
+  - "Track covers per shift and revenue per seat"
+  - "Log supplier orders, deliveries, and pricing over time"
 ---
 
 # Restaurant Operations

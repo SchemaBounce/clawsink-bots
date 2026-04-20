@@ -55,3 +55,29 @@ When writing README files or documentation in this repo:
 - Explain that skills are part of the bot definition, not standalone deployable units
 - Clarify that teams create multiple agents from their member bots
 - Never mention "seats" — use "agent slots" for tier capacity if needed
+
+## Three Concepts Sharing the Word 'Skill'
+
+The ADL system uses the word "skill" in three distinct ways. Each operates independently with different storage, discovery, invocation, and ownership models. Always qualify which skill type you are discussing.
+
+### Comparison Table
+
+| Concept | Storage | Runtime Discovery | Runtime Invocation | Who Controls | UI Location |
+|---------|---------|-------------------|-------------------|--------------|-------------|
+| **Marketplace Skills** | `agent.skill_prompts` JSONB array | Embedded in SOUL.md at activation | `adl_invoke_skill` tool call | Marketplace authors (BOT.md) | Bot definition pages (Marketplace tab) |
+| **Crystallized Skills** | `adl_skills` + `adl_crystallization_candidates` tables | `adl_discover_skills` tool call | `adl_execute_skill` tool call (Tier 0/1 only) | Workspace users via approval flow | Automations > Functions tab |
+| **Tool Pack Tools** | Hardcoded Go functions in `tools_packs.go` + allowlist per agent | `adl_tool_search` tool call | `callPackTool` dispatch in provider tools | Platform team; per-agent allowlist | Marketplace > Tool Packs tab |
+
+### Critical Rules
+
+- When writing code that references "skills," always qualify: *marketplace skills*, *crystallized skills*, or *tool pack tools*. Unqualified "skill" leads to ambiguity.
+- The `adl_skills` table holds **only crystallized skills**. It is not related to `agent.skill_prompts`.
+- The `agent.skill_prompts` JSONB column holds **only marketplace skill prompts**. It is not related to `adl_skills`.
+- The frontend "Functions" tab at `/agent-data-layer/automations?tab=functions` operates on crystallized skills only. It is NOT a tool pack browser and NOT a marketplace skill editor.
+- `adl_invoke_skill` activates a marketplace skill by loading its prompt and restricting available tools to those declared in its requirements.
+- `adl_execute_skill` runs a crystallized skill by calling its underlying PostgreSQL function or materialized view.
+- `adl_discover_skills` lists all crystallized skills available to the agent.
+- `adl_tool_search` discovers tool pack tools available to the agent via its hardcoded allowlist.
+- Marketplace skills are inherited from the bot at activation; they can be added/removed/reordered post-deploy on the Agent's Skills tab.
+- Crystallized skills are auto-discovered patterns detected by the platform, never manually authored by users.
+- Tool pack tools are hardcoded platform capabilities, configured per-agent via an allowlist maintained by the workspace admin.

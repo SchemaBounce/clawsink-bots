@@ -43,6 +43,32 @@ northStar:
     - shipping_regions
 orgChart:
   lead: executive-reporter
+  domains:
+    - name: "Production"
+      description: "Plant-floor operations: output, yield, dashboards"
+      head: executive-reporter
+      children:
+        - name: "Raw Materials"
+          description: "Stock levels, par tracking, shortage detection"
+          head: inventory-manager
+          children:
+            - name: "Material Alerts"
+              description: "Fires on stockout risk before the line halts"
+              head: inventory-alert
+    - name: "Logistics"
+      description: "Inbound deliveries and outbound customer shipments"
+      head: order-fulfillment
+      children:
+        - name: "Shipping"
+          description: "Carrier tracking for inbound raw mats + outbound finished goods"
+          head: shipping-tracker
+    - name: "Systems"
+      description: "SCADA, MES, IoT, and floor infrastructure uptime"
+      head: sre-devops
+      children:
+        - name: "Data Integrity"
+          description: "Sensor drift, batch record validity, yield-calc sanity"
+          head: data-quality-monitor
   roles:
     - bot: executive-reporter
       role: lead

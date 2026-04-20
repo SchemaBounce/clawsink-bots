@@ -29,6 +29,11 @@ graphEdgeTypes:
   - OWNED_BY
 vectorCollections:
   - re_listings
+useCases:
+  - "Track every active listing with price history, media, and status"
+  - "Match clients to listings by criteria and log each showing"
+  - "Follow an offer from submission through acceptance, with counter history"
+  - "Manage a transaction from contract to close with deadlines and tasks"
 ---
 
 # Real Estate Agency

@@ -31,6 +31,11 @@ graphEdgeTypes:
   - REQUIRED_BY
 vectorCollections:
   - hc_compliance_items
+useCases:
+  - "Book appointments and manage a day-of schedule per provider"
+  - "File claims, track denials, and rework them through resubmission"
+  - "Log compliance items (HIPAA, OSHA) with owner and next review date"
+  - "Track provider credentials and license expirations"
 ---
 
 # Healthcare Practice

@@ -28,6 +28,21 @@ northStar:
     - user_segments
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Product"
+      description: "Roadmap, backlog, release strategy"
+      head: product-owner
+      children:
+        - name: "Engineering"
+          description: "Sprint planning, velocity, technical sequencing"
+          head: sprint-planner
+        - name: "Research"
+          description: "Experiments, customer interviews, signal synthesis"
+          head: experiment-tracker
+          children:
+            - name: "Support Signals"
+              description: "Themes from live support conversations"
+              head: customer-support
   roles:
     - bot: executive-assistant
       role: lead

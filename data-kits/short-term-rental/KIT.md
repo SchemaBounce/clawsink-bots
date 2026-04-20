@@ -35,6 +35,11 @@ vectorCollections:
   - str_properties
   - str_reviews
   - str_messages
+useCases:
+  - "Sync bookings across Airbnb, VRBO, and direct channels to avoid double-bookings"
+  - "Message guests from pre-arrival through checkout with templates"
+  - "Run dynamic pricing per property with rules for events, seasons, and gaps"
+  - "Schedule turnovers by property and track cleaner completion"
 ---
 
 # Short-Term Rental & Vacation Property

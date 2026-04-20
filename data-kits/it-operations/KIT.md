@@ -30,6 +30,11 @@ graphEdgeTypes:
 vectorCollections:
   - ops_incidents
   - ops_runbooks
+useCases:
+  - "Open an incident, track the timeline, and write the postmortem in the same place"
+  - "Record every deployment with service, version, and environment"
+  - "Map services to their dependencies and on-call owner"
+  - "Keep runbooks next to the services they apply to, searchable by symptom"
 ---
 
 # IT Operations

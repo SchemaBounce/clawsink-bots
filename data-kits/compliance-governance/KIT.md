@@ -31,6 +31,11 @@ graphEdgeTypes:
 vectorCollections:
   - gov_policies
   - gov_regulatory_changes
+useCases:
+  - "Maintain a register of controls and their current compliance state"
+  - "Track audit findings from open through remediation, with owner and due date"
+  - "Map each policy to the controls it satisfies and the regulations it covers"
+  - "Log incoming regulatory changes and flag affected controls"
 ---
 
 # Compliance & Governance

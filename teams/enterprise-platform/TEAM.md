@@ -35,6 +35,35 @@ northStar:
     - team_structure
 orgChart:
   lead: executive-reporter
+  domains:
+    - name: "Engineering"
+      description: "Platform delivery and release management"
+      head: executive-reporter
+      children:
+        - name: "Releases"
+          description: "Release coordination, deployment gates"
+          head: release-manager
+          children:
+            - name: "Code Review"
+              description: "Merge gates, style, regression hunting"
+              head: code-reviewer
+        - name: "Reliability"
+          description: "SRE / DevOps / infrastructure uptime"
+          head: sre-devops
+          children:
+            - name: "Data"
+              description: "Warehouse, ETL, data platform ops"
+              head: data-engineer
+    - name: "Security"
+      description: "Threat detection, CVE tracking, access review"
+      head: security-agent
+      children:
+        - name: "Compliance"
+          description: "SOC 2, HIPAA, PCI, audit controls"
+          head: compliance-auditor
+    - name: "Business Intelligence"
+      description: "Executive analytics and operational reporting"
+      head: business-analyst
   roles:
     - bot: executive-reporter
       role: lead

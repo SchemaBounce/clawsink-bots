@@ -34,6 +34,11 @@ graphEdgeTypes:
   - RELATED_TO
 vectorCollections:
   - crm_interactions
+useCases:
+  - "Track every person and company you talk to with lifecycle status"
+  - "Run a B2B sales pipeline: log deals, update stages, measure win rate"
+  - "Search past interactions by meaning with pgvector-backed semantic search"
+  - "Segment contacts by tags, source, or status for follow-up campaigns"
 ---
 
 # CRM Contacts

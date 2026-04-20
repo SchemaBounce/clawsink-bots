@@ -7,7 +7,7 @@
     },
     {
       "name": "code_sessions",
-      "description": "Audit records for Claude Code sessions tracking implementation execution and outcomes",
+      "description": "Audit records for code sessions tracking implementation execution and outcomes",
       "fields": ["session_id", "implementation_plan_ref", "status", "files_changed", "tests_passed", "test_output", "duration_seconds", "retry_count"]
     },
     {

@@ -21,6 +21,21 @@ requirements:
   minTier: "starter"
 orgChart:
   lead: data-engineer
+  domains:
+    - name: "Data Infrastructure"
+      description: "Pipeline health, connector uptime, schema drift"
+      head: data-engineer
+      children:
+        - name: "Infrastructure Reporting"
+          description: "Daily platform-health briefings and drift reports"
+          head: infrastructure-reporter
+    - name: "Data Quality"
+      description: "Validation rules, freshness, completeness"
+      head: data-quality-monitor
+      children:
+        - name: "Anomaly Detection"
+          description: "Statistical + rule-based outlier detection on tables and streams"
+          head: anomaly-detector
   roles:
     - bot: data-engineer
       role: lead

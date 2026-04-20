@@ -35,6 +35,22 @@ northStar:
     - compliance_requirements
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Operations"
+      description: "Day-to-day coordination and decision-making"
+      head: executive-assistant
+    - name: "Finance"
+      description: "Bookkeeping, cash-flow, basic reporting"
+      head: accountant
+    - name: "Customer Relations"
+      description: "Lead triage, customer Q&A, follow-ups"
+      head: customer-support
+    - name: "Growth"
+      description: "Local marketing and email outreach"
+      head: marketing-growth
+    - name: "Compliance"
+      description: "Licenses, filings, and regulatory basics"
+      head: legal-compliance
   roles:
     - bot: executive-assistant
       role: lead

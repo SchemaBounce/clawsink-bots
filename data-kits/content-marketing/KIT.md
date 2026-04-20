@@ -29,6 +29,11 @@ graphEdgeTypes:
   - GENERATED_BY
 vectorCollections:
   - mkt_content
+useCases:
+  - "Plan a campaign, produce the content, schedule the posts, and track leads back to source"
+  - "Store every published asset (post, email, landing page) with owner and status"
+  - "Attribute leads to the first content piece that generated them"
+  - "Report content velocity and conversion by channel"
 ---
 
 # Content Marketing

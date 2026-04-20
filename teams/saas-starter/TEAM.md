@@ -55,6 +55,29 @@ northStar:
     - growth_targets
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Operations"
+      description: "Daily coordination and exec briefings"
+      head: executive-assistant
+    - name: "Engineering"
+      description: "Platform reliability and code quality"
+      head: sre-devops
+      children:
+        - name: "Code Review"
+          description: "Merge gates, style, regression review"
+          head: code-reviewer
+    - name: "Growth"
+      description: "Marketing programs, content, demand-gen"
+      head: marketing-growth
+    - name: "Revenue"
+      description: "Sales pipeline and forecast"
+      head: sales-pipeline
+    - name: "Customer Success"
+      description: "Support + retention"
+      head: customer-support
+    - name: "Platform"
+      description: "Performance + cost optimization"
+      head: platform-optimizer
   roles:
     - bot: executive-assistant
       role: lead

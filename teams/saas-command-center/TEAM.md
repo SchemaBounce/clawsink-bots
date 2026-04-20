@@ -108,6 +108,39 @@ northStar:
     - status_page_url
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Technology"
+      description: "Platform reliability, code quality, and internal developer experience"
+      head: sre-devops
+      children:
+        - name: "Engineering"
+          description: "Build, review, test, and document product code"
+          head: code-reviewer
+        - name: "Reliability"
+          description: "SRE/DevOps, uptime monitoring, incident response"
+          head: uptime-manager
+        - name: "Platform Ops"
+          description: "Cost, performance, and infrastructure optimization"
+          head: platform-optimizer
+    - name: "Growth & Revenue"
+      description: "Top-of-funnel through expansion — marketing, sales, retention"
+      head: marketing-growth
+      children:
+        - name: "Growth"
+          description: "Demand generation, content, dev relations, competitive intel"
+          head: marketing-growth
+        - name: "Revenue"
+          description: "Sales pipeline, onboarding, churn, RevOps"
+          head: sales-pipeline
+    - name: "Product"
+      description: "Roadmap, discovery, and business analytics"
+      head: product-owner
+    - name: "Customer Success"
+      description: "Support triage, community engagement, satisfaction"
+      head: customer-support
+    - name: "Operations"
+      description: "Executive oversight and cross-domain coordination"
+      head: executive-assistant
   roles:
     - bot: executive-assistant
       role: lead

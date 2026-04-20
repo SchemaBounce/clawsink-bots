@@ -183,7 +183,7 @@ Never put secrets in SERVER.md — only declare variable names. Users configure 
 | [docker](docker/) | Docker container, image, and volume management | stdio |
 | [terraform](terraform/) | Terraform IaC — plan, apply, state, workspaces | stdio |
 | [kubernetes](kubernetes/) | Kubernetes cluster — pods, deployments, services | stdio |
-| [claude-code](claude-code/) | Sandboxed Claude Code for implementation and PRs | streamable-http |
+| [codex](codex/) | **[Preview]** Sandboxed OpenAI Codex sessions — backend not yet deployed | streamable-http |
 | [argocd](argocd/) | Argo CD GitOps — applications, sync, resources, logs | stdio |
 
 ### Platform (SchemaBounce + Kolumn)

@@ -30,6 +30,11 @@ graphEdgeTypes:
   - USES
 vectorCollections:
   - con_knowledge_artifacts
+useCases:
+  - "Open a new engagement, track hours against budget, and bill from time entries"
+  - "Produce a deliverable with owner, due date, and client approval status"
+  - "Capture reusable knowledge artifacts tagged by practice area and industry"
+  - "Report utilization and realization by consultant and client"
 ---
 
 # Management Consulting

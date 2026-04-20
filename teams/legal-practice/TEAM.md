@@ -42,6 +42,27 @@ northStar:
     - knowledge_domains
 orgChart:
   lead: executive-assistant
+  domains:
+    - name: "Legal Ops"
+      description: "Matter intake, deadlines, team coordination"
+      head: executive-assistant
+      children:
+        - name: "Meetings"
+          description: "Client call transcripts, deposition summaries"
+          head: meeting-summarizer
+    - name: "Compliance"
+      description: "Regulatory watch and engagement-letter review"
+      head: legal-compliance
+      children:
+        - name: "Audit"
+          description: "Internal controls and evidence collection"
+          head: compliance-auditor
+    - name: "Knowledge"
+      description: "Briefs, precedent, internal memos"
+      head: knowledge-base-curator
+    - name: "Finance"
+      description: "Billable hours, realization, trust accounting"
+      head: accountant
   roles:
     - bot: executive-assistant
       role: lead
