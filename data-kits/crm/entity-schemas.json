@@ -1,0 +1,83 @@
+[
+  {
+    "entityType": "leads",
+    "displayName": "Leads",
+    "description": "B2B sales leads and prospects",
+    "domain": "crm",
+    "validationMode": "advisory",
+    "fields": {
+      "firstName":   { "type": "string", "required": true },
+      "lastName":    { "type": "string", "required": true },
+      "email":       { "type": "string", "required": true },
+      "company":     { "type": "string" },
+      "title":       { "type": "string" },
+      "status":      { "type": "string", "enum": ["new", "contacted", "qualified", "disqualified"] },
+      "source":      { "type": "string" },
+      "notes":       { "type": "string" },
+      "linkedinUrl": { "type": "string" },
+      "companyId":   { "type": "string" }
+    }
+  },
+  {
+    "entityType": "companies",
+    "displayName": "Companies",
+    "description": "Target accounts and prospect companies",
+    "domain": "crm",
+    "validationMode": "advisory",
+    "fields": {
+      "name":     { "type": "string", "required": true },
+      "domain":   { "type": "string" },
+      "industry": { "type": "string" },
+      "size":     { "type": "string", "enum": ["1-10", "11-50", "51-200", "201-500", "501-1000", "1001+"] },
+      "location": { "type": "string" },
+      "website":  { "type": "string" },
+      "about":    { "type": "string" }
+    }
+  },
+  {
+    "entityType": "news_items",
+    "displayName": "News Items",
+    "description": "Recent news and signals about target companies and contacts",
+    "domain": "crm",
+    "validationMode": "advisory",
+    "fields": {
+      "title":       { "type": "string", "required": true },
+      "url":         { "type": "string" },
+      "summary":     { "type": "string" },
+      "entityId":    { "type": "string" },
+      "entityType":  { "type": "string" },
+      "publishedAt": { "type": "date" },
+      "source":      { "type": "string" },
+      "relevance":   { "type": "string" }
+    }
+  },
+  {
+    "entityType": "outreach_templates",
+    "displayName": "Outreach Templates",
+    "description": "Email and message templates for lead outreach",
+    "domain": "crm",
+    "validationMode": "advisory",
+    "fields": {
+      "name":           { "type": "string", "required": true },
+      "subject":        { "type": "string" },
+      "body":           { "type": "string", "required": true },
+      "type":           { "type": "string", "enum": ["cold", "follow-up", "re-engagement"] },
+      "targetIndustry": { "type": "string" }
+    }
+  },
+  {
+    "entityType": "research_briefs",
+    "displayName": "Research Briefs",
+    "description": "AI-generated research briefs produced by the Lead Researcher agent",
+    "domain": "crm",
+    "validationMode": "advisory",
+    "fields": {
+      "leadId":      { "type": "string", "required": true },
+      "companyId":   { "type": "string" },
+      "content":     { "type": "string", "required": true },
+      "sources":     { "type": "array" },
+      "generatedAt": { "type": "date" },
+      "agentId":     { "type": "string" }
+    }
+  }
+]
