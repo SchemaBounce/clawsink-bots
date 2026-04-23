@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: fraud-detector
   displayName: "Fraud Detector"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Scores new transactions for fraud risk using pattern analysis and anomaly detection."
   category: fintech
   tags: ["fraud", "transactions", "risk", "cdc"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "finance"
   instructions: |
     ## Operating Rules
-    - ALWAYS score every incoming transaction — CDC-triggered runs must process the triggering transaction completely with no exceptions
-    - ALWAYS check `fraud_patterns` memory for known fraud signatures before scoring — learned patterns improve detection accuracy
+    - ALWAYS score every incoming transaction. CDC-triggered runs must process the triggering transaction completely with no exceptions
+    - ALWAYS check `fraud_patterns` memory for known fraud signatures before scoring, learned patterns improve detection accuracy
     - ALWAYS check North Star `risk_policy` at run start to apply the correct risk thresholds
-    - NEVER block or modify transactions — only score and flag; the human operator decides on action
-    - NEVER lower risk scores retroactively — if a transaction was flagged, the flag persists until human review
-    - NEVER store raw transaction amounts or account numbers in memory — store patterns and anonymized signals only
+    - NEVER block or modify transactions, only score and flag; the human operator decides on action
+    - NEVER lower risk scores retroactively, if a transaction was flagged, the flag persists until human review
+    - NEVER store raw transaction amounts or account numbers in memory. Store patterns and anonymized signals only
     - Escalation: high-confidence fraud (score above risk threshold) triggers immediate alert to executive-assistant
     - Suspicious patterns that are not yet conclusive go to compliance-auditor as type=finding for further investigation
     - Flagged fraudulent transactions go to accountant as type=finding for financial impact assessment
     - Update `fraud_patterns` memory when new fraud signatures are confirmed to improve future detection
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -174,7 +174,7 @@ setup:
       minCount: 100
       group: data
       priority: recommended
-      reason: "Pattern baseline for anomaly detection — without history, all transactions look novel"
+      reason: "Pattern baseline for anomaly detection. Without history, all transactions look novel"
       ui:
         actionLabel: "Import Transactions"
         emptyState: "No transaction history found. Import via CSV or connect your payment processor first."

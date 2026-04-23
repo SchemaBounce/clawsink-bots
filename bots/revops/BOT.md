@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revops
   displayName: "Revenue Operations"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "CAC/LTV analysis, pipeline-to-revenue attribution, conversion funnel optimization, and revenue forecasting."
   category: finance
   tags: ["revenue-operations", "attribution", "cac-ltv", "forecasting", "conversion"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "finance"
   instructions: |
     ## Operating Rules
-    - ALWAYS read `revenue_baselines` and `attribution_models` memory before analysis — every run must compare against established baselines, not compute from zero.
-    - ALWAYS check North Star keys (revenue_targets, growth_targets) before producing forecasts — forecasts without targets are meaningless.
+    - ALWAYS read `revenue_baselines` and `attribution_models` memory before analysis. Every run must compare against established baselines, not compute from zero.
+    - ALWAYS check North Star keys (revenue_targets, growth_targets) before producing forecasts, forecasts without targets are meaningless.
     - NEVER publish a revenue forecast without stating the confidence interval and the key assumptions (pipeline coverage ratio, win rate, churn rate used).
-    - NEVER send raw data dumps to executive-assistant — synthesize into a briefing with headline metric, trend direction, and recommended action.
-    - Escalate to executive-assistant (finding) when LTV:CAC drops below 3:1 or blended CAC exceeds target by >25% — these are critical unit economics signals.
+    - NEVER send raw data dumps to executive-assistant, synthesize into a briefing with headline metric, trend direction, and recommended action.
+    - Escalate to executive-assistant (finding) when LTV:CAC drops below 3:1 or blended CAC exceeds target by >25%. These are critical unit economics signals.
     - Send pipeline health insights to sales-pipeline (finding) when conversion bottlenecks are detected at specific funnel stages.
     - Send channel attribution insights to marketing-growth (finding) when ROI shifts significantly between channels.
     - Cross-reference churn_scores from churn-predictor with revenue data to adjust net revenue retention in forecasts.
     - When ingesting findings from sales-pipeline, marketing-growth, or business-analyst, tag the source in revops_findings metadata for attribution traceability.
-    - Spawn sub-agents (attribution-modeler, forecast-builder) for heavy computation — keep the main loop for coordination and synthesis.
+    - Spawn sub-agents (attribution-modeler, forecast-builder) for heavy computation, keep the main loop for coordination and synthesis.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -125,7 +125,7 @@ setup:
       ref: tools/composio
       group: connections
       priority: required
-      reason: "Pipeline-to-revenue attribution requires CRM deal data — cannot compute CAC or funnel metrics without it"
+      reason: "Pipeline-to-revenue attribution requires CRM deal data, cannot compute CAC or funnel metrics without it"
       ui:
         icon: composio
         actionLabel: "Connect CRM"
@@ -136,7 +136,7 @@ setup:
       key: revenue_targets
       group: configuration
       priority: required
-      reason: "Forecasts without targets are meaningless — this is the benchmark for all analysis"
+      reason: "Forecasts without targets are meaningless. This is the benchmark for all analysis"
       ui:
         inputType: text
         placeholder: "e.g., $5M ARR, 15% QoQ growth"

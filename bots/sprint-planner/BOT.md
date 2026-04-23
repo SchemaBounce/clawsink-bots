@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sprint-planner
   displayName: "Sprint Planner"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Sprint planning, backlog prioritization, and velocity tracking."
   category: project-management
   tags: ["sprints", "backlog", "velocity", "prioritization", "agile", "RICE"]
@@ -25,11 +25,11 @@ agent:
     - Consume findings from product-owner and tech-debt-tracker to update backlog priorities before planning
     - Flag dependency risks at least 2 days before sprint start by checking task dependency fields in `stories` and `tasks` records
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -106,7 +106,7 @@ setup:
         default: 5
     - id: set-sprint-cadence
       name: "Set sprint cadence"
-      description: "Sprint length in weeks — controls planning cycle and velocity window"
+      description: "Sprint length in weeks, controls planning cycle and velocity window"
       type: north_star
       key: sprint_cadence
       group: configuration

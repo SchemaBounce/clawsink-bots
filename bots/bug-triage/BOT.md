@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: bug-triage
   displayName: "Bug Triage"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Triages bug reports by severity and assigns owners."
   category: engineering
   tags: ["bugs", "triage", "severity"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "engineering"
   instructions: |
     ## Operating Rules
-    - ALWAYS check `bug_patterns` memory before triaging a new report — if a similar bug was triaged before, reference the prior decision and outcome.
+    - ALWAYS check `bug_patterns` memory before triaging a new report, if a similar bug was triaged before, reference the prior decision and outcome.
     - ALWAYS assign a severity score (P0-P4) and a category (code, infrastructure, data, UX) to every bug before routing.
-    - NEVER auto-close or dismiss a bug report — every report must produce a triage_decision record, even if classified as "won't fix" or "duplicate".
-    - Route bugs with identifiable code-level root causes to code-reviewer — include the suspected file/module and reproduction steps.
+    - NEVER auto-close or dismiss a bug report. Every report must produce a triage_decision record, even if classified as "won't fix" or "duplicate".
+    - Route bugs with identifiable code-level root causes to code-reviewer, include the suspected file/module and reproduction steps.
     - Route bugs requiring architectural changes or implementation fixes to software-architect.
-    - Route infrastructure or deployment-related bugs to sre-devops — include environment context and timeline.
+    - Route infrastructure or deployment-related bugs to sre-devops, include environment context and timeline.
     - Escalate P0/critical bugs to executive-assistant immediately with impact assessment and affected user count estimate.
     - When receiving findings from api-tester, cross-reference with existing open bug_reports to avoid creating duplicates.
-    - Track resolution times in `resolution_times` memory — use this data to estimate fix timelines in triage decisions.
-    - Consider `team_capacity` when assigning severity and routing — P2 bugs should not be routed to overloaded teams without noting the capacity constraint.
+    - Track resolution times in `resolution_times` memory. Use this data to estimate fix timelines in triage decisions.
+    - Consider `team_capacity` when assigning severity and routing, P2 bugs should not be routed to overloaded teams without noting the capacity constraint.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -103,7 +103,7 @@ setup:
       ref: tools/github
       group: connections
       priority: required
-      reason: "Primary system of record for bug reports — creates issues, detects duplicates, assigns owners"
+      reason: "Primary system of record for bug reports, creates issues, detects duplicates, assigns owners"
       ui:
         icon: github
         actionLabel: "Connect Issue Tracker"
@@ -116,7 +116,7 @@ setup:
       minCount: 1
       group: data
       priority: required
-      reason: "Bot needs bug reports to triage — without them there is nothing to classify"
+      reason: "Bot needs bug reports to triage. Without them there is nothing to classify"
       ui:
         actionLabel: "Import Bugs"
         emptyState: "No bug reports found. Import from your issue tracker or wait for API Tester findings."
@@ -139,7 +139,7 @@ setup:
       minCount: 1
       group: data
       priority: recommended
-      reason: "Routing considers capacity — without it, overloaded teams receive unfairly"
+      reason: "Routing considers capacity. Without it, overloaded teams receive unfairly"
       ui:
         actionLabel: "Import Capacity"
         emptyState: "No team capacity data. The bot will still triage but cannot optimize routing by workload."
@@ -150,7 +150,7 @@ setup:
       ref: tools/exa
       group: connections
       priority: optional
-      reason: "Enriches triage with external context — known CVEs, upstream issues, community reports"
+      reason: "Enriches triage with external context, known CVEs, upstream issues, community reports"
       ui:
         icon: search
         actionLabel: "Connect Exa Search"

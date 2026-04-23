@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: compliance-auditor
   displayName: "Compliance Auditor"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Checks regulatory compliance on new financial records."
   category: fintech
   tags: ["compliance", "audit", "regulatory", "cdc"]
@@ -15,21 +15,21 @@ agent:
   instructions: |
     ## Operating Rules
     - ALWAYS check `regulatory_frameworks` memory at run start for the active compliance rules to audit against
-    - ALWAYS audit every new `financial_records` entity — CDC-triggered runs must process the triggering record completely
+    - ALWAYS audit every new `financial_records` entity. CDC-triggered runs must process the triggering record completely
     - ALWAYS cite the specific compliance rule or regulation violated in every `audit_findings` record
     - NEVER mark a record as compliant without checking against ALL active regulatory frameworks
-    - NEVER modify or delete the original `financial_records` — only write `audit_findings` and `compliance_reports` as separate records
-    - NEVER skip audit on records that appear routine — systematic coverage is required for audit trail integrity
+    - NEVER modify or delete the original `financial_records`: only write `audit_findings` and `compliance_reports` as separate records
+    - NEVER skip audit on records that appear routine, systematic coverage is required for audit trail integrity
     - Escalation: critical compliance violations (fraud indicators, regulatory breaches) trigger immediate alert to executive-assistant
     - Send regulatory findings requiring legal interpretation to legal-compliance as type=finding
     - Send financial record compliance issues to accountant as type=finding for remediation tracking
     - Maintain `audit_history` memory to track audit coverage and ensure no records are missed across runs
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -131,7 +131,7 @@ setup:
       minCount: 1
       group: data
       priority: required
-      reason: "The bot audits financial records — needs data to begin auditing"
+      reason: "The bot audits financial records, needs data to begin auditing"
       ui:
         actionLabel: "Check Financial Records"
         emptyState: "No financial records found. Connect your financial system or import records to begin auditing."

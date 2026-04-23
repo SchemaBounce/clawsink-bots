@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "engineering"
   instructions: |
     ## Operating Rules
-    - ALWAYS check North Star keys `documentation_standards` and `product_catalog` before writing — match the workspace's style guide and product terminology.
+    - ALWAYS check North Star keys `documentation_standards` and `product_catalog` before writing, match the workspace's style guide and product terminology.
     - ALWAYS read the full implementation plan and linked PR diff before deciding which documentation files need updating.
-    - NEVER modify application code — this bot only touches documentation files (README, API docs, guides, changelogs, inline doc comments).
-    - NEVER create documentation that exposes internal architecture, credentials, or security details — follow the workspace's documentation_standards for what is public vs. internal.
+    - NEVER modify application code. This bot only touches documentation files (README, API docs, guides, changelogs, inline doc comments).
+    - NEVER create documentation that exposes internal architecture, credentials, or security details, follow the workspace's documentation_standards for what is public vs. internal.
     - When receiving findings from code-reviewer about API changes, update API reference docs and include before/after examples.
     - When receiving findings from release-notes-writer about new features, ensure user-facing guides cover the feature.
     - Request implementation details from software-architect when a finding lacks sufficient context to write accurate docs.
-    - Notify release-manager when a doc PR is ready for review — include the PR link and a summary of what changed.
-    - Only spawn code sessions for actual file edits — use regular tool calls for reading and planning.
+    - Notify release-manager when a doc PR is ready for review, include the PR link and a summary of what changed.
+    - Only spawn code sessions for actual file edits. Use regular tool calls for reading and planning.
     - Create doc PRs on `docs/{issue-name}` branches, always linked to the originating implementation PR.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -89,7 +89,7 @@ presence:
 mcpServers:
   - ref: "tools/codex"
     required: false
-    reason: "Intended default coding agent for documentation file edits. Preview — backend service not yet deployed; marked optional until GA"
+    reason: "Intended default coding agent for documentation file edits. Preview, backend service not yet deployed; marked optional until GA"
   - ref: "tools/github"
     required: true
     reason: "Creates doc PRs linked to implementation PRs"
@@ -152,13 +152,13 @@ setup:
         icon: github
         actionLabel: "Connect GitHub"
     - id: enable-codex
-      name: "Enable Codex (Preview — coming soon)"
-      description: "Confirms workspace credit balance and provisions the sandboxed Codex service for documentation file edits. Preview — backend service is not yet live."
+      name: "Enable Codex (Preview, coming soon)"
+      description: "Confirms workspace credit balance and provisions the sandboxed Codex service for documentation file edits. Preview, backend service is not yet live."
       type: mcp_connection
       ref: tools/codex
       group: connections
       priority: recommended
-      reason: "Intended default coding agent for doc file edits — will be required once the backend ships; optional until then"
+      reason: "Intended default coding agent for doc file edits, will be required once the backend ships; optional until then"
       ui:
         icon: code
         actionLabel: "Enable Codex"
@@ -171,7 +171,7 @@ setup:
       minCount: 1
       group: data
       priority: recommended
-      reason: "Doc updates are triggered by implementation completions — no plans means no automatic doc work"
+      reason: "Doc updates are triggered by implementation completions, no plans means no automatic doc work"
       ui:
         actionLabel: "Import Implementation Plans"
         emptyState: "No implementation plans found. The bot will activate when software-architect sends findings."

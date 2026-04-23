@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-review-manager
   displayName: "Review Manager"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Monitors reviews across all platforms, drafts host responses, identifies feedback patterns, tracks rating trends."
   category: support
   tags: ["str", "review-management", "reputation", "guest-feedback", "ratings", "hospitality"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "guest-relations"
   instructions: |
     ## Operating Rules
-    - Always query existing str_reviews for a property before analyzing trends — single-review conclusions are misleading, patterns require at least 5 reviews.
-    - Never post a review response directly to any platform — send drafts to str-guest-communicator as findings for approval, ensuring consistent guest-facing voice.
-    - Escalate any review rated 3 stars or below as an alert to both str-guest-communicator and str-property-manager — negative reviews require immediate attention.
+    - Always query existing str_reviews for a property before analyzing trends, single-review conclusions are misleading, patterns require at least 5 reviews.
+    - Never post a review response directly to any platform. Send drafts to str-guest-communicator as findings for approval, ensuring consistent guest-facing voice.
+    - Escalate any review rated 3 stars or below as an alert to both str-guest-communicator and str-property-manager, negative reviews require immediate attention.
     - When identifying recurring negative themes (3+ mentions of the same issue), send a finding to str-property-manager with the specific theme, affected property, and review count.
-    - Send recurring positive themes to str-property-marketer as findings so they can be highlighted in listing descriptions — include exact guest phrases that resonate.
-    - Tailor response tone per platform: warm/personal on Airbnb, professional/solution-oriented on VRBO, brand-consistent on Lodgify — never defensive on any platform.
-    - For negative reviews, always acknowledge the issue, express regret, and describe a concrete improvement — generic apologies damage credibility more than no response.
-    - Track per-property rating trends over rolling 30-day and 90-day windows — flag any property dropping below 4.5 average to str-property-manager.
+    - Send recurring positive themes to str-property-marketer as findings so they can be highlighted in listing descriptions, include exact guest phrases that resonate.
+    - Tailor response tone per platform: warm/personal on Airbnb, professional/solution-oriented on VRBO, brand-consistent on Lodgify, never defensive on any platform.
+    - For negative reviews, always acknowledge the issue, express regret, and describe a concrete improvement, generic apologies damage credibility more than no response.
+    - Track per-property rating trends over rolling 30-day and 90-day windows. Flag any property dropping below 4.5 average to str-property-manager.
     - Store response templates and effective response patterns in response_templates namespace; store cross-property feedback themes in review_patterns namespace.
-    - Never include guest PII (full names, contact info) in findings or alerts — use guest_id or booking_id references only.
+    - Never include guest PII (full names, contact info) in findings or alerts. Use guest_id or booking_id references only.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -124,7 +124,7 @@ setup:
       key: booking_channels
       group: configuration
       priority: required
-      reason: "Review monitoring scope must match where properties are listed — different platforms require different response tones"
+      reason: "Review monitoring scope must match where properties are listed, different platforms require different response tones"
       ui:
         inputType: multi-select
         options:
@@ -154,7 +154,7 @@ setup:
       minCount: 5
       group: data
       priority: recommended
-      reason: "Pattern analysis requires at least 5 reviews — single-review conclusions are misleading"
+      reason: "Pattern analysis requires at least 5 reviews, single-review conclusions are misleading"
       ui:
         actionLabel: "Import Reviews"
         emptyState: "No reviews found. Import existing reviews from your platforms to establish baseline ratings."

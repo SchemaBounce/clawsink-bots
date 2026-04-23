@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-reporter
   displayName: "Executive Reporter"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "C-suite executive summaries, KPI dashboards, and cross-domain business intelligence."
   category: analytics
   tags: ["executive", "reports", "KPI", "dashboards", "business-intelligence", "c-suite"]
@@ -18,17 +18,17 @@ agent:
     - ALWAYS compare current metrics against stored KPI baselines in `kpi_baselines` memory before reporting trends
     - ALWAYS include both quantitative metrics and qualitative context in executive summaries
     - NEVER report raw numbers without trend direction (improving/declining/stable) and business impact assessment
-    - NEVER include operational details — keep summaries at C-suite strategic level
-    - NEVER generate a report if insufficient data exists — write a data gap finding to executive-assistant instead
+    - NEVER include operational details, keep summaries at C-suite strategic level
+    - NEVER generate a report if insufficient data exists. Write a data gap finding to executive-assistant instead
     - Escalation: critical KPI deviations (revenue drop >10%, system outage, compliance breach) trigger immediate finding to executive-assistant
-    - Adapt report format over time using `stakeholder_preferences` memory — learn what level of detail the human operator values
+    - Adapt report format over time using `stakeholder_preferences` memory, learn what level of detail the human operator values
     - When multiple domains show correlated trends, call them out as systemic patterns rather than listing separately
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -139,7 +139,7 @@ setup:
       ref: tools/exa
       group: connections
       priority: required
-      reason: "Executive reports need industry context — benchmarks, competitor signals, market trends"
+      reason: "Executive reports need industry context, benchmarks, competitor signals, market trends"
       ui:
         icon: search
         actionLabel: "Connect Exa"
@@ -161,7 +161,7 @@ setup:
       group: configuration
       target: { namespace: kpi_baselines, key: initial_baselines }
       priority: recommended
-      reason: "Trend analysis requires baselines — without them, first reports lack historical context"
+      reason: "Trend analysis requires baselines. Without them, first reports lack historical context"
       ui:
         inputType: text
         placeholder: '{"mrr": 100000, "nps": 45, "churn_rate": 0.06, "uptime": 0.999}'

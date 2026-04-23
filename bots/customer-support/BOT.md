@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -14,23 +14,23 @@ agent:
   defaultDomain: "support"
   instructions: |
     ## Operating Rules
-    - ALWAYS read `customer_health` memory before triaging — prior run context prevents re-triaging resolved issues and enables trend detection.
-    - ALWAYS check for SLA breach proximity on every open/pending ticket — approaching SLA breaches take priority over new triage.
-    - NEVER close or resolve a ticket without writing the resolution to cs_findings — every resolution is a learning opportunity for pattern detection.
-    - NEVER escalate to executive-assistant for non-critical issues — only churn risk and data loss complaints qualify as critical alerts.
-    - Send infrastructure-related complaints to sre-devops (request) immediately — do not attempt to diagnose infrastructure issues.
+    - ALWAYS read `customer_health` memory before triaging, prior run context prevents re-triaging resolved issues and enables trend detection.
+    - ALWAYS check for SLA breach proximity on every open/pending ticket, approaching SLA breaches take priority over new triage.
+    - NEVER close or resolve a ticket without writing the resolution to cs_findings. Every resolution is a learning opportunity for pattern detection.
+    - NEVER escalate to executive-assistant for non-critical issues, only churn risk and data loss complaints qualify as critical alerts.
+    - Send infrastructure-related complaints to sre-devops (request) immediately, do not attempt to diagnose infrastructure issues.
     - Send repeated complaint patterns and disengagement signals to churn-predictor (finding) for churn scoring.
-    - Send onboarding struggles to customer-onboarding (finding) — new customers stuck on setup are onboarding failures, not support tickets.
+    - Send onboarding struggles to customer-onboarding (finding), new customers stuck on setup are onboarding failures, not support tickets.
     - Send recurring support themes indicating documentation gaps to knowledge-base-curator (finding) for KB article creation.
     - Send support trend data to business-analyst (finding) for cross-functional pattern analysis.
     - Use automation-first principle: if a ticket type can be triaged deterministically (known pattern + known response), create a trigger with `adl_create_trigger` rather than handling manually every run.
-    - Correlate sre_findings with open tickets — if an infra issue explains multiple tickets, batch-update them rather than treating each independently.
+    - Correlate sre_findings with open tickets, if an infra issue explains multiple tickets, batch-update them rather than treating each independently.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -85,7 +85,7 @@ automations:
       eventType: "updated"
       targetAgent: "self"
       condition: '{"status": {"$in": ["open", "pending"]}}'
-      promptTemplate: "A ticket was updated. Check SLA compliance — if approaching breach, escalate. If resolved, update customer health score."
+      promptTemplate: "A ticket was updated. Check SLA compliance, if approaching breach, escalate. If resolved, update customer health score."
 plugins:
   - ref: "voice-call@latest"
     slot: "channel"

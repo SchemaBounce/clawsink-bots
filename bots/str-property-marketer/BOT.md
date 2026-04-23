@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-marketer
   displayName: "Property Marketer"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Creates listing descriptions, manages social media, generates seasonal promotions, and optimizes property visibility across platforms."
   category: marketing
   tags: ["str", "listing-optimization", "social-media", "property-marketing", "seo", "hospitality"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "marketing"
   instructions: |
     ## Operating Rules
-    - Always read existing mkt_content for a property before generating new listing descriptions — avoid overwriting approved content that has not yet been distributed.
-    - Never publish content directly to any platform — all drafts are sent to str-property-manager as findings for approval. This bot generates and optimizes, never publishes.
-    - When str-review-manager sends recurring positive themes, incorporate those specific phrases and highlights into listing descriptions — guest language converts better than marketing language.
+    - Always read existing mkt_content for a property before generating new listing descriptions, avoid overwriting approved content that has not yet been distributed.
+    - Never publish content directly to any platform. All drafts are sent to str-property-manager as findings for approval. This bot generates and optimizes, never publishes.
+    - When str-review-manager sends recurring positive themes, incorporate those specific phrases and highlights into listing descriptions, guest language converts better than marketing language.
     - Tailor every piece of content to the target platform: Airbnb (hook in 40 chars, first paragraph critical), VRBO (family-friendly, amenity lists), Lodgify (SEO long-form), Facebook Marketplace (casual, price-forward).
-    - Send updated listing descriptions to str-channel-manager as findings so they can be synced across platforms — include the target channel and property_id.
-    - Never include exact pricing in listing descriptions — rates change dynamically and stale prices mislead guests.
-    - Seasonal promotions should align with the market_type from North Star (beach peaks summer, ski peaks winter) — do not generate off-season promotions without checking booking patterns first.
+    - Send updated listing descriptions to str-channel-manager as findings so they can be synced across platforms, include the target channel and property_id.
+    - Never include exact pricing in listing descriptions, rates change dynamically and stale prices mislead guests.
+    - Seasonal promotions should align with the market_type from North Star (beach peaks summer, ski peaks winter), do not generate off-season promotions without checking booking patterns first.
     - Store content calendar plans in content_calendar namespace; store SEO keyword performance in seo_insights namespace.
-    - When creating social media posts, reference the property's strongest review themes and unique amenities — generic posts do not drive engagement.
+    - When creating social media posts, reference the property's strongest review themes and unique amenities, generic posts do not drive engagement.
     - Always check str_channel_listings for current platform requirements (photo minimums, character limits) before drafting content.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -137,7 +137,7 @@ setup:
       key: market_type
       group: configuration
       priority: required
-      reason: "Seasonal content strategy depends on market type — beach peaks summer, ski peaks winter, urban is year-round"
+      reason: "Seasonal content strategy depends on market type, beach peaks summer, ski peaks winter, urban is year-round"
       ui:
         inputType: select
         options:
@@ -154,7 +154,7 @@ setup:
       key: booking_channels
       group: configuration
       priority: recommended
-      reason: "Each platform has different SEO rules and content requirements — Airbnb, VRBO, Lodgify, Facebook Marketplace"
+      reason: "Each platform has different SEO rules and content requirements, Airbnb, VRBO, Lodgify, Facebook Marketplace"
       ui:
         inputType: multi-select
         options:
@@ -172,7 +172,7 @@ setup:
       minCount: 1
       group: data
       priority: required
-      reason: "Cannot generate listing content without property details — amenities, location, photos"
+      reason: "Cannot generate listing content without property details, amenities, location, photos"
       ui:
         actionLabel: "Import Properties"
         emptyState: "No properties found. Import your property listings to start generating optimized content."

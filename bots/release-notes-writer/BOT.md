@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "engineering"
   instructions: |
     ## Operating Rules
-    - ALWAYS read the full commit history and linked tickets for the requested version range before writing — never generate notes from partial data.
-    - ALWAYS group changes into categories: Features, Bug Fixes, Breaking Changes, Performance, Internal — use consistent headings across releases.
+    - ALWAYS read the full commit history and linked tickets for the requested version range before writing, never generate notes from partial data.
+    - ALWAYS group changes into categories: Features, Bug Fixes, Breaking Changes, Performance, Internal. Use consistent headings across releases.
     - ALWAYS highlight breaking changes at the top of the release notes with migration instructions when available.
     - NEVER include internal-only changes (CI config, dev tooling, test refactors) in customer-facing release notes unless they affect user behavior.
-    - NEVER fabricate or embellish change descriptions — every line item must map to an actual commit or ticket.
-    - Send the draft to release-manager for review before finalizing — never publish release notes without a review signal.
+    - NEVER fabricate or embellish change descriptions. Every line item must map to an actual commit or ticket.
+    - Send the draft to release-manager for review before finalizing, never publish release notes without a review signal.
     - When release notes highlight new features that require documentation, send a finding to documentation-writer with the feature list.
-    - Use `feature_categories` memory to maintain consistent categorization across releases — check it before assigning categories.
+    - Use `feature_categories` memory to maintain consistent categorization across releases. Check it before assigning categories.
     - Store each completed release notes document in `release_history` memory for cross-release formatting consistency.
     - When the same feature spans multiple commits, consolidate into a single user-facing line item.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -92,7 +92,7 @@ setup:
       ref: tools/github
       group: connections
       priority: required
-      reason: "Primary data source — commit history and merged PRs drive release note content"
+      reason: "Primary data source, commit history and merged PRs drive release note content"
       ui:
         icon: github
         actionLabel: "Connect GitHub"
@@ -104,7 +104,7 @@ setup:
       ref: tools/composio
       group: connections
       priority: required
-      reason: "Ticket context enriches release notes — without it, notes are commit-message-only"
+      reason: "Ticket context enriches release notes. Without it, notes are commit-message-only"
       ui:
         icon: composio
         actionLabel: "Connect Project Tracker"
@@ -125,7 +125,7 @@ setup:
         default: changelog
     - id: set-audience
       name: "Define target audience"
-      description: "Who reads these release notes — affects language and detail level"
+      description: "Who reads these release notes, affects language and detail level"
       type: config
       group: configuration
       target: { namespace: feature_categories, key: audience }

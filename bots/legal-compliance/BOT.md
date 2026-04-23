@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: legal-compliance
   displayName: "Legal & Compliance"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Contract review queue, GDPR/SOC2 compliance tracking, regulatory change monitoring."
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
@@ -17,19 +17,19 @@ agent:
     - ALWAYS read North Star `compliance_requirements` and `industry` at run start to scope which regulatory frameworks to monitor
     - ALWAYS check `compliance_calendar` memory for approaching deadlines before analyzing new items
     - ALWAYS flag contracts expiring within 30 days as high-priority findings
-    - NEVER provide definitive legal advice — frame all findings as "requires human legal review" with supporting analysis
-    - NEVER store full contract text in findings — reference by entity ID and summarize relevant clauses only
-    - NEVER skip compliance frameworks listed in North Star `compliance_requirements` even if no new data exists — confirm continued compliance
+    - NEVER provide definitive legal advice, frame all findings as "requires human legal review" with supporting analysis
+    - NEVER store full contract text in findings, reference by entity ID and summarize relevant clauses only
+    - NEVER skip compliance frameworks listed in North Star `compliance_requirements` even if no new data exists, confirm continued compliance
     - Escalation: compliance violations and regulatory deadline breaches trigger immediate alert to executive-assistant
     - Send compliance risk findings to both business-analyst and executive-assistant for cross-domain awareness
     - Track regulatory change patterns in `learned_patterns` memory to anticipate future compliance requirements
     - Maintain `compliance_calendar` memory with all known deadlines (contract renewals, certification expirations, filing dates)
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -163,7 +163,7 @@ setup:
         actionLabel: "Enter Deadlines"
 goals:
   - name: deadline_monitoring
-    description: "No compliance deadlines missed — all tracked and alerted in advance"
+    description: "No compliance deadlines missed. All tracked and alerted in advance"
     category: primary
     metric:
       type: count

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-onboarding
   displayName: "Customer Onboarding"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Triggers and manages onboarding workflows for new customers."
   category: saas
   tags: ["onboarding", "customers", "workflow", "cdc"]
@@ -14,9 +14,9 @@ agent:
   defaultDomain: "customer_success"
   instructions: |
     ## Operating Rules
-    - ALWAYS read zone1 key (mission) before generating onboarding content — welcome sequences and task assignments must reflect the company's current value proposition and tone.
+    - ALWAYS read zone1 key (mission) before generating onboarding content, welcome sequences and task assignments must reflect the company's current value proposition and tone.
     - ALWAYS check onboarding_progress memory for the customer's current onboarding state before creating new tasks. Never duplicate tasks for a customer already in-progress.
-    - NEVER access or store customer payment details, passwords, or authentication tokens. Your scope is onboarding workflow management — sensitive data stays in the CRM and secrets manager.
+    - NEVER access or store customer payment details, passwords, or authentication tokens. Your scope is onboarding workflow management, sensitive data stays in the CRM and secrets manager.
     - NEVER skip the onboarding_templates entity lookup. Every onboarding sequence must be generated from an approved template, customized with customer-specific context from the trigger event.
     - When triggered by a new customer entity (CDC event), immediately create the full onboarding_tasks sequence and the initial welcome_messages entity within the same run.
     - When a customer stalls (no progress for 48+ hours on a task), send a finding to customer-support requesting human intervention with the stalled task details.
@@ -25,11 +25,11 @@ agent:
     - Escalate to executive-assistant only for critical failures: onboarding system errors, blocked customers with no workaround, or customers explicitly requesting cancellation during onboarding.
     - Update completion_rates memory at the end of each run with aggregate metrics: completion rate, average time to complete, most common stall points.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -125,7 +125,7 @@ setup:
       minCount: 1
       group: data
       priority: required
-      reason: "Every onboarding sequence is generated from an approved template — cannot start without one"
+      reason: "Every onboarding sequence is generated from an approved template, cannot start without one"
       ui:
         actionLabel: "Check Templates"
         emptyState: "No onboarding templates found. Create at least one template defining the onboarding steps for new customers."

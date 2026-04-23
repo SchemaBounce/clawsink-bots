@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: str-channel-manager
   displayName: "Channel Manager"
-  version: "1.0.4"
-  description: "Syncs listings across Airbnb, VRBO, Lodgify, and Facebook Marketplace — detects calendar conflicts and monitors listing health."
+  version: "1.0.5"
+  description: "Syncs listings across Airbnb, VRBO, Lodgify, and Facebook Marketplace, detects calendar conflicts and monitors listing health."
   category: operations
   tags: ["str", "channel-management", "airbnb", "vrbo", "lodgify", "calendar-sync", "hospitality"]
 agent:
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "channel-ops"
   instructions: |
     ## Operating Rules
-    - Always query existing str_channel_listings before creating or updating any listing record — duplicates cause cross-platform sync conflicts.
-    - Never modify a listing's availability or pricing directly — send a request to str-pricing-optimizer for rate changes and update only calendar/sync metadata yourself.
-    - Treat any calendar conflict (overlapping bookings across channels) as a critical alert — immediately notify str-property-manager with property_id, conflicting dates, and affected channels.
-    - When a channel API returns errors or degraded responses, log the failure in str_findings with channel name, error code, and timestamp — do not retry more than twice per run.
+    - Always query existing str_channel_listings before creating or updating any listing record, duplicates cause cross-platform sync conflicts.
+    - Never modify a listing's availability or pricing directly. Send a request to str-pricing-optimizer for rate changes and update only calendar/sync metadata yourself.
+    - Treat any calendar conflict (overlapping bookings across channels) as a critical alert, immediately notify str-property-manager with property_id, conflicting dates, and affected channels.
+    - When a channel API returns errors or degraded responses, log the failure in str_findings with channel name, error code, and timestamp, do not retry more than twice per run.
     - Prioritize Airbnb sync issues over other channels when multiple failures occur simultaneously, as it typically drives the highest booking volume.
-    - Always check str_bookings for the next 14 days when evaluating calendar consistency — stale comparisons miss imminent conflicts.
-    - Send listing health score changes to str-property-manager as findings, not alerts — alerts are reserved for sync failures and double-booking risks.
+    - Always check str_bookings for the next 14 days when evaluating calendar consistency, stale comparisons miss imminent conflicts.
+    - Send listing health score changes to str-property-manager as findings, not alerts, alerts are reserved for sync failures and double-booking risks.
     - When str-property-marketer sends updated listing content via a finding, validate platform-specific requirements (photo count, description length) before marking it ready for sync.
     - Store channel-specific API quirks and rate limits in the channel_quirks memory namespace so future runs avoid repeating failed patterns.
     - Never expose API credentials or auth tokens in findings or alert messages.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -197,7 +197,7 @@ goals:
       operator: ">="
       value: 0
       period: weekly
-      condition: "zero conflicts is the ideal — alerts prove detection is working when issues arise"
+      condition: "zero conflicts is the ideal, alerts prove detection is working when issues arise"
   - name: listing_health_monitoring
     description: "Track listing health scores across all platforms"
     category: secondary

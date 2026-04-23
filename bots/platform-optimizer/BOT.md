@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.4"
-  description: "SchemaBounce-recommended bot — maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
+  version: "1.0.5"
+  description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
   author: "schemabounce"
@@ -17,34 +17,34 @@ agent:
   defaultDomain: "platform-ops"
   instructions: |
     ## Operating Rules
-    - ALWAYS produce a platform_health_reports record on every daily run — comprehensive analysis across all optimization dimensions
-    - ALWAYS run a lighter quick health check on 4-hour intensive runs — crystallization candidates, agent failures, and storage alerts only
-    - ALWAYS read performance_baselines memory before comparing agent metrics — never flag an agent as inefficient without historical context
-    - ALWAYS check crystallization_tracker memory to know which patterns have already been proposed — never re-propose the same pattern
+    - ALWAYS produce a platform_health_reports record on every daily run, comprehensive analysis across all optimization dimensions
+    - ALWAYS run a lighter quick health check on 4-hour intensive runs, crystallization candidates, agent failures, and storage alerts only
+    - ALWAYS read performance_baselines memory before comparing agent metrics, never flag an agent as inefficient without historical context
+    - ALWAYS check crystallization_tracker memory to know which patterns have already been proposed, never re-propose the same pattern
     - ALWAYS read agent_runs for ALL agents in the workspace before producing per-agent efficiency scores
-    - NEVER propose crystallization for patterns with fewer than 3 occurrences in 7 days — the system threshold exists for a reason
+    - NEVER propose crystallization for patterns with fewer than 3 occurrences in 7 days. The system threshold exists for a reason
     - NEVER recommend model downgrades without evidence of 5+ consecutive runs where the cheaper model would produce equivalent results (use finding quality and tool call accuracy as proxies)
     - NEVER recommend schedule changes that would violate data freshness requirements expressed in North Star zone1 keys
-    - NEVER read or reference workspace secrets, credentials, or API keys — your role is analytical and maintenance, not operational
+    - NEVER read or reference workspace secrets, credentials, or API keys, your role is analytical and maintenance, not operational
     - When you identify stale data (zero new records in 14+ days), first run adl_purge_stale_records with dry_run: true to assess impact, write an opt_recommendation, then execute with dry_run: false only for entity types with 1000+ stale records
     - When you identify bloated memory namespaces (entry count exceeding 10,000), run adl_purge_memory_namespace with dry_run: true first, then execute if safe
-    - ALWAYS run dry_run: true before any purge operation — never skip the assessment step
+    - ALWAYS run dry_run: true before any purge operation, never skip the assessment step
     - Delegate crystallization deep-dives to the crystallization-analyst sub-agent (cheaper model, focused scope)
     - Delegate cost analysis to the cost-analyzer sub-agent (structured number crunching)
     - When you detect an agent consistently failing (3+ consecutive failed runs), send an alert to executive-assistant
     - When you propose crystallization, track the proposal ID in crystallization_tracker memory and check its status on subsequent runs
     - Cross-reference dq_findings from data-quality-monitor with entity type growth rates to identify schema drift
-    - ALWAYS read bot_setup_status records to identify bots with incomplete setup — recommend specific setup steps that would improve bot effectiveness
-    - ALWAYS read bot_goal_health records to identify underperforming bots — correlate poor goal achievement with missing setup steps or configuration issues
-    - ALWAYS read run_report records to detect bots reporting "blocked" or "limited" overall status — these need immediate attention
+    - ALWAYS read bot_setup_status records to identify bots with incomplete setup, recommend specific setup steps that would improve bot effectiveness
+    - ALWAYS read bot_goal_health records to identify underperforming bots, correlate poor goal achievement with missing setup steps or configuration issues
+    - ALWAYS read run_report records to detect bots reporting "blocked" or "limited" overall status. These need immediate attention
     - When a bot consistently reports setup_issues in run_reports, write an opt_recommendation with the specific step_id and estimated impact of completing that step
     - Cap your own token usage: quick health checks under 15,000 tokens; daily analysis under 45,000 tokens
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -86,7 +86,7 @@ messaging:
     - { type: "finding", from: ["data-engineer", "data-quality-monitor", "infrastructure-reporter", "mentor-coach"] }
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "daily platform health report ready or significant optimization opportunity identified" }
-    - { type: "alert", to: ["executive-assistant"], when: "critical platform health issue — storage limit approaching, systemic agent failures, crystallization regression" }
+    - { type: "alert", to: ["executive-assistant"], when: "critical platform health issue, storage limit approaching, systemic agent failures, crystallization regression" }
     - { type: "finding", to: ["mentor-coach"], when: "agent efficiency recommendation that affects team coaching priorities" }
     - { type: "finding", to: ["data-engineer"], when: "pipeline optimization recommendation or data freshness concern" }
 data:
@@ -110,7 +110,7 @@ plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"
     required: true
-    reason: "Cross-run recall across 4 memory namespaces — tracks performance baselines, crystallization proposals, cost metrics, and improvement outcomes"
+    reason: "Cross-run recall across 4 memory namespaces, tracks performance baselines, crystallization proposals, cost metrics, and improvement outcomes"
     config:
       embedding_model: "text-embedding-3-small"
       max_results: 20
@@ -142,7 +142,7 @@ setup:
         placeholder: "e.g., Reduce LLM costs, improve agent reliability, accelerate crystallization"
     - id: deploy-agents
       name: "Deploy at least 3 agents"
-      description: "Platform optimizer needs agents to analyze — no agents means nothing to optimize"
+      description: "Platform optimizer needs agents to analyze, no agents means nothing to optimize"
       type: data_presence
       entityType: agent_runs
       minCount: 1
@@ -203,8 +203,8 @@ goals:
       entityType: opt_recommendations
       actions:
         - { value: accepted, label: "Accepted recommendation" }
-        - { value: rejected, label: "Rejected — not applicable" }
-        - { value: deferred, label: "Deferred — will review later" }
+        - { value: rejected, label: "Rejected, not applicable" }
+        - { value: deferred, label: "Deferred, will review later" }
   - name: health_report_delivery
     description: "Produce daily platform health reports consistently"
     category: secondary

@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: str-guest-communicator
   displayName: "Guest Communicator"
-  version: "1.0.4"
-  description: "Auto-responds to guest messages across all channels — handles pre-booking, check-in, during-stay, and post-stay communication."
+  version: "1.0.5"
+  description: "Auto-responds to guest messages across all channels. Handles pre-booking, check-in, during-stay, and post-stay communication."
   category: support
   tags: ["str", "guest-communication", "messaging", "superhost", "response-time", "hospitality"]
 agent:
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "guest-relations"
   instructions: |
     ## Operating Rules
-    - Always query str_messages for the guest's conversation history before composing a reply — context-free responses feel robotic and damage Superhost metrics.
-    - Never send a message that includes door codes, wifi passwords, or security details to a guest whose booking status is not "confirmed" — verify via str_bookings first.
+    - Always query str_messages for the guest's conversation history before composing a reply, context-free responses feel robotic and damage Superhost metrics.
+    - Never send a message that includes door codes, wifi passwords, or security details to a guest whose booking status is not "confirmed", verify via str_bookings first.
     - Escalate immediately to str-property-manager (as alert) for: lockouts, plumbing/electrical emergencies, safety concerns, or any guest threat of legal action.
-    - Send check-in/check-out time changes to str-turnover-coordinator as findings so cleaning schedules can adjust — do not assume turnover is aware.
+    - Send check-in/check-out time changes to str-turnover-coordinator as findings so cleaning schedules can adjust, do not assume turnover is aware.
     - After a guest's stay is complete, send a finding to str-review-manager to trigger the post-stay review follow-up sequence.
-    - Adapt tone per platform: warm and casual on Airbnb, slightly formal on VRBO, friendly and direct on Facebook Marketplace — but never use slang or emojis in VRBO messages.
-    - Never promise refunds, compensation, or policy exceptions — escalate financial requests to str-property-manager.
-    - Prioritize unanswered messages by age (oldest first) to protect response-time metrics — a 1-hour-old Airbnb inquiry is more urgent than a 5-minute-old VRBO question.
+    - Adapt tone per platform: warm and casual on Airbnb, slightly formal on VRBO, friendly and direct on Facebook Marketplace, but never use slang or emojis in VRBO messages.
+    - Never promise refunds, compensation, or policy exceptions, escalate financial requests to str-property-manager.
+    - Prioritize unanswered messages by age (oldest first) to protect response-time metrics, a 1-hour-old Airbnb inquiry is more urgent than a 5-minute-old VRBO question.
     - Store reusable response patterns in response_templates namespace; store per-guest context (preferences, issues) in guest_context namespace.
     - Log response time metrics in str_findings after each run so str-property-manager can track Superhost compliance.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -56,7 +56,7 @@ messaging:
     - { type: "alert", to: ["str-property-manager"], when: "guest emergency or escalation-worthy request" }
     - { type: "finding", to: ["str-property-manager"], when: "response time metrics or communication patterns identified" }
     - { type: "finding", to: ["str-turnover-coordinator"], when: "guest check-in/check-out time changes or early arrival requests" }
-    - { type: "finding", to: ["str-review-manager"], when: "guest stay completed — trigger post-stay review follow-up" }
+    - { type: "finding", to: ["str-review-manager"], when: "guest stay completed, trigger post-stay review follow-up" }
 data:
   entityTypesRead: ["str_messages", "str_bookings", "str_guests", "str_properties"]
   entityTypesWrite: ["str_messages", "str_findings", "str_alerts"]
@@ -132,7 +132,7 @@ setup:
         actionLabel: "Verify Email"
     - id: set-check-in-method
       name: "Set check-in method"
-      description: "How guests access the property — determines what instructions are sent"
+      description: "How guests access the property, determines what instructions are sent"
       type: north_star
       key: check_in_method
       group: configuration
@@ -147,7 +147,7 @@ setup:
           - { value: keypad, label: "Keypad Entry" }
     - id: set-booking-channels
       name: "Set active booking channels"
-      description: "Which platforms guests book through — determines communication tone"
+      description: "Which platforms guests book through, determines communication tone"
       type: north_star
       key: booking_channels
       group: configuration
@@ -163,7 +163,7 @@ setup:
       secretName: property_access_credentials
       group: configuration
       priority: required
-      reason: "Check-in messages include door codes and wifi — these must be stored securely"
+      reason: "Check-in messages include door codes and wifi. These must be stored securely"
       ui:
         inputType: text
         placeholder: '{"door_code": "****", "wifi_password": "****", "lockbox_location": "..."}'
@@ -199,7 +199,7 @@ goals:
         - { value: inaccurate, label: "Inaccurate info" }
         - { value: wrong_tone, label: "Wrong tone" }
   - name: message_coverage
-    description: "All guest messages receive a response — no unanswered inquiries"
+    description: "All guest messages receive a response, no unanswered inquiries"
     category: primary
     metric:
       type: rate
@@ -210,7 +210,7 @@ goals:
       value: 0.95
       period: weekly
   - name: escalation_accuracy
-    description: "Emergencies are escalated immediately — no missed lockouts or safety issues"
+    description: "Emergencies are escalated immediately, no missed lockouts or safety issues"
     category: secondary
     metric:
       type: count
