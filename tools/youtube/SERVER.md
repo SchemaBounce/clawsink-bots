@@ -5,7 +5,7 @@ metadata:
   name: youtube
   displayName: "YouTube"
   version: "1.0.0"
-  description: "YouTube Data API — videos, channels, playlists, and analytics"
+  description: "YouTube Data API, videos, channels, playlists, and analytics"
   tags: ["youtube", "video", "google", "content"]
   author: "schemabounce"
   license: "MIT"

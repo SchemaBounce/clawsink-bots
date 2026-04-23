@@ -5,7 +5,7 @@ metadata:
   name: supabase
   displayName: "Supabase"
   version: "1.0.0"
-  description: "Supabase — database, auth, storage, and edge functions"
+  description: "Supabase, database, auth, storage, and edge functions"
   tags: ["supabase", "database", "auth", "storage", "postgres"]
   author: "schemabounce"
   license: "MIT"

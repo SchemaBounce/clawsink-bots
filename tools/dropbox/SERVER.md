@@ -5,7 +5,7 @@ metadata:
   name: dropbox
   displayName: "Dropbox"
   version: "1.0.0"
-  description: "Dropbox file storage — files, folders, sharing, and search"
+  description: "Dropbox file storage, files, folders, sharing, and search"
   tags: ["dropbox", "storage", "files", "cloud-storage"]
   author: "schemabounce"
   license: "MIT"

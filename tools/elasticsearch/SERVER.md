@@ -5,7 +5,7 @@ metadata:
   name: elasticsearch
   displayName: "Elasticsearch"
   version: "1.0.0"
-  description: "Elasticsearch search and analytics — queries, indices, and aggregations"
+  description: "Elasticsearch search and analytics, queries, indices, and aggregations"
   tags: ["elasticsearch", "search", "analytics", "logging"]
   author: "schemabounce"
   license: "MIT"

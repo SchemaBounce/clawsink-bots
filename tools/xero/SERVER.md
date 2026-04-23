@@ -5,7 +5,7 @@ metadata:
   name: xero
   displayName: "Xero"
   version: "1.0.0"
-  description: "Xero accounting — invoices, contacts, bank transactions, and reports"
+  description: "Xero accounting, invoices, contacts, bank transactions, and reports"
   tags: ["xero", "accounting", "invoices", "finance", "bookkeeping"]
   author: "schemabounce"
   license: "MIT"

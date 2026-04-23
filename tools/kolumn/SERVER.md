@@ -5,7 +5,7 @@ metadata:
   name: kolumn
   displayName: "Kolumn"
   version: "1.1.0"
-  description: "Kolumn IaC — schema patterns, HCL generation, validation, and documentation"
+  description: "Kolumn IaC, schema patterns, HCL generation, validation, and documentation"
   tags: ["kolumn", "iac", "schema", "hcl", "migration", "infrastructure-as-code"]
   author: "schemabounce"
   license: "MIT"
@@ -21,7 +21,7 @@ tools:
     description: "Get Kolumn HCL patterns for common schema operations"
     category: patterns
   - name: kolumn_schema
-    description: "Query Kolumn schema reference — column types, policies, provider features"
+    description: "Query Kolumn schema reference, column types, policies, provider features"
     category: reference
   - name: kolumn_validate
     description: "Validate Kolumn HCL configuration for correctness"

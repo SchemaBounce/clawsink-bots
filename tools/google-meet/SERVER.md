@@ -5,7 +5,7 @@ metadata:
   name: google-meet
   displayName: "Google Meet"
   version: "1.0.0"
-  description: "Google Meet video conferencing — create meetings and manage participants"
+  description: "Google Meet video conferencing, create meetings and manage participants"
   tags: ["google", "meet", "video", "conferencing"]
   author: "schemabounce"
   license: "MIT"

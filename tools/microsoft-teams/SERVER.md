@@ -5,7 +5,7 @@ metadata:
   name: microsoft-teams
   displayName: "Microsoft Teams"
   version: "1.0.0"
-  description: "Microsoft Teams — messages, channels, and meetings"
+  description: "Microsoft Teams, messages, channels, and meetings"
   tags: ["microsoft", "teams", "chat", "meetings", "enterprise"]
   author: "schemabounce"
   license: "MIT"

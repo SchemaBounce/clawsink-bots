@@ -5,7 +5,7 @@ metadata:
   name: twitter
   displayName: "Twitter / X"
   version: "1.0.0"
-  description: "Twitter/X API — tweets, timelines, users, and search"
+  description: "Twitter/X API, tweets, timelines, users, and search"
   tags: ["twitter", "x", "social", "tweets"]
   author: "schemabounce"
   license: "MIT"

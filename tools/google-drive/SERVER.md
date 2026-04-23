@@ -5,7 +5,7 @@ metadata:
   name: google-drive
   displayName: "Google Drive"
   version: "1.0.0"
-  description: "Google Drive file management — read, search, and organize files and folders"
+  description: "Google Drive file management. Read, search, and organize files and folders"
   tags: ["google", "drive", "storage", "files", "documents"]
   author: "schemabounce"
   license: "MIT"

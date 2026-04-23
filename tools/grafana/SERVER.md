@@ -5,7 +5,7 @@ metadata:
   name: grafana
   displayName: "Grafana"
   version: "1.0.0"
-  description: "Grafana observability — dashboards, Prometheus queries, and alerting"
+  description: "Grafana observability, dashboards, Prometheus queries, and alerting"
   tags: ["grafana", "dashboards", "prometheus", "monitoring", "alerting"]
   author: "schemabounce"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: discord
   displayName: "Discord"
   version: "1.0.0"
-  description: "Discord bot integration — messages, channels, and server management"
+  description: "Discord bot integration, messages, channels, and server management"
   tags: ["discord", "chat", "community", "messaging"]
   author: "schemabounce"
   license: "MIT"

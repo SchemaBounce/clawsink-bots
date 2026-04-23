@@ -5,7 +5,7 @@ metadata:
   name: telegram
   displayName: "Telegram"
   version: "1.0.0"
-  description: "Telegram bot API — messages, channels, groups, and media"
+  description: "Telegram bot API, messages, channels, groups, and media"
   tags: ["telegram", "messaging", "bot", "chat"]
   author: "schemabounce"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: basecamp
   displayName: "Basecamp"
   version: "1.0.0"
-  description: "Basecamp project management — projects, todos, messages, and schedules"
+  description: "Basecamp project management, projects, todos, messages, and schedules"
   tags: ["basecamp", "project-management", "collaboration", "todos"]
   author: "schemabounce"
   license: "MIT"

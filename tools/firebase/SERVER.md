@@ -5,7 +5,7 @@ metadata:
   name: firebase
   displayName: "Firebase"
   version: "1.0.0"
-  description: "Firebase application monitoring — logs, analytics, Firestore, and auth"
+  description: "Firebase application monitoring, logs, analytics, Firestore, and auth"
   tags: ["firebase", "google", "logs", "analytics", "firestore"]
   author: "schemabounce"
   license: "MIT"

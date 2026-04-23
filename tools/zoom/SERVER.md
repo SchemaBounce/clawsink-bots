@@ -5,7 +5,7 @@ metadata:
   name: zoom
   displayName: "Zoom"
   version: "1.0.0"
-  description: "Zoom video conferencing — meetings, webinars, and recordings"
+  description: "Zoom video conferencing, meetings, webinars, and recordings"
   tags: ["zoom", "video", "conferencing", "meetings", "webinars"]
   author: "schemabounce"
   license: "MIT"

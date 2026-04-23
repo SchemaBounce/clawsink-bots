@@ -5,7 +5,7 @@ metadata:
   name: quickbooks
   displayName: "QuickBooks"
   version: "1.0.0"
-  description: "QuickBooks Online accounting — invoices, payments, expenses, and reports"
+  description: "QuickBooks Online accounting, invoices, payments, expenses, and reports"
   tags: ["quickbooks", "accounting", "invoices", "payments", "finance"]
   author: "schemabounce"
   license: "MIT"

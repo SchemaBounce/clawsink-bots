@@ -5,7 +5,7 @@ metadata:
   name: cal
   displayName: "Cal.com"
   version: "1.0.0"
-  description: "Cal.com scheduling — bookings, availability, and event types"
+  description: "Cal.com scheduling, bookings, availability, and event types"
   tags: ["cal", "scheduling", "calendar", "bookings"]
   author: "schemabounce"
   license: "MIT"

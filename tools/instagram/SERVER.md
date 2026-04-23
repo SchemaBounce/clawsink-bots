@@ -5,7 +5,7 @@ metadata:
   name: instagram
   displayName: "Instagram"
   version: "1.0.0"
-  description: "Instagram Graph API — posts, stories, comments, and insights"
+  description: "Instagram Graph API, posts, stories, comments, and insights"
   tags: ["instagram", "social", "media", "marketing"]
   author: "schemabounce"
   license: "MIT"

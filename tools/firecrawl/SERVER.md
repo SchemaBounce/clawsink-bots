@@ -5,7 +5,7 @@ metadata:
   name: firecrawl
   displayName: "Firecrawl"
   version: "1.0.0"
-  description: "Web crawling and data extraction API for AI agents — no browser required"
+  description: "Web crawling and data extraction API for AI agents, no browser required"
   tags: ["crawling", "scraping", "web", "extraction", "research", "presence"]
   author: "firecrawl"
   license: "MIT"
@@ -25,7 +25,7 @@ tools:
     description: "Process multiple URLs efficiently with parallel handling"
     category: scraping
   - name: firecrawl_interact
-    description: "Browser automation — click, type, navigate on scraped pages"
+    description: "Browser automation, click, type, navigate on scraped pages"
     category: automation
   - name: firecrawl_map
     description: "Discover all URLs within a website for site mapping"

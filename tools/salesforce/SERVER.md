@@ -5,7 +5,7 @@ metadata:
   name: salesforce
   displayName: "Salesforce"
   version: "1.0.0"
-  description: "Salesforce CRM — accounts, contacts, opportunities, and cases"
+  description: "Salesforce CRM, accounts, contacts, opportunities, and cases"
   tags: ["salesforce", "crm", "sales", "leads", "opportunities"]
   author: "schemabounce"
   license: "MIT"

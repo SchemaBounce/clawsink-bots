@@ -5,7 +5,7 @@ metadata:
   name: azure
   displayName: "Microsoft Azure"
   version: "1.0.0"
-  description: "Azure cloud management — VMs, storage, databases, and App Service"
+  description: "Azure cloud management, VMs, storage, databases, and App Service"
   tags: ["azure", "microsoft", "cloud", "infrastructure"]
   author: "schemabounce"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: docker
   displayName: "Docker"
   version: "1.0.0"
-  description: "Docker container management — images, containers, and registries"
+  description: "Docker container management, images, containers, and registries"
   tags: ["docker", "containers", "images", "devops"]
   author: "schemabounce"
   license: "MIT"

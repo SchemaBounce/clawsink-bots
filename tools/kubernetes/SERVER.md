@@ -5,7 +5,7 @@ metadata:
   name: kubernetes
   displayName: "Kubernetes"
   version: "1.0.0"
-  description: "Kubernetes cluster management — pods, services, deployments, and logs"
+  description: "Kubernetes cluster management, pods, services, deployments, and logs"
   tags: ["kubernetes", "k8s", "containers", "orchestration", "devops"]
   author: "schemabounce"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: argocd
   displayName: "Argo CD"
   version: "1.0.0"
-  description: "Argo CD GitOps — applications, sync, resources, logs, and events"
+  description: "Argo CD GitOps, applications, sync, resources, logs, and events"
   tags: ["argocd", "gitops", "kubernetes", "cd", "deployment"]
   author: "schemabounce"
   license: "MIT"

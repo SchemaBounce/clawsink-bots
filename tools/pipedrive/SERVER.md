@@ -5,7 +5,7 @@ metadata:
   name: pipedrive
   displayName: "Pipedrive"
   version: "1.0.0"
-  description: "Pipedrive CRM — deals, contacts, activities, and sales pipeline"
+  description: "Pipedrive CRM, deals, contacts, activities, and sales pipeline"
   tags: ["pipedrive", "crm", "sales", "deals", "pipeline"]
   author: "schemabounce"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: terraform
   displayName: "Terraform"
   version: "1.0.0"
-  description: "Terraform infrastructure as code — plan, apply, and state management"
+  description: "Terraform infrastructure as code, plan, apply, and state management"
   tags: ["terraform", "iac", "infrastructure", "hashicorp", "devops"]
   author: "schemabounce"
   license: "MIT"

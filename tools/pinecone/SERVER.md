@@ -5,7 +5,7 @@ metadata:
   name: pinecone
   displayName: "Pinecone"
   version: "1.0.0"
-  description: "Pinecone vector database — indexes, upsert, query, and namespaces"
+  description: "Pinecone vector database, indexes, upsert, query, and namespaces"
   tags: ["pinecone", "vector", "embeddings", "ai", "search"]
   author: "schemabounce"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: agentphone
   displayName: "AgentPhone"
   version: "1.0.0"
-  description: "Phone and SMS for AI agents — provision numbers, send texts, make calls"
+  description: "Phone and SMS for AI agents, provision numbers, send texts, make calls"
   tags: ["phone", "sms", "voice", "calls", "presence", "communication"]
   author: "agentphone"
   license: "MIT"
@@ -19,7 +19,7 @@ env:
     required: true
 tools:
   - name: account_overview
-    description: "Full snapshot of account — agents, numbers, webhook, usage"
+    description: "Full snapshot of account, agents, numbers, webhook, usage"
     category: account
   - name: get_usage
     description: "Detailed usage stats: plan limits, number quotas, message/call volume"
@@ -55,7 +55,7 @@ tools:
     description: "Place an outbound call using webhook for conversation"
     category: calls
   - name: make_conversation_call
-    description: "Place a call with built-in AI conversation — no webhook needed"
+    description: "Place a call with built-in AI conversation, no webhook needed"
     category: calls
   - name: list_agents
     description: "List all phone agents with numbers and voice config"

@@ -5,7 +5,7 @@ metadata:
   name: n8n
   displayName: "n8n"
   version: "1.0.0"
-  description: "n8n workflow automation — workflows, executions, and credentials"
+  description: "n8n workflow automation, workflows, executions, and credentials"
   tags: ["n8n", "automation", "workflow", "self-hosted"]
   author: "schemabounce"
   license: "MIT"

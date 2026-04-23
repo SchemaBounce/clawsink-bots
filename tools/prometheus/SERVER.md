@@ -5,7 +5,7 @@ metadata:
   name: prometheus
   displayName: "Prometheus"
   version: "1.0.0"
-  description: "Prometheus metrics — PromQL queries, alerts, and targets"
+  description: "Prometheus metrics, PromQL queries, alerts, and targets"
   tags: ["prometheus", "metrics", "promql", "monitoring"]
   author: "schemabounce"
   license: "MIT"

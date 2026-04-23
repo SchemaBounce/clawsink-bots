@@ -5,7 +5,7 @@ metadata:
   name: aws-cloudwatch
   displayName: "AWS CloudWatch"
   version: "1.0.0"
-  description: "AWS CloudWatch — logs, metrics, alarms, and dashboards"
+  description: "AWS CloudWatch, logs, metrics, alarms, and dashboards"
   tags: ["aws", "cloudwatch", "monitoring", "logs", "metrics", "alarms"]
   author: "schemabounce"
   license: "MIT"

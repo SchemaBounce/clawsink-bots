@@ -5,7 +5,7 @@ metadata:
   name: sentry
   displayName: "Sentry"
   version: "1.0.0"
-  description: "Sentry error tracking — issues, events, releases, and performance"
+  description: "Sentry error tracking, issues, events, releases, and performance"
   tags: ["sentry", "errors", "monitoring", "debugging", "performance"]
   author: "schemabounce"
   license: "MIT"
