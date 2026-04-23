@@ -5,7 +5,7 @@ metadata:
   name: healthcare-practice
   displayName: "Healthcare Practice"
   version: "1.0.0"
-  description: "AI operations team for medical practices and clinics — manages patient relations, regulatory compliance, billing reconciliation, and staff coordination"
+  description: "AI operations team for medical practices and clinics. Manages patient relations, regulatory compliance, billing reconciliation, and staff coordination."
   category: healthcare
   tags: ["healthcare", "medical", "practice", "compliance", "hipaa", "starter"]
   author: "schemabounce"

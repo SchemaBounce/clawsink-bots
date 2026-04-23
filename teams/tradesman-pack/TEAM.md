@@ -5,7 +5,7 @@ metadata:
   name: tradesman-pack
   displayName: "Tradesman Pack"
   version: "1.0.0"
-  description: "Complete AI team for construction and trades businesses — project management, estimating, scheduling, safety compliance, and client communications"
+  description: "Complete AI team for construction and trades businesses. Project management, estimating, scheduling, safety compliance, and client communications."
   category: trades
   tags: ["construction", "trades", "small-business", "project-management"]
   author: "schemabounce"

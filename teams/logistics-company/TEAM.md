@@ -5,7 +5,7 @@ metadata:
   name: logistics-company
   displayName: "Logistics Company"
   version: "1.0.0"
-  description: "AI operations team for logistics, warehousing, and 3PL — manages shipment tracking, inventory across locations, order fulfillment SLAs, and cost-per-order optimization"
+  description: "AI operations team for logistics, warehousing, and 3PL. Manages shipment tracking, inventory across locations, order fulfillment SLAs, and cost-per-order optimization."
   category: logistics
   tags: ["logistics", "shipping", "warehousing", "fulfillment", "supply-chain", "starter"]
   author: "schemabounce"

@@ -5,7 +5,7 @@ metadata:
   name: restaurant-group
   displayName: "Restaurant Group"
   version: "1.0.0"
-  description: "AI operations team for restaurants and food service — manages food costs, perishable inventory, customer relations, and local marketing"
+  description: "AI operations team for restaurants and food service. Manages food costs, perishable inventory, customer relations, and local marketing."
   category: hospitality
   tags: ["restaurant", "hospitality", "food-service", "inventory", "starter"]
   author: "schemabounce"
@@ -35,7 +35,7 @@ dataKits:
     installSampleData: false
 northStar:
   industry: "Restaurant / Food Service"
-  context: "Restaurant owners or small chains managing daily operations — food costs, inventory waste, customer complaints, and local marketing"
+  context: "Restaurant owners or small chains managing daily operations: food costs, inventory waste, customer complaints, and local marketing"
   requiredKeys:
     - cuisine_type
     - locations
@@ -47,14 +47,14 @@ orgChart:
   lead: executive-assistant
   domains:
     - name: "Front of House"
-      description: "Guest-facing operations — reservations, complaints, host stand"
+      description: "Guest-facing operations: reservations, complaints, host stand"
       head: executive-assistant
       children:
         - name: "Customer Support"
           description: "Reservation issues, review-site complaints, guest feedback triage"
           head: customer-support
     - name: "Kitchen"
-      description: "Back-of-house ops — prep, pars, supplier coordination"
+      description: "Back-of-house ops: prep, pars, supplier coordination"
       head: inventory-manager
       children:
         - name: "Inventory"

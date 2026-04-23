@@ -5,7 +5,7 @@ metadata:
   name: lead-researcher
   displayName: "Lead Researcher"
   version: "1.0.0"
-  description: "Single-agent team for B2B lead research — researches leads, surfaces company news signals, and writes AI-generated research briefs to personalize outreach."
+  description: "Single-agent team for B2B lead research. Researches leads, surfaces company news signals, and writes AI-generated research briefs to personalize outreach."
   category: sales
   tags: ["sales", "leads", "research", "crm", "outreach", "b2b", "prospecting", "starter"]
   author: "schemabounce"
@@ -23,7 +23,7 @@ dataKits:
     installSampleData: true
 northStar:
   industry: "B2B Sales"
-  context: "Teams that need to research leads before outreach — enriches CRM contacts with company intelligence, news signals, and AI-generated research briefs"
+  context: "Teams that need to research leads before outreach. Enriches CRM contacts with company intelligence, news signals, and AI-generated research briefs."
   requiredKeys:
     - mission
     - icp

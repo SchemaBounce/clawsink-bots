@@ -45,7 +45,7 @@ orgChart:
   lead: executive-assistant
   domains:
     - name: "Member Experience"
-      description: "Everything the member sees — bookings, support, retention"
+      description: "Everything the member sees: bookings, support, retention"
       head: executive-assistant
       children:
         - name: "Support"

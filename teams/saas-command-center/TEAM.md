@@ -5,7 +5,7 @@ metadata:
   name: saas-command-center
   displayName: "SaaS Command Center"
   version: "1.0.0"
-  description: "Run your entire SaaS company at scale — 19 bots covering engineering, product, growth, revenue, customer success, and platform optimization under unified coordination"
+  description: "Run your entire SaaS company at scale. 19 bots covering engineering, product, growth, revenue, customer success, and platform optimization under unified coordination."
   category: saas
   tags: ["saas", "scale", "full-stack", "engineering", "growth", "revenue", "product", "customer-success", "flagship"]
   author: "schemabounce"
@@ -90,7 +90,7 @@ dataKits:
     installSampleData: false
 northStar:
   industry: "B2B SaaS"
-  context: "SaaS companies needing comprehensive operational coverage across engineering, product, growth, revenue, and customer success — the full command center for running a software business"
+  context: "SaaS companies needing comprehensive operational coverage across engineering, product, growth, revenue, and customer success. The full command center for running a software business."
   requiredKeys:
     - mission
     - industry
@@ -123,7 +123,7 @@ orgChart:
           description: "Cost, performance, and infrastructure optimization"
           head: platform-optimizer
     - name: "Growth & Revenue"
-      description: "Top-of-funnel through expansion — marketing, sales, retention"
+      description: "Top-of-funnel through expansion: marketing, sales, retention"
       head: marketing-growth
       children:
         - name: "Growth"

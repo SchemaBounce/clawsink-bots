@@ -48,7 +48,7 @@ orgChart:
           description: "Dynamic pricing, promo windows, margin guardrails"
           head: price-optimizer
     - name: "Customer Ops"
-      description: "Post-purchase experience — tracking, delivery, support handoffs"
+      description: "Post-purchase experience: tracking, delivery, support handoffs"
       head: shipping-tracker
   roles:
     - bot: order-fulfillment

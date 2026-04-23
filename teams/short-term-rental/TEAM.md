@@ -5,7 +5,7 @@ metadata:
   name: short-term-rental
   displayName: "Short-Term Rental Operations"
   version: "1.0.0"
-  description: "Full-stack AI operations for vacation rental portfolios — multi-channel management, guest communication, dynamic pricing, and property marketing across Airbnb, VRBO, Lodgify, and Facebook Marketplace"
+  description: "Full-stack AI operations for vacation rental portfolios. Multi-channel management, guest communication, dynamic pricing, and property marketing across Airbnb, VRBO, Lodgify, and Facebook Marketplace."
   category: hospitality
   tags: ["airbnb", "vrbo", "lodgify", "vacation-rental", "str", "property-management", "hospitality", "flagship"]
   author: "schemabounce"
@@ -36,7 +36,7 @@ dataKits:
     installSampleData: false
 northStar:
   industry: "Short-Term Rental / Vacation Property"
-  context: "Property managers and hosts managing vacation rentals across multiple platforms — from single-property Airbnb hosts to 50+ property portfolio managers"
+  context: "Property managers and hosts managing vacation rentals across multiple platforms, from single-property Airbnb hosts to 50+ property portfolio managers"
   requiredKeys:
     - property_count
     - primary_channel
