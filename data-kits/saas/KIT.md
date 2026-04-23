@@ -5,7 +5,7 @@ metadata:
   name: saas
   displayName: SaaS Operations
   version: "2.0.0"
-  description: "B2B SaaS operations data — accounts, subscriptions, feature usage, onboarding, NPS, incidents, deployments, content, sales pipeline, support, community, revenue metrics, feature requests, and market landscape"
+  description: "B2B SaaS operations data, accounts, subscriptions, feature usage, onboarding, NPS, incidents, deployments, content, sales pipeline, support, community, revenue metrics, feature requests, and market landscape"
   category: industry
   tags:
     - saas

@@ -5,7 +5,7 @@ metadata:
   name: education
   displayName: Education Academy
   version: "1.0.0"
-  description: "Online training academy data — students, courses, enrollments, instructors, and assessments"
+  description: "Online training academy data, students, courses, enrollments, instructors, and assessments"
   category: industry
   tags:
     - education
