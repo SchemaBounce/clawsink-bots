@@ -5,7 +5,7 @@ metadata:
   name: workflow-ops
   displayName: "Workflow Operations"
   version: "1.0.0"
-  description: "Inspect, troubleshoot, and fix deployed workflows — diagnose failures, update nodes, redeploy"
+  description: "Inspect, troubleshoot, and fix deployed workflows, diagnose failures, update nodes, redeploy"
   tags: ["platform", "workflow", "operations", "troubleshooting"]
   author: "schemabounce"
   license: "MIT"
@@ -17,7 +17,7 @@ data:
 ---
 # Workflow Operations
 
-Inspect, troubleshoot, and fix existing workflows. Complements the `workflow-designer` skill which creates NEW workflows — this skill manages workflows that are already deployed.
+Inspect, troubleshoot, and fix existing workflows. Complements the `workflow-designer` skill which creates NEW workflows. This skill manages workflows that are already deployed.
 
 ## When to Use
 

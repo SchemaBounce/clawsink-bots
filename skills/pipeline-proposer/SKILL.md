@@ -5,7 +5,7 @@ metadata:
   name: pipeline-proposer
   displayName: "Pipeline Proposer"
   version: "1.0.0"
-  description: "Propose new data pipeline routes for CDC, webhook, and SaaS data ingestion — requires human approval before activation."
+  description: "Propose new data pipeline routes for CDC, webhook, and SaaS data ingestion, requires human approval before activation."
   tags: ["pipelines", "data-ingestion", "cdc", "proposals"]
   author: "schemabounce"
   license: "MIT"
@@ -17,7 +17,7 @@ data:
 ---
 # Pipeline Proposer
 
-Enables agents to propose new data pipeline routes when they identify missing data flows. Proposals go through human approval before activation — agents cannot create pipelines directly.
+Enables agents to propose new data pipeline routes when they identify missing data flows. Proposals go through human approval before activation, agents cannot create pipelines directly.
 
 ## When to Use
 
