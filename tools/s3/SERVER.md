@@ -5,7 +5,7 @@ metadata:
   name: s3
   displayName: "Amazon S3"
   version: "1.0.0"
-  description: "AWS S3 — buckets, objects, presigned URLs, and storage management"
+  description: "AWS S3, buckets, objects, presigned URLs, and storage management"
   tags: ["s3", "aws", "storage", "objects", "cloud"]
   author: "schemabounce"
   license: "MIT"

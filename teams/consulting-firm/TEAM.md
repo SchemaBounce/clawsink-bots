@@ -5,7 +5,7 @@ metadata:
   name: consulting-firm
   displayName: "Consulting Firm"
   version: "1.0.0"
-  description: "AI team for consulting and advisory firms — manages billable utilization, client engagements, knowledge capture, and team development"
+  description: "AI team for consulting and advisory firms. Manages billable utilization, client engagements, knowledge capture, and team development."
   category: professional-services
   tags: ["consulting", "professional-services", "advisory", "analytics", "starter"]
   author: "schemabounce"

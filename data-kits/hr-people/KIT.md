@@ -5,7 +5,7 @@ metadata:
   name: hr-people
   displayName: HR & People
   version: "1.0.0"
-  description: "People operations data — employees, onboarding, leave requests, performance reviews, and company policies"
+  description: "People operations data, employees, onboarding, leave requests, performance reviews, and company policies"
   category: horizontal
   tags:
     - hr

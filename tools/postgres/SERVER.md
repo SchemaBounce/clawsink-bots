@@ -5,7 +5,7 @@ metadata:
   name: postgres
   displayName: "PostgreSQL"
   version: "1.0.0"
-  description: "PostgreSQL database — queries, schema inspection, and data exploration"
+  description: "PostgreSQL database, queries, schema inspection, and data exploration"
   tags: ["postgres", "postgresql", "database", "sql"]
   author: "schemabounce"
   license: "MIT"

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -14,24 +14,24 @@ agent:
   defaultDomain: "engineering"
   instructions: |
     ## Operating Rules
-    - ALWAYS read North Star keys `repository_config` and `architecture_principles` before planning any implementation — branch names, test commands, and design constraints are workspace-specific.
-    - ALWAYS produce a structured implementation plan before spawning any code session — the plan must include file changes, risk assessment, and test strategy.
-    - ALWAYS run tests in the code session before creating a PR — never create a PR with failing tests.
-    - NEVER merge PRs — this bot creates PRs for human and code-reviewer review only.
-    - NEVER modify files outside the scope of the implementation plan — if scope creep is needed, update the plan first and record the rationale.
-    - For high-risk implementations, alert executive-assistant with plan details and STOP — do not proceed until approval is received.
-    - Route completed PRs to code-reviewer for review — include the implementation plan ID and linked issues in the PR description.
+    - ALWAYS read North Star keys `repository_config` and `architecture_principles` before planning any implementation, branch names, test commands, and design constraints are workspace-specific.
+    - ALWAYS produce a structured implementation plan before spawning any code session. The plan must include file changes, risk assessment, and test strategy.
+    - ALWAYS run tests in the code session before creating a PR, never create a PR with failing tests.
+    - NEVER merge PRs. This bot creates PRs for human and code-reviewer review only.
+    - NEVER modify files outside the scope of the implementation plan, if scope creep is needed, update the plan first and record the rationale.
+    - For high-risk implementations, alert executive-assistant with plan details and STOP, do not proceed until approval is received.
+    - Route completed PRs to code-reviewer for review, include the implementation plan ID and linked issues in the PR description.
     - Notify documentation-writer when an implementation changes APIs, interfaces, or user-facing behavior.
     - Notify release-manager when an implementation is complete and the PR is merged.
     - When receiving findings from bug-triage or tech-debt-tracker, check `codebase_map` memory to identify affected modules before planning.
-    - Store architecture decisions in `architecture_patterns` memory — reference prior decisions to maintain consistency across implementations.
-    - Limit code session retries to 2 attempts — if tests still fail after 2 retries, record the failure and escalate to human review.
+    - Store architecture decisions in `architecture_patterns` memory, reference prior decisions to maintain consistency across implementations.
+    - Limit code session retries to 2 attempts, if tests still fail after 2 retries, record the failure and escalate to human review.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -71,7 +71,7 @@ skills:
 mcpServers:
   - ref: "tools/codex"
     required: false
-    reason: "Intended default sandboxed coding agent for implementation/testing/PR creation. Preview — backend service not yet deployed; marked optional until GA"
+    reason: "Intended default sandboxed coding agent for implementation/testing/PR creation. Preview, backend service not yet deployed; marked optional until GA"
   - ref: "tools/github"
     required: true
     reason: "Creates branches, pull requests, and manages issues"
@@ -105,13 +105,13 @@ setup:
         actionLabel: "Connect GitHub"
         helpUrl: "https://docs.schemabounce.com/integrations/github"
     - id: enable-codex
-      name: "Enable Codex (Preview — coming soon)"
-      description: "Confirms workspace credit balance and provisions the sandboxed Codex service. Preview — the backend service is not yet live; this setup step will succeed once the Codex managed-inference service is deployed."
+      name: "Enable Codex (Preview, coming soon)"
+      description: "Confirms workspace credit balance and provisions the sandboxed Codex service. Preview. The backend service is not yet live; this setup step will succeed once the Codex managed-inference service is deployed."
       type: mcp_connection
       ref: tools/codex
       group: connections
       priority: recommended
-      reason: "Intended default coding agent — will be required once the backend ships; optional until then"
+      reason: "Intended default coding agent, will be required once the backend ships; optional until then"
       ui:
         icon: code
         actionLabel: "Enable Codex"
@@ -123,7 +123,7 @@ setup:
       key: repository_config
       group: configuration
       priority: required
-      reason: "Branch names, test commands, and build steps vary per project — the bot needs these to operate correctly"
+      reason: "Branch names, test commands, and build steps vary per project. The bot needs these to operate correctly"
       ui:
         inputType: text
         placeholder: '{"repo_url": "https://github.com/org/repo", "main_branch": "main", "test_cmd": "npm test", "build_cmd": "npm run build"}'

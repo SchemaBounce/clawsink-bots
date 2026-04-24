@@ -5,7 +5,7 @@ metadata:
   name: redis
   displayName: "Redis"
   version: "1.0.0"
-  description: "Redis key-value store — keys, hashes, lists, sets, and pub/sub"
+  description: "Redis key-value store, keys, hashes, lists, sets, and pub/sub"
   tags: ["redis", "cache", "key-value", "database"]
   author: "schemabounce"
   license: "MIT"

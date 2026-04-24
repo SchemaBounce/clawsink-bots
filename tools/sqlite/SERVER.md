@@ -5,7 +5,7 @@ metadata:
   name: sqlite
   displayName: "SQLite"
   version: "1.0.0"
-  description: "SQLite database — queries, schema inspection, and in-memory databases"
+  description: "SQLite database, queries, schema inspection, and in-memory databases"
   tags: ["sqlite", "database", "sql", "embedded"]
   author: "schemabounce"
   license: "MIT"

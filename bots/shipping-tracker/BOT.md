@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: shipping-tracker
   displayName: "Shipping Tracker"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Monitors shipment status changes and detects delivery issues."
   category: ecommerce
   tags: ["shipping", "logistics", "tracking", "cdc"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "operations"
   instructions: |
     ## Operating Rules
-    - ALWAYS read `carrier_performance` memory before evaluating a shipment event — compare current transit time against carrier historical averages to detect true delays vs. normal variance.
+    - ALWAYS read `carrier_performance` memory before evaluating a shipment event, compare current transit time against carrier historical averages to detect true delays vs. normal variance.
     - ALWAYS read `route_patterns` memory to check if the shipping route has known delay patterns (e.g., customs bottlenecks, regional weather) before classifying an event as exceptional.
-    - NEVER classify a shipment as "delayed" based on a single status update — require either an explicit carrier exception code or transit time exceeding the SLA by >20%.
-    - NEVER send an alert to executive-assistant for individual shipment delays — only systemic carrier failures affecting multiple shipments qualify as critical.
-    - Send delivery status updates to order-fulfillment (finding) for every meaningful state change — delivered, delayed, exception, or returned. Order-fulfillment depends on this for SLA tracking.
+    - NEVER classify a shipment as "delayed" based on a single status update, require either an explicit carrier exception code or transit time exceeding the SLA by >20%.
+    - NEVER send an alert to executive-assistant for individual shipment delays, only systemic carrier failures affecting multiple shipments qualify as critical.
+    - Send delivery status updates to order-fulfillment (finding) for every meaningful state change, delivered, delayed, exception, or returned. Order-fulfillment depends on this for SLA tracking.
     - When order-fulfillment sends a tracking request for a newly shipped order, create the initial tracking record and begin monitoring the shipment lifecycle.
-    - Update `carrier_performance` memory with actual delivery times after every completed shipment — this builds the statistical baseline for delay detection.
+    - Update `carrier_performance` memory with actual delivery times after every completed shipment. This builds the statistical baseline for delay detection.
     - Update `route_patterns` memory when new route-specific patterns emerge (e.g., consistent 2-day delays on a specific corridor).
     - When a delivery exception occurs (damaged, refused, returned), include the exception code and recommended next action in the shipping_alerts record.
-    - Process shipment CDC events promptly — stale tracking data leads to late customer notifications and SLA breaches going undetected.
+    - Process shipment CDC events promptly, stale tracking data leads to late customer notifications and SLA breaches going undetected.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -51,7 +51,7 @@ messaging:
     - { type: "request", from: ["executive-assistant", "order-fulfillment"] }
   sendsTo:
     - { type: "alert", to: ["executive-assistant"], when: "critical issue detected" }
-    - { type: "finding", to: ["order-fulfillment"], when: "delivery status update — delivered, delayed, or exception" }
+    - { type: "finding", to: ["order-fulfillment"], when: "delivery status update, delivered, delayed, or exception" }
 data:
   entityTypesRead: ["shipments", "delivery_slas"]
   entityTypesWrite: ["shipping_alerts", "delivery_predictions"]
@@ -101,7 +101,7 @@ setup:
       minCount: 1
       group: data
       priority: required
-      reason: "Bot needs shipment records to monitor — without them there is nothing to track"
+      reason: "Bot needs shipment records to monitor. Without them there is nothing to track"
       ui:
         actionLabel: "Import Shipments"
         emptyState: "No shipments found. Import via CSV or connect your e-commerce platform."

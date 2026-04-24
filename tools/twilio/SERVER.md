@@ -5,7 +5,7 @@ metadata:
   name: twilio
   displayName: "Twilio"
   version: "1.0.0"
-  description: "Twilio communications — SMS, voice calls, and messaging"
+  description: "Twilio communications. SMS, voice calls, and messaging"
   tags: ["twilio", "sms", "voice", "messaging", "communications"]
   author: "schemabounce"
   license: "MIT"

@@ -17,4 +17,4 @@ data:
 ---
 # Invoice Categorization
 
-Reads uncategorized invoices from ADL, classifies them by vendor, expense category, and payment urgency, then writes categorization results as findings.
+Reads uncategorized invoices from data layer, classifies them by vendor, expense category, and payment urgency, then writes categorization results as findings.

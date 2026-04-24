@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: api-tester
   displayName: "API Tester"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "API endpoint testing, performance benchmarking, and health monitoring."
   category: engineering
   tags: ["api-testing", "performance", "health-monitoring", "regression", "benchmarks"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "engineering"
   instructions: |
     ## Operating Rules
-    - ALWAYS load existing endpoint baselines from `endpoint_baselines` memory before running tests — never compare against hardcoded values.
+    - ALWAYS load existing endpoint baselines from `endpoint_baselines` memory before running tests, never compare against hardcoded values.
     - ALWAYS test both happy-path and error-path (4xx, 5xx, malformed input, missing auth) for every endpoint.
-    - NEVER send real credentials or PII in test payloads — use synthetic test data only.
-    - Route 5xx errors and auth bypass findings to sre-devops immediately — do not wait for the next scheduled run.
+    - NEVER send real credentials or PII in test payloads. Use synthetic test data only.
+    - Route 5xx errors and auth bypass findings to sre-devops immediately, do not wait for the next scheduled run.
     - Route confirmed bug-indicating failures (consistent logic errors, schema violations) to bug-triage for triage.
     - Route sustained endpoint unavailability (3+ consecutive failures) to uptime-manager for status page consideration.
     - When a new endpoint appears in `api_endpoints`, auto-generate baseline test cases and store initial latency benchmarks.
-    - Update `failure_patterns` memory when a previously failing test starts passing — track resolution patterns, not just failures.
-    - On latency regressions, record the percentage increase and the specific P50/P95/P99 values — never report raw numbers without baseline context.
+    - Update `failure_patterns` memory when a previously failing test starts passing, track resolution patterns, not just failures.
+    - On latency regressions, record the percentage increase and the specific P50/P95/P99 values, never report raw numbers without baseline context.
     - Do not re-test endpoints that have been marked as deprecated in the `api_endpoints` entity unless explicitly requested.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -97,7 +97,7 @@ setup:
   steps:
     - id: set-api-base-url
       name: "Set API base URL"
-      description: "The root URL of the API under test — all endpoint paths are relative to this"
+      description: "The root URL of the API under test. All endpoint paths are relative to this"
       type: north_star
       key: api_base_url
       group: configuration
@@ -131,12 +131,12 @@ setup:
         emptyState: "No endpoints found. Import an OpenAPI spec or add endpoints manually."
     - id: set-api-auth
       name: "Configure API authentication"
-      description: "Auth credentials for the API under test — stored securely as a workspace secret"
+      description: "Auth credentials for the API under test, stored securely as a workspace secret"
       type: secret
       secretName: api_test_credentials
       group: configuration
       priority: recommended
-      reason: "Most APIs require authentication — without it, tests only cover public endpoints"
+      reason: "Most APIs require authentication. Without it, tests only cover public endpoints"
       ui:
         inputType: secret
         placeholder: "Bearer token or API key"

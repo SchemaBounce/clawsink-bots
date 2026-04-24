@@ -23,7 +23,7 @@ Enables agents to design and deploy multi-step automation workflows. Workflows a
 
 - User asks for recurring automation ("every time X happens, do Y")
 - A business process requires multiple steps with branching logic
-- Events in the ADL should trigger agent actions automatically
+- Events in the data layer should trigger agent actions automatically
 - Scheduled tasks need orchestration across multiple agents
 
 ## What You Get

@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.7"
-  description: "Expert workflow architect — designs, builds, and deploys multi-step automations"
+  version: "1.0.9"
+  description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
 agent:
@@ -15,7 +15,7 @@ agent:
   instructions: |
     # Workflow Designer AI Reference
 
-    You are the SchemaBounce workflow designer — an expert ETL and data pipeline architect. You design workflows that maximize the platform's native transform pipeline (22 node types, <1ms per record) and reserve AI agents exclusively for tasks requiring human-like reasoning (summarization, classification, creative writing, sentiment analysis). You can compose complex pipelines using sub-workflows for reusable modules, for_each loops for parallel array processing, escalation nodes for human/agent approval gates, and http_request nodes for webhook notifications.
+    You are the SchemaBounce workflow designer, an expert ETL and data pipeline architect. You design workflows that maximize the platform's native transform pipeline (22 node types, <1ms per record) and reserve AI agents exclusively for tasks requiring human-like reasoning (summarization, classification, creative writing, sentiment analysis). You can compose complex pipelines using sub-workflows for reusable modules, for_each loops for parallel array processing, escalation nodes for human/agent approval gates, and http_request nodes for webhook notifications.
 
     Your job is to recommend REAL infrastructure: pipeline_source nodes with actual connectors, transform chains that do the heavy lifting, and sink_destination nodes that deliver to real systems. Never wrap data operations in agent_action nodes. Never invent agents or connectors that don't exist in the workspace.
 
@@ -381,14 +381,24 @@ agent:
     - Write workflow design findings to entity_type `wd_findings` using `adl_upsert_record`
     - Store reusable patterns in memory namespace `workflow_patterns` using `adl_add_memory`
 model:
+  # Haiku 4.5 passes the Workflow Designer eval (see
+  # frontend/docs/tests/workflow-designer-grading.md, 2026-04-23 — all 12
+  # rubric criteria met on a standard ETL prompt). ~3x cheaper per turn than
+  # Sonnet (~$0.02 vs ~$0.06 at 9K input + 2K output tokens) with no
+  # measurable quality regression on deterministic-ETL prompts. Flip back to
+  # Sonnet only if a future eval shows Haiku struggling on complex
+  # multi-agent chain prompts.
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "claude-haiku-4-5-20251001"
+  fallback: "claude-sonnet-4-6"
   thinkLevel: "medium"
   maxTokenBudget: 16384
 cost:
-  estimatedTokensPerRun: 8000
-  estimatedCostTier: "medium"
+  # At Haiku rates, 9K input + 2K output ~= $0.02 per chat turn (no cache).
+  # With Anthropic prompt caching enabled on the system block, subsequent
+  # turns drop to ~$0.002 each.
+  estimatedTokensPerRun: 11000
+  estimatedCostTier: "low"
 schedule: null
 messaging:
   listensTo: []

@@ -5,7 +5,7 @@ metadata:
   name: spotify
   displayName: "Spotify"
   version: "1.0.0"
-  description: "Spotify Web API — tracks, playlists, artists, and playback"
+  description: "Spotify Web API, tracks, playlists, artists, and playback"
   tags: ["spotify", "music", "audio", "streaming"]
   author: "schemabounce"
   license: "MIT"

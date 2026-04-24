@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-pricing-optimizer
   displayName: "Dynamic Pricing"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Analyzes market conditions, competitor rates, and demand patterns to optimize nightly rates and maximize revenue."
   category: finance
   tags: ["str", "dynamic-pricing", "revenue-management", "rate-optimization", "hospitality"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "revenue"
   instructions: |
     ## Operating Rules
-    - Always read the current str_pricing_calendar for a property before recommending rate changes — blind overwrites destroy manually set special-event pricing.
-    - Never apply rate changes directly to booking platforms — write recommendations to str_pricing_calendar with status="recommended" and send a request to str-channel-manager for actual distribution.
-    - When str-channel-manager reports availability or channel status changes, re-evaluate affected date ranges within 24 hours — stale pricing on newly available dates costs revenue.
-    - Flag any rate recommendation that exceeds 30% above or below the property's trailing 30-day average as an alert to str-property-manager — extreme swings need human approval.
-    - Use North Star keys (target_occupancy_rate, market_type, average_nightly_rate) as guardrails — never recommend rates that would mathematically push occupancy below 50% of target.
-    - Prioritize gap-night optimization (orphan nights between bookings) over general rate adjustments — a filled gap night at a discount beats an empty night at full price.
-    - Last-minute discounts (within 7 days) should be progressive: 5% at 7 days, 10% at 3 days, 15% at 1 day — never exceed 25% discount without alerting str-property-manager.
+    - Always read the current str_pricing_calendar for a property before recommending rate changes, blind overwrites destroy manually set special-event pricing.
+    - Never apply rate changes directly to booking platforms. Write recommendations to str_pricing_calendar with status="recommended" and send a request to str-channel-manager for actual distribution.
+    - When str-channel-manager reports availability or channel status changes, re-evaluate affected date ranges within 24 hours, stale pricing on newly available dates costs revenue.
+    - Flag any rate recommendation that exceeds 30% above or below the property's trailing 30-day average as an alert to str-property-manager, extreme swings need human approval.
+    - Use North Star keys (target_occupancy_rate, market_type, average_nightly_rate) as guardrails, never recommend rates that would mathematically push occupancy below 50% of target.
+    - Prioritize gap-night optimization (orphan nights between bookings) over general rate adjustments, a filled gap night at a discount beats an empty night at full price.
+    - Last-minute discounts (within 7 days) should be progressive: 5% at 7 days, 10% at 3 days, 15% at 1 day, never exceed 25% discount without alerting str-property-manager.
     - Store seasonal patterns and market benchmarks in seasonal_data namespace; store learned demand signals in market_patterns namespace.
     - Send rate adjustment recommendations to str-property-manager as findings with per-property breakdown, not portfolio-level summaries.
-    - Never include competitor property names or exact competitor URLs in findings — reference market averages and percentile positions instead.
+    - Never include competitor property names or exact competitor URLs in findings, reference market averages and percentile positions instead.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -54,7 +54,7 @@ messaging:
     - { type: "finding", from: ["str-channel-manager"] }
   sendsTo:
     - { type: "finding", to: ["str-property-manager"], when: "rate adjustment recommendations or market analysis complete" }
-    - { type: "alert", to: ["str-property-manager"], when: "pricing anomaly detected — competitor drop, demand spike, or revenue risk" }
+    - { type: "alert", to: ["str-property-manager"], when: "pricing anomaly detected, competitor drop, demand spike, or revenue risk" }
     - { type: "request", to: ["str-channel-manager"], when: "approved rate changes need syncing to booking platforms" }
 data:
   entityTypesRead: ["str_pricing_calendar", "str_bookings", "str_properties", "str_channel_listings"]
@@ -119,7 +119,7 @@ setup:
         actionLabel: "Connect Browser"
     - id: set-target-occupancy
       name: "Set target occupancy rate"
-      description: "Your occupancy goal — pricing recommendations stay within this guardrail"
+      description: "Your occupancy goal, pricing recommendations stay within this guardrail"
       type: north_star
       key: target_occupancy_rate
       group: configuration
@@ -131,7 +131,7 @@ setup:
         helpUrl: "https://docs.schemabounce.com/bots/str-pricing-optimizer/occupancy"
     - id: set-market-type
       name: "Set market type"
-      description: "Determines seasonal patterns — beach peaks in summer, ski in winter"
+      description: "Determines seasonal patterns, beach peaks in summer, ski in winter"
       type: north_star
       key: market_type
       group: configuration
@@ -147,7 +147,7 @@ setup:
           - { value: lake, label: "Lake / Waterfront" }
     - id: set-average-rate
       name: "Set average nightly rate"
-      description: "Baseline rate for the portfolio — used as a reference for rate recommendations"
+      description: "Baseline rate for the portfolio, used as a reference for rate recommendations"
       type: north_star
       key: average_nightly_rate
       group: configuration

@@ -5,7 +5,7 @@ metadata:
   name: aws
   displayName: "AWS"
   version: "1.0.0"
-  description: "Amazon Web Services — manage EC2, S3, Lambda, RDS, and 1000+ AWS resources"
+  description: "Amazon Web Services, manage EC2, S3, Lambda, RDS, and 1000+ AWS resources"
   tags: ["aws", "amazon", "cloud", "infrastructure", "ec2", "s3", "lambda"]
   author: "schemabounce"
   license: "MIT"

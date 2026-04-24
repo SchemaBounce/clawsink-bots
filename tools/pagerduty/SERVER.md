@@ -5,7 +5,7 @@ metadata:
   name: pagerduty
   displayName: "PagerDuty"
   version: "1.0.0"
-  description: "PagerDuty incident management — incidents, services, and on-call schedules"
+  description: "PagerDuty incident management, incidents, services, and on-call schedules"
   tags: ["pagerduty", "incidents", "oncall", "alerting"]
   author: "schemabounce"
   license: "MIT"

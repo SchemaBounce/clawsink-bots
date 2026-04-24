@@ -5,7 +5,7 @@ metadata:
   name: codex
   displayName: "Codex (Preview)"
   version: "0.1.0"
-  description: "[Preview] Sandboxed OpenAI Codex sessions for implementation — managed inference, backend service not yet deployed"
+  description: "[Preview] Sandboxed OpenAI Codex sessions for implementation. Managed inference, backend service not yet deployed"
   tags: ["codex", "openai", "coding", "implementation", "managed", "preview"]
   author: "schemabounce"
   license: "MIT"
@@ -14,7 +14,7 @@ transport:
   url: "${CODEX_MCP_URL}/mcp"
 env:
   - name: CODEX_MCP_URL
-    description: "SchemaBounce-managed Codex service URL (injected by platform; never customer-provided). Not yet deployed — enabling this bot will fail until the backend service is live."
+    description: "SchemaBounce-managed Codex service URL (injected by platform; never customer-provided). Not yet deployed, enabling this bot will fail until the backend service is live."
     required: true
   - name: REPO_CLONE_TOKEN
     description: "Git personal access token with repo read/write scope. Used by the sandboxed container to clone the target repo; kept separate from the tools/github MCP token because the two run in different trust contexts (see README body)."

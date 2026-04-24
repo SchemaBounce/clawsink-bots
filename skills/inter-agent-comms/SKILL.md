@@ -5,7 +5,7 @@ metadata:
   name: inter-agent-comms
   displayName: "Inter-Agent Communication"
   version: "1.0.0"
-  description: "Detailed inter-agent messaging — 5 message types, A2A Parts, threading, delegation patterns"
+  description: "Detailed inter-agent messaging, 5 message types, A2A Parts, threading, delegation patterns"
   tags: ["platform", "messaging", "multi-agent", "a2a", "delegation"]
   author: "schemabounce"
   license: "MIT"
@@ -17,11 +17,11 @@ data:
 ---
 # Inter-Agent Communication
 
-Detailed instructions for inter-agent communication using the A2A pattern — 5 message types, typed Parts for data exchange, async/sync delegation, and task lifecycle management.
+Detailed instructions for inter-agent communication using the A2A pattern, 5 message types, typed Parts for data exchange, async/sync delegation, and task lifecycle management.
 
 ## When to Use
 
-Invoke this skill when you need to coordinate with other agents — send requests, delegate tasks, hand off work, or broadcast findings across a domain.
+Invoke this skill when you need to coordinate with other agents. Send requests, delegate tasks, hand off work, or broadcast findings across a domain.
 
 ## What You Get
 

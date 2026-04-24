@@ -5,7 +5,7 @@ metadata:
   name: mysql
   displayName: "MySQL"
   version: "1.0.0"
-  description: "MySQL database — queries, schema inspection, and data exploration"
+  description: "MySQL database, queries, schema inspection, and data exploration"
   tags: ["mysql", "database", "sql", "mariadb"]
   author: "schemabounce"
   license: "MIT"

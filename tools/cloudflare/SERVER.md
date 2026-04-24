@@ -5,7 +5,7 @@ metadata:
   name: cloudflare
   displayName: "Cloudflare"
   version: "1.0.0"
-  description: "Cloudflare — DNS, Workers, Pages, and CDN management"
+  description: "Cloudflare. DNS, Workers, Pages, and CDN management"
   tags: ["cloudflare", "cdn", "dns", "workers", "edge"]
   author: "schemabounce"
   license: "MIT"

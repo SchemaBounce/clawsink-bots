@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: infrastructure-reporter
   displayName: "Infrastructure Reporter"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Periodic infrastructure health summary reports."
   category: engineering
   tags: ["infrastructure", "health", "monitoring"]
@@ -25,11 +25,11 @@ agent:
     - Track resource utilization trends in `capacity_trends` memory to forecast when thresholds will be breached (weeks/months ahead)
     - Complete all analysis within token budget -- if data volume is large, sample representative time windows rather than processing everything
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:

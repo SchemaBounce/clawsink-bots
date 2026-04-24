@@ -5,7 +5,7 @@ metadata:
   name: puppeteer
   displayName: "Puppeteer"
   version: "1.0.0"
-  description: "Puppeteer browser automation — navigation, screenshots, and scraping"
+  description: "Puppeteer browser automation, navigation, screenshots, and scraping"
   tags: ["puppeteer", "browser", "automation", "scraping"]
   author: "schemabounce"
   license: "MIT"

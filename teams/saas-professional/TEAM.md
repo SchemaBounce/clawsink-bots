@@ -5,7 +5,7 @@ metadata:
   name: saas-professional
   displayName: "SaaS Professional"
   version: "1.0.0"
-  description: "Growing SaaS operations — 13 bots covering engineering, product, growth, revenue, customer success, and platform optimization"
+  description: "Growing SaaS operations. 13 bots covering engineering, product, growth, revenue, customer success, and platform optimization."
   category: saas
   tags: ["saas", "professional", "mid-size", "engineering", "product", "growth", "revenue", "customer-success"]
   author: "schemabounce"
@@ -69,7 +69,7 @@ dataKits:
     installSampleData: false
 northStar:
   industry: "B2B SaaS"
-  context: "Growing SaaS companies needing solid coverage across engineering, product, growth, revenue, and customer success — the operational backbone for scaling from startup to established business"
+  context: "Growing SaaS companies needing solid coverage across engineering, product, growth, revenue, and customer success. The operational backbone for scaling from startup to established business."
   requiredKeys:
     - mission
     - industry

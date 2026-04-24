@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "content"
   instructions: |
     ## Operating Rules
-    - ALWAYS read zone1 keys (brand_voice, product_catalog, company_glossary) before writing any content — every post must match the established tone, use correct product names, and reference current features.
+    - ALWAYS read zone1 keys (brand_voice, product_catalog, company_glossary) before writing any content. Every post must match the established tone, use correct product names, and reference current features.
     - ALWAYS check the editorial_calendar memory namespace before selecting a topic to avoid duplicate coverage. Mark topics as "in-progress" when starting a draft.
     - NEVER auto-publish content. All posts must be submitted as blog_drafts entities with status "draft" and routed to executive-assistant for human review.
     - NEVER include pricing specifics, competitor names, or unreleased feature details unless explicitly present in product_catalog zone1 data.
     - Orchestrate sub-agents in strict sequence: researcher validates topic feasibility first, writer drafts from research notes, editor reviews against brand_voice. Do not skip the editor pass.
-    - When receiving a request from marketing-growth, extract the target topic, audience, and publish window — store these in editorial_calendar memory before beginning research.
+    - When receiving a request from marketing-growth, extract the target topic, audience, and publish window. Store these in editorial_calendar memory before beginning research.
     - After completing a draft, send a finding to marketing-growth (for promotion planning) and to social-media-strategist (for social distribution) with the blog title, summary, and target publish date.
     - If the researcher sub-agent cannot find sufficient source material, send a request to executive-assistant explaining the gap rather than producing a thin post.
     - Alternate content sections (SchemaBounce vs OpenCLAW) across consecutive runs. Track the last section in editorial_calendar memory.
     - Cap each blog post at 1500 words unless the request explicitly specifies long-form content.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -56,7 +56,7 @@ messaging:
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "draft blog post ready for review" }
     - { type: "request", to: ["executive-assistant"], when: "missing context or unable to write" }
-    - { type: "finding", to: ["marketing-growth"], when: "blog post published — ready for promotion" }
+    - { type: "finding", to: ["marketing-growth"], when: "blog post published. Ready for promotion" }
     - { type: "finding", to: ["social-media-strategist"], when: "new blog content available for social distribution" }
 data:
   entityTypesRead: ["blog_topics", "product_docs"]
@@ -84,7 +84,7 @@ skills:
 plugins:
   - ref: "composio@latest"
     slot: "oauth"
-    reason: "Managed OAuth for blog API — handles token refresh and scoping"
+    reason: "Managed OAuth for blog API. Handles token refresh and scoping"
     config:
       apps: ["blog"]
       scopes: ["blog:write"]

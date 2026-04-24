@@ -5,7 +5,7 @@ metadata:
   name: whatsapp
   displayName: "WhatsApp"
   version: "1.0.0"
-  description: "WhatsApp Business API — messages, templates, and media"
+  description: "WhatsApp Business API, messages, templates, and media"
   tags: ["whatsapp", "messaging", "business", "chat"]
   author: "schemabounce"
   license: "MIT"

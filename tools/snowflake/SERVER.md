@@ -5,7 +5,7 @@ metadata:
   name: snowflake
   displayName: "Snowflake"
   version: "1.0.0"
-  description: "Snowflake data warehouse — SQL queries, warehouses, databases, and stages"
+  description: "Snowflake data warehouse. SQL queries, warehouses, databases, and stages"
   tags: ["snowflake", "data-warehouse", "analytics", "sql", "cloud"]
   author: "schemabounce"
   license: "MIT"

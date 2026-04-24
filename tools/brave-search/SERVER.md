@@ -5,7 +5,7 @@ metadata:
   name: brave-search
   displayName: "Brave Search"
   version: "1.0.0"
-  description: "Brave Search API — web search, news, and local results"
+  description: "Brave Search API, web search, news, and local results"
   tags: ["brave", "search", "web", "news"]
   author: "schemabounce"
   license: "MIT"

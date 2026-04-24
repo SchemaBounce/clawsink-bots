@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: brand-guardian
   displayName: "Brand Guardian"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Brand consistency monitoring, guideline enforcement, and asset review."
   category: design
   tags: ["brand", "consistency", "guidelines", "design", "content-review", "brand-audit"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "design"
   instructions: |
     ## Operating Rules
-    - ALWAYS score every new `content_items` record against brand guidelines — CDC-triggered runs must process the triggering item completely
+    - ALWAYS score every new `content_items` record against brand guidelines. CDC-triggered runs must process the triggering item completely
     - ALWAYS produce a `brand_scores` record for every content item reviewed, even if the score is high
     - ALWAYS check `brand_drift_log` memory for cumulative drift patterns before flagging individual violations
     - NEVER approve content without checking against ALL active `brand_guidelines` records (tone, visual, messaging, terminology)
-    - NEVER edit or modify content directly — write `brand_findings` with specific corrections for the content creator
-    - NEVER lower score thresholds over time — maintain consistent standards using `guideline_updates` memory
+    - NEVER edit or modify content directly. Write `brand_findings` with specific corrections for the content creator
+    - NEVER lower score thresholds over time. Maintain consistent standards using `guideline_updates` memory
     - Escalation: systematic brand violations across multiple content items trigger finding to executive-assistant
     - Single content items scoring below 60 overall get a high-priority `brand_findings` record flagged for review
     - Listen for marketing-growth findings to proactively review associated content before it goes live
-    - Track brand drift trends over time — gradual erosion is harder to detect than sudden violations
+    - Track brand drift trends over time, gradual erosion is harder to detect than sudden violations
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -115,7 +115,7 @@ setup:
       key: industry
       group: configuration
       priority: required
-      reason: "Brand standards differ by industry — B2B SaaS vs retail vs healthcare require different baselines"
+      reason: "Brand standards differ by industry, B2B SaaS vs retail vs healthcare require different baselines"
       ui:
         inputType: select
         options:
@@ -133,7 +133,7 @@ setup:
       ref: tools/exa
       group: connections
       priority: required
-      reason: "Core capability — monitors external brand presence and competitor positioning"
+      reason: "Core capability. Monitors external brand presence and competitor positioning"
       ui:
         icon: search
         actionLabel: "Connect Exa Search"
@@ -188,8 +188,8 @@ goals:
       entityType: brand_scores
       actions:
         - { value: accurate, label: "Score reflects reality" }
-        - { value: too_strict, label: "Score too low — content is fine" }
-        - { value: too_lenient, label: "Score too high — missed issues" }
+        - { value: too_strict, label: "Score too low, content is fine" }
+        - { value: too_lenient, label: "Score too high, missed issues" }
   - name: average_brand_score
     description: "Maintain high average brand score across all reviewed content"
     category: primary

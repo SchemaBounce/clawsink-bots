@@ -17,13 +17,13 @@ data:
 ---
 # External Connections Awareness
 
-Teaches agents that their workspace can have external service connections (MCP servers) and how to discover and use them. Connected services provide tools the agent can call directly — GitHub issues, Slack messages, Stripe charges, Google Sheets, and more.
+Teaches agents that their workspace can have external service connections (MCP servers) and how to discover and use them. Connected services provide tools the agent can call directly, GitHub issues, Slack messages, Stripe charges, Google Sheets, and more.
 
 ## When to Use
 
 - User asks the agent to interact with an external service
 - Agent needs to send notifications, create documents, or read external data
-- Business processes require actions outside the ADL (email, chat, payments)
+- Business processes require actions outside the data layer (email, chat, payments)
 
 ## What You Get
 

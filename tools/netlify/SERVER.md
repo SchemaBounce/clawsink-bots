@@ -5,7 +5,7 @@ metadata:
   name: netlify
   displayName: "Netlify"
   version: "1.0.0"
-  description: "Netlify — sites, deploys, forms, and serverless functions"
+  description: "Netlify, sites, deploys, forms, and serverless functions"
   tags: ["netlify", "deployment", "hosting", "jamstack"]
   author: "schemabounce"
   license: "MIT"

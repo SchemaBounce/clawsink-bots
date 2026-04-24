@@ -5,7 +5,7 @@ metadata:
   name: vercel
   displayName: "Vercel"
   version: "1.0.0"
-  description: "Vercel deployments — projects, domains, and deployment management"
+  description: "Vercel deployments, projects, domains, and deployment management"
   tags: ["vercel", "deployment", "hosting", "frontend", "serverless"]
   author: "schemabounce"
   license: "MIT"

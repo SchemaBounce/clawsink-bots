@@ -5,7 +5,7 @@ metadata:
   name: hubspot
   displayName: "HubSpot"
   version: "1.0.0"
-  description: "HubSpot CRM — contacts, deals, companies, and marketing automation"
+  description: "HubSpot CRM, contacts, deals, companies, and marketing automation"
   tags: ["hubspot", "crm", "marketing", "sales", "contacts"]
   author: "schemabounce"
   license: "MIT"

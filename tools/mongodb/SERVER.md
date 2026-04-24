@@ -5,7 +5,7 @@ metadata:
   name: mongodb
   displayName: "MongoDB"
   version: "1.0.0"
-  description: "MongoDB database — queries, collections, documents, and aggregation"
+  description: "MongoDB database, queries, collections, documents, and aggregation"
   tags: ["mongodb", "nosql", "database", "documents"]
   author: "schemabounce"
   license: "MIT"

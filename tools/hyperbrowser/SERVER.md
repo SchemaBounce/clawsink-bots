@@ -5,7 +5,7 @@ metadata:
   name: hyperbrowser
   displayName: "Hyperbrowser"
   version: "1.0.0"
-  description: "Cloud browser infrastructure for AI agents — browse, scrape, and automate the web"
+  description: "Cloud browser infrastructure for AI agents, browse, scrape, and automate the web"
   tags: ["browser", "web", "scraping", "automation", "presence"]
   author: "hyperbrowser"
   license: "MIT"

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-engineer
   displayName: "Data Engineer"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Monitors Kolumn schemas, CDC pipeline health, DLQ depth, and sink configuration drift."
   category: engineering
   tags: ["data", "schemas", "cdc", "pipelines", "kolumn", "drift"]
@@ -25,11 +25,11 @@ agent:
     - Forward data exposure risks (unencrypted sinks, public endpoints) to security-agent (type=finding)
     - Consume requests from sre-devops and business-analyst and findings from sre-devops -- process these before routine checks
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -97,7 +97,7 @@ automations:
       entityType: "*"
       eventType: "created"
       targetAgent: "self"
-      promptTemplate: "New records were created. Run data quality checks — validate required fields, check for duplicates, verify referential integrity, and flag anomalies."
+      promptTemplate: "New records were created. Run data quality checks, validate required fields, check for duplicates, verify referential integrity, and flag anomalies."
 requirements:
   minTier: "starter"
 setup:

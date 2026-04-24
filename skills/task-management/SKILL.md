@@ -17,4 +17,4 @@ data:
 ---
 # Task Management
 
-Enables agents to create, assign, and track tasks on the workspace kanban board. Tasks are stored as ADL records and visible to both agents and humans. Setting `assignee_agent_id` on a task auto-wakes the assigned agent — no cron or manual trigger needed.
+Enables agents to create, assign, and track tasks on the workspace kanban board. Tasks are stored as data layer records and visible to both agents and humans. Setting `assignee_agent_id` on a task auto-wakes the assigned agent, no cron or manual trigger needed.

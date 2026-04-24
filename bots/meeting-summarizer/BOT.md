@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: meeting-summarizer
   displayName: "Meeting Summarizer"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Summarizes meeting notes and creates action items."
   category: productivity
   tags: ["meetings", "notes", "actions"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "general"
   instructions: |
     ## Operating Rules
-    - ALWAYS extract action items, decisions, and follow-ups from every meeting — no meeting summary is complete without these three elements
+    - ALWAYS extract action items, decisions, and follow-ups from every meeting, no meeting summary is complete without these three elements
     - ALWAYS attribute action items to specific attendees with due dates when mentioned in the notes
-    - ALWAYS check `recurring_themes` memory for topics that recur across meetings — flag stalled discussions or repeatedly deferred decisions
+    - ALWAYS check `recurring_themes` memory for topics that recur across meetings. Flag stalled discussions or repeatedly deferred decisions
     - NEVER include verbatim quotes or sensitive discussions in summaries unless explicitly marked as "on the record" in notes
-    - NEVER fabricate attendee names or action items — only extract what is explicitly stated in `meeting_notes`
-    - NEVER produce a summary longer than the original meeting notes — summaries must be concise
+    - NEVER fabricate attendee names or action items, only extract what is explicitly stated in `meeting_notes`
+    - NEVER produce a summary longer than the original meeting notes, summaries must be concise
     - Escalation: meetings with unresolved critical decisions or blocked action items trigger finding to executive-assistant
     - Use gog plugin for Google Calendar context (meeting participants, agenda) and Drive for storing/sharing summaries
     - Track decision patterns in `decision_log` memory to provide context when the same topic resurfaces
     - Cross-reference `attendee_lists` with action items to ensure every assigned task has a valid owner
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -130,7 +130,7 @@ setup:
       minCount: 1
       group: data
       priority: required
-      reason: "The bot needs meeting notes to process — without input data it cannot run"
+      reason: "The bot needs meeting notes to process. Without input data it cannot run"
       ui:
         actionLabel: "Add Meeting Notes"
         emptyState: "No meeting notes found. Paste notes, upload a transcript, or connect your calendar."

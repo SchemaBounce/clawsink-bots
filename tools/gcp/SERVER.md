@@ -5,7 +5,7 @@ metadata:
   name: gcp
   displayName: "Google Cloud"
   version: "1.0.0"
-  description: "Google Cloud Platform — Compute, Storage, BigQuery, and Cloud Run"
+  description: "Google Cloud Platform, Compute, Storage, BigQuery, and Cloud Run"
   tags: ["gcp", "google-cloud", "cloud", "infrastructure"]
   author: "schemabounce"
   license: "MIT"

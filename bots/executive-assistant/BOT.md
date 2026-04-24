@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "platform-ops"
   instructions: |
     ## Operating Rules
-    - ALWAYS read messages from ALL bots before producing a briefing — never skip a domain
+    - ALWAYS read messages from ALL bots before producing a briefing, never skip a domain
     - ALWAYS check `follow_ups` memory namespace at run start to resume tracked action items
-    - ALWAYS prioritize findings against North Star `priorities` and `mission` — rank by business impact, not recency
+    - ALWAYS prioritize findings against North Star `priorities` and `mission`: rank by business impact, not recency
     - NEVER produce a briefing without reading zone1 keys (`mission`, `industry`, `stage`, `priorities`) first
-    - NEVER ignore alerts — every `*_alerts` record must appear in the briefing or be explicitly triaged
-    - NEVER modify or delete findings written by other bots — only read and synthesize
-    - Escalation: you are the TOP of the chain — do not escalate further; produce the final prioritized output for the human operator
+    - NEVER ignore alerts. Every `*_alerts` record must appear in the briefing or be explicitly triaged
+    - NEVER modify or delete findings written by other bots, only read and synthesize
+    - Escalation: you are the TOP of the chain, do not escalate further; produce the final prioritized output for the human operator
     - Cross-bot coordination: route requests to the right specialist (business-analyst for analysis, accountant for financial data, sre-devops for infrastructure, mentor-coach for team health)
     - When a finding spans multiple domains, tag it as cross-domain and include source bot references
     - Write `ea_findings` for synthesized insights, `ea_alerts` only for items requiring immediate human attention, `tasks` for trackable action items
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -128,7 +128,7 @@ setup:
   steps:
     - id: set-mission
       name: "Define company mission"
-      description: "Your company's mission statement — bots align all findings to this"
+      description: "Your company's mission statement, bots align all findings to this"
       type: north_star
       key: mission
       group: configuration
@@ -194,7 +194,7 @@ setup:
         actionLabel: "Connect Task Management"
 goals:
   - name: briefing_completeness
-    description: "Include all bot domains in every briefing — never skip a domain"
+    description: "Include all bot domains in every briefing, never skip a domain"
     category: primary
     metric:
       type: boolean
@@ -204,7 +204,7 @@ goals:
       value: 1
       period: per_run
   - name: alert_triage
-    description: "Triage every alert received — no alert goes unacknowledged"
+    description: "Triage every alert received, no alert goes unacknowledged"
     category: primary
     metric:
       type: rate

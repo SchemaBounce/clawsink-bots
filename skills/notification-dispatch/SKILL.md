@@ -5,13 +5,13 @@ metadata:
   name: notification-dispatch
   displayName: "Notification Dispatch"
   version: "1.0.0"
-  description: "Send alerts via configured channels (ADL messages, escalations)."
+  description: "Send alerts via configured channels (data layer messages, escalations)."
   tags: ["alerts", "messaging"]
 ---
 
 # Notification Dispatch
 
-Send alerts via configured channels (ADL messages, escalations).
+Send alerts via configured channels (data layer messages, escalations).
 
 ## Usage
 

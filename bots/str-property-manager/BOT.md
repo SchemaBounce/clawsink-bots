@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: str-property-manager
   displayName: "Property Manager"
-  version: "1.0.4"
-  description: "Lead coordinator for short-term rental operations — consolidates reports, manages portfolio dashboard, coordinates specialists."
+  version: "1.0.5"
+  description: "Lead coordinator for short-term rental operations, consolidates reports, manages portfolio dashboard, coordinates specialists."
   category: operations
   tags: ["str", "property-management", "portfolio", "coordination", "lead", "hospitality"]
 agent:
@@ -14,22 +14,22 @@ agent:
   defaultDomain: "portfolio-management"
   instructions: |
     ## Operating Rules
-    - Always read str_findings and str_alerts from ALL specialist bots before generating a daily briefing — missing a bot's output creates blind spots in portfolio visibility.
-    - Never override a specialist bot's recommendation directly — send a request back to the originating bot with approval, rejection, or modification instructions.
-    - Treat all alerts (type="alert" from any bot) as requiring acknowledgment within the current run — log the response action taken in str_findings.
+    - Always read str_findings and str_alerts from ALL specialist bots before generating a daily briefing, missing a bot's output creates blind spots in portfolio visibility.
+    - Never override a specialist bot's recommendation directly. Send a request back to the originating bot with approval, rejection, or modification instructions.
+    - Treat all alerts (type="alert" from any bot) as requiring acknowledgment within the current run, log the response action taken in str_findings.
     - Escalation hierarchy: operational alerts (turnover, sync) are self-handled; financial alerts (pricing anomalies) require human notification; guest emergencies always trigger immediate human notification.
     - Cross-domain coordination: when review trends indicate a recurring property issue, send a request to str-turnover-coordinator to investigate during the next cleaning cycle.
     - Daily briefings sent to all specialist bots must include: portfolio occupancy, revenue summary, active alerts, and any pending coordination requests.
-    - When updating str_properties records, always include the status field (active, blocked, maintenance, seasonal) — downstream bots filter by property status.
+    - When updating str_properties records, always include the status field (active, blocked, maintenance, seasonal), downstream bots filter by property status.
     - Use portfolio_health namespace to track week-over-week KPI trends; use learned_patterns namespace for cross-domain correlations discovered over time.
-    - Never include raw financial transaction details in briefings distributed to non-finance bots — summarize at portfolio level.
+    - Never include raw financial transaction details in briefings distributed to non-finance bots, summarize at portfolio level.
     - When multiple bots report conflicting information about the same property, flag it as a finding and request clarification from both bots before taking action.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -130,7 +130,7 @@ setup:
         actionLabel: "Verify Email"
     - id: set-property-count
       name: "Set property count"
-      description: "Number of properties in the portfolio — drives briefing scope and alert thresholds"
+      description: "Number of properties in the portfolio, drives briefing scope and alert thresholds"
       type: north_star
       key: property_count
       group: configuration
@@ -142,7 +142,7 @@ setup:
         helpUrl: "https://docs.schemabounce.com/bots/str-property-manager/setup"
     - id: set-target-occupancy
       name: "Set target occupancy rate"
-      description: "Portfolio occupancy goal — used in daily briefings and performance tracking"
+      description: "Portfolio occupancy goal, used in daily briefings and performance tracking"
       type: north_star
       key: target_occupancy_rate
       group: configuration

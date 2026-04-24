@@ -5,7 +5,7 @@ metadata:
   name: gmail
   displayName: "Gmail"
   version: "1.0.0"
-  description: "Gmail email management — send, read, search, and organize messages"
+  description: "Gmail email management. Send, read, search, and organize messages"
   tags: ["google", "gmail", "email", "messaging"]
   author: "schemabounce"
   license: "MIT"

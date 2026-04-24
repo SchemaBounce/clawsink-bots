@@ -5,7 +5,7 @@ metadata:
   name: clickup
   displayName: "ClickUp"
   version: "1.0.0"
-  description: "ClickUp project management — tasks, lists, spaces, and goals"
+  description: "ClickUp project management, tasks, lists, spaces, and goals"
   tags: ["clickup", "project-management", "tasks", "productivity"]
   author: "schemabounce"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: data-maintenance
   displayName: "Data Maintenance"
   version: "1.0.0"
-  description: "Workspace data cleanup — stale record purging, memory compaction, and lifecycle management with dry-run safety."
+  description: "Workspace data cleanup, stale record purging, memory compaction, and lifecycle management with dry-run safety."
   category: operations
   tags: ["maintenance", "cleanup", "retention", "memory-lifecycle", "data-hygiene"]
   author: "schemabounce"
@@ -22,10 +22,10 @@ Reusable skill for workspace data hygiene. Any bot with data_maintenance capabil
 
 ## Capabilities
 
-- **Stale record purging** — identify and remove records past their retention window
-- **Memory namespace compaction** — consolidate fragmented memory entries
-- **Memory lifecycle management** — set TTLs and enforce retention policies
-- **Dry-run safety** — all destructive operations preview impact before execution
+- **Stale record purging**. Identify and remove records past their retention window
+- **Memory namespace compaction**. Consolidate fragmented memory entries
+- **Memory lifecycle management**. Set TTLs and enforce retention policies
+- **Dry-run safety**. All destructive operations preview impact before execution
 
 ## When to Use
 

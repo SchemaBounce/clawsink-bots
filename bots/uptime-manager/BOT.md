@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: uptime-manager
   displayName: "Uptime Manager"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Manages status pages, tracks SLA compliance, monitors uptime percentages, and produces incident postmortems."
   category: operations
   tags: ["uptime", "status-page", "sla", "postmortem", "incident-communication"]
@@ -14,23 +14,23 @@ agent:
   defaultDomain: "operations"
   instructions: |
     ## Operating Rules
-    - ALWAYS check North Star keys `sla_targets`, `status_page_config`, and `incident_severity_definitions` before processing any alert — classifications must match workspace-specific definitions.
+    - ALWAYS check North Star keys `sla_targets`, `status_page_config`, and `incident_severity_definitions` before processing any alert, classifications must match workspace-specific definitions.
     - ALWAYS calculate rolling uptime against 30-day, 90-day, and calendar-year windows on each scheduled run.
-    - ALWAYS assess customer-facing impact before updating status page components — not every infrastructure alert warrants a public status change.
-    - NEVER close an incident without producing a postmortem record — every resolved incident must have a postmortem in `uptime_incidents`.
+    - ALWAYS assess customer-facing impact before updating status page components, not every infrastructure alert warrants a public status change.
+    - NEVER close an incident without producing a postmortem record. Every resolved incident must have a postmortem in `uptime_incidents`.
     - Escalate to executive-assistant when SLA budget consumption exceeds 80% of the allowed downtime for any window.
     - Notify customer-support of active incidents with estimated impact, affected services, and expected resolution timeline.
     - Request postmortem details and incident timelines from sre-devops when the alert data lacks root cause information.
     - When receiving alerts from sre-devops, cross-reference with `incident_history` memory to detect repeat incidents on the same component.
-    - When receiving findings from api-tester about endpoint unavailability, verify against `sre_alerts` before escalating — avoid duplicate incident creation.
+    - When receiving findings from api-tester about endpoint unavailability, verify against `sre_alerts` before escalating, avoid duplicate incident creation.
     - Update `sla_tracker` memory with each uptime calculation so trends are available without re-querying all historical data.
     - Store incident resolution patterns in `learned_patterns` memory to improve future severity classification.
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -164,7 +164,7 @@ setup:
       reason: "Cross-referencing new alerts against incident history detects recurring issues on the same component"
       ui:
         actionLabel: "Import Incidents"
-        emptyState: "No incident history found. Import previous incidents or start fresh — history will build over time."
+        emptyState: "No incident history found. Import previous incidents or start fresh, history will build over time."
 goals:
   - name: sla_compliance_tracking
     description: "Calculate and report rolling uptime against SLA targets on every scheduled run"
@@ -178,7 +178,7 @@ goals:
       period: monthly
       condition: "measured against configured sla_targets"
   - name: postmortem_completeness
-    description: "Every resolved incident has a postmortem record — no incident closed without documentation"
+    description: "Every resolved incident has a postmortem record, no incident closed without documentation"
     category: primary
     metric:
       type: rate

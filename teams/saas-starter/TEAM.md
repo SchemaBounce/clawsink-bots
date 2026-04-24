@@ -5,7 +5,7 @@ metadata:
   name: saas-starter
   displayName: "SaaS Starter"
   version: "1.0.0"
-  description: "Essential SaaS operations for small teams — 7 bots covering engineering, growth, revenue, customer success, and platform optimization"
+  description: "Essential SaaS operations for small teams. 7 bots covering engineering, growth, revenue, customer success, and platform optimization."
   category: saas
   tags: ["saas", "starter", "small-team", "engineering", "growth", "revenue", "customer-success"]
   author: "schemabounce"
@@ -45,7 +45,7 @@ dataKits:
     installSampleData: false
 northStar:
   industry: "B2B SaaS"
-  context: "Small SaaS teams needing core operational coverage — engineering reliability, code quality, growth, revenue tracking, and customer support with a single coordinator"
+  context: "Small SaaS teams needing core operational coverage: engineering reliability, code quality, growth, revenue tracking, and customer support with a single coordinator"
   requiredKeys:
     - mission
     - industry

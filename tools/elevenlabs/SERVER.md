@@ -5,7 +5,7 @@ metadata:
   name: elevenlabs
   displayName: "ElevenLabs"
   version: "1.0.0"
-  description: "Voice and audio for AI agents — text-to-speech, speech-to-text, voice cloning"
+  description: "Voice and audio for AI agents, text-to-speech, speech-to-text, voice cloning"
   tags: ["voice", "audio", "tts", "stt", "presence", "phone"]
   author: "elevenlabs"
   license: "MIT"

@@ -5,7 +5,7 @@ metadata:
   name: bigquery
   displayName: "BigQuery"
   version: "1.0.0"
-  description: "Google BigQuery data warehouse — SQL queries, datasets, and tables"
+  description: "Google BigQuery data warehouse. SQL queries, datasets, and tables"
   tags: ["bigquery", "google", "data-warehouse", "analytics", "sql"]
   author: "schemabounce"
   license: "MIT"

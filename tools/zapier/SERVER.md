@@ -5,7 +5,7 @@ metadata:
   name: zapier
   displayName: "Zapier"
   version: "1.0.0"
-  description: "Zapier automation — trigger zaps, list workflows, and manage connections"
+  description: "Zapier automation, trigger zaps, list workflows, and manage connections"
   tags: ["zapier", "automation", "workflow", "integration"]
   author: "schemabounce"
   license: "MIT"

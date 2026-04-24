@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
@@ -25,11 +25,11 @@ agent:
     - Update `detection_models` memory namespace with refined baseline parameters after each run to improve accuracy over time
     - This bot has egress mode=none -- all analysis must use data already available within ADL records and memory
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -80,7 +80,7 @@ setup:
       target:
         namespace: metric_baselines
         key: initial_baselines
-      reason: "Compares incoming metrics against baselines — without initial values, all readings appear normal"
+      reason: "Compares incoming metrics against baselines. Without initial values, all readings appear normal"
       ui:
         inputType: text
         placeholder: '{"cpu_usage": 45, "error_rate": 0.02, "latency_p99": 200}'
@@ -92,7 +92,7 @@ setup:
       minCount: 5
       group: data
       priority: required
-      reason: "CDC-triggered on metrics entity — without historical records, no baseline context for comparison"
+      reason: "CDC-triggered on metrics entity. Without historical records, no baseline context for comparison"
       ui:
         actionLabel: "Import Metrics"
         emptyState: "No metrics found. Import initial metrics or wait for your monitoring pipeline to create them."
@@ -125,7 +125,7 @@ setup:
       type: manual
       group: external
       priority: recommended
-      reason: "Critical infrastructure anomalies are routed to sre-devops — without it, alerts go unprocessed"
+      reason: "Critical infrastructure anomalies are routed to sre-devops. Without it, alerts go unprocessed"
       ui:
         actionLabel: "I've verified SRE/DevOps is deployed"
         instructions: "Deploy the sre-devops bot from the marketplace, or confirm it is already active in your workspace."

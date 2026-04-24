@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ux-researcher
   displayName: "UX Researcher"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "User research synthesis, feedback analysis, and usability insight generation."
   category: design
   tags: ["ux", "research", "usability", "feedback", "user-experience", "design"]
@@ -16,20 +16,20 @@ agent:
     ## Operating Rules
     - ALWAYS categorize incoming `user_feedback` records by theme (onboarding, navigation, performance, accessibility, etc.) and severity before analysis
     - ALWAYS include evidence count and affected user personas in every `ux_findings` record
-    - ALWAYS check `pain_points` memory for existing themes before creating new findings — merge signals into existing themes when possible
-    - NEVER write a finding without a concrete recommendation — every pain point must include a suggested improvement
-    - NEVER report individual feedback items as findings — cluster at least 3 signals into a theme first
-    - NEVER modify support ticket or customer data — only read and analyze
+    - ALWAYS check `pain_points` memory for existing themes before creating new findings, merge signals into existing themes when possible
+    - NEVER write a finding without a concrete recommendation. Every pain point must include a suggested improvement
+    - NEVER report individual feedback items as findings, cluster at least 3 signals into a theme first
+    - NEVER modify support ticket or customer data, only read and analyze
     - Escalation: usability issues causing measurable churn or data loss go to executive-assistant immediately
     - Send actionable UX patterns with clear fix recommendations to product-owner as type=finding
     - Maintain `research_backlog` memory for emerging patterns that need more data before becoming findings
     - Score pain points by frequency, severity, and user segment impact to prioritize recommendations
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -120,7 +120,7 @@ setup:
       key: industry
       group: configuration
       priority: required
-      reason: "UX standards differ by industry — e-commerce checkout patterns differ from SaaS onboarding patterns"
+      reason: "UX standards differ by industry, e-commerce checkout patterns differ from SaaS onboarding patterns"
       ui:
         inputType: select
         options:
@@ -140,7 +140,7 @@ setup:
       minCount: 3
       group: data
       priority: required
-      reason: "Findings require at least 3 clustered signals — individual feedback items are not reported as findings"
+      reason: "Findings require at least 3 clustered signals, individual feedback items are not reported as findings"
       ui:
         actionLabel: "Import Feedback"
         emptyState: "No user feedback found. Import feedback from surveys, support tickets, or in-app feedback tools."
@@ -180,7 +180,7 @@ goals:
       period: monthly
       condition: "when user_feedback records exist with sufficient volume"
   - name: recommendation_quality
-    description: "Every UX finding includes a concrete improvement recommendation — no pain points without solutions"
+    description: "Every UX finding includes a concrete improvement recommendation, no pain points without solutions"
     category: primary
     metric:
       type: rate

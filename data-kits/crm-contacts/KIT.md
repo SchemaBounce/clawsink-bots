@@ -5,7 +5,7 @@ metadata:
   name: crm-contacts
   displayName: CRM Contacts
   version: "1.0.0"
-  description: "B2B sales pipeline data — contacts, companies, deals, and interaction history with semantic search"
+  description: "B2B sales pipeline data, contacts, companies, deals, and interaction history with semantic search"
   category: horizontal
   tags:
     - crm

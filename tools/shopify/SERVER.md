@@ -5,7 +5,7 @@ metadata:
   name: shopify
   displayName: "Shopify"
   version: "1.0.0"
-  description: "Shopify e-commerce — products, orders, inventory, and customer management"
+  description: "Shopify e-commerce, products, orders, inventory, and customer management"
   tags: ["shopify", "ecommerce", "inventory", "orders", "products"]
   author: "schemabounce"
   license: "MIT"

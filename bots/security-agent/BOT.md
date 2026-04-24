@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: security-agent
   displayName: "Security Agent"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Vulnerability scanning, security policy audits, CVE monitoring, pen test posture checks, secret rotation tracking."
   category: operations
   tags: ["security", "pentest", "vulnerabilities", "cve", "policy", "compliance", "secrets"]
@@ -25,11 +25,11 @@ agent:
     - Only access external CVE sources (nvd.nist.gov, cve.org, osv.dev, api.github.com) via allowed egress -- never attempt to reach other domains
     - Maintain a running vulnerability count by severity in `working_notes` memory for trend reporting via the scheduled-report skill
   toolInstructions: |
-    ## Tool Usage — Minimal Calls
+    ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state` — get last run timestamp
-    - Step 2: `adl_read_messages` — check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}` — ONE query for all new records
+    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
+    - Step 2: `adl_read_messages`: check for new requests
+    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
     - Step 5: If new records → process deltas → write findings → update memory
 model:
@@ -111,7 +111,7 @@ setup:
       key: security_policy
       group: configuration
       priority: required
-      reason: "Cannot evaluate findings without a defined security policy — severity thresholds and acceptable risk vary by org"
+      reason: "Cannot evaluate findings without a defined security policy, severity thresholds and acceptable risk vary by org"
       ui:
         inputType: select
         options:
@@ -126,7 +126,7 @@ setup:
       key: tech_stack
       group: configuration
       priority: required
-      reason: "CVE monitoring without tech stack context produces noise — targeted scanning reduces false positives"
+      reason: "CVE monitoring without tech stack context produces noise, targeted scanning reduces false positives"
       ui:
         inputType: text
         placeholder: "e.g., Go, Node.js, PostgreSQL, Kubernetes, AWS"

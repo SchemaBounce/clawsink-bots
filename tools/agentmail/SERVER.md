@@ -5,7 +5,7 @@ metadata:
   name: agentmail
   displayName: "AgentMail"
   version: "1.0.0"
-  description: "Email identity for AI agents — send, receive, and manage email"
+  description: "Email identity for AI agents. Send, receive, and manage email"
   tags: ["email", "communication", "identity", "presence", "inbox"]
   author: "agentmail"
   license: "MIT"

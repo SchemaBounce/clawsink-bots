@@ -5,7 +5,7 @@ metadata:
   name: gitlab
   displayName: "GitLab"
   version: "1.0.0"
-  description: "GitLab API — projects, merge requests, issues, and CI/CD pipelines"
+  description: "GitLab API, projects, merge requests, issues, and CI/CD pipelines"
   tags: ["gitlab", "git", "merge-requests", "ci-cd", "devops"]
   author: "schemabounce"
   license: "MIT"

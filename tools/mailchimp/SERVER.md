@@ -5,7 +5,7 @@ metadata:
   name: mailchimp
   displayName: "Mailchimp"
   version: "1.0.0"
-  description: "Mailchimp email marketing — campaigns, audiences, templates, and analytics"
+  description: "Mailchimp email marketing, campaigns, audiences, templates, and analytics"
   tags: ["mailchimp", "email", "marketing", "campaigns", "newsletters"]
   author: "schemabounce"
   license: "MIT"

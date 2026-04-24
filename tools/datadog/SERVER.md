@@ -5,7 +5,7 @@ metadata:
   name: datadog
   displayName: "Datadog"
   version: "1.0.0"
-  description: "Datadog observability — metrics, logs, traces, and monitors"
+  description: "Datadog observability, metrics, logs, traces, and monitors"
   tags: ["datadog", "monitoring", "metrics", "logs", "apm"]
   author: "schemabounce"
   license: "MIT"

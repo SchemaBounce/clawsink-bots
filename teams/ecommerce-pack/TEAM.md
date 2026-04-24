@@ -5,7 +5,7 @@ metadata:
   name: ecommerce-pack
   displayName: "E-Commerce Pack"
   version: "1.0.0"
-  description: "AI team for online retail — inventory management, customer support, financial tracking, compliance, and business intelligence"
+  description: "AI team for online retail: inventory management, customer support, financial tracking, compliance, and business intelligence"
   category: ecommerce
   tags: ["ecommerce", "retail", "online-store", "customer-service"]
   author: "schemabounce"

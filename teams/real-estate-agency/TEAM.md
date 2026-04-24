@@ -5,7 +5,7 @@ metadata:
   name: real-estate-agency
   displayName: "Real Estate Agency"
   version: "1.0.0"
-  description: "AI team for real estate agencies — manages listing pipelines, buyer/seller relationships, contract deadlines, and property marketing"
+  description: "AI team for real estate agencies. Manages listing pipelines, buyer/seller relationships, contract deadlines, and property marketing."
   category: real-estate
   tags: ["real-estate", "property", "sales", "listings", "starter"]
   author: "schemabounce"

@@ -5,7 +5,7 @@ metadata:
   name: financial-ops
   displayName: Financial Operations
   version: "1.0.0"
-  description: "Small business accounting data — transactions, invoices, budgets, and recurring charges"
+  description: "Small business accounting data, transactions, invoices, budgets, and recurring charges"
   category: horizontal
   tags:
     - finance

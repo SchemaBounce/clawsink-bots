@@ -5,7 +5,7 @@ metadata:
   name: exa
   displayName: "Exa Search"
   version: "1.0.0"
-  description: "Semantic web search for AI agents — token-efficient, embedding-based search"
+  description: "Semantic web search for AI agents, token-efficient, embedding-based search"
   tags: ["search", "web", "semantic", "research", "presence"]
   author: "exa"
   license: "MIT"
