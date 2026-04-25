@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -25,13 +25,16 @@ agent:
     - Alternate content sections (SchemaBounce vs OpenCLAW) across consecutive runs. Track the last section in editorial_calendar memory.
     - Cap each blog post at 1500 words unless the request explicitly specifies long-form content.
   toolInstructions: |
-    ## Tool Usage: Minimal Calls
-    - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
-    - Step 2: `adl_read_messages`: check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
-    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
-    - Step 5: If new records → process deltas → write findings → update memory
+    ## Tool Usage
+    - Step 1: `adl_read_memory` namespace `bot:blog-writer:northstar` key `brand_voice` and `product_catalog` — read voice + product context first
+    - Step 2: `adl_read_memory` namespace `editorial_calendar` key `last_run_state` — get last run timestamp and section to alternate
+    - Step 3: `adl_read_messages` — check for topic requests from executive-assistant, marketing-growth, or seo-expert
+    - Step 4: Spawn researcher / writer / editor sub-agents in sequence (sessions_spawn) to produce a draft
+    - Step 5: When the editor returns PASS, call `adl_blog_create_draft` with the markdown post → returns post_id
+    - Step 6: Call `adl_blog_submit_review` with post_id → moves to human review
+    - Step 7: `adl_write_memory` namespace `editorial_calendar` to record the topic, slug, and section
+    - Step 8: `adl_send_message` to executive-assistant with finding "draft submitted for review", include slug
+    - Approval is human-only — never call any approve tool. There isn't one.
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -81,29 +84,13 @@ skills:
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
-plugins:
-  - ref: "composio@latest"
-    slot: "oauth"
-    reason: "Managed OAuth for blog API. Handles token refresh and scoping"
-    config:
-      apps: ["blog"]
-      scopes: ["blog:write"]
-mcpServers:
-  - ref: "tools/github"
-    required: false
-    reason: "Publishes blog posts via pull requests to content repository"
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Send editorial notifications and draft review requests to content stakeholders"
-  - ref: "tools/exa"
-    required: true
-    reason: "Research trending topics, competitor content, and industry news for blog post ideation"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl reference articles and documentation sources for research material"
-  - ref: "tools/composio"
-    required: false
-    reason: "Publish drafts to CMS platforms and coordinate with marketing automation tools"
+plugins: []
+# No external MCP servers required for the SchemaBounce internal deployment.
+# Publishing happens via the runtime built-ins adl_blog_create_draft and
+# adl_blog_submit_review, which route through core-api's internal admin
+# endpoint. External research tools (exa, firecrawl) and outreach tools
+# (agentmail, github) can be re-added later as optional connections.
+mcpServers: []
 requirements:
   minTier: "starter"
 setup:
