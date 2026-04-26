@@ -5,83 +5,75 @@ metadata:
   name: google-search-console
   displayName: "Google Search Console"
   version: "1.0.0"
-  description: "Google Search Console real keyword data, indexation status, sitemap health, and search analytics"
+  description: "Google Search Console real keyword data, indexation status, sitemap health, and search analytics — reached through the Composio MCP gateway."
   tags: ["google", "seo", "search-console", "gsc", "analytics"]
   author: "schemabounce"
   license: "MIT"
-transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "google-search-console-mcp@latest"]
 auth:
-  method: "oauth2"
-  redirectUri: "https://{tenant}/api/v1/oauth/google/callback"
-  scope: "https://www.googleapis.com/auth/webmasters.readonly"
+  method: "composio"
+  composioToolkit: "GOOGLE_SEARCH_CONSOLE"
   setupReason: "Real keyword data, impressions, CTR, position trends. Without this the SEO auditor falls back to internal-only checks and cannot identify almost-ranking opportunities."
+# This is a virtual MCP server — agents reach Google Search Console through the
+# Composio gateway, not a separate process. The runtime calls
+# `composio.execute_composio_tool` with action names that Composio resolves to
+# the GSC API. The transport block below documents this for the marketplace UI;
+# OpenCLAW does not start a separate process for this server.
+transport:
+  type: "composio-virtual"
 env:
-  - name: GOOGLE_CLIENT_ID
-    description: "Google OAuth client ID"
-    required: true
-    sensitive: true
-  - name: GOOGLE_CLIENT_SECRET
-    description: "Google OAuth client secret"
-    required: true
-    sensitive: true
-  - name: GOOGLE_REDIRECT_URI
-    description: "Google OAuth redirect URI for the workspace tenant"
-    required: true
-  - name: GOOGLE_REFRESH_TOKEN
-    description: "Long-lived refresh token issued after first OAuth consent (stored encrypted)"
-    required: true
+  - name: GOOGLE_SEARCH_CONSOLE_REFRESH_TOKEN
+    description: "Managed by Composio after OAuth consent. Not exposed to bots; resolved server-side per tool call."
+    required: false
     sensitive: true
 tools:
-  - name: gsc_list_sites
-    description: "List GSC verified properties (sites) the credential has access to"
-    category: discovery
-  - name: gsc_search_analytics_query
+  - name: GOOGLE_SEARCH_CONSOLE_QUERY_SEARCH_ANALYTICS
     description: "Query Search Analytics over a date range. Dimensions: query, page, country, device, searchAppearance. Returns clicks, impressions, CTR, position."
     category: analytics
-  - name: gsc_url_inspect
-    description: "Inspect a single URL: indexation status, last crawl, canonical, mobile usability, rich results"
+  - name: GOOGLE_SEARCH_CONSOLE_INSPECT_URL
+    description: "Inspect a single URL: indexation status, last crawl, canonical, mobile usability, rich results."
     category: indexation
-  - name: gsc_sitemap_list
-    description: "List submitted sitemaps and their crawl errors / warnings"
+  - name: GOOGLE_SEARCH_CONSOLE_LIST_SITEMAPS
+    description: "List submitted sitemaps and their crawl errors / warnings."
     category: indexation
+  - name: GOOGLE_SEARCH_CONSOLE_LIST_SITES
+    description: "List GSC verified properties (sites) the credential has access to."
+    category: discovery
 ---
 
-# Google Search Console MCP Server
+# Google Search Console MCP
 
-Provides Google Search Console (GSC) Search Console API access for SEO bots that need real keyword data, indexation status, and crawl health.
+Provides Google Search Console (GSC) Search Analytics, URL inspection, and sitemap-health tools through the **Composio managed-OAuth gateway**. SEO bots discover the available actions at runtime via `composio.search_composio_tools({ toolkits: ["GOOGLE_SEARCH_CONSOLE"] })` and execute them via `composio.execute_composio_tool({ action, arguments })`.
+
+This is a **virtual MCP server**: it represents the GSC capability set, but the actual MCP transport is Composio. There is no separate process to start.
 
 ## Which Bots Use This
 
-- **seo-expert** — primary consumer. The auditor pulls Search Analytics for the workspace's site over a rolling 28-day window and identifies "almost-ranking" opportunities (impressions ≥ 100, position 5-20, CTR below median). The recommender turns those into topic suggestions for the blog-writer.
+- **seo-expert** — primary consumer. The auditor pulls Search Analytics for the workspace's site over a rolling 28-day window and identifies almost-ranking opportunities (impressions ≥ 100, position 5-20, CTR below median). The recommender turns those into topic suggestions for the blog-writer.
 
-## Setup
+## Connection Flow
 
-1. Create a Google Cloud project and enable the **Google Search Console API**.
-2. Create OAuth 2.0 credentials (client ID and secret) with the `webmasters.readonly` scope.
-3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` to your workspace's MCP connections (Workspace Settings → Connections → Google Search Console).
-4. Complete the OAuth consent flow once. The refresh token is stored encrypted in `mcp_connections` and used to mint short-lived access tokens for every tool call.
-5. The server starts automatically when a bot that references it runs. The first `gsc_list_sites` call confirms connectivity.
+1. The user clicks **Deploy** on the SEO Expert bot in the marketplace.
+2. The deploy modal shows two MCP dependencies:
+   - **Composio** (required) — the workspace must have a Composio API key. If missing, the modal links to Workspace Settings → Connections.
+   - **Google Search Console** (optional) — the deploy modal renders a "Connect" button that opens Composio's OAuth popup for the GSC toolkit. On success, the connection is recorded in `mcp_connections` keyed by `tools/google-search-console`.
+3. The user approves Google's OAuth consent for the `webmasters.readonly` scope.
+4. Composio stores the long-lived refresh token; we never see it directly.
+5. The agent activates and the auditor can immediately call GSC tools through Composio.
 
-## What This Replaces
+## Why Composio (not a separate MCP server binary)
 
-Before this server was wired, the SEO Expert could only audit our own sitemap and our own published-blog-list endpoint. It had **zero visibility into actual search traffic** — no keyword data, no CTR, no impressions, no position. It was structurally incapable of moving the SEO needle. This server is the first concrete step in closing that gap. See `docs/AGENT_MCP_TOOLING_HANDOFF.md` for the broader audit.
+- The OAuth dance is non-trivial and adds a credential-management surface. Composio is already in our runtime registry and already handles OAuth for 500+ services. Using it for GSC is one entry in `mcpServerMeta.ts`, zero new Go code, zero new credential storage.
+- A future iteration may swap in a dedicated GSC MCP server binary (e.g., a community Node package) once the OAuth handler in core-api supports direct Google OAuth. Until then, Composio is the path.
 
-## Local-Test Note
+## Verification
 
-While the actual public/community MCP server image is being finalized, the SEO Expert calls four built-in OpenCLAW tools (`adl_seo_fetch_gsc_keywords`, `adl_seo_pagespeed_audit`, `adl_seo_meta_audit`, `adl_seo_geo_visibility_check`) that resolve credentials from the same `mcp_connections` row this server uses. The MCP transport is the long-term path; the built-ins are the immediate path so the agent ships value today.
+Once deployed, the auditor's first GSC tool call should be:
 
-## Team Usage
-
-Add to your TEAM.md to share a single GSC server instance across bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/google-search-console"
-    required: false
-    reason: "Real search performance data for SEO + content teams"
-    config:
-      default_site_url: "https://your-domain.com/"
 ```
+composio.search_composio_tools({
+  toolkits: ["GOOGLE_SEARCH_CONSOLE"],
+  use_case: "fetch real keyword performance over the last 28 days"
+})
+```
+
+If Composio returns `TOOLKIT_NOT_CONNECTED`, the user has Composio configured but has not authorized the GSC toolkit. The auditor handles this gracefully by emitting a single `seo_findings` row asking the user to connect.

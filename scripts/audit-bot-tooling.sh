@@ -25,19 +25,24 @@ TOOLS_DIR="$REPO_ROOT/tools"
 # embeddedEnvSpecs map. If you add a SERVER.md here without a matching entry
 # there, activation silently no-ops (auto-grant succeeds, tool never wires).
 # Keep this list in sync with that file (line 25-71 as of 2026-04-25).
-RUNTIME_KNOWN="github slack stripe jira linear notion firecrawl agentmail hyperbrowser exa elevenlabs composio agentphone claude-code google-search-console google-analytics-4 google-pagespeed-insights"
+RUNTIME_KNOWN="github slack stripe jira linear notion firecrawl agentmail hyperbrowser exa elevenlabs composio agentphone claude-code"
 
 # A server has a SERVER.md (manifest known)
 manifest_known() {
   [ -d "$TOOLS_DIR/$1" ]
 }
 
-# A server is wired in the core-api runtime registry
+# A server is wired in the core-api runtime registry — either it has an
+# embeddedEnvSpecs entry (direct MCP), or its SERVER.md declares
+# `method: "composio"` (Composio-virtual; auth flows through Composio).
 runtime_known() {
   local name="$1"
   for known in $RUNTIME_KNOWN; do
     if [ "$known" = "$name" ]; then return 0; fi
   done
+  if [ -f "$TOOLS_DIR/$name/SERVER.md" ] && grep -qE '^[[:space:]]*method:[[:space:]]*"?composio"?' "$TOOLS_DIR/$name/SERVER.md"; then
+    return 0
+  fi
   return 1
 }
 

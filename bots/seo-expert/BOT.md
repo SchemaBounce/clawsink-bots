@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.1.2"
+  version: "0.1.3"
   description: "Audits SchemaBounce SEO across modern signals (Google Search Console keyword data, Core Web Vitals, Open Graph, structured data, AI-search citation visibility), suggests blog topics, and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -26,11 +26,7 @@ agent:
     ## Tool Usage
     - Step 1: `adl_read_memory` namespace `bot:seo-expert:northstar` keys `brand_voice`, `product_catalog`, `competitive_anchors`
     - Step 2: `adl_read_memory` namespace `seo:audit:cache` key `sitemap_xml` (seeded by the bootstrap script before each run); list URLs.
-    - Step 3: Spawn `auditor` sub-agent. The auditor MUST call:
-      - `adl_seo_meta_audit` for each URL in the sitemap (Open Graph, Twitter Card, JSON-LD, canonical, hreflang, meta description, H1)
-      - `adl_seo_pagespeed_audit` for the home page + top-N URLs (Core Web Vitals, Lighthouse SEO score)
-      - `adl_seo_fetch_gsc_keywords` for the workspace's site over the last 28 days (clicks, impressions, CTR, position)
-      - `adl_seo_geo_visibility_check` for 5-10 brand-relevant queries (citation rate across Anthropic, OpenAI, Perplexity)
+    - Step 3: Spawn `auditor` sub-agent. The auditor uses Composio MCP tools (`composio.search_composio_tools` then `composio.execute_composio_tool`) to reach Google Search Console for real keyword data, and `adl_proxy_call` for sitemap-URL meta audits (Open Graph, JSON-LD, canonical). PageSpeed and GEO/LLMO checks are deferred to dedicated MCP servers in the next iteration.
     - Step 4: For each finding, `adl_upsert_record` entity_type=`seo_findings` with severity, metric_name, metric_value, provider.
     - Step 5: For each almost-ranking GSC query, `adl_upsert_record` entity_type=`seo_keyword_opportunity`.
     - Step 6: Spawn `recommender` sub-agent; for each topic suggestion, `adl_upsert_record` entity_type=`seo_topic_suggestion` AND `adl_send_message` to `blog-writer` type=`finding`. Link to the seo_keyword_opportunity rows that justify it.
@@ -88,9 +84,12 @@ egress:
     - "api.schemabounce.com"
 plugins: []
 mcpServers:
+  - ref: "tools/composio"
+    required: true
+    reason: "Composio is the managed-OAuth gateway that provides Google Search Console (and future GA4, etc.) without writing custom OAuth handlers. Without it the auditor cannot reach GSC at all."
   - ref: "tools/google-search-console"
     required: false
-    reason: "Real keyword data, impressions, CTR, and position trends. Without this the auditor falls back to internal-only checks and cannot generate keyword opportunity records."
+    reason: "Real keyword data, impressions, CTR, position trends. Authorized via Composio OAuth at activation time. Without this the auditor still runs but only emits Open-Graph and structured-data findings — no almost-ranking opportunities."
     config:
       default_lookback_days: 28
 requirements:
