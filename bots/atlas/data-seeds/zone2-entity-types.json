@@ -1,40 +1,39 @@
 {
   "entityTypes": [
     {
-      "name": "knowledge",
-      "displayName": "Knowledge",
-      "description": "Stored facts, decisions, and information",
-      "domain": "personal",
+      "name": "platform_pages",
+      "displayName": "Platform Pages",
+      "description": "Catalog of UI routes Atlas can recommend",
+      "domain": "general",
       "fields": {
-        "title": {"type": "string", "required": true, "description": "Clear, searchable title"},
-        "content": {"type": "string", "required": true, "description": "The knowledge content"},
-        "tags": {"type": "array", "items": {"type": "string"}, "description": "Categorization tags"},
-        "source": {"type": "string", "description": "Where this knowledge came from"},
-        "confidence": {"type": "string", "enum": ["fact", "decision", "idea", "reference"], "description": "Type of knowledge"}
+        "title": {"type": "string", "required": true, "description": "Page name as shown in the UI"},
+        "route": {"type": "string", "required": true, "description": "Path under /workspaces/{workspaceId}"},
+        "purpose": {"type": "string", "required": true, "description": "One sentence — what the user does on this page"},
+        "tags": {"type": "array", "items": {"type": "string"}, "description": "Keywords Atlas matches against user questions"},
+        "section": {"type": "string", "enum": ["overview", "agents", "etl", "kolumn", "settings", "marketplace"], "description": "Top-level UI section"}
       }
     },
     {
-      "name": "notes",
-      "displayName": "Notes",
-      "description": "Quick notes, reminders, and thoughts",
-      "domain": "personal",
+      "name": "agent_intros",
+      "displayName": "Agent Intros",
+      "description": "Concierge-friendly summaries of peer agents (one-paragraph blurbs Atlas can quote when introducing a peer)",
+      "domain": "general",
       "fields": {
-        "title": {"type": "string", "required": true, "description": "Note title"},
-        "content": {"type": "string", "required": true, "description": "Note content"},
-        "tags": {"type": "array", "items": {"type": "string"}, "description": "Categorization tags"},
-        "priority": {"type": "string", "enum": ["low", "normal", "high"], "description": "Note priority"}
+        "agent_name": {"type": "string", "required": true, "description": "Agent slug (e.g. blog-writer)"},
+        "headline": {"type": "string", "required": true, "description": "One-sentence pitch"},
+        "best_for": {"type": "array", "items": {"type": "string"}, "description": "User-facing tasks this agent excels at"}
       }
     },
     {
-      "name": "bookmarks",
-      "displayName": "Bookmarks",
-      "description": "Saved links, references, and resources",
-      "domain": "personal",
+      "name": "user_orientation_log",
+      "displayName": "User Orientation Log",
+      "description": "Every concierge interaction Atlas logs after replying to a user",
+      "domain": "general",
       "fields": {
-        "title": {"type": "string", "required": true, "description": "Resource title"},
-        "url": {"type": "string", "description": "URL or reference path"},
-        "description": {"type": "string", "description": "Why this resource is useful"},
-        "tags": {"type": "array", "items": {"type": "string"}, "description": "Categorization tags"}
+        "topic": {"type": "string", "required": true, "description": "What the user asked about (agents | navigation | status | unknown)"},
+        "route_recommended": {"type": "string", "description": "UI route Atlas pointed the user to"},
+        "agent_recommended": {"type": "string", "description": "Peer agent slug Atlas recommended, if any"},
+        "user_question": {"type": "string", "description": "Verbatim user message"}
       }
     }
   ]

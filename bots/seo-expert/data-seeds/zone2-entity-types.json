@@ -1,0 +1,42 @@
+{
+  "entityTypes": [
+    {
+      "name": "seo_findings",
+      "description": "A single SEO issue detected by the auditor sub-agent.",
+      "fields": {
+        "url": {"type": "string", "required": true},
+        "finding_type": {"type": "string", "required": true, "enum": ["missing_meta_description", "thin_content", "duplicate_slug", "orphan_page", "weak_title", "stale_content", "missing_canonical", "missing_h1", "multiple_h1", "long_slug", "audit_failure"]},
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high"]},
+        "description": {"type": "string", "required": true},
+        "suggested_fix": {"type": "string", "required": true},
+        "audited_at": {"type": "timestamp", "required": true}
+      }
+    },
+    {
+      "name": "seo_topic_suggestion",
+      "description": "A blog topic suggestion routed from seo-expert to blog-writer to close a content gap.",
+      "fields": {
+        "topic": {"type": "string", "required": true},
+        "target_keywords": {"type": "array", "items": {"type": "string"}, "required": true},
+        "rationale": {"type": "string", "required": true},
+        "linked_finding_ids": {"type": "array", "items": {"type": "string"}, "required": false},
+        "status": {"type": "string", "required": true, "enum": ["proposed", "accepted", "drafted", "rejected"]}
+      }
+    },
+    {
+      "name": "seo_outreach_log",
+      "description": "A simulated outreach attempt. Always status=would_send. Never sent externally.",
+      "fields": {
+        "target_url": {"type": "string", "required": true},
+        "target_contact": {"type": "string", "required": false},
+        "channel": {"type": "string", "required": true, "enum": ["email", "twitter", "linkedin"]},
+        "subject": {"type": "string", "required": false},
+        "draft_message": {"type": "string", "required": true},
+        "rationale": {"type": "string", "required": true},
+        "status": {"type": "string", "required": true, "enum": ["would_send"]},
+        "simulated_at": {"type": "timestamp", "required": true},
+        "actual_send_log_id": {"type": "string", "required": false}
+      }
+    }
+  ]
+}

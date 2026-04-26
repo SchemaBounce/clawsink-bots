@@ -1,9 +1,9 @@
 {
   "seeds": [
     {
-      "key": "mission",
-      "value": "Personal knowledge management — remember everything, find anything",
-      "description": "Atlas core mission for the personal knowledge domain"
+      "key": "platform_concierge",
+      "value": "Help every user find their way around SchemaBounce. Answer agent and navigation questions using real records — never invent features.",
+      "description": "Atlas core mission as the platform concierge"
     }
   ]
 }
