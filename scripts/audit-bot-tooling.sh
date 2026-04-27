@@ -115,6 +115,7 @@ mcp_refs() {
 count_none=0
 count_shallow=0
 count_connected=0
+count_internal=0
 total=0
 
 if [ "${1:-}" = "--counts-only" ]; then
@@ -155,7 +156,18 @@ for botdir in "$BOTS_DIR"/*/; do
     fi
   done
 
-  if [ "$mcp_count" -eq 0 ] && { [ "$egress" = "none" ] || [ "$egress" = "" ]; }; then
+  # Intentional internal-only bots opt out by including a marker line near
+  # the top of BOT.md. They use platform built-ins (adl_*) which don't show
+  # up in mcpServers[]; flagging them as "none" would be a false positive.
+  internal_marker=0
+  if [ -f "$bot_md" ] && head -50 "$bot_md" | grep -qiE "internal-only by design|first-party only|first-party platform"; then
+    internal_marker=1
+  fi
+
+  if [ "$internal_marker" -eq 1 ] && [ "$mcp_count" -eq 0 ]; then
+    depth="internal-only"
+    count_internal=$((count_internal + 1))
+  elif [ "$mcp_count" -eq 0 ] && { [ "$egress" = "none" ] || [ "$egress" = "" ]; }; then
     depth="none"
     count_none=$((count_none + 1))
   elif [ "$runtime_wired" -gt 0 ] && [ "$manifest_only" -eq 0 ] && [ "$unknown" -eq 0 ]; then
@@ -173,7 +185,7 @@ done
 
 if [ "$COUNTS_ONLY" -eq 0 ]; then
   echo ""
-  echo "**Totals:** $total bots — $count_none none · $count_shallow shallow · $count_connected connected"
+  echo "**Totals:** $total bots — $count_none none · $count_shallow shallow · $count_connected connected · $count_internal internal-only"
 else
-  echo "total=$total none=$count_none shallow=$count_shallow connected=$count_connected"
+  echo "total=$total none=$count_none shallow=$count_shallow connected=$count_connected internal=$count_internal"
 fi

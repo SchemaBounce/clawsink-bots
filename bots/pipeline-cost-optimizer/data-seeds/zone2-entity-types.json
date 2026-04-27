@@ -1,0 +1,52 @@
+{
+  "entityTypes": [
+    {
+      "name": "pipeline_route_audit",
+      "description": "Per-route health + cost-relevant signal snapshot captured by the analyzer sub-agent. The recommender consumes these to generate pipeline_cost_recommendation records. Also produces a __workspace_rollup__ row per run summarising aggregate counts.",
+      "fields": {
+        "route_id": {"type": "string", "required": true, "description": "Pipeline route id, or __workspace_rollup__ / __no_routes__ / __truncated__ for synthetic rows"},
+        "route_name": {"type": "string", "required": false},
+        "status": {"type": "string", "required": true, "description": "active | paused | errored | unknown | rollup"},
+        "source_id": {"type": "string", "required": false},
+        "sink_count": {"type": "integer", "required": false},
+        "sink_types": {"type": "array", "items": {"type": "string"}, "required": false},
+        "event_count_24h": {"type": "integer", "required": false},
+        "event_count_7d": {"type": "integer", "required": false},
+        "event_count_30d": {"type": "integer", "required": false},
+        "last_event_at": {"type": "timestamp", "required": false},
+        "error_count_24h": {"type": "integer", "required": false},
+        "is_idle": {"type": "boolean", "required": false},
+        "has_rate_limit": {"type": "boolean", "required": false},
+        "has_batching": {"type": "boolean", "required": false},
+        "has_dlq": {"type": "boolean", "required": false},
+        "unsupported_sinks": {"type": "array", "items": {"type": "string"}, "required": false},
+        "total_routes": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "idle_routes": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "errored_routes": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "orphan_sources": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "total_event_count_30d": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "total_sink_count": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "audited_at": {"type": "timestamp", "required": true}
+      }
+    },
+    {
+      "name": "pipeline_cost_recommendation",
+      "description": "An actionable cost recommendation produced by the recommender sub-agent. Reviewed by ops or routed to release-manager for implementation. Recommendations are dry-run only; this bot does not modify infrastructure.",
+      "fields": {
+        "route_id": {"type": "string", "required": true},
+        "route_name": {"type": "string", "required": false},
+        "finding_type": {"type": "string", "required": true, "enum": ["idle_route", "fanout_oversized", "no_rate_limit", "no_batching", "no_dlq", "high_run_rate", "errored_route", "orphan_source", "setup_gap", "cost_data_missing"]},
+        "severity": {"type": "string", "required": true, "enum": ["info", "warning", "critical"]},
+        "current_metric": {"type": "object", "required": false, "description": "JSON blob with the actual metric values that triggered the rule (e.g., {event_count_30d: 0, last_event_at: ...})"},
+        "projected_savings": {"type": "string", "required": false, "description": "Plain-text estimate of the cost or operational benefit of acting on this recommendation. Cites concrete numbers from sink_cost_table when available."},
+        "suggested_action": {"type": "string", "required": true, "description": "Concrete one-paragraph action a human or release-manager can execute. No hype verbs."},
+        "suggested_owner": {"type": "string", "required": false, "enum": ["release-manager", "executive-assistant", "human-ops"], "description": "Bot or human role best suited to act on this recommendation"},
+        "audit_id": {"type": "string", "required": false, "description": "ID of the pipeline_route_audit record this recommendation was derived from"},
+        "first_detected_at": {"type": "timestamp", "required": true},
+        "last_seen_at": {"type": "timestamp", "required": false, "description": "Updated each run the same finding persists"},
+        "consecutive_runs_seen": {"type": "integer", "required": false, "description": "How many runs in a row this finding has been emitted"},
+        "status": {"type": "string", "required": true, "enum": ["open", "dismissed", "resolved"], "description": "Operator state. Bot only writes 'open'; humans/release-manager flip to dismissed/resolved."}
+      }
+    }
+  ]
+}
