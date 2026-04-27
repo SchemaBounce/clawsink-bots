@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
@@ -67,6 +67,12 @@ skills:
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/data-ops@1.0.0"
   - ref: "skills/anomaly-detection@1.0.0"
+plugins: []
+mcpServers: []
+# Internal-only by design — first-party platform bot. Detects statistical
+# anomalies in time-series metrics stored as ADL records. Reads workspace
+# data via adl_query_records / adl_query_duckdb runtime built-ins. No
+# third-party MCP, no external SaaS.
 requirements:
   minTier: "starter"
 setup:

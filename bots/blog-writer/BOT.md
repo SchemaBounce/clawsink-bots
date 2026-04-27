@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -85,12 +85,17 @@ skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
 plugins: []
-# No external MCP servers required for the SchemaBounce internal deployment.
-# Publishing happens via the runtime built-ins adl_blog_create_draft and
-# adl_blog_submit_review, which route through core-api's internal admin
-# endpoint. External research tools (exa, firecrawl) and outreach tools
-# (agentmail, github) can be re-added later as optional connections.
 mcpServers: []
+# Internal-only by design — first-party platform bot in its current form.
+# Publishing routes through the runtime built-ins adl_blog_create_draft
+# and adl_blog_submit_review (admin-workspace-gated). Research is read
+# from pre-staged Zone1 / ADL records by the bootstrap script. No
+# third-party MCP, no external SaaS in the data path.
+#
+# To extend for non-admin workspaces that want a more featureful flow,
+# re-add tools/exa (research), tools/firecrawl (crawl), tools/agentmail
+# (outreach), tools/github (publish-by-PR). Each requires its own
+# Connect step at activation time. Intentionally minimal today.
 requirements:
   minTier: "starter"
 setup:
