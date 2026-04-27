@@ -9,6 +9,10 @@ metadata:
   tags: ["microsoft", "teams", "chat", "meetings", "enterprise"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "MICROSOFT_TEAMS"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like MICROSOFT_TEAMS_*."
 transport:
   type: "stdio"
   command: "npx"

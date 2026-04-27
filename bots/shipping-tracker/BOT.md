@@ -66,6 +66,11 @@ skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/cdc-event-analysis@1.0.0"
+plugins: []
+mcpServers:
+  - ref: "tools/composio"
+    required: true
+    reason: "Carrier APIs (UPS, FedEx, USPS, DHL) reached through Composio's managed-OAuth gateway. Setup wizard prompts the operator to connect Composio + the relevant carrier toolkits when activating this bot."
 requirements:
   minTier: "starter"
 setup:

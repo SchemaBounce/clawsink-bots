@@ -420,6 +420,12 @@ skills:
   - ref: "skills/pipeline-proposer@1.0.0"
 plugins: []
 mcpServers: []
+# Internal-only by design — first-party platform bot. The workflow-designer
+# creates and edits workflow definition records via adl_create_workflow /
+# adl_list_workflows / adl_get_workflow / adl_update_workflow /
+# adl_deploy_workflow runtime built-ins. No external SaaS, no third-party
+# MCP. Composio cannot replicate this — only SchemaBounce can host it
+# because only SchemaBounce has the workflow runtime.
 requirements:
   minTier: "starter"
 setup:

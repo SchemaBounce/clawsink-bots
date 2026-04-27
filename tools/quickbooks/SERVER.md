@@ -9,6 +9,10 @@ metadata:
   tags: ["quickbooks", "accounting", "invoices", "payments", "finance"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "QUICKBOOKS"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like QUICKBOOKS_*."
 transport:
   type: "stdio"
   command: "npx"

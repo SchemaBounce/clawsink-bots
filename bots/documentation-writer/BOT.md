@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -87,9 +87,11 @@ presence:
     browsing: false
     crawling: true
 mcpServers:
-  - ref: "tools/codex"
-    required: false
-    reason: "Intended default coding agent for documentation file edits. Preview, backend service not yet deployed; marked optional until GA"
+# tools/codex was declared here previously but its backend MCP service
+# is not deployed and the tool is not in the runtime registry — silent
+# no-op when activated. Stripped 2026-04-27 per the no-vaporware sweep.
+# Re-add once the codex backend ships and the SERVER.md graduates from
+# preview.
   - ref: "tools/github"
     required: true
     reason: "Creates doc PRs linked to implementation PRs"

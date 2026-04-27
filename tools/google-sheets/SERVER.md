@@ -9,6 +9,10 @@ metadata:
   tags: ["google", "sheets", "spreadsheet", "data"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "GOOGLESHEETS"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like GOOGLESHEETS_*."
 transport:
   type: "stdio"
   command: "npx"

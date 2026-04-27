@@ -72,11 +72,20 @@ zones:
   zone1Read: ["mission", "icp"]
   zone2Domains: ["crm"]
 egress:
-  mode: "none"
+  mode: "allowlist"
+  allowlist:
+    - "api.exa.ai"
+    - "api.firecrawl.dev"
 skills:
   - ref: "skills/platform-awareness@1.0.0"
 plugins: []
-mcpServers: []
+mcpServers:
+  - ref: "tools/exa"
+    required: false
+    reason: "Semantic web search to enrich lead profiles with recent news, funding announcements, and tech-stack signals"
+  - ref: "tools/firecrawl"
+    required: false
+    reason: "Crawl company websites and product pages to gather structured firmographics for outreach briefs"
 presence:
   email:
     required: false

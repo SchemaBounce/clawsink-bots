@@ -9,6 +9,10 @@ metadata:
   tags: ["google", "gmail", "email", "messaging"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "GMAIL"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like GMAIL_*."
 transport:
   type: "stdio"
   command: "npx"

@@ -9,6 +9,10 @@ metadata:
   tags: ["dropbox", "storage", "files", "cloud-storage"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "DROPBOX"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like DROPBOX_*."
 transport:
   type: "sse"
   url: "https://mcp.dropbox.com/sse"

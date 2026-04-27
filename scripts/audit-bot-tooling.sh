@@ -25,7 +25,7 @@ TOOLS_DIR="$REPO_ROOT/tools"
 # embeddedEnvSpecs map. If you add a SERVER.md here without a matching entry
 # there, activation silently no-ops (auto-grant succeeds, tool never wires).
 # Keep this list in sync with that file (line 25-71 as of 2026-04-25).
-RUNTIME_KNOWN="github slack stripe jira linear notion firecrawl agentmail hyperbrowser exa elevenlabs composio agentphone claude-code"
+RUNTIME_KNOWN="github slack stripe jira linear notion firecrawl agentmail hyperbrowser exa elevenlabs composio agentphone claude-code confluence"
 
 # A server has a SERVER.md (manifest known)
 manifest_known() {
@@ -40,7 +40,7 @@ runtime_known() {
   for known in $RUNTIME_KNOWN; do
     if [ "$known" = "$name" ]; then return 0; fi
   done
-  if [ -f "$TOOLS_DIR/$name/SERVER.md" ] && grep -qE '^[[:space:]]*method:[[:space:]]*"?composio"?' "$TOOLS_DIR/$name/SERVER.md"; then
+  if [ -f "$TOOLS_DIR/$name/SERVER.md" ] && grep -qE '^[[:space:]]*method:[[:space:]]*"?(composio|native-oauth)"?' "$TOOLS_DIR/$name/SERVER.md"; then
     return 0
   fi
   return 1
@@ -75,6 +75,7 @@ yaml_array_count() {
   local file="$1"
   local key="$2"
   awk -v k="$key" '
+    { sub(/\r$/, "") }
     BEGIN { infm = 0; inblock = 0; n = 0; printed = 0 }
     /^---$/ {
       infm = !infm
@@ -98,6 +99,7 @@ yaml_array_count() {
 mcp_refs() {
   local file="$1"
   awk '
+    { sub(/\r$/, "") }
     BEGIN { infm = 0; inblock = 0 }
     /^---$/ { infm = !infm; next }
     !infm { next }
@@ -160,7 +162,7 @@ for botdir in "$BOTS_DIR"/*/; do
   # the top of BOT.md. They use platform built-ins (adl_*) which don't show
   # up in mcpServers[]; flagging them as "none" would be a false positive.
   internal_marker=0
-  if [ -f "$bot_md" ] && head -50 "$bot_md" | grep -qiE "internal-only by design|first-party only|first-party platform"; then
+  if [ -f "$bot_md" ] && grep -qiE "internal-only by design|first-party only|first-party platform" "$bot_md"; then
     internal_marker=1
   fi
 

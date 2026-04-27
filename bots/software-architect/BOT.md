@@ -69,9 +69,11 @@ skills:
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
 mcpServers:
-  - ref: "tools/codex"
-    required: false
-    reason: "Intended default sandboxed coding agent for implementation/testing/PR creation. Preview, backend service not yet deployed; marked optional until GA"
+# tools/codex was declared here previously but its backend MCP service
+# is not deployed and the tool is not in the runtime registry — silent
+# no-op when activated. Stripped 2026-04-27 per the no-vaporware sweep.
+# Re-add once the codex backend ships and the SERVER.md graduates from
+# preview.
   - ref: "tools/github"
     required: true
     reason: "Creates branches, pull requests, and manages issues"

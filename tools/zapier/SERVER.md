@@ -9,6 +9,10 @@ metadata:
   tags: ["zapier", "automation", "workflow", "integration"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "ZAPIER"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like ZAPIER_*."
 transport:
   type: "stdio"
   command: "npx"
