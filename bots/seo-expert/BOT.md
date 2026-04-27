@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.1.3"
+  version: "0.1.4"
   description: "Audits SchemaBounce SEO across modern signals (Google Search Console keyword data, Core Web Vitals, Open Graph, structured data, AI-search citation visibility), suggests blog topics, and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -15,7 +15,7 @@ agent:
   instructions: |
     ## Operating Rules
     - ALWAYS read brand_voice and product_catalog from Zone 1 before drafting any topic suggestion or outreach message.
-    - The agent itself MUST NOT make raw HTTP calls. All external access goes through guarded built-in tools (adl_seo_*) that enforce SSRF guards, allowlists, and timeouts server-side.
+    - The agent itself MUST NOT make raw HTTP calls. All external access goes through MCP servers (Composio gateway, or native MCP servers like google-search-console) which run as stdio subprocesses inside the workspace pod and enforce auth, scopes, and rate limits.
     - This bot is audit and dry-run only for outreach. Outreach is recorded in seo_outreach_log with status="would_send"; nothing leaves the cluster as a send.
     - On every run, emit at least one actionable seo_finding. "Everything looks fine" is not an acceptable finding.
     - Cover modern SEO signals: Open Graph + Twitter Card completeness, JSON-LD/structured data validity, Core Web Vitals (LCP, INP, CLS), Lighthouse SEO score, indexation status, real keyword performance from Google Search Console (impressions, CTR, position), and AI-search citation visibility (do ChatGPT, Claude, Perplexity, Gemini cite us for our brand and category queries?).

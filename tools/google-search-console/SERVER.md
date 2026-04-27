@@ -5,75 +5,90 @@ metadata:
   name: google-search-console
   displayName: "Google Search Console"
   version: "1.0.0"
-  description: "Google Search Console real keyword data, indexation status, sitemap health, and search analytics — reached through the Composio MCP gateway."
+  description: "Google Search Console real keyword performance, indexation, and sitemap health. Native Google OAuth — no Composio in the data path."
   tags: ["google", "seo", "search-console", "gsc", "analytics"]
   author: "schemabounce"
   license: "MIT"
 auth:
-  method: "composio"
-  composioToolkit: "GOOGLE_SEARCH_CONSOLE"
+  method: "native-oauth"
+  provider: "google"
+  scopes:
+    - "https://www.googleapis.com/auth/webmasters.readonly"
+    - "openid"
+    - "email"
   setupReason: "Real keyword data, impressions, CTR, position trends. Without this the SEO auditor falls back to internal-only checks and cannot identify almost-ranking opportunities."
-# This is a virtual MCP server — agents reach Google Search Console through the
-# Composio gateway, not a separate process. The runtime calls
-# `composio.execute_composio_tool` with action names that Composio resolves to
-# the GSC API. The transport block below documents this for the marketplace UI;
-# OpenCLAW does not start a separate process for this server.
+# Transport: a stdio MCP server we host inside the workspace OpenCLAW pod.
+# The npm package below is illustrative — replace with the actual package
+# we vendor or publish. The runtime resolves GOOGLE_REFRESH_TOKEN from
+# mcp_connections at pod-start and the MCP server uses it to mint short-lived
+# access tokens for every Google Search Console API call. No customer data
+# leaves the pod except to googleapis.com.
 transport:
-  type: "composio-virtual"
+  type: "stdio"
+  command: "npx"
+  args: ["-y", "google-search-console-mcp@latest"]
+  # NOTE: at the time of writing the canonical npm package is still being
+  # vetted. Until it is, the SERVER.md is committed as a target spec; the
+  # OAuth handler in core-api (mcp_oauth_google_handler.go) lands the
+  # refresh token regardless, so when the package is finalised the runtime
+  # path lights up with no further frontend / handler changes.
 env:
-  - name: GOOGLE_SEARCH_CONSOLE_REFRESH_TOKEN
-    description: "Managed by Composio after OAuth consent. Not exposed to bots; resolved server-side per tool call."
-    required: false
+  - name: GOOGLE_REFRESH_TOKEN
+    description: "Workspace's Google OAuth refresh token. Issued by core-api after the user completes the consent flow opened from the deploy modal. Stored encrypted in mcp_connections; resolved server-side at pod start."
+    required: true
+    sensitive: true
+  - name: GOOGLE_OAUTH_CLIENT_ID
+    description: "Platform-level Google OAuth client ID (same one that issued the refresh token). Sourced from the SchemaBounce-owned Google Cloud project, not per-customer."
+    required: true
+    sensitive: false
+  - name: GOOGLE_OAUTH_CLIENT_SECRET
+    description: "Platform-level Google OAuth client secret. Used by the MCP server to mint access tokens from the stored refresh token. Sourced from the SchemaBounce-owned Google Cloud project."
+    required: true
     sensitive: true
 tools:
-  - name: GOOGLE_SEARCH_CONSOLE_QUERY_SEARCH_ANALYTICS
+  - name: query_search_analytics
     description: "Query Search Analytics over a date range. Dimensions: query, page, country, device, searchAppearance. Returns clicks, impressions, CTR, position."
     category: analytics
-  - name: GOOGLE_SEARCH_CONSOLE_INSPECT_URL
+  - name: inspect_url
     description: "Inspect a single URL: indexation status, last crawl, canonical, mobile usability, rich results."
     category: indexation
-  - name: GOOGLE_SEARCH_CONSOLE_LIST_SITEMAPS
+  - name: list_sitemaps
     description: "List submitted sitemaps and their crawl errors / warnings."
     category: indexation
-  - name: GOOGLE_SEARCH_CONSOLE_LIST_SITES
+  - name: list_sites
     description: "List GSC verified properties (sites) the credential has access to."
     category: discovery
 ---
 
 # Google Search Console MCP
 
-Provides Google Search Console (GSC) Search Analytics, URL inspection, and sitemap-health tools through the **Composio managed-OAuth gateway**. SEO bots discover the available actions at runtime via `composio.search_composio_tools({ toolkits: ["GOOGLE_SEARCH_CONSOLE"] })` and execute them via `composio.execute_composio_tool({ action, arguments })`.
+A direct GSC MCP server, no third-party gateway. Ships in the workspace OpenCLAW pod as a stdio subprocess; reaches Google Search Console via the official API.
 
-This is a **virtual MCP server**: it represents the GSC capability set, but the actual MCP transport is Composio. There is no separate process to start.
+## Auth flow (one-time per workspace)
+
+1. User clicks **Deploy** on the SEO Expert in the marketplace.
+2. The deploy modal lists `tools/google-search-console` as an optional MCP dependency and renders a **Connect** button.
+3. Clicking Connect calls `POST /api/v1/workspaces/{ws}/mcp/connections/oauth/google/initiate` with this server's scopes.
+4. Backend opens a popup pointed at Google's consent screen using SchemaBounce's platform-level OAuth client.
+5. User picks their Google account and consents to read-only Search Console access.
+6. Google redirects to `GET /api/v1/oauth/google/callback?code=...&state=...`.
+7. Backend exchanges the code for a refresh token + access token, stores them encrypted in `mcp_connections` keyed by `tools/google-search-console`, and the popup closes.
+8. The deploy modal refetches connections, the gate clears, the user clicks **Deploy**.
+
+The refresh token never leaves our infrastructure. The data path at runtime is **agent → workspace OpenCLAW pod → GSC MCP subprocess → googleapis.com → back**. No Composio, no third-party broker.
 
 ## Which Bots Use This
 
-- **seo-expert** — primary consumer. The auditor pulls Search Analytics for the workspace's site over a rolling 28-day window and identifies almost-ranking opportunities (impressions ≥ 100, position 5-20, CTR below median). The recommender turns those into topic suggestions for the blog-writer.
+- **seo-expert** — primary consumer. The auditor pulls Search Analytics for the workspace's verified site over a rolling 28-day window and identifies almost-ranking opportunities (impressions ≥ 100, position 5-20, CTR below median).
 
-## Connection Flow
+## Why native (vs Composio)
 
-1. The user clicks **Deploy** on the SEO Expert bot in the marketplace.
-2. The deploy modal shows two MCP dependencies:
-   - **Composio** (required) — the workspace must have a Composio API key. If missing, the modal links to Workspace Settings → Connections.
-   - **Google Search Console** (optional) — the deploy modal renders a "Connect" button that opens Composio's OAuth popup for the GSC toolkit. On success, the connection is recorded in `mcp_connections` keyed by `tools/google-search-console`.
-3. The user approves Google's OAuth consent for the `webmasters.readonly` scope.
-4. Composio stores the long-lived refresh token; we never see it directly.
-5. The agent activates and the auditor can immediately call GSC tools through Composio.
+We previously routed this through Composio's GSC toolkit. That works, but every API call passed through Composio's hosted backend — they saw the request and response payloads, and at scale the per-action billing eats real margin. The native path costs us a one-time Google OAuth handler in core-api (`mcp_oauth_google_handler.go`) and a stdio MCP server vendored in the workspace pod. After that, every Google service we add (GA4, Drive, Sheets, Gmail, Calendar) reuses the exact same OAuth client and handler — only the scopes change in `mcpServerMeta.ts`.
 
-## Why Composio (not a separate MCP server binary)
+## Platform configuration (one-time per environment)
 
-- The OAuth dance is non-trivial and adds a credential-management surface. Composio is already in our runtime registry and already handles OAuth for 500+ services. Using it for GSC is one entry in `mcpServerMeta.ts`, zero new Go code, zero new credential storage.
-- A future iteration may swap in a dedicated GSC MCP server binary (e.g., a community Node package) once the OAuth handler in core-api supports direct Google OAuth. Until then, Composio is the path.
-
-## Verification
-
-Once deployed, the auditor's first GSC tool call should be:
-
-```
-composio.search_composio_tools({
-  toolkits: ["GOOGLE_SEARCH_CONSOLE"],
-  use_case: "fetch real keyword performance over the last 28 days"
-})
-```
-
-If Composio returns `TOOLKIT_NOT_CONNECTED`, the user has Composio configured but has not authorized the GSC toolkit. The auditor handles this gracefully by emitting a single `seo_findings` row asking the user to connect.
+- Create a Google Cloud project, enable the **Google Search Console API**.
+- Create an OAuth 2.0 **Web application** client.
+- Authorised redirect URIs: `https://api.schemabounce.com/api/v1/oauth/google/callback` (and `http://localhost:8080/api/v1/oauth/google/callback` for local dev).
+- Set core-api env: `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REDIRECT_BASE`.
+- Same client ID + secret serves every Google service the platform supports — one consent screen, many `webmasters.*`, `analytics.*`, `drive.*`, `gmail.*` scopes available depending on which bots a workspace deploys.
