@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.2"
+  version: "0.1.3"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools — no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -24,11 +24,12 @@ agent:
     ## Tool Usage
     - Step 1: `adl_read_memory` namespace `bot:pipeline-cost-optimizer:northstar` keys `cost_thresholds`, `sink_cost_table`, `idle_definition`
     - Step 2: `adl_read_memory` namespace `cost:run:state` key `last_run` to know which routes were already flagged in the prior run (avoid duplicate noise)
-    - Step 3: Spawn `analyzer` sub-agent. The analyzer enumerates every pipeline route via `adl_list_pipeline_routes`, calls `adl_get_route_status` for each, lists sources via `adl_list_workspace_sources`, lists sink types via `adl_list_sink_types`, pulls data-stat counts via `adl_get_data_stats`, and emits one `pipeline_route_audit` record per route summarising health + cost-relevant signals.
-    - Step 4: Spawn `recommender` sub-agent. The recommender reads the freshly-written audits via `adl_query_records` (filter audited_at within the last hour), correlates them with cost_thresholds + sink_cost_table from north star, and emits `pipeline_cost_recommendation` records with concrete actions.
-    - Step 5: For every recommendation with severity="critical", `adl_send_message` to `executive-assistant` type=`finding` payload=`{recommendation_id, route_id, projected_savings, suggested_action}`.
-    - Step 6: For every recommendation that requires a release-manager change (e.g., disable an idle route), `adl_send_message` to `release-manager` type=`request` payload=`{recommendation_id, action_type, target}`.
-    - Step 7: `adl_write_memory` namespace `cost:run:state` key `last_run` with `{run_at, audits_written, recommendations_written, by_severity, by_category}`
+    - Step 3: Spawn `analyzer` sub-agent. The analyzer enumerates every pipeline route via `adl_list_pipeline_routes`, then for each route calls `adl_get_route_status` + `adl_get_route_metrics(route_id, windows=["24h","7d","30d"])`. Lists sources via `adl_list_workspace_sources`, lists sinks (with config) via `adl_list_workspace_sinks`, lists sink types via `adl_list_sink_types`. Emits one `pipeline_route_audit` record per route plus a workspace rollup.
+    - Step 4: Spawn `recommender` sub-agent. The recommender reads the freshly-written audits via `adl_query_records`, correlates with `cost_thresholds` + `sink_cost_table`, computes projected_monthly_usd per flagged route, and emits `pipeline_cost_recommendation` records.
+    - Step 5: For every recommendation with severity="critical", `adl_send_message` to `executive-assistant` type=`finding` payload=`{recommendation_id, route_id, projected_monthly_usd, suggested_action}`.
+    - Step 6: For `finding_type="errored_route"`, ALSO `adl_send_message` to `sre-devops` type=`alert`.
+    - Step 7: For recommendations whose `suggested_owner == "release-manager"`, `adl_send_message` to `release-manager` type=`request`.
+    - Step 8: `adl_write_memory` namespace `cost:run:state` key `last_run` with `{run_at, audits_written, recommendations_written, by_severity, by_finding_type, total_projected_monthly_usd_at_risk, critical_messages_sent, release_manager_requests_sent, sre_alerts_sent}`
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -115,22 +116,23 @@ Audits this workspace's pipeline routes, sources, sinks, and event throughput pa
 
 ## What It Does
 
-- **Per-route audit:** for every configured pipeline route, captures status, source type, sinks attached, lifetime event count, last event timestamp, and a workspace-relative volume bucket (none/low/med/high) into a `pipeline_route_audit` record.
-- **Idle-route detection:** flags routes whose `last_event_at` is null or older than a configurable threshold (default: 14 days warn, 30 days critical). Cites `days_since_last_event` so severity is grounded in real numbers.
-- **Sink fan-out check:** flags routes with a high sink count (default: ≥ 3 warn, ≥ 5 critical when lifetime volume is "high") where consolidation could reduce per-event delivery cost.
-- **Errored route surfacing:** routes with `status=errored` are critical findings — failures retry and amplify cost.
+- **Per-route audit:** for every configured pipeline route, captures status, source type, sinks attached (with DLQ + retry-policy presence), lifetime event count, per-window event counts (24h / 7d / 30d), failure rate, and processing latency into a `pipeline_route_audit` record.
+- **Real monthly run-rate projections:** uses `adl_get_route_metrics` events_30d × `sink_cost_table` rates to compute concrete dollar figures per route. Surfaces routes whose projected monthly cost exceeds tier thresholds.
+- **Idle-route detection:** flags routes with no events in the recent past (default: 14 days warn, 30 days critical). Distinguishes "never active" from "historically active, now silent" — the latter is critical because it represents wasted resource allocation.
+- **Failure-rate findings:** routes with `failure_rate_30d > 1%` (warn) or `> 5%` (critical) get a finding citing the absolute failed count and which attached sinks lack DLQ (those amplify worst on retry).
+- **Reliability scoring:** sinks lacking DLQ on high-volume routes, sinks lacking explicit retry policy, sinks with elevated lifetime error count — each becomes its own finding with the affected sink IDs.
+- **Sink fan-out check:** flags routes with high sink count where consolidation could reduce per-event delivery cost. Cites projected savings from removing redundant sinks.
+- **Errored route surfacing:** routes with `status=errored` are critical findings, routed to sre-devops.
 - **Source orphan check:** flags workspace sources with no active routes consuming them.
 - **Setup-gap honesty:** when the analyzer hits an empty pipeline OR `sink_cost_table` is missing entries, the recommender emits an explicit `setup_gap` / `cost_data_missing` finding rather than inventing numbers.
-- **Recommendations:** `pipeline_cost_recommendation` records with `{route_id, finding_type, severity, current_metric, projected_savings, suggested_action, suggested_owner}`.
-- **Critical routing:** any `severity="critical"` recommendation is messaged to `executive-assistant` in the same run.
+- **Recommendations:** `pipeline_cost_recommendation` records with `{route_id, finding_type, severity, current_metric, projected_savings, suggested_action, suggested_owner}`. The `current_metric` for high-run-rate findings includes `projected_monthly_usd` and `sink_breakdown_usd`.
+- **Critical routing:** any `severity="critical"` recommendation is messaged to `executive-assistant`. Errored-route findings additionally message sre-devops as `type=alert`.
 
 ## What It Does NOT Do
 
 - Does not disable, modify, or delete any pipeline route, source, or sink. Recommendations are dry-run only.
 - Does not call any external API. The data is the workspace's own platform state.
-- Does not invent numbers — every recommendation cites the actual metric that justifies it. If data is missing, the bot writes a setup-gap finding instead of guessing.
-- Does not project monthly run-rate dollars today. The runtime built-ins expose lifetime event counts (`events_processed`) but not time-windowed counts (events-in-last-24h / 7d / 30d). The bot uses workspace-relative volume buckets ("low/med/high") in place of a fabricated run-rate. Real dollar projections will land once the runtime exposes window-based metrics.
-- Does not check rate-limit, batching, or DLQ presence per route. The runtime built-in `adl_get_route_status` returns top-level fields only; sink configuration is not exposed today. The bot stays honest by not scoring those dimensions.
+- Does not invent numbers — every recommendation cites the actual metric that justifies it. If `sink_cost_table` lacks an entry for a sink type the bot writes a `cost_data_missing` recommendation instead of guessing.
 
 ## Sub-Agents
 

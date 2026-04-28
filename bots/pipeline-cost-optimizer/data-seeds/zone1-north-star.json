@@ -5,14 +5,20 @@
       "idle_critical_days": 30,
       "fanout_warn_count": 3,
       "fanout_critical_count": 5,
-      "_comment": "Tune per-workspace. Defaults err on the side of surfacing. Lower thresholds = more findings per run; raise them once the team has cleared baseline noise. Note: per-window throughput thresholds (runrate_*_usd) are NOT used today because the platform's runtime tools don't expose per-window event counts. Cost projections will be added once those tools land."
+      "runrate_warn_usd": 100,
+      "runrate_critical_usd": 500,
+      "failure_rate_warn": 0.01,
+      "failure_rate_critical": 0.05,
+      "error_count_warn_lifetime": 100,
+      "error_count_critical_lifetime": 1000,
+      "_comment": "Tune per-workspace. Defaults err on the side of surfacing. Lower thresholds = more findings per run; raise them once the team has cleared baseline noise. Run-rate thresholds activate once the runtime exposes pipeline_event_rollups via adl_get_route_metrics."
     },
     "idle_definition": {
       "lookback_days": 14,
       "_comment": "A route is 'idle' if last_event_at is null OR older than lookback_days. The analyzer also rolls up days_since_last_event so the recommender can rank severity. Routes legitimately bursty (cron-driven sources firing once a quarter) should be exempted via a per-route override stored in cost:audit:cache memory namespace."
     },
     "sink_cost_table": {
-      "_comment": "Rough cost-per-event estimates by sink type. The recommender uses these to describe the cost surface area of a flagged route ('this route has 3 sinks: snowflake + bigquery + s3 — at typical rates that is dominated by the warehouse loads'). The bot will NOT compute monthly_run_rate dollar figures from this table because per-window event counts aren't available — the table is qualitative only today.",
+      "_comment": "Cost-per-event estimates by sink type. The recommender uses these against events_30d (from adl_get_route_metrics) to project monthly run-rate. Rough order-of-magnitude defaults; operators should override with their actual contracted rates per provider.",
       "_units": "USD per event delivered (rough order of magnitude, not invoice-accurate)",
       "postgres": 0.000001,
       "mysql": 0.000001,
