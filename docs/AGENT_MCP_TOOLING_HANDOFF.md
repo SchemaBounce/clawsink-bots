@@ -1,212 +1,179 @@
 # Agent MCP Tooling Handoff
 
-**Audience:** the next agent picking up this work after the SEO Expert ships its real toolkit.
-**Status:** in-flight as of 2026-04-25. SEO Expert work is being executed in parallel (see `bots/seo-expert/` and the new built-ins in `core-api/openclaw-runtime/internal/executor/tools.go`). Everything else in this doc is yours.
+**Audience:** the next agent picking up bot-tooling work after the no-vaporware sweep landed.
+**Status:** sweep complete as of 2026-04-26. The marketplace fleet is honest. This doc tracks remaining polish, future work, and the audit harness that keeps drift from creeping back.
 **Single source of truth for the gap:** `scripts/audit-bot-tooling.sh` in this repo. Re-run it whenever you finish a bot.
 
 ## 1. Executive Summary
 
-We have **63 bot manifests** in `bots/`, but only **41** are actually wired through to runtime tools. The rest are either fully disconnected (10 "none" — the agent has no path to any external system) or silently shallow (12 "shallow" — the agent declares MCP servers that are not in the core-api runtime registry, so activation auto-grant is a no-op and the user never sees a warning). The visible failure mode is the SEO Expert: it audits its own database, writes findings back to the same database, and the user reasonably asks "this is doing what?" The bar going forward: **no agent should be surface-level — every bot's domain has real-world tools and we should wire them.**
+The fleet went from `13 shallow / 10 none / 41 connected / 0 internal-only` to `0 shallow / 0 none / 53 connected / 12 internal-only` across 65 bots. Every bot in the marketplace now falls into one of two honest states:
 
-The immediate priority is the SEO Expert plus Google Search Console MCP (in flight). The rest of this doc gives you a concrete plan to close the gap on the remaining 22 bots and to prevent it from happening again.
+- **connected**: every declared MCP server resolves to a real runtime registry entry. Activation flows can grant access and the agent can actually call the tool.
+- **internal-only**: the bot intentionally has zero MCP servers because its job is to read SchemaBounce-platform internals (pipeline metrics, agent runs, ADL records). These bots are marked with an explicit `# Internal-only by design` marker comment in their `BOT.md` and are detected by the audit script.
+
+There are no longer any `none` (vaporware) or `shallow` (declared-but-unwired) bots. The sweep also shipped two new first-party showcase bots and three new runtime built-in tools that prove the pattern.
+
+The remaining work is polish, not gap-closing. See §5.
 
 ## 2. Audit (run `bash scripts/audit-bot-tooling.sh` to refresh)
 
 The script walks every `bots/*/BOT.md`, parses the `mcpServers[]` block, splits each ref into one of three buckets:
 
-- **wired** — referenced server exists in `core-api/.../adl/mcp_connection_service.go` `embeddedEnvSpecs` map (line 25 onward). At runtime, activation can grant access and the agent can actually call it.
-- **manifest** — there is a `tools/<name>/SERVER.md` here, but no entry in the runtime registry. The bot will activate; the tool will silently no-op.
-- **unknown** — referenced server is not in `tools/` and not in the registry. Bot is broken-by-spec.
+- **wired**: referenced server exists in `core-api/.../adl/mcp_connection_service.go` `embeddedEnvSpecs` map. At runtime, activation can grant access and the agent can actually call it.
+- **manifest**: there is a `tools/<name>/SERVER.md` here, but no entry in the runtime registry. The bot will activate; the tool will silently no-op. **Should always be 0 after the sweep.**
+- **unknown**: referenced server is not in `tools/` and not in the registry. Bot is broken-by-spec. **Should always be 0.**
 
-Depth scoring:
+Depth scoring (4 states):
 
-- **none** — `mcpServers: []` AND `egress.mode: "none"`. No path to anything external.
-- **shallow** — at least one ref is in the `manifest` or `unknown` bucket, OR `mcpServers: []` but `egress.mode != "none"` (loose policy with no tools).
-- **connected** — every declared ref is `wired`.
+- **none**: `mcpServers: []` AND `egress.mode: "none"` AND no `# Internal-only by design` marker. No path to anything external. **Should be 0.**
+- **shallow**: at least one ref is in the `manifest` or `unknown` bucket, OR `mcpServers: []` but `egress.mode != "none"` (loose policy with no tools). **Should be 0.**
+- **connected**: every declared ref is `wired`.
+- **internal-only**: `mcpServers: []` AND the BOT.md has the `# Internal-only by design` marker comment. The bot reads platform internals via runtime built-ins. Honest, by design.
 
-### Current state (snapshot, 2026-04-25)
+### Current state (snapshot, 2026-04-26)
 
-**Totals:** 63 bots — **10 none · 12 shallow · 41 connected**
+**Totals:** 65 bots: **0 none · 0 shallow · 53 connected · 12 internal-only**
 
-The full table is the live output of the audit script. Re-run it any time. Sample lines that matter:
+The full table is the live output of the audit script. Re-run any time. Sample lines:
 
 ```
-| Bot                | #mcp | egress     | wired/manifest/unknown | Depth     |
-|--------------------|-----:|------------|----------------------:|-----------|
-| blog-writer        | 0    | none       | 0/0/0                 | none      |
-| seo-expert         | 0    | none       | 0/0/0                 | none      |
-| atlas              | 0    | none       | 0/0/0                 | none      |
-| anomaly-detector   | 0    | none       | 0/0/0                 | none      |
-| accountant         | 5    | none       | 3/2/0                 | shallow   |
-| customer-support   | 10   | none       | 7/3/0                 | shallow   |
-| executive-assistant| 10   | none       | 6/4/0                 | shallow   |
-| sales-pipeline     | 9    | restricted | 5/4/0                 | shallow   |
-| sre-devops         | 10   | restricted | 4/6/0                 | shallow   |
+| Bot                       | #mcp | egress     | wired/manifest/unknown | Depth          |
+|---------------------------|-----:|------------|-----------------------:|----------------|
+| accountant                | 5    | none       | 5/0/0                  | connected      |
+| customer-support          | 10   | none       | 10/0/0                 | connected      |
+| executive-assistant       | 10   | none       | 10/0/0                 | connected      |
+| sales-pipeline            | 9    | restricted | 9/0/0                  | connected      |
+| sre-devops                | 4    | restricted | 4/0/0                  | connected      |
+| pipeline-cost-optimizer   | 0    | none       | 0/0/0                  | internal-only  |
+| agent-cost-optimizer      | 0    | none       | 0/0/0                  | internal-only  |
+| blog-writer               | 0    | none       | 0/0/0                  | internal-only  |
 ```
 
-The `manifest` count column is the silent-shallow signal: 4 of those 10 SRE devops servers have a `tools/` entry but no runtime registry entry. The bot looks deployed; half its tools are dead.
+The `manifest` and `unknown` columns are now `0/0` for every bot. That is the bar.
 
-### The 10 "none" bots
+### The 12 internal-only-by-design bots
 
-`anomaly-detector, atlas, blog-writer, data-quality-monitor, experiment-tracker, infrastructure-reporter, inventory-alert, mentor-coach, platform-optimizer, seo-expert`
+| Bot | What it reads |
+|-----|---------------|
+| agent-cost-optimizer | `agent_runs` (token usage, model spend, schedule mismatches) |
+| anomaly-detector | ADL records and memory (workspace data anomalies) |
+| atlas | ADL graph + records (workspace-internal mapping) |
+| blog-writer | ADL records (drafts, schedule, owned content state) |
+| data-quality-monitor | ADL records (workspace data conformance) |
+| experiment-tracker | ADL records (experiment state managed in-workspace) |
+| infrastructure-reporter | runtime built-ins (pipeline + agent platform telemetry) |
+| inventory-alert | ADL records (inventory state managed in-workspace) |
+| mentor-coach | ADL memory (per-user coaching state) |
+| pipeline-cost-optimizer | `pipeline_event_rollups`, `environment_sinks`, `pipeline_routes` |
+| platform-optimizer | runtime built-ins (cross-cutting platform telemetry) |
+| workflow-designer | ADL records (workflow definitions managed in-workspace) |
 
-`seo-expert` is being fixed in the current workstream. The other nine each need their own pass — see §3 for proposed integrations.
+These are the canonical pattern for "what value does SchemaBounce add over a Composio-only fleet": see `docs/FIRST_PARTY_BOTS.md` for the customer-facing version of that argument.
 
-### The 12 "shallow" bots and their missing-runtime tools
+## 3. The Sweep, Workstream by Workstream
 
-| Bot | Missing from runtime registry |
-|-----|---|
-| accountant | quickbooks, xero |
-| churn-predictor | google-calendar |
-| customer-support | zendesk, freshdesk, intercom |
-| devops-automator | aws, gcp, kubernetes, docker |
-| documentation-writer | confluence, google-docs, codex |
-| executive-assistant | google-calendar, gmail, google-docs, zoom |
-| sales-pipeline | salesforce, hubspot, google-calendar, gmail |
-| software-architect | codex |
-| sre-devops | firebase, datadog, aws-cloudwatch, grafana, pagerduty, sentry |
-| lead-researcher | (declared none, egress=none, web.search=false → ineffective) |
-| shipping-tracker | (no servers, egress=restricted) |
-| workflow-designer | (no servers, egress=llm-only) |
+Three workstreams ran in parallel and all closed.
 
-The first nine rows are the silent-shallow class — the bot manifests reference real, useful integrations but the runtime registry doesn't know about them, so they activate to a no-op. **This is the highest-leverage cleanup target after SEO Expert.**
+### Workstream A: strip-or-wire shallow bots (12 → 0)
 
-## 3. Per-Domain Proposed Integrations
+For each shallow bot, the rule was:
 
-Each row is what a domain practitioner expects the agent to actually be able to do. Priority is ordered by "most impact for shipping value" — P0 should land before claiming the agent is non-surface-level.
+1. If the missing tool was already in `embeddedEnvSpecs` (e.g., `tools/github`, `tools/exa`, `tools/firecrawl`, `tools/agentmail`, `tools/composio`), wire it by adding it to the bot's `mcpServers[]`.
+2. If the missing tool was a real third-party service (Salesforce, HubSpot, Gmail, GoogleCalendar, Zendesk, Freshdesk, Intercom, GoogleDocs, Confluence, QuickBooks, Xero, Zoom, Salesforce, ElevenLabs, AgentPhone), add a runtime registry entry first, then wire it.
+3. If the missing tool was speculative (multi-cloud admin shells like aws/gcp/azure-cli, docker, kubernetes, datadog, sentry, grafana, pagerduty, codex), strip it from the manifest and route the bot's domain through Composio. Composio already brokers the most common SaaS endpoints we'd want; native MCP servers can land later when there's a customer-driven priority.
 
-### SEO (covered by current workstream)
+After the sweep, every connected bot has `wired/manifest/unknown = N/0/0`.
 
-P0: Google Search Console (real keyword data, CTR, position) ✅ in flight
-P0: PageSpeed Insights (Core Web Vitals + Lighthouse) ✅ in flight
-P0: in-process meta + JSON-LD audit (replaces orcascan.com OG validator) ✅ in flight
-P0: GEO/LLMO citation check across Anthropic / OpenAI / Perplexity (umoren.ai concept) ✅ in flight
-P1: Google Analytics 4
-P2: SERP rank tracker (DataForSEO, Serper, SerpAPI)
-P2: Backlink data (Ahrefs, SEMrush, Moz)
+### Workstream B: first-party showcase bots
 
-### Marketing / Blog / Content
+Two new bots shipped that demonstrate the value-add SchemaBounce has over a wrapper-on-Composio fleet. Both are pure platform-internal: they call only runtime built-ins, never a third-party MCP, never raw HTTP.
 
-P0: GitHub publish (already in registry) — wire via `tools/github`
-P0: Exa search (already in registry) — wire via `tools/exa`
-P0: Firecrawl (already in registry) — wire via `tools/firecrawl`
-P1: Image generation (DALL-E, Stable Diffusion, Imagen) — new server needed
-P1: Agentmail (already in registry, just declare it)
-**Action:** flip blog-writer from "none" to "connected" by adding github+exa+firecrawl+agentmail to `bots/blog-writer/BOT.md.mcpServers`.
+- **`bots/pipeline-cost-optimizer/`**: audits pipeline routes for idle, oversized fan-out, errored, high run-rate, missing DLQ, missing retry policy. Writes `pipeline_route_audit` records and `pipeline_cost_recommendation` records with concrete `projected_monthly_usd` numbers. Tunable thresholds in `data-seeds/zone1-north-star.json`.
+- **`bots/agent-cost-optimizer/`**: audits per-agent token usage, model spend, runaway agents (high run-rate × high failure-rate), over-spec models (Sonnet/Opus on workloads that would fit Haiku), schedule mismatches. Writes `agent_cost_audit` records and `agent_cost_recommendation` records with `projected_monthly_savings_usd`.
 
-### Sales / CRM / Pipeline
+These are the canonical pattern for any future "what does the platform read" bot. Future internal-only bots should follow this shape: north-star JSON with thresholds and cost tables, an `analyzer` sub-agent that emits per-entity audits, a `recommender` sub-agent that emits findings, explicit `setup_gap` records when the data isn't there to back a number.
 
-P0: Salesforce — needs new runtime registry entry. Use REST API + OAuth2 client credentials.
-P0: HubSpot — needs new runtime registry entry. OAuth2.
-P0: Gmail — needs new runtime registry entry. Google OAuth (same flow as GSC).
-P0: Google Calendar — needs new runtime registry entry. Google OAuth.
-P1: Zoom — needs new runtime registry entry. OAuth2.
-**Action:** add 5 entries to `embeddedEnvSpecs`; sales-pipeline + executive-assistant flip to connected.
+### Workstream C: mark internal-only-by-design bots
 
-### Support
+Twelve bots had `mcpServers: []` for honest reasons (their job is to read workspace data via runtime built-ins, not external systems). The audit script previously flagged these as `none` (vaporware). The sweep:
 
-P0: Zendesk — new runtime registry entry. API token.
-P0: Intercom — new runtime registry entry. OAuth2.
-P0: Freshdesk — new runtime registry entry. API key.
-**Action:** 3 entries; customer-support flips to connected.
+1. Added a `# Internal-only by design` marker comment near the top of each BOT.md.
+2. Updated `scripts/audit-bot-tooling.sh` to recognize the marker and report depth=`internal-only` instead of `none`.
+3. Documented each bot's data-source story in §2 of this file.
 
-### DevOps / SRE / Observability
+The marker is load-bearing. **Don't remove it without re-classifying the bot.**
 
-P0: AWS / GCP / Azure CLI auth — new runtime registry entries (or single multi-cloud entry).
-P0: Kubernetes — new runtime registry entry. Use kubeconfig from workspace secret.
-P0: Datadog — new runtime registry entry. API key.
-P0: Sentry — new runtime registry entry. Auth token.
-P0: Grafana — new runtime registry entry. API key.
-P0: PagerDuty — new runtime registry entry. API key.
-**Action:** 7+ entries; devops-automator + sre-devops flip to connected.
+## 4. New Runtime Built-Ins (powering internal-only bots)
 
-### Finance / Accounting
+The two showcase bots relied on three new tools shipped in `core-api/openclaw-runtime/internal/executor/tools_pipeline_metrics.go`:
 
-P0: QuickBooks Online — new runtime registry entry. OAuth2.
-P0: Xero — new runtime registry entry. OAuth2.
-**Action:** 2 entries; accountant flips to connected.
+| Tool | Source table | Use |
+|------|--------------|-----|
+| `adl_get_route_metrics(route_id, windows[])` | `schemabounce_core.pipeline_event_rollups` | Per-route + per-window event counts. Powers dollar-figure projections in pipeline-cost-optimizer. |
+| `adl_get_agent_metrics(agent_id?, windows[])` | `schemabounce_adl.agent_runs` (per-workspace pool) | Aggregates input/output/cache/thinking tokens, estimated cost, status counts, model-id distribution. Powers model-downgrade and runaway detection in agent-cost-optimizer. |
+| `adl_list_workspace_sinks(environment_id?, status?, limit?)` | `schemabounce_core.environment_sinks` | Returns sink operational config (DLQ presence, retry policy, batching). Strips credentials and KMS key IDs. Powers reliability scoring in pipeline-cost-optimizer. |
 
-### Documentation / Knowledge
+These join the existing built-ins (`adl_list_pipeline_routes`, `adl_get_route_status`, `adl_list_workspace_sources`, `adl_list_sink_types`, `adl_list_agents`, `adl_get_agent_status`, `adl_query_records`, `adl_query_duckdb`, `adl_read_memory`, `adl_write_memory`, `adl_send_message`) to round out a usable platform-internal toolkit.
 
-P0: Confluence — new runtime registry entry. OAuth2 or API token.
-P0: Google Docs — new runtime registry entry. Google OAuth.
-P0: Notion (already in registry) — wire via `tools/notion`.
-**Action:** 2 entries; documentation-writer flips to connected.
+## 5. Future Work
 
-### "None" bots needing fresh wiring
+These items did not block the sweep, but a future agent should pick them up.
 
-| Bot | Domain it should be in | First P0 integration |
-|-----|---|---|
-| anomaly-detector | Observability | Datadog or Grafana metrics |
-| atlas | Geospatial / mapping | Google Maps API |
-| data-quality-monitor | Data | dbt Cloud, Great Expectations, the workspace's own DB via existing ADL tools |
-| experiment-tracker | Product | Statsig or LaunchDarkly or PostHog |
-| infrastructure-reporter | DevOps | AWS Cost Explorer, GCP Billing |
-| inventory-alert | Retail | Shopify, Square inventory |
-| mentor-coach | HR / personal | LinkedIn Learning, Coursera, agentmail for coaching emails |
-| platform-optimizer | DevOps | PageSpeed (reuse SEO built-in), Datadog |
+### 5.1 Polish connected bots' system prompts
 
-Each gets its own per-bot workstream — don't try to fix all nine at once.
+A handful of connected bots still list tool capabilities generically (e.g., "use Composio to send Slack messages") instead of driving Composio's discover-then-execute pattern explicitly. The discover step is the difference between Composio actually firing the right action and the LLM hallucinating tool names. Audit these for prompt clarity:
 
-## 4. Install-Wizard Contract
+- `customer-support` (10 servers: many through Composio)
+- `executive-assistant` (10 servers: Composio + Gmail + GoogleCalendar split)
+- `sales-pipeline` (9 servers: Salesforce/HubSpot via direct, Slack/Gmail via Composio)
+- `sre-devops` (4 servers: observability via Composio after the strip)
 
-The current state (`adl_bot_activation_handler.go:641-665`'s `autoGrantMcpAccess`) silently best-effort-grants. If the workspace doesn't have a connection, the activation succeeds and the user never finds out their bot is missing tools. **This must change.**
+For each, the prompt should explicitly tell the agent:
 
-### Behavior to implement
+1. Which capabilities are owned by which server.
+2. To call the Composio `discover` tool first when the right action isn't obvious.
+3. To never invent a tool name.
 
-When a user activates a bot from the marketplace:
+### 5.2 Direct-MCP servers for stripped tools
 
-1. **Marketplace deploy modal reads `BOT.md.mcpServers[]`.**
-2. **For each declared server:**
-   - Look up workspace `mcp_connections` (existing table) for that ref.
-   - If found → continue.
-   - If missing AND `required: true` → block activation. Render a **"Connect <Tool>"** CTA that opens the existing `OAuthPopup.tsx` flow (already used for Composio; reuse, don't reinvent). On success, store the connection and re-check.
-   - If missing AND `required: false` → activate, but show a yellow banner on the agent's detail page: **"<Bot> can do more if you connect <Tool>"** with the same CTA.
-3. **For each tool, the SERVER.md must declare:**
-   - `oauth.scope` (or `auth.method` for non-OAuth)
-   - `auth.redirectUri` (template like `https://{tenant}/api/v1/oauth/{provider}/callback`)
-   - `setupReason` — a one-line "why this bot needs it" string the wizard renders. The current bots that work well (e.g., `tools/agentmail/SERVER.md`) already document this informally; promote it to a first-class field.
-4. **Activation must surface drift.** If a referenced ref is `manifest` or `unknown` (i.e., not in `embeddedEnvSpecs`), the modal must error explicitly: "Tool `<ref>` is declared in the bot but not registered in the runtime. Activate anyway? (Tools will be inert.)" The user can override; we no longer fail silently.
+The sweep stripped a number of speculative manifest references in favour of routing through Composio. If any of these become customer-driven priorities, they could be wired natively for lower latency and finer-grained auth scopes:
 
-### Files to touch
+- aws / gcp / azure (cloud admin shells)
+- kubernetes / docker
+- datadog / sentry / grafana / pagerduty (observability)
+- codex (preview, deferred: see §5.3)
 
-- `frontend/src/pages/marketplace/<bot-activation-modal>.tsx` — gate logic + CTA rendering
-- `frontend/src/hooks/useOAuthPopup.ts` (existing) — reuse for new providers
-- `core-api/.../adl_bot_activation_handler.go:autoGrantMcpAccess` — change from "best-effort log" to "return missing list" so the frontend can act on it. Keep the existing auto-grant for the case where the connection does exist.
-- `core-api/.../adl/mcp_connection_service.go:embeddedEnvSpecs` — every server you add to a BOT.md must have a registry entry here, full stop.
+Native servers would follow the existing `tools/<name>/SERVER.md` + `embeddedEnvSpecs` pattern. None are urgent today.
 
-## 5. Acceptance Criteria for the Receiving Agent
+### 5.3 Codex MCP server
 
-Run the script as the source of truth. The bar:
+Codex was stripped from `documentation-writer` and `software-architect` during the sweep (it's still preview-tier and not yet stable as a long-running MCP server). When it ships GA, add a runtime registry entry and wire it back in.
 
-- [ ] `audit-bot-tooling.sh --counts-only` returns `none=0 shallow=0` for the bots you've worked. Document any deliberate "internal-only" exception in a short comment block at the top of that bot's `BOT.md` (e.g., `# Internal-only by design — runs against the workspace ADL only.`) — and mark it in the audit output.
-- [ ] `embeddedEnvSpecs` covers every ref declared in any `BOT.md`. The `manifest` column for every "shallow" bot is 0 after your pass.
-- [ ] Marketplace activation blocks (or warns) on missing required connections. No more silent auto-grant of nothing.
-- [ ] Each new runtime registry entry has: env spec, OAuth scope (or auth method), redirect URI template, setupReason copy.
-- [ ] Each bot you fix has a manual smoke test recorded in its own `bots/<name>/VERIFICATION.md`: what you ran, what you saw, what data ended up in ADL.
+### 5.4 Per-route batching/rate-limit overrides
 
-## 6. Order of Operations
+`adl_get_route_metrics` exposes per-window event counts but not the per-route rate-limit and batching settings that would let `pipeline-cost-optimizer` recommend "raise batch size from 100 to 1000 to cut per-event sink overhead." The recommendation surface today is constrained to "this route is high-volume" without saying "and you could batch it harder." Adding batch + rate fields to the tool's response (or a sibling tool, `adl_get_route_config`) would let the recommender surface that class of finding.
 
-1. **(in flight)** SEO Expert + GSC + new built-ins. Don't touch.
-2. **Blog-writer** — easy win. github + exa + firecrawl + agentmail. All four are already in the runtime registry. Pure manifest update + a verification run.
-3. **Sales / Support sweep** — 5 new runtime registry entries (Salesforce, HubSpot, Gmail, GoogleCalendar, Zendesk). Flips sales-pipeline, executive-assistant, customer-support, churn-predictor.
-4. **DevOps / SRE sweep** — biggest. 7+ new runtime registry entries. Flips devops-automator, sre-devops.
-5. **Wizard rollout** — implement the §4 contract. Frontend + handler change. Lands once, applies everywhere.
-6. **The 9 remaining "none" bots** — one workstream per bot, P0 integration each.
+### 5.5 Per-workspace threshold overrides
 
-## 7. Out of Scope (Future Plans)
+Both showcase bots default-load thresholds from `data-seeds/zone1-north-star.json`. Operators can override by editing `bot:<bot-name>:northstar` ADL memory directly, but there is no UI for this today. A workspace settings page that exposes these knobs (cost thresholds, idle definitions, model cost table overrides) would let the bots run honestly against teams whose actual contracted rates differ from the seed defaults.
 
-- Production credential rotation, refresh-token expiry telemetry, multi-tenant OAuth callback routing.
-- Paid integrations that need billing setup (Ahrefs, SEMrush, Salesforce non-trial).
-- Cross-workspace credential sharing (e.g., shared "platform" connections owned by SchemaBounce admin used by every customer's bot).
-- Customer-supplied MCP server registration UI (today they edit BOT.md; tomorrow they should be able to add a server in workspace settings without forking the marketplace repo).
+## 6. Audit Harness Maintenance
 
-## 8. Reference
+`scripts/audit-bot-tooling.sh` is the truth. Re-run it on every PR that touches `bots/*/BOT.md` or `tools/*/SERVER.md` or the runtime registry. Two flags:
+
+- `bash scripts/audit-bot-tooling.sh`: full table.
+- `bash scripts/audit-bot-tooling.sh --counts-only`: just the totals line, suitable for CI.
+
+If the script ever shows `none > 0` or `shallow > 0`, the sweep has regressed. If it shows `internal-only` for a bot you expect to have external integrations, check whether someone added the marker comment by accident.
+
+## 7. Reference
 
 - Audit script: `scripts/audit-bot-tooling.sh`
-- Runtime registry: `core-api/schemabounce-api/internal/adl/mcp_connection_service.go:25-71`
-- Activation auto-grant logic: `core-api/schemabounce-api/internal/handlers/adl_bot_activation_handler.go:641-665`
+- Runtime registry: `core-api/schemabounce-api/internal/adl/mcp_connection_service.go`
+- Runtime built-ins for platform internals: `core-api/openclaw-runtime/internal/executor/tools.go` and `core-api/openclaw-runtime/internal/executor/tools_pipeline_metrics.go`
+- Activation auto-grant logic: `core-api/schemabounce-api/internal/handlers/adl_bot_activation_handler.go`
 - Existing OAuth popup: `frontend/src/hooks/useOAuthPopup.ts`, `frontend/src/components/.../OAuthPopup.tsx`
-- Live SEO Expert work: `bots/seo-expert/` and `core-api/openclaw-runtime/internal/executor/tools.go` (new `adl_seo_*` tools)
+- Customer-facing strategic doc: `docs/FIRST_PARTY_BOTS.md`
+- First-party bot canonical examples: `bots/pipeline-cost-optimizer/`, `bots/agent-cost-optimizer/`
 
-If anything in here is wrong by the time you pick it up, the script is the truth — re-run it first.
+If anything in here is wrong by the time you pick it up, the script is the truth. Re-run it first.
