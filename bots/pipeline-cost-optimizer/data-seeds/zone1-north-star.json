@@ -5,34 +5,28 @@
       "idle_critical_days": 30,
       "fanout_warn_count": 3,
       "fanout_critical_count": 5,
-      "runrate_warn_usd": 100,
-      "runrate_critical_usd": 500,
-      "error_count_warn_24h": 25,
-      "error_count_critical_24h": 100,
-      "_comment": "Tune per-workspace. Defaults err on the side of surfacing. Lower thresholds = more findings per run; raise them once the team has cleared baseline noise."
+      "_comment": "Tune per-workspace. Defaults err on the side of surfacing. Lower thresholds = more findings per run; raise them once the team has cleared baseline noise. Note: per-window throughput thresholds (runrate_*_usd) are NOT used today because the platform's runtime tools don't expose per-window event counts. Cost projections will be added once those tools land."
     },
     "idle_definition": {
-      "lookback_days": 30,
-      "events_required_in_window": 1,
-      "_comment": "A route is 'idle' if it received zero events in the lookback window. event_count_30d==0 AND last_event_at older than idle_warn_days = idle. Routes legitimately bursty (cron-driven sources firing once a quarter) should be exempted via a workspace override of lookback_days."
+      "lookback_days": 14,
+      "_comment": "A route is 'idle' if last_event_at is null OR older than lookback_days. The analyzer also rolls up days_since_last_event so the recommender can rank severity. Routes legitimately bursty (cron-driven sources firing once a quarter) should be exempted via a per-route override stored in cost:audit:cache memory namespace."
     },
     "sink_cost_table": {
-      "_comment": "Rough cost-per-event estimates by sink type. Used by the recommender to project monthly_run_rate = event_count_30d * sum(sink_cost_table[sink_type]). Operators should override with their actual contracted rates.",
+      "_comment": "Rough cost-per-event estimates by sink type. The recommender uses these to describe the cost surface area of a flagged route ('this route has 3 sinks: snowflake + bigquery + s3 — at typical rates that is dominated by the warehouse loads'). The bot will NOT compute monthly_run_rate dollar figures from this table because per-window event counts aren't available — the table is qualitative only today.",
       "_units": "USD per event delivered (rough order of magnitude, not invoice-accurate)",
-      "postgres-cdc": 0.000001,
-      "mysql-cdc": 0.000001,
-      "mongodb-cdc": 0.000001,
+      "postgres": 0.000001,
+      "mysql": 0.000001,
+      "mssql": 0.000001,
       "kafka": 0.000002,
       "snowflake": 0.00001,
       "bigquery": 0.000008,
       "redshift": 0.00001,
       "databricks": 0.00001,
+      "clickhouse": 0.000005,
       "s3": 0.0000005,
-      "gcs": 0.0000005,
-      "azure-blob": 0.0000005,
       "webhook": 0.0000003,
-      "email": 0.0001,
-      "slack": 0.000001,
+      "openclaw": 0.000001,
+      "agent_datastore": 0.0000005,
       "_default": 0.0000005
     },
     "company_glossary": {
@@ -40,8 +34,7 @@
       "sink": "A delivery destination (database, lake, queue, webhook). Defined in environment_sinks table.",
       "source": "An ingest origin (CDC bridge, SaaS connector, webhook receiver, direct push). Defined in workspace_sources table.",
       "fan-out": "Number of sinks attached to a single route. Multiplies per-event cost.",
-      "DLQ": "Dead-letter queue. Failed sink deliveries land here instead of retrying infinitely.",
-      "run-rate": "Projected monthly cost based on the trailing 30-day event count and per-sink cost table."
+      "lifetime_volume_bucket": "Quartile-style bucket (none/low/med/high) the analyzer assigns each route based on events_processed_lifetime relative to the workspace distribution. Used in place of a per-window run-rate until the runtime exposes window-based event counts."
     }
   }
 }

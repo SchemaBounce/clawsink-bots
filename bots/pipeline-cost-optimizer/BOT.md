@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.1"
+  version: "0.1.2"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools — no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -115,12 +115,12 @@ Audits this workspace's pipeline routes, sources, sinks, and event throughput pa
 
 ## What It Does
 
-- **Per-route audit:** for every configured pipeline route, captures health (status, error rate from recent runs), throughput signals (event count via `adl_get_data_stats`), and configuration (sinks attached, batching, rate limits) into a `pipeline_route_audit` record.
-- **Idle-route detection:** flags routes that haven't received events in a configurable window (default: 14 days warn, 30 days critical) but still consume resources.
-- **Sink cost analysis:** cross-references route throughput with sink type cost tables to project monthly run-rate per route. Surfaces routes whose run-rate exceeds tier thresholds.
-- **Sink fan-out check:** flags routes with a high sink count (default: ≥ 3) where consolidation could reduce per-event delivery cost.
-- **Source orphan check:** flags configured workspace sources with no active routes consuming them.
-- **Configuration smell:** routes with no rate limit, no batching, or no DLQ get a "fragility" finding.
+- **Per-route audit:** for every configured pipeline route, captures status, source type, sinks attached, lifetime event count, last event timestamp, and a workspace-relative volume bucket (none/low/med/high) into a `pipeline_route_audit` record.
+- **Idle-route detection:** flags routes whose `last_event_at` is null or older than a configurable threshold (default: 14 days warn, 30 days critical). Cites `days_since_last_event` so severity is grounded in real numbers.
+- **Sink fan-out check:** flags routes with a high sink count (default: ≥ 3 warn, ≥ 5 critical when lifetime volume is "high") where consolidation could reduce per-event delivery cost.
+- **Errored route surfacing:** routes with `status=errored` are critical findings — failures retry and amplify cost.
+- **Source orphan check:** flags workspace sources with no active routes consuming them.
+- **Setup-gap honesty:** when the analyzer hits an empty pipeline OR `sink_cost_table` is missing entries, the recommender emits an explicit `setup_gap` / `cost_data_missing` finding rather than inventing numbers.
 - **Recommendations:** `pipeline_cost_recommendation` records with `{route_id, finding_type, severity, current_metric, projected_savings, suggested_action, suggested_owner}`.
 - **Critical routing:** any `severity="critical"` recommendation is messaged to `executive-assistant` in the same run.
 
@@ -129,6 +129,8 @@ Audits this workspace's pipeline routes, sources, sinks, and event throughput pa
 - Does not disable, modify, or delete any pipeline route, source, or sink. Recommendations are dry-run only.
 - Does not call any external API. The data is the workspace's own platform state.
 - Does not invent numbers — every recommendation cites the actual metric that justifies it. If data is missing, the bot writes a setup-gap finding instead of guessing.
+- Does not project monthly run-rate dollars today. The runtime built-ins expose lifetime event counts (`events_processed`) but not time-windowed counts (events-in-last-24h / 7d / 30d). The bot uses workspace-relative volume buckets ("low/med/high") in place of a fabricated run-rate. Real dollar projections will land once the runtime exposes window-based metrics.
+- Does not check rate-limit, batching, or DLQ presence per route. The runtime built-in `adl_get_route_status` returns top-level fields only; sink configuration is not exposed today. The bot stays honest by not scoring those dimensions.
 
 ## Sub-Agents
 

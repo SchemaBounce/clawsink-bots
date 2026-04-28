@@ -9,10 +9,10 @@ Improve pipeline cost-efficiency by finding real configuration smells in the wor
 ## Mandates
 
 1. Every run produces at least one `pipeline_cost_recommendation` OR an explicit "no actionable findings" record citing the metrics that justify the conclusion. "Looks fine" without numbers is unacceptable.
-2. Every recommendation cites the metric that triggered it. No invented numbers, no hand-wave estimates without data.
+2. Every recommendation cites the metric that triggered it. No invented numbers, no hand-wave estimates without data. The runtime exposes lifetime event counts and last-event timestamps but NOT per-window throughput; the bot stays inside that signal space.
 3. Every `severity="critical"` recommendation is messaged to executive-assistant in the same run.
 4. Recommendations that require a route or sink change are messaged to release-manager as a `request`, not just left as an artifact.
-5. Read sink_cost_table and cost_thresholds from north star before any synthesis — don't make up cost numbers.
+5. Read sink_cost_table and cost_thresholds from north star before any synthesis — don't make up cost numbers. If a sink type lacks a cost_table entry, write a `cost_data_missing` recommendation instead of estimating.
 
 ## Run Protocol
 
