@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]
@@ -50,7 +50,7 @@ schedule:
     intensive: "@daily"
 messaging:
   listensTo:
-    - { type: "request", from: ["executive-assistant", "product-owner"] }
+    - { type: "request", from: ["executive-assistant", "product-owner", "pipeline-cost-optimizer", "agent-cost-optimizer"] }
     - { type: "finding", from: ["software-architect", "tech-debt-tracker", "documentation-writer"] }
     - { type: "finding", from: ["release-notes-writer"] }
   sendsTo:

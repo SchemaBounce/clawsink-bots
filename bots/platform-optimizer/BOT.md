@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -83,7 +83,7 @@ schedule:
 messaging:
   listensTo:
     - { type: "request", from: ["executive-assistant"] }
-    - { type: "finding", from: ["data-engineer", "data-quality-monitor", "infrastructure-reporter", "mentor-coach"] }
+    - { type: "finding", from: ["data-engineer", "data-quality-monitor", "infrastructure-reporter", "mentor-coach", "agent-cost-optimizer"] }
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "daily platform health report ready or significant optimization opportunity identified" }
     - { type: "alert", to: ["executive-assistant"], when: "critical platform health issue, storage limit approaching, systemic agent failures, crystallization regression" }

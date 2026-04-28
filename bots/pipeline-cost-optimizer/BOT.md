@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.3"
+  version: "0.1.4"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools — no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -52,6 +52,7 @@ messaging:
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "critical cost recommendation requires action" }
     - { type: "request", to: ["release-manager"], when: "recommendation requires a route or sink change" }
+    - { type: "alert", to: ["sre-devops"], when: "errored_route finding is critical and needs operator triage" }
 data:
   entityTypesRead: ["pipeline_route_audit", "pipeline_cost_recommendation"]
   entityTypesWrite: ["pipeline_route_audit", "pipeline_cost_recommendation"]

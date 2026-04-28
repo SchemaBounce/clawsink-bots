@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
@@ -121,7 +121,7 @@ schedule:
 messaging:
   listensTo:
     - { type: "alert", from: ["*"] }
-    - { type: "finding", from: ["business-analyst", "accountant", "legal-compliance", "product-owner", "mentor-coach", "platform-optimizer"] }
+    - { type: "finding", from: ["business-analyst", "accountant", "legal-compliance", "product-owner", "mentor-coach", "platform-optimizer", "pipeline-cost-optimizer", "agent-cost-optimizer"] }
     - { type: "text", from: ["*"] }
   sendsTo:
     - { type: "request", to: ["business-analyst", "sre-devops", "accountant", "mentor-coach"], when: "needs cross-domain analysis" }
