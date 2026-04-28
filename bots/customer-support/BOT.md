@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -26,13 +26,92 @@ agent:
     - Use automation-first principle: if a ticket type can be triaged deterministically (known pattern + known response), create a trigger with `adl_create_trigger` rather than handling manually every run.
     - Correlate sre_findings with open tickets, if an infra issue explains multiple tickets, batch-update them rather than treating each independently.
   toolInstructions: |
-    ## Tool Usage: Minimal Calls
-    - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
-    - Step 2: `adl_read_messages`: check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
-    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
-    - Step 5: If new records → process deltas → write findings → update memory
+    ## Tool Usage
+
+    ### Budget
+    - Target 5 to 12 tool calls per run. Hard cap 20. Most runs only spend the budget when new tickets arrived or an SLA breach is imminent.
+
+    ### Run loop (always)
+    1. `adl_read_memory` key `last_run_state`: get last run timestamp.
+    2. `adl_read_memory` namespace `customer_health`: load prior triage state and SLA targets so resolved issues are not re-triaged.
+    3. `adl_read_messages`: pull requests from executive-assistant and findings from sre-devops.
+    4. `adl_query_records` filter `created_at > {last_run_timestamp}` for `tickets`, `sre_findings`. One batched query.
+    5. If zero new tickets and no open tickets nearing SLA, `adl_write_memory` to bump the timestamp and STOP.
+    6. Otherwise: triage, draft, dispatch via the channel + helpdesk tools below, write `cs_findings`, update `customer_health` memory.
+
+    ### Channel + helpdesk tools
+
+    Two call patterns. Direct-host tools (slack, agentmail, exa, hyperbrowser, elevenlabs, agentphone) are namespaced and called directly. Helpdesk toolkits (zendesk, freshdesk, intercom, and any other CRM via composio) require the discover-then-execute pattern: first `composio.search_composio_tools` with the toolkit and use case, then `composio.execute_composio_tool` with the action name it returns.
+
+    Never invent Composio action names. They follow `<TOOLKIT>_<VERB>_<NOUN>` (e.g. `ZENDESK_CREATE_TICKET_COMMENT`, `FRESHDESK_UPDATE_TICKET`, `INTERCOM_REPLY_TO_CONVERSATION`), but the canonical name and arg schema must come from `search_composio_tools`. Guessing produces 404s and burns budget.
+
+    ### Direct-host recipes
+
+    **AgentMail (customer-facing email).** Primary channel for ticket updates, resolution confirmations, and follow-up emails. The agent's inbox is auto-provisioned via `presence.email`.
+    - `agentmail.list_inboxes()` once per cold start to confirm the inbox id, cache in memory.
+    - `agentmail.reply_to_message({thread_id, message_id, html: "<reply>"})` when the customer first contacted via email and a thread already exists. Always thread, never start a new email chain on an existing ticket.
+    - `agentmail.send_message({inbox_id, to: ["customer@example.com"], subject: "Re: <ticket subject> [#<id>]", html: "<reply>"})` for the first outbound on a ticket that originated in the helpdesk.
+    - `agentmail.list_threads({inbox_id, limit: 25})` once per run to catch inbound email replies that have not been mirrored into the helpdesk yet.
+
+    **Slack (internal team coordination, not customer-facing).** Use to alert the support team and to read on-call channel context. Never message a customer through Slack.
+    - `slack.slack_post_message({channel: "#support-escalations", text: "SLA breach risk on ticket #<id>: <summary>", blocks: [...]})` for at-risk tickets.
+    - `slack.slack_get_channel_history({channel_id: "<sre_alerts_id>", limit: 25})` when correlating customer complaints with infra issues. Pair with the `sre_findings` records you already loaded.
+    - `slack.slack_reply_to_thread({channel_id, thread_ts, text})` to attach customer impact to an existing incident thread instead of opening a new one.
+
+    **AgentPhone (critical churn-risk callbacks).** Run only for explicit churn-risk callbacks or the executive-assistant requesting a human voice touch. Outbound calls cost real money.
+    - `agentphone.list_numbers()` to confirm a number is provisioned for outbound.
+    - `agentphone.make_conversation_call({from: "<agent_number>", to: "<customer_phone>", system_prompt: "<short brief on the issue>", first_message: "<opening line>"})` for AI-handled callbacks. Prefer this over raw `make_call` because it removes the webhook dependency.
+    - `agentphone.list_calls_for_number({number, limit: 5})` after the call to fetch the transcript and write it to the ticket as a `cs_findings` record.
+
+    **Exa (knowledge-base lookups).** Use when a ticket asks a how-to question and the answer might live in public docs or release notes.
+    - `exa.web_search_exa({query: "<product> <feature> <error message>", num_results: 5})` to find the canonical doc page.
+    - `exa.crawling_exa({url: "<doc_url>"})` to pull the content for inclusion in the customer reply.
+    - Cap at 1 to 2 Exa calls per ticket. If the answer is not in the first hit, escalate to a human agent.
+
+    **Hyperbrowser (gated docs and admin consoles).** Use when the answer lives behind authentication that the agent has credentials for.
+    - `hyperbrowser.scrape_webpage({url: "<gated_doc_url>"})` for static auth-walled pages.
+    - `hyperbrowser.browser_use_agent({task: "Log in to <vendor admin> and check the customer's billing status"})` for stateful workflows. Expensive, use sparingly.
+
+    **ElevenLabs (voice replies, opt-in).** Generate audio only when the customer asked for a voice response or AgentPhone needs a recorded greeting.
+    - `elevenlabs.text_to_speech({text: "<reply>", voice_id: "<configured_voice>"})` then attach the audio to the AgentMail or AgentPhone delivery.
+
+    ### Composio recipes (discover then execute)
+
+    Pattern is identical for every helpdesk:
+    1. `composio.search_composio_tools({toolkits: ["<TOOLKIT>"], use_case: "<plain English description>"})`.
+    2. Read the returned action name and argument schema.
+    3. `composio.execute_composio_tool({action: "<RETURNED_NAME>", arguments: {...}})`.
+
+    **Zendesk (`ZENDESK`).** Primary helpdesk for many SaaS customers.
+    - Use case "list tickets created or updated in the last 2 hours, status open or pending" returns a search/list-tickets action; call it with `{query: "status<solved updated>2h", per_page: 25}`. Use the result to build the triage queue.
+    - Use case "post a public comment on a ticket and set status to pending" returns an update-ticket / add-comment action; pass `{ticket_id, comment: {body, public: true}, status: "pending"}`.
+    - Use case "set ticket priority and tags after triage" returns the ticket-update action; pass `{ticket_id, priority, tags: ["bot_triaged", "<category>"]}`. Always tag `bot_triaged` so humans can filter the bot's work.
+    - Use case "search resolved tickets matching <symptom> for proven response patterns" supports the response-drafter sub-agent's pattern lookup.
+
+    **Freshdesk (`FRESHDESK`).** Same flow as Zendesk for accounts on Freshdesk.
+    - Use case "list new tickets in the last hour" returns a filter-tickets action with `{filter: "new_and_my_open"}` or a custom view id.
+    - Use case "reply to a ticket and update status" returns an add-note / update-ticket pair; reply public, then update status.
+    - Use case "find canned response matching <category>" returns a list-canned-responses action; reuse the canonical reply rather than drafting from scratch.
+
+    **Intercom (`INTERCOM`).** Conversational helpdesk; the agent should reply inside the conversation, not over email.
+    - Use case "list open conversations updated in the last hour" returns a search-conversations action; pass `{query: {field: "updated_at", operator: ">", value: "<unix_ts>"}}`.
+    - Use case "reply to a conversation as the bot user" returns a reply-to-conversation action; pass `{conversation_id, message_type: "comment", body: "<reply>", admin_id: "<bot_admin_id>"}`.
+    - Use case "tag a conversation with churn_risk" returns the attach-tag action; use this to feed the churn-predictor bot via the existing `cs_findings` -> finding pipeline.
+
+    ### Order of operations
+    1. ADL reads first (memory, messages, records). No external call until you know there is work.
+    2. Helpdesk read (Composio: list tickets / list conversations) before any reply, so triage uses fresh state.
+    3. Slack channel history when correlating with sre_findings, before drafting customer-facing replies.
+    4. Reply via the channel the ticket originated on (helpdesk reply via Composio, or AgentMail thread). Do not cross channels mid-conversation.
+    5. AgentPhone only for explicit critical churn callbacks, with a written rationale in the `cs_findings` record.
+    6. Memory write last (`adl_write_memory` with new timestamp + customer_health updates).
+
+    ### What not to do
+    - Do not call `composio.execute_composio_tool` without first calling `search_composio_tools` for the same toolkit in this run. Action names drift between Composio releases.
+    - Do not reply to a Zendesk ticket through AgentMail or vice versa. Stay on the channel the customer used.
+    - Do not call Exa on every ticket. Many tickets are billing or account questions where doc search adds latency without value.
+    - Do not place an AgentPhone call without a `cs_findings` record explaining why a phone touch was warranted (churn signal, escalation from executive-assistant, customer explicitly asked for a callback).
+    - Do not loop one `adl_query_records` per entity type. Batch into one call with a multi-`entity_type` filter.
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"

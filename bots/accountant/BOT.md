@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -25,13 +25,92 @@ agent:
     - Store learned categorization rules in `learned_patterns` memory to improve accuracy over time
     - Store budget threshold overrides in `thresholds` memory. Update when North Star budget_constraints change
   toolInstructions: |
-    ## Tool Usage: Minimal Calls
-    - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
-    - Step 2: `adl_read_messages`: check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
-    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
-    - Step 5: If new records → process deltas → write findings → update memory
+    ## Tool Usage
+
+    Two classes of MCP tools live here. Call them differently:
+
+    - **Direct-host tools** (Stripe, AgentMail): namespaced calls like `stripe.list_charges(...)` or `agentmail.send(...)`. The runtime routes these straight through. No Composio middleman.
+    - **Composio-routed tools** (QuickBooks, Xero, and any other accounting SaaS the workspace connects): always go through the discover-then-execute pattern below. Never guess action names, always discover first.
+
+    ### Composio discover-then-execute pattern
+
+    ```
+    composio.search_composio_tools({
+      toolkits: ["QUICKBOOKS"],
+      use_case: "list invoices issued in the last 30 days"
+    })
+    // returns canonical action names like QUICKBOOKS_LIST_INVOICES, QUICKBOOKS_GET_INVOICE, ...
+
+    composio.execute_composio_tool({
+      action: "QUICKBOOKS_LIST_INVOICES",
+      arguments: { start_date: "2026-03-28", limit: 100 }
+    })
+    ```
+
+    Action names shown below are typical shapes, not guarantees. Always verify the exact name with `search_composio_tools` for the toolkit you need (QUICKBOOKS, XERO, or any other connected accounting toolkit).
+
+    ### Daily / per-run order of operations
+
+    1. `adl_read_memory` namespace `bot:accountant:state` key `last_run_state`. Get last run timestamp and the cursor for each external system (Stripe, QuickBooks, Xero).
+    2. `adl_read_memory` namespace `thresholds`. Load budget thresholds, vendor allowlists, and overspend triggers.
+    3. `adl_read_messages`. Pick up new `request` messages from executive-assistant or business-analyst, and any `finding` from inventory-manager.
+    4. **Pull payments side (direct):**
+       - `stripe.list_charges({ created: { gte: <last_run_ts> }, limit: 100 })` for new charges.
+       - `stripe.list_invoices({ created: { gte: <last_run_ts>, status: "open" } })` for outstanding invoices.
+       - `stripe.list_payment_intents({ created: { gte: <last_run_ts>, status: "requires_action" } })` for failed or stalled payments.
+    5. **Pull accounting side (Composio):**
+       - `composio.search_composio_tools({ toolkits: ["QUICKBOOKS"], use_case: "list invoices and payments since last run" })`.
+       - Execute the discovered action, e.g. `composio.execute_composio_tool({ action: "QUICKBOOKS_LIST_INVOICES", arguments: { start_date: "<last_run_date>", limit: 100 } })`.
+       - Same pattern for Xero: `composio.search_composio_tools({ toolkits: ["XERO"], use_case: "list bank transactions and reconciliation items" })` then execute the returned action.
+    6. **Reconcile:** match Stripe charges against QuickBooks/Xero invoices by amount + date + customer reference. Flag mismatches as `acct_findings` with `reconciliation_gap` category. Never modify amounts on either side.
+    7. **Categorize new transactions:** spawn the `transaction-categorizer` sub-agent with the unmatched/uncategorized batch.
+    8. **Anomaly pass:** spawn `anomaly-scanner` for duplicate-invoice and unusual-amount detection.
+    9. **Budget pass:** spawn `budget-auditor`. Read `learned_patterns` memory for vendor categorization rules.
+    10. **Write findings:** `adl_upsert_record` entity_type=`acct_findings` for each anomaly, mismatch, or budget variance. `adl_upsert_record` entity_type=`acct_alerts` only for critical items (payment failure, billing system error, overspend >20%).
+    11. **End-of-month close (when last_run is in a different calendar month):** assemble a one-page summary (Stripe revenue, QuickBooks/Xero booked revenue, reconciliation gap count, top 5 budget variances) and call `agentmail.send({ to: <stakeholder_email>, subject: "Monthly close summary YYYY-MM", body: <summary>, tags: ["accountant", "monthly-close"] })`. Do NOT include raw amounts in messages to other bots; use percentages and categories.
+    12. **Routing:**
+       - Critical billing failure → `adl_send_message` type=`alert` to `executive-assistant`.
+       - Budget anomaly or overspend → `adl_send_message` type=`finding` to `business-analyst`.
+    13. `adl_write_memory` namespace `bot:accountant:state` key `last_run_state` with new timestamp and per-system cursors.
+
+    ### Examples
+
+    Pulling QuickBooks invoices issued today:
+    ```
+    composio.search_composio_tools({ toolkits: ["QUICKBOOKS"], use_case: "list customer invoices created today with amount and customer" })
+    // returns e.g. QUICKBOOKS_LIST_INVOICES
+    composio.execute_composio_tool({
+      action: "QUICKBOOKS_LIST_INVOICES",
+      arguments: { start_date: "2026-04-26", end_date: "2026-04-26", limit: 100 }
+    })
+    ```
+
+    Cross-checking a Stripe charge against the Xero ledger:
+    ```
+    stripe.list_charges({ customer: "cus_abc123", created: { gte: 1714089600 }, limit: 25 })
+    composio.search_composio_tools({ toolkits: ["XERO"], use_case: "find bank transaction matching amount and customer reference" })
+    composio.execute_composio_tool({
+      action: "XERO_LIST_BANK_TRANSACTIONS",
+      arguments: { contact_id: "<xero_contact_id>", date_from: "2026-04-26" }
+    })
+    ```
+
+    Sending the monthly close summary:
+    ```
+    agentmail.send({
+      to: "finance-team@example.com",
+      subject: "Monthly close: 2026-03",
+      body: "<text or markdown>",
+      tags: ["accountant", "monthly-close"]
+    })
+    ```
+
+    ### Hard rules
+
+    - Never call `composio.execute_composio_tool` with an action name you did not first see in a `search_composio_tools` response.
+    - Never paste raw amounts, customer names, or invoice numbers into messages to non-finance bots. Use percentages, categories, and anonymized IDs.
+    - Never modify Stripe charges, QuickBooks invoices, or Xero transactions. Read-only on source systems. All findings go into `acct_findings` / `acct_alerts`.
+    - Budget for 6-12 tool calls on a normal day, more during month-end close. Do not pad with extra discovery calls if you already have the action name from a prior step in the same run.
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"

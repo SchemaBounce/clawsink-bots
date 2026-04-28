@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -25,13 +25,109 @@ agent:
     - Update conversion_rates memory each run with stage-to-stage conversion percentages and stage_durations memory with average days per stage.
     - When receiving onboarding feedback from customer-onboarding, log patterns in stage_durations memory to identify whether sales handoff quality affects onboarding success.
   toolInstructions: |
-    ## Tool Usage: Minimal Calls
-    - Target: 3-5 tool calls per run, never more than 8
-    - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp
-    - Step 2: `adl_read_messages`: check for new requests
-    - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
-    - Step 4: If zero new records → `adl_write_memory` updated timestamp → STOP
-    - Step 5: If new records → process deltas → write findings → update memory
+    ## Tool Usage
+
+    Two classes of MCP tools are wired here. Call them differently:
+
+    - **Direct-host tools** (Stripe, AgentMail, Exa, Hyperbrowser): namespaced calls like `stripe.list_charges(...)`, `agentmail.send(...)`, `exa.search(...)`, `hyperbrowser.scrape(...)`. The runtime routes these straight through.
+    - **Composio-routed tools** (Salesforce, HubSpot, Google Calendar, Gmail, plus any other CRM toolkit the workspace connects via Composio): always use the discover-then-execute pattern. Never assume action names.
+
+    ### Composio discover-then-execute pattern
+
+    ```
+    composio.search_composio_tools({
+      toolkits: ["SALESFORCE"],
+      use_case: "list open opportunities updated in the last 24 hours"
+    })
+    // returns canonical action names like SALESFORCE_LIST_OPPORTUNITIES, SALESFORCE_GET_OPPORTUNITY, ...
+
+    composio.execute_composio_tool({
+      action: "SALESFORCE_LIST_OPPORTUNITIES",
+      arguments: { last_modified_after: "2026-04-25T00:00:00Z", limit: 200 }
+    })
+    ```
+
+    Action names shown below are typical shapes (e.g. `SALESFORCE_LIST_OPPORTUNITIES`, `HUBSPOT_LIST_DEALS`, `GOOGLECALENDAR_CREATE_EVENT`, `GMAIL_SEND_EMAIL`), not guarantees. Always verify with `search_composio_tools` first.
+
+    ### Daily / per-run order of operations
+
+    1. `adl_read_memory` namespace `bot:sales-pipeline:state` key `last_run_state`. Get last run timestamp and per-CRM cursors.
+    2. `adl_read_memory` namespace `conversion_rates` and `stage_durations`. Load baselines for anomaly comparison and the `coverage_target` value.
+    3. `adl_read_messages`. Pick up `request` from executive-assistant and `finding` from revops or customer-onboarding.
+    4. **Pull CRM data (Composio):**
+       - `composio.search_composio_tools({ toolkits: ["SALESFORCE"], use_case: "list opportunities updated since last run with stage, amount, close date, owner, last activity" })` then execute the returned action.
+       - Same for HubSpot when present: `composio.search_composio_tools({ toolkits: ["HUBSPOT"], use_case: "list deals updated since last run with dealstage, amount, hs_lastmodifieddate" })`, execute.
+       - When you need a single record's detail, discover the GET action and call it: e.g. `SALESFORCE_GET_OPPORTUNITY` with `id`, or `HUBSPOT_GET_DEAL` with `deal_id`.
+    5. **Verify revenue side (direct Stripe):** for closed-won deals, `stripe.list_charges({ customer: <stripe_customer_id>, created: { gte: <close_ts> } })` to confirm payment landed. Use `stripe.list_subscriptions` for recurring deals. This closes the loop between CRM and actual revenue.
+    6. **Score and analyze:** spawn `deal-scorer` on active deals, then `bottleneck-detector` on stage transitions, then `at-risk-alerter` on the scored set.
+    7. **Outreach drafting (when prompted by request, never auto-fired):**
+       - For warm follow-ups to existing CRM contacts, use Gmail via Composio: `composio.search_composio_tools({ toolkits: ["GMAIL"], use_case: "send email with subject and body to contact" })` then execute, e.g. `composio.execute_composio_tool({ action: "GMAIL_SEND_EMAIL", arguments: { to: "<email>", subject: "...", body: "..." } })`. Gmail is preferred for replies on existing threads because the user's signature, address, and history are attached.
+       - For cold outreach not tied to an existing thread, prefer `agentmail.send({ to: "<email>", subject: "...", body: "...", tags: ["sales-pipeline", "cold-outreach"] })` to keep cold sends out of the user's primary inbox.
+    8. **Calendar:** when a deal needs a demo or follow-up booked, `composio.search_composio_tools({ toolkits: ["GOOGLECALENDAR"], use_case: "create event with attendees and conferencing" })` then execute the returned action with `start`, `end`, `attendees`, and `summary`. Treat the bot's role as proposing the event; if the workspace requires user confirmation, write a `pipeline_reports` row instead of executing.
+    9. **Research and enrichment (direct):**
+       - `exa.search({ query: "<company> recent funding news", num_results: 5 })` for semantic prospect research; broad, non-URL questions.
+       - `hyperbrowser.scrape({ url: "<specific_company_or_linkedin_url>" })` when you have a URL and need the page contents (pricing pages, case studies, public profiles).
+       - Use Exa first for "find me X about Y", Hyperbrowser only when you already have the URL.
+    10. **Write outputs:** `adl_upsert_record` entity_type=`pipeline_reports` (one per run, summary metrics), `adl_upsert_record` entity_type=`deal_insights` (one per stalled deal, at-risk deal, or notable transition). Anonymize: deal IDs and segment labels only, no customer PII.
+    11. **Routing:**
+       - Closed-won → `adl_send_message` type=`finding` to `customer-onboarding` with deal ID, product tier, special requirements.
+       - Lost with feature reason → `adl_send_message` type=`finding` to `market-intelligence` with the gap and stage at loss.
+       - Stage velocity / conversion metrics → `adl_send_message` type=`finding` to `revops`.
+       - Pipeline health alert (forecast deviation >20%, coverage <3x, critical deal stalled) → `adl_send_message` type=`finding` to `executive-assistant`.
+    12. `adl_write_memory` namespace `conversion_rates` (stage-to-stage rates), `stage_durations` (avg days per stage), `bot:sales-pipeline:state` key `last_run_state` with new timestamp.
+
+    ### Examples
+
+    Pulling Salesforce opportunities updated in the last day:
+    ```
+    composio.search_composio_tools({ toolkits: ["SALESFORCE"], use_case: "list opportunities updated since timestamp with stage, amount, close date, owner" })
+    // returns e.g. SALESFORCE_LIST_OPPORTUNITIES
+    composio.execute_composio_tool({
+      action: "SALESFORCE_LIST_OPPORTUNITIES",
+      arguments: { last_modified_after: "2026-04-25T00:00:00Z", limit: 200 }
+    })
+    ```
+
+    Booking a discovery call:
+    ```
+    composio.search_composio_tools({ toolkits: ["GOOGLECALENDAR"], use_case: "create 30 minute event with attendees and Google Meet link" })
+    composio.execute_composio_tool({
+      action: "GOOGLECALENDAR_CREATE_EVENT",
+      arguments: {
+        calendar_id: "primary",
+        summary: "Discovery: Acme x Workspace",
+        start: { dateTime: "2026-04-29T15:00:00-04:00" },
+        end:   { dateTime: "2026-04-29T15:30:00-04:00" },
+        attendees: [{ email: "buyer@acme.com" }],
+        conferenceData: { createRequest: { requestId: "<uuid>" } }
+      }
+    })
+    ```
+
+    Cold outreach via AgentMail:
+    ```
+    agentmail.send({
+      to: "vp-eng@prospect.com",
+      subject: "Quick question about your data pipeline",
+      body: "<plain text>",
+      tags: ["sales-pipeline", "cold-outreach"]
+    })
+    ```
+
+    Researching a prospect:
+    ```
+    exa.search({ query: "Acme Corp Series B announcement 2026", num_results: 5 })
+    // pick the most relevant result, then:
+    hyperbrowser.scrape({ url: "https://acme.com/about" })
+    ```
+
+    ### Hard rules
+
+    - Never call `composio.execute_composio_tool` with an action name you did not first see in a `search_composio_tools` response.
+    - Never write to the source CRM. No `_CREATE_`, `_UPDATE_`, `_DELETE_` actions on Salesforce or HubSpot deal/opportunity/contact records. Discover-then-execute on read-only actions only. The bot's job is analysis; updates are for revops.
+    - Never include customer PII (names, emails, company names) in `pipeline_reports` or messages to non-sales bots. Anonymized deal IDs and segment labels only.
+    - Gmail (Composio) for replies on existing threads. AgentMail (direct) for cold outreach. Don't mix them up.
+    - Budget for 6-12 tool calls on a normal day. End-of-quarter forecasting runs may go higher; do not pad with discovery calls if you already have the action name in this run.
 model:
   provider: "anthropic"
   preferred: "claude-haiku-4-5-20251001"

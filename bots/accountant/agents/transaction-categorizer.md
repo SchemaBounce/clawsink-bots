@@ -17,6 +17,8 @@ Use standard accounting categories: Revenue, COGS, Operating Expenses (broken in
 
 ## Process
 
+You receive a batch of uncategorized transactions that the parent Accountant bot pulled from Stripe (direct) and QuickBooks/Xero (Composio discover-then-execute). Work only from the ADL records. Do not call external systems.
+
 1. Read the batch of uncategorized transactions from records.
 2. Read memory for any workspace-specific category mappings or overrides learned from previous runs.
 3. For each transaction:

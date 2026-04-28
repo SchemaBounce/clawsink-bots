@@ -13,9 +13,11 @@ Identify deals at risk of being lost and generate alerts for timely intervention
 
 ## Process
 
+You operate on `deal_score` records already produced by the `deal-scorer` sub-agent. The parent Sales Pipeline bot pulls CRM data via Composio (`composio.search_composio_tools` then `composio.execute_composio_tool` against SALESFORCE / HUBSPOT) and verifies revenue via direct Stripe calls before spawning the scoring chain. You do not call external tools.
+
 1. Query the latest `deal_score` records.
 2. Filter for deals meeting at-risk criteria (see below).
-3. For each at-risk deal, write an `at_risk_deal` record with the reason and recommended action.
+3. For each at-risk deal, write an `at_risk_deal` record with the reason and recommended action. Use anonymized deal IDs and segment labels only, no customer PII.
 4. Send alert messages for high-value at-risk deals.
 
 ## At-Risk Criteria

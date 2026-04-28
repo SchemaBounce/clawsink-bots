@@ -21,9 +21,11 @@ Scan recent transactions and invoices for anomalies that require human or parent
 
 ## Process
 
+You work on records already pulled into ADL by the parent Accountant bot. The parent reconciles Stripe (direct) against QuickBooks/Xero (Composio discover-then-execute) and writes the merged set to `transactions` and `invoices` records before spawning you. Do not re-fetch from external systems. If a critical record is missing, return that gap as a finding instead of trying to pull it yourself.
+
 1. Query recent transactions and invoices.
 2. Read memory for historical baselines (vendor averages, recurring obligations, known patterns).
-3. Use semantic search to find potential duplicate invoices.
+3. Use semantic search to find potential duplicate invoices. Cross-source duplicates (one in Stripe, one in QuickBooks) are common and should be flagged separately from same-source duplicates.
 4. For each anomaly found, produce a finding with:
    - `anomaly_type`: one of the types above
    - `severity`: "low", "medium", "high", "critical"
