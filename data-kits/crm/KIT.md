@@ -18,8 +18,7 @@ metadata:
     - sales-intelligence
   author: SchemaBounce
 compatibility:
-  teams:
-    - lead-researcher
+  teams: []
   composableWith:
     - saas
     - consulting
