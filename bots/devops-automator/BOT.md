@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -108,7 +108,7 @@ mcpServers:
     required: false
     reason: "Integrate with PagerDuty, Datadog, and other DevOps SaaS platforms via Composio managed-OAuth gateway"
 # tools/aws, tools/gcp, tools/kubernetes, tools/docker were declared here
-# previously but are not yet wired in the runtime registry — clicking
+# previously but are not yet wired in the runtime registry, clicking
 # Connect on them produced silent no-ops. Stripped 2026-04-27 per the
 # no-vaporware sweep. Re-add when their npm MCP packages are vetted and
 # entries land in core-api embeddedEnvSpecs.

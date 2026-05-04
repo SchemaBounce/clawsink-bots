@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-turnover-coordinator
   displayName: "Turnover Coordinator"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Manages cleaning schedules between guests, tracks turnover status, ensures properties are guest-ready, flags maintenance issues."
   category: operations
   tags: ["str", "turnover", "cleaning", "maintenance", "scheduling", "hospitality"]
@@ -199,7 +199,7 @@ goals:
 
 # Turnover Coordinator
 
-Manages the operational logistics between guests. In short-term rental, the turnover window — the hours between checkout and check-in — is where operational failures happen. This bot ensures every property is cleaned, inspected, and guest-ready on time.
+Manages the operational logistics between guests. In short-term rental, the turnover window, the hours between checkout and check-in, is where operational failures happen. This bot ensures every property is cleaned, inspected, and guest-ready on time.
 
 ## What It Does
 
@@ -207,12 +207,12 @@ Manages the operational logistics between guests. In short-term rental, the turn
 - Tracks turnover completion status in real time
 - Alerts immediately when a cleaning is running late or at risk of missing the check-in window
 - Flags maintenance issues discovered during turnovers (broken appliances, stains, damage)
-- Manages back-to-back booking logistics — tight windows get flagged for priority scheduling
+- Manages back-to-back booking logistics, tight windows get flagged for priority scheduling
 - Tracks cleaner performance metrics (on-time rate, quality scores, availability)
 
 ## Why Haiku
 
-Turnover coordination is high-frequency, low-complexity work — schedule matching, status tracking, time math. Haiku handles it efficiently at a fraction of Sonnet's cost, keeping the per-run cost low even at intensive (hourly) schedules.
+Turnover coordination is high-frequency, low-complexity work, schedule matching, status tracking, time math. Haiku handles it efficiently at a fraction of Sonnet's cost, keeping the per-run cost low even at intensive (hourly) schedules.
 
 ## Critical Timing
 

@@ -119,13 +119,13 @@ An AI operations team built for the realities of running a restaurant. Food marg
 
 ## How They Work Together
 
-In a restaurant, everything connects back to the walk-in cooler and the guest experience. Inventory Manager continuously tracks what you have on hand against what you need for tonight's covers and tomorrow's prep list. When avocados are two days from turning or your fish supplier is delayed, Inventory Alert fires immediately — giving the kitchen time to 86 an item or call the backup supplier before service starts.
+In a restaurant, everything connects back to the walk-in cooler and the guest experience. Inventory Manager continuously tracks what you have on hand against what you need for tonight's covers and tomorrow's prep list. When avocados are two days from turning or your fish supplier is delayed, Inventory Alert fires immediately, giving the kitchen time to 86 an item or call the backup supplier before service starts.
 
 Accountant watches the numbers that keep restaurants alive: food cost percentage against your target, labor cost as a ratio of revenue, and daily cover counts versus projections. When food cost creeps above target, it cross-references with Inventory Manager to identify whether the issue is waste, over-portioning, or supplier price increases.
 
 Customer Support monitors your reservation platform and review sites. A complaint about wait times or a cold dish gets triaged and surfaced before it becomes a pattern. Positive reviews get flagged for Marketing Growth to amplify.
 
-Marketing Growth handles the local game — promoting the weekend special, pushing the new seasonal menu, managing your social accounts, and coordinating local event tie-ins. It pulls from Accountant to understand which promotions actually drive profitable covers, not just foot traffic.
+Marketing Growth handles the local game, promoting the weekend special, pushing the new seasonal menu, managing your social accounts, and coordinating local event tie-ins. It pulls from Accountant to understand which promotions actually drive profitable covers, not just foot traffic.
 
 Executive Assistant ties it all together into the daily pre-service briefing: tonight's reservation count, 86 list from Inventory Alert, any guest issues from Customer Support, food cost trend from Accountant, and active promotions from Marketing Growth.
 

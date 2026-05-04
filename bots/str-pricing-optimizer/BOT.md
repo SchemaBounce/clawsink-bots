@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-pricing-optimizer
   displayName: "Dynamic Pricing"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Analyzes market conditions, competitor rates, and demand patterns to optimize nightly rates and maximize revenue."
   category: finance
   tags: ["str", "dynamic-pricing", "revenue-management", "rate-optimization", "hospitality"]
@@ -246,9 +246,9 @@ The revenue brain of the short-term rental operation. Analyzes market conditions
 - Analyzes comparable listings in the market to establish competitive rate ranges
 - Tracks demand patterns: weekday vs. weekend, seasonal trends, local events, school holidays
 - Recommends rate adjustments based on booking velocity and gap nights
-- Manages minimum stay requirements — longer minimums during peak, flexible during slow periods
+- Manages minimum stay requirements, longer minimums during peak, flexible during slow periods
 - Suggests last-minute discounts for unbooked nights within the next 7 days
-- Detects pricing anomalies — competitors suddenly dropping 40%, unexpected demand surges
+- Detects pricing anomalies, competitors suddenly dropping 40%, unexpected demand surges
 
 ## Pricing Strategy
 
@@ -262,6 +262,6 @@ Uses a multi-factor approach:
 ## Recommended Setup
 
 Fill in these North Star keys for best results:
-- `target_occupancy_rate` — Your target (e.g., 75% — higher for urban, lower for luxury)
-- `market_type` — Affects seasonal patterns (beach peaks in summer, ski in winter)
-- `average_nightly_rate` — Baseline for the portfolio
+- `target_occupancy_rate`: Your target (e.g., 75%, higher for urban, lower for luxury)
+- `market_type`: Affects seasonal patterns (beach peaks in summer, ski in winter)
+- `average_nightly_rate`: Baseline for the portfolio

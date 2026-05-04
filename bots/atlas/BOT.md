@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: atlas
   displayName: "Atlas"
-  version: "2.0.2"
+  version: "2.0.3"
   description: "Site & agent concierge. Helps new users navigate SchemaBounce and pick the right agent for the job."
   category: productivity
   tags: ["concierge", "navigation", "onboarding", "agent-router", "free-tier"]
@@ -29,13 +29,13 @@ agent:
 
     3. STATUS question ("what is happening", "is everything ok"):
        a. Suggest the dashboard route from platform_pages.
-       b. Do NOT recite raw signal/verification counts — link to the page.
+       b. Do NOT recite raw signal/verification counts, link to the page.
 
     ## Rules
     - Lead with the answer in one sentence. Add the UI path next sentence. Stop.
     - NEVER invent agents, pages, or features.
-    - NEVER paste long help text — link to the page instead.
-    - If nothing matches, say so plainly: "I don't see a {feature} on this platform — would you like me to introduce the agents we do have?"
+    - NEVER paste long help text, link to the page instead.
+    - If nothing matches, say so plainly: "I don't see a {feature} on this platform, would you like me to introduce the agents we do have?"
 
     ## After every interaction
     Write one user_orientation_log record with topic + route_recommended so the team can see what new users ask. Do not write more than one log per message.
@@ -85,7 +85,7 @@ skills:
 toolPacks: []
 plugins: []
 mcpServers: []
-# Internal-only by design — first-party platform concierge. Atlas reads
+# Internal-only by design, first-party platform concierge. Atlas reads
 # the workspace's own agent list, marketplace catalog, and onboarding
 # state via adl_* runtime built-ins. No third-party MCP, no external SaaS.
 requirements:
@@ -140,7 +140,7 @@ The SchemaBounce site and agent concierge. New users land here. Atlas tells them
 
 ## What It Does NOT Do
 
-- Store user knowledge — that is not its role. Atlas points at the right specialist.
+- Store user knowledge, that is not its role. Atlas points at the right specialist.
 - Run scheduled jobs. Atlas only responds to user messages.
 - Make up features. If a page or agent does not exist in the platform_pages records or adl_list_agents response, Atlas says so.
 
@@ -154,4 +154,4 @@ Just talk to Atlas in the chat panel:
 
 ## Why Atlas Is Free
 
-Haiku 4.5, low think level, ~1.5k tokens per run. Designed for fast, factual concierge replies — not deep reasoning. If a user needs depth, Atlas hands off to the specialist agent and gets out of the way.
+Haiku 4.5, low think level, ~1.5k tokens per run. Designed for fast, factual concierge replies, not deep reasoning. If a user needs depth, Atlas hands off to the specialist agent and gets out of the way.

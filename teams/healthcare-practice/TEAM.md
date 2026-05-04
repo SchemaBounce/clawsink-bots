@@ -103,14 +103,14 @@ orgChart:
 ---
 # Healthcare Practice
 
-An AI team built for the operational realities of running a medical practice. Between patient flow, insurance billing complexities, regulatory audits, staff credentialing, and the constant pressure to maintain care quality while keeping the lights on — practice managers are buried. This team handles the operational overhead so clinical staff can focus on patients.
+An AI team built for the operational realities of running a medical practice. Between patient flow, insurance billing complexities, regulatory audits, staff credentialing, and the constant pressure to maintain care quality while keeping the lights on, practice managers are buried. This team handles the operational overhead so clinical staff can focus on patients.
 
 ## Included Bots
 
 | Bot | Role | Schedule |
 |-----|------|----------|
-| Executive Assistant | Daily practice briefing — patient volume, compliance status, billing health, staffing | @daily |
-| Customer Support | Patient relations — appointment issues, satisfaction surveys, inquiry triage | @every 2h |
+| Executive Assistant | Daily practice briefing, patient volume, compliance status, billing health, staffing | @daily |
+| Customer Support | Patient relations, appointment issues, satisfaction surveys, inquiry triage | @every 2h |
 | Compliance Auditor | Continuous regulatory validation, audit readiness checks, policy monitoring | @daily |
 | Accountant | Billing reconciliation, insurance claims tracking, practice P&L | @daily |
 | Meeting Summarizer | Captures clinical team meetings, staff huddles, and case review action items | @cdc |
@@ -120,15 +120,15 @@ An AI team built for the operational realities of running a medical practice. Be
 
 Healthcare practices operate under a unique combination of pressures: high patient volume, strict regulatory requirements, complex insurance billing, and staffing challenges. Every bot in this team addresses a specific operational pain point that practice managers deal with daily.
 
-Customer Support handles patient-facing communications — but in a healthcare context, this means appointment rescheduling, referral coordination, post-visit follow-up surveys, and complaint triage. A patient frustrated by a billing error or a long wait time gets surfaced quickly before it becomes a formal complaint or negative review. Patterns in patient feedback (repeated complaints about wait times in the afternoon, for example) get flagged for Executive Assistant.
+Customer Support handles patient-facing communications, but in a healthcare context, this means appointment rescheduling, referral coordination, post-visit follow-up surveys, and complaint triage. A patient frustrated by a billing error or a long wait time gets surfaced quickly before it becomes a formal complaint or negative review. Patterns in patient feedback (repeated complaints about wait times in the afternoon, for example) get flagged for Executive Assistant.
 
-Compliance Auditor is the regulatory backbone. Healthcare practices face overlapping compliance requirements — documentation standards, privacy regulations, clinical protocols, and workplace safety. This bot tracks your compliance posture against your declared frameworks, monitors for regulatory updates that affect your practice type, and maintains continuous audit readiness. When a gap is detected, it generates specific remediation steps rather than generic warnings.
+Compliance Auditor is the regulatory backbone. Healthcare practices face overlapping compliance requirements, documentation standards, privacy regulations, clinical protocols, and workplace safety. This bot tracks your compliance posture against your declared frameworks, monitors for regulatory updates that affect your practice type, and maintains continuous audit readiness. When a gap is detected, it generates specific remediation steps rather than generic warnings.
 
 Accountant manages the financial engine that keeps a practice viable: claim submission tracking, denial rates by payer, aging receivables, procedure code profitability, and monthly P&L. It flags claims approaching timely filing deadlines and identifies payer-specific denial patterns so your billing team can address root causes.
 
-Meeting Summarizer captures the clinical team huddles, case conferences, and staff meetings that happen constantly in healthcare settings. Action items get extracted and assigned — a discussed change to intake procedures, a new protocol to implement, a referral pattern to investigate. Nothing from a meeting gets lost.
+Meeting Summarizer captures the clinical team huddles, case conferences, and staff meetings that happen constantly in healthcare settings. Action items get extracted and assigned, a discussed change to intake procedures, a new protocol to implement, a referral pattern to investigate. Nothing from a meeting gets lost.
 
-HR Onboarding tracks the credentialing and compliance requirements for every staff member — license renewals, continuing education requirements, mandatory training completions, and background check expirations. In healthcare, a lapsed credential can shut down a provider's ability to see patients.
+HR Onboarding tracks the credentialing and compliance requirements for every staff member, license renewals, continuing education requirements, mandatory training completions, and background check expirations. In healthcare, a lapsed credential can shut down a provider's ability to see patients.
 
 Executive Assistant synthesizes everything into the daily practice briefing: today's patient volume versus capacity, any compliance flags from the Auditor, billing health from Accountant, outstanding action items from Meeting Summarizer, and upcoming credential expirations from HR Onboarding.
 

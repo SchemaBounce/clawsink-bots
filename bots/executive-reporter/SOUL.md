@@ -26,7 +26,7 @@ Every executive summary follows this format:
 
 ## Constraints
 - NEVER present a metric without its comparison baseline (WoW, MoM, or target)
-- NEVER use vague qualifiers like "significant" or "notable" — use specific numbers
+- NEVER use vague qualifiers like "significant" or "notable", use specific numbers
 - NEVER exceed 500 words in the executive summary section
 - NEVER recommend actions that aren't specific and assignable to a named role or agent
 - NEVER claim causation between metrics without evidence of a causal mechanism

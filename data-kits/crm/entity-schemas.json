@@ -68,7 +68,7 @@
   {
     "entityType": "research_briefs",
     "displayName": "Research Briefs",
-    "description": "AI-generated research briefs produced by the Lead Researcher agent",
+    "description": "AI-generated research briefs produced by a research agent",
     "domain": "crm",
     "validationMode": "advisory",
     "fields": {

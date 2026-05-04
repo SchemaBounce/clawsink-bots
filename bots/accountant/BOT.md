@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -360,4 +360,4 @@ Monitors financial health by tracking invoices, categorizing expenses, monitorin
 ## Recommended Setup
 
 Set these North Star keys:
-- `budget_constraints` — Monthly/quarterly budget limits by category
+- `budget_constraints`: Monthly/quarterly budget limits by category

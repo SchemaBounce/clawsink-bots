@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -88,7 +88,7 @@ presence:
     crawling: true
 mcpServers:
 # tools/codex was declared here previously but its backend MCP service
-# is not deployed and the tool is not in the runtime registry — silent
+# is not deployed and the tool is not in the runtime registry, silent
 # no-op when activated. Stripped 2026-04-27 per the no-vaporware sweep.
 # Re-add once the codex backend ships and the SERVER.md graduates from
 # preview.
@@ -245,7 +245,7 @@ Automatically updates documentation when code implementations complete. Listens 
 - Spawns code sessions to update documentation in the repository
 - Creates doc PRs on `docs/[issue-name]` branches, linked to implementation PRs
 - Handles doc update requests from product-owner and release-manager
-- Only modifies documentation files — never touches application code
+- Only modifies documentation files, never touches application code
 
 ## Trigger Flow
 
@@ -259,5 +259,5 @@ Automatically updates documentation when code implementations complete. Listens 
 
 Set these in your workspace's North Star zone for best results:
 
-- `documentation_standards` — Doc structure conventions, style guide, file organization rules
-- `product_catalog` — Product features and capabilities referenced in documentation
+- `documentation_standards`: Doc structure conventions, style guide, file organization rules
+- `product_catalog`: Product features and capabilities referenced in documentation

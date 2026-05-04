@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: uptime-manager
   displayName: "Uptime Manager"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Manages status pages, tracks SLA compliance, monitors uptime percentages, and produces incident postmortems."
   category: operations
   tags: ["uptime", "status-page", "sla", "postmortem", "incident-communication"]
@@ -233,6 +233,6 @@ Manages status page updates, tracks SLA compliance against configured targets, m
 ## Recommended Setup
 
 Set these North Star keys for best results:
-- `sla_targets` — Your uptime SLA targets per window (30-day, 90-day, yearly)
-- `status_page_config` — Status page component mapping and update preferences
-- `incident_severity_definitions` — How to classify incident severity for customer communication
+- `sla_targets`: Your uptime SLA targets per window (30-day, 90-day, yearly)
+- `status_page_config`: Status page component mapping and update preferences
+- `incident_severity_definitions`: How to classify incident severity for customer communication

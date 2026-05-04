@@ -71,10 +71,10 @@ A comprehensive data operations team. Monitors data quality, detects anomalies, 
 
 ## Included Bots
 
-- **Data Quality Monitor** — CDC-triggered, validates every incoming record
-- **Anomaly Detector** — CDC-triggered, statistical anomaly detection on metrics
-- **Infrastructure Reporter** — Scheduled every 6 hours, health summaries
-- **Data Engineer** — Scheduled every 6 hours, pipeline health monitoring
+- **Data Quality Monitor**: CDC-triggered, validates every incoming record
+- **Anomaly Detector**: CDC-triggered, statistical anomaly detection on metrics
+- **Infrastructure Reporter**: Scheduled every 6 hours, health summaries
+- **Data Engineer**: Scheduled every 6 hours, pipeline health monitoring
 
 ## Target Market
 

@@ -95,16 +95,16 @@ A growth-focused team for SaaS companies. Predicts churn, optimizes sales pipeli
 
 ## Included Bots
 
-- **Churn Predictor** — CDC-triggered on user activity changes, flags at-risk accounts
-- **Sales Pipeline** — Daily analysis of sales funnel and conversion rates
-- **Customer Onboarding** — CDC-triggered on new customer creation
-- **Content Scheduler** — Weekday content planning and scheduling
+- **Churn Predictor**: CDC-triggered on user activity changes, flags at-risk accounts
+- **Sales Pipeline**: Daily analysis of sales funnel and conversion rates
+- **Customer Onboarding**: CDC-triggered on new customer creation
+- **Content Scheduler**: Weekday content planning and scheduling
 
 ## Target Market
 
 SaaS companies focused on retention, growth, and customer success.
 
 For broader operational coverage, see the tiered SaaS teams:
-- **[SaaS Starter](../saas-starter/)** (6 bots) — core essentials across all domains
-- **[SaaS Professional](../saas-professional/)** (12 bots) — engineering, product, growth, revenue, and customer success
-- **[SaaS Command Center](../saas-command-center/)** (18 bots) — full-scale operational coverage
+- **[SaaS Starter](../saas-starter/)** (6 bots), core essentials across all domains
+- **[SaaS Professional](../saas-professional/)** (12 bots), engineering, product, growth, revenue, and customer success
+- **[SaaS Command Center](../saas-command-center/)** (18 bots), full-scale operational coverage

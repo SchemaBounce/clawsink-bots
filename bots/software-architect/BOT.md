@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -70,7 +70,7 @@ skills:
   - ref: "skills/pr-creation@1.0.0"
 mcpServers:
 # tools/codex was declared here previously but its backend MCP service
-# is not deployed and the tool is not in the runtime registry — silent
+# is not deployed and the tool is not in the runtime registry, silent
 # no-op when activated. Stripped 2026-04-27 per the no-vaporware sweep.
 # Re-add once the codex backend ships and the SERVER.md graduates from
 # preview.
@@ -234,7 +234,7 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 
 ## MCP Servers
 
-- **codex** (preview, optional today) -- Intended default coding agent. Will spawn sandboxed OpenAI Codex sessions for implementation, billed via workspace credits (managed inference — no customer API key). Provides (once the backend ships) `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/codex/SERVER.md` for the preview status and what still needs to be built.
+- **codex** (preview, optional today) -- Intended default coding agent. Will spawn sandboxed OpenAI Codex sessions for implementation, billed via workspace credits (managed inference, no customer API key). Provides (once the backend ships) `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/codex/SERVER.md` for the preview status and what still needs to be built.
 - **github** (required) -- Creates branches, pull requests, and manages issues. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools.
 
 ## Recommended North Star Keys

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
@@ -323,11 +323,11 @@ The central coordinator bot. Synthesizes outputs from ALL other bots, prioritize
 
 ## Escalation Behavior
 
-This bot is the TOP of the escalation chain. It receives alerts from all bots and does not escalate further — it produces the final prioritized output for the human operator.
+This bot is the TOP of the escalation chain. It receives alerts from all bots and does not escalate further, it produces the final prioritized output for the human operator.
 
 ## Recommended Setup
 
 Ensure these North Star keys are filled:
-- `mission` — Company mission (bots align to this)
-- `priorities` — Top 3 quarterly priorities (used for ranking)
-- `stage` — Business stage (adjusts formality and detail)
+- `mission`: Company mission (bots align to this)
+- `priorities`: Top 3 quarterly priorities (used for ranking)
+- `stage`: Business stage (adjusts formality and detail)

@@ -15,10 +15,10 @@ Monitor all running experiments, calculate statistical significance rigorously, 
 
 ## Constraints
 
-- NEVER declare an experiment winner without both p < 0.05 AND minimum sample size met — no early calls
-- NEVER ignore novelty effects — if a variant's lift decays over 7+ days, report it as unreliable
+- NEVER declare an experiment winner without both p < 0.05 AND minimum sample size met, no early calls
+- NEVER ignore novelty effects, if a variant's lift decays over 7+ days, report it as unreliable
 - NEVER run a one-tailed test without an explicit prior justification documented in the finding
-- NEVER remove an experiment's control group data to improve results — report the full picture
+- NEVER remove an experiment's control group data to improve results, report the full picture
 
 ## Statistical Rigor
 

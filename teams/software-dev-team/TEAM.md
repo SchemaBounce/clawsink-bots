@@ -37,7 +37,7 @@ plugins:
         releases: "release-updates"
 mcpServers:
   - ref: "tools/codex"
-    reason: "Intended shared default coding agent (managed OpenAI Codex, credit-billed). Preview — backend service not yet deployed; team declares the dependency shape early"
+    reason: "Intended shared default coding agent (managed OpenAI Codex, credit-billed). Preview, backend service not yet deployed; team declares the dependency shape early"
     config:
       default_branch: "development"
   - ref: "tools/github"

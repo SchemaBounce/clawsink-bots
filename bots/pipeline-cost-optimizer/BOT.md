@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.4"
-  description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools — no third-party MCP, no Composio in the data path."
+  version: "0.1.5"
+  description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
 agent:
@@ -15,7 +15,7 @@ agent:
   instructions: |
     ## Operating Rules
     - You are a FIRST-PARTY platform bot. You read the workspace's own pipeline configuration via the runtime built-in tools (adl_list_pipeline_routes, adl_get_route_status, adl_list_workspace_sources, adl_list_sink_types, adl_get_data_stats, adl_query_records, adl_query_duckdb). You do NOT call any third-party MCP. You do NOT use Composio. You do NOT make raw HTTP.
-    - Every run produces at least one actionable pipeline_cost_recommendation OR an explicit "no actionable findings" record with the metrics that justify the conclusion. "Looks fine" is not a finding — back it with the numbers.
+    - Every run produces at least one actionable pipeline_cost_recommendation OR an explicit "no actionable findings" record with the metrics that justify the conclusion. "Looks fine" is not a finding, back it with the numbers.
     - Recommendations are ALWAYS dry-run: you write structured records that ops or release-manager review and act on. You never disable a route, change a sink config, or modify infrastructure yourself.
     - When a finding has severity="critical", message executive-assistant immediately so ops sees it without waiting for the next dashboard refresh.
     - Use real numbers. If the data isn't there to back a recommendation, say so explicitly and write a setup-gap finding ("metrics not available because <reason>") instead of inventing a guess.
@@ -113,15 +113,15 @@ goals:
 
 # Pipeline Cost Optimizer
 
-Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface **concrete, actionable** cost-saving recommendations. Reads exclusively from SchemaBounce platform tools — no third-party MCP servers, no Composio in the data path.
+Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface **concrete, actionable** cost-saving recommendations. Reads exclusively from SchemaBounce platform tools, no third-party MCP servers, no Composio in the data path.
 
 ## What It Does
 
 - **Per-route audit:** for every configured pipeline route, captures status, source type, sinks attached (with DLQ + retry-policy presence), lifetime event count, per-window event counts (24h / 7d / 30d), failure rate, and processing latency into a `pipeline_route_audit` record.
 - **Real monthly run-rate projections:** uses `adl_get_route_metrics` events_30d × `sink_cost_table` rates to compute concrete dollar figures per route. Surfaces routes whose projected monthly cost exceeds tier thresholds.
-- **Idle-route detection:** flags routes with no events in the recent past (default: 14 days warn, 30 days critical). Distinguishes "never active" from "historically active, now silent" — the latter is critical because it represents wasted resource allocation.
+- **Idle-route detection:** flags routes with no events in the recent past (default: 14 days warn, 30 days critical). Distinguishes "never active" from "historically active, now silent", the latter is critical because it represents wasted resource allocation.
 - **Failure-rate findings:** routes with `failure_rate_30d > 1%` (warn) or `> 5%` (critical) get a finding citing the absolute failed count and which attached sinks lack DLQ (those amplify worst on retry).
-- **Reliability scoring:** sinks lacking DLQ on high-volume routes, sinks lacking explicit retry policy, sinks with elevated lifetime error count — each becomes its own finding with the affected sink IDs.
+- **Reliability scoring:** sinks lacking DLQ on high-volume routes, sinks lacking explicit retry policy, sinks with elevated lifetime error count, each becomes its own finding with the affected sink IDs.
 - **Sink fan-out check:** flags routes with high sink count where consolidation could reduce per-event delivery cost. Cites projected savings from removing redundant sinks.
 - **Errored route surfacing:** routes with `status=errored` are critical findings, routed to sre-devops.
 - **Source orphan check:** flags workspace sources with no active routes consuming them.
@@ -133,7 +133,7 @@ Audits this workspace's pipeline routes, sources, sinks, and event throughput pa
 
 - Does not disable, modify, or delete any pipeline route, source, or sink. Recommendations are dry-run only.
 - Does not call any external API. The data is the workspace's own platform state.
-- Does not invent numbers — every recommendation cites the actual metric that justifies it. If `sink_cost_table` lacks an entry for a sink type the bot writes a `cost_data_missing` recommendation instead of guessing.
+- Does not invent numbers, every recommendation cites the actual metric that justifies it. If `sink_cost_table` lacks an entry for a sink type the bot writes a `cost_data_missing` recommendation instead of guessing.
 
 ## Sub-Agents
 
@@ -144,16 +144,16 @@ Audits this workspace's pipeline routes, sources, sinks, and event throughput pa
 
 ## Why This Bot Matters
 
-This is a first-party bot that demonstrates SchemaBounce platform value. Composio cannot ship this — no third-party platform has visibility into our pipeline routes, sinks, and event throughput. Bots like this are why agents on SchemaBounce are differentiated from agents on a generic MCP gateway.
+This is a first-party bot that demonstrates SchemaBounce platform value. Composio cannot ship this, no third-party platform has visibility into our pipeline routes, sinks, and event throughput. Bots like this are why agents on SchemaBounce are differentiated from agents on a generic MCP gateway.
 
 ## Required North Star Keys
 
 Set in your workspace's North Star zone (the bootstrap script seeds defaults):
 
-- `cost_thresholds` — idle window warning + critical thresholds, per-route monthly run-rate alarm levels
-- `sink_cost_table` — rough cost-per-event by sink type (postgres-cdc, snowflake, bigquery, s3, etc.) used to project monthly run-rate
-- `idle_definition` — what counts as "no events" (events_in_window: 0, default window 14 days)
-- `company_glossary` — for using accurate terminology in recommendations
+- `cost_thresholds`: idle window warning + critical thresholds, per-route monthly run-rate alarm levels
+- `sink_cost_table`: rough cost-per-event by sink type (postgres-cdc, snowflake, bigquery, s3, etc.) used to project monthly run-rate
+- `idle_definition`: what counts as "no events" (events_in_window: 0, default window 14 days)
+- `company_glossary`: for using accurate terminology in recommendations
 
 ## Run Cadence
 

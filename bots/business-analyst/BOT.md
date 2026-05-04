@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: business-analyst
   displayName: "Business Analyst"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Cross-domain analysis, trend detection, and strategic recommendations from all bot findings."
   category: management
   tags: ["analysis", "trends", "strategy", "cross-domain", "insights"]
@@ -252,4 +252,4 @@ The analytical brain of the bot team. Reads findings from ALL domain-specific bo
 
 - Sends strategic insights and cross-domain correlations to executive-assistant
 - Requests deeper data from data-engineer or accountant when analysis needs more context
-- Does not receive alerts directly — works on findings from other bots
+- Does not receive alerts directly, works on findings from other bots

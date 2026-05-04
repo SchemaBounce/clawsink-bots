@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: experiment-tracker
   displayName: "Experiment Tracker"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "A/B experiment monitoring, statistical analysis, and ship/kill recommendations."
   category: analytics
   tags: ["experiments", "ab-testing", "statistics", "conversion", "growth"]
@@ -68,7 +68,7 @@ skills:
   - ref: "skills/ab-testing@1.0.0"
 plugins: []
 mcpServers: []
-# Internal-only by design — first-party platform bot. Reads experiment
+# Internal-only by design, first-party platform bot. Reads experiment
 # records via adl_query_records and runs statistical analysis with
 # adl_query_duckdb. No third-party MCP, no external SaaS.
 automations:

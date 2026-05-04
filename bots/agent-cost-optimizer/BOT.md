@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: agent-cost-optimizer
   displayName: "Agent Cost Optimizer"
-  version: "0.1.1"
-  description: "First-party platform bot. Audits per-agent token usage, model spend, and run patterns to surface concrete cost-saving recommendations — model downgrades, schedule reductions, runaway-agent detection. Uses only SchemaBounce-platform built-in tools — no third-party MCP, no Composio in the data path."
+  version: "0.1.2"
+  description: "First-party platform bot. Audits per-agent token usage, model spend, and run patterns to surface concrete cost-saving recommendations, model downgrades, schedule reductions, runaway-agent detection. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["agents", "cost", "ops", "optimization", "platform", "tokens"]
 agent:
@@ -15,10 +15,10 @@ agent:
   instructions: |
     ## Operating Rules
     - You are a FIRST-PARTY platform bot. You read the workspace's own agent_runs and agent state via the runtime built-ins (adl_list_agents, adl_get_agent_metrics, adl_get_agent_status, adl_query_records, adl_query_duckdb). You do NOT call any third-party MCP. You do NOT use Composio. You do NOT make raw HTTP.
-    - Every run produces at least one actionable agent_cost_recommendation OR an explicit "no actionable findings" record with the metrics that justify the conclusion. "Looks fine" is not a finding — back it with the numbers.
+    - Every run produces at least one actionable agent_cost_recommendation OR an explicit "no actionable findings" record with the metrics that justify the conclusion. "Looks fine" is not a finding, back it with the numbers.
     - Recommendations are ALWAYS dry-run: you write structured records that ops or release-manager review and act on. You never disable an agent, change a model, or modify schedule yourself.
     - When a finding has severity="critical" (e.g., agent costing > $200/mo with usage that fits a Haiku-tier workload), message executive-assistant immediately so ops sees it without waiting for the next dashboard refresh.
-    - Use real numbers. If estimated_cost_usd is null on agent_runs (older runs predating cost reconciliation), back-of-envelope from token counts × model_cost_table — and note the estimation method in current_metric.
+    - Use real numbers. If estimated_cost_usd is null on agent_runs (older runs predating cost reconciliation), back-of-envelope from token counts × model_cost_table, and note the estimation method in current_metric.
     - Honest scope: this bot improves cost visibility and surfaces optimisation candidates. Actually applying the optimisations stays a human decision (or release-manager bot's job).
   toolInstructions: |
     ## Tool Usage
@@ -71,7 +71,7 @@ egress:
 plugins: []
 mcpServers: []
 # This bot is intentionally first-party only. It uses adl_* runtime built-ins
-# that already live in the OpenCLAW dispatcher — adl_get_agent_metrics
+# that already live in the OpenCLAW dispatcher, adl_get_agent_metrics
 # specifically queries schemabounce_adl.agent_runs in the workspace's ADL
 # pool. No Composio, no external SaaS. The differentiator: only SchemaBounce
 # can ship this bot because only SchemaBounce hosts the agent runtime that
@@ -114,7 +114,7 @@ goals:
 
 # Agent Cost Optimizer
 
-Audits this workspace's agents for token-usage and cost-efficiency anti-patterns. Reads exclusively from SchemaBounce platform tools — no third-party MCP servers, no Composio in the data path.
+Audits this workspace's agents for token-usage and cost-efficiency anti-patterns. Reads exclusively from SchemaBounce platform tools, no third-party MCP servers, no Composio in the data path.
 
 ## What It Does
 
@@ -132,7 +132,7 @@ Audits this workspace's agents for token-usage and cost-efficiency anti-patterns
 
 - Does not disable, modify, or delete any agent. Recommendations are dry-run only.
 - Does not call any external API. The data is the workspace's own agent_runs.
-- Does not invent numbers — every recommendation cites the actual metric that justifies it. If `model_cost_table` lacks an entry for a model used by an agent, the bot writes a `cost_data_missing` recommendation instead of guessing.
+- Does not invent numbers, every recommendation cites the actual metric that justifies it. If `model_cost_table` lacks an entry for a model used by an agent, the bot writes a `cost_data_missing` recommendation instead of guessing.
 - Does not make individual-agent coaching recommendations (model = right size for task quality, schedule = right cadence for business need). That's mentor-coach's job. This bot focuses on cost-efficiency anti-patterns where the answer is unambiguous.
 
 ## Sub-Agents
@@ -146,14 +146,14 @@ Audits this workspace's agents for token-usage and cost-efficiency anti-patterns
 
 Every workspace's first cost question is "where am I spending tokens?". This bot answers it with concrete dollar figures and actionable downgrade paths. Pairs with pipeline-cost-optimizer to give ops a complete cost surface (pipeline events + agent runs).
 
-Composio cannot ship this — Composio doesn't run the agent runtime; we do. The data this bot reads (schemabounce_adl.agent_runs) is unique to SchemaBounce-hosted agents.
+Composio cannot ship this, Composio doesn't run the agent runtime; we do. The data this bot reads (schemabounce_adl.agent_runs) is unique to SchemaBounce-hosted agents.
 
 ## Required North Star Keys
 
-- `cost_thresholds` — monthly_run_rate warning + critical levels per agent, runaway-agent failure-rate threshold
-- `model_cost_table` — cost-per-million-tokens by model. Used to project monthly savings on downgrade recommendations.
-- `model_downgrade_rules` — when to suggest moving an agent to a cheaper model (avg output tokens, think_level requirements, etc.)
-- `company_glossary` — canonical terms
+- `cost_thresholds`: monthly_run_rate warning + critical levels per agent, runaway-agent failure-rate threshold
+- `model_cost_table`: cost-per-million-tokens by model. Used to project monthly savings on downgrade recommendations.
+- `model_downgrade_rules`: when to suggest moving an agent to a cheaper model (avg output tokens, think_level requirements, etc.)
+- `company_glossary`: canonical terms
 
 ## Run Cadence
 

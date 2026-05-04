@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.1.4"
+  version: "0.1.5"
   description: "Audits SchemaBounce SEO across modern signals (Google Search Console keyword data, Core Web Vitals, Open Graph, structured data, AI-search citation visibility), suggests blog topics, and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -89,7 +89,7 @@ mcpServers:
     reason: "Composio is the managed-OAuth gateway that provides Google Search Console (and future GA4, etc.) without writing custom OAuth handlers. Without it the auditor cannot reach GSC at all."
   - ref: "tools/google-search-console"
     required: false
-    reason: "Real keyword data, impressions, CTR, position trends. Authorized via Composio OAuth at activation time. Without this the auditor still runs but only emits Open-Graph and structured-data findings — no almost-ranking opportunities."
+    reason: "Real keyword data, impressions, CTR, position trends. Authorized via Composio OAuth at activation time. Without this the auditor still runs but only emits Open-Graph and structured-data findings, no almost-ranking opportunities."
     config:
       default_lookback_days: 28
 requirements:
@@ -150,7 +150,7 @@ Audits SchemaBounce's published content footprint, generates topic suggestions f
 
 ## Why Dry-Run For Outreach Only
 
-The audit, GSC pulls, PageSpeed, and AI-search citation checks are real and produce real artifacts. **Outreach is dry-run only** — real send requires credential management (Mailgun/SES/Twitter) and a careful spam-prevention plan. Until that is built, the value is in the audit and the suggestion pipeline. Pretending to send is dishonest; we are honest about what we do and do not do.
+The audit, GSC pulls, PageSpeed, and AI-search citation checks are real and produce real artifacts. **Outreach is dry-run only**, real send requires credential management (Mailgun/SES/Twitter) and a careful spam-prevention plan. Until that is built, the value is in the audit and the suggestion pipeline. Pretending to send is dishonest; we are honest about what we do and do not do.
 
 ## External APIs This Agent Reaches
 
@@ -165,18 +165,18 @@ The agent itself never makes raw HTTP calls. The four built-in OpenCLAW tools (`
 
 Set in your workspace's North Star zone:
 
-- `brand_voice` — same as blog-writer; outreach drafts must match
-- `product_catalog` — what we actually offer
-- `competitive_anchors` — how we describe ourselves vs alternatives
-- `company_glossary` — canonical terms
+- `brand_voice`: same as blog-writer; outreach drafts must match
+- `product_catalog`: what we actually offer
+- `competitive_anchors`: how we describe ourselves vs alternatives
+- `company_glossary`: canonical terms
 
 ## Data the Bootstrap Script Stages
 
 Before each run, the bootstrap script writes:
 
-- `seo:audit:cache/sitemap_xml` — raw `public/sitemap.xml` content
-- `seo:audit:cache/published_posts_json` — JSON list returned by `GET /api/v1/blog/posts`
-- `seo:audit:cache/brand_queries` — JSON array of 5-10 queries the GEO check uses (e.g., "real-time CDC platform", "schemabounce vs fivetran"). Owned by the workspace operator.
-- `seo:audit:cache/site_url` — the GSC property URL for the workspace (e.g., `https://schemabounce.com/`)
+- `seo:audit:cache/sitemap_xml`: raw `public/sitemap.xml` content
+- `seo:audit:cache/published_posts_json`: JSON list returned by `GET /api/v1/blog/posts`
+- `seo:audit:cache/brand_queries`: JSON array of 5-10 queries the GEO check uses (e.g., "real-time CDC platform", "schemabounce vs fivetran"). Owned by the workspace operator.
+- `seo:audit:cache/site_url`: the GSC property URL for the workspace (e.g., `https://schemabounce.com/`)
 
-These are read by the auditor sub-agent. The agent itself does no outbound HTTP — every external call is brokered by an `adl_seo_*` built-in.
+These are read by the auditor sub-agent. The agent itself does no outbound HTTP, every external call is brokered by an `adl_seo_*` built-in.

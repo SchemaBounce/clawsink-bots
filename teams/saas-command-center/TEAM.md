@@ -261,7 +261,7 @@ orgChart:
 ---
 # SaaS Command Center
 
-Eighteen bots providing complete operational coverage for B2B SaaS companies: engineering reliability, code quality, product management, content marketing, developer relations, sales pipeline, revenue operations, customer success, and executive coordination — all under a single unified team with cross-domain escalation.
+Eighteen bots providing complete operational coverage for B2B SaaS companies: engineering reliability, code quality, product management, content marketing, developer relations, sales pipeline, revenue operations, customer success, and executive coordination, all under a single unified team with cross-domain escalation.
 
 ## Included Bots
 
@@ -317,8 +317,8 @@ On the growth side, Marketing Growth coordinates Blog Writer, Developer Relation
 ## Smaller Tiers
 
 For smaller teams that don't need full 18-bot coverage:
-- **[SaaS Starter](../saas-starter/)** (6 bots) — core essentials: engineering, growth, revenue, customer support
-- **[SaaS Professional](../saas-professional/)** (12 bots) — adds product management, content, bug triage, onboarding, and churn prediction
+- **[SaaS Starter](../saas-starter/)** (6 bots), core essentials: engineering, growth, revenue, customer support
+- **[SaaS Professional](../saas-professional/)** (12 bots), adds product management, content, bug triage, onboarding, and churn prediction
 
 ## Getting Started
 

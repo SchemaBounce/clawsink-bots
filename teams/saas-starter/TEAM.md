@@ -204,7 +204,7 @@ Six bots providing essential operational coverage for small B2B SaaS teams: engi
 
 ## How They Work Together
 
-The Executive Assistant leads the team, coordinating across four domains and issuing daily briefings. SRE & DevOps and Code Reviewer cover engineering — infrastructure health and code quality respectively. Marketing Growth handles go-to-market activities. Sales Pipeline tracks revenue and deal flow. Customer Support triages tickets and routes feature requests to the team lead.
+The Executive Assistant leads the team, coordinating across four domains and issuing daily briefings. SRE & DevOps and Code Reviewer cover engineering, infrastructure health and code quality respectively. Marketing Growth handles go-to-market activities. Sales Pipeline tracks revenue and deal flow. Customer Support triages tickets and routes feature requests to the team lead.
 
 **Communication flow:**
 - Executive Assistant coordinates across all domains -> request to all specialists
@@ -218,8 +218,8 @@ The Executive Assistant leads the team, coordinating across four domains and iss
 ## Upgrading
 
 For more comprehensive coverage, consider:
-- **[SaaS Professional](../saas-professional/)** (12 bots) — adds product management, content, bug triage, onboarding, and churn prediction
-- **[SaaS Command Center](../saas-command-center/)** (18 bots) — full operational coverage with DevRel, market intelligence, RevOps, and more
+- **[SaaS Professional](../saas-professional/)** (12 bots), adds product management, content, bug triage, onboarding, and churn prediction
+- **[SaaS Command Center](../saas-command-center/)** (18 bots), full operational coverage with DevRel, market intelligence, RevOps, and more
 
 ## Getting Started
 

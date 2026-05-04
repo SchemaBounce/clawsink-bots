@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-guest-communicator
   displayName: "Guest Communicator"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Auto-responds to guest messages across all channels. Handles pre-booking, check-in, during-stay, and post-stay communication."
   category: support
   tags: ["str", "guest-communication", "messaging", "superhost", "response-time", "hospitality"]
@@ -243,7 +243,7 @@ The front line of guest interaction. Runs every 15 minutes to maintain Superhost
 
 - Responds to pre-booking inquiries with property-specific details (amenities, location, house rules)
 - Sends check-in instructions at the right moment (24 hours before arrival, with door codes and directions)
-- Fields during-stay requests — wifi passwords, thermostat location, local restaurant recommendations
+- Fields during-stay requests, wifi passwords, thermostat location, local restaurant recommendations
 - Queues post-stay thank-you messages and review requests
 - Escalates emergencies (lockouts, plumbing issues, safety concerns) to Property Manager immediately
 
@@ -256,4 +256,4 @@ Booking platforms reward fast responses:
 
 ## Communication Tone
 
-Adapts tone per platform — casual and warm on Airbnb, slightly more formal on VRBO, friendly and direct on Facebook Marketplace. Always professional, never robotic. Uses the guest's name and references their specific booking details.
+Adapts tone per platform, casual and warm on Airbnb, slightly more formal on VRBO, friendly and direct on Facebook Marketplace. Always professional, never robotic. Uses the guest's name and references their specific booking details.

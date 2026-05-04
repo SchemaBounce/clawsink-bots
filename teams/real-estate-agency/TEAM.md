@@ -99,7 +99,7 @@ orgChart:
 ---
 # Real Estate Agency
 
-An AI team designed for how real estate actually works — long sales cycles, overlapping deals at different stages, strict regulatory deadlines, and the constant need to market new listings while closing existing ones. Every agent juggles dozens of deals simultaneously, and dropping the ball on one inspection deadline or disclosure requirement can kill a deal or invite legal trouble.
+An AI team designed for how real estate actually works, long sales cycles, overlapping deals at different stages, strict regulatory deadlines, and the constant need to market new listings while closing existing ones. Every agent juggles dozens of deals simultaneously, and dropping the ball on one inspection deadline or disclosure requirement can kill a deal or invite legal trouble.
 
 ## Included Bots
 
@@ -107,24 +107,24 @@ An AI team designed for how real estate actually works — long sales cycles, ov
 |-----|------|----------|
 | Executive Assistant | Weekly pipeline review, showing coordination, and closing countdown | @daily |
 | Sales Pipeline | Tracks buyer and seller deals through lead, showing, offer, negotiation, and closing stages | @every 4h |
-| Customer Onboarding | Activates on new client sign-up — sets up search criteria or listing timeline | @cdc |
+| Customer Onboarding | Activates on new client sign-up, sets up search criteria or listing timeline | @cdc |
 | Content Scheduler | Manages listing posts, open house announcements, and market update content | @daily |
 | Accountant | Tracks commissions, escrow status, and monthly P&L | @daily |
 | Legal Compliance | Monitors fair housing requirements, contract deadlines, and disclosure obligations | @daily |
 
 ## How They Work Together
 
-Real estate deals live and die by timing. Sales Pipeline is the backbone — it tracks every deal from first contact through closing, with stage-specific milestones. When a buyer moves from showing to offer, the pipeline updates and Legal Compliance immediately checks that all required disclosures are queued. When a deal enters the negotiation stage, Accountant projects the commission and flags any escrow timing issues.
+Real estate deals live and die by timing. Sales Pipeline is the backbone, it tracks every deal from first contact through closing, with stage-specific milestones. When a buyer moves from showing to offer, the pipeline updates and Legal Compliance immediately checks that all required disclosures are queued. When a deal enters the negotiation stage, Accountant projects the commission and flags any escrow timing issues.
 
-Customer Onboarding triggers the moment a new client signs a representation agreement. For buyers, it builds their property search profile — budget range, neighborhood preferences, must-haves. For sellers, it creates the listing preparation timeline — photography scheduling, staging recommendations, pricing strategy window. This structured intake feeds directly into Sales Pipeline so nothing starts without a complete client profile.
+Customer Onboarding triggers the moment a new client signs a representation agreement. For buyers, it builds their property search profile, budget range, neighborhood preferences, must-haves. For sellers, it creates the listing preparation timeline, photography scheduling, staging recommendations, pricing strategy window. This structured intake feeds directly into Sales Pipeline so nothing starts without a complete client profile.
 
 Content Scheduler handles the marketing engine that keeps listings visible. New listings get syndicated across platforms with optimized descriptions and photo scheduling. Open houses get promoted in advance. Market update posts position agents as local experts. It pulls from Sales Pipeline to know which properties need marketing push and which are under contract.
 
-Legal Compliance is the safety net. Real estate has hard deadlines — inspection contingencies, financing conditions, disclosure windows, fair housing rules. This bot tracks every contractual deadline across all active deals and alerts before anything expires. It also monitors regulatory changes in your market area.
+Legal Compliance is the safety net. Real estate has hard deadlines, inspection contingencies, financing conditions, disclosure windows, fair housing rules. This bot tracks every contractual deadline across all active deals and alerts before anything expires. It also monitors regulatory changes in your market area.
 
-Accountant manages the financial picture — projected and actual commissions, escrow tracking, monthly office P&L, and agent split calculations. It reconciles closed deals against projections and flags when closings are delayed.
+Accountant manages the financial picture, projected and actual commissions, escrow tracking, monthly office P&L, and agent split calculations. It reconciles closed deals against projections and flags when closings are delayed.
 
-Executive Assistant pulls it all together — the daily briefing shows active deal status, upcoming showings, approaching deadlines, new leads in the funnel, and any compliance flags that need attention.
+Executive Assistant pulls it all together, the daily briefing shows active deal status, upcoming showings, approaching deadlines, new leads in the funnel, and any compliance flags that need attention.
 
 **Communication flow:**
 - Sales Pipeline detects deal stage change -> update to Legal Compliance for deadline tracking and Accountant for commission projection

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: tech-debt-tracker
   displayName: "Tech Debt Tracker"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Analyzes code review findings and quality metrics to identify technical debt patterns, track debt over time, and suggest refactoring priorities."
   category: engineering
   tags: ["tech-debt", "code-quality", "refactoring", "engineering"]
@@ -211,5 +211,5 @@ Tech Debt Tracker sits downstream of code-reviewer and api-tester, consuming the
 
 Set these in your workspace's North Star zone for best results:
 
-- `quality_standards` — Code coverage thresholds, complexity limits, acceptable duplication levels
-- `tech_stack` — Languages, frameworks, and tools in use for contextualizing debt analysis
+- `quality_standards`: Code coverage thresholds, complexity limits, acceptable duplication levels
+- `tech_stack`: Languages, frameworks, and tools in use for contextualizing debt analysis

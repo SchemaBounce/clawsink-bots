@@ -34,8 +34,8 @@ Monitor deployments and CI/CD pipelines proactively. Verify deployment health, d
 ## Constraints
 - NEVER trigger a rollback without confirming the regression with at least two signals (error rate + latency, or error rate + pod restarts)
 - NEVER propose automation for a task that has happened fewer than three times
-- NEVER assume a deployment is healthy based solely on pod readiness — always check error rates and latency post-deploy
-- NEVER modify infrastructure directly — propose changes and route to the appropriate team
+- NEVER assume a deployment is healthy based solely on pod readiness, always check error rates and latency post-deploy
+- NEVER modify infrastructure directly, propose changes and route to the appropriate team
 
 ## Entity Types
 - Read: deployments, infrastructure_events, pipeline_runs

@@ -103,7 +103,7 @@ orgChart:
 ---
 # Consulting Firm
 
-An AI team designed for the economics of consulting — where the product is expertise, the currency is billable hours, and the biggest risks are underutilization, knowledge loss, and team burnout. Every consulting firm runs on the same fundamental tension: maximize billable hours while retaining the people who generate them. This team keeps both sides visible.
+An AI team designed for the economics of consulting, where the product is expertise, the currency is billable hours, and the biggest risks are underutilization, knowledge loss, and team burnout. Every consulting firm runs on the same fundamental tension: maximize billable hours while retaining the people who generate them. This team keeps both sides visible.
 
 ## Included Bots
 
@@ -118,13 +118,13 @@ An AI team designed for the economics of consulting — where the product is exp
 
 ## How They Work Together
 
-Consulting firms generate enormous volumes of unstructured knowledge — client calls, workshop outputs, strategy sessions, stakeholder interviews — and most of it evaporates after the meeting ends. Meeting Summarizer is the knowledge capture engine. Every meeting gets structured into decisions made, action items assigned, open questions, and key insights. This structured output feeds Business Analyst and becomes searchable institutional knowledge.
+Consulting firms generate enormous volumes of unstructured knowledge, client calls, workshop outputs, strategy sessions, stakeholder interviews, and most of it evaporates after the meeting ends. Meeting Summarizer is the knowledge capture engine. Every meeting gets structured into decisions made, action items assigned, open questions, and key insights. This structured output feeds Business Analyst and becomes searchable institutional knowledge.
 
 Revenue Analyst tracks the metric that determines whether a consulting firm is healthy: billable utilization. It monitors hours logged against your target utilization rate across the team, forecasts pipeline based on signed and probable engagements, and calculates profitability per engagement. When a consultant's utilization drops below target, it surfaces the gap before it becomes a financial problem. When an engagement is running over scope, it flags the margin erosion.
 
-Business Analyst works at a different altitude — looking across engagements to identify patterns and reusable frameworks. If three different clients in the same industry are facing the same challenge, Business Analyst connects the dots and surfaces the insight as a potential methodology or offering. This is how consulting firms build intellectual property instead of just selling hours.
+Business Analyst works at a different altitude, looking across engagements to identify patterns and reusable frameworks. If three different clients in the same industry are facing the same challenge, Business Analyst connects the dots and surfaces the insight as a potential methodology or offering. This is how consulting firms build intellectual property instead of just selling hours.
 
-Accountant handles the transactional financial layer — invoicing based on logged hours and agreed rates, tracking expenses against engagement budgets, managing project-level P&L, and reconciling payments. It integrates with Revenue Analyst to ensure invoiced amounts match utilization data.
+Accountant handles the transactional financial layer, invoicing based on logged hours and agreed rates, tracking expenses against engagement budgets, managing project-level P&L, and reconciling payments. It integrates with Revenue Analyst to ensure invoiced amounts match utilization data.
 
 Mentor Coach watches the human side. Consulting is demanding work, and firms that ignore team health lose their best people. This bot monitors workload distribution, flags when someone has been consistently over-allocated, tracks professional development goals, and identifies coaching opportunities. When Revenue Analyst shows a consultant at 110% utilization for three consecutive weeks, Mentor Coach raises the burnout flag.
 

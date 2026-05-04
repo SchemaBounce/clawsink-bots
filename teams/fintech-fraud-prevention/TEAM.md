@@ -71,10 +71,10 @@ A complete fraud prevention team for financial services. Combines real-time tran
 
 ## Included Bots
 
-- **Fraud Detector** — CDC-triggered, scores every new transaction
-- **Compliance Auditor** — CDC-triggered, validates regulatory compliance
-- **Anomaly Detector** — CDC-triggered, detects statistical anomalies in metrics
-- **Revenue Analyst** — Scheduled daily, tracks revenue trends and forecasts
+- **Fraud Detector**: CDC-triggered, scores every new transaction
+- **Compliance Auditor**: CDC-triggered, validates regulatory compliance
+- **Anomaly Detector**: CDC-triggered, detects statistical anomalies in metrics
+- **Revenue Analyst**: Scheduled daily, tracks revenue trends and forecasts
 
 ## Target Market
 

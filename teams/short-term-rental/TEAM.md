@@ -123,15 +123,15 @@ orgChart:
 
 # Short-Term Rental Operations
 
-The flagship AI operations team for vacation rental businesses. Whether you manage a single Airbnb listing or a portfolio of 50+ properties across multiple channels, this team handles the operational complexity that comes with short-term rental management — calendar synchronization, guest communication at Superhost speed, dynamic pricing, turnover logistics, review management, and property marketing.
+The flagship AI operations team for vacation rental businesses. Whether you manage a single Airbnb listing or a portfolio of 50+ properties across multiple channels, this team handles the operational complexity that comes with short-term rental management, calendar synchronization, guest communication at Superhost speed, dynamic pricing, turnover logistics, review management, and property marketing.
 
 ## Included Bots
 
 | Bot | Role | Schedule | What It Does |
 |-----|------|----------|--------------|
 | Property Manager | Lead | @daily | Consolidates all specialist outputs, manages portfolio dashboard, coordinates team, delivers owner briefings |
-| Channel Manager | Specialist | @every 2h | Syncs listings across Airbnb, VRBO, Lodgify, Facebook Marketplace — detects calendar conflicts, monitors listing health |
-| Guest Communicator | Specialist | @every 15m | Auto-responds to guest messages across all channels — pre-booking questions, check-in instructions, during-stay requests |
+| Channel Manager | Specialist | @every 2h | Syncs listings across Airbnb, VRBO, Lodgify, Facebook Marketplace, detects calendar conflicts, monitors listing health |
+| Guest Communicator | Specialist | @every 15m | Auto-responds to guest messages across all channels, pre-booking questions, check-in instructions, during-stay requests |
 | Dynamic Pricing | Specialist | @daily | Analyzes market conditions, competitor rates, demand patterns, and local events to optimize nightly rates |
 | Property Marketer | Specialist | @weekly | Creates listing descriptions, manages social media, generates seasonal promotions, handles Facebook Marketplace engagement |
 | Turnover Coordinator | Specialist | @every 4h | Manages cleaning schedules, tracks turnover status, ensures properties are guest-ready, flags maintenance issues |
@@ -139,17 +139,17 @@ The flagship AI operations team for vacation rental businesses. Whether you mana
 
 ## How They Work Together
 
-In short-term rental, response time is everything. A guest inquiry that sits unanswered for 2 hours means a lost booking — and platforms punish slow responders in search rankings. Guest Communicator runs every 15 minutes, handling the time-sensitive front line: answering pre-booking questions with property-specific details, sending check-in instructions at the right moment, fielding during-stay requests ("Where's the thermostat?"), and queuing post-stay follow-ups.
+In short-term rental, response time is everything. A guest inquiry that sits unanswered for 2 hours means a lost booking, and platforms punish slow responders in search rankings. Guest Communicator runs every 15 minutes, handling the time-sensitive front line: answering pre-booking questions with property-specific details, sending check-in instructions at the right moment, fielding during-stay requests ("Where's the thermostat?"), and queuing post-stay follow-ups.
 
-Behind the scenes, Channel Manager keeps the multi-platform operation from falling apart. When you list the same property on Airbnb, VRBO, and Lodgify, calendar conflicts are a constant threat. Channel Manager syncs availability every 2 hours, catches double-booking risks before they become cancellations, and monitors listing health scores across platforms — flagging when a listing drops in search ranking or has stale photos.
+Behind the scenes, Channel Manager keeps the multi-platform operation from falling apart. When you list the same property on Airbnb, VRBO, and Lodgify, calendar conflicts are a constant threat. Channel Manager syncs availability every 2 hours, catches double-booking risks before they become cancellations, and monitors listing health scores across platforms, flagging when a listing drops in search ranking or has stale photos.
 
-Dynamic Pricing watches the numbers that determine profitability. It analyzes comparable listings in your market, tracks demand patterns (weekends vs. weekdays, festivals, school holidays), and adjusts nightly rates to maximize revenue per available night. When it detects an anomaly — a competitor suddenly dropping rates 40%, or a local event that should spike demand — it flags the situation to Property Manager with a recommendation.
+Dynamic Pricing watches the numbers that determine profitability. It analyzes comparable listings in your market, tracks demand patterns (weekends vs. weekdays, festivals, school holidays), and adjusts nightly rates to maximize revenue per available night. When it detects an anomaly, a competitor suddenly dropping rates 40%, or a local event that should spike demand, it flags the situation to Property Manager with a recommendation.
 
-Turnover Coordinator handles the operational chaos between guests. With back-to-back bookings, the window between checkout and check-in can be as tight as 4 hours. The coordinator manages cleaning assignments, tracks completion status, ensures quality checklists are followed, and raises immediate alerts when a turnover is running late — giving you time to push back a check-in time or call a backup cleaner.
+Turnover Coordinator handles the operational chaos between guests. With back-to-back bookings, the window between checkout and check-in can be as tight as 4 hours. The coordinator manages cleaning assignments, tracks completion status, ensures quality checklists are followed, and raises immediate alerts when a turnover is running late, giving you time to push back a check-in time or call a backup cleaner.
 
-Review Manager operates in the guest-relations domain alongside Guest Communicator. It monitors reviews across all platforms, drafts professional host responses (matching platform tone — casual on Airbnb, formal on VRBO), identifies patterns in negative feedback ("Three guests mentioned the mattress"), and tracks rating trends per property. Negative reviews escalate through Guest Communicator to Property Manager.
+Review Manager operates in the guest-relations domain alongside Guest Communicator. It monitors reviews across all platforms, drafts professional host responses (matching platform tone, casual on Airbnb, formal on VRBO), identifies patterns in negative feedback ("Three guests mentioned the mattress"), and tracks rating trends per property. Negative reviews escalate through Guest Communicator to Property Manager.
 
-Property Marketer handles the growth side — optimizing listing descriptions with SEO best practices per platform, generating seasonal promotions, managing social media presence for the portfolio, and handling Facebook Marketplace listings. It pulls from review data to know which property features guests love most, and from pricing data to understand which promotions drive profitable bookings.
+Property Marketer handles the growth side, optimizing listing descriptions with SEO best practices per platform, generating seasonal promotions, managing social media presence for the portfolio, and handling Facebook Marketplace listings. It pulls from review data to know which property features guests love most, and from pricing data to understand which promotions drive profitable bookings.
 
 Property Manager ties everything together. The daily briefing covers: occupancy for the next 30 days, any calendar conflicts flagged by Channel Manager, response time metrics from Guest Communicator, pricing recommendations from Dynamic Pricing, pending turnovers from Turnover Coordinator, review sentiment trends from Review Manager, and active promotions from Property Marketer.
 
