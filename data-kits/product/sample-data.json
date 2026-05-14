@@ -1,0 +1,221 @@
+{
+  "records": {
+    "prd_user_segments": [
+      {
+        "name": "Power Users",
+        "description": "High-frequency users who engage with advanced features daily and drive most of the product's word-of-mouth growth",
+        "size_estimate": 4200,
+        "defining_behaviors": ["daily active usage", "uses 5+ features per session", "has created 10+ records", "shares or exports data regularly"],
+        "acquisition_channels": ["referral", "direct"],
+        "avg_session_frequency": "daily",
+        "primary_jobs_to_be_done": "Automate complex workflows and get real-time visibility into business data without switching tools",
+        "churn_risk": "low",
+        "last_reviewed": "2026-04-15"
+      },
+      {
+        "name": "New Signups",
+        "description": "Users within their first 30 days who are evaluating whether the product solves their problem",
+        "size_estimate": 1800,
+        "defining_behaviors": ["completed onboarding", "created at least one record", "visited docs 3+ times"],
+        "acquisition_channels": ["organic-search", "paid-search", "social-media"],
+        "avg_session_frequency": "weekly",
+        "primary_jobs_to_be_done": "Understand if the product can replace their current solution quickly enough to justify switching",
+        "churn_risk": "high",
+        "last_reviewed": "2026-04-15"
+      },
+      {
+        "name": "Team Admins",
+        "description": "Users managing workspace settings, billing, and team access for 5+ members",
+        "size_estimate": 890,
+        "defining_behaviors": ["manages user invites", "configures integrations", "reviews audit logs", "owns billing"],
+        "acquisition_channels": ["referral", "direct", "paid-search"],
+        "avg_session_frequency": "weekly",
+        "primary_jobs_to_be_done": "Maintain control over data access and ensure the team is using the product effectively without manual oversight",
+        "churn_risk": "medium",
+        "last_reviewed": "2026-03-30"
+      },
+      {
+        "name": "Occasional Users",
+        "description": "Users who log in less than once per week, typically checking outputs produced by other tools or team members",
+        "size_estimate": 6500,
+        "defining_behaviors": ["fewer than 3 sessions per month", "primarily reads data, rarely writes", "uses search more than navigation"],
+        "acquisition_channels": ["referral", "email-marketing"],
+        "avg_session_frequency": "monthly",
+        "primary_jobs_to_be_done": "Spot-check data or review reports prepared by others without investing time in learning the full product",
+        "churn_risk": "high",
+        "last_reviewed": "2026-02-28"
+      }
+    ],
+    "prd_sprints": [
+      {
+        "name": "Sprint 41",
+        "goal": "Ship the pipeline monitoring dashboard and fix top 3 customer-reported data display bugs",
+        "status": "completed",
+        "start_date": "2026-04-28",
+        "end_date": "2026-05-09",
+        "planned_points": 52,
+        "completed_points": 48,
+        "carryover_points": 4,
+        "team_capacity": 42,
+        "retrospective_notes": "Underestimated the dashboard complexity. Dashboard shipped but one bug fix rolled over. Velocity holding steady at 46-50 points."
+      },
+      {
+        "name": "Sprint 42",
+        "goal": "Launch segment-based experiment targeting and complete the onboarding flow redesign",
+        "status": "active",
+        "start_date": "2026-05-12",
+        "end_date": "2026-05-23",
+        "planned_points": 48,
+        "completed_points": null,
+        "carryover_points": 4,
+        "team_capacity": 38,
+        "retrospective_notes": null
+      },
+      {
+        "name": "Sprint 40",
+        "goal": "Migrate the routing engine to the new worker architecture and ship CSV export",
+        "status": "completed",
+        "start_date": "2026-04-14",
+        "end_date": "2026-04-25",
+        "planned_points": 56,
+        "completed_points": 46,
+        "carryover_points": 10,
+        "team_capacity": 44,
+        "retrospective_notes": "Migration scope grew significantly during sprint. CSV export shipped. 10-point rollover caused by unexpected worker compatibility issue discovered mid-sprint."
+      }
+    ],
+    "prd_features": [
+      {
+        "title": "Segment-Based Experiment Targeting",
+        "description": "Allow experiment operators to target A/B tests at specific user segments instead of a random traffic split across all users",
+        "status": "in_sprint",
+        "priority": "high",
+        "owner": "Tyler Nakamura",
+        "target_segment": "Power Users",
+        "effort_estimate": "M",
+        "impact_score": 7.5,
+        "target_release": "Q2 2026",
+        "shipped_at": null
+      },
+      {
+        "title": "CSV Export for All Entity Types",
+        "description": "Add one-click CSV export to every entity list view, respecting column visibility settings and active filters",
+        "status": "shipped",
+        "priority": "medium",
+        "owner": "Tyler Nakamura",
+        "target_segment": "Team Admins",
+        "effort_estimate": "S",
+        "impact_score": 6.0,
+        "target_release": "Q2 2026",
+        "shipped_at": "2026-04-22"
+      },
+      {
+        "title": "Onboarding Flow Redesign",
+        "description": "Redesign the 7-step onboarding wizard into a 3-step guided setup based on user research showing high drop-off at step 4",
+        "status": "in_sprint",
+        "priority": "critical",
+        "owner": "Tyler Nakamura",
+        "target_segment": "New Signups",
+        "effort_estimate": "L",
+        "impact_score": 9.0,
+        "target_release": "Q2 2026",
+        "shipped_at": null
+      },
+      {
+        "title": "Pipeline Health Dashboard",
+        "description": "Consolidated real-time dashboard showing pipeline status, latency, error rates, and recent anomalies across all active pipelines",
+        "status": "shipped",
+        "priority": "high",
+        "owner": "Tyler Nakamura",
+        "target_segment": "Power Users",
+        "effort_estimate": "L",
+        "impact_score": 8.2,
+        "target_release": "Q2 2026",
+        "shipped_at": "2026-05-07"
+      }
+    ],
+    "prd_experiments": [
+      {
+        "name": "Onboarding Step Reduction",
+        "hypothesis": "We believe reducing the onboarding wizard from 7 steps to 3 steps will increase 7-day activation rate for New Signups because users are dropping off at step 4 before completing setup",
+        "status": "running",
+        "primary_metric": "7-day activation rate",
+        "control_variant": "7-step onboarding wizard (current)",
+        "test_variant": "3-step condensed onboarding wizard",
+        "traffic_split_pct": 50,
+        "start_date": "2026-05-12",
+        "end_date": null,
+        "result": null,
+        "lift_pct": null,
+        "confidence_pct": null
+      },
+      {
+        "name": "In-App Upgrade Prompt Timing",
+        "hypothesis": "We believe showing the upgrade prompt after a user creates their 5th record (instead of on day 14) will increase free-to-paid conversion because users hit the value moment before seeing pricing",
+        "status": "completed",
+        "primary_metric": "free-to-paid conversion rate",
+        "control_variant": "Upgrade prompt shown on day 14 of trial",
+        "test_variant": "Upgrade prompt shown after 5th record created",
+        "traffic_split_pct": 50,
+        "start_date": "2026-03-10",
+        "end_date": "2026-04-07",
+        "result": "winner",
+        "lift_pct": 18.4,
+        "confidence_pct": 97.2
+      },
+      {
+        "name": "Empty State Call-to-Action Copy",
+        "hypothesis": "We believe changing empty state CTA copy from 'Get Started' to 'Create your first pipeline' will increase empty state click-through rate because specific copy outperforms generic copy",
+        "status": "completed",
+        "primary_metric": "empty state click-through rate",
+        "control_variant": "'Get Started' button",
+        "test_variant": "'Create your first pipeline' button",
+        "traffic_split_pct": 50,
+        "start_date": "2026-04-01",
+        "end_date": "2026-04-14",
+        "result": "inconclusive",
+        "lift_pct": 3.1,
+        "confidence_pct": 78.0
+      }
+    ],
+    "prd_research_sessions": [
+      {
+        "session_type": "usability_test",
+        "participant_segment": "New Signups",
+        "date_conducted": "2026-04-22",
+        "researcher": "Priya Chen",
+        "research_question": "Where do users get stuck in the current 7-step onboarding wizard?",
+        "key_findings": [
+          "6 of 8 participants abandoned at step 4 (source configuration) without seeking help",
+          "Step 4 requires knowledge of database credentials that users did not have on hand",
+          "2 participants confused 'environment' with 'workspace' terminology consistently"
+        ],
+        "pain_points_identified": [
+          "No way to save progress and return later if credentials are unavailable",
+          "Error messages at step 4 are technical and do not suggest a recovery action",
+          "The progress indicator shows 7 steps which makes the wizard feel long before starting"
+        ],
+        "severity": "critical",
+        "recording_url": "https://research.internal/sessions/us-2026-0422"
+      },
+      {
+        "session_type": "user_interview",
+        "participant_segment": "Power Users",
+        "date_conducted": "2026-05-05",
+        "researcher": "Priya Chen",
+        "research_question": "What would make Power Users recommend the product more actively to peers?",
+        "key_findings": [
+          "Primary blocker to referral is lack of a dedicated referral or team invite flow",
+          "Power Users want to share specific views or dashboards with external stakeholders without giving full access",
+          "3 of 5 participants mentioned wanting a mobile app for monitoring alerts on the go"
+        ],
+        "pain_points_identified": [
+          "No guest access or read-only sharing link for external stakeholders",
+          "Alert notifications only available via email - no push notification support"
+        ],
+        "severity": "high",
+        "recording_url": "https://research.internal/sessions/ui-2026-0505"
+      }
+    ]
+  }
+}

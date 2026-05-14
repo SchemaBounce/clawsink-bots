@@ -1,0 +1,265 @@
+{
+  "records": {
+    "ops_suppliers": [
+      {
+        "name": "Pacific Rim Wholesale",
+        "contact_email": "orders@pacificrimwholesale.com",
+        "lead_time_days": 7,
+        "on_time_rate": 96.2,
+        "quality_score": 4.4,
+        "contract_end_date": "2027-03-31",
+        "payment_terms": "Net-30",
+        "categories": ["electronics", "accessories"],
+        "active": true
+      },
+      {
+        "name": "Heartland Supply Co.",
+        "contact_email": "procurement@heartlandsupply.com",
+        "lead_time_days": 4,
+        "on_time_rate": 98.8,
+        "quality_score": 4.7,
+        "contract_end_date": "2026-12-31",
+        "payment_terms": "Net-15",
+        "categories": ["apparel", "home-goods"],
+        "active": true
+      },
+      {
+        "name": "Metro Distribution LLC",
+        "contact_email": "ops@metrodist.com",
+        "lead_time_days": 14,
+        "on_time_rate": 87.3,
+        "quality_score": 3.6,
+        "contract_end_date": "2026-06-30",
+        "payment_terms": "Net-60",
+        "categories": ["furniture", "large-goods"],
+        "active": true
+      },
+      {
+        "name": "Coastal Packaging Group",
+        "contact_email": "sales@coastalpkg.com",
+        "lead_time_days": 5,
+        "on_time_rate": 99.1,
+        "quality_score": 4.8,
+        "contract_end_date": "2027-09-30",
+        "payment_terms": "Net-30",
+        "categories": ["packaging", "materials"],
+        "active": true
+      }
+    ],
+    "ops_inventory": [
+      {
+        "sku": "ELEC-BT-001",
+        "product_name": "Wireless Bluetooth Headphones",
+        "quantity_on_hand": 143,
+        "quantity_reserved": 32,
+        "quantity_available": 111,
+        "reorder_point": 50,
+        "reorder_quantity": 200,
+        "supplier_id": "pacific-rim-wholesale",
+        "warehouse_location": "B-04-2",
+        "unit_cost": 28.50,
+        "last_counted": "2026-05-01",
+        "status": "in_stock"
+      },
+      {
+        "sku": "APRL-TS-M-BLK",
+        "product_name": "Classic T-Shirt Medium Black",
+        "quantity_on_hand": 18,
+        "quantity_reserved": 9,
+        "quantity_available": 9,
+        "reorder_point": 30,
+        "reorder_quantity": 150,
+        "supplier_id": "heartland-supply-co",
+        "warehouse_location": "A-11-3",
+        "unit_cost": 6.20,
+        "last_counted": "2026-04-28",
+        "status": "low_stock"
+      },
+      {
+        "sku": "HOME-CK-SS-24",
+        "product_name": "Stainless Steel Cookware Set 24pc",
+        "quantity_on_hand": 0,
+        "quantity_reserved": 0,
+        "quantity_available": 0,
+        "reorder_point": 10,
+        "reorder_quantity": 40,
+        "supplier_id": "heartland-supply-co",
+        "warehouse_location": "C-02-1",
+        "unit_cost": 45.00,
+        "last_counted": "2026-04-20",
+        "status": "out_of_stock"
+      },
+      {
+        "sku": "ELEC-USB-C-3",
+        "product_name": "USB-C Fast Charger 65W",
+        "quantity_on_hand": 412,
+        "quantity_reserved": 55,
+        "quantity_available": 357,
+        "reorder_point": 100,
+        "reorder_quantity": 500,
+        "supplier_id": "pacific-rim-wholesale",
+        "warehouse_location": "B-01-4",
+        "unit_cost": 8.75,
+        "last_counted": "2026-05-03",
+        "status": "in_stock"
+      },
+      {
+        "sku": "APRL-HK-L-GRY",
+        "product_name": "Pullover Hoodie Large Grey",
+        "quantity_on_hand": 67,
+        "quantity_reserved": 14,
+        "quantity_available": 53,
+        "reorder_point": 40,
+        "reorder_quantity": 120,
+        "supplier_id": "heartland-supply-co",
+        "warehouse_location": "A-09-1",
+        "unit_cost": 18.40,
+        "last_counted": "2026-04-30",
+        "status": "in_stock"
+      }
+    ],
+    "ops_orders": [
+      {
+        "order_number": "ORD-2026-08841",
+        "customer_name": "Brightline Retail",
+        "order_date": "2026-05-13",
+        "ship_by_date": "2026-05-15",
+        "status": "picking",
+        "priority": "expedited",
+        "line_items": [
+          {"sku": "ELEC-BT-001", "product_name": "Wireless Bluetooth Headphones", "quantity": 10, "unit_price": 59.99},
+          {"sku": "ELEC-USB-C-3", "product_name": "USB-C Fast Charger 65W", "quantity": 20, "unit_price": 24.99}
+        ],
+        "total_value": 1099.70,
+        "shipping_address": "1200 Commerce Blvd, Portland, OR 97201",
+        "notes": "Pallet delivery required - call ahead"
+      },
+      {
+        "order_number": "ORD-2026-08842",
+        "customer_name": "Sunrise Boutique",
+        "order_date": "2026-05-13",
+        "ship_by_date": "2026-05-16",
+        "status": "packing",
+        "priority": "standard",
+        "line_items": [
+          {"sku": "APRL-TS-M-BLK", "product_name": "Classic T-Shirt Medium Black", "quantity": 6, "unit_price": 19.99},
+          {"sku": "APRL-HK-L-GRY", "product_name": "Pullover Hoodie Large Grey", "quantity": 4, "unit_price": 44.99}
+        ],
+        "total_value": 299.90,
+        "shipping_address": "88 Fashion Ave, New York, NY 10018"
+      },
+      {
+        "order_number": "ORD-2026-08843",
+        "customer_name": "TechCorner Inc.",
+        "order_date": "2026-05-14",
+        "ship_by_date": "2026-05-14",
+        "status": "pending",
+        "priority": "rush",
+        "line_items": [
+          {"sku": "ELEC-USB-C-3", "product_name": "USB-C Fast Charger 65W", "quantity": 50, "unit_price": 22.99}
+        ],
+        "total_value": 1149.50,
+        "shipping_address": "400 Tech Park Dr, Austin, TX 78701",
+        "notes": "Same-day dispatch required"
+      },
+      {
+        "order_number": "ORD-2026-08820",
+        "customer_name": "Valley Home Goods",
+        "order_date": "2026-05-10",
+        "ship_by_date": "2026-05-14",
+        "status": "backordered",
+        "priority": "standard",
+        "line_items": [
+          {"sku": "HOME-CK-SS-24", "product_name": "Stainless Steel Cookware Set 24pc", "quantity": 5, "unit_price": 129.99}
+        ],
+        "total_value": 649.95,
+        "shipping_address": "22 Main Street, Fresno, CA 93701",
+        "notes": "Customer notified of backorder - expecting restock by 2026-05-20"
+      }
+    ],
+    "ops_shipments": [
+      {
+        "tracking_number": "1Z999AA10123456784",
+        "order_number": "ORD-2026-08799",
+        "carrier": "UPS",
+        "service_level": "ground",
+        "status": "delivered",
+        "ship_date": "2026-05-09",
+        "estimated_delivery": "2026-05-13",
+        "actual_delivery": "2026-05-12",
+        "shipping_cost": 12.40,
+        "exception_reason": null
+      },
+      {
+        "tracking_number": "9400111202530943579291",
+        "order_number": "ORD-2026-08811",
+        "carrier": "USPS",
+        "service_level": "express",
+        "status": "in_transit",
+        "ship_date": "2026-05-13",
+        "estimated_delivery": "2026-05-15",
+        "actual_delivery": null,
+        "shipping_cost": 18.90
+      },
+      {
+        "tracking_number": "784044232590",
+        "order_number": "ORD-2026-08805",
+        "carrier": "FedEx",
+        "service_level": "overnight",
+        "status": "exception",
+        "ship_date": "2026-05-12",
+        "estimated_delivery": "2026-05-13",
+        "actual_delivery": null,
+        "shipping_cost": 42.00,
+        "exception_reason": "Delivery attempted - recipient not available. Second attempt scheduled 2026-05-14."
+      },
+      {
+        "tracking_number": "1Z999AA10234567891",
+        "order_number": "ORD-2026-08798",
+        "carrier": "UPS",
+        "service_level": "ground",
+        "status": "delivered",
+        "ship_date": "2026-05-08",
+        "estimated_delivery": "2026-05-13",
+        "actual_delivery": "2026-05-14",
+        "shipping_cost": 9.75,
+        "exception_reason": "Delivered 1 day late due to weather delay at regional hub"
+      }
+    ],
+    "ops_price_rules": [
+      {
+        "rule_name": "Standard Electronics Margin",
+        "rule_type": "percentage",
+        "applies_to": "electronics",
+        "adjustment_value": 0,
+        "target_margin_pct": 42.0,
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "priority": 10,
+        "active": true
+      },
+      {
+        "rule_name": "Clearance Apparel Q2",
+        "rule_type": "clearance",
+        "applies_to": "APRL-TS-M-BLK",
+        "adjustment_value": -25.0,
+        "target_margin_pct": 15.0,
+        "effective_from": "2026-05-01",
+        "effective_to": "2026-06-30",
+        "priority": 3,
+        "active": true
+      },
+      {
+        "rule_name": "Volume Discount 50+ Units",
+        "rule_type": "volume",
+        "applies_to": "ELEC-USB-C-3",
+        "adjustment_value": -10.0,
+        "target_margin_pct": 38.0,
+        "effective_from": "2026-03-01",
+        "effective_to": null,
+        "priority": 5,
+        "active": true
+      }
+    ]
+  }
+}

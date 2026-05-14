@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "ldr_exec_briefings",
+      "description": "Semantic search over executive briefings to surface relevant past signals and decisions when preparing new briefings or reviewing historical context",
+      "sourceEntity": "ldr_exec_briefings",
+      "embeddingFields": ["title", "summary", "key_signals"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

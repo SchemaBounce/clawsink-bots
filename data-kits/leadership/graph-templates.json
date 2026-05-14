@@ -1,0 +1,24 @@
+{
+  "edgeTypes": [
+    {
+      "label": "SUPPORTS_GOAL",
+      "description": "Links an OKR or decision to the strategic goal it advances, enabling alignment tracing",
+      "fromEntity": "ldr_okrs",
+      "toEntity": "ldr_strategic_goals",
+      "properties": {
+        "alignment_strength": "string",
+        "rationale": "string"
+      }
+    },
+    {
+      "label": "INFORMED_BY",
+      "description": "Links a decision to the executive briefing or data source that provided supporting evidence",
+      "fromEntity": "ldr_decision_log",
+      "toEntity": "ldr_exec_briefings",
+      "properties": {
+        "evidence_type": "string",
+        "briefing_date": "date"
+      }
+    }
+  ]
+}

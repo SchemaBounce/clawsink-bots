@@ -1,0 +1,34 @@
+{
+  "edgeTypes": [
+    {
+      "label": "GENERATED_BY",
+      "description": "Links a marketing lead to the campaign or content asset that acquired them",
+      "fromEntity": "mkt_leads",
+      "toEntity": "mkt_campaigns",
+      "properties": {
+        "acquisition_date": "date",
+        "source_channel": "string"
+      }
+    },
+    {
+      "label": "PUBLISHED_TO",
+      "description": "Links a content asset to a social post that distributed it",
+      "fromEntity": "mkt_content",
+      "toEntity": "mkt_social_posts",
+      "properties": {
+        "published_at": "date",
+        "platform": "string"
+      }
+    },
+    {
+      "label": "ATTRIBUTED_TO",
+      "description": "Links a lead to the specific content asset that captured or assisted in their conversion",
+      "fromEntity": "mkt_leads",
+      "toEntity": "mkt_content",
+      "properties": {
+        "attribution_model": "string",
+        "touch_date": "date"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "collections": [
+    {
+      "name": "mkt_content",
+      "description": "Semantic search over marketing content assets - find relevant pieces for repurposing, identify content gaps, and surface similar published articles to avoid duplication",
+      "sourceEntity": "mkt_content",
+      "embeddingFields": ["title", "body", "keywords"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    },
+    {
+      "name": "mkt_brand_assets",
+      "description": "Semantic search over brand assets by description and tags - helps teams find the right logo, template, or creative file without browsing folders",
+      "sourceEntity": "mkt_brand_assets",
+      "embeddingFields": ["name", "asset_type", "tags"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

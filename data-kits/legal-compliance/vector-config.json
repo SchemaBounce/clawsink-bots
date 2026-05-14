@@ -1,0 +1,20 @@
+{
+  "collections": [
+    {
+      "name": "leg_policies",
+      "description": "Semantic search over organizational policies - find relevant policies by describing a situation, obligation, or question in plain language",
+      "sourceEntity": "leg_policies",
+      "embeddingFields": ["title", "content", "scope", "category"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    },
+    {
+      "name": "leg_regulatory_changes",
+      "description": "Semantic search over regulatory changes - find relevant regulations and requirements by describing a business activity or compliance concern",
+      "sourceEntity": "leg_regulatory_changes",
+      "embeddingFields": ["title", "summary", "regulation"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+[
+  {
+    "name": "mkt_campaigns",
+    "displayName": "Marketing Campaigns",
+    "description": "Marketing campaigns with budget tracking, channels, and performance metrics",
+    "fields": {
+      "name": { "type": "string", "required": true, "description": "Campaign name" },
+      "objective": { "type": "string", "required": true, "enum": ["awareness", "lead_generation", "conversion", "retention", "brand_building"], "description": "Primary campaign objective" },
+      "status": { "type": "string", "required": true, "enum": ["planning", "active", "paused", "completed", "cancelled"], "description": "Campaign status" },
+      "budget": { "type": "number", "required": true, "description": "Total campaign budget in USD" },
+      "spent": { "type": "number", "description": "Amount spent to date in USD" },
+      "channels": { "type": "array", "required": true, "description": "Distribution channels used (e.g. email, linkedin, paid_search)" },
+      "start_date": { "type": "date", "required": true, "description": "Campaign start date" },
+      "end_date": { "type": "date", "description": "Campaign end date" },
+      "leads_generated": { "type": "number", "description": "Total leads attributed to this campaign" },
+      "roi_percentage": { "type": "number", "description": "Return on investment as a percentage" },
+      "target_segment": { "type": "string", "description": "Target audience segment (e.g. SMB, enterprise, developers)" },
+      "owner": { "type": "string", "description": "Campaign owner or DRI" }
+    }
+  },
+  {
+    "name": "mkt_content",
+    "displayName": "Content Assets",
+    "description": "Articles, whitepapers, videos, and other marketing content assets with publication and engagement data",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Content title" },
+      "body": { "type": "string", "description": "Full content body or summary" },
+      "content_type": { "type": "string", "required": true, "enum": ["blog_post", "whitepaper", "case_study", "video", "infographic", "ebook", "webinar", "podcast"], "description": "Type of content asset" },
+      "status": { "type": "string", "required": true, "enum": ["draft", "review", "scheduled", "published", "archived"], "description": "Publication status" },
+      "author": { "type": "string", "required": true, "description": "Content author name" },
+      "keywords": { "type": "array", "description": "SEO and topic keywords" },
+      "channel": { "type": "string", "enum": ["blog", "email", "social", "paid", "partner", "organic"], "description": "Primary distribution channel" },
+      "campaign_id": { "type": "string", "description": "Associated campaign identifier" },
+      "publish_date": { "type": "date", "description": "Scheduled or actual publish date" },
+      "views": { "type": "number", "description": "Total view count" },
+      "engagement_rate": { "type": "number", "description": "Engagement rate as a percentage" },
+      "seo_score": { "type": "number", "description": "SEO optimization score (0-100)" }
+    }
+  },
+  {
+    "name": "mkt_social_posts",
+    "displayName": "Social Posts",
+    "description": "Social media posts across platforms with engagement metrics and campaign attribution",
+    "fields": {
+      "platform": { "type": "string", "required": true, "enum": ["linkedin", "twitter", "facebook", "instagram", "tiktok", "youtube", "threads"], "description": "Social media platform" },
+      "content_text": { "type": "string", "required": true, "description": "Post text content" },
+      "post_type": { "type": "string", "required": true, "enum": ["text", "image", "video", "carousel", "story", "reel", "poll"], "description": "Type of social post" },
+      "status": { "type": "string", "required": true, "enum": ["draft", "scheduled", "published", "failed"], "description": "Post status" },
+      "scheduled_at": { "type": "date", "description": "Scheduled publish time" },
+      "published_at": { "type": "date", "description": "Actual publish time" },
+      "impressions": { "type": "number", "description": "Total impressions" },
+      "engagements": { "type": "number", "description": "Total engagements (likes, comments, shares, saves)" },
+      "clicks": { "type": "number", "description": "Link clicks from this post" },
+      "campaign_id": { "type": "string", "description": "Associated campaign identifier" },
+      "content_id": { "type": "string", "description": "Source content asset this post distributes" }
+    }
+  },
+  {
+    "name": "mkt_leads",
+    "displayName": "Marketing Leads",
+    "description": "Inbound leads with scoring, source attribution, and lifecycle status",
+    "fields": {
+      "email": { "type": "string", "required": true, "description": "Lead email address" },
+      "name": { "type": "string", "required": true, "description": "Lead full name" },
+      "company": { "type": "string", "description": "Lead company name" },
+      "title": { "type": "string", "description": "Lead job title" },
+      "source": { "type": "string", "required": true, "enum": ["blog", "whitepaper", "webinar", "social", "referral", "paid_ad", "organic_search", "event"], "description": "Lead acquisition source" },
+      "status": { "type": "string", "required": true, "enum": ["new", "contacted", "qualified", "nurturing", "converted", "lost"], "description": "Lead lifecycle status" },
+      "score": { "type": "number", "description": "Lead quality score (0-100)" },
+      "campaign_id": { "type": "string", "description": "Originating campaign identifier" },
+      "content_id": { "type": "string", "description": "Content asset that captured this lead" },
+      "created_at": { "type": "date", "required": true, "description": "Date lead was captured" },
+      "converted_at": { "type": "date", "description": "Date lead converted to sales opportunity" },
+      "estimated_value": { "type": "number", "description": "Estimated deal value in USD" }
+    }
+  },
+  {
+    "name": "mkt_brand_assets",
+    "displayName": "Brand Assets",
+    "description": "Logos, templates, brand guidelines, and creative files with usage rights and version tracking",
+    "fields": {
+      "name": { "type": "string", "required": true, "description": "Asset name" },
+      "asset_type": { "type": "string", "required": true, "enum": ["logo", "icon", "template", "brand_guideline", "photography", "illustration", "font", "color_palette", "video_template"], "description": "Type of brand asset" },
+      "file_url": { "type": "string", "required": true, "description": "URL or storage path to the asset file" },
+      "format": { "type": "string", "description": "File format (e.g. SVG, PNG, PDF, PPTX)" },
+      "version": { "type": "string", "required": true, "description": "Asset version number" },
+      "status": { "type": "string", "required": true, "enum": ["active", "deprecated", "draft"], "description": "Asset status" },
+      "usage_rights": { "type": "string", "enum": ["internal_only", "partner", "public", "licensed"], "description": "Permitted usage scope" },
+      "tags": { "type": "array", "description": "Searchable tags for asset discovery" },
+      "created_at": { "type": "date", "required": true, "description": "Date asset was created" },
+      "updated_at": { "type": "date", "description": "Date of last update" }
+    }
+  }
+]

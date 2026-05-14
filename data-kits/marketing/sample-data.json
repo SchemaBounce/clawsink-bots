@@ -1,0 +1,283 @@
+{
+  "records": {
+    "mkt_campaigns": [
+      {
+        "name": "Q2 2026 Developer Awareness",
+        "objective": "awareness",
+        "status": "active",
+        "budget": 25000,
+        "spent": 11200,
+        "channels": ["linkedin", "twitter", "content"],
+        "start_date": "2026-04-01",
+        "end_date": "2026-06-30",
+        "leads_generated": 142,
+        "roi_percentage": null,
+        "target_segment": "developers",
+        "owner": "marketing-growth"
+      },
+      {
+        "name": "CDC Whitepaper Lead Gen",
+        "objective": "lead_generation",
+        "status": "completed",
+        "budget": 15000,
+        "spent": 14800,
+        "channels": ["paid_search", "email", "linkedin"],
+        "start_date": "2026-02-01",
+        "end_date": "2026-03-31",
+        "leads_generated": 318,
+        "roi_percentage": 285,
+        "target_segment": "data engineers",
+        "owner": "marketing-growth"
+      },
+      {
+        "name": "Enterprise Webinar Series",
+        "objective": "conversion",
+        "status": "active",
+        "budget": 8000,
+        "spent": 3200,
+        "channels": ["email", "linkedin", "partner"],
+        "start_date": "2026-05-01",
+        "end_date": "2026-07-31",
+        "leads_generated": 67,
+        "roi_percentage": null,
+        "target_segment": "enterprise data teams",
+        "owner": "marketing-growth"
+      },
+      {
+        "name": "Fivetran Migration Promo",
+        "objective": "conversion",
+        "status": "planning",
+        "budget": 30000,
+        "spent": 0,
+        "channels": ["paid_search", "review_sites", "email"],
+        "start_date": "2026-06-15",
+        "end_date": "2026-08-15",
+        "leads_generated": 0,
+        "roi_percentage": null,
+        "target_segment": "current Fivetran users",
+        "owner": "growth-hacker"
+      }
+    ],
+    "mkt_content": [
+      {
+        "title": "Why CDC Beats Batch ETL for Real-Time Analytics",
+        "body": "Change data capture delivers sub-second data freshness that batch ETL simply cannot match. Here is how to evaluate the trade-offs and migrate without disruption.",
+        "content_type": "blog_post",
+        "status": "published",
+        "author": "blog-writer",
+        "keywords": ["cdc", "real-time", "etl", "data pipeline", "analytics"],
+        "channel": "blog",
+        "campaign_id": "q2-2026-developer-awareness",
+        "publish_date": "2026-04-15",
+        "views": 8420,
+        "engagement_rate": 4.2,
+        "seo_score": 87
+      },
+      {
+        "title": "The Complete Guide to PostgreSQL Change Data Capture",
+        "body": "A deep dive into PostgreSQL logical replication, replication slots, WAL-based CDC, and how to configure production-grade streaming pipelines.",
+        "content_type": "whitepaper",
+        "status": "published",
+        "author": "blog-writer",
+        "keywords": ["postgresql", "cdc", "logical replication", "wal", "change data capture"],
+        "channel": "organic",
+        "campaign_id": "cdc-whitepaper-lead-gen",
+        "publish_date": "2026-02-10",
+        "views": 14300,
+        "engagement_rate": 6.8,
+        "seo_score": 92
+      },
+      {
+        "title": "SchemaBounce vs Fivetran: Head-to-Head Comparison",
+        "body": "An honest technical comparison of latency, pricing, connector coverage, and platform lock-in between SchemaBounce and Fivetran for modern data teams.",
+        "content_type": "blog_post",
+        "status": "draft",
+        "author": "seo-expert",
+        "keywords": ["schemabounce vs fivetran", "fivetran alternative", "data pipeline comparison"],
+        "channel": "blog",
+        "campaign_id": "fivetran-migration-promo",
+        "publish_date": null,
+        "views": 0,
+        "engagement_rate": null,
+        "seo_score": 74
+      },
+      {
+        "title": "Building a Real-Time Inventory System with CDC",
+        "body": "A step-by-step walkthrough of using SchemaBounce CDC pipelines to power a live inventory management system for e-commerce.",
+        "content_type": "case_study",
+        "status": "published",
+        "author": "blog-writer",
+        "keywords": ["inventory management", "e-commerce", "cdc", "real-time"],
+        "channel": "blog",
+        "campaign_id": "q2-2026-developer-awareness",
+        "publish_date": "2026-05-01",
+        "views": 3100,
+        "engagement_rate": 3.9,
+        "seo_score": 81
+      }
+    ],
+    "mkt_social_posts": [
+      {
+        "platform": "linkedin",
+        "content_text": "Batch ETL runs every hour. CDC runs continuously. The difference is the gap between 'good enough analytics' and 'real decisions in real time'. We wrote up the full technical comparison.",
+        "post_type": "text",
+        "status": "published",
+        "scheduled_at": "2026-04-15T09:00:00Z",
+        "published_at": "2026-04-15T09:00:00Z",
+        "impressions": 18400,
+        "engagements": 812,
+        "clicks": 344,
+        "campaign_id": "q2-2026-developer-awareness",
+        "content_id": "why-cdc-beats-batch-etl"
+      },
+      {
+        "platform": "twitter",
+        "content_text": "PostgreSQL replication slots, WAL decoding, and logical replication in one guide. The most complete CDC setup tutorial we know of.",
+        "post_type": "text",
+        "status": "published",
+        "scheduled_at": "2026-02-12T14:00:00Z",
+        "published_at": "2026-02-12T14:00:00Z",
+        "impressions": 6200,
+        "engagements": 198,
+        "clicks": 87,
+        "campaign_id": "cdc-whitepaper-lead-gen",
+        "content_id": "complete-guide-postgresql-cdc"
+      },
+      {
+        "platform": "linkedin",
+        "content_text": "Webinar next week: How Global Retail Co replaced their Fivetran stack with SchemaBounce and cut data latency from 15 minutes to under 2 seconds. Register now.",
+        "post_type": "image",
+        "status": "scheduled",
+        "scheduled_at": "2026-05-18T10:00:00Z",
+        "published_at": null,
+        "impressions": null,
+        "engagements": null,
+        "clicks": null,
+        "campaign_id": "enterprise-webinar-series",
+        "content_id": null
+      }
+    ],
+    "mkt_leads": [
+      {
+        "email": "devlead@fintech-startup.com",
+        "name": "Ana Rodrigues",
+        "company": "FinTech Startup",
+        "title": "Lead Data Engineer",
+        "source": "whitepaper",
+        "status": "qualified",
+        "score": 82,
+        "campaign_id": "cdc-whitepaper-lead-gen",
+        "content_id": "complete-guide-postgresql-cdc",
+        "created_at": "2026-02-14",
+        "converted_at": null,
+        "estimated_value": 18000
+      },
+      {
+        "email": "data@ecommerce-big.com",
+        "name": "Tom Higgins",
+        "company": "ECommerce Big",
+        "title": "VP of Engineering",
+        "source": "blog",
+        "status": "converted",
+        "score": 95,
+        "campaign_id": "q2-2026-developer-awareness",
+        "content_id": "why-cdc-beats-batch-etl",
+        "created_at": "2026-04-18",
+        "converted_at": "2026-04-28",
+        "estimated_value": 48000
+      },
+      {
+        "email": "analytics@logistics-firm.co",
+        "name": "Sarah Chen",
+        "company": "Logistics Firm",
+        "title": "Analytics Manager",
+        "source": "webinar",
+        "status": "nurturing",
+        "score": 61,
+        "campaign_id": "enterprise-webinar-series",
+        "content_id": null,
+        "created_at": "2026-05-05",
+        "converted_at": null,
+        "estimated_value": 12000
+      },
+      {
+        "email": "cto@mid-saas.io",
+        "name": "David Park",
+        "company": "Mid-Size SaaS",
+        "title": "CTO",
+        "source": "organic_search",
+        "status": "new",
+        "score": 71,
+        "campaign_id": null,
+        "content_id": "schemabounce-vs-fivetran",
+        "created_at": "2026-05-10",
+        "converted_at": null,
+        "estimated_value": 36000
+      },
+      {
+        "email": "dba@retail-chain.com",
+        "name": "Melissa Torres",
+        "company": "National Retail Chain",
+        "title": "Database Administrator",
+        "source": "referral",
+        "status": "qualified",
+        "score": 78,
+        "campaign_id": null,
+        "content_id": null,
+        "created_at": "2026-05-08",
+        "converted_at": null,
+        "estimated_value": 60000
+      }
+    ],
+    "mkt_brand_assets": [
+      {
+        "name": "SchemaBounce Primary Logo (Dark)",
+        "asset_type": "logo",
+        "file_url": "https://assets.schemabounce.com/brand/logo-primary-dark.svg",
+        "format": "SVG",
+        "version": "3.0",
+        "status": "active",
+        "usage_rights": "public",
+        "tags": ["logo", "primary", "dark", "horizontal"],
+        "created_at": "2025-01-15",
+        "updated_at": "2025-06-01"
+      },
+      {
+        "name": "SchemaBounce Primary Logo (Light)",
+        "asset_type": "logo",
+        "file_url": "https://assets.schemabounce.com/brand/logo-primary-light.svg",
+        "format": "SVG",
+        "version": "3.0",
+        "status": "active",
+        "usage_rights": "public",
+        "tags": ["logo", "primary", "light", "horizontal"],
+        "created_at": "2025-01-15",
+        "updated_at": "2025-06-01"
+      },
+      {
+        "name": "Brand Guidelines v3",
+        "asset_type": "brand_guideline",
+        "file_url": "https://assets.schemabounce.com/brand/guidelines-v3.pdf",
+        "format": "PDF",
+        "version": "3.0",
+        "status": "active",
+        "usage_rights": "internal_only",
+        "tags": ["guidelines", "brand", "colors", "typography", "usage"],
+        "created_at": "2025-01-15",
+        "updated_at": "2026-01-10"
+      },
+      {
+        "name": "Webinar Slide Template",
+        "asset_type": "template",
+        "file_url": "https://assets.schemabounce.com/brand/webinar-template-2026.pptx",
+        "format": "PPTX",
+        "version": "2.1",
+        "status": "active",
+        "usage_rights": "internal_only",
+        "tags": ["webinar", "slides", "presentation", "template"],
+        "created_at": "2026-01-20",
+        "updated_at": "2026-04-01"
+      }
+    ]
+  }
+}

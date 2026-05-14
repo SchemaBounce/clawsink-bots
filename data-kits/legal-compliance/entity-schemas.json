@@ -1,0 +1,108 @@
+[
+  {
+    "name": "leg_matters",
+    "displayName": "Legal Matters",
+    "description": "Legal matters and cases with status, practice area, billing method, and responsible attorney",
+    "fields": {
+      "matter_number": { "type": "string", "required": true, "description": "Unique matter identifier (e.g., 2026-0042)" },
+      "matter_name": { "type": "string", "required": true, "description": "Matter title or short name" },
+      "client_name": { "type": "string", "required": true, "description": "Client or internal team this matter is for" },
+      "practice_area": { "type": "string", "required": true, "enum": ["litigation", "employment", "contracts", "intellectual_property", "regulatory", "data_privacy", "corporate", "real_estate"], "description": "Area of law" },
+      "responsible_attorney": { "type": "string", "required": true, "description": "Lead attorney or counsel assigned to this matter" },
+      "billing_method": { "type": "string", "required": true, "enum": ["hourly", "flat_fee", "contingency", "retainer", "internal"], "description": "How this matter is billed" },
+      "hourly_rate": { "type": "number", "description": "Agreed hourly rate (if hourly billing)" },
+      "estimated_cost": { "type": "number", "description": "Estimated total cost or exposure in USD" },
+      "date_opened": { "type": "date", "required": true, "description": "Date the matter was opened" },
+      "status": { "type": "string", "required": true, "enum": ["active", "pending", "closed", "on_hold", "escalated"], "description": "Current matter status" }
+    }
+  },
+  {
+    "name": "leg_controls",
+    "displayName": "Compliance Controls",
+    "description": "Compliance controls mapped to regulatory frameworks with effectiveness and owner tracking",
+    "fields": {
+      "control_id": { "type": "string", "required": true, "description": "Unique control identifier (e.g., CC-1.1, AC-2)" },
+      "title": { "type": "string", "required": true, "description": "Control title" },
+      "description": { "type": "string", "required": true, "description": "Detailed control description and objectives" },
+      "framework": { "type": "string", "required": true, "enum": ["soc2", "iso27001", "hipaa", "pci_dss", "gdpr", "nist_csf", "custom"], "description": "Primary regulatory framework" },
+      "category": { "type": "string", "required": true, "enum": ["access_control", "data_protection", "incident_response", "change_management", "risk_management", "business_continuity", "monitoring"], "description": "Control category" },
+      "status": { "type": "string", "required": true, "enum": ["implemented", "partially_implemented", "planned", "not_applicable", "failed"], "description": "Implementation status" },
+      "effectiveness": { "type": "string", "enum": ["effective", "partially_effective", "ineffective", "not_tested"], "description": "Last assessed effectiveness" },
+      "owner": { "type": "string", "required": true, "description": "Control owner responsible for operation and evidence" },
+      "evidence_location": { "type": "string", "description": "Where control evidence is stored" },
+      "last_tested": { "type": "date", "description": "Most recent test date" },
+      "next_review": { "type": "date", "description": "Next scheduled review date" }
+    }
+  },
+  {
+    "name": "leg_policies",
+    "displayName": "Policies",
+    "description": "Organizational policies with approval workflows, review schedules, and version tracking",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Policy title" },
+      "content": { "type": "string", "required": true, "description": "Full policy content" },
+      "scope": { "type": "string", "required": true, "description": "Who and what this policy applies to" },
+      "category": { "type": "string", "required": true, "enum": ["information_security", "data_privacy", "acceptable_use", "incident_response", "business_continuity", "access_management", "vendor_management", "hr", "legal"], "description": "Policy category" },
+      "status": { "type": "string", "required": true, "enum": ["draft", "in_review", "approved", "published", "retired"], "description": "Policy lifecycle status" },
+      "version": { "type": "string", "required": true, "description": "Policy version (e.g., 2.1)" },
+      "owner": { "type": "string", "required": true, "description": "Policy owner" },
+      "approver": { "type": "string", "description": "Policy approver" },
+      "effective_date": { "type": "date", "description": "Date policy becomes effective" },
+      "review_date": { "type": "date", "description": "Next scheduled review date" },
+      "frameworks": { "type": "array", "description": "Regulatory frameworks this policy supports" }
+    }
+  },
+  {
+    "name": "leg_audit_findings",
+    "displayName": "Audit Findings",
+    "description": "Internal and external audit findings with severity, remediation plans, and closure tracking",
+    "fields": {
+      "finding_id": { "type": "string", "required": true, "description": "Unique finding identifier" },
+      "title": { "type": "string", "required": true, "description": "Finding title" },
+      "description": { "type": "string", "required": true, "description": "Detailed finding description" },
+      "audit_type": { "type": "string", "required": true, "enum": ["internal", "external", "regulatory", "self_assessment"], "description": "Type of audit" },
+      "severity": { "type": "string", "required": true, "enum": ["critical", "high", "medium", "low", "informational"], "description": "Finding severity" },
+      "status": { "type": "string", "required": true, "enum": ["open", "in_remediation", "pending_verification", "closed", "accepted_risk"], "description": "Remediation status" },
+      "control_id": { "type": "string", "description": "Related control identifier from leg_controls" },
+      "remediation_plan": { "type": "string", "description": "Planned remediation actions" },
+      "owner": { "type": "string", "required": true, "description": "Finding owner responsible for remediation" },
+      "identified_date": { "type": "date", "required": true, "description": "Date finding was identified" },
+      "target_closure_date": { "type": "date", "description": "Target remediation completion date" },
+      "actual_closure_date": { "type": "date", "description": "Actual closure date" }
+    }
+  },
+  {
+    "name": "leg_deadlines",
+    "displayName": "Deadlines",
+    "description": "Court dates, regulatory filing deadlines, statute of limitations, and contractual obligations with alert configuration",
+    "fields": {
+      "matter_number": { "type": "string", "description": "Reference to leg_matters (if deadline belongs to a matter)" },
+      "title": { "type": "string", "required": true, "description": "Short description of the deadline" },
+      "deadline_type": { "type": "string", "required": true, "enum": ["statute_of_limitations", "court_filing", "discovery", "hearing", "trial", "response", "regulatory_filing", "contractual", "internal"], "description": "Category of deadline" },
+      "due_date": { "type": "date", "required": true, "description": "Date the deadline is due" },
+      "reminder_days": { "type": "number", "description": "Number of days before due date to send reminder alerts" },
+      "responsible_attorney": { "type": "string", "required": true, "description": "Attorney or owner responsible for meeting this deadline" },
+      "priority": { "type": "string", "required": true, "enum": ["critical", "high", "medium", "low"], "description": "Urgency level" },
+      "status": { "type": "string", "required": true, "enum": ["upcoming", "due_soon", "overdue", "completed", "waived", "extended"], "description": "Current deadline status" },
+      "jurisdiction": { "type": "string", "description": "Court or jurisdiction for court-related deadlines" },
+      "notes": { "type": "string", "description": "Additional notes or filing instructions" }
+    }
+  },
+  {
+    "name": "leg_regulatory_changes",
+    "displayName": "Regulatory Changes",
+    "description": "Regulatory updates and new requirements with impact assessment and organizational response tracking",
+    "fields": {
+      "title": { "type": "string", "required": true, "description": "Regulatory change title" },
+      "summary": { "type": "string", "required": true, "description": "Summary of the regulatory change and its requirements" },
+      "affected_areas": { "type": "array", "required": true, "description": "Business areas or systems affected by the change" },
+      "regulation": { "type": "string", "required": true, "description": "Originating regulation or standard (e.g., GDPR Article 17, CCPA)" },
+      "jurisdiction": { "type": "string", "required": true, "enum": ["us_federal", "us_state", "eu", "uk", "apac", "global", "industry_specific"], "description": "Regulatory jurisdiction" },
+      "impact_level": { "type": "string", "required": true, "enum": ["critical", "significant", "moderate", "minor"], "description": "Assessed impact on the organization" },
+      "status": { "type": "string", "required": true, "enum": ["monitoring", "assessing", "implementing", "compliant", "non_compliant"], "description": "Response status" },
+      "effective_date": { "type": "date", "required": true, "description": "Date the regulation takes effect" },
+      "response_deadline": { "type": "date", "description": "Internal deadline for compliance response" },
+      "assigned_to": { "type": "string", "description": "Person responsible for assessment and response" }
+    }
+  }
+]

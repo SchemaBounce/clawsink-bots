@@ -1,0 +1,278 @@
+[
+  {
+    "name": "dat_pipelines",
+    "displayName": "Pipelines",
+    "description": "Data pipeline definitions with source, sink, schedule, status, and health metrics",
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Pipeline name"
+      },
+      "source_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["postgres", "mysql", "mongodb", "kafka", "s3", "api", "salesforce", "snowflake", "other"],
+        "description": "Source system type"
+      },
+      "sink_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["postgres", "bigquery", "snowflake", "redshift", "s3", "kafka", "webhook", "other"],
+        "description": "Destination system type"
+      },
+      "connection_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["cdc", "direct", "saas", "outbox", "bridge", "webhook"],
+        "description": "Pipeline connection/ingestion type"
+      },
+      "schedule": {
+        "type": "string",
+        "description": "Cron expression or trigger type (null for CDC/streaming)"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "paused", "failed", "degraded", "provisioning", "decommissioned"],
+        "description": "Current pipeline operational status"
+      },
+      "last_run_at": {
+        "type": "date",
+        "description": "Timestamp of the most recent successful run"
+      },
+      "last_error": {
+        "type": "string",
+        "description": "Last error message if the pipeline is in a failed or degraded state"
+      },
+      "avg_latency_ms": {
+        "type": "number",
+        "description": "Average end-to-end latency in milliseconds"
+      },
+      "events_per_hour": {
+        "type": "number",
+        "description": "Average event throughput per hour"
+      },
+      "owner": {
+        "type": "string",
+        "required": true,
+        "description": "Team or person responsible for this pipeline"
+      }
+    }
+  },
+  {
+    "name": "dat_quality_checks",
+    "displayName": "Quality Checks",
+    "description": "Data quality rule executions with pass/fail results and affected row counts",
+    "fields": {
+      "pipeline_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to dat_pipelines"
+      },
+      "rule_name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the data quality rule"
+      },
+      "rule_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["not_null", "unique", "range", "regex", "referential_integrity", "freshness", "completeness", "custom"],
+        "description": "Type of quality check"
+      },
+      "result": {
+        "type": "string",
+        "required": true,
+        "enum": ["pass", "fail", "warning", "error"],
+        "description": "Check execution result"
+      },
+      "rows_checked": {
+        "type": "number",
+        "required": true,
+        "description": "Total rows evaluated by this check"
+      },
+      "rows_failed": {
+        "type": "number",
+        "required": true,
+        "description": "Number of rows that failed the check"
+      },
+      "failure_rate_pct": {
+        "type": "number",
+        "required": true,
+        "description": "Percentage of rows that failed (0-100)"
+      },
+      "run_at": {
+        "type": "date",
+        "required": true,
+        "description": "Timestamp when the check was executed"
+      },
+      "details": {
+        "type": "string",
+        "description": "Additional context or sample failing values"
+      }
+    }
+  },
+  {
+    "name": "dat_anomalies",
+    "displayName": "Anomalies",
+    "description": "Detected data anomalies with severity, affected pipeline, and resolution tracking",
+    "fields": {
+      "pipeline_id": {
+        "type": "string",
+        "required": true,
+        "description": "Reference to dat_pipelines where the anomaly was detected"
+      },
+      "anomaly_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["volume_spike", "volume_drop", "schema_drift", "latency_spike", "null_surge", "duplicate_surge", "value_drift"],
+        "description": "Type of anomaly detected"
+      },
+      "severity": {
+        "type": "string",
+        "required": true,
+        "enum": ["low", "medium", "high", "critical"],
+        "description": "Anomaly severity level"
+      },
+      "detected_at": {
+        "type": "date",
+        "required": true,
+        "description": "Timestamp when the anomaly was first detected"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Human-readable description of the anomaly and its potential impact"
+      },
+      "affected_table": {
+        "type": "string",
+        "description": "Specific table or entity type affected"
+      },
+      "baseline_value": {
+        "type": "number",
+        "description": "Expected baseline value for the anomalous metric"
+      },
+      "observed_value": {
+        "type": "number",
+        "description": "Observed value that triggered the anomaly alert"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["open", "investigating", "resolved", "accepted", "false_positive"],
+        "description": "Current resolution status"
+      },
+      "resolved_at": {
+        "type": "date",
+        "description": "Timestamp when the anomaly was resolved"
+      }
+    }
+  },
+  {
+    "name": "dat_schemas",
+    "displayName": "Schemas",
+    "description": "Schema registry records with version history and compatibility tracking",
+    "fields": {
+      "schema_name": {
+        "type": "string",
+        "required": true,
+        "description": "Schema identifier (e.g., table name, topic name, entity type)"
+      },
+      "source_system": {
+        "type": "string",
+        "required": true,
+        "description": "System that owns this schema"
+      },
+      "version": {
+        "type": "string",
+        "required": true,
+        "description": "Schema version (e.g., v1.2.0)"
+      },
+      "schema_definition": {
+        "type": "object",
+        "required": true,
+        "description": "Schema field definitions as a JSON object"
+      },
+      "compatibility_mode": {
+        "type": "string",
+        "required": true,
+        "enum": ["BACKWARD", "FORWARD", "FULL", "NONE"],
+        "description": "Schema evolution compatibility mode"
+      },
+      "breaking_change": {
+        "type": "boolean",
+        "required": true,
+        "description": "Whether this version introduces a breaking change from the previous version"
+      },
+      "registered_at": {
+        "type": "date",
+        "required": true,
+        "description": "Date this schema version was registered"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["active", "deprecated", "archived"],
+        "description": "Schema lifecycle status"
+      },
+      "owner": {
+        "type": "string",
+        "required": true,
+        "description": "Team responsible for this schema"
+      },
+      "downstream_consumers": {
+        "type": "array",
+        "description": "List of pipelines or systems consuming this schema"
+      }
+    }
+  },
+  {
+    "name": "dat_lineage_nodes",
+    "displayName": "Lineage Nodes",
+    "description": "Data lineage graph nodes representing datasets, transforms, and pipeline endpoints",
+    "fields": {
+      "node_name": {
+        "type": "string",
+        "required": true,
+        "description": "Human-readable name of this lineage node"
+      },
+      "node_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["source", "transform", "sink", "intermediate"],
+        "description": "Type of lineage node"
+      },
+      "system": {
+        "type": "string",
+        "required": true,
+        "description": "System or service this node belongs to (e.g., Postgres, BigQuery, pipeline-worker)"
+      },
+      "entity_or_table": {
+        "type": "string",
+        "required": true,
+        "description": "Specific table, topic, entity, or dataset this node represents"
+      },
+      "pipeline_id": {
+        "type": "string",
+        "description": "Reference to dat_pipelines if this node is part of a managed pipeline"
+      },
+      "schema_name": {
+        "type": "string",
+        "description": "Reference to dat_schemas (schema version in use at this node)"
+      },
+      "freshness_sla_minutes": {
+        "type": "number",
+        "description": "Maximum acceptable age of data at this node in minutes"
+      },
+      "last_updated_at": {
+        "type": "date",
+        "description": "Timestamp of the most recent data change at this node"
+      },
+      "tags": {
+        "type": "array",
+        "description": "Classification tags (e.g., pii, financial, customer-facing)"
+      }
+    }
+  }
+]

@@ -1,6 +1,6 @@
 # Teams
 
-A Team is a coordinated group of bots that work together under a shared North Star context, org chart, and escalation routing. Teams are the top of the hierarchy — they represent a complete operational unit for a specific business or industry.
+A Team is a coordinated group of bots that work together under a shared North Star context, org chart, and escalation routing. Teams are **domain-specific** — each team covers one business function (Customer Service, Marketing, Engineering, Finance, and so on), not a whole company or industry. A business composes the domain teams it needs.
 
 **Relationship to Bots**: Teams compose bots via `bots[].ref: "bots/{name}@{version}"`. See [bots/README.md](../bots/README.md) for the bot format.
 
@@ -30,7 +30,8 @@ metadata:
   displayName: string    # Human-readable name
   version: string        # SemVer
   description: string    # One-line description
-  category: string       # Industry or use-case category
+  domain: string         # Canonical business-function domain slug (see below)
+  category: string       # Set equal to domain (back-compat with the legacy category filter)
   tags: [string]
   author: string
   license: string
@@ -108,10 +109,20 @@ teamGoals:               # Team-level success metrics (optional)
 Extended documentation here. Renders as the team's marketplace page.
 ```
 
+## Domain Taxonomy
+
+Every team belongs to exactly one canonical business-function domain. `metadata.domain` must be one of these 11 slugs:
+
+`customer-service`, `marketing`, `sales`, `engineering`, `finance`, `operations`, `product`, `data`, `hr`, `legal-compliance`, `leadership`
+
+Teams are domain-specific functions, not whole companies. The `metadata.category` field is retained for back-compat with the legacy category filter and should be set equal to `metadata.domain`. The `domain` slug also powers the marketplace domain filter.
+
 ## Field Rules
 
 - `metadata.name` must match the directory name under `teams/`
-- `bots[].ref` must reference valid bot directories
+- `metadata.domain` must be one of the 11 canonical domain slugs above
+- `metadata.category` should be set equal to `metadata.domain`
+- `bots[].ref` must reference valid bot directories using the `"bots/{name}@{version}"` format (bare-string refs are not allowed)
 - `northStar.requiredKeys` should list all zone1 keys needed by any bot in the team
 - `estimatedMonthlyCost` is calculated from model costs at default schedules
 - Teams do NOT override individual bot schedules or models — those are bot-level concerns
@@ -136,14 +147,9 @@ The hierarchy creates a tree: human -> lead -> specialists -> support bots.
 
 ### Domains
 
-Each bot is assigned to a Zone 2 shared domain via `roles[].domain`. Bots in the same domain share read/write access to domain-scoped entity records. Domains are team-specific and industry-appropriate:
+Each bot is assigned to a Zone 2 shared domain via `roles[].domain`. Bots in the same domain share read/write access to domain-scoped entity records. These are sub-domains *within* a team — for example, an Engineering team might use `quality`, `devops`, and `release` as `roles[].domain` values. They are distinct from `metadata.domain`, which is the team's single canonical business-function domain.
 
-- Restaurant: `kitchen-ops`, `front-of-house`, `finance`, `marketing`
-- Software team: `engineering`, `quality`, `devops`, `project-management`
-- Healthcare: `patient-care`, `compliance`, `administration`, `billing`
-- Generic fallback: `operations`, `finance`, `management`, `customer-relations`
-
-Multiple bots can share a domain. This enables coordination through shared state — bots in the same domain read each other's entity records without explicit message passing.
+Multiple bots can share a `roles[].domain`. This enables coordination through shared state — bots in the same domain read each other's entity records without explicit message passing.
 
 ### Escalation
 
@@ -306,4 +312,4 @@ Team-level plugins, tool packs, and MCP servers are shared — you don't need to
 
 ## Canonical Example
 
-See [`restaurant-group/`](restaurant-group/) for a complete team with orgChart, escalation paths, and industry-specific domains.
+See [`engineering-team/`](engineering-team/) for a complete domain team with orgChart, escalation paths, sub-domain assignments, and a bundled data kit.

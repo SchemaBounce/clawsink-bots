@@ -1,0 +1,35 @@
+{
+  "edgeTypes": [
+    {
+      "label": "CONTACTED_BY",
+      "description": "Links a support ticket to the customer contact who submitted it",
+      "fromEntity": "cs_tickets",
+      "toEntity": "cs_contacts",
+      "properties": {
+        "created_at": "date",
+        "channel": "string"
+      }
+    },
+    {
+      "label": "ESCALATED_TO",
+      "description": "Links a ticket to the escalation target (another ticket, agent, or team)",
+      "fromEntity": "cs_tickets",
+      "toEntity": "cs_tickets",
+      "properties": {
+        "escalated_at": "date",
+        "reason": "string",
+        "escalated_by": "string"
+      }
+    },
+    {
+      "label": "LINKED_TO_CONTACT",
+      "description": "Links conversations and NPS responses to their customer contact",
+      "fromEntity": "cs_conversations",
+      "toEntity": "cs_contacts",
+      "properties": {
+        "interaction_date": "date",
+        "channel": "string"
+      }
+    }
+  ]
+}

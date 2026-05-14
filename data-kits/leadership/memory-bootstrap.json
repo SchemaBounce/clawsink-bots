@@ -1,0 +1,59 @@
+{
+  "namespace": "kit:leadership:defaults",
+  "entries": [
+    {
+      "key": "kpi:okr_achievement_rate",
+      "value": "Target OKR achievement rate is >70% green (on_track or achieved) per quarter. Consistently above 90% means goals are too conservative. Consistently below 50% means goals are unrealistic or execution is broken. At mid-quarter, any OKR with confidence_level=low should trigger a leadership conversation - not a quarter-end retrospective.",
+      "category": "kpi",
+      "tags": ["okrs", "achievement", "goal-setting"]
+    },
+    {
+      "key": "kpi:briefing_freshness",
+      "value": "Executive briefings for critical business functions (revenue, operations, product) should be available within 24 hours of the covered period. A briefing that arrives 3 days late is partially obsolete. Leadership operating on briefings older than 48 hours for fast-moving functions risks making decisions on stale signals.",
+      "category": "kpi",
+      "tags": ["briefings", "freshness", "timeliness"]
+    },
+    {
+      "key": "kpi:decision_documentation_rate",
+      "value": "Target >90% of significant decisions documented in ldr_decision_log within 48 hours of being made. Undocumented decisions create institutional knowledge gaps, make onboarding harder, and lead to decision reversals without awareness of prior context. Define 'significant' as: affects more than one team, budget above $10K, or strategic direction change.",
+      "category": "kpi",
+      "tags": ["decisions", "documentation", "institutional-knowledge"]
+    },
+    {
+      "key": "kpi:strategic_goal_review_cadence",
+      "value": "Strategic goals should be reviewed at least monthly at the leadership level. Annual horizon goals reviewed quarterly; two-year and longer goals reviewed semi-annually. Goals with status=at_risk or status=behind for two consecutive reviews require a structured intervention - scope reduction, timeline adjustment, or resource reallocation.",
+      "category": "kpi",
+      "tags": ["strategic-goals", "review", "cadence"]
+    },
+    {
+      "key": "threshold:okr_at_risk_escalation",
+      "value": "Escalate an OKR to leadership review when: overall_progress_pct is below 50% at the mid-quarter mark, confidence_level drops to low, or a blocker has been open for more than 2 weeks without a mitigation plan. Do not wait for the quarter-end retrospective to surface at-risk OKRs - by then corrective action is rarely possible.",
+      "category": "threshold",
+      "tags": ["okrs", "at-risk", "escalation"]
+    },
+    {
+      "key": "threshold:strategic_goal_behind_alert",
+      "value": "Alert when a strategic goal with horizon=annual reaches status=behind with more than 3 months remaining. For two-year and longer goals, alert when progress_pct is more than 20 percentage points below where it should be at the current point in the timeline. Behind goals with no active mitigation plan should be surfaced in the next executive briefing.",
+      "category": "threshold",
+      "tags": ["strategic-goals", "behind", "alerting"]
+    },
+    {
+      "key": "best-practice:okr_key_result_design",
+      "value": "Key results must be measurable and time-bound. 'Improve customer satisfaction' is an objective, not a key result. 'Increase NPS from 34 to 50 by June 30' is a key result. Limit to 3-5 key results per objective - more than 5 means the objective is too broad. Key results should be leading indicators where possible, not lagging ones.",
+      "category": "best-practice",
+      "tags": ["okrs", "key-results", "design"]
+    },
+    {
+      "key": "best-practice:decision_log_usage",
+      "value": "The decision log is most valuable when used proactively, not just as a compliance artifact. Before making a significant decision, check ldr_decision_log for prior decisions in the same category - this prevents contradictory decisions made in isolation. Review_date should always be set; decisions without a review date are never revisited.",
+      "category": "best-practice",
+      "tags": ["decisions", "decision-log", "governance"]
+    },
+    {
+      "key": "best-practice:executive_briefing_structure",
+      "value": "An effective executive briefing has three parts: (1) what changed since the last briefing - only deltas, not full status repeats; (2) what requires a decision or escalation - specific, actionable items with a proposed resolution; (3) what to watch - signals that are not yet actionable but may become so. Total reading time should be under 10 minutes.",
+      "category": "best-practice",
+      "tags": ["briefings", "structure", "executive-communication"]
+    }
+  ]
+}

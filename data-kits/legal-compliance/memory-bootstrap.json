@@ -1,0 +1,77 @@
+{
+  "namespace": "kit:legal-compliance:defaults",
+  "entries": [
+    {
+      "key": "kpi:control_effectiveness_rate",
+      "value": "Control effectiveness rate = effective controls / total applicable controls * 100. Target >95%. Any control rated 'ineffective' requires immediate remediation planning. Controls rated 'partially_effective' must be upgraded within 90 days. Report by framework and category, not just as an aggregate.",
+      "category": "kpi",
+      "tags": ["controls", "compliance", "effectiveness"]
+    },
+    {
+      "key": "kpi:audit_finding_closure_time",
+      "value": "Average time from finding identification to closure. Target <30 days for high severity, <60 days for medium, <90 days for low. Critical findings must have a remediation plan within 5 business days of identification. Track separately by audit type and finding severity.",
+      "category": "kpi",
+      "tags": ["audit", "findings", "remediation"]
+    },
+    {
+      "key": "kpi:statute_of_limitations",
+      "value": "Zero missed statute of limitations deadlines is the only acceptable target. Every matter must have its relevant SOL entered in the deadline register on day one. Alert at 180 days, 90 days, 30 days, and 7 days before expiry. A missed SOL is a legal malpractice event.",
+      "category": "kpi",
+      "tags": ["deadlines", "statutes", "malpractice-prevention"]
+    },
+    {
+      "key": "kpi:policy_review_currency",
+      "value": "100% of published policies must be reviewed on their scheduled review date. No policy should be more than 12 months overdue for review. Policies covering active regulatory frameworks (SOC 2, GDPR, HIPAA) must be reviewed at least annually. Stale policies are a compliance gap.",
+      "category": "kpi",
+      "tags": ["policies", "review", "governance"]
+    },
+    {
+      "key": "kpi:regulatory_change_response",
+      "value": "Target initial assessment of any new regulatory change within 14 days of publication. Assessment must include: impact level, affected business areas, required control or policy changes, and response owner. Critical changes (effective within 90 days) escalate immediately to General Counsel.",
+      "category": "kpi",
+      "tags": ["regulatory", "response-time", "compliance"]
+    },
+    {
+      "key": "threshold:critical_finding_alert",
+      "value": "Critical audit findings trigger immediate alert to General Counsel and CISO. Remediation plan must be submitted within 5 business days. Progress check-in required every 10 days until closed. External auditors must be notified if a critical finding is not remediated before the next audit cycle.",
+      "category": "threshold",
+      "tags": ["audit", "critical", "escalation"]
+    },
+    {
+      "key": "threshold:deadline_alert_cadence",
+      "value": "Statute of limitations: alert at 180, 90, 30, and 7 days. Court filing deadlines: alert at 30, 14, 7, and 2 days. Regulatory filing deadlines: alert at 60, 30, and 7 days. Contractual deadlines: alert at 30 and 7 days. All alerts go to the responsible attorney and their supervisor.",
+      "category": "threshold",
+      "tags": ["deadlines", "alerts", "calendar"]
+    },
+    {
+      "key": "best-practice:matter_intake",
+      "value": "Every new legal matter must be opened in the matter register within 24 hours of engagement. Required fields on intake: matter number, practice area, responsible attorney, billing method, client/business unit, and any known deadlines. Deadlines must be entered before the matter is marked 'active'.",
+      "category": "best-practice",
+      "tags": ["matters", "intake", "process"]
+    },
+    {
+      "key": "best-practice:policy_lifecycle",
+      "value": "New policies require legal review, compliance review, and executive approval before publication. Policy updates require the same unless the change is non-substantive (formatting, typo correction). Retired policies must be archived, not deleted. Employees must acknowledge any policy that affects their role within 30 days of publication.",
+      "category": "best-practice",
+      "tags": ["policies", "governance", "lifecycle"]
+    },
+    {
+      "key": "compliance:data_retention",
+      "value": "Legal documents: retain for 7 years minimum after matter closure (10 years for litigation). Contracts: retain for the life of the contract plus 7 years. Audit evidence: retain for 5 years. Regulatory filing records: retain per jurisdiction requirements, minimum 5 years. Disposal must be authorized and documented.",
+      "category": "compliance",
+      "tags": ["retention", "data-management", "compliance"]
+    },
+    {
+      "key": "terminology:privilege",
+      "value": "Attorney-client privilege protects confidential communications between a lawyer and client made for the purpose of legal advice. Work product doctrine protects documents prepared in anticipation of litigation. Privilege can be waived by disclosure to third parties. Mark privileged documents clearly and restrict access accordingly.",
+      "category": "terminology",
+      "tags": ["privilege", "confidentiality", "legal"]
+    },
+    {
+      "key": "terminology:soc2_trust_criteria",
+      "value": "SOC 2 Trust Service Criteria (TSC): Security (required), Availability, Confidentiality, Processing Integrity, Privacy (optional). Type 1 report covers controls at a point in time. Type 2 covers operating effectiveness over 6-12 months. Controls map to TSC categories - COSO framework provides the underlying control principles.",
+      "category": "terminology",
+      "tags": ["soc2", "audit", "frameworks"]
+    }
+  ]
+}

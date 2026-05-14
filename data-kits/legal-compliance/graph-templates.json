@@ -1,0 +1,44 @@
+{
+  "edgeTypes": [
+    {
+      "label": "FINDING_FOR",
+      "description": "Links an audit finding to the compliance control it relates to",
+      "fromEntity": "leg_audit_findings",
+      "toEntity": "leg_controls",
+      "properties": {
+        "audit_date": "date",
+        "severity": "string"
+      }
+    },
+    {
+      "label": "SATISFIES",
+      "description": "Links a compliance control to the regulatory requirement or policy it addresses",
+      "fromEntity": "leg_controls",
+      "toEntity": "leg_policies",
+      "properties": {
+        "framework": "string",
+        "requirement_ref": "string"
+      }
+    },
+    {
+      "label": "AFFECTS",
+      "description": "Links a regulatory change to the policies it impacts and may require updating",
+      "fromEntity": "leg_regulatory_changes",
+      "toEntity": "leg_policies",
+      "properties": {
+        "impact_level": "string",
+        "requires_update": "boolean"
+      }
+    },
+    {
+      "label": "DEADLINE_FOR",
+      "description": "Links a deadline to the legal matter it applies to",
+      "fromEntity": "leg_deadlines",
+      "toEntity": "leg_matters",
+      "properties": {
+        "deadline_type": "string",
+        "reminder_sent": "boolean"
+      }
+    }
+  ]
+}

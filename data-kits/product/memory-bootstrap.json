@@ -1,0 +1,59 @@
+{
+  "namespace": "kit:product:defaults",
+  "entries": [
+    {
+      "key": "kpi:sprint_velocity_variance",
+      "value": "Target sprint velocity variance is <20% from the 3-sprint rolling average. Variance above 30% consistently signals estimation problems or scope creep. Track planned_points vs completed_points per sprint. High carryover_points (>15% of planned) is a leading indicator of commitment overreach.",
+      "category": "kpi",
+      "tags": ["sprint", "velocity", "estimation"]
+    },
+    {
+      "key": "kpi:experiment_win_rate",
+      "value": "Track experiment win rate as a trend, not a target. A win rate above 50% may mean you are only testing safe bets. A win rate below 20% may mean hypotheses are poorly formed. Aim for 30-40% wins - this means you are taking real swings. Always require >95% statistical confidence before declaring a winner.",
+      "category": "kpi",
+      "tags": ["experiments", "ab-testing", "win-rate"]
+    },
+    {
+      "key": "kpi:feature_cycle_time",
+      "value": "Track feature cycle time from status=discovery to status=shipped. Benchmark: 2-4 weeks for small features (S/M effort), 6-10 weeks for large features (L/XL). Features spending more than 8 weeks in status=scoping without moving to in_sprint are likely scope-locked - force a decision to scope-down or cancel.",
+      "category": "kpi",
+      "tags": ["features", "cycle-time", "throughput"]
+    },
+    {
+      "key": "kpi:research_coverage",
+      "value": "Target at least one research session per user segment per quarter. Segments with no research in the past 90 days are operating on assumptions, not evidence. Prioritize segments with the highest churn_risk for more frequent research. Never ship a feature targeting a segment without at least one session confirming the problem is real.",
+      "category": "kpi",
+      "tags": ["research", "user-segments", "coverage"]
+    },
+    {
+      "key": "kpi:sprint_rollover_rate",
+      "value": "Target sprint rollover rate below 15% of planned story points. Rollover above 25% signals planning overcommitment or mid-sprint scope additions. Review carryover_points at retrospective and reduce planned_points in the next sprint by the rollover amount until velocity stabilizes.",
+      "category": "kpi",
+      "tags": ["sprint", "rollover", "planning"]
+    },
+    {
+      "key": "threshold:experiment_runtime",
+      "value": "Run experiments for a minimum of 2 full business weeks before evaluating results to avoid novelty effect bias. Maximum experiment runtime is 8 weeks - experiments running longer tend to have confounded results from seasonal or external factors. Auto-pause if sample size requirements are not met within 4 weeks.",
+      "category": "threshold",
+      "tags": ["experiments", "runtime", "statistical-validity"]
+    },
+    {
+      "key": "threshold:research_finding_severity",
+      "value": "Critical severity research findings (e.g., users cannot complete a core flow) require a product review within 48 hours. High severity findings go into the next sprint planning session. Medium and low severity are logged and reviewed quarterly during roadmap grooming.",
+      "category": "threshold",
+      "tags": ["research", "severity", "escalation"]
+    },
+    {
+      "key": "best-practice:hypothesis_format",
+      "value": "All experiments must have a hypothesis in the format: 'We believe [change] will [impact metric] for [user segment] because [rationale].' A hypothesis without a measurable metric cannot be evaluated. Define primary_metric and minimum detectable effect before the experiment starts - never after.",
+      "category": "best-practice",
+      "tags": ["experiments", "hypothesis", "rigor"]
+    },
+    {
+      "key": "best-practice:sprint_planning",
+      "value": "Never commit more than 80% of team_capacity in story points. Reserve 20% for unplanned work, bugs, and code review. Sprint goals should be achievable with 70% of committed stories - the goal tests direction, not volume. Review the 3-sprint average velocity before committing to a new sprint.",
+      "category": "best-practice",
+      "tags": ["sprint", "planning", "capacity"]
+    }
+  ]
+}

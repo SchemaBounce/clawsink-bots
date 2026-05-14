@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "dat_schemas",
+      "description": "Semantic search over schema definitions to find related schemas, detect naming conflicts, and assist with schema evolution decisions",
+      "sourceEntity": "dat_schemas",
+      "embeddingFields": ["schema_name", "source_system", "owner"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

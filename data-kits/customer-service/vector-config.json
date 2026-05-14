@@ -1,0 +1,20 @@
+{
+  "collections": [
+    {
+      "name": "cs_tickets",
+      "description": "Semantic search over support tickets - find similar past issues, surface relevant resolutions, and detect duplicate tickets",
+      "sourceEntity": "cs_tickets",
+      "embeddingFields": ["subject", "description", "resolution_notes"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    },
+    {
+      "name": "cs_conversations",
+      "description": "Semantic search over conversation transcripts for training, QA review, and finding precedent resolutions",
+      "sourceEntity": "cs_conversations",
+      "embeddingFields": ["transcript", "resolution_notes"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

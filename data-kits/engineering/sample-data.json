@@ -1,0 +1,324 @@
+{
+  "records": {
+    "eng_incidents": [
+      {
+        "title": "API gateway 502 errors - checkout service degraded",
+        "description": "Customers receiving 502 errors on checkout requests. Error rate spiked from 0.1% to 18% at 14:32 UTC. Cart creation succeeding but payment processing failing intermittently.",
+        "severity": "sev1",
+        "status": "resolved",
+        "resolution": "Reverted checkout-service to v2.4.1. Root cause was a connection pool exhaustion bug introduced in v2.4.2.",
+        "root_cause": "Connection pool limit set too low in v2.4.2 configuration change - max_connections set to 10 instead of 100.",
+        "incident_commander": "dana.park@company.com",
+        "affected_services": ["checkout-service", "api-gateway"],
+        "detected_at": "2026-05-01T14:32:00",
+        "resolved_at": "2026-05-01T15:47:00",
+        "customer_impact": "partial_outage",
+        "is_recurring": false
+      },
+      {
+        "title": "Nightly batch job timeout - analytics pipeline delayed",
+        "description": "Nightly ETL job exceeded 6-hour timeout, causing analytics dashboards to show stale data from prior day.",
+        "severity": "sev3",
+        "status": "postmortem",
+        "resolution": "Increased job timeout to 8 hours. Identified slow query on events table - added index on created_at column.",
+        "root_cause": "Missing index on high-cardinality events table caused full table scan on 200M row dataset.",
+        "incident_commander": "ravi.singh@company.com",
+        "affected_services": ["analytics-pipeline", "reporting-service"],
+        "detected_at": "2026-05-08T06:15:00",
+        "resolved_at": "2026-05-08T09:40:00",
+        "customer_impact": "degraded",
+        "is_recurring": true
+      },
+      {
+        "title": "Auth service latency spike - login times elevated",
+        "description": "Average login latency jumped from 180ms to 2.4s. No errors, but user experience severely impacted during peak traffic hours.",
+        "severity": "sev2",
+        "status": "resolved",
+        "resolution": "Scaled auth service replicas from 3 to 8. Latency returned to normal within 4 minutes of scale-out.",
+        "root_cause": "Insufficient autoscaling headroom during traffic spike from marketing email campaign launch.",
+        "incident_commander": "priya.mehta@company.com",
+        "affected_services": ["auth-service"],
+        "detected_at": "2026-05-10T11:05:00",
+        "resolved_at": "2026-05-10T11:22:00",
+        "customer_impact": "degraded",
+        "is_recurring": false
+      },
+      {
+        "title": "Redis cache flush - cache miss storm on product catalog",
+        "description": "Ops team flushed wrong Redis instance in production. Product catalog cache emptied, causing 100% cache miss rate and database overload.",
+        "severity": "sev1",
+        "status": "postmortem",
+        "resolution": "Emergency read replicas brought online to absorb database load. Cache repopulated over 22 minutes via warm-up job.",
+        "root_cause": "Ops runbook did not clearly distinguish staging vs production Redis instance names. Human error during maintenance.",
+        "incident_commander": "alex.torres@company.com",
+        "affected_services": ["product-catalog", "search-service", "database-primary"],
+        "detected_at": "2026-04-28T20:10:00",
+        "resolved_at": "2026-04-28T21:05:00",
+        "customer_impact": "partial_outage",
+        "is_recurring": false
+      }
+    ],
+    "eng_deployments": [
+      {
+        "version": "2.5.0",
+        "service_name": "checkout-service",
+        "environment": "production",
+        "status": "succeeded",
+        "deploy_type": "blue_green",
+        "deployer": "CI/CD - GitHub Actions",
+        "commit_sha": "a3f8c2d1",
+        "change_summary": "Fix connection pool limit bug, add payment retry logic, upgrade Stripe SDK to v14",
+        "started_at": "2026-05-12T09:00:00",
+        "completed_at": "2026-05-12T09:14:00",
+        "rollback_version": "2.4.1"
+      },
+      {
+        "version": "1.8.3",
+        "service_name": "auth-service",
+        "environment": "production",
+        "status": "succeeded",
+        "deploy_type": "rolling",
+        "deployer": "CI/CD - GitHub Actions",
+        "commit_sha": "b7e3a91c",
+        "change_summary": "Add autoscaling policy for peak traffic, raise HPA max replicas to 20, tune resource limits",
+        "started_at": "2026-05-11T14:30:00",
+        "completed_at": "2026-05-11T14:44:00",
+        "rollback_version": "1.8.2"
+      },
+      {
+        "version": "3.2.1",
+        "service_name": "analytics-pipeline",
+        "environment": "production",
+        "status": "succeeded",
+        "deploy_type": "recreate",
+        "deployer": "ravi.singh@company.com",
+        "commit_sha": "d4c7f015",
+        "change_summary": "Add index on events.created_at, increase job timeout to 8h, add progress checkpointing",
+        "started_at": "2026-05-09T11:00:00",
+        "completed_at": "2026-05-09T11:08:00",
+        "rollback_version": "3.2.0"
+      },
+      {
+        "version": "4.0.0",
+        "service_name": "api-gateway",
+        "environment": "staging",
+        "status": "in_progress",
+        "deploy_type": "canary",
+        "deployer": "CI/CD - GitHub Actions",
+        "commit_sha": "f1a2b3c4",
+        "change_summary": "Major version upgrade - new rate limiting engine, request tracing integration, updated auth middleware",
+        "started_at": "2026-05-13T10:00:00",
+        "completed_at": null,
+        "rollback_version": "3.9.4"
+      }
+    ],
+    "eng_services": [
+      {
+        "name": "checkout-service",
+        "description": "Handles cart creation, payment processing, and order confirmation",
+        "tier": "tier1",
+        "status": "healthy",
+        "owner_team": "Payments Squad",
+        "tech_stack": ["Go", "PostgreSQL", "Redis", "Stripe SDK"],
+        "sla_target": 99.9,
+        "current_availability": 99.94,
+        "repository_url": "https://github.com/company/checkout-service",
+        "runbook_url": "https://runbooks.company.internal/checkout"
+      },
+      {
+        "name": "auth-service",
+        "description": "Authentication and authorization - login, token issuance, session management",
+        "tier": "tier1",
+        "status": "healthy",
+        "owner_team": "Platform Squad",
+        "tech_stack": ["Go", "Redis", "PostgreSQL", "JWT"],
+        "sla_target": 99.9,
+        "current_availability": 99.87,
+        "repository_url": "https://github.com/company/auth-service",
+        "runbook_url": "https://runbooks.company.internal/auth"
+      },
+      {
+        "name": "analytics-pipeline",
+        "description": "Nightly ETL pipeline for analytics dashboard data aggregation",
+        "tier": "tier2",
+        "status": "healthy",
+        "owner_team": "Data Squad",
+        "tech_stack": ["Python", "Apache Spark", "PostgreSQL", "S3"],
+        "sla_target": 99.5,
+        "current_availability": 99.61,
+        "repository_url": "https://github.com/company/analytics-pipeline",
+        "runbook_url": "https://runbooks.company.internal/analytics-pipeline"
+      },
+      {
+        "name": "product-catalog",
+        "description": "Product metadata, inventory counts, and search index serving",
+        "tier": "tier1",
+        "status": "healthy",
+        "owner_team": "Catalog Squad",
+        "tech_stack": ["Node.js", "Elasticsearch", "Redis", "PostgreSQL"],
+        "sla_target": 99.9,
+        "current_availability": 99.81,
+        "repository_url": "https://github.com/company/product-catalog",
+        "runbook_url": "https://runbooks.company.internal/product-catalog"
+      }
+    ],
+    "eng_runbooks": [
+      {
+        "title": "Checkout Service - Connection Pool Exhaustion",
+        "steps": "1. Check error rate on checkout-service dashboard. 2. If error rate >5%, confirm connection pool metrics in Datadog. 3. Scale service replicas immediately: kubectl scale deployment checkout-service --replicas=10. 4. If rate does not drop, roll back to previous version. 5. Open incident and page on-call.",
+        "category": "incident_response",
+        "tags": ["checkout", "connection-pool", "payments"],
+        "service_name": "checkout-service",
+        "automation_status": "partially_automated",
+        "last_used": "2026-05-01",
+        "author": "dana.park@company.com",
+        "review_date": "2026-08-01",
+        "estimated_duration_minutes": 12
+      },
+      {
+        "title": "Auth Service - Scale Out During Traffic Spike",
+        "steps": "1. Confirm auth latency is above 500ms in Datadog. 2. Check current replica count: kubectl get hpa auth-service. 3. Manually override HPA: kubectl scale deployment auth-service --replicas=15. 4. Monitor latency over 5 minutes. 5. Once below 200ms, allow HPA to resume control.",
+        "category": "scaling",
+        "tags": ["auth", "scaling", "hpa", "traffic"],
+        "service_name": "auth-service",
+        "automation_status": "partially_automated",
+        "last_used": "2026-05-10",
+        "author": "priya.mehta@company.com",
+        "review_date": "2026-07-10",
+        "estimated_duration_minutes": 8
+      },
+      {
+        "title": "Redis Cache - Emergency Warm-Up",
+        "steps": "1. Confirm cache miss rate spike on Redis dashboard. 2. Identify affected services and alert their owners. 3. Run cache warm-up job: kubectl create job --from=cronjob/cache-warmup cache-warmup-emergency. 4. Monitor job progress. 5. If product catalog affected, scale read replicas: kubectl scale statefulset postgres-read --replicas=5.",
+        "category": "recovery",
+        "tags": ["redis", "cache", "recovery", "product-catalog"],
+        "service_name": "product-catalog",
+        "automation_status": "partially_automated",
+        "last_used": "2026-04-28",
+        "author": "alex.torres@company.com",
+        "review_date": "2026-07-28",
+        "estimated_duration_minutes": 25
+      }
+    ],
+    "eng_tasks": [
+      {
+        "title": "Implement distributed tracing for checkout-service",
+        "description": "Integrate OpenTelemetry to trace requests from API gateway through checkout-service to Stripe and back",
+        "acceptance_criteria": "Every checkout request produces a complete trace visible in Jaeger. P99 latency impact <5ms.",
+        "status": "in_progress",
+        "priority": "high",
+        "task_type": "feature",
+        "assignee": "dana.park@company.com",
+        "story_points": 8,
+        "sprint_id": "sprint-22",
+        "labels": ["observability", "checkout"],
+        "created_at": "2026-05-05",
+        "completed_at": null
+      },
+      {
+        "title": "Upgrade auth-service JWT library to v9",
+        "description": "Current JWT library has a known vulnerability in token parsing. Upgrade to v9 which patches CVE-2026-1234.",
+        "acceptance_criteria": "All tests pass. No regression in login latency. Security scan clean.",
+        "status": "done",
+        "priority": "critical",
+        "task_type": "chore",
+        "assignee": "priya.mehta@company.com",
+        "story_points": 3,
+        "sprint_id": "sprint-21",
+        "labels": ["security", "auth", "dependency"],
+        "created_at": "2026-04-28",
+        "completed_at": "2026-05-02"
+      },
+      {
+        "title": "Add index to analytics_events.created_at column",
+        "description": "Missing index causing full table scan on 200M row table during nightly ETL. Index adds ~10GB but reduces query from 4h to 8min.",
+        "acceptance_criteria": "Nightly ETL completes within 2 hours. No degradation to write performance during business hours.",
+        "status": "done",
+        "priority": "high",
+        "task_type": "tech_debt",
+        "assignee": "ravi.singh@company.com",
+        "story_points": 5,
+        "sprint_id": "sprint-21",
+        "labels": ["database", "performance", "analytics"],
+        "created_at": "2026-05-08",
+        "completed_at": "2026-05-09"
+      },
+      {
+        "title": "Design rate limiting architecture for API gateway v4",
+        "description": "Define rate limiting rules, storage backend (Redis vs in-memory), and failure mode behavior for the v4 gateway upgrade",
+        "acceptance_criteria": "Architecture doc approved by platform lead. Burst handling tested under simulated load.",
+        "status": "in_review",
+        "priority": "high",
+        "task_type": "spike",
+        "assignee": "alex.torres@company.com",
+        "story_points": 5,
+        "sprint_id": "sprint-22",
+        "labels": ["api-gateway", "rate-limiting", "architecture"],
+        "created_at": "2026-05-06",
+        "completed_at": null
+      },
+      {
+        "title": "Write Redis flush runbook with environment safeguards",
+        "description": "After the production Redis flush incident, create a runbook that requires explicit environment confirmation before any flush command",
+        "acceptance_criteria": "Runbook reviewed by ops team. Includes two-step confirmation procedure. Added to incident response library.",
+        "status": "todo",
+        "priority": "high",
+        "task_type": "chore",
+        "assignee": "alex.torres@company.com",
+        "story_points": 2,
+        "sprint_id": "sprint-22",
+        "labels": ["runbook", "ops", "redis"],
+        "created_at": "2026-04-29",
+        "completed_at": null
+      }
+    ],
+    "eng_sprints": [
+      {
+        "name": "Sprint 21",
+        "goal": "Resolve post-incident tech debt from April incidents and close all open security vulnerabilities",
+        "status": "completed",
+        "start_date": "2026-04-28",
+        "end_date": "2026-05-09",
+        "planned_points": 42,
+        "completed_points": 38,
+        "velocity": 38,
+        "carryover_points": 4
+      },
+      {
+        "name": "Sprint 22",
+        "goal": "Improve observability and prepare API gateway v4 for staging deployment",
+        "status": "active",
+        "start_date": "2026-05-12",
+        "end_date": "2026-05-23",
+        "planned_points": 40,
+        "completed_points": 8,
+        "velocity": null,
+        "carryover_points": 4
+      }
+    ],
+    "eng_risks": [
+      {
+        "title": "API gateway v4 migration may cause downstream breaking changes",
+        "description": "The v4 gateway introduces new auth middleware behavior. Services relying on header passthrough may break without code changes.",
+        "category": "technical",
+        "probability": "medium",
+        "impact": "high",
+        "status": "mitigating",
+        "owner": "alex.torres@company.com",
+        "mitigation_plan": "Run v4 in parallel on staging for 2 weeks. Audit all downstream services for header dependencies. Provide migration guide 2 weeks before rollout.",
+        "identified_date": "2026-05-06"
+      },
+      {
+        "title": "Analytics pipeline outage during Q2 close if ETL does not stabilize",
+        "description": "Finance depends on analytics dashboards for Q2 close on June 30. If the nightly job continues to fail, finance will be blocked.",
+        "category": "dependency",
+        "probability": "low",
+        "impact": "critical",
+        "status": "mitigating",
+        "owner": "ravi.singh@company.com",
+        "mitigation_plan": "Index added in sprint 21. Monitor job duration for 3 weeks. If duration remains above 4 hours, add incremental processing to avoid full table scans.",
+        "identified_date": "2026-05-08"
+      }
+    ]
+  }
+}

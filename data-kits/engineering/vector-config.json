@@ -1,0 +1,20 @@
+{
+  "collections": [
+    {
+      "name": "eng_incidents",
+      "description": "Semantic search over incident records - find similar past incidents, root causes, and resolution patterns by symptom description",
+      "sourceEntity": "eng_incidents",
+      "embeddingFields": ["title", "description", "root_cause", "resolution"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    },
+    {
+      "name": "eng_runbooks",
+      "description": "Semantic search over runbooks - find the right procedure by describing the problem or symptom in plain language",
+      "sourceEntity": "eng_runbooks",
+      "embeddingFields": ["title", "steps", "tags"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}
