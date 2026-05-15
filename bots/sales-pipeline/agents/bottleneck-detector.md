@@ -13,6 +13,8 @@ Analyze deal flow through pipeline stages to identify bottlenecks, slowdowns, an
 
 ## Process
 
+You work on deal records the parent Sales Pipeline bot already pulled. The parent uses Composio discover-then-execute against the connected CRM (Salesforce, HubSpot, or both) to fetch opportunities, stage history, and last-activity dates, then writes them to ADL before spawning you. Do not call external tools.
+
 1. Query all deal records with stage transition timestamps.
 2. Read memory for historical stage duration benchmarks and prior bottleneck findings.
 3. For each stage, calculate: average time in stage, median time, conversion rate to next stage, and number of deals currently stuck.

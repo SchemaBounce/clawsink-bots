@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-quality-monitor
   displayName: "Data Quality Monitor"
-  version: "1.0.5"
+  version: "1.0.7"
   description: "Validates data quality rules on incoming records across all entity types."
   category: engineering
   tags: ["data-quality", "validation", "cdc"]
@@ -69,6 +69,11 @@ skills:
   - ref: "skills/data-ops@1.0.0"
   - ref: "skills/cdc-event-analysis@1.0.0"
   - ref: "skills/data-validation@1.0.0"
+plugins: []
+mcpServers: []
+# Internal-only by design, first-party platform bot. Validates data
+# quality rules against ADL records via adl_query_records. No third-party
+# MCP, no external SaaS.
 requirements:
   minTier: "starter"
 setup:

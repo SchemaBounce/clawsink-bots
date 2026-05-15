@@ -13,6 +13,8 @@ Score deals in the pipeline based on likelihood to close and expected value.
 
 ## Process
 
+You score the deal set the parent Sales Pipeline bot already pulled. The parent uses Composio discover-then-execute (against SALESFORCE / HUBSPOT toolkits) to read opportunities, contacts, and engagement signals, then writes them to ADL `deals` records before spawning you. Do not call external tools yourself.
+
 1. Query active deal records (stage, value, age, last activity date, contact engagement).
 2. Read memory for historical conversion rates by stage and segment.
 3. Score each deal on a 0-100 scale based on weighted factors.

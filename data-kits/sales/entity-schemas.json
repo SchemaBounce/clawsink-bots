@@ -1,0 +1,93 @@
+[
+  {
+    "name": "sal_contacts",
+    "displayName": "Sales Contacts",
+    "description": "People your sales team interacts with - prospects, leads, champions, and economic buyers",
+    "fields": {
+      "first_name": { "type": "string", "required": true, "description": "Contact first name" },
+      "last_name": { "type": "string", "required": true, "description": "Contact last name" },
+      "email": { "type": "string", "required": true, "description": "Primary email address" },
+      "phone": { "type": "string", "description": "Phone number" },
+      "company_id": { "type": "string", "description": "Reference to sal_companies" },
+      "title": { "type": "string", "description": "Job title" },
+      "seniority": { "type": "string", "enum": ["individual_contributor", "manager", "director", "vp", "c_suite", "founder"], "description": "Seniority level" },
+      "status": { "type": "string", "required": true, "enum": ["lead", "prospect", "customer", "churned", "partner"], "description": "Contact lifecycle status" },
+      "source": { "type": "string", "enum": ["website", "referral", "cold_outreach", "event", "inbound", "partner", "marketing"], "description": "How this contact was acquired" },
+      "owner": { "type": "string", "description": "Assigned sales rep" },
+      "last_contacted_at": { "type": "date", "description": "Date of most recent interaction" },
+      "tags": { "type": "array", "description": "Segmentation tags (e.g. champion, blocker, economic-buyer)" }
+    }
+  },
+  {
+    "name": "sal_companies",
+    "displayName": "Companies",
+    "description": "Organizations and accounts your sales team targets and manages",
+    "fields": {
+      "name": { "type": "string", "required": true, "description": "Company name" },
+      "domain": { "type": "string", "description": "Company website domain" },
+      "industry": { "type": "string", "description": "Industry sector" },
+      "size": { "type": "string", "enum": ["1-10", "11-50", "51-200", "201-1000", "1001+"], "description": "Employee count range" },
+      "annual_revenue": { "type": "number", "description": "Estimated annual revenue in USD" },
+      "status": { "type": "string", "required": true, "enum": ["prospect", "customer", "partner", "churned", "inactive"], "description": "Account relationship status" },
+      "tier": { "type": "string", "enum": ["smb", "mid_market", "enterprise", "strategic"], "description": "Account tier for resource allocation" },
+      "address": { "type": "string", "description": "Primary business address" },
+      "city": { "type": "string", "description": "City" },
+      "country": { "type": "string", "description": "Country code (ISO 3166-1 alpha-2)" },
+      "owner": { "type": "string", "description": "Account owner or sales rep responsible" },
+      "arr": { "type": "number", "description": "Current Annual Recurring Revenue from this account in USD" }
+    }
+  },
+  {
+    "name": "sal_deals",
+    "displayName": "Deals",
+    "description": "Sales pipeline opportunities with stage, value, probability, and close date tracking",
+    "fields": {
+      "name": { "type": "string", "required": true, "description": "Deal name or title" },
+      "value": { "type": "number", "required": true, "description": "Deal value (Annual Contract Value) in USD" },
+      "stage": { "type": "string", "required": true, "enum": ["discovery", "qualification", "proposal", "negotiation", "closed_won", "closed_lost"], "description": "Current pipeline stage" },
+      "probability": { "type": "number", "description": "Win probability percentage (0-100)" },
+      "expected_close_date": { "type": "date", "required": true, "description": "Expected close date" },
+      "contact_id": { "type": "string", "required": true, "description": "Primary contact reference to sal_contacts" },
+      "company_id": { "type": "string", "description": "Associated company reference to sal_companies" },
+      "owner": { "type": "string", "required": true, "description": "Sales rep who owns the deal" },
+      "source": { "type": "string", "description": "Deal source or campaign that generated the opportunity" },
+      "use_case": { "type": "string", "description": "Primary use case driving the purchase (e.g. real-time analytics, fraud detection)" },
+      "competitor": { "type": "string", "description": "Primary competing vendor in this deal" },
+      "lost_reason": { "type": "string", "enum": ["price", "competitor", "timing", "no_budget", "no_decision", "other"], "description": "Reason for lost deal (only for closed_lost)" },
+      "closed_at": { "type": "date", "description": "Actual close date (for won or lost deals)" }
+    }
+  },
+  {
+    "name": "sal_interactions",
+    "displayName": "Interactions",
+    "description": "Call logs, email summaries, meeting notes, and demo records with outcomes and next steps",
+    "fields": {
+      "type": { "type": "string", "required": true, "enum": ["call", "email", "meeting", "note", "demo", "follow_up"], "description": "Interaction type" },
+      "subject": { "type": "string", "required": true, "description": "Interaction subject or topic" },
+      "notes": { "type": "string", "description": "Detailed notes from the interaction" },
+      "summary": { "type": "string", "description": "Brief summary of outcomes and next steps" },
+      "contact_id": { "type": "string", "required": true, "description": "Related contact reference to sal_contacts" },
+      "deal_id": { "type": "string", "description": "Related deal reference to sal_deals" },
+      "duration_minutes": { "type": "number", "description": "Duration of the interaction in minutes" },
+      "occurred_at": { "type": "date", "required": true, "description": "When the interaction took place" },
+      "outcome": { "type": "string", "enum": ["positive", "neutral", "negative", "no_answer"], "description": "Overall outcome of the interaction" },
+      "next_action": { "type": "string", "description": "Agreed next step after this interaction" },
+      "next_action_date": { "type": "date", "description": "Date the next action is due" }
+    }
+  },
+  {
+    "name": "sal_market_signals",
+    "displayName": "Market Signals",
+    "description": "Competitive intelligence, news triggers, and buyer intent signals for prospecting and deal acceleration",
+    "fields": {
+      "signal_type": { "type": "string", "required": true, "enum": ["funding_round", "job_posting", "leadership_change", "competitor_news", "industry_news", "review_posted", "intent_signal", "expansion_signal"], "description": "Type of market signal" },
+      "title": { "type": "string", "required": true, "description": "Signal headline or title" },
+      "description": { "type": "string", "required": true, "description": "Full signal description or content" },
+      "company_id": { "type": "string", "description": "Company this signal relates to (reference to sal_companies)" },
+      "source_url": { "type": "string", "description": "URL of the original signal source" },
+      "relevance_score": { "type": "number", "description": "Relevance score (0-100) - how likely this signal indicates buying intent" },
+      "action_taken": { "type": "string", "enum": ["none", "contacted", "deal_created", "added_to_sequence", "shared_with_team"], "description": "Action taken based on this signal" },
+      "detected_at": { "type": "date", "required": true, "description": "Date the signal was detected or published" }
+    }
+  }
+]

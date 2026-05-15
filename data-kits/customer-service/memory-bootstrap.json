@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:customer-service:defaults",
+  "entries": [
+    {
+      "key": "kpi:first_response_time",
+      "value": "Target first response time is <4 hours for standard tickets and <1 hour for high/critical severity. Under 30 minutes is best-in-class for chat channels. Track by channel and severity separately - phone and chat have inherently different SLA expectations than email.",
+      "category": "kpi",
+      "tags": ["response-time", "sla", "speed"]
+    },
+    {
+      "key": "kpi:first_contact_resolution_rate",
+      "value": "Target first contact resolution (FCR) rate is >70%. FCR measures the percentage of tickets resolved without requiring a follow-up from the customer. Low FCR (below 55%) signals knowledge gaps, unclear processes, or routing problems. Each re-contact costs 2-3x the effort of an initial contact.",
+      "category": "kpi",
+      "tags": ["fcr", "resolution", "efficiency"]
+    },
+    {
+      "key": "kpi:csat_score",
+      "value": "Target CSAT score is >4.2 out of 5.0. CSAT is measured post-resolution via short surveys. Scores below 3.5 trigger an immediate review. Track by agent, category, and channel to find systemic issues. A 1-point CSAT drop correlates with a 10-15% increase in churn risk for affected accounts.",
+      "category": "kpi",
+      "tags": ["csat", "satisfaction", "quality"]
+    },
+    {
+      "key": "kpi:nps",
+      "value": "Target NPS is >40. NPS is computed as Promoters (9-10) minus Detractors (0-6) as a percentage. Passives (7-8) are excluded. An NPS above 50 is excellent for B2B SaaS. Below 20 indicates structural satisfaction problems. Run NPS surveys quarterly and after major milestones (post-onboarding, post-support interaction).",
+      "category": "kpi",
+      "tags": ["nps", "loyalty", "advocacy"]
+    },
+    {
+      "key": "kpi:ticket_volume_trend",
+      "value": "Monitor week-over-week ticket volume growth. Growth below 5% is acceptable. Above 10% with no new customer additions signals a product or process problem. Track by category - a spike in billing tickets needs finance involvement, a spike in bug tickets needs engineering escalation. Volume per active customer is a better normalized metric than raw volume.",
+      "category": "kpi",
+      "tags": ["volume", "capacity", "trends"]
+    },
+    {
+      "key": "threshold:critical_ticket_response",
+      "value": "Critical severity tickets must receive a first response within 15 minutes. Assign to a senior agent immediately. Escalate to engineering if not resolved within 2 hours. Notify customer success of any critical ticket affecting enterprise customers. Log all critical tickets in a separate incident record.",
+      "category": "threshold",
+      "tags": ["critical", "escalation", "sla"]
+    },
+    {
+      "key": "threshold:csat_alert",
+      "value": "Alert when any agent's rolling 30-day CSAT falls below 3.8. Alert when a single ticket receives a score of 1 or 2 - this requires a manager review and proactive customer outreach. Flag accounts with 3+ low-CSAT tickets in 90 days as churn risk for customer success.",
+      "category": "threshold",
+      "tags": ["csat", "alerting", "churn-risk"]
+    },
+    {
+      "key": "best-practice:ticket_routing",
+      "value": "Route tickets by category first, then severity. Billing and security tickets always go to specialists - never to general support. Use first-response templates for common question types but require personalization before sending. Never close a ticket without confirming resolution with the customer. Reopen time limit: 7 days after closure.",
+      "category": "best-practice",
+      "tags": ["routing", "triage", "workflow"]
+    },
+    {
+      "key": "best-practice:nps_follow_up",
+      "value": "Follow up with all NPS detractors (0-6) within 48 hours. Detractor follow-ups should be handled by a senior support rep or customer success manager, not a first-line agent. Promoters (9-10) should receive a thank-you and an ask for a public review or referral within 1 week.",
+      "category": "best-practice",
+      "tags": ["nps", "follow-up", "detractors"]
+    },
+    {
+      "key": "terminology:sla",
+      "value": "SLA (Service Level Agreement): A committed response or resolution time by ticket severity. Standard SLAs: Critical=15 min response/2 hr resolution, High=1 hr response/8 hr resolution, Medium=4 hr response/24 hr resolution, Low=24 hr response/72 hr resolution. Enterprise customers may have contractual SLAs that override these defaults.",
+      "category": "terminology",
+      "tags": ["sla", "definitions", "tiers"]
+    }
+  ]
+}

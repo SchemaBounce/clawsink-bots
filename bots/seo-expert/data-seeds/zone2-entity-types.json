@@ -2,24 +2,45 @@
   "entityTypes": [
     {
       "name": "seo_findings",
-      "description": "A single SEO issue detected by the auditor sub-agent.",
+      "description": "A single SEO issue detected by the auditor sub-agent. Covers modern signals: Open Graph completeness, structured-data validity, Core Web Vitals, indexation, real GSC keyword performance, and AI-search citation visibility.",
       "fields": {
         "url": {"type": "string", "required": true},
-        "finding_type": {"type": "string", "required": true, "enum": ["missing_meta_description", "thin_content", "duplicate_slug", "orphan_page", "weak_title", "stale_content", "missing_canonical", "missing_h1", "multiple_h1", "long_slug", "audit_failure"]},
-        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high"]},
+        "finding_type": {"type": "string", "required": true},
+        "severity": {"type": "string", "required": true, "enum": ["info", "warning", "critical", "low", "medium", "high"]},
+        "metric_name": {"type": "string", "required": false, "description": "e.g. og_logo_missing, lcp_p75, ai_citation_rate, json_ld_invalid"},
+        "metric_value": {"type": "string", "required": false, "description": "Numeric or string value of the metric (stored as string for flexibility)"},
+        "provider": {"type": "string", "required": false, "description": "Source of the finding: meta | pagespeed | gsc | geo:anthropic | geo:openai | geo:perplexity"},
         "description": {"type": "string", "required": true},
         "suggested_fix": {"type": "string", "required": true},
         "audited_at": {"type": "timestamp", "required": true}
       }
     },
     {
+      "name": "seo_keyword_opportunity",
+      "description": "An almost-ranking query from Google Search Console: position 5-20, impressions >= 100, CTR below run-median. Highest ROI source for blog topic suggestions.",
+      "fields": {
+        "query": {"type": "string", "required": true},
+        "current_clicks": {"type": "integer", "required": true},
+        "current_impressions": {"type": "integer", "required": true},
+        "current_ctr": {"type": "number", "required": true},
+        "current_position": {"type": "number", "required": true},
+        "opportunity_score": {"type": "number", "required": true, "description": "impressions * (1 - ctr) * (1 / position) — higher is better"},
+        "suggested_target_url": {"type": "string", "required": false, "description": "The page that already ranks for this query (from the GSC page dimension), if any"},
+        "gsc_pulled_at": {"type": "timestamp", "required": true},
+        "linked_topic_suggestion_id": {"type": "string", "required": false}
+      }
+    },
+    {
       "name": "seo_topic_suggestion",
-      "description": "A blog topic suggestion routed from seo-expert to blog-writer to close a content gap.",
+      "description": "A blog topic suggestion routed from seo-expert to blog-writer to close a content gap or capture an almost-ranking opportunity.",
       "fields": {
         "topic": {"type": "string", "required": true},
         "target_keywords": {"type": "array", "items": {"type": "string"}, "required": true},
         "rationale": {"type": "string", "required": true},
         "linked_finding_ids": {"type": "array", "items": {"type": "string"}, "required": false},
+        "linked_opportunity_ids": {"type": "array", "items": {"type": "string"}, "required": false},
+        "current_position": {"type": "number", "required": false, "description": "GSC position at time of suggestion (if opportunity-driven)"},
+        "current_impressions": {"type": "integer", "required": false},
         "status": {"type": "string", "required": true, "enum": ["proposed", "accepted", "drafted", "rejected"]}
       }
     },

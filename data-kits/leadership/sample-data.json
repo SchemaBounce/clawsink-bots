@@ -1,0 +1,154 @@
+{
+  "records": {
+    "ldr_strategic_goals": [
+      {
+        "title": "Reach $10M ARR by End of 2026",
+        "description": "Scale annual recurring revenue to $10M through a combination of net new business growth and expansion of existing accounts to larger tiers",
+        "owner": "CEO",
+        "horizon": "annual",
+        "category": "growth",
+        "status": "on_track",
+        "progress_pct": 62,
+        "target_date": "2026-12-31",
+        "success_criteria": "ARR reaches $10M or above as reported in the December 2026 billing cycle",
+        "last_reviewed": "2026-05-01"
+      },
+      {
+        "title": "Achieve SOC 2 Type II Certification",
+        "description": "Complete a full SOC 2 Type II audit covering the Security, Availability, and Confidentiality trust service criteria to unlock enterprise and regulated-industry customers",
+        "owner": "CTO",
+        "horizon": "annual",
+        "category": "compliance",
+        "status": "at_risk",
+        "progress_pct": 45,
+        "target_date": "2026-09-30",
+        "success_criteria": "Receive SOC 2 Type II report from auditor covering a minimum 6-month observation period",
+        "last_reviewed": "2026-05-01"
+      },
+      {
+        "title": "Launch Agent Platform to General Availability",
+        "description": "Move the Agent Data Layer and bot marketplace from early access to GA with a documented SLA, self-serve onboarding, and at least 50 active team deployments",
+        "owner": "CPO",
+        "horizon": "annual",
+        "category": "innovation",
+        "status": "on_track",
+        "progress_pct": 70,
+        "target_date": "2026-08-31",
+        "success_criteria": "50 active team deployments with >80% weekly retention at 60 days post-activation",
+        "last_reviewed": "2026-05-01"
+      }
+    ],
+    "ldr_okrs": [
+      {
+        "objective": "Accelerate new logo acquisition in Q2",
+        "quarter": "Q2 2026",
+        "owner": "Sales",
+        "strategic_goal_id": "reach-10m-arr-by-end-of-2026",
+        "key_results": [
+          {"title": "Close 40 new paying customers", "target": 40, "current": 22, "unit": "customers", "progress_pct": 55},
+          {"title": "Increase trial-to-paid conversion to 28%", "target": 28, "current": 24.1, "unit": "percent", "progress_pct": 86},
+          {"title": "Reduce sales cycle from 45 to 32 days", "target": 32, "current": 38, "unit": "days", "progress_pct": 53}
+        ],
+        "overall_progress_pct": 65,
+        "status": "on_track",
+        "confidence_level": "medium",
+        "blockers": "Enterprise deals stalled on SOC 2 requirements - accelerating compliance work may unblock 3-4 deals"
+      },
+      {
+        "objective": "Complete SOC 2 evidence collection phase",
+        "quarter": "Q2 2026",
+        "owner": "Security",
+        "strategic_goal_id": "achieve-soc-2-type-ii-certification",
+        "key_results": [
+          {"title": "Complete evidence collection for all 50 controls", "target": 50, "current": 31, "unit": "controls", "progress_pct": 62},
+          {"title": "Remediate all critical audit findings", "target": 0, "current": 4, "unit": "open findings", "progress_pct": 20},
+          {"title": "Complete penetration test and remediate P0/P1 findings", "target": 100, "current": 60, "unit": "percent", "progress_pct": 60}
+        ],
+        "overall_progress_pct": 47,
+        "status": "at_risk",
+        "confidence_level": "low",
+        "blockers": "4 critical findings require engineering time that is currently allocated to GA launch. Need leadership decision on prioritization."
+      },
+      {
+        "objective": "Ship agent platform GA with self-serve activation",
+        "quarter": "Q2 2026",
+        "owner": "Product",
+        "strategic_goal_id": "launch-agent-platform-to-general-availability",
+        "key_results": [
+          {"title": "Reach 50 active team deployments", "target": 50, "current": 34, "unit": "teams", "progress_pct": 68},
+          {"title": "Achieve 80% 60-day team retention", "target": 80, "current": 83, "unit": "percent", "progress_pct": 100},
+          {"title": "Publish self-serve activation docs and complete onboarding redesign", "target": 100, "current": 65, "unit": "percent complete", "progress_pct": 65}
+        ],
+        "overall_progress_pct": 78,
+        "status": "on_track",
+        "confidence_level": "high",
+        "blockers": null
+      }
+    ],
+    "ldr_exec_briefings": [
+      {
+        "title": "Weekly Executive Summary W19 2026",
+        "briefing_type": "weekly",
+        "period_covered": "2026-05-06 to 2026-05-12",
+        "prepared_by": "executive-assistant",
+        "audience": ["CEO", "CFO", "CTO", "CPO"],
+        "key_signals": [
+          {"domain": "Sales", "signal": "22 new logos closed in Q2 to date vs 40 target - pace tracking 55% of goal at mid-quarter", "status": "at_risk"},
+          {"domain": "Product", "signal": "Agent platform at 34 active team deployments (68% of Q2 target). Retention holding at 83%.", "status": "on_track"},
+          {"domain": "Security", "signal": "SOC 2 evidence collection at 62% complete. 4 critical findings unresolved - engineering bandwidth conflict.", "status": "at_risk"},
+          {"domain": "Operations", "signal": "Order fulfillment SLA at 97.2% this week - slightly below 98% target. One carrier exception spike (FedEx, +1.8%).", "status": "watch"}
+        ],
+        "action_items": [
+          {"action": "Prioritization decision needed: SOC 2 critical findings vs GA launch sprint allocation", "owner": "CEO", "due_date": "2026-05-16"},
+          {"action": "Review FedEx exception rate trend - consider carrier swap for overnight service level", "owner": "COO", "due_date": "2026-05-20"}
+        ],
+        "summary": "Q2 sales is tracking behind pace at mid-quarter, with enterprise deals blocked by SOC 2 status. The agent platform is performing well with retention above target. A resource conflict between the SOC 2 remediation effort and the GA launch sprint requires an executive decision this week. Operations is within tolerance but watching carrier performance.",
+        "created_at": "2026-05-13"
+      }
+    ],
+    "ldr_decision_log": [
+      {
+        "title": "Prioritize SOC 2 GA Over Feature Work in Q2",
+        "decision": "Allocate 40% of engineering capacity in Q2 to SOC 2 remediation and evidence collection, accepting a 2-week delay to the agent platform GA launch",
+        "decision_maker": "CEO",
+        "decision_date": "2026-04-15",
+        "category": "strategic",
+        "context": "SOC 2 Type II is blocking 4 enterprise deals worth ~$800K ARR. Current completion pace would miss the Q3 audit window without additional engineering focus.",
+        "alternatives_considered": "Option A: Maintain current pace and push SOC 2 to Q4 audit window. Option B: Hire a contractor to handle SOC 2 evidence collection. Option C: Reduce feature scope and reallocate 40% of engineering.",
+        "rationale": "Option C was chosen because the ROI of unblocking enterprise deals ($800K ARR) outweighs the 2-week GA delay. Contractor option rejected due to context-transfer time cost. Option A risks missing the annual SOC 2 target entirely.",
+        "expected_outcome": "SOC 2 audit readiness by September 30, agent platform GA by August 31, 3-4 enterprise deals unblocked in Q2-Q3",
+        "actual_outcome": null,
+        "review_date": "2026-07-01",
+        "strategic_goal_id": "achieve-soc-2-type-ii-certification"
+      },
+      {
+        "title": "Sunset Legacy Console Port 3001",
+        "decision": "Decommission the standalone console application on port 3001 and complete the migration to the unified frontend on port 3000 by end of Q1 2026",
+        "decision_maker": "CTO",
+        "decision_date": "2026-01-10",
+        "category": "technical",
+        "context": "Two separate frontend applications (landing/docs on 3000, workspace console on 3001) created inconsistent UX, duplicated infrastructure, and slowed feature development across both surfaces.",
+        "alternatives_considered": "Option A: Keep both frontends and share a component library. Option B: Migrate all surfaces to a unified frontend. Option C: Use a micro-frontend architecture with a shared shell.",
+        "rationale": "Option B delivers the best developer experience and UX consistency. The migration is estimated at 6 weeks of effort with a payoff of reduced operational complexity and a single deployment surface.",
+        "expected_outcome": "Single frontend at port 3000 serving landing, docs, and workspace console. Zero customer-visible downtime during migration.",
+        "actual_outcome": "Completed December 2024. Zero downtime. Developer velocity on cross-surface features improved by an estimated 30%.",
+        "review_date": null,
+        "strategic_goal_id": null
+      },
+      {
+        "title": "Adopt Kolumn as Sole Schema Management Tool",
+        "decision": "Mandate Kolumn HCL for all database schema changes. Direct SQL DDL is banned across all repositories effective immediately.",
+        "decision_maker": "CTO",
+        "decision_date": "2026-02-01",
+        "category": "technical",
+        "context": "Multiple schema drift incidents caused by ad-hoc SQL run outside the migration system. Three production incidents in Q4 2025 were traced to undocumented schema changes.",
+        "alternatives_considered": "Option A: Enforce SQL migration files with a standard migration tool (Flyway, Goose). Option B: Mandate Kolumn HCL for all schema changes. Option C: Continue ad-hoc with better documentation.",
+        "rationale": "Kolumn provides state tracking, rollback capability, audit trails, and is already the bundled IaC tool for SchemaBounce customers - using it internally strengthens the product by making us eat our own cooking.",
+        "expected_outcome": "Zero schema drift incidents caused by undocumented SQL changes. All schema state tracked in version control.",
+        "actual_outcome": "No schema drift incidents since mandate. Two instances where engineers attempted direct SQL and were caught by pre-commit hooks.",
+        "review_date": null,
+        "strategic_goal_id": null
+      }
+    ]
+  }
+}

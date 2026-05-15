@@ -1,0 +1,281 @@
+{
+  "records": {
+    "leg_matters": [
+      {
+        "matter_number": "2026-0041",
+        "matter_name": "Meridian Retail Partners - Contract Dispute",
+        "client_name": "Finance / Revenue Team",
+        "practice_area": "contracts",
+        "responsible_attorney": "sarah.chen@company.com",
+        "billing_method": "internal",
+        "hourly_rate": null,
+        "estimated_cost": 45000,
+        "date_opened": "2026-04-15",
+        "status": "active"
+      },
+      {
+        "matter_number": "2026-0038",
+        "matter_name": "GDPR Data Subject Access Request - EU Customer",
+        "client_name": "Data Privacy - Internal",
+        "practice_area": "data_privacy",
+        "responsible_attorney": "marcus.bell@company.com",
+        "billing_method": "internal",
+        "hourly_rate": null,
+        "estimated_cost": 8000,
+        "date_opened": "2026-04-02",
+        "status": "active"
+      },
+      {
+        "matter_number": "2026-0035",
+        "matter_name": "Employment Dispute - Former Contractor",
+        "client_name": "HR / People Ops",
+        "practice_area": "employment",
+        "responsible_attorney": "sarah.chen@company.com",
+        "billing_method": "hourly",
+        "hourly_rate": 450,
+        "estimated_cost": 95000,
+        "date_opened": "2026-03-10",
+        "status": "active"
+      },
+      {
+        "matter_number": "2026-0029",
+        "matter_name": "Series B SPA - Outside Counsel Review",
+        "client_name": "Executive Team",
+        "practice_area": "corporate",
+        "responsible_attorney": "marcus.bell@company.com",
+        "billing_method": "flat_fee",
+        "hourly_rate": null,
+        "estimated_cost": 120000,
+        "date_opened": "2026-02-14",
+        "status": "closed"
+      }
+    ],
+    "leg_controls": [
+      {
+        "control_id": "CC-6.1",
+        "title": "Logical Access Controls",
+        "description": "The organization implements logical access security measures to protect against unauthorized access, including role-based access control, MFA enforcement, and quarterly access reviews.",
+        "framework": "soc2",
+        "category": "access_control",
+        "status": "implemented",
+        "effectiveness": "effective",
+        "owner": "ciso@company.com",
+        "evidence_location": "https://vault.company.internal/soc2/CC-6.1",
+        "last_tested": "2026-03-15",
+        "next_review": "2026-09-15"
+      },
+      {
+        "control_id": "CC-7.2",
+        "title": "Incident Detection and Response",
+        "description": "The organization monitors system components for anomalies and security events, and has documented incident response procedures with defined escalation paths.",
+        "framework": "soc2",
+        "category": "incident_response",
+        "status": "implemented",
+        "effectiveness": "effective",
+        "owner": "ciso@company.com",
+        "evidence_location": "https://vault.company.internal/soc2/CC-7.2",
+        "last_tested": "2026-04-01",
+        "next_review": "2026-10-01"
+      },
+      {
+        "control_id": "DP-3.1",
+        "title": "Data Subject Rights Fulfillment",
+        "description": "Process to fulfill data subject access, deletion, and portability requests within the regulatory deadline (30 days for GDPR, 45 days for CCPA).",
+        "framework": "gdpr",
+        "category": "data_protection",
+        "status": "partially_implemented",
+        "effectiveness": "partially_effective",
+        "owner": "privacy@company.com",
+        "evidence_location": "https://vault.company.internal/privacy/DP-3.1",
+        "last_tested": "2026-02-20",
+        "next_review": "2026-05-20"
+      },
+      {
+        "control_id": "CM-2.1",
+        "title": "Change Management Authorization",
+        "description": "All production changes must be reviewed and approved through the change management process before deployment. Emergency changes require post-facto review within 24 hours.",
+        "framework": "soc2",
+        "category": "change_management",
+        "status": "implemented",
+        "effectiveness": "effective",
+        "owner": "vp-engineering@company.com",
+        "evidence_location": "https://vault.company.internal/soc2/CM-2.1",
+        "last_tested": "2026-04-10",
+        "next_review": "2026-10-10"
+      }
+    ],
+    "leg_policies": [
+      {
+        "title": "Data Retention and Disposal Policy",
+        "content": "This policy governs how long the company retains personal and business data, and the secure disposal procedures when retention periods expire. Legal records are retained 7 years post-matter. Employee records retained 7 years post-employment. Customer transaction data retained per contractual obligation, minimum 5 years. Disposal must be documented and authorized by the Legal or Compliance team.",
+        "scope": "All employees, contractors, and data processors handling company or customer data",
+        "category": "data_privacy",
+        "status": "published",
+        "version": "3.0",
+        "owner": "privacy@company.com",
+        "approver": "general-counsel@company.com",
+        "effective_date": "2026-01-01",
+        "review_date": "2027-01-01",
+        "frameworks": ["gdpr", "ccpa", "soc2"]
+      },
+      {
+        "title": "Acceptable Use Policy",
+        "content": "Company systems, devices, and networks are provided for business purposes. Personal use must be incidental. Users must not install unauthorized software, share credentials, access inappropriate content, or use company resources for competitive activities. All use is subject to monitoring with appropriate notice. Violations may result in disciplinary action up to termination.",
+        "scope": "All employees, contractors, and third parties with access to company systems",
+        "category": "acceptable_use",
+        "status": "published",
+        "version": "2.2",
+        "owner": "security@company.com",
+        "approver": "ciso@company.com",
+        "effective_date": "2025-06-01",
+        "review_date": "2026-06-01",
+        "frameworks": ["soc2", "iso27001"]
+      },
+      {
+        "title": "Vendor Risk Management Policy",
+        "content": "All vendors with access to company data or systems must complete a security questionnaire prior to engagement. Vendors processing personal data require a Data Processing Agreement. Tier 1 vendors (access to production data) require annual security assessments. Contracts must include data handling requirements, breach notification obligations, and audit rights.",
+        "scope": "Procurement, Legal, and IT teams engaging third-party vendors",
+        "category": "vendor_management",
+        "status": "in_review",
+        "version": "2.0-draft",
+        "owner": "security@company.com",
+        "approver": null,
+        "effective_date": null,
+        "review_date": null,
+        "frameworks": ["soc2", "gdpr"]
+      }
+    ],
+    "leg_audit_findings": [
+      {
+        "finding_id": "AF-2026-011",
+        "title": "DSAR process exceeds 30-day GDPR deadline",
+        "description": "Current Data Subject Access Request process takes 45-60 days to complete due to manual data extraction from multiple systems. GDPR requires response within 30 days with one-month extension possible if complexity is communicated.",
+        "audit_type": "self_assessment",
+        "severity": "high",
+        "status": "in_remediation",
+        "control_id": "DP-3.1",
+        "remediation_plan": "1. Automate data extraction from top 5 data systems by June 15. 2. Create DSAR tracking workflow in the compliance system. 3. Assign dedicated DSAR coordinator. Target: 25-day average process time by July 1.",
+        "owner": "privacy@company.com",
+        "identified_date": "2026-04-02",
+        "target_closure_date": "2026-07-01",
+        "actual_closure_date": null
+      },
+      {
+        "finding_id": "AF-2026-008",
+        "title": "Vendor risk assessments not completed for 3 tier-1 vendors",
+        "description": "Three vendors with production data access have not had security assessments in 18+ months. Vendor risk management policy requires annual assessment for tier-1 vendors.",
+        "audit_type": "internal",
+        "severity": "medium",
+        "status": "in_remediation",
+        "control_id": null,
+        "remediation_plan": "Schedule assessments with all three vendors by May 31. Escalate to procurement to add assessment renewal to contract terms for future renewals.",
+        "owner": "security@company.com",
+        "identified_date": "2026-03-18",
+        "target_closure_date": "2026-05-31",
+        "actual_closure_date": null
+      },
+      {
+        "finding_id": "AF-2025-044",
+        "title": "Access review completed 30 days late",
+        "description": "Q3 2025 quarterly access review for production systems was completed November 15 instead of October 31. Four user accounts with excessive privileges were identified and remediated.",
+        "audit_type": "internal",
+        "severity": "low",
+        "status": "closed",
+        "control_id": "CC-6.1",
+        "remediation_plan": "Access review reminders added to compliance calendar with 2-week advance notice. Process owner changed to CISO with backup reviewer assigned.",
+        "owner": "ciso@company.com",
+        "identified_date": "2025-11-15",
+        "target_closure_date": "2025-12-31",
+        "actual_closure_date": "2025-12-20"
+      }
+    ],
+    "leg_deadlines": [
+      {
+        "matter_number": "2026-0041",
+        "title": "Response to demand letter - Meridian Retail Partners",
+        "deadline_type": "response",
+        "due_date": "2026-06-01",
+        "reminder_days": 14,
+        "responsible_attorney": "sarah.chen@company.com",
+        "priority": "high",
+        "status": "upcoming",
+        "jurisdiction": null,
+        "notes": "Letter received April 20. 30-day response window under contract terms. Coordinate with Finance for disputed invoice details."
+      },
+      {
+        "matter_number": "2026-0038",
+        "title": "GDPR DSAR response deadline",
+        "deadline_type": "regulatory_filing",
+        "due_date": "2026-05-22",
+        "reminder_days": 7,
+        "responsible_attorney": "marcus.bell@company.com",
+        "priority": "critical",
+        "status": "due_soon",
+        "jurisdiction": null,
+        "notes": "Request received April 22. GDPR Art. 12 requires response within 30 days. Extension requires proactive communication by May 22 if not complete."
+      },
+      {
+        "matter_number": "2026-0035",
+        "title": "Mediation session - employment dispute",
+        "deadline_type": "hearing",
+        "due_date": "2026-06-15",
+        "reminder_days": 21,
+        "responsible_attorney": "sarah.chen@company.com",
+        "priority": "high",
+        "status": "upcoming",
+        "jurisdiction": "JAMS Arbitration - San Francisco",
+        "notes": "Preparation materials due to mediator 10 days prior. Coordinate with HR for personnel file retrieval."
+      },
+      {
+        "matter_number": null,
+        "title": "Annual SOC 2 Type 2 audit window opens",
+        "deadline_type": "internal",
+        "due_date": "2026-07-01",
+        "reminder_days": 30,
+        "responsible_attorney": "general-counsel@company.com",
+        "priority": "high",
+        "status": "upcoming",
+        "jurisdiction": null,
+        "notes": "All open audit findings (AF-2026-011, AF-2026-008) must be closed or have documented remediation plans before audit window opens."
+      }
+    ],
+    "leg_regulatory_changes": [
+      {
+        "title": "EU AI Act - High-Risk AI System Requirements",
+        "summary": "The EU AI Act requires organizations deploying high-risk AI systems (including those used in HR decisions, creditworthiness assessment, and access to essential services) to implement conformity assessments, maintain technical documentation, ensure human oversight, and register systems in an EU database before deployment.",
+        "affected_areas": ["Product - AI Features", "Engineering", "Legal", "HR Technology"],
+        "regulation": "EU AI Act 2024/1689",
+        "jurisdiction": "eu",
+        "impact_level": "significant",
+        "status": "assessing",
+        "effective_date": "2026-08-02",
+        "response_deadline": "2026-06-01",
+        "assigned_to": "marcus.bell@company.com"
+      },
+      {
+        "title": "California SB 1047 - AI Safety Reporting",
+        "summary": "California SB 1047 introduces safety reporting requirements for large AI models. Organizations training or using models above specified compute thresholds must conduct safety assessments and report incidents to CalDOJ within specified timeframes.",
+        "affected_areas": ["Product - AI Features", "Engineering", "Legal"],
+        "regulation": "California SB 1047",
+        "jurisdiction": "us_state",
+        "impact_level": "moderate",
+        "status": "monitoring",
+        "effective_date": "2026-01-01",
+        "response_deadline": "2026-06-15",
+        "assigned_to": "general-counsel@company.com"
+      },
+      {
+        "title": "PCI DSS v4.0 - Full Compliance Required",
+        "summary": "PCI DSS v4.0 mandatory compliance date has passed. New requirements include customized approach for control implementation, multi-factor authentication expanded to all access to the cardholder data environment, and enhanced encryption requirements for transit data.",
+        "affected_areas": ["Engineering - Payments", "Compliance", "Security"],
+        "regulation": "PCI DSS v4.0",
+        "jurisdiction": "industry_specific",
+        "impact_level": "critical",
+        "status": "implementing",
+        "effective_date": "2025-03-31",
+        "response_deadline": "2026-06-30",
+        "assigned_to": "ciso@company.com"
+      }
+    ]
+  }
+}

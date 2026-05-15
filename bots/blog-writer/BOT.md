@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.7"
+  version: "1.0.9"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -26,15 +26,15 @@ agent:
     - Cap each blog post at 1500 words unless the request explicitly specifies long-form content.
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:blog-writer:northstar` key `brand_voice` and `product_catalog` — read voice + product context first
-    - Step 2: `adl_read_memory` namespace `editorial_calendar` key `last_run_state` — get last run timestamp and section to alternate
-    - Step 3: `adl_read_messages` — check for topic requests from executive-assistant, marketing-growth, or seo-expert
+    - Step 1: `adl_read_memory` namespace `bot:blog-writer:northstar` key `brand_voice` and `product_catalog`, read voice + product context first
+    - Step 2: `adl_read_memory` namespace `editorial_calendar` key `last_run_state`, get last run timestamp and section to alternate
+    - Step 3: `adl_read_messages`, check for topic requests from executive-assistant, marketing-growth, or seo-expert
     - Step 4: Spawn researcher / writer / editor sub-agents in sequence (sessions_spawn) to produce a draft
     - Step 5: When the editor returns PASS, call `adl_blog_create_draft` with the markdown post → returns post_id
     - Step 6: Call `adl_blog_submit_review` with post_id → moves to human review
     - Step 7: `adl_write_memory` namespace `editorial_calendar` to record the topic, slug, and section
     - Step 8: `adl_send_message` to executive-assistant with finding "draft submitted for review", include slug
-    - Approval is human-only — never call any approve tool. There isn't one.
+    - Approval is human-only, never call any approve tool. There isn't one.
 model:
   provider: "anthropic"
   preferred: "claude-sonnet-4-6"
@@ -85,12 +85,17 @@ skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
 plugins: []
-# No external MCP servers required for the SchemaBounce internal deployment.
-# Publishing happens via the runtime built-ins adl_blog_create_draft and
-# adl_blog_submit_review, which route through core-api's internal admin
-# endpoint. External research tools (exa, firecrawl) and outreach tools
-# (agentmail, github) can be re-added later as optional connections.
 mcpServers: []
+# Internal-only by design, first-party platform bot in its current form.
+# Publishing routes through the runtime built-ins adl_blog_create_draft
+# and adl_blog_submit_review (admin-workspace-gated). Research is read
+# from pre-staged Zone1 / ADL records by the bootstrap script. No
+# third-party MCP, no external SaaS in the data path.
+#
+# To extend for non-admin workspaces that want a more featureful flow,
+# re-add tools/exa (research), tools/firecrawl (crawl), tools/agentmail
+# (outreach), tools/github (publish-by-PR). Each requires its own
+# Connect step at activation time. Intentionally minimal today.
 requirements:
   minTier: "starter"
 setup:
@@ -229,7 +234,7 @@ Creates weekly technical blog posts for the SchemaBounce and OpenCLAW blog secti
 - Writer drafts the full post from research notes
 - Editor reviews for voice, accuracy, and style guide adherence (with revision cycles)
 - Maintains an editorial calendar to avoid duplicate topics
-- Submits all posts as drafts — never auto-publishes
+- Submits all posts as drafts, never auto-publishes
 - Notifies the team when a draft is ready for review
 
 ## Scheduling Options
@@ -250,7 +255,7 @@ For self-hosted deployments, register the agent via the platform API with the ap
 
 ### Service Account Setup
 
-Both approaches require a service account with blog scopes. Create one in Workspace Settings > Service Accounts. Save the credentials — the secret is shown only once.
+Both approaches require a service account with blog scopes. Create one in Workspace Settings > Service Accounts. Save the credentials, the secret is shown only once.
 
 ## Content Categories
 
@@ -269,7 +274,7 @@ Both approaches require a service account with blog scopes. Create one in Worksp
 
 Set these in your workspace's North Star zone for best results:
 
-- `brand_voice` — Tone, style guidelines, terminology preferences
-- `product_catalog` — Current features, pricing tiers, differentiators
-- `company_glossary` — Product names, acronyms, technical terms
-- `market_context` — Industry context for comparison posts
+- `brand_voice`: Tone, style guidelines, terminology preferences
+- `product_catalog`: Current features, pricing tiers, differentiators
+- `company_glossary`: Product names, acronyms, technical terms
+- `market_context`: Industry context for comparison posts

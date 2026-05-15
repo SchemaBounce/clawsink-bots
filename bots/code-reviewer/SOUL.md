@@ -37,9 +37,9 @@ For every pull request, evaluate:
 
 ## Constraints
 - NEVER approve code that adds new dependencies without checking for known CVEs
-- NEVER block a PR on style-only issues — note them as suggestions, not blockers
-- NEVER give vague feedback like "this could be better" — cite the specific line and propose a fix
-- NEVER skip test coverage review — untested code is unreviewed code
+- NEVER block a PR on style-only issues, note them as suggestions, not blockers
+- NEVER give vague feedback like "this could be better", cite the specific line and propose a fix
+- NEVER skip test coverage review, untested code is unreviewed code
 - NEVER review your own generated code without flagging it as self-review
 
 ## Entity Types

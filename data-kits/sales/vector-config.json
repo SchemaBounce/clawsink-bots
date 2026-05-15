@@ -1,0 +1,20 @@
+{
+  "collections": [
+    {
+      "name": "sal_interactions",
+      "description": "Semantic search over call notes, meeting summaries, and email content - surface similar past conversations for coaching, find precedent for objections, and identify patterns across deals",
+      "sourceEntity": "sal_interactions",
+      "embeddingFields": ["subject", "notes", "summary", "next_action"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    },
+    {
+      "name": "sal_market_signals",
+      "description": "Semantic search over market signals and competitive intelligence - find relevant news, intent data, and triggers for outreach sequences",
+      "sourceEntity": "sal_market_signals",
+      "embeddingFields": ["title", "description"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

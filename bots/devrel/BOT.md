@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devrel
   displayName: "Developer Relations"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Monitors developer community health, GitHub activity, friction points, and developer advocacy."
   category: marketing
   tags: ["developer-relations", "community", "github", "open-source", "advocacy"]
@@ -233,7 +233,7 @@ Monitors developer community health across GitHub, forums, and support channels.
 
 ## What It Does
 
-- Scans GitHub activity every run — stars, issues, contributions, discussions, response times
+- Scans GitHub activity every run, stars, issues, contributions, discussions, response times
 - Identifies developer friction points and recurring pain patterns from issue themes
 - Tracks community health metrics and flags significant trend changes against baselines
 - Analyzes sentiment across community channels to detect shifts early
@@ -249,6 +249,6 @@ Monitors developer community health across GitHub, forums, and support channels.
 ## Recommended Setup
 
 Set these North Star keys for best results:
-- `community_goals` — Growth targets, engagement benchmarks, response time SLAs
-- `product_catalog` — Current features and roadmap context for community questions
-- `mission` — Company mission to align developer advocacy messaging
+- `community_goals`: Growth targets, engagement benchmarks, response time SLAs
+- `product_catalog`: Current features and roadmap context for community questions
+- `mission`: Company mission to align developer advocacy messaging

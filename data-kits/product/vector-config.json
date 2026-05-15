@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "prd_research_sessions",
+      "description": "Semantic search over research session findings to surface relevant past insights when scoping new features or experiments",
+      "sourceEntity": "prd_research_sessions",
+      "embeddingFields": ["research_question", "key_findings", "pain_points_identified"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

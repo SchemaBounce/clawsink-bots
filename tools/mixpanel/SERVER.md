@@ -9,6 +9,10 @@ metadata:
   tags: ["mixpanel", "analytics", "product", "events", "funnels"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "MIXPANEL"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like MIXPANEL_*."
 transport:
   type: "stdio"
   command: "npx"

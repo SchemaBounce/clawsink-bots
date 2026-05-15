@@ -1,0 +1,272 @@
+[
+  {
+    "name": "prd_features",
+    "displayName": "Features",
+    "description": "Product feature records with status, priority, owner, and roadmap positioning",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Feature title"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Feature description and user problem being solved"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["idea", "discovery", "scoping", "in_sprint", "shipped", "cancelled"],
+        "description": "Current feature lifecycle status"
+      },
+      "priority": {
+        "type": "string",
+        "required": true,
+        "enum": ["critical", "high", "medium", "low"],
+        "description": "Business priority level"
+      },
+      "owner": {
+        "type": "string",
+        "required": true,
+        "description": "Product manager or team owner"
+      },
+      "target_segment": {
+        "type": "string",
+        "description": "Primary user segment this feature targets"
+      },
+      "effort_estimate": {
+        "type": "string",
+        "enum": ["XS", "S", "M", "L", "XL"],
+        "description": "T-shirt size effort estimate"
+      },
+      "impact_score": {
+        "type": "number",
+        "description": "Estimated business impact score (1-10)"
+      },
+      "target_release": {
+        "type": "string",
+        "description": "Target release quarter or version (e.g., Q2 2026)"
+      },
+      "shipped_at": {
+        "type": "date",
+        "description": "Date the feature was shipped to production"
+      }
+    }
+  },
+  {
+    "name": "prd_experiments",
+    "displayName": "Experiments",
+    "description": "A/B test definitions with hypothesis, variants, metrics, and results",
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Experiment name"
+      },
+      "hypothesis": {
+        "type": "string",
+        "required": true,
+        "description": "The hypothesis being tested (if X then Y because Z)"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["draft", "running", "paused", "completed", "cancelled"],
+        "description": "Experiment status"
+      },
+      "primary_metric": {
+        "type": "string",
+        "required": true,
+        "description": "Primary success metric being measured"
+      },
+      "control_variant": {
+        "type": "string",
+        "required": true,
+        "description": "Description of the control variant"
+      },
+      "test_variant": {
+        "type": "string",
+        "required": true,
+        "description": "Description of the test variant"
+      },
+      "traffic_split_pct": {
+        "type": "number",
+        "required": true,
+        "description": "Percentage of traffic in the test variant (e.g., 50)"
+      },
+      "start_date": {
+        "type": "date",
+        "description": "Experiment start date"
+      },
+      "end_date": {
+        "type": "date",
+        "description": "Experiment end date"
+      },
+      "result": {
+        "type": "string",
+        "enum": ["winner", "loser", "inconclusive", "stopped_early"],
+        "description": "Final experiment result"
+      },
+      "lift_pct": {
+        "type": "number",
+        "description": "Observed lift percentage of test vs control on primary metric"
+      },
+      "confidence_pct": {
+        "type": "number",
+        "description": "Statistical confidence level of the result (0-100)"
+      }
+    }
+  },
+  {
+    "name": "prd_sprints",
+    "displayName": "Sprints",
+    "description": "Time-boxed delivery iterations with velocity, goals, and completion tracking",
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Sprint name (e.g., Sprint 14)"
+      },
+      "goal": {
+        "type": "string",
+        "required": true,
+        "description": "Sprint goal statement"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["planning", "active", "completed", "cancelled"],
+        "description": "Sprint lifecycle status"
+      },
+      "start_date": {
+        "type": "date",
+        "required": true,
+        "description": "Sprint start date"
+      },
+      "end_date": {
+        "type": "date",
+        "required": true,
+        "description": "Sprint end date"
+      },
+      "planned_points": {
+        "type": "number",
+        "description": "Story points committed at sprint start"
+      },
+      "completed_points": {
+        "type": "number",
+        "description": "Story points completed by end of sprint"
+      },
+      "carryover_points": {
+        "type": "number",
+        "description": "Story points rolled over to the next sprint"
+      },
+      "team_capacity": {
+        "type": "number",
+        "description": "Available team capacity in person-days for this sprint"
+      },
+      "retrospective_notes": {
+        "type": "string",
+        "description": "Key findings from the sprint retrospective"
+      }
+    }
+  },
+  {
+    "name": "prd_user_segments",
+    "displayName": "User Segments",
+    "description": "Defined audience groups with behavioral and demographic characteristics",
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Segment name (e.g., Power Users, New Signups)"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Who this segment represents and why it matters"
+      },
+      "size_estimate": {
+        "type": "number",
+        "description": "Estimated number of users in this segment"
+      },
+      "defining_behaviors": {
+        "type": "array",
+        "required": true,
+        "description": "List of behaviors that define membership in this segment"
+      },
+      "acquisition_channels": {
+        "type": "array",
+        "description": "Primary channels through which this segment is acquired"
+      },
+      "avg_session_frequency": {
+        "type": "string",
+        "description": "Typical session frequency (e.g., daily, weekly)"
+      },
+      "primary_jobs_to_be_done": {
+        "type": "string",
+        "description": "Core jobs this segment is trying to accomplish with the product"
+      },
+      "churn_risk": {
+        "type": "string",
+        "enum": ["low", "medium", "high"],
+        "description": "Relative churn risk level for this segment"
+      },
+      "last_reviewed": {
+        "type": "date",
+        "description": "Date this segment definition was last reviewed and updated"
+      }
+    }
+  },
+  {
+    "name": "prd_research_sessions",
+    "displayName": "Research Sessions",
+    "description": "User interview and usability test records with findings and insights",
+    "fields": {
+      "session_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["user_interview", "usability_test", "survey", "diary_study", "focus_group"],
+        "description": "Type of research session"
+      },
+      "participant_segment": {
+        "type": "string",
+        "required": true,
+        "description": "User segment represented by the participant"
+      },
+      "date_conducted": {
+        "type": "date",
+        "required": true,
+        "description": "Date the session was conducted"
+      },
+      "researcher": {
+        "type": "string",
+        "required": true,
+        "description": "Researcher or UX team member who conducted the session"
+      },
+      "research_question": {
+        "type": "string",
+        "required": true,
+        "description": "Primary research question this session was designed to answer"
+      },
+      "key_findings": {
+        "type": "array",
+        "required": true,
+        "description": "List of key findings from this session"
+      },
+      "pain_points_identified": {
+        "type": "array",
+        "description": "User pain points surfaced during the session"
+      },
+      "severity": {
+        "type": "string",
+        "enum": ["low", "medium", "high", "critical"],
+        "description": "Severity of findings - critical sessions should trigger immediate product review"
+      },
+      "recording_url": {
+        "type": "string",
+        "description": "Link to session recording or notes document"
+      }
+    }
+  }
+]

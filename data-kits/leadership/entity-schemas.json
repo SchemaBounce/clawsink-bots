@@ -1,0 +1,226 @@
+[
+  {
+    "name": "ldr_strategic_goals",
+    "displayName": "Strategic Goals",
+    "description": "Long-horizon organizational objectives with owners, timelines, and progress indicators",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Strategic goal title"
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "Full description of the goal and why it matters to the organization"
+      },
+      "owner": {
+        "type": "string",
+        "required": true,
+        "description": "Executive or team responsible for this goal"
+      },
+      "horizon": {
+        "type": "string",
+        "required": true,
+        "enum": ["annual", "two_year", "three_year", "five_year"],
+        "description": "Planning horizon for this goal"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "enum": ["growth", "efficiency", "quality", "people", "compliance", "innovation"],
+        "description": "Strategic category"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["on_track", "at_risk", "behind", "achieved", "paused", "cancelled"],
+        "description": "Current progress status"
+      },
+      "progress_pct": {
+        "type": "number",
+        "description": "Estimated completion percentage (0-100)"
+      },
+      "target_date": {
+        "type": "date",
+        "required": true,
+        "description": "Target completion or review date"
+      },
+      "success_criteria": {
+        "type": "string",
+        "required": true,
+        "description": "Measurable criteria defining successful achievement of this goal"
+      },
+      "last_reviewed": {
+        "type": "date",
+        "description": "Date of the last executive review of this goal"
+      }
+    }
+  },
+  {
+    "name": "ldr_okrs",
+    "displayName": "OKRs",
+    "description": "Quarterly objectives and key results with progress tracking and status",
+    "fields": {
+      "objective": {
+        "type": "string",
+        "required": true,
+        "description": "Qualitative objective statement for the quarter"
+      },
+      "quarter": {
+        "type": "string",
+        "required": true,
+        "description": "Quarter this OKR belongs to (e.g., Q2 2026)"
+      },
+      "owner": {
+        "type": "string",
+        "required": true,
+        "description": "Team or executive who owns this objective"
+      },
+      "strategic_goal_id": {
+        "type": "string",
+        "description": "Reference to ldr_strategic_goals (parent goal this OKR advances)"
+      },
+      "key_results": {
+        "type": "array",
+        "required": true,
+        "description": "Array of {title, target, current, unit, progress_pct} key result objects"
+      },
+      "overall_progress_pct": {
+        "type": "number",
+        "required": true,
+        "description": "Aggregate progress across all key results (0-100)"
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "enum": ["on_track", "at_risk", "behind", "achieved", "missed"],
+        "description": "Overall OKR status"
+      },
+      "confidence_level": {
+        "type": "string",
+        "enum": ["high", "medium", "low"],
+        "description": "Team's confidence level in achieving this OKR by quarter end"
+      },
+      "blockers": {
+        "type": "string",
+        "description": "Known blockers or risks to achieving this OKR"
+      }
+    }
+  },
+  {
+    "name": "ldr_exec_briefings",
+    "displayName": "Executive Briefings",
+    "description": "Consolidated cross-functional briefings with key signals, decisions, and action items for leadership",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Briefing title (e.g., Weekly Executive Summary W19 2026)"
+      },
+      "briefing_type": {
+        "type": "string",
+        "required": true,
+        "enum": ["weekly", "monthly", "quarterly", "incident", "board", "ad_hoc"],
+        "description": "Type of briefing"
+      },
+      "period_covered": {
+        "type": "string",
+        "required": true,
+        "description": "Time period this briefing covers (e.g., 2026-05-06 to 2026-05-12)"
+      },
+      "prepared_by": {
+        "type": "string",
+        "required": true,
+        "description": "Person or bot that prepared this briefing"
+      },
+      "audience": {
+        "type": "array",
+        "required": true,
+        "description": "List of intended recipients (e.g., CEO, CFO, Board)"
+      },
+      "key_signals": {
+        "type": "array",
+        "required": true,
+        "description": "Array of {domain, signal, status} objects representing top signals across functions"
+      },
+      "action_items": {
+        "type": "array",
+        "description": "Array of {action, owner, due_date} objects requiring leadership decisions or follow-up"
+      },
+      "summary": {
+        "type": "string",
+        "required": true,
+        "description": "Executive summary paragraph covering the most important developments"
+      },
+      "created_at": {
+        "type": "date",
+        "required": true,
+        "description": "Date the briefing was created"
+      }
+    }
+  },
+  {
+    "name": "ldr_decision_log",
+    "displayName": "Decision Log",
+    "description": "Records of significant decisions with context, rationale, and outcomes",
+    "fields": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Brief title describing the decision"
+      },
+      "decision": {
+        "type": "string",
+        "required": true,
+        "description": "The specific decision made"
+      },
+      "decision_maker": {
+        "type": "string",
+        "required": true,
+        "description": "Person or group who made the decision"
+      },
+      "decision_date": {
+        "type": "date",
+        "required": true,
+        "description": "Date the decision was made"
+      },
+      "category": {
+        "type": "string",
+        "required": true,
+        "enum": ["strategic", "operational", "financial", "people", "product", "technical", "compliance"],
+        "description": "Decision category"
+      },
+      "context": {
+        "type": "string",
+        "required": true,
+        "description": "Background context that led to this decision"
+      },
+      "alternatives_considered": {
+        "type": "string",
+        "description": "Other options that were evaluated before reaching this decision"
+      },
+      "rationale": {
+        "type": "string",
+        "required": true,
+        "description": "Why this decision was made over the alternatives"
+      },
+      "expected_outcome": {
+        "type": "string",
+        "description": "Expected result or impact of this decision"
+      },
+      "actual_outcome": {
+        "type": "string",
+        "description": "Actual outcome once observable (retrospective fill-in)"
+      },
+      "review_date": {
+        "type": "date",
+        "description": "Date to review this decision and assess outcomes"
+      },
+      "strategic_goal_id": {
+        "type": "string",
+        "description": "Reference to ldr_strategic_goals (goal this decision advances)"
+      }
+    }
+  }
+]

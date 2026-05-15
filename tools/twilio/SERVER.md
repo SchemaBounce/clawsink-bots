@@ -9,6 +9,10 @@ metadata:
   tags: ["twilio", "sms", "voice", "messaging", "communications"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "TWILIO"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like TWILIO_*."
 transport:
   type: "stdio"
   command: "npx"

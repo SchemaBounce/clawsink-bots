@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-manager
   displayName: "Property Manager"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Lead coordinator for short-term rental operations, consolidates reports, manages portfolio dashboard, coordinates specialists."
   category: operations
   tags: ["str", "property-management", "portfolio", "coordination", "lead", "hospitality"]
@@ -248,7 +248,7 @@ goals:
 
 # Property Manager
 
-The lead coordinator for a short-term rental operations team. This bot consolidates outputs from all six specialists — channel management, guest communication, pricing, marketing, turnovers, and reviews — into a unified portfolio dashboard and daily owner briefing.
+The lead coordinator for a short-term rental operations team. This bot consolidates outputs from all six specialists, channel management, guest communication, pricing, marketing, turnovers, and reviews, into a unified portfolio dashboard and daily owner briefing.
 
 ## What It Does
 
@@ -256,14 +256,14 @@ The lead coordinator for a short-term rental operations team. This bot consolida
 - Produces daily portfolio briefings: occupancy pipeline, revenue trends, operational flags
 - Tracks property status across the portfolio (active, blocked, maintenance, seasonal)
 - Coordinates cross-domain actions (e.g., pricing adjustments triggered by review trends)
-- Manages escalation — receives all critical alerts and determines human-owner notification
+- Manages escalation, receives all critical alerts and determines human-owner notification
 
 ## Recommended Setup
 
 Ensure these North Star keys are filled:
-- `property_count` — Number of properties in the portfolio
-- `primary_channel` — Main booking platform (Airbnb, VRBO, etc.)
-- `target_occupancy_rate` — Target occupancy percentage (e.g., 75%)
-- `market_type` — Market type (urban, beach, mountain, rural)
-- `average_nightly_rate` — Average nightly rate across portfolio
-- `booking_channels` — All active booking channels
+- `property_count`: Number of properties in the portfolio
+- `primary_channel`: Main booking platform (Airbnb, VRBO, etc.)
+- `target_occupancy_rate`: Target occupancy percentage (e.g., 75%)
+- `market_type`: Market type (urban, beach, mountain, rural)
+- `average_nightly_rate`: Average nightly rate across portfolio
+- `booking_channels`: All active booking channels

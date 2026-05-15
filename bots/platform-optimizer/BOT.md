@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.5"
+  version: "1.0.8"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -83,7 +83,7 @@ schedule:
 messaging:
   listensTo:
     - { type: "request", from: ["executive-assistant"] }
-    - { type: "finding", from: ["data-engineer", "data-quality-monitor", "infrastructure-reporter", "mentor-coach"] }
+    - { type: "finding", from: ["data-engineer", "data-quality-monitor", "infrastructure-reporter", "mentor-coach", "agent-cost-optimizer"] }
   sendsTo:
     - { type: "finding", to: ["executive-assistant"], when: "daily platform health report ready or significant optimization opportunity identified" }
     - { type: "alert", to: ["executive-assistant"], when: "critical platform health issue, storage limit approaching, systemic agent failures, crystallization regression" }
@@ -114,6 +114,13 @@ plugins:
     config:
       embedding_model: "text-embedding-3-small"
       max_results: 20
+mcpServers: []
+# Internal-only by design, first-party platform bot. Optimises this
+# workspace's crystallization candidates, agent efficiency, data health,
+# and platform ROI via adl_list_crystallization_candidates,
+# adl_query_records, adl_get_data_stats, and adl_query_duckdb. No
+# third-party MCP, no external SaaS, this bot is the canonical example
+# of platform value Composio cannot replicate.
 requirements:
   minTier: "starter"
 setup:
@@ -243,7 +250,7 @@ goals:
 
 The SchemaBounce-recommended platform optimization bot. Maximizes the value users get from the ADL, crystallization engine, and the entire SchemaBounce platform by continuously analyzing agent performance, accelerating crystallization, monitoring data health, and recommending cost optimizations.
 
-**Recommended for ALL teams.** This bot typically pays for itself — crystallization acceleration and model downgrade recommendations save more tokens than the optimizer consumes.
+**Recommended for ALL teams.** This bot typically pays for itself, crystallization acceleration and model downgrade recommendations save more tokens than the optimizer consumes.
 
 ## What It Does
 
@@ -251,7 +258,7 @@ The SchemaBounce-recommended platform optimization bot. Maximizes the value user
 - Monitors query patterns for repeating patterns approaching the 3-in-7-days crystallization threshold
 - Proactively proposes crystallization via `propose_crystallization` to accelerate the flywheel
 - Tracks the full crystallization lifecycle: patterns detected, proposals made, skills approved, token savings realized
-- Goal: maximize the flywheel — more patterns, more skills, less LLM cost
+- Goal: maximize the flywheel, more patterns, more skills, less LLM cost
 
 ### Agent Performance Optimization
 - Reads `agent_runs` to analyze per-agent token consumption, duration, and tool call patterns
@@ -286,8 +293,8 @@ The SchemaBounce-recommended platform optimization bot. Maximizes the value user
 
 Delegates focused analysis to two sub-agents for token efficiency:
 
-1. **crystallization-analyst** (haiku) — Scans query patterns, proposes crystallization, calculates token savings
-2. **cost-analyzer** (haiku) — Per-agent cost metrics, model downgrade modeling, ROI estimates
+1. **crystallization-analyst** (haiku), Scans query patterns, proposes crystallization, calculates token savings
+2. **cost-analyzer** (haiku), Per-agent cost metrics, model downgrade modeling, ROI estimates
 
 ## Escalation Behavior
 

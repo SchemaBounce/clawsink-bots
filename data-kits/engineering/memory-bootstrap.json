@@ -1,0 +1,77 @@
+{
+  "namespace": "kit:engineering:defaults",
+  "entries": [
+    {
+      "key": "kpi:mttr",
+      "value": "Mean Time to Resolve (MTTR) target is <4 hours for sev1/sev2 incidents. Calculate as average time from detection to resolution across the rolling 30-day window. MTTR above 8 hours for sev1 requires an incident process review. Track separately by service tier.",
+      "category": "kpi",
+      "tags": ["incidents", "reliability", "sre"]
+    },
+    {
+      "key": "kpi:deployment_frequency",
+      "value": "Target deployment frequency is at least once per day to production for mature teams. Weekly deployments are acceptable during early-stage growth. Deployment frequency below monthly indicates process bottlenecks. Track per service, not just as a team aggregate.",
+      "category": "kpi",
+      "tags": ["deployments", "velocity", "ci-cd"]
+    },
+    {
+      "key": "kpi:change_failure_rate",
+      "value": "Change Failure Rate (CFR) = deployments causing incidents / total deployments. Target <15%. Above 25% signals insufficient testing or review gates. Track by service and deploy type. Canary deployments should have CFR near zero before full rollout.",
+      "category": "kpi",
+      "tags": ["deployments", "quality", "reliability"]
+    },
+    {
+      "key": "kpi:service_availability",
+      "value": "Target availability for tier1 services is >99.9% (8.7 hours downtime/year). Tier2 services target >99.5%. Tier3 services target >99%. Calculate as (total_minutes - downtime_minutes) / total_minutes * 100 over a rolling 30-day window. Report per service, not as an average.",
+      "category": "kpi",
+      "tags": ["availability", "sla", "reliability"]
+    },
+    {
+      "key": "kpi:sprint_velocity",
+      "value": "Track sprint velocity as story points completed per sprint. A healthy team has stable velocity within a 15% band. Velocity declining 3+ sprints in a row signals a problem. Velocity spikes often hide quality debt. Never use velocity for cross-team comparison.",
+      "category": "kpi",
+      "tags": ["sprints", "velocity", "agile"]
+    },
+    {
+      "key": "kpi:blocked_task_ratio",
+      "value": "Blocked Task Ratio = blocked tasks / total active tasks. Target <5%. Above 10% means dependency management is failing. Review blockers in daily standup. Any task blocked for more than 2 days needs an escalation path. Track blocker source (external, internal, unclear spec).",
+      "category": "kpi",
+      "tags": ["tasks", "flow", "agile"]
+    },
+    {
+      "key": "threshold:incident_sev1_response",
+      "value": "Sev1 incidents require an incident commander assigned within 5 minutes of detection. First customer communication within 15 minutes. Status update every 30 minutes until resolved. Postmortem must be completed within 5 business days of resolution.",
+      "category": "threshold",
+      "tags": ["incidents", "response", "sev1"]
+    },
+    {
+      "key": "threshold:deployment_rollback",
+      "value": "Trigger automatic rollback when error rate increases >5% within 10 minutes of a deployment, or when a health check fails post-deploy. Manual rollback decision should be made within 15 minutes of a sev2 incident caused by a deployment. Never leave a failed deployment in production overnight.",
+      "category": "threshold",
+      "tags": ["deployments", "rollback", "reliability"]
+    },
+    {
+      "key": "threshold:runbook_staleness",
+      "value": "Alert when any runbook has not been reviewed in 90 days. Runbooks for tier1 services must be reviewed every 60 days. A runbook that has not been executed in 180 days should be evaluated for archival or automation. Stale runbooks are a reliability risk during incidents.",
+      "category": "threshold",
+      "tags": ["runbooks", "maintenance", "reliability"]
+    },
+    {
+      "key": "best-practice:incident_postmortem",
+      "value": "Every sev1 and sev2 incident requires a blameless postmortem. Postmortems should answer: what happened, why it happened, how it was detected, how it was resolved, and what changes prevent recurrence. Action items from postmortems must have owners and deadlines. Share postmortems with the full engineering team.",
+      "category": "best-practice",
+      "tags": ["incidents", "postmortem", "learning"]
+    },
+    {
+      "key": "best-practice:sprint_planning",
+      "value": "Sprint planning should leave 20% of capacity for unplanned work and bugs. Never plan more than 80% of historical velocity. Each sprint should have a single primary goal that fits in one sentence. Stories that cannot be completed within one sprint must be split before planning. Carry zero stories into the next sprint more than twice before escalating.",
+      "category": "best-practice",
+      "tags": ["sprints", "planning", "agile"]
+    },
+    {
+      "key": "terminology:four_key_metrics",
+      "value": "The four DORA metrics for engineering performance: Deployment Frequency (how often you ship), Lead Time for Changes (time from commit to production), Change Failure Rate (percentage of deployments causing failures), and Time to Restore Service (MTTR). Elite performers ship multiple times per day with <1h lead time, <5% CFR, and <1h MTTR.",
+      "category": "terminology",
+      "tags": ["dora", "metrics", "benchmarks"]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "northStar": {
+    "cost_thresholds": {
+      "idle_warn_days": 14,
+      "idle_critical_days": 30,
+      "fanout_warn_count": 3,
+      "fanout_critical_count": 5,
+      "runrate_warn_usd": 100,
+      "runrate_critical_usd": 500,
+      "failure_rate_warn": 0.01,
+      "failure_rate_critical": 0.05,
+      "error_count_warn_lifetime": 100,
+      "error_count_critical_lifetime": 1000,
+      "_comment": "Tune per-workspace. Defaults err on the side of surfacing. Lower thresholds = more findings per run; raise them once the team has cleared baseline noise. Run-rate thresholds activate once the runtime exposes pipeline_event_rollups via adl_get_route_metrics."
+    },
+    "idle_definition": {
+      "lookback_days": 14,
+      "_comment": "A route is 'idle' if last_event_at is null OR older than lookback_days. The analyzer also rolls up days_since_last_event so the recommender can rank severity. Routes legitimately bursty (cron-driven sources firing once a quarter) should be exempted via a per-route override stored in cost:audit:cache memory namespace."
+    },
+    "sink_cost_table": {
+      "_comment": "Cost-per-event estimates by sink type. The recommender uses these against events_30d (from adl_get_route_metrics) to project monthly run-rate. Rough order-of-magnitude defaults; operators should override with their actual contracted rates per provider.",
+      "_units": "USD per event delivered (rough order of magnitude, not invoice-accurate)",
+      "postgres": 0.000001,
+      "mysql": 0.000001,
+      "mssql": 0.000001,
+      "kafka": 0.000002,
+      "snowflake": 0.00001,
+      "bigquery": 0.000008,
+      "redshift": 0.00001,
+      "databricks": 0.00001,
+      "clickhouse": 0.000005,
+      "s3": 0.0000005,
+      "webhook": 0.0000003,
+      "openclaw": 0.000001,
+      "agent_datastore": 0.0000005,
+      "_default": 0.0000005
+    },
+    "company_glossary": {
+      "route": "A configured pipeline path from a source to one or more sinks. Defined in pipeline_routes table.",
+      "sink": "A delivery destination (database, lake, queue, webhook). Defined in environment_sinks table.",
+      "source": "An ingest origin (CDC bridge, SaaS connector, webhook receiver, direct push). Defined in workspace_sources table.",
+      "fan-out": "Number of sinks attached to a single route. Multiplies per-event cost.",
+      "lifetime_volume_bucket": "Quartile-style bucket (none/low/med/high) the analyzer assigns each route based on events_processed_lifetime relative to the workspace distribution. Used in place of a per-window run-rate until the runtime exposes window-based event counts."
+    }
+  }
+}

@@ -1,0 +1,94 @@
+[
+  {
+    "name": "cs_tickets",
+    "displayName": "Support Tickets",
+    "description": "Customer support tickets with severity, SLA tracking, channel, and resolution data",
+    "fields": {
+      "subject": { "type": "string", "required": true, "description": "Ticket subject line" },
+      "description": { "type": "string", "required": true, "description": "Detailed issue description" },
+      "customer_email": { "type": "string", "required": true, "description": "Customer email address" },
+      "customer_name": { "type": "string", "required": true, "description": "Customer name" },
+      "company": { "type": "string", "description": "Customer company name" },
+      "severity": { "type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Issue severity level" },
+      "category": { "type": "string", "required": true, "enum": ["bug", "question", "feature_request", "billing", "onboarding", "integration", "performance", "security"], "description": "Ticket category" },
+      "status": { "type": "string", "required": true, "enum": ["open", "in_progress", "waiting_customer", "waiting_internal", "resolved", "closed"], "description": "Current ticket status" },
+      "channel": { "type": "string", "required": true, "enum": ["email", "chat", "phone", "portal", "social", "api"], "description": "Channel through which the ticket was submitted" },
+      "assignee": { "type": "string", "description": "Assigned support agent" },
+      "priority_level": { "type": "string", "enum": ["standard", "premium", "enterprise"], "description": "Customer support tier" },
+      "contact_id": { "type": "string", "description": "Reference to cs_contacts" },
+      "created_at": { "type": "date", "required": true, "description": "Ticket creation timestamp" },
+      "first_response_at": { "type": "date", "description": "First agent response timestamp" },
+      "resolved_at": { "type": "date", "description": "Resolution timestamp" },
+      "satisfaction_score": { "type": "number", "description": "Post-resolution CSAT score (1-5)" }
+    }
+  },
+  {
+    "name": "cs_contacts",
+    "displayName": "Customer Contacts",
+    "description": "Customer contact records linked to tickets, conversations, and NPS responses",
+    "fields": {
+      "first_name": { "type": "string", "required": true, "description": "Contact first name" },
+      "last_name": { "type": "string", "required": true, "description": "Contact last name" },
+      "email": { "type": "string", "required": true, "description": "Primary email address" },
+      "company": { "type": "string", "description": "Customer company name" },
+      "phone": { "type": "string", "description": "Phone number" },
+      "plan_tier": { "type": "string", "enum": ["free", "starter", "team", "scale", "enterprise"], "description": "Current plan tier" },
+      "status": { "type": "string", "required": true, "enum": ["active", "at_risk", "churned"], "description": "Customer health status" },
+      "lifetime_tickets": { "type": "number", "description": "Total tickets opened by this contact" },
+      "avg_satisfaction_score": { "type": "number", "description": "Average CSAT score across resolved tickets" },
+      "customer_since": { "type": "date", "description": "Date customer first signed up" },
+      "last_contacted_at": { "type": "date", "description": "Date of most recent interaction" },
+      "tags": { "type": "array", "description": "Segmentation tags (e.g. vip, churning, expansion)" }
+    }
+  },
+  {
+    "name": "cs_conversations",
+    "displayName": "Conversations",
+    "description": "Full conversation history between agents and customers, with transcripts and resolution notes",
+    "fields": {
+      "ticket_id": { "type": "string", "required": true, "description": "Reference to cs_tickets" },
+      "contact_id": { "type": "string", "required": true, "description": "Reference to cs_contacts" },
+      "channel": { "type": "string", "required": true, "enum": ["email", "chat", "phone", "portal"], "description": "Conversation channel" },
+      "transcript": { "type": "string", "description": "Full conversation transcript or summary" },
+      "agent": { "type": "string", "required": true, "description": "Agent who handled the conversation" },
+      "started_at": { "type": "date", "required": true, "description": "Conversation start time" },
+      "ended_at": { "type": "date", "description": "Conversation end time" },
+      "duration_minutes": { "type": "number", "description": "Conversation duration in minutes" },
+      "resolution_notes": { "type": "string", "description": "Agent notes on how the issue was resolved" },
+      "outcome": { "type": "string", "enum": ["resolved", "escalated", "callback_scheduled", "awaiting_reply"], "description": "Conversation outcome" }
+    }
+  },
+  {
+    "name": "cs_feedback",
+    "displayName": "Customer Feedback",
+    "description": "Post-interaction satisfaction ratings and free-text feedback from customers",
+    "fields": {
+      "ticket_id": { "type": "string", "description": "Reference to cs_tickets (if from a ticket interaction)" },
+      "contact_id": { "type": "string", "required": true, "description": "Reference to cs_contacts" },
+      "rating": { "type": "number", "required": true, "description": "Satisfaction rating (1-5)" },
+      "feedback_text": { "type": "string", "description": "Free-text customer feedback" },
+      "category": { "type": "string", "enum": ["speed", "quality", "agent_knowledge", "ease_of_use", "follow_up", "overall"], "description": "Feedback category" },
+      "sentiment": { "type": "string", "enum": ["positive", "neutral", "negative", "mixed"], "description": "Detected sentiment" },
+      "submitted_at": { "type": "date", "required": true, "description": "Date feedback was submitted" },
+      "follow_up_required": { "type": "boolean", "description": "Whether this feedback requires a follow-up action" }
+    }
+  },
+  {
+    "name": "cs_nps_responses",
+    "displayName": "NPS Responses",
+    "description": "Net Promoter Score survey responses with scoring, segmentation, and follow-up tracking",
+    "fields": {
+      "respondent_email": { "type": "string", "required": true, "description": "Survey respondent email" },
+      "respondent_name": { "type": "string", "description": "Survey respondent name" },
+      "contact_id": { "type": "string", "description": "Reference to cs_contacts" },
+      "company": { "type": "string", "description": "Respondent company name" },
+      "score": { "type": "number", "required": true, "description": "NPS score (0-10)" },
+      "segment": { "type": "string", "required": true, "enum": ["detractor", "passive", "promoter"], "description": "NPS segment derived from score" },
+      "feedback": { "type": "string", "description": "Open-ended feedback text" },
+      "survey_trigger": { "type": "string", "required": true, "enum": ["quarterly", "post_onboarding", "post_support", "annual", "milestone"], "description": "What triggered this survey" },
+      "plan_tier": { "type": "string", "enum": ["free", "starter", "team", "scale", "enterprise"], "description": "Customer plan at time of survey" },
+      "survey_date": { "type": "date", "required": true, "description": "Date survey was completed" },
+      "follow_up_status": { "type": "string", "enum": ["none", "scheduled", "completed", "declined"], "description": "Follow-up action status" }
+    }
+  }
+]

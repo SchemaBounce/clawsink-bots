@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:hr:defaults",
+  "entries": [
+    {
+      "key": "kpi:employee_retention_rate",
+      "value": "Target annual employee retention rate is >90%. Calculate as (employees_at_end - new_hires) / employees_at_start * 100. Voluntary turnover above 15% is critical. Track by department - one high-turnover team can mask healthy overall numbers.",
+      "category": "kpi",
+      "tags": ["retention", "turnover", "attrition"]
+    },
+    {
+      "key": "kpi:time_to_hire",
+      "value": "Target time to hire is <30 days from job posting to accepted offer. Engineering roles may take 45-60 days. Track by stage: sourcing, screening, interview, offer. If any stage exceeds 7 days, investigate bottlenecks.",
+      "category": "kpi",
+      "tags": ["recruiting", "hiring", "velocity"]
+    },
+    {
+      "key": "kpi:onboarding_completion_rate",
+      "value": "Target >95% of onboarding tasks completed within 30 days of hire date. IT setup and compliance tasks must be 100% complete by day 1. Training and introductions by day 14. Incomplete onboarding increases 90-day turnover by 2x.",
+      "category": "kpi",
+      "tags": ["onboarding", "completion", "new-hire"]
+    },
+    {
+      "key": "kpi:leave_utilization",
+      "value": "Target leave utilization is 70-90% of annual allowance. Below 60% signals burnout risk or cultural pressure not to take time off. Above 95% may indicate gaming or inadequate staffing. Track by department and encourage minimum 2-week blocks.",
+      "category": "kpi",
+      "tags": ["leave", "utilization", "wellbeing"]
+    },
+    {
+      "key": "kpi:performance_review_completion",
+      "value": "Target >98% of reviews completed on schedule. Late reviews demoralize employees and delay compensation decisions. Managers with overdue reviews should be blocked from approving new hires. Review cycles: semi-annual recommended for companies under 200 employees.",
+      "category": "kpi",
+      "tags": ["performance", "reviews", "compliance"]
+    },
+    {
+      "key": "kpi:headcount_growth_rate",
+      "value": "Track headcount growth rate vs revenue growth rate. Healthy ratio: revenue grows faster than headcount (improving revenue-per-employee). Headcount growing faster than revenue for 2+ quarters signals inefficiency. Track planned vs actual headcount by department.",
+      "category": "kpi",
+      "tags": ["headcount", "growth", "efficiency"]
+    },
+    {
+      "key": "threshold:onboarding_overdue_alert",
+      "value": "Alert when any onboarding task is overdue by >3 days. Critical tasks (IT setup, compliance) should alert immediately on the due date. Escalate to the new hire's manager after 5 days overdue. Block marking onboarding as complete until all high-priority tasks are done.",
+      "category": "threshold",
+      "tags": ["onboarding", "alerting", "overdue"]
+    },
+    {
+      "key": "threshold:leave_balance_alert",
+      "value": "Alert employees with >80% of annual leave remaining when Q3 begins. Alert managers when a direct report hasn't taken time off in 90+ days. Flag departments where average utilization is below 50% for HR review.",
+      "category": "threshold",
+      "tags": ["leave", "balance", "alerting"]
+    },
+    {
+      "key": "best-practice:performance_reviews",
+      "value": "Use a consistent rating scale (1-5) across the organization. Always include specific examples for each rating. Set 3-5 measurable goals per review period. Reviews should be a conversation, not a surprise - no new feedback should appear for the first time in a formal review.",
+      "category": "best-practice",
+      "tags": ["performance", "feedback", "management"]
+    },
+    {
+      "key": "best-practice:onboarding_structure",
+      "value": "Day 1: IT setup, welcome meeting, office tour, compliance docs. Week 1: team introductions, role overview, first small task. Month 1: buddy check-ins, 30-day feedback session, all training complete. Assign an onboarding buddy who is NOT the direct manager.",
+      "category": "best-practice",
+      "tags": ["onboarding", "new-hire", "structure"]
+    }
+  ]
+}

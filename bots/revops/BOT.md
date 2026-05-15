@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revops
   displayName: "Revenue Operations"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "CAC/LTV analysis, pipeline-to-revenue attribution, conversion funnel optimization, and revenue forecasting."
   category: finance
   tags: ["revenue-operations", "attribution", "cac-ltv", "forecasting", "conversion"]
@@ -261,6 +261,6 @@ Bridges cross-functional data from sales, marketing, and customer success to opt
 ## Recommended Setup
 
 Set these North Star keys for best results:
-- `revenue_targets` — ARR, MRR, or revenue growth targets
-- `attribution_model` — Preferred attribution method (first-touch, last-touch, multi-touch)
-- `growth_targets` — Customer acquisition and expansion targets
+- `revenue_targets`: ARR, MRR, or revenue growth targets
+- `attribution_model`: Preferred attribution method (first-touch, last-touch, multi-touch)
+- `growth_targets`: Customer acquisition and expansion targets

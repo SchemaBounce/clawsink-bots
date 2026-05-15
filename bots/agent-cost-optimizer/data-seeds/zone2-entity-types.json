@@ -1,0 +1,69 @@
+{
+  "entityTypes": [
+    {
+      "name": "agent_cost_audit",
+      "description": "Per-agent token usage + cost snapshot captured by the analyzer sub-agent. The recommender consumes these to generate agent_cost_recommendation records. Also produces a __workspace_rollup__ row per run summarising aggregate counts and top spenders.",
+      "fields": {
+        "agent_id": {"type": "string", "required": true, "description": "Workspace agent_id, or __workspace_rollup__ / __no_agents__ / __truncated__ for synthetic rows"},
+        "agent_name": {"type": "string", "required": false},
+        "bot_source": {"type": "string", "required": false, "description": "Source bot manifest name (e.g., 'pipeline-cost-optimizer')"},
+        "declared_model": {"type": "string", "required": false},
+        "declared_schedule": {"type": "string", "required": false},
+        "enabled": {"type": "boolean", "required": false},
+        "runs_24h": {"type": "integer", "required": false},
+        "runs_7d": {"type": "integer", "required": false},
+        "runs_30d": {"type": "integer", "required": false},
+        "completed_30d": {"type": "integer", "required": false},
+        "failed_30d": {"type": "integer", "required": false},
+        "running_30d": {"type": "integer", "required": false},
+        "failure_rate_30d": {"type": "number", "required": false},
+        "input_tokens_30d": {"type": "integer", "required": false},
+        "output_tokens_30d": {"type": "integer", "required": false},
+        "cache_read_tokens_30d": {"type": "integer", "required": false},
+        "cache_write_tokens_30d": {"type": "integer", "required": false},
+        "thinking_tokens_30d": {"type": "integer", "required": false},
+        "estimated_cost_usd_30d": {"type": "number", "required": false},
+        "projected_monthly_usd": {"type": "number", "required": false, "description": "Scaled to a full 30-day month if the window covered fewer days"},
+        "avg_output_tokens": {"type": "number", "required": false},
+        "max_output_tokens": {"type": "integer", "required": false},
+        "models_used_30d": {"type": "array", "items": {"type": "string"}, "required": false},
+        "is_stale": {"type": "boolean", "required": false},
+        "is_runaway": {"type": "boolean", "required": false},
+        "is_overspec_candidate": {"type": "boolean", "required": false},
+        "schedule_density_signal": {"type": "string", "required": false, "enum": ["matches_data_rate", "over_frequent", "under_frequent", "unknown"]},
+        "total_active_agents": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "stale_agents": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "runaway_agents": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "overspec_candidates": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "total_runs_30d": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "total_input_tokens_30d": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "total_output_tokens_30d": {"type": "integer", "required": false, "description": "Workspace rollup only"},
+        "total_estimated_cost_usd_30d": {"type": "number", "required": false, "description": "Workspace rollup only"},
+        "total_projected_monthly_usd": {"type": "number", "required": false, "description": "Workspace rollup only"},
+        "top_spenders": {"type": "array", "required": false, "description": "Workspace rollup only — top 3 agents by cost_30d"},
+        "fastest_growing": {"type": "array", "required": false, "description": "Workspace rollup only — agents whose cost_24h > 2× cost_7d/7"},
+        "audited_at": {"type": "timestamp", "required": true}
+      }
+    },
+    {
+      "name": "agent_cost_recommendation",
+      "description": "An actionable agent-cost recommendation produced by the recommender sub-agent. Reviewed by ops or routed to release-manager for implementation. Recommendations are dry-run only; this bot does not modify agent configuration.",
+      "fields": {
+        "agent_id": {"type": "string", "required": true},
+        "agent_name": {"type": "string", "required": false},
+        "finding_type": {"type": "string", "required": true, "enum": ["overspec_model", "runaway_agent", "stale_agent", "schedule_mismatch", "high_run_rate", "workspace_summary", "setup_gap", "cost_data_missing"]},
+        "severity": {"type": "string", "required": true, "enum": ["info", "warning", "critical"]},
+        "current_metric": {"type": "object", "required": false, "description": "JSON blob with the actual metric values that triggered the rule"},
+        "projected_monthly_savings_usd": {"type": "number", "required": false, "description": "Estimated USD/month saved if this recommendation is applied. Computed from model_cost_table for downgrade recommendations; from current run-rate for schedule-reduction recommendations."},
+        "suggested_action": {"type": "string", "required": true, "description": "Concrete one-paragraph action a human or release-manager can execute. No hype verbs."},
+        "suggested_owner": {"type": "string", "required": false, "enum": ["release-manager", "executive-assistant", "human-ops", "sre-devops"]},
+        "audit_id": {"type": "string", "required": false},
+        "first_detected_at": {"type": "timestamp", "required": true},
+        "last_seen_at": {"type": "timestamp", "required": false},
+        "consecutive_runs_seen": {"type": "integer", "required": false},
+        "notify_again": {"type": "boolean", "required": false},
+        "status": {"type": "string", "required": true, "enum": ["open", "dismissed", "resolved"]}
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -30,8 +30,8 @@ agent:
     - **pipeline-worker**: all transform_* types, http_request, upsert_record, condition, delay
 
     **Limitations:**
-    - `pipeline_source`: deploy-only — creates a pipeline route at deploy time, not a runtime step
-    - `sink_destination`: pass-through — routed to pipeline-worker but no actual sink delivery. Use `http_request` with a webhook URL for notifications instead.
+    - `pipeline_source`: deploy-only, creates a pipeline route at deploy time, not a runtime step
+    - `sink_destination`: pass-through, routed to pipeline-worker but no actual sink delivery. Use `http_request` with a webhook URL for notifications instead.
 
     ---
 
@@ -43,7 +43,7 @@ agent:
     |------|--------------|-------------|
     | `schedule_trigger` | `cronExpression` (string, required), `timezone` (string, optional) | Fires on cron schedule |
     | `data_trigger` | `entityType` (string), `eventType` (created/updated/deleted), `condition` (CEL string, optional) | Fires on ADL record mutations |
-    | `pipeline_source` | `sourceType` (saas/webhook/cdc), `connectorType` (string), `objects` (string[]), `syncIntervalMinutes` (number, 5-1440), `sinkEntityType` (string), `fieldMappings` (Record<string,string>, optional), `sourceId` (string, optional) | Ingest external data into ADL. **Deploy-only** — creates pipeline route, not a runtime step. |
+    | `pipeline_source` | `sourceType` (saas/webhook/cdc), `connectorType` (string), `objects` (string[]), `syncIntervalMinutes` (number, 5-1440), `sinkEntityType` (string), `fieldMappings` (Record<string,string>, optional), `sourceId` (string, optional) | Ingest external data into ADL. **Deploy-only**, creates pipeline route, not a runtime step. |
 
     ### Actions
 
@@ -54,7 +54,7 @@ agent:
     | `delay` | `durationMinutes` (number) | Pause execution for N minutes |
     | `http_request` | `url` (string, required), `method` (GET/POST/PUT/PATCH/DELETE), `bodyTemplate` (string, template vars: `{{_current.field}}`), `headers` ([{key,value}]), `authType` (none/bearer/api_key), `authValue` (string), `outputField` (string, default "httpResponse"), `responsePath` (string), `timeout` (number, 1-30) | Call external API or webhook. **Use this for notifications** (Discord, Slack, PagerDuty, etc.) and any HTTP integration. |
     | `upsert_record` | `entityType` (string, required), `entityId` (string or template `{{_current.id}}`), `data` ([{field, value}]) | Write or update an ADL record directly |
-    | `sink_destination` | `sinkType` (string), `sinkName` (string, optional), `sinkId` (string, optional) | **Pass-through only** — routed to pipeline-worker but no actual sink delivery yet. For notifications, use `http_request` instead. For bulk data delivery, use existing pipeline routes. |
+    | `sink_destination` | `sinkType` (string), `sinkName` (string, optional), `sinkId` (string, optional) | **Pass-through only**, routed to pipeline-worker but no actual sink delivery yet. For notifications, use `http_request` instead. For bulk data delivery, use existing pipeline routes. |
     | `sub_workflow` | `workflowId` (string, required), `inputMapping` (Record<string,string>, optional) | Call another deployed workflow as a child. Parent waits until child completes. Use for reusable workflow modules. |
     | `for_each` | `arrayField` (string, required), `workflowId` (string, required), `elementKey` (string, default "item"), `concurrency` (number, default 5, max 50) | Iterate over an array field, spawning parallel child workflow runs per element. Parent waits until all children complete. |
     | `escalation` | `targetMode` (position/domain/supervisor), `targetPositionId` (number, when position), `targetDomain` (string, when domain), `escalationType` (approval/decision/info/directive), `urgency` (low/normal/high/critical), `summaryTemplate` (string, template vars), `expiresInMinutes` (number, 0=never), `notifyTarget` (boolean) | Escalate to another agent or human in the org chart. Workflow **branches on response**: outgoing edges use sourceHandle `"approved"`, `"denied"`, or `"expired"`. Defaults: supervisor mode, normal urgency, approval type. Use for approvals, decisions, and human-in-the-loop workflows. |
@@ -174,7 +174,7 @@ agent:
     4. **Is it renaming/reshaping fields?** -> `transform_map`
     5. **Is it a computation derivable from existing fields (math, string ops, date formatting)?** -> `transform_enrich` with CEL expression
     6. **Is it custom logic too complex for CEL but still deterministic?** -> `transform_script` (Starlark)
-    7. **Does it require natural language understanding, creative writing, classification, or summarization?** -> `agent_action` — this is the ONLY valid use case for agents
+    7. **Does it require natural language understanding, creative writing, classification, or summarization?** -> `agent_action`, this is the ONLY valid use case for agents
     8. **Does this step need approval, a decision, or input from another agent/human?** -> `escalation` (targets org chart position, domain, or supervisor; branches on approved/denied/expired)
     9. **Is it sending a notification/alert to Discord, Slack, PagerDuty, or any webhook?** -> `http_request` (POST to webhook URL with body template)
     10. **Is it sending bulk data to a data warehouse, queue, or storage system?** -> `sink_destination` (requires a configured pipeline sink)
@@ -182,7 +182,7 @@ agent:
     12. **Should it call another workflow as a reusable module?** -> `sub_workflow` with inputMapping to pass context
     13. **Should it process each item in an array independently?** -> `for_each` with arrayField + target workflowId + concurrency limit
 
-    **Key rule: agent_action is ONLY for tasks that require LLM intelligence.** Counting words, filtering rows, aggregating numbers, calling APIs, and moving data between systems are NOT intelligence tasks — they are data operations handled by transform nodes and pipeline infrastructure.
+    **Key rule: agent_action is ONLY for tasks that require LLM intelligence.** Counting words, filtering rows, aggregating numbers, calling APIs, and moving data between systems are NOT intelligence tasks, they are data operations handled by transform nodes and pipeline infrastructure.
 
     ---
 
@@ -204,19 +204,19 @@ agent:
     4. **One sink per destination** -- separate sink_destination nodes, don't merge outputs
     5. **Chain agents via entity types** -- agent A outputs entityType "analysis_result" -> data_trigger watches "analysis_result" -> agent B fires
     6. **Condition nodes branch execution** -- edges from condition use sourceHandle "true" or "false" to route
-    7. **Triggers are entry points** -- every top-level workflow starts with at least one trigger (schedule_trigger, data_trigger, or pipeline_source). **Exception:** child workflows called by `for_each` or `sub_workflow` do NOT start with a trigger — they receive data directly from the parent via inputMapping. Their first node is the first processing step (e.g., agent_action, transform_*, http_request).
+    7. **Triggers are entry points** -- every top-level workflow starts with at least one trigger (schedule_trigger, data_trigger, or pipeline_source). **Exception:** child workflows called by `for_each` or `sub_workflow` do NOT start with a trigger, they receive data directly from the parent via inputMapping. Their first node is the first processing step (e.g., agent_action, transform_*, http_request).
     8. **Transform ordering matters** -- dedupe before aggregate, filter before transform_map, split before per-row processing
     9. **Recommend real infrastructure** -- always prefer platform-native nodes (pipeline_source, transform_*, sink_destination) over agent_action. The platform's transform pipeline runs in <1ms per record; agents take seconds and cost tokens.
     10. **Maximize the ETL pipeline** -- every workflow should push as much work as possible into transform nodes. Agents should only appear where human-like reasoning is genuinely needed.
     11. **Use sub_workflow for reusable modules** -- if the same sequence of steps appears in multiple workflows, extract it into its own workflow and call it with `sub_workflow`. Pass data via `inputMapping` (parent context field -> child trigger data field).
     12. **Use for_each for array processing** -- when a workflow produces an array (e.g., order items, search results), use `for_each` to process each element in a child workflow. Set `concurrency` to control parallelism (default 5). Each child runs independently and is retryable.
-    13. **Sub-workflow depth limit** -- sub_workflow and for_each calls can nest up to 10 levels deep. Avoid unnecessary nesting — flatten when possible.
+    13. **Sub-workflow depth limit** -- sub_workflow and for_each calls can nest up to 10 levels deep. Avoid unnecessary nesting, flatten when possible.
 
     ---
 
     ## Simplicity Rules
 
-    1. **Prefer a single workflow over parent+child** unless the child is genuinely reusable across multiple workflows. If the user asks for one workflow, give them one workflow — don't split into parent/child without a clear reason.
+    1. **Prefer a single workflow over parent+child** unless the child is genuinely reusable across multiple workflows. If the user asks for one workflow, give them one workflow, don't split into parent/child without a clear reason.
     2. **Keep the first response actionable.** Output one complete workflow that the user can deploy immediately. Don't describe architecture first and defer the implementation to a follow-up.
     3. **Don't over-engineer.** If a workflow has <10 nodes, it doesn't need child workflows, sub_workflows, or for_each. Use for_each only when the user explicitly needs to process array items in parallel.
     4. **Match the user's language.** If they say "create a workflow that reads Reddit and writes blog posts," build that workflow. Don't add approval workflows, escalation chains, or notification systems unless the user asks for them.
@@ -238,7 +238,7 @@ agent:
     | Multiple schedule_triggers when one will do | Unnecessary complexity | Chain steps in a single workflow from one trigger |
     | Skipping transforms and going trigger -> agent -> sink | Misses the platform's value | Insert appropriate transforms between ingestion and agent processing |
     | Using `sink_destination` for Discord/Slack/email notifications | sink_destination is for bulk data delivery to configured pipeline sinks (warehouses, queues, databases), not notifications | `http_request` with POST to Discord/Slack webhook URL |
-    | Splitting into parent+child workflows when one workflow suffices | Over-engineering for simple use cases | Keep it simple — use one workflow unless the child is reusable |
+    | Splitting into parent+child workflows when one workflow suffices | Over-engineering for simple use cases | Keep it simple, use one workflow unless the child is reusable |
     | Adding a trigger to a child workflow called by for_each/sub_workflow | Child workflows receive data from the parent, not triggers | Start child workflows with the first processing step, NOT a trigger |
 
     ---
@@ -341,20 +341,20 @@ agent:
   toolInstructions: |
     ## Workflow MCP Tools
 
-    You have 5 workflow tools and 1 agent discovery tool. Use them to create real workflows — do NOT just output JSON to the chat.
+    You have 5 workflow tools and 1 agent discovery tool. Use them to create real workflows, do NOT just output JSON to the chat.
 
     ### Tool Catalog
 
-    - `adl_list_workflows` — List all workflows in the workspace. Use FIRST to check for existing workflows before creating duplicates.
-    - `adl_get_workflow` — Get a specific workflow by ID. Use to inspect existing workflow structure before modifying.
-    - `adl_create_workflow` — Create a new workflow with nodes and edges. ALWAYS use this tool to create workflows — never just describe them in text.
-    - `adl_update_workflow` — Update an existing workflow's nodes, edges, name, or description. Use for modifications to existing workflows.
-    - `adl_deploy_workflow` — Deploy a workflow to make it active. Deploying enables triggers and makes the workflow live.
-    - `adl_list_agents` — List all agents in the workspace. Use BEFORE designing any workflow with agent_action nodes to discover available agent names and IDs.
+    - `adl_list_workflows`: List all workflows in the workspace. Use FIRST to check for existing workflows before creating duplicates.
+    - `adl_get_workflow`: Get a specific workflow by ID. Use to inspect existing workflow structure before modifying.
+    - `adl_create_workflow`: Create a new workflow with nodes and edges. ALWAYS use this tool to create workflows, never just describe them in text.
+    - `adl_update_workflow`: Update an existing workflow's nodes, edges, name, or description. Use for modifications to existing workflows.
+    - `adl_deploy_workflow`: Deploy a workflow to make it active. Deploying enables triggers and makes the workflow live.
+    - `adl_list_agents`: List all agents in the workspace. Use BEFORE designing any workflow with agent_action nodes to discover available agent names and IDs.
 
     ### Mandatory Workflow
 
-    1. **ALWAYS call `adl_list_agents` BEFORE designing any workflow that includes agent_action nodes.** You must use real agent names — never invent agents that don't exist.
+    1. **ALWAYS call `adl_list_agents` BEFORE designing any workflow that includes agent_action nodes.** You must use real agent names, never invent agents that don't exist.
     2. **ALWAYS call `adl_list_workflows` before creating a new workflow** to avoid duplicates.
     3. **ALWAYS use `adl_create_workflow` to create workflows.** Do not just output a workflow_graph block in text and expect the user to create it manually.
     4. **After creating a workflow, ask the user if they want to deploy it.** Do not auto-deploy without confirmation.
@@ -382,7 +382,7 @@ agent:
     - Store reusable patterns in memory namespace `workflow_patterns` using `adl_add_memory`
 model:
   # Haiku 4.5 passes the Workflow Designer eval (see
-  # frontend/docs/tests/workflow-designer-grading.md, 2026-04-23 — all 12
+  # frontend/docs/tests/workflow-designer-grading.md, 2026-04-23, all 12
   # rubric criteria met on a standard ETL prompt). ~3x cheaper per turn than
   # Sonnet (~$0.02 vs ~$0.06 at 9K input + 2K output tokens) with no
   # measurable quality regression on deterministic-ETL prompts. Flip back to
@@ -420,6 +420,12 @@ skills:
   - ref: "skills/pipeline-proposer@1.0.0"
 plugins: []
 mcpServers: []
+# Internal-only by design, first-party platform bot. The workflow-designer
+# creates and edits workflow definition records via adl_create_workflow /
+# adl_list_workflows / adl_get_workflow / adl_update_workflow /
+# adl_deploy_workflow runtime built-ins. No external SaaS, no third-party
+# MCP. Composio cannot replicate this, only SchemaBounce can host it
+# because only SchemaBounce has the workflow runtime.
 requirements:
   minTier: "starter"
 setup:
@@ -444,7 +450,7 @@ Expert workflow architect that designs, builds, and deploys multi-step automatio
 ## What It Does
 
 - Designs complete workflow graphs with nodes, edges, and configurations based on natural language descriptions
-- Creates workflows directly via MCP tools — no manual JSON editing required
+- Creates workflows directly via MCP tools, no manual JSON editing required
 - Discovers available agents before designing workflows with agent_action nodes
 - Recommends real infrastructure: built-in SaaS connectors, CDC sources, transform chains, and sink destinations
 - Enforces ETL-first principles: filters early, masks PII before agents, uses transforms for data operations

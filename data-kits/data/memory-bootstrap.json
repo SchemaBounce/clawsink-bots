@@ -1,0 +1,59 @@
+{
+  "namespace": "kit:data:defaults",
+  "entries": [
+    {
+      "key": "kpi:pipeline_success_rate",
+      "value": "Target pipeline success rate is >99% per 30-day rolling window. Below 99% triggers investigation; below 98% is critical. Measure by successful run completions vs total scheduled/triggered runs. A single high-volume pipeline failure can have more downstream impact than 10 low-volume failures - weight by events_per_hour.",
+      "category": "kpi",
+      "tags": ["pipelines", "reliability", "success-rate"]
+    },
+    {
+      "key": "kpi:data_freshness",
+      "value": "Every pipeline with a freshness_sla_minutes must be monitored continuously. Alert when last_updated_at exceeds the SLA. CDC pipelines should have latency <1 second; batch pipelines should complete within their scheduled window. A stale dashboard is worse than no dashboard - users make decisions on old data without knowing it.",
+      "category": "kpi",
+      "tags": ["freshness", "latency", "sla"]
+    },
+    {
+      "key": "kpi:quality_check_pass_rate",
+      "value": "Target quality check pass rate is >99.5% across all active checks. A sustained failure_rate_pct above 0.5% on any single check indicates a systemic upstream data problem, not a random error. Group failures by pipeline_id and rule_type to identify root cause patterns before escalating.",
+      "category": "kpi",
+      "tags": ["data-quality", "pass-rate", "validation"]
+    },
+    {
+      "key": "kpi:anomaly_resolution_time",
+      "value": "Target anomaly resolution time: critical severity <4 hours, high <24 hours, medium <72 hours, low <1 week. Anomalies remaining open beyond their SLA should auto-escalate. Track mean time to resolve (MTTR) by anomaly_type to identify which types are hardest to remediate.",
+      "category": "kpi",
+      "tags": ["anomalies", "resolution-time", "mttr"]
+    },
+    {
+      "key": "kpi:schema_compatibility_rate",
+      "value": "Target 100% schema compatibility rate - no breaking changes should reach production without downstream consumer sign-off. BACKWARD compatibility means new schema can read old data. FORWARD means old schema can read new data. FULL means both. Always prefer BACKWARD or FULL. NONE compatibility mode requires a migration plan before deployment.",
+      "category": "kpi",
+      "tags": ["schema", "compatibility", "breaking-changes"]
+    },
+    {
+      "key": "threshold:anomaly_volume_spike",
+      "value": "Alert on volume_spike anomaly when observed event count exceeds 2x the baseline for more than 5 consecutive minutes. Alert on volume_drop when observed count falls below 50% of baseline. For CDC pipelines, a volume_drop to zero events is always critical - it may indicate a WAL or binlog gap.",
+      "category": "threshold",
+      "tags": ["anomalies", "volume", "thresholds"]
+    },
+    {
+      "key": "threshold:schema_drift_alert",
+      "value": "Alert immediately on schema_drift anomaly type - any unexpected column addition, removal, or type change in a source schema should halt the pipeline if compatibility_mode is not FORWARD or FULL. Unexpected schema changes are the most common cause of pipeline failures in production CDC environments.",
+      "category": "threshold",
+      "tags": ["schema", "drift", "alerting"]
+    },
+    {
+      "key": "best-practice:lineage_documentation",
+      "value": "Every production pipeline should have its key lineage nodes documented in dat_lineage_nodes with DEPENDS_ON edges connecting them. Without lineage, impact analysis for failures or schema changes requires manual investigation. Document lineage at pipeline creation, not retrospectively. Tags on lineage nodes (pii, financial) enable security and compliance audits.",
+      "category": "best-practice",
+      "tags": ["lineage", "documentation", "impact-analysis"]
+    },
+    {
+      "key": "best-practice:quality_rule_coverage",
+      "value": "Every pipeline should have at minimum: one not_null check on primary key fields, one freshness check on the sink, and one completeness check comparing source row count to sink row count within 5 minutes of ingestion. These three checks catch 80% of data quality incidents. Add domain-specific checks (range, regex) for business-critical fields.",
+      "category": "best-practice",
+      "tags": ["data-quality", "rules", "coverage"]
+    }
+  ]
+}

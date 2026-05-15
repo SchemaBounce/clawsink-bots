@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: legal-compliance
   displayName: "Legal & Compliance"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Contract review queue, GDPR/SOC2 compliance tracking, regulatory change monitoring."
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
@@ -232,5 +232,5 @@ Monitors compliance posture, tracks contract review queues, and watches for regu
 ## Recommended Setup
 
 Set these North Star keys:
-- `compliance_requirements` — Active compliance frameworks (GDPR, SOC2, PCI, etc.)
-- `industry` — Used to filter relevant regulatory changes
+- `compliance_requirements`: Active compliance frameworks (GDPR, SOC2, PCI, etc.)
+- `industry`: Used to filter relevant regulatory changes

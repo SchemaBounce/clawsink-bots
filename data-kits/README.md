@@ -31,7 +31,8 @@ metadata:
   displayName: string    # Human-readable name
   version: string        # SemVer (e.g., "1.0.0")
   description: string    # One-line description (<160 chars)
-  category: string       # "industry" or "horizontal"
+  domain: string         # Canonical business-function domain slug (see below)
+  category: string       # The literal string "domain"
   tags: [string]         # Searchable tags
   author: string
 compatibility:
@@ -166,12 +167,13 @@ Example records for optional seeding during kit installation:
 }
 ```
 
-## Categories
+## Domain
 
-| Category | Purpose | Examples |
-|----------|---------|---------|
-| `industry` | Vertical domain-specific kits | Restaurant, Healthcare, Legal, E-Commerce |
-| `horizontal` | Cross-cutting kits that compose with any industry | CRM, Financial Ops, HR, Project Management |
+Every Data Kit belongs to exactly one canonical business-function domain, matching the team it ships with. `metadata.domain` must be one of these 11 slugs:
+
+`customer-service`, `marketing`, `sales`, `engineering`, `finance`, `operations`, `product`, `data`, `hr`, `legal-compliance`, `leadership`
+
+`metadata.category` is set to the literal string `domain`. The old `industry` / `horizontal` split is retired — there is one data kit per domain, designed to ship with the matching domain team. Multiple domain kits coexist cleanly in a workspace because each uses a unique entity prefix.
 
 ## Entity Prefix Convention
 
@@ -179,9 +181,17 @@ Every kit uses a short prefix for all entity type names to prevent collisions wh
 
 | Kit | Prefix | Example Entity |
 |-----|--------|---------------|
-| restaurant | `rest_` | `rest_menu_items` |
-| crm-contacts | `crm_` | `crm_contacts` |
-| financial-ops | `fin_` | `fin_transactions` |
+| customer-service | `cs_` | `cs_tickets` |
+| marketing | `mkt_` | `mkt_campaigns` |
+| sales | `sal_` | `sal_deals` |
+| engineering | `eng_` | `eng_incidents` |
+| finance | `fin_` | `fin_transactions` |
+| operations | `ops_` | `ops_inventory` |
+| product | `prd_` | `prd_features` |
+| data | `dat_` | `dat_pipelines` |
+| hr | `hr_` | `hr_employees` |
+| legal-compliance | `leg_` | `leg_matters` |
+| leadership | `ldr_` | `ldr_okrs` |
 
 **Rules:**
 - Prefix is 2-4 lowercase characters followed by underscore
@@ -202,12 +212,14 @@ Installation is **idempotent** — re-installing an already-installed kit is a n
 
 ## Composability
 
-Industry kits compose with horizontal kits. A restaurant team might install:
-- `restaurant` (industry) — menu items, reservations, suppliers
-- `crm-contacts` (horizontal) — contacts, companies, deals
-- `financial-ops` (horizontal) — transactions, invoices, budgets
+Domain kits are self-contained — each ships with its matching domain team and carries the entity schemas that team's bots need. A business that runs several domain teams installs several domain kits, and they coexist cleanly because every kit uses a unique entity prefix.
 
-Prefixes prevent entity name collisions: `rest_menu_items`, `crm_contacts`, `fin_transactions` coexist cleanly.
+For example, a workspace running the Customer Service, Sales, and Finance teams installs:
+- `customer-service` — `cs_tickets`, `cs_contacts`, `cs_conversations`
+- `sales` — `sal_contacts`, `sal_companies`, `sal_deals`
+- `finance` — `fin_transactions`, `fin_invoices`, `fin_budgets`
+
+Prefixes prevent entity name collisions, so all three coexist without conflict.
 
 ## Validation
 

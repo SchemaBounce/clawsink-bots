@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:sales:defaults",
+  "entries": [
+    {
+      "key": "kpi:pipeline_coverage",
+      "value": "Target pipeline coverage ratio is 3-4x quarterly quota. Coverage = total open pipeline value / quota for the period. Below 3x heading into a quarter is a leading indicator of a miss. Above 5x may indicate poor qualification. Measure by stage: weighted pipeline (probability-adjusted) should be >1.2x quota for the current quarter.",
+      "category": "kpi",
+      "tags": ["pipeline", "coverage", "forecast"]
+    },
+    {
+      "key": "kpi:win_rate",
+      "value": "Target overall win rate is >25% of qualified opportunities. Track separately by: rep (coaching gaps), segment (ICP fit), deal source (channel quality), and competitor (win/loss patterns). Win rate below 20% for a rep over 90 days triggers a performance conversation. Win rate above 40% may indicate under-qualifying - you may be leaving revenue on the table.",
+      "category": "kpi",
+      "tags": ["win-rate", "conversion", "performance"]
+    },
+    {
+      "key": "kpi:average_deal_size",
+      "value": "Track average deal size (ACV) vs plan and trend over time. Growing ADS signals better ICP targeting and upmarket movement. Declining ADS may indicate discounting pressure, downmarket drift, or deal splitting. Segment ADS by rep, channel, and use case to find which motions produce the highest-value deals.",
+      "category": "kpi",
+      "tags": ["acv", "deal-size", "revenue"]
+    },
+    {
+      "key": "kpi:sales_cycle_length",
+      "value": "Target sales cycle: <45 days for SMB, <90 days for mid-market, <180 days for enterprise. Measure from opportunity creation to close. Deals exceeding 1.5x the segment average should be reviewed for blocker identification. Track by stage duration to find where deals are stalling - proposal-to-negotiation is the most common bottleneck.",
+      "category": "kpi",
+      "tags": ["sales-cycle", "velocity", "pipeline"]
+    },
+    {
+      "key": "kpi:crm_hygiene_score",
+      "value": "Target CRM hygiene score is >90%. Score is computed weekly as the percentage of open deals with: close date set, primary contact assigned, stage-appropriate fields complete, and an interaction in the last 14 days. Deals without a next action date set are automatically flagged. Reps with hygiene scores below 75% are blocked from pipeline review meetings until resolved.",
+      "category": "kpi",
+      "tags": ["crm", "hygiene", "data-quality"]
+    },
+    {
+      "key": "threshold:stale_deal_alert",
+      "value": "Alert on deals with no recorded interaction in 14+ days. Escalate to manager after 21 days. Close deals as lost after 30 days of no activity unless the rep explicitly extends with a reason. Stale deals inflate pipeline and corrupt forecast accuracy.",
+      "category": "threshold",
+      "tags": ["stale-deals", "activity", "pipeline-hygiene"]
+    },
+    {
+      "key": "threshold:close_date_slip_alert",
+      "value": "Alert when a deal's close date is pushed back for the second time in a single quarter. Two slips indicate either poor qualification, an undisclosed blocker, or a change in the customer's buying process. Require manager review before the third slip is allowed.",
+      "category": "threshold",
+      "tags": ["close-date", "slippage", "forecast-risk"]
+    },
+    {
+      "key": "best-practice:discovery_call",
+      "value": "A strong discovery call establishes: confirmed pain (not just curiosity), budget authority (who signs), timeline (what's driving urgency), and technical fit (can the product solve the problem). If any of these four are unknown after the first call, schedule a follow-up before moving to demo. Do not present pricing before establishing value - it anchors the conversation in cost rather than ROI.",
+      "category": "best-practice",
+      "tags": ["discovery", "qualification", "meddic"]
+    },
+    {
+      "key": "best-practice:competitive_positioning",
+      "value": "When Fivetran is in the deal: lead with latency (15-min batch vs sub-second CDC), pricing transparency (event-based vs connector-seat model), and Kolumn IaC bundling. When Airbyte is in the deal: lead with managed reliability, enterprise support SLAs, and the full streaming-to-sink pipeline as a single product. Always ask what the prospect is currently using before assuming the primary competitor.",
+      "category": "best-practice",
+      "tags": ["competitive", "fivetran", "airbyte", "positioning"]
+    },
+    {
+      "key": "terminology:meddic",
+      "value": "MEDDIC is the qualification framework: Metrics (quantified business impact), Economic Buyer (who approves budget), Decision Criteria (what factors matter), Decision Process (how they buy), Identify Pain (confirmed problem), Champion (internal advocate). All MEDDIC fields should be captured in deal notes by the proposal stage. Deals missing a Champion rarely close on time.",
+      "category": "terminology",
+      "tags": ["meddic", "qualification", "framework"]
+    }
+  ]
+}

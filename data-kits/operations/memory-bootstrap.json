@@ -1,0 +1,59 @@
+{
+  "namespace": "kit:operations:defaults",
+  "entries": [
+    {
+      "key": "kpi:order_fulfillment_rate",
+      "value": "Target order fulfillment rate is >98% on time against SLA. Below 95% is critical and requires immediate investigation. Measure by ship_by_date adherence. Track by priority tier - rush orders failing SLA cost more than standard ones. Root causes: stockouts, carrier exceptions, warehouse capacity.",
+      "category": "kpi",
+      "tags": ["fulfillment", "sla", "orders"]
+    },
+    {
+      "key": "kpi:inventory_accuracy",
+      "value": "Target inventory accuracy is >99% (physical count vs system quantity). Below 98% triggers a full recount. Cycle count high-velocity SKUs weekly, all others monthly. Discrepancies above 5% on any single SKU should be investigated before the next replenishment order.",
+      "category": "kpi",
+      "tags": ["inventory", "accuracy", "stockout"]
+    },
+    {
+      "key": "kpi:supplier_on_time_rate",
+      "value": "Target supplier on-time delivery rate is >95%. Below 90% for a single supplier is a contract review trigger. Track by lead_time_days promised vs actual. Suppliers with on_time_rate below 85% over 3 consecutive months should be placed on a performance improvement plan or replaced.",
+      "category": "kpi",
+      "tags": ["supplier", "on-time", "lead-time"]
+    },
+    {
+      "key": "kpi:shipment_exception_rate",
+      "value": "Target shipment exception rate is <2% of outbound shipments. Exceptions requiring manual intervention cost 3-5x a clean delivery in labor. Track by carrier and service level. If a carrier's exception rate exceeds 5%, evaluate switching carriers for that service level.",
+      "category": "kpi",
+      "tags": ["shipping", "exceptions", "carrier"]
+    },
+    {
+      "key": "kpi:gross_margin_per_sku",
+      "value": "Monitor gross margin per SKU monthly. Alert when any SKU's margin falls below the category floor (typically 30% for consumables, 40% for discretionary). Margin compression sources: rising unit_cost from supplier, competitive pricing pressure, or excessive discounting via price rules.",
+      "category": "kpi",
+      "tags": ["margin", "pricing", "sku"]
+    },
+    {
+      "key": "threshold:low_stock_alert",
+      "value": "Alert when quantity_available falls below reorder_point. Critical alert when quantity_available reaches 0 or goes negative (oversold). Factor in lead_time_days from supplier - if reorder_point is set without accounting for lead time, stock-outs are guaranteed for fast-moving SKUs.",
+      "category": "threshold",
+      "tags": ["inventory", "low-stock", "alerting"]
+    },
+    {
+      "key": "threshold:fulfillment_sla_warning",
+      "value": "Warn when an order's remaining time to ship_by_date falls below 4 hours. Escalate when any rush order is within 1 hour of SLA breach. Batch standard orders but treat expedited and rush orders as queue jumpers - never batch them with lower-priority work.",
+      "category": "threshold",
+      "tags": ["fulfillment", "sla", "alerting"]
+    },
+    {
+      "key": "best-practice:reorder_point_calculation",
+      "value": "Reorder point = (average daily demand x lead time days) + safety stock. Safety stock = Z-score x std deviation of demand x sqrt(lead time). Use Z=1.65 for 95% service level. Recalculate quarterly or whenever a supplier's lead_time_days changes by more than 20%.",
+      "category": "best-practice",
+      "tags": ["inventory", "replenishment", "reorder-point"]
+    },
+    {
+      "key": "best-practice:price_rule_priority",
+      "value": "Apply price rules in ascending priority order (lower priority number = applied first). Never let two rules with the same priority apply to the same SKU - this creates ambiguity. Seasonal and clearance rules should always have lower priority numbers (higher priority) than standard competitive adjustments.",
+      "category": "best-practice",
+      "tags": ["pricing", "rules", "priority"]
+    }
+  ]
+}

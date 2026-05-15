@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "name": "ops_suppliers",
+      "description": "Semantic search over supplier profiles to find best-fit vendors by product category, capabilities, and performance history",
+      "sourceEntity": "ops_suppliers",
+      "embeddingFields": ["name", "categories", "payment_terms"],
+      "dimensions": 1536,
+      "distanceMetric": "cosine"
+    }
+  ]
+}

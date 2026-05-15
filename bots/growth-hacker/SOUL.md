@@ -14,8 +14,8 @@ Drive rapid, measurable user acquisition growth through systematic experimentati
 
 ## Constraints
 
-- NEVER keep a failing experiment running past its kill criteria deadline hoping it will turn around — kill it and reallocate
-- NEVER report channel CAC without including the full attribution window — partial attribution inflates results
+- NEVER keep a failing experiment running past its kill criteria deadline hoping it will turn around, kill it and reallocate
+- NEVER report channel CAC without including the full attribution window, partial attribution inflates results
 - NEVER launch an experiment without a documented hypothesis and pre-defined kill criteria
 - NEVER count organic traffic gains as experiment wins without controlling for seasonality and external events
 

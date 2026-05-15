@@ -1,0 +1,65 @@
+{
+  "namespace": "kit:marketing:defaults",
+  "entries": [
+    {
+      "key": "kpi:mql_volume",
+      "value": "Track Marketing Qualified Leads (MQLs) week-over-week vs plan. MQL criteria typically include: company size match, title match, engagement score >60, and at least one high-intent action (demo request, pricing page visit, whitepaper download). MQL volume below 80% of plan for two consecutive weeks requires a channel audit.",
+      "category": "kpi",
+      "tags": ["mql", "lead-generation", "pipeline"]
+    },
+    {
+      "key": "kpi:cost_per_lead",
+      "value": "Target cost per lead: <$150 for SMB-segment leads, <$500 for mid-market, <$1,200 for enterprise. Calculate as total campaign spend / total leads attributed. Track by channel: paid search and paid social typically have 2-3x the CPL of content and organic. Unusually low CPL may indicate lead quality problems, not efficiency.",
+      "category": "kpi",
+      "tags": ["cpl", "cost", "efficiency"]
+    },
+    {
+      "key": "kpi:content_engagement_rate",
+      "value": "Target engagement rate: >3% for LinkedIn posts, >1% for Twitter/X, >5% for Instagram. Engagement rate = (likes + comments + shares + saves) / impressions * 100. Posts below 0.5% engagement should not be boosted with paid budget. Content driving >6% engagement is a strong candidate for repurposing or whitepaper expansion.",
+      "category": "kpi",
+      "tags": ["engagement", "social", "content"]
+    },
+    {
+      "key": "kpi:campaign_roi",
+      "value": "Target campaign ROI is >200% (return 3x spend). Calculate as (revenue_attributed - campaign_spend) / campaign_spend * 100. Use first-touch attribution for awareness campaigns, last-touch for conversion campaigns, and linear for nurture campaigns. A campaign below 100% ROI after 90 days should be paused and reviewed.",
+      "category": "kpi",
+      "tags": ["roi", "revenue", "attribution"]
+    },
+    {
+      "key": "kpi:mql_to_sql_conversion",
+      "value": "Target MQL to Sales Qualified Lead (SQL) conversion rate is >25%. Rates below 15% indicate lead quality issues - the MQL scoring criteria may be too loose. Rates above 40% may indicate the bar is too high and marketing is leaving volume on the table. Review with sales monthly.",
+      "category": "kpi",
+      "tags": ["conversion", "mql", "sql", "sales-alignment"]
+    },
+    {
+      "key": "threshold:content_gap_alert",
+      "value": "Alert when a top-traffic landing page or blog post has not been updated in >6 months and still drives >500 visits/month. Stale evergreen content loses SEO ranking progressively. Schedule a refresh when content age exceeds 12 months regardless of traffic.",
+      "category": "threshold",
+      "tags": ["content", "seo", "freshness"]
+    },
+    {
+      "key": "threshold:campaign_budget_pacing",
+      "value": "Alert when a campaign has spent <40% of its budget at the 50% mark of its runtime (underpacing) or >70% at the 50% mark (overpacing). Underpacing risks missing reach targets; overpacing risks running out of budget before the end date. Adjust daily budgets to correct within 3 business days of alert.",
+      "category": "threshold",
+      "tags": ["budget", "pacing", "campaigns"]
+    },
+    {
+      "key": "best-practice:content_calendar",
+      "value": "Publish on a consistent schedule: 2-3 blog posts per week, 1 long-form piece (whitepaper, ebook, or in-depth guide) per month, and 1-2 social posts per weekday per active platform. Batch-create content 2 weeks ahead. Evergreen content (30% of output) drives compounding SEO returns. Seasonal content (20%) tied to events or product launches. Educational content (50%) for demand generation.",
+      "category": "best-practice",
+      "tags": ["content-calendar", "cadence", "planning"]
+    },
+    {
+      "key": "best-practice:brand_consistency",
+      "value": "All external content must use approved brand assets only. Check brand-assets kit before creating new graphics. Deprecated assets must not appear in published content. Run a quarterly brand audit across all channels. Color palette, logo usage, and typography must match brand guidelines exactly. External agencies must receive brand kit access before any deliverable review.",
+      "category": "best-practice",
+      "tags": ["brand", "consistency", "assets"]
+    },
+    {
+      "key": "terminology:utm_parameters",
+      "value": "UTM parameters are required on all campaign links. Standard format: utm_source (channel: linkedin, email, google), utm_medium (type: cpc, organic, newsletter), utm_campaign (campaign slug, kebab-case), utm_content (specific asset or ad variant), utm_term (keyword, for paid search). Missing UTMs cause attribution loss. Use a UTM builder and validate before launch.",
+      "category": "terminology",
+      "tags": ["utm", "attribution", "tracking"]
+    }
+  ]
+}

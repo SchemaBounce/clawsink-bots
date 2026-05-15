@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -88,25 +88,14 @@ mcpServers:
     reason: "Browse cloud provider status pages and monitoring dashboards for incident correlation"
   - ref: "tools/composio"
     required: false
-    reason: "Connect to PagerDuty, Datadog, and OpsGenie for incident management workflows"
-  - ref: "tools/firebase"
-    required: false
-    reason: "Monitor Firebase logs, analytics, and Crashlytics crash reports"
-  - ref: "tools/datadog"
-    required: false
-    reason: "Query metrics, search logs, and monitor incidents via Datadog"
-  - ref: "tools/aws-cloudwatch"
-    required: false
-    reason: "Query CloudWatch logs, metrics, and alarms"
-  - ref: "tools/grafana"
-    required: false
-    reason: "Search dashboards and query Prometheus metrics via Grafana"
-  - ref: "tools/pagerduty"
-    required: false
-    reason: "Manage incidents, check on-call schedules, and trigger alerts"
-  - ref: "tools/sentry"
-    required: false
-    reason: "Track errors, search issues, and monitor release health"
+    reason: "Connect to PagerDuty, Datadog, and other monitoring SaaS via the Composio managed-OAuth gateway"
+# tools/firebase, tools/datadog, tools/aws-cloudwatch, tools/grafana,
+# tools/pagerduty, tools/sentry were declared here previously but are not
+# yet wired in the runtime registry, clicking Connect on them produced
+# silent no-ops. Stripped 2026-04-27 per the no-vaporware sweep. Many of
+# these are reachable through Composio today (it has Datadog + PagerDuty
+# toolkits); use composio.execute_composio_tool instead. Re-add direct
+# refs once we vet npm MCP packages and add embeddedEnvSpecs entries.
 presence:
   web:
     browsing: true
@@ -284,5 +273,5 @@ Monitors infrastructure health across pipelines, services, and environments. Det
 ## Recommended Setup
 
 Set these North Star keys for best results:
-- `tech_stack` — Your infrastructure components
-- `sla_targets` — Uptime, latency, and freshness targets
+- `tech_stack`: Your infrastructure components
+- `sla_targets`: Uptime, latency, and freshness targets

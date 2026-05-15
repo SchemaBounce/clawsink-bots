@@ -1,0 +1,64 @@
+{
+  "edgeTypes": [
+    {
+      "label": "AFFECTS",
+      "description": "Links an incident to the services it impacts",
+      "fromEntity": "eng_incidents",
+      "toEntity": "eng_services",
+      "properties": {
+        "impact_level": "string",
+        "affected_since": "date"
+      }
+    },
+    {
+      "label": "DEPLOYED_TO",
+      "description": "Links a deployment to the service it updates",
+      "fromEntity": "eng_deployments",
+      "toEntity": "eng_services",
+      "properties": {
+        "deploy_date": "date",
+        "environment": "string"
+      }
+    },
+    {
+      "label": "DEPENDS_ON",
+      "description": "Links a service to another service it depends on, for blast radius analysis",
+      "fromEntity": "eng_services",
+      "toEntity": "eng_services",
+      "properties": {
+        "dependency_type": "string",
+        "criticality": "string"
+      }
+    },
+    {
+      "label": "BLOCKED_BY",
+      "description": "Links a task to another task that must complete before it can start",
+      "fromEntity": "eng_tasks",
+      "toEntity": "eng_tasks",
+      "properties": {
+        "blocker_reason": "string",
+        "identified_date": "date"
+      }
+    },
+    {
+      "label": "PART_OF",
+      "description": "Links a task to the sprint it belongs to",
+      "fromEntity": "eng_tasks",
+      "toEntity": "eng_sprints",
+      "properties": {
+        "added_date": "date",
+        "committed": "boolean"
+      }
+    },
+    {
+      "label": "RUNS_ON",
+      "description": "Links a service to the infrastructure or platform that hosts it",
+      "fromEntity": "eng_services",
+      "toEntity": "eng_services",
+      "properties": {
+        "hosting_type": "string",
+        "region": "string"
+      }
+    }
+  ]
+}

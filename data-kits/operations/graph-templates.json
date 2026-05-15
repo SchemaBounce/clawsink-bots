@@ -1,0 +1,25 @@
+{
+  "edgeTypes": [
+    {
+      "label": "SUPPLIED_BY",
+      "description": "Links an inventory SKU to the supplier who provides it",
+      "fromEntity": "ops_inventory",
+      "toEntity": "ops_suppliers",
+      "properties": {
+        "unit_cost": "number",
+        "lead_time_days": "number",
+        "preferred": "boolean"
+      }
+    },
+    {
+      "label": "SHIPPED_VIA",
+      "description": "Links an order to its outbound shipment record for end-to-end fulfillment tracing",
+      "fromEntity": "ops_orders",
+      "toEntity": "ops_shipments",
+      "properties": {
+        "ship_date": "date",
+        "service_level": "string"
+      }
+    }
+  ]
+}

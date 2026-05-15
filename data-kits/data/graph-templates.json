@@ -1,0 +1,24 @@
+{
+  "edgeTypes": [
+    {
+      "label": "DEPENDS_ON",
+      "description": "Links a lineage node to its upstream dependency, enabling impact analysis for schema changes or pipeline failures",
+      "fromEntity": "dat_lineage_nodes",
+      "toEntity": "dat_lineage_nodes",
+      "properties": {
+        "dependency_type": "string",
+        "criticality": "string"
+      }
+    },
+    {
+      "label": "DETECTED_IN",
+      "description": "Links an anomaly record to the pipeline or quality check where it was first detected",
+      "fromEntity": "dat_anomalies",
+      "toEntity": "dat_pipelines",
+      "properties": {
+        "detected_at": "date",
+        "detection_method": "string"
+      }
+    }
+  ]
+}

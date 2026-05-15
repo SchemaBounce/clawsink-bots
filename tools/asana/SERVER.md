@@ -9,6 +9,10 @@ metadata:
   tags: ["asana", "project-management", "tasks", "enterprise"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "ASANA"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like ASANA_*."
 transport:
   type: "sse"
   url: "https://mcp.asana.com/sse"

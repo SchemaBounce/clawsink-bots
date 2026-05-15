@@ -1,0 +1,279 @@
+{
+  "records": {
+    "sal_companies": [
+      {
+        "name": "FinFlow Technologies",
+        "domain": "finflow.io",
+        "industry": "Financial Technology",
+        "size": "51-200",
+        "annual_revenue": 12000000,
+        "status": "prospect",
+        "tier": "mid_market",
+        "address": "100 Market Street",
+        "city": "San Francisco",
+        "country": "US",
+        "owner": "sales-pipeline",
+        "arr": 0
+      },
+      {
+        "name": "Retail Giant Inc",
+        "domain": "retailgiant.com",
+        "industry": "Retail",
+        "size": "1001+",
+        "annual_revenue": 500000000,
+        "status": "customer",
+        "tier": "enterprise",
+        "address": "200 Commerce Way",
+        "city": "Chicago",
+        "country": "US",
+        "owner": "sales-pipeline",
+        "arr": 96000
+      },
+      {
+        "name": "CloudOps Studio",
+        "domain": "cloudops.studio",
+        "industry": "Technology",
+        "size": "11-50",
+        "annual_revenue": 3000000,
+        "status": "prospect",
+        "tier": "smb",
+        "address": "42 Startup Row",
+        "city": "Austin",
+        "country": "US",
+        "owner": "sales-pipeline",
+        "arr": 0
+      },
+      {
+        "name": "Meridian Health Systems",
+        "domain": "meridianhealth.org",
+        "industry": "Healthcare",
+        "size": "1001+",
+        "annual_revenue": 250000000,
+        "status": "prospect",
+        "tier": "enterprise",
+        "address": "1 Medical Center Drive",
+        "city": "Boston",
+        "country": "US",
+        "owner": "revops",
+        "arr": 0
+      }
+    ],
+    "sal_contacts": [
+      {
+        "first_name": "Elena",
+        "last_name": "Vasquez",
+        "email": "elena.vasquez@finflow.io",
+        "phone": "+1-415-555-0201",
+        "company_id": "finflow-technologies",
+        "title": "VP of Engineering",
+        "seniority": "vp",
+        "status": "prospect",
+        "source": "inbound",
+        "owner": "sales-pipeline",
+        "last_contacted_at": "2026-05-08",
+        "tags": ["champion", "technical"]
+      },
+      {
+        "first_name": "Robert",
+        "last_name": "Kim",
+        "email": "rkim@finflow.io",
+        "phone": "+1-415-555-0202",
+        "company_id": "finflow-technologies",
+        "title": "CTO",
+        "seniority": "c_suite",
+        "status": "prospect",
+        "source": "inbound",
+        "owner": "sales-pipeline",
+        "last_contacted_at": "2026-05-01",
+        "tags": ["economic-buyer"]
+      },
+      {
+        "first_name": "Patricia",
+        "last_name": "Moore",
+        "email": "pmoore@retailgiant.com",
+        "phone": "+1-312-555-0301",
+        "company_id": "retail-giant-inc",
+        "title": "Director of Data Engineering",
+        "seniority": "director",
+        "status": "customer",
+        "source": "event",
+        "owner": "sales-pipeline",
+        "last_contacted_at": "2026-04-22",
+        "tags": ["champion", "renewal"]
+      },
+      {
+        "first_name": "Arnav",
+        "last_name": "Mehta",
+        "email": "arnav@cloudops.studio",
+        "phone": "+1-512-555-0401",
+        "company_id": "cloudops-studio",
+        "title": "Founder",
+        "seniority": "founder",
+        "status": "prospect",
+        "source": "referral",
+        "owner": "growth-hacker",
+        "last_contacted_at": "2026-05-10",
+        "tags": ["economic-buyer", "technical"]
+      },
+      {
+        "first_name": "Diana",
+        "last_name": "Chen",
+        "email": "d.chen@meridianhealth.org",
+        "phone": "+1-617-555-0501",
+        "company_id": "meridian-health-systems",
+        "title": "Chief Data Officer",
+        "seniority": "c_suite",
+        "status": "lead",
+        "source": "marketing",
+        "owner": "sales-pipeline",
+        "last_contacted_at": "2026-05-05",
+        "tags": ["economic-buyer"]
+      }
+    ],
+    "sal_deals": [
+      {
+        "name": "FinFlow - Real-Time Fraud Detection Pipeline",
+        "value": 48000,
+        "stage": "proposal",
+        "probability": 55,
+        "expected_close_date": "2026-06-15",
+        "contact_id": "elena-vasquez",
+        "company_id": "finflow-technologies",
+        "owner": "sales-pipeline",
+        "source": "inbound",
+        "use_case": "real-time fraud detection",
+        "competitor": "Fivetran",
+        "lost_reason": null,
+        "closed_at": null
+      },
+      {
+        "name": "Retail Giant - Inventory Sync Expansion",
+        "value": 36000,
+        "stage": "negotiation",
+        "probability": 80,
+        "expected_close_date": "2026-05-31",
+        "contact_id": "patricia-moore",
+        "company_id": "retail-giant-inc",
+        "owner": "sales-pipeline",
+        "source": "customer_expansion",
+        "use_case": "inventory sync",
+        "competitor": null,
+        "lost_reason": null,
+        "closed_at": null
+      },
+      {
+        "name": "CloudOps - CDC Starter Plan",
+        "value": 4800,
+        "stage": "qualification",
+        "probability": 30,
+        "expected_close_date": "2026-06-30",
+        "contact_id": "arnav-mehta",
+        "company_id": "cloudops-studio",
+        "owner": "growth-hacker",
+        "source": "referral",
+        "use_case": "multi-cloud data sync",
+        "competitor": "Airbyte",
+        "lost_reason": null,
+        "closed_at": null
+      },
+      {
+        "name": "Meridian Health - Patient Data Pipeline",
+        "value": 120000,
+        "stage": "discovery",
+        "probability": 15,
+        "expected_close_date": "2026-09-30",
+        "contact_id": "diana-chen",
+        "company_id": "meridian-health-systems",
+        "owner": "sales-pipeline",
+        "source": "marketing",
+        "use_case": "HIPAA-compliant patient data pipelines",
+        "competitor": null,
+        "lost_reason": null,
+        "closed_at": null
+      }
+    ],
+    "sal_interactions": [
+      {
+        "type": "demo",
+        "subject": "FinFlow - Technical Deep Dive on CDC Latency",
+        "notes": "Showed end-to-end CDC pipeline from PostgreSQL to BigQuery. Elena asked specifically about WAL slot management at scale. Robert asked about SOC 2 and PCI DSS certifications. Latency demo hit 800ms - they were impressed. Concern raised about support SLAs for a fintech use case.",
+        "summary": "Strong demo, both technical and economic buyers engaged. Primary objection: SLA guarantees. Following up with enterprise support doc and SOC 2 progress report.",
+        "contact_id": "elena-vasquez",
+        "deal_id": "finflow-fraud-detection",
+        "duration_minutes": 75,
+        "occurred_at": "2026-05-01T14:00:00Z",
+        "outcome": "positive",
+        "next_action": "Send SOC 2 in progress documentation and enterprise SLA addendum",
+        "next_action_date": "2026-05-05"
+      },
+      {
+        "type": "call",
+        "subject": "Retail Giant - Renewal and Expansion Discussion",
+        "notes": "Patricia is happy with the current CDC pipeline for order sync. Looking to expand to inventory data across 200 warehouse locations. Current contract is $8k/month, she wants to add the warehouse sync for an additional $3k/month. No competitive threat - they are committed to SchemaBounce.",
+        "summary": "Expansion opportunity confirmed. Sending contract amendment for $36k incremental ACV. Close expected by end of May.",
+        "contact_id": "patricia-moore",
+        "deal_id": "retail-giant-expansion",
+        "duration_minutes": 30,
+        "occurred_at": "2026-04-22T10:00:00Z",
+        "outcome": "positive",
+        "next_action": "Send contract amendment for signature",
+        "next_action_date": "2026-04-25"
+      },
+      {
+        "type": "email",
+        "subject": "CloudOps - Follow Up After Technical Eval",
+        "notes": "Arnav evaluated Airbyte OSS and found the operational overhead too high for a 3-person team. Interested in our fully managed approach. Main question is pricing - they are pre-Series A and budget-conscious.",
+        "summary": "Competitive displacement from Airbyte OSS. Budget concern - may need to offer startup pricing or an extended trial.",
+        "contact_id": "arnav-mehta",
+        "deal_id": "cloudops-starter",
+        "duration_minutes": null,
+        "occurred_at": "2026-05-10T09:00:00Z",
+        "outcome": "positive",
+        "next_action": "Check startup discount eligibility and loop in finance",
+        "next_action_date": "2026-05-13"
+      }
+    ],
+    "sal_market_signals": [
+      {
+        "signal_type": "funding_round",
+        "title": "FinFlow Technologies raises $25M Series B",
+        "description": "FinFlow Technologies announced a $25M Series B led by Vertex Ventures to expand their real-time payment fraud detection platform. They plan to triple engineering headcount over the next 18 months.",
+        "company_id": "finflow-technologies",
+        "source_url": "https://techcrunch.com/2026/04/15/finflow-series-b",
+        "relevance_score": 92,
+        "action_taken": "contacted",
+        "detected_at": "2026-04-15"
+      },
+      {
+        "signal_type": "job_posting",
+        "title": "Meridian Health hiring 3 Senior Data Engineers",
+        "description": "Meridian Health posted three Senior Data Engineer roles emphasizing 'real-time data pipeline experience' and 'CDC and streaming technologies'. This signals an active data infrastructure build-out.",
+        "company_id": "meridian-health-systems",
+        "source_url": "https://jobs.meridianhealth.org/data-engineer-senior",
+        "relevance_score": 78,
+        "action_taken": "deal_created",
+        "detected_at": "2026-04-28"
+      },
+      {
+        "signal_type": "competitor_news",
+        "title": "Fivetran raises connector fees by 30% starting Q3",
+        "description": "Fivetran announced a 30% connector seat price increase effective July 1, 2026. Multiple user posts on LinkedIn and Reddit expressing frustration with the lack of notice.",
+        "company_id": null,
+        "source_url": "https://fivetran.com/blog/pricing-update-2026",
+        "relevance_score": 88,
+        "action_taken": "added_to_sequence",
+        "detected_at": "2026-05-01"
+      },
+      {
+        "signal_type": "intent_signal",
+        "title": "CloudOps Studio visited CDC comparison page 4 times this week",
+        "description": "CloudOps Studio IP detected visiting the 'SchemaBounce vs Fivetran' and 'CDC vs Batch ETL' comparison pages multiple times in a 7-day window - strong buyer intent signal.",
+        "company_id": "cloudops-studio",
+        "source_url": null,
+        "relevance_score": 85,
+        "action_taken": "contacted",
+        "detected_at": "2026-05-09"
+      }
+    ]
+  }
+}

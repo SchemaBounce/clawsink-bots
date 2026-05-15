@@ -1,0 +1,83 @@
+{
+  "namespace": "kit:finance:defaults",
+  "entries": [
+    {
+      "key": "kpi:gross_margin",
+      "value": "Gross margin = (revenue - COGS) / revenue * 100. Target >50% for service businesses, >30% for product businesses. Declining gross margin signals rising input costs or pricing pressure. Review monthly by product line and cost center.",
+      "category": "kpi",
+      "tags": ["profitability", "margin", "revenue"]
+    },
+    {
+      "key": "kpi:net_profit_margin",
+      "value": "Net profit margin = net income / total revenue * 100. Target >10% for healthy businesses. Below 5% is fragile. Separate operating expenses from one-time items for accurate trending. Report on both GAAP and adjusted basis for management visibility.",
+      "category": "kpi",
+      "tags": ["profitability", "net-income", "bottom-line"]
+    },
+    {
+      "key": "kpi:cash_flow_runway",
+      "value": "Cash flow runway = current cash balance / monthly net burn rate. Target >6 months. Below 3 months is critical and requires immediate action. Calculate burn rate as the 3-month rolling average of net cash outflow. Present to leadership monthly.",
+      "category": "kpi",
+      "tags": ["cash-flow", "runway", "liquidity"]
+    },
+    {
+      "key": "kpi:accounts_receivable_days",
+      "value": "AR days = (accounts receivable / annual revenue) * 365. Target <30 days. Above 45 days signals collection problems. Review aging buckets weekly: current, 1-30 days, 31-60, 61-90, 90+ days. Escalate accounts over 60 days to collections process.",
+      "category": "kpi",
+      "tags": ["receivables", "collections", "cash-flow"]
+    },
+    {
+      "key": "kpi:budget_variance",
+      "value": "Budget variance = (actual - budgeted) / budgeted * 100. Target <5% absolute variance per department per period. Variance above 10% requires a written explanation from the budget owner. Track favorable (underspend) separately from unfavorable (overspend).",
+      "category": "kpi",
+      "tags": ["budget", "variance", "planning"]
+    },
+    {
+      "key": "kpi:fraud_detection_rate",
+      "value": "Fraud detection rate = fraud signals confirmed as actual fraud / total fraud that occurred. Target >95% detected within 24 hours. Track false positive rate separately - above 20% means the detection rules are too broad and eroding trust in alerts. Review detection rules quarterly.",
+      "category": "kpi",
+      "tags": ["fraud", "detection", "risk"]
+    },
+    {
+      "key": "threshold:overdue_invoice_alert",
+      "value": "Alert when any receivable invoice is overdue by >7 days. Escalate to account owner at 15 days. Flag for collections review at 45 days. At 90 days, evaluate write-off or collections referral. Send automated payment reminders at 7, 14, and 28 days past due.",
+      "category": "threshold",
+      "tags": ["invoices", "overdue", "collections"]
+    },
+    {
+      "key": "threshold:budget_overspend_alert",
+      "value": "Alert budget owner when spend reaches 75% of allocation before 75% of the period has elapsed. Critical alert at 95% spend. Require explicit CFO approval before any budget overrun is permitted. Never allow automated overspend.",
+      "category": "threshold",
+      "tags": ["budget", "overspend", "controls"]
+    },
+    {
+      "key": "threshold:fraud_risk_score",
+      "value": "Fraud signals with risk score >70 require immediate investigation within 4 hours. Risk score 50-70 requires review within 24 hours. Risk score below 50 can be batched for weekly review. Transactions above $50,000 always require manual review regardless of score.",
+      "category": "threshold",
+      "tags": ["fraud", "risk-score", "investigation"]
+    },
+    {
+      "key": "best-practice:period_close",
+      "value": "Month-end close should complete within 5 business days. Week 1: reconcile all accounts. Week 2: prepare management reports. Hard close on day 5. Any journal entry after day 5 requires VP Finance approval. Maintain a close checklist with owner and due date for each step.",
+      "category": "best-practice",
+      "tags": ["period-close", "month-end", "accounting"]
+    },
+    {
+      "key": "best-practice:invoice_management",
+      "value": "Send invoices within 24 hours of service delivery or billing period end. Use Net 30 terms as default for new customers. Offer 2% discount for payment within 10 days on invoices above $10,000. Always include a unique invoice number and bank transfer details. Automate reminders.",
+      "category": "best-practice",
+      "tags": ["invoicing", "payment-terms", "collections"]
+    },
+    {
+      "key": "terminology:burn_rate",
+      "value": "Gross burn rate = total monthly operating expenses. Net burn rate = total expenses minus total revenue. A profitable business has negative net burn (positive cash flow). Track both to separate growth investment from operational efficiency. Investors typically ask for net burn.",
+      "category": "terminology",
+      "tags": ["cash-flow", "definitions", "burn-rate"]
+    },
+    {
+      "key": "compliance:expense_controls",
+      "value": "All expenses above $500 require manager approval before incurrence. Expenses above $5,000 require VP or CFO approval. Travel and entertainment must be submitted with receipts within 30 days. Personal expenses submitted as business expenses are a terminable offense per company policy.",
+      "category": "compliance",
+      "tags": ["expenses", "controls", "policy"]
+    }
+  ]
+}

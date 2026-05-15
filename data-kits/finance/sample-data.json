@@ -1,0 +1,271 @@
+{
+  "records": {
+    "fin_transactions": [
+      {
+        "date": "2026-05-01",
+        "amount": 285000,
+        "type": "income",
+        "category": "Revenue - SaaS Subscriptions",
+        "vendor": "Acme Corp",
+        "description": "Monthly enterprise subscription - May 2026",
+        "status": "reconciled",
+        "payment_method": "bank_transfer",
+        "invoice_id": "INV-2026-0441",
+        "tags": ["enterprise", "subscription", "may-2026"]
+      },
+      {
+        "date": "2026-05-01",
+        "amount": -142500,
+        "type": "expense",
+        "category": "Payroll",
+        "vendor": "Gusto",
+        "description": "Semi-monthly payroll run - 1st of month",
+        "status": "reconciled",
+        "payment_method": "ach",
+        "invoice_id": null,
+        "tags": ["payroll", "may-2026"]
+      },
+      {
+        "date": "2026-05-05",
+        "amount": -18400,
+        "type": "expense",
+        "category": "Cloud Infrastructure",
+        "vendor": "AWS",
+        "description": "AWS bill - April 2026 usage",
+        "status": "completed",
+        "payment_method": "credit_card",
+        "invoice_id": null,
+        "tags": ["aws", "infrastructure", "cloud"]
+      },
+      {
+        "date": "2026-05-08",
+        "amount": 52000,
+        "type": "income",
+        "category": "Revenue - Professional Services",
+        "vendor": "Beacon Financial Group",
+        "description": "Q2 implementation engagement - milestone 1 payment",
+        "status": "completed",
+        "payment_method": "wire",
+        "invoice_id": "INV-2026-0438",
+        "tags": ["professional-services", "implementation"]
+      },
+      {
+        "date": "2026-05-10",
+        "amount": -4200,
+        "type": "expense",
+        "category": "Software Subscriptions",
+        "vendor": "Various SaaS vendors",
+        "description": "Monthly SaaS tool subscriptions - consolidated payment",
+        "status": "completed",
+        "payment_method": "credit_card",
+        "invoice_id": null,
+        "tags": ["saas", "tools", "subscriptions"]
+      },
+      {
+        "date": "2026-05-12",
+        "amount": -9800,
+        "type": "expense",
+        "category": "Marketing",
+        "vendor": "Digital Agency Co",
+        "description": "Paid search and social media management - May retainer",
+        "status": "pending",
+        "payment_method": "bank_transfer",
+        "invoice_id": null,
+        "tags": ["marketing", "agency", "may-2026"]
+      }
+    ],
+    "fin_invoices": [
+      {
+        "invoice_number": "INV-2026-0441",
+        "direction": "receivable",
+        "date": "2026-05-01",
+        "due_date": "2026-05-31",
+        "amount": 285000,
+        "status": "paid",
+        "counterparty": "Acme Corp",
+        "category": "SaaS Subscription",
+        "line_items": [
+          { "description": "Enterprise Platform License - May 2026", "quantity": 1, "unit_price": 285000, "amount": 285000 }
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "INV-2026-0438",
+        "direction": "receivable",
+        "date": "2026-04-25",
+        "due_date": "2026-05-25",
+        "amount": 52000,
+        "status": "paid",
+        "counterparty": "Beacon Financial Group",
+        "category": "Professional Services",
+        "line_items": [
+          { "description": "Implementation Services - Milestone 1: Data Migration Planning", "quantity": 1, "unit_price": 52000, "amount": 52000 }
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "INV-2026-0445",
+        "direction": "receivable",
+        "date": "2026-05-01",
+        "due_date": "2026-05-31",
+        "amount": 18500,
+        "status": "overdue",
+        "counterparty": "Meridian Retail Partners",
+        "category": "SaaS Subscription",
+        "line_items": [
+          { "description": "Standard Platform License - May 2026", "quantity": 1, "unit_price": 18500, "amount": 18500 }
+        ],
+        "payment_terms": "net_30"
+      },
+      {
+        "invoice_number": "INV-2026-0447",
+        "direction": "payable",
+        "date": "2026-05-07",
+        "due_date": "2026-06-06",
+        "amount": 24000,
+        "status": "sent",
+        "counterparty": "LexCloud Legal Technology",
+        "category": "Software - Legal",
+        "line_items": [
+          { "description": "Annual contract management platform renewal", "quantity": 1, "unit_price": 24000, "amount": 24000 }
+        ],
+        "payment_terms": "net_30"
+      }
+    ],
+    "fin_budgets": [
+      {
+        "name": "Engineering - Q2 2026",
+        "category": "Engineering",
+        "period": "quarterly",
+        "allocated_amount": 680000,
+        "spent_amount": 241000,
+        "start_date": "2026-04-01",
+        "end_date": "2026-06-30",
+        "owner": "VP Engineering",
+        "status": "active",
+        "notes": "Includes $120k contractor budget for API gateway v4 migration"
+      },
+      {
+        "name": "Marketing - Q2 2026",
+        "category": "Marketing",
+        "period": "quarterly",
+        "allocated_amount": 180000,
+        "spent_amount": 87400,
+        "start_date": "2026-04-01",
+        "end_date": "2026-06-30",
+        "owner": "VP Marketing",
+        "status": "active",
+        "notes": "On pace. Conference sponsorship ($45k) scheduled for June."
+      },
+      {
+        "name": "Cloud Infrastructure - May 2026",
+        "category": "Cloud Infrastructure",
+        "period": "monthly",
+        "allocated_amount": 22000,
+        "spent_amount": 18400,
+        "start_date": "2026-05-01",
+        "end_date": "2026-05-31",
+        "owner": "Head of DevOps",
+        "status": "active",
+        "notes": "April actuals came in 16% under budget after reserved instance purchase"
+      },
+      {
+        "name": "G&A - Q2 2026",
+        "category": "General & Administrative",
+        "period": "quarterly",
+        "allocated_amount": 95000,
+        "spent_amount": 102800,
+        "start_date": "2026-04-01",
+        "end_date": "2026-06-30",
+        "owner": "CFO",
+        "status": "over_budget",
+        "notes": "Overrun driven by unexpected legal fees for contract negotiations. CFO approved $15k supplemental budget."
+      }
+    ],
+    "fin_recurring": [
+      {
+        "name": "AWS Reserved Instances",
+        "type": "subscription",
+        "amount": 16800,
+        "frequency": "monthly",
+        "counterparty": "Amazon Web Services",
+        "direction": "outbound",
+        "next_due_date": "2026-06-01",
+        "status": "active",
+        "auto_generate_invoice": false,
+        "start_date": "2026-01-01"
+      },
+      {
+        "name": "LexCloud Annual Contract",
+        "type": "subscription",
+        "amount": 24000,
+        "frequency": "annual",
+        "counterparty": "LexCloud Legal Technology",
+        "direction": "outbound",
+        "next_due_date": "2026-06-06",
+        "status": "active",
+        "auto_generate_invoice": false,
+        "start_date": "2025-06-06"
+      },
+      {
+        "name": "Acme Corp Enterprise License",
+        "type": "retainer",
+        "amount": 285000,
+        "frequency": "monthly",
+        "counterparty": "Acme Corp",
+        "direction": "inbound",
+        "next_due_date": "2026-06-01",
+        "status": "active",
+        "auto_generate_invoice": true,
+        "start_date": "2025-03-01"
+      },
+      {
+        "name": "Digital Agency Retainer",
+        "type": "retainer",
+        "amount": 9800,
+        "frequency": "monthly",
+        "counterparty": "Digital Agency Co",
+        "direction": "outbound",
+        "next_due_date": "2026-06-01",
+        "status": "active",
+        "auto_generate_invoice": false,
+        "start_date": "2026-02-01"
+      }
+    ],
+    "fin_fraud_signals": [
+      {
+        "transaction_id": "txn-2026-05-09-8821",
+        "signal_type": "duplicate_charge",
+        "risk_score": 82,
+        "description": "Transaction for $4,200 to 'Various SaaS vendors' duplicates a transaction from the same vendor for the same amount 3 days prior. Possible double billing.",
+        "status": "investigating",
+        "investigator": "maria.chen@company.com",
+        "detected_at": "2026-05-10",
+        "resolved_at": null,
+        "resolution_notes": null
+      },
+      {
+        "transaction_id": "txn-2026-04-28-5512",
+        "signal_type": "unusual_amount",
+        "risk_score": 61,
+        "description": "Expense claim for $3,890 submitted by a contractor for 'equipment'. Contractor's average monthly expense is $240. Amount is 16x historical baseline.",
+        "status": "confirmed_fraud",
+        "investigator": "james.wu@company.com",
+        "detected_at": "2026-04-29",
+        "resolved_at": "2026-05-03",
+        "resolution_notes": "Contractor submitted fabricated receipt. Contract terminated. Matter referred to legal team for recovery action."
+      },
+      {
+        "transaction_id": "txn-2026-05-05-3301",
+        "signal_type": "velocity_spike",
+        "risk_score": 45,
+        "description": "Corporate card ending 4821 had 12 transactions in a 4-hour window on May 5th, totaling $1,840. Card is typically used for 2-3 transactions per day.",
+        "status": "false_positive",
+        "investigator": "maria.chen@company.com",
+        "detected_at": "2026-05-05",
+        "resolved_at": "2026-05-06",
+        "resolution_notes": "Card holder confirmed transactions. Team offsite on May 5th drove legitimate spending spike."
+      }
+    ]
+  }
+}

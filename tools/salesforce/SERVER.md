@@ -9,6 +9,10 @@ metadata:
   tags: ["salesforce", "crm", "sales", "leads", "opportunities"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "SALESFORCE"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like SALESFORCE_*."
 transport:
   type: "sse"
   url: "https://mcp.salesforce.com/sse"

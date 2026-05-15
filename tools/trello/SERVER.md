@@ -9,6 +9,10 @@ metadata:
   tags: ["trello", "kanban", "project-management", "boards"]
   author: "schemabounce"
   license: "MIT"
+auth:
+  method: "composio"
+  composioToolkit: "TRELLO"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like TRELLO_*."
 transport:
   type: "stdio"
   command: "npx"

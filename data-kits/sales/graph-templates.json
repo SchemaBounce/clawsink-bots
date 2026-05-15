@@ -1,0 +1,36 @@
+{
+  "edgeTypes": [
+    {
+      "label": "WORKS_AT",
+      "description": "Links a contact to the company they work at, enabling account-based selling",
+      "fromEntity": "sal_contacts",
+      "toEntity": "sal_companies",
+      "properties": {
+        "title": "string",
+        "department": "string",
+        "since": "date"
+      }
+    },
+    {
+      "label": "OPPORTUNITY_FOR",
+      "description": "Links a deal to the primary contact and company it represents",
+      "fromEntity": "sal_deals",
+      "toEntity": "sal_contacts",
+      "properties": {
+        "role": "string",
+        "created_at": "date"
+      }
+    },
+    {
+      "label": "INTERACTED_WITH",
+      "description": "Links an interaction record to the contact it involved, building a complete activity timeline",
+      "fromEntity": "sal_interactions",
+      "toEntity": "sal_contacts",
+      "properties": {
+        "interaction_type": "string",
+        "occurred_at": "date",
+        "outcome": "string"
+      }
+    }
+  ]
+}

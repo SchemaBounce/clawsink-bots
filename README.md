@@ -1,6 +1,6 @@
 # ClawSink Bots
 
-Pre-built, persistent AI bot packs for SchemaBounce workspaces. Each bot is a complete OpenCLAW agent that autonomously operates a specific business role. Teams compose bots into full operational teams for specific industries.
+Pre-built, persistent AI bot packs for SchemaBounce workspaces. Each bot is a complete OpenCLAW agent that autonomously operates a specific business role. Teams compose bots into domain-specific functions (Customer Service, Marketing, Engineering, and so on) — a business activates the domain teams it needs.
 
 This repository is **parsed programmatically** to populate the marketplace, agent pages, and org chart views in the SchemaBounce console. Every manifest file is a contract -- the format must be followed exactly.
 
@@ -42,11 +42,11 @@ clawsink-bots/
 │           ├── zone2-entity-types.json
 │           └── zone3-initial-memory.json
 │
-├── teams/                          # 26 coordinated bot groups
+├── teams/                          # 11 domain-specific bot teams (one per business function)
 │   └── {team-name}/
 │       └── TEAM.md                 # Manifest (kind: Team) -- PARSED FOR MARKETPLACE
 │
-├── data-kits/                      # 21 full-stack domain data packages
+├── data-kits/                      # 11 domain data packages (one per domain team)
 │   └── {kit-name}/
 │       ├── KIT.md                  # Manifest (kind: DataKit) -- PARSED FOR MARKETPLACE
 │       ├── entity-schemas.json     # Entity type definitions with typed fields
@@ -107,7 +107,7 @@ The marketplace reads manifest files (`BOT.md`, `TEAM.md`, `SKILL.md`, `PACK.md`
 |---|---|
 | `metadata.displayName` | Page title, card heading |
 | `metadata.description` | Card subtitle, search snippet |
-| `metadata.category` | Category filter pill |
+| `metadata.domain` | Domain filter pill, domain badge |
 | `metadata.tags` | Search index, tag chips |
 | `bots[].ref` | Bot cards grid, bot count badge |
 | `northStar.industry` | "Built for" label |
@@ -165,7 +165,7 @@ The org chart view renders the team's `orgChart` as an interactive tree:
 |---|---|
 | `metadata.displayName` | Page title, card heading |
 | `metadata.description` | Card subtitle, search snippet |
-| `metadata.category` | Category filter pill (industry/horizontal) |
+| `metadata.domain` | Domain filter pill, domain badge |
 | `metadata.tags` | Search index, tag chips |
 | `entityPrefix` | Prefix badge |
 | `entityCount` | Entity count badge |
@@ -195,30 +195,24 @@ See **"What the Platform Does With This Spec"** in [ARCHITECTURE.md](ARCHITECTUR
 ## Composability Hierarchy
 
 ```
-Team (restaurant-group)                      ← industry-specific bot group
- ├── Data Kit (restaurant)                   ← primary domain data package
- │    ├── Entity Schemas (rest_menu_items, rest_reservations, ...)
- │    ├── Graph Templates (SUPPLIED_BY, REVIEWED)
- │    ├── Vector Collections (rest_menu_items, rest_reviews)
- │    └── Memory Bootstraps (food cost KPIs, industry thresholds)
- ├── Data Kit (crm-contacts)                 ← horizontal cross-cutting kit
- ├── Data Kit (financial-ops)                ← horizontal cross-cutting kit
- ├── Bot (executive-assistant)               ← top-level agent [lead]
- │    ├── Skill (daily-briefing)             ← reusable capability
- │    ├── Skill (cross-domain-synthesis)
+Team (engineering-team)                      ← domain-specific bot team [domain: engineering]
+ ├── Data Kit (engineering)                  ← the team's domain data package
+ │    ├── Entity Schemas (eng_incidents, eng_deployments, ...)
+ │    ├── Graph Templates (AFFECTS, DEPLOYED_TO)
+ │    ├── Vector Collections (eng_runbooks)
+ │    └── Memory Bootstraps (MTTR KPIs, deployment thresholds)
+ ├── Bot (software-architect)                ← top-level agent [lead]
+ │    ├── Skill (code-review)                ← reusable capability
  │    ├── Sub-Agent (request-router)         ← internal workflow step
  │    └── Sub-Agent (followup-tracker)
- ├── Bot (accountant)                        ← top-level agent [specialist]
- │    ├── Skill (invoice-categorization)
- │    ├── Skill (expense-tracking)
- │    ├── Built-in Tools (financial-toolkit)      ← native deterministic functions
- │    ├── Built-in Tools (data-transform)
- │    └── Skill (budget-monitoring)
- ├── Bot (inventory-manager)                 ← top-level agent [specialist]
- │    └── Sub-Agent (stock-analyst)
- ├── Bot (inventory-alert)                   ← top-level agent [support → inventory-manager]
- ├── Bot (customer-support)                  ← top-level agent [specialist]
- └── Bot (marketing-growth)                  ← top-level agent [specialist]
+ ├── Bot (code-reviewer)                     ← top-level agent [specialist]
+ │    ├── Skill (code-review)
+ │    └── Built-in Tools (data-transform)        ← native deterministic functions
+ ├── Bot (sre-devops)                        ← top-level agent [specialist]
+ │    └── Sub-Agent (incident-analyst)
+ ├── Bot (api-tester)                        ← top-level agent [support → code-reviewer]
+ ├── Bot (release-manager)                   ← top-level agent [specialist]
+ └── Bot (bug-triage)                        ← top-level agent [specialist]
 ```
 
 **Data Kits** are full-stack domain data packages (entity schemas + graph + vectors + memory + sample data). **Skills** are reusable instructions composed into bots. **Built-in Tools** are native deterministic platform functions that bots can declare when they need domain-specific computation. **Bots** are complete agents with identity, schedule, and messaging. **Sub-agents** are internal to a bot (isolated sessions for workflow steps). **Teams** compose bots into a coordinated group with an org chart, escalation paths, and bundled Data Kits. **MCP Servers** provide external tool endpoints that bots call via the Model Context Protocol. **Plugins** are npm-based runtime extensions for OAuth, memory, channels, and automation.
@@ -357,7 +351,8 @@ metadata:
   displayName: "Your Team"
   version: "1.0.0"
   description: "What this team does"
-  category: your-industry
+  domain: engineering              # One of the 11 canonical domain slugs
+  category: engineering            # Set equal to domain
   tags: ["tag1"]
   author: "your-org"
   license: "MIT"
@@ -370,11 +365,11 @@ toolPacks:                          # Optional -- shared native functions for al
   - ref: "packs/data-transform@1.0.0"
     reason: "Normalize shared CSV and JSON payloads before routing work"
 northStar:
-  industry: "Your Industry"
+  industry: "Software Engineering"  # The team's function, not a business vertical
   context: "Who this team is for"
   requiredKeys:
     - mission
-    - industry
+    - tech_stack
 orgChart:
   lead: bot-a
   roles:
@@ -450,29 +445,21 @@ Standard categories for `metadata.category` on bots:
 | `logistics` | inventory-manager, shipping-tracker |
 | `content` | blog-writer, content-scheduler |
 
-Standard categories for `metadata.category` on teams:
+Domain taxonomy for `metadata.domain` on teams and data kits. Teams are domain-specific functions, not whole companies. `metadata.category` is set equal to `metadata.domain` on teams, and to the literal `domain` on data kits.
 
-| Category | Examples |
-|---|---|
-| `general` | small-business-starter |
-| `startup` | startup-all-in-one |
-| `hospitality` | restaurant-group |
-| `real-estate` | real-estate-agency |
-| `healthcare` | healthcare-practice |
-| `professional-services` | consulting-firm |
-| `logistics` | logistics-company |
-| `media` | media-publisher |
-| `fitness` | fitness-studio |
-| `legal` | legal-practice |
-| `manufacturing` | manufacturing-ops |
-| `enterprise` | enterprise-platform |
-| `ecommerce` | ecommerce-pack, ecommerce-operations |
-| `fintech` | fintech-fraud-prevention |
-| `agency` | digital-agency |
-| `saas` | saas-growth |
-| `engineering` | software-dev-team, data-ops |
-| `hr` | hr-operations |
-| `trades` | tradesman-pack |
+| Domain | Team | Data Kit |
+|---|---|---|
+| `customer-service` | customer-service-team | customer-service |
+| `marketing` | marketing-team | marketing |
+| `sales` | sales-team | sales |
+| `engineering` | engineering-team | engineering |
+| `finance` | finance-team | finance |
+| `operations` | operations-team | operations |
+| `product` | product-team | product |
+| `data` | data-team | data |
+| `hr` | hr-team | hr |
+| `legal-compliance` | legal-compliance-team | legal-compliance |
+| `leadership` | leadership-team | leadership |
 
 ## Inter-Bot Communication
 

@@ -1,0 +1,51 @@
+{
+  "northStar": {
+    "cost_thresholds": {
+      "overspec_warn_usd": 10,
+      "overspec_critical_usd": 50,
+      "runrate_warn_usd": 20,
+      "runrate_critical_usd": 100,
+      "runaway_runs_per_24h": 50,
+      "runaway_failure_rate": 0.30,
+      "stale_days": 30,
+      "_comment": "Tune per-workspace. Defaults err on the side of surfacing. Lower thresholds = more findings per run."
+    },
+    "model_cost_table": {
+      "_comment": "Cost per million tokens (input + output blended). Used to project savings on model-downgrade recommendations. Override with your contracted rates if different. Sources: published Anthropic + OpenAI pricing pages as of 2026.",
+      "_units": "USD per million tokens, blended input/output (rough; the recommender's projections are approximate by design — operators should not treat them as billing-grade)",
+      "claude-opus-4-7": 25.00,
+      "claude-opus-4-7-20251001": 25.00,
+      "claude-sonnet-4-6": 5.00,
+      "claude-sonnet-4-6-20250929": 5.00,
+      "claude-sonnet-4-5-20250929": 5.00,
+      "claude-haiku-4-5-20251001": 1.00,
+      "gpt-5": 8.00,
+      "gpt-5-mini": 1.50,
+      "gpt-4o": 5.00,
+      "gpt-4o-mini": 0.50,
+      "_default": 3.00
+    },
+    "model_downgrade_rules": {
+      "expensive_models": [
+        "claude-opus-4-7",
+        "claude-opus-4-7-20251001",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-20250929",
+        "claude-sonnet-4-5-20250929",
+        "gpt-5"
+      ],
+      "haiku_threshold_output_tokens": 2000,
+      "min_runs_for_downgrade": 5,
+      "preferred_haiku_model": "claude-haiku-4-5-20251001",
+      "preferred_mini_model": "gpt-5-mini",
+      "_comment": "If an agent uses a model in expensive_models AND has avg_output_tokens < haiku_threshold AND has at least min_runs_for_downgrade completed runs in 30d AND its bot manifest doesn't declare thinkLevel: high, recommend a downgrade to preferred_haiku_model (Anthropic) or preferred_mini_model (OpenAI). Tune haiku_threshold up if quality regresses on simple tasks."
+    },
+    "company_glossary": {
+      "model_cost_table": "Per-million-token cost estimates by model. Used by the recommender to project monthly savings on downgrade recommendations.",
+      "overspec_candidate": "Agent using an expensive model (Sonnet, Opus, GPT-5) with consistently low output tokens — Haiku-tier would suffice without quality regression.",
+      "runaway_agent": "Agent with high run rate AND high failure rate. Likely retry-looping; pausing prevents the loop from amplifying cost.",
+      "stale_agent": "Agent enabled but with zero runs in 30 days. Either disable or investigate why its trigger isn't firing.",
+      "schedule_mismatch": "Agent firing more frequently than the data change rate of its entityTypesRead — wasted runs that produce 'no new records' findings."
+    }
+  }
+}

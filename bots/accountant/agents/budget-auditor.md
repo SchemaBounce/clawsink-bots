@@ -13,6 +13,8 @@ Analyze current-period spending by category against defined budgets. Identify ov
 
 ## Process
 
+You work on the categorized transaction set that the parent Accountant bot already produced. The parent pulls Stripe (direct) and QuickBooks/Xero (Composio) and reconciles them into `transactions` records before spawning you. Do not call external tools yourself.
+
 1. Query all categorized transactions for the current period.
 2. Read memory for budget constraints (per-category limits, period definitions, thresholds).
 3. For each budget category:

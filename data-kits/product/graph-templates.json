@@ -1,0 +1,24 @@
+{
+  "edgeTypes": [
+    {
+      "label": "VALIDATED_BY",
+      "description": "Links a feature to an experiment that informed or validated its design",
+      "fromEntity": "prd_features",
+      "toEntity": "prd_experiments",
+      "properties": {
+        "validation_type": "string",
+        "confidence_pct": "number"
+      }
+    },
+    {
+      "label": "TARGETS_SEGMENT",
+      "description": "Links a feature or experiment to the user segment it is designed for",
+      "fromEntity": "prd_features",
+      "toEntity": "prd_user_segments",
+      "properties": {
+        "primary": "boolean",
+        "rationale": "string"
+      }
+    }
+  ]
+}
