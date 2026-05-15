@@ -61,8 +61,11 @@ validate_manifest() {
   fi
 
   # Required fields
+  # Note: use a here-string instead of `echo ... | grep -q` to avoid SIGPIPE
+  # from grep -q closing the pipe early, which combined with `set -o pipefail`
+  # would intermittently invert the `if !` condition and produce false failures.
   for field in "apiVersion:" "kind:" "name:" "version:" "description:" "category:"; do
-    if ! echo "$frontmatter" | grep -q "$field"; then
+    if ! grep -q "$field" <<< "$frontmatter"; then
       echo -e "  ${RED}FAIL${NC} Missing required field: $field"
       errors=$((errors + 1))
     fi
