@@ -9,6 +9,7 @@ metadata:
   tags: ["microsoft", "teams", "chat", "meetings", "enterprise"]
   author: "schemabounce"
   license: "MIT"
+  category: communication
 auth:
   method: "composio"
   composioToolkit: "MICROSOFT_TEAMS"

@@ -9,6 +9,7 @@ metadata:
   tags: ["mailchimp", "email", "marketing", "campaigns", "newsletters"]
   author: "schemabounce"
   license: "MIT"
+  category: analytics
 auth:
   method: "composio"
   composioToolkit: "MAILCHIMP"

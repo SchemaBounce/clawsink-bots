@@ -9,6 +9,7 @@ metadata:
   tags: ["basecamp", "project-management", "collaboration", "todos"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 auth:
   method: "composio"
   composioToolkit: "BASECAMP"

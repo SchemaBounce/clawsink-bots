@@ -9,6 +9,7 @@ metadata:
   tags: ["n8n", "automation", "workflow", "self-hosted"]
   author: "schemabounce"
   license: "MIT"
+  category: automation
 auth:
   method: "composio"
   composioToolkit: "N8N"

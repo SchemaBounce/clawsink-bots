@@ -9,6 +9,7 @@ metadata:
   tags: ["prometheus", "metrics", "promql", "monitoring"]
   author: "schemabounce"
   license: "MIT"
+  category: observability
 transport:
   type: "stdio"
   command: "npx"

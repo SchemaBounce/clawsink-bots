@@ -9,6 +9,7 @@ metadata:
   tags: ["phone", "sms", "voice", "calls", "presence", "communication"]
   author: "agentphone"
   license: "MIT"
+  category: communication
 transport:
   type: "stdio"
   command: "npx"

@@ -9,6 +9,7 @@ metadata:
   tags: ["airtable", "database", "spreadsheet", "no-code"]
   author: "schemabounce"
   license: "MIT"
+  category: other
 transport:
   type: "stdio"
   command: "npx"

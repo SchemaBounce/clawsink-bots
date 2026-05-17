@@ -9,6 +9,7 @@ metadata:
   tags: ["google", "docs", "documents", "writing"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "GOOGLEDOCS"

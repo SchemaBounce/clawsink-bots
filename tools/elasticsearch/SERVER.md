@@ -9,6 +9,7 @@ metadata:
   tags: ["elasticsearch", "search", "analytics", "logging"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

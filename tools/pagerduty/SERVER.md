@@ -9,6 +9,7 @@ metadata:
   tags: ["pagerduty", "incidents", "oncall", "alerting"]
   author: "schemabounce"
   license: "MIT"
+  category: observability
 transport:
   type: "sse"
   url: "https://mcp.composio.dev/pagerduty"

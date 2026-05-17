@@ -9,6 +9,7 @@ metadata:
   tags: ["confluence", "atlassian", "wiki", "documentation"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 transport:
   type: "stdio"
   command: "npx"

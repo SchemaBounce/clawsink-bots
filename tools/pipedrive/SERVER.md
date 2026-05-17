@@ -9,6 +9,7 @@ metadata:
   tags: ["pipedrive", "crm", "sales", "deals", "pipeline"]
   author: "schemabounce"
   license: "MIT"
+  category: crms-sales
 auth:
   method: "composio"
   composioToolkit: "PIPEDRIVE"

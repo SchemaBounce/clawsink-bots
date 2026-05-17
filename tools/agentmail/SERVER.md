@@ -9,6 +9,7 @@ metadata:
   tags: ["email", "communication", "identity", "presence", "inbox"]
   author: "agentmail"
   license: "MIT"
+  category: communication
 transport:
   type: "stdio"
   command: "npx"

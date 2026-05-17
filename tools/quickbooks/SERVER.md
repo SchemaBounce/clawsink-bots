@@ -9,6 +9,7 @@ metadata:
   tags: ["quickbooks", "accounting", "invoices", "payments", "finance"]
   author: "schemabounce"
   license: "MIT"
+  category: accounting
 auth:
   method: "composio"
   composioToolkit: "QUICKBOOKS"

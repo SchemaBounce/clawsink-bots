@@ -9,6 +9,7 @@ metadata:
   tags: ["brave", "search", "web", "news"]
   author: "schemabounce"
   license: "MIT"
+  category: browser-scraping
 transport:
   type: "stdio"
   command: "npx"

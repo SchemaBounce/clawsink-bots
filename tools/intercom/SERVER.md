@@ -9,6 +9,7 @@ metadata:
   tags: ["intercom", "messaging", "support", "customer-engagement"]
   author: "schemabounce"
   license: "MIT"
+  category: crms-sales
 auth:
   method: "composio"
   composioToolkit: "INTERCOM"

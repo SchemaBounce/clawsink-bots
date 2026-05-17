@@ -9,6 +9,7 @@ metadata:
   tags: ["terraform", "iac", "infrastructure", "hashicorp", "devops"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "npx"

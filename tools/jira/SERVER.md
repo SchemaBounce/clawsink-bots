@@ -9,6 +9,7 @@ metadata:
   tags: ["jira", "project-management", "issues", "sprints", "agile"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 auth:
   method: "composio"
   composioToolkit: "JIRA"

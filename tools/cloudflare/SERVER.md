@@ -9,6 +9,7 @@ metadata:
   tags: ["cloudflare", "cdn", "dns", "workers", "edge"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "npx"

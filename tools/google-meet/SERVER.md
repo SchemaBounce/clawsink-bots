@@ -9,6 +9,7 @@ metadata:
   tags: ["google", "meet", "video", "conferencing"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "GOOGLEMEET"

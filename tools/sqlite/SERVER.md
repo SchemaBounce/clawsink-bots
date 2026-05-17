@@ -9,6 +9,7 @@ metadata:
   tags: ["sqlite", "database", "sql", "embedded"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

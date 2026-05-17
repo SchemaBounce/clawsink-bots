@@ -9,6 +9,7 @@ metadata:
   tags: ["xero", "accounting", "invoices", "finance", "bookkeeping"]
   author: "schemabounce"
   license: "MIT"
+  category: accounting
 auth:
   method: "composio"
   composioToolkit: "XERO"

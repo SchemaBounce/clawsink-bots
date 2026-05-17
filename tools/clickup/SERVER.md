@@ -9,6 +9,7 @@ metadata:
   tags: ["clickup", "project-management", "tasks", "productivity"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 auth:
   method: "composio"
   composioToolkit: "CLICKUP"

@@ -9,6 +9,7 @@ metadata:
   tags: ["redis", "cache", "key-value", "database"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

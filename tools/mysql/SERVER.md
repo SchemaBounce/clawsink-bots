@@ -9,6 +9,7 @@ metadata:
   tags: ["mysql", "database", "sql", "mariadb"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

@@ -9,6 +9,7 @@ metadata:
   tags: ["cal", "scheduling", "calendar", "bookings"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "CAL"

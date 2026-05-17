@@ -9,6 +9,7 @@ metadata:
   tags: ["browser", "web", "scraping", "automation", "presence"]
   author: "hyperbrowser"
   license: "MIT"
+  category: ai-memory
 transport:
   type: "stdio"
   command: "npx"

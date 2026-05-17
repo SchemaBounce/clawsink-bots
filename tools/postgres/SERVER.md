@@ -9,6 +9,7 @@ metadata:
   tags: ["postgres", "postgresql", "database", "sql"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

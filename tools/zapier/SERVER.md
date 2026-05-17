@@ -9,6 +9,7 @@ metadata:
   tags: ["zapier", "automation", "workflow", "integration"]
   author: "schemabounce"
   license: "MIT"
+  category: automation
 auth:
   method: "composio"
   composioToolkit: "ZAPIER"

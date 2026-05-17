@@ -9,6 +9,7 @@ metadata:
   tags: ["google", "gmail", "email", "messaging"]
   author: "schemabounce"
   license: "MIT"
+  category: communication
 auth:
   method: "composio"
   composioToolkit: "GMAIL"

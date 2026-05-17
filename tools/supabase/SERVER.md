@@ -9,6 +9,7 @@ metadata:
   tags: ["supabase", "database", "auth", "storage", "postgres"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

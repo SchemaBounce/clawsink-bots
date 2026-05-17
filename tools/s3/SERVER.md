@@ -9,6 +9,7 @@ metadata:
   tags: ["s3", "aws", "storage", "objects", "cloud"]
   author: "schemabounce"
   license: "MIT"
+  category: other
 transport:
   type: "stdio"
   command: "npx"

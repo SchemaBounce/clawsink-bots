@@ -9,6 +9,7 @@ metadata:
   tags: ["sentry", "errors", "monitoring", "debugging", "performance"]
   author: "schemabounce"
   license: "MIT"
+  category: observability
 transport:
   type: "stdio"
   command: "npx"

@@ -9,6 +9,7 @@ metadata:
   tags: ["telegram", "messaging", "bot", "chat"]
   author: "schemabounce"
   license: "MIT"
+  category: communication
 auth:
   method: "composio"
   composioToolkit: "TELEGRAM"

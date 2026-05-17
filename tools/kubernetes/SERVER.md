@@ -9,6 +9,7 @@ metadata:
   tags: ["kubernetes", "k8s", "containers", "orchestration", "devops"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "npx"

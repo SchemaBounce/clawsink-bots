@@ -9,6 +9,7 @@ metadata:
   tags: ["spotify", "music", "audio", "streaming"]
   author: "schemabounce"
   license: "MIT"
+  category: social-media
 auth:
   method: "composio"
   composioToolkit: "SPOTIFY"

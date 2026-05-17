@@ -9,6 +9,7 @@ metadata:
   tags: [memory, vector-search, filtering, rust]
   author: Qdrant
   license: Apache-2.0
+  category: ai-memory
 transport:
   type: streamable-http
   url: "http://qdrant-mcp:8080/mcp"

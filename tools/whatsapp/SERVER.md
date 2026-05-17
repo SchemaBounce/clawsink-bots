@@ -9,6 +9,7 @@ metadata:
   tags: ["whatsapp", "messaging", "business", "chat"]
   author: "schemabounce"
   license: "MIT"
+  category: communication
 auth:
   method: "composio"
   composioToolkit: "WHATSAPP"

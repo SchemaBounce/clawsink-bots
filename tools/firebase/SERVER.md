@@ -9,6 +9,7 @@ metadata:
   tags: ["firebase", "google", "logs", "analytics", "firestore"]
   author: "schemabounce"
   license: "MIT"
+  category: observability
 transport:
   type: "stdio"
   command: "npx"

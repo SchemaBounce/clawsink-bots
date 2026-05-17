@@ -9,6 +9,7 @@ metadata:
   tags: ["gcp", "google-cloud", "cloud", "infrastructure"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "npx"

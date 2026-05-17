@@ -9,6 +9,7 @@ metadata:
   tags: [memory, vector-search, fact-extraction, personalization]
   author: Mem0 AI
   license: Apache-2.0
+  category: ai-memory
 transport:
   type: streamable-http
   url: "http://mem0-mcp:8080/mcp"

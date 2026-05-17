@@ -9,6 +9,7 @@ metadata:
   tags: ["shopify", "ecommerce", "inventory", "orders", "products"]
   author: "schemabounce"
   license: "MIT"
+  category: ecommerce
 auth:
   method: "composio"
   composioToolkit: "SHOPIFY"

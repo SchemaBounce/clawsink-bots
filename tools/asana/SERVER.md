@@ -9,6 +9,7 @@ metadata:
   tags: ["asana", "project-management", "tasks", "enterprise"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 auth:
   method: "composio"
   composioToolkit: "ASANA"

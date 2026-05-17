@@ -9,6 +9,7 @@ metadata:
   tags: ["zendesk", "support", "helpdesk", "tickets", "customer-service"]
   author: "schemabounce"
   license: "MIT"
+  category: crms-sales
 auth:
   method: "composio"
   composioToolkit: "ZENDESK"

@@ -9,6 +9,7 @@ metadata:
   tags: ["linear", "project-management", "issues", "cycles", "roadmap"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 auth:
   method: "composio"
   composioToolkit: "LINEAR"

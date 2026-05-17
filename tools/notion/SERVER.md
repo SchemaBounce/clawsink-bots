@@ -9,6 +9,7 @@ metadata:
   tags: ["notion", "productivity", "knowledge-base", "documentation", "wiki"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "NOTION"

@@ -9,6 +9,7 @@ metadata:
   tags: ["netlify", "deployment", "hosting", "jamstack"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "npx"

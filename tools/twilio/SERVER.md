@@ -9,6 +9,7 @@ metadata:
   tags: ["twilio", "sms", "voice", "messaging", "communications"]
   author: "schemabounce"
   license: "MIT"
+  category: communication
 auth:
   method: "composio"
   composioToolkit: "TWILIO"

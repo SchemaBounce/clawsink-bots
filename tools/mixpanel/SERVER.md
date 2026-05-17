@@ -9,6 +9,7 @@ metadata:
   tags: ["mixpanel", "analytics", "product", "events", "funnels"]
   author: "schemabounce"
   license: "MIT"
+  category: observability
 auth:
   method: "composio"
   composioToolkit: "MIXPANEL"

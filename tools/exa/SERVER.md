@@ -9,6 +9,7 @@ metadata:
   tags: ["search", "web", "semantic", "research", "presence"]
   author: "exa"
   license: "MIT"
+  category: browser-scraping
 transport:
   type: "stdio"
   command: "npx"

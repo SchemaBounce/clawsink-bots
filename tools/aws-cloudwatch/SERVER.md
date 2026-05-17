@@ -9,6 +9,7 @@ metadata:
   tags: ["aws", "cloudwatch", "monitoring", "logs", "metrics", "alarms"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "uvx"

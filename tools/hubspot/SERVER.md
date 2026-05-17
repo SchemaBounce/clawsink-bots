@@ -9,6 +9,7 @@ metadata:
   tags: ["hubspot", "crm", "marketing", "sales", "contacts"]
   author: "schemabounce"
   license: "MIT"
+  category: crms-sales
 auth:
   method: "composio"
   composioToolkit: "HUBSPOT"

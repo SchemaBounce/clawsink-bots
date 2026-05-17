@@ -83,6 +83,7 @@ metadata:
   tags: [string]
   author: string
   license: string
+  category: string         # High-level grouping for marketplace UI (e.g. databases, communication, observability). Defaults to "other".
 transport:
   type: string           # "stdio" | "sse" | "streamable-http"
   command: string        # For stdio: command to run (e.g., "npx")

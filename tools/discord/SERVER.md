@@ -9,6 +9,7 @@ metadata:
   tags: ["discord", "chat", "community", "messaging"]
   author: "schemabounce"
   license: "MIT"
+  category: communication
 auth:
   method: "composio"
   composioToolkit: "DISCORD"

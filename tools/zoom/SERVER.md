@@ -9,6 +9,7 @@ metadata:
   tags: ["zoom", "video", "conferencing", "meetings", "webinars"]
   author: "schemabounce"
   license: "MIT"
+  category: other
 auth:
   method: "composio"
   composioToolkit: "ZOOM"

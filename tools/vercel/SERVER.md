@@ -9,6 +9,7 @@ metadata:
   tags: ["vercel", "deployment", "hosting", "frontend", "serverless"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "npx"

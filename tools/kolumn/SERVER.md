@@ -9,6 +9,7 @@ metadata:
   tags: ["kolumn", "iac", "schema", "hcl", "migration", "infrastructure-as-code"]
   author: "schemabounce"
   license: "MIT"
+  category: platform
 transport:
   type: "streamable-http"
   url: "${KOLUMN_MCP_URL}/mcp"

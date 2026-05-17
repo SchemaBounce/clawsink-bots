@@ -9,6 +9,7 @@ metadata:
   tags: ["mongodb", "nosql", "database", "documents"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

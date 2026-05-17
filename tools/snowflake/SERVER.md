@@ -9,6 +9,7 @@ metadata:
   tags: ["snowflake", "data-warehouse", "analytics", "sql", "cloud"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "stdio"
   command: "npx"

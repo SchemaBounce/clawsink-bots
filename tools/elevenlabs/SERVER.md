@@ -9,6 +9,7 @@ metadata:
   tags: ["voice", "audio", "tts", "stt", "presence", "phone"]
   author: "elevenlabs"
   license: "MIT"
+  category: ai-memory
 transport:
   type: "stdio"
   command: "uvx"

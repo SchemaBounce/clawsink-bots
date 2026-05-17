@@ -9,6 +9,7 @@ metadata:
   tags: ["aws", "amazon", "cloud", "infrastructure", "ec2", "s3", "lambda"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "uvx"

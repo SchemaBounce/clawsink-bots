@@ -9,6 +9,7 @@ metadata:
   tags: ["docker", "containers", "images", "devops"]
   author: "schemabounce"
   license: "MIT"
+  category: cloud-infra
 transport:
   type: "stdio"
   command: "npx"

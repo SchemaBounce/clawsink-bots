@@ -9,6 +9,7 @@ metadata:
   tags: [memory, vector-search, collections, developer-friendly]
   author: Chroma
   license: Apache-2.0
+  category: ai-memory
 transport:
   type: streamable-http
   url: "http://chromadb-mcp:8080/mcp"

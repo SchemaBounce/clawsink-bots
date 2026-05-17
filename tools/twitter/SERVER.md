@@ -9,6 +9,7 @@ metadata:
   tags: ["twitter", "x", "social", "tweets"]
   author: "schemabounce"
   license: "MIT"
+  category: social-media
 auth:
   method: "composio"
   composioToolkit: "TWITTER"

@@ -9,6 +9,7 @@ metadata:
   tags: ["trello", "kanban", "project-management", "boards"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 auth:
   method: "composio"
   composioToolkit: "TRELLO"

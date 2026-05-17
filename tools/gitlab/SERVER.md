@@ -9,6 +9,7 @@ metadata:
   tags: ["gitlab", "git", "merge-requests", "ci-cd", "devops"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 transport:
   type: "stdio"
   command: "npx"

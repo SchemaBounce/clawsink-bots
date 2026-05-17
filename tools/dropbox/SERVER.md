@@ -9,6 +9,7 @@ metadata:
   tags: ["dropbox", "storage", "files", "cloud-storage"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "DROPBOX"

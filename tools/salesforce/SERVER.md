@@ -9,6 +9,7 @@ metadata:
   tags: ["salesforce", "crm", "sales", "leads", "opportunities"]
   author: "schemabounce"
   license: "MIT"
+  category: crms-sales
 auth:
   method: "composio"
   composioToolkit: "SALESFORCE"

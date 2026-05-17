@@ -9,6 +9,7 @@ metadata:
   tags: ["google", "drive", "storage", "files", "documents"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "GOOGLEDRIVE"

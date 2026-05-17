@@ -9,6 +9,7 @@ metadata:
   tags: ["bigquery", "google", "data-warehouse", "analytics", "sql"]
   author: "schemabounce"
   license: "MIT"
+  category: databases
 transport:
   type: "sse"
   url: "https://mcp.googleapis.com/bigquery/sse"

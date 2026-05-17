@@ -9,6 +9,7 @@ metadata:
   tags: ["stripe", "payments", "billing", "subscriptions", "invoices"]
   author: "schemabounce"
   license: "MIT"
+  category: accounting
 auth:
   method: "composio"
   composioToolkit: "STRIPE"

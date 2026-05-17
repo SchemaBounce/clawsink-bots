@@ -9,6 +9,7 @@ metadata:
   tags: ["google", "calendar", "scheduling", "meetings"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "GOOGLECALENDAR"

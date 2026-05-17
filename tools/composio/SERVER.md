@@ -9,6 +9,7 @@ metadata:
   tags: ["saas", "integration", "oauth", "automation", "presence", "gmail", "calendar", "crm"]
   author: "composio"
   license: "MIT"
+  category: ai-memory
 transport:
   type: "stdio"
   command: "npx"

@@ -9,6 +9,7 @@ metadata:
   tags: ["youtube", "video", "google", "content"]
   author: "schemabounce"
   license: "MIT"
+  category: social-media
 auth:
   method: "composio"
   composioToolkit: "YOUTUBE"

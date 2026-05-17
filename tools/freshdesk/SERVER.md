@@ -9,6 +9,7 @@ metadata:
   tags: ["freshdesk", "helpdesk", "support", "tickets"]
   author: "schemabounce"
   license: "MIT"
+  category: crms-sales
 auth:
   method: "composio"
   composioToolkit: "FRESHDESK"

@@ -9,6 +9,7 @@ metadata:
   tags: ["todoist", "tasks", "productivity", "project-management"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 auth:
   method: "composio"
   composioToolkit: "TODOIST"

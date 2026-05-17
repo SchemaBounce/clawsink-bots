@@ -9,6 +9,7 @@ metadata:
   tags: ["crawling", "scraping", "web", "extraction", "research", "presence"]
   author: "firecrawl"
   license: "MIT"
+  category: browser-scraping
 transport:
   type: "stdio"
   command: "npx"

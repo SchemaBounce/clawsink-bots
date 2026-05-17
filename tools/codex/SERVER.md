@@ -9,6 +9,7 @@ metadata:
   tags: ["codex", "openai", "coding", "implementation", "managed", "preview"]
   author: "schemabounce"
   license: "MIT"
+  category: ai-memory
 transport:
   type: "streamable-http"
   url: "${CODEX_MCP_URL}/mcp"

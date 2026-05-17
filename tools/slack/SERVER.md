@@ -9,6 +9,7 @@ metadata:
   tags: ["slack", "messaging", "channels", "notifications"]
   author: "schemabounce"
   license: "MIT"
+  category: communication
 transport:
   type: "stdio"
   command: "npx"

@@ -9,6 +9,7 @@ metadata:
   tags: ["schemabounce", "platform", "pipelines", "schemas", "drift", "adl", "analytics"]
   author: "schemabounce"
   license: "MIT"
+  category: platform
 transport:
   type: "streamable-http"
   url: "${SCHEMABOUNCE_MCP_URL}/mcp"

@@ -9,6 +9,7 @@ metadata:
   tags: ["google", "seo", "search-console", "gsc", "analytics"]
   author: "schemabounce"
   license: "MIT"
+  category: platform
 auth:
   method: "native-oauth"
   provider: "google"

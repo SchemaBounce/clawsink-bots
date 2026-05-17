@@ -9,6 +9,7 @@ metadata:
   tags: ["github", "git", "issues", "pull-requests", "ci-cd"]
   author: "schemabounce"
   license: "MIT"
+  category: project-issue
 transport:
   type: "stdio"
   command: "npx"

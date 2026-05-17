@@ -9,6 +9,7 @@ metadata:
   tags: ["datadog", "monitoring", "metrics", "logs", "apm"]
   author: "schemabounce"
   license: "MIT"
+  category: observability
 transport:
   type: "sse"
   url: "https://mcp.datadoghq.com/sse"

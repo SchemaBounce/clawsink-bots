@@ -9,6 +9,7 @@ metadata:
   tags: ["playwright", "browser", "testing", "automation", "e2e"]
   author: "schemabounce"
   license: "MIT"
+  category: browser-scraping
 transport:
   type: "stdio"
   command: "npx"

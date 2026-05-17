@@ -9,6 +9,7 @@ metadata:
   tags: ["pinecone", "vector", "embeddings", "ai", "search"]
   author: "schemabounce"
   license: "MIT"
+  category: ai-memory
 transport:
   type: "stdio"
   command: "npx"

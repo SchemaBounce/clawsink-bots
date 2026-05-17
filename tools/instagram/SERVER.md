@@ -9,6 +9,7 @@ metadata:
   tags: ["instagram", "social", "media", "marketing"]
   author: "schemabounce"
   license: "MIT"
+  category: social-media
 auth:
   method: "composio"
   composioToolkit: "INSTAGRAM"

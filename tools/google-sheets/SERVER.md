@@ -9,6 +9,7 @@ metadata:
   tags: ["google", "sheets", "spreadsheet", "data"]
   author: "schemabounce"
   license: "MIT"
+  category: files-docs
 auth:
   method: "composio"
   composioToolkit: "GOOGLESHEETS"
