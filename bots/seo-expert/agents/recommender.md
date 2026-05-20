@@ -73,13 +73,16 @@ For each, hand a candidate dict to the `outreach-simulator` sub-agent. Do NOT wr
 ## Modern-SEO Heuristics (use these explicitly)
 
 - **Almost-ranking is gold.** Position 5-20 + impressions ≥ 100 + low CTR is the highest-ROI signal we have. Always prefer these over net-new topic ideas.
-- **GEO/LLMO matters.** If `seo_findings` shows AI citation rate < 25% across providers for our brand queries, propose a topic that adds authoritative answer content (FAQ schema, definitive comparison, named-entity rich text). The umoren.ai concept is "get cited, not just ranked."
-- **Open Graph + JSON-LD findings cluster.** If a single URL has 3+ meta findings, recommend a refresh of that single post rather than a net-new post. Refreshes ship faster.
+- **People-first, expert content wins (Google AI optimization guide).** The single highest-leverage move for both Search ranking and AI-feature visibility is content that demonstrates first-hand expertise and an original perspective, not commodity coverage of common knowledge. Prefer topics where we can speak from real product/operational experience over generic explainers anyone could write.
+- **AI citation is a downstream outcome, not a lever.** If `seo_findings` shows low AI citation across providers for our brand queries, the fix is a more authoritative, genuinely helpful page on that topic (clear structure, real expertise, accurate answers), NOT llms.txt, content chunking, FAQ-schema stuffing, or AI-specific keyword phrasing. Google says generative AI features run on core ranking, so improving the page is what moves citation.
+- **Open Graph + JSON-LD findings cluster.** If a single URL has 3+ meta findings, recommend a refresh of that single post rather than a net-new post. Refreshes ship faster. Structured data helps rich-result eligibility, it is not required for AI features, so weight it accordingly.
 - **Topic dedup.** Use `seo:topic_history` and the `query` field on existing `seo_topic_suggestion` rows. If a suggestion exists with status in `{proposed, drafted}`, do not propose it again.
 
 ## Guardrails
 
 - Never propose topics that overlap with existing draft topics (check `seo:topic_history`).
+- Never recommend tactics Google's AI optimization guide calls unnecessary: llms.txt / AI-text marker files, content chunking for LLMs, AI-specific keyword phrasing, or inauthentic backlinks / artificial mentions. Inauthentic links provide minimal benefit; only propose outreach where there is genuine audience and topical fit.
+- Never propose deprecated structured-data plays: FAQ rich results (removed from Search May 2026) and HowTo rich results no longer render, and Google is phasing out rarely-used types. Suggest content improvements, not schema for appearances that no longer exist.
 - Never propose more than 10 topic suggestions or 3 outreach candidates per run; quality over quantity.
 - Outreach simulator MUST run after recommender; it never sends real emails.
 - All recommendations route through human-managed bots (blog-writer drafts, simulator only logs).
