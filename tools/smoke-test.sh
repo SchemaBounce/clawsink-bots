@@ -23,7 +23,7 @@ RESET='\033[0m'
 
 # ── Constants ────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TIMEOUT_SECONDS=30
+TIMEOUT_SECONDS="${SMOKE_TIMEOUT_SECONDS:-30}"
 
 INIT_REQUEST='{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"smoke-test","version":"1.0"}},"id":1}'
 INIT_NOTIFICATION='{"jsonrpc":"2.0","method":"notifications/initialized"}'
@@ -32,6 +32,7 @@ TOOLS_LIST_REQUEST='{"jsonrpc":"2.0","method":"tools/list","params":{},"id":2}'
 # ── Flags ────────────────────────────────────────────────────────────────────
 WITH_TOOLS_LIST=false
 FILTER_SERVER=""
+CI_MODE=false
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -39,16 +40,24 @@ while [[ $# -gt 0 ]]; do
             WITH_TOOLS_LIST=true
             shift
             ;;
+        --ci)
+            CI_MODE=true
+            shift
+            ;;
         --server)
             FILTER_SERVER="$2"
             shift 2
             ;;
         --help|-h)
-            echo "Usage: $0 [--server <name>] [--with-tools-list]"
+            echo "Usage: $0 [--server <name>] [--with-tools-list] [--ci]"
             echo ""
             echo "Options:"
             echo "  --server <name>      Test only the named server (e.g. github, slack)"
             echo "  --with-tools-list    Also send tools/list request after initialize"
+            echo "  --ci                 CI gate mode: servers needing credentials are"
+            echo "                       SKIPPED (can't verify without secrets) so the run"
+            echo "                       fails ONLY on real package/transport breakage"
+            echo "                       (missing package, no command, bad MCP handshake)."
             echo "  -h, --help           Show this help"
             exit 0
             ;;
@@ -186,6 +195,18 @@ for server_dir in "$SCRIPT_DIR"/*/; do
             missing_envs+=("$env_name")
         fi
     done
+
+    # ── CI gate: skip servers that need credentials ──────────────────────
+    # We can't verify a credentialed server without its secret, and a missing
+    # secret is expected, not a defect. In --ci mode, SKIP those so the gate
+    # fails only on real package/transport breakage (missing package, no
+    # command, broken MCP handshake) for the servers we CAN exercise no-cred.
+    if $CI_MODE && [[ ${#missing_envs[@]} -gt 0 ]]; then
+        echo -e "  ${YELLOW}SKIP${RESET}  ${BOLD}${display_name:-$server_name}${RESET} ${DIM}(needs credentials: ${missing_envs[*]})${RESET}"
+        SKIPPED=$((SKIPPED + 1))
+        RESULTS+=("SKIP|${display_name:-$server_name}|needs credentials")
+        continue
+    fi
 
     # ── Build the command ────────────────────────────────────────────────
     if [[ -z "$command" ]]; then

@@ -1,0 +1,43 @@
+name: MCP Smoke Test
+
+# Verifies every stdio MCP server in tools/ still spawns and speaks MCP
+# (initialize + tools/list) so a broken package name, missing command, or
+# malformed transport in a SERVER.md is caught before it reaches the catalog.
+#
+# Runs in --ci mode: servers that need credentials are SKIPPED (we can't and
+# shouldn't ship secrets to CI), so the gate fails ONLY on real package or
+# transport breakage for the servers we can exercise without credentials.
+# sse / streamable-http servers are skipped here (they need an HTTP probe, not
+# a stdio handshake) — track that as a follow-up.
+
+on:
+  pull_request:
+    paths:
+      - 'tools/**'
+      - '.github/workflows/mcp-smoke-test.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    name: stdio MCP servers spawn + list tools
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      # npx-based servers
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # uvx-based servers (aws, elevenlabs, todoist, ...)
+      - name: Install uv (provides uvx)
+        uses: astral-sh/setup-uv@v5
+
+      - name: Smoke test all stdio MCP servers
+        working-directory: tools
+        # Longer per-server timeout than the 30s local default: CI cold-starts
+        # download npm/PyPI packages (and Chromium for puppeteer/playwright).
+        env:
+          SMOKE_TIMEOUT_SECONDS: '90'
+        run: bash ./smoke-test.sh --with-tools-list --ci
