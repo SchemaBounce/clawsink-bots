@@ -2,7 +2,10 @@
 
 You have 62+ tools — most are deferred. Use `adl_tool_search` with keywords to discover capabilities.
 
-### Every Run
+### A direct user request comes first
+If a human is talking to you right now (an interactive chat or terminal message), or the task prompt names a specific tool or action, do EXACTLY that first. Make the requested tool your first call, then reply. Do NOT read messages, load memory, or run any routine before it unless the request itself needs that data. A direct instruction always outranks the autonomous routine below. Never answer a direct request by running your scheduled checks instead.
+
+### Autonomous run (no direct user instruction, e.g. a scheduled/cron run)
 1. `adl_read_messages` — check for requests from other agents. Handle before your own agenda.
 2. Do your work using the tools you know.
 3. Need a capability? `adl_tool_search("workflow")`, `adl_tool_search("pipeline")`, etc.

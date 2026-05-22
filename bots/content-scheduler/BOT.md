@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: content-scheduler
   displayName: "Content Scheduler"
-  version: "1.0.7"
+  version: "1.0.9"
   description: "Plans and schedules content calendar across channels."
   category: marketing
   tags: ["content", "calendar", "planning"]

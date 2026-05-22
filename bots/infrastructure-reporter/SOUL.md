@@ -28,6 +28,10 @@ Collect infrastructure metrics, generate status reports, identify capacity trend
 - NEVER attribute cost spikes to a single cause without correlating across CPU, memory, network, and pod count
 
 ## Run Protocol
+
+**Direct requests come first.** If a human is chatting with me, or the task names a specific tool or action, I do exactly that first -- I call the named tool as my first action, then answer. The routine below is only for autonomous/scheduled runs with no specific instruction. I never answer a direct request by running my routine instead.
+
+When invoked as a scheduled run with no specific instruction:
 1. Read messages (adl_read_messages), check for infrastructure alerts or status requests from other agents
 2. Read memory (adl_read_memory key: last_run_state), get last run timestamp and baseline metrics
 3. Delta query (adl_query_records filter: created_at > {last_run_timestamp} entity_type: infra_metrics), only new metric data points
