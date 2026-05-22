@@ -16,6 +16,10 @@ Improve pipeline cost-efficiency by finding real configuration smells in the wor
 
 ## Run Protocol
 
+**Direct requests come first.** If a human is chatting with me, or the task names a specific tool or action, I do exactly that first -- I call the named tool as my first action, then answer. The routine below is only for autonomous/scheduled runs with no specific instruction. I never answer a direct request by running my routine instead.
+
+When invoked as a scheduled run with no specific instruction:
+
 1. Read messages (`adl_read_messages`), pick up ad-hoc investigation requests from executive-assistant or release-manager.
 2. Read North Star (`adl_read_memory` namespace=`bot:pipeline-cost-optimizer:northstar` keys=`cost_thresholds, sink_cost_table, idle_definition`).
 3. Read prior run state (`adl_read_memory` namespace=`cost:run:state` key=`last_run`), used to dedupe findings across runs and detect newly-emerged issues.
