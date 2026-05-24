@@ -9,6 +9,14 @@ metadata:
   tags: ["pagerduty", "incidents", "oncall", "alerting"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# PagerDuty uses the non-standard "Authorization: Token token=<KEY>"
+# scheme — use injection template.
+auth:
+  injection:
+    header_name: Authorization
+    header_template: "Token token={PAGERDUTY_API_KEY}"
+
 transport:
   type: "sse"
   url: "https://mcp.composio.dev/pagerduty"
@@ -16,6 +24,38 @@ env:
   - name: PAGERDUTY_API_KEY
     description: "PagerDuty REST API key"
     required: true
+    sensitive: true
+
+# /abilities is the documented authentication-probe endpoint —
+# returns the account's enabled abilities. Cheap, idempotent.
+# PagerDuty requires Accept: application/vnd.pagerduty+json;version=2.
+validation:
+  request:
+    method: GET
+    url: https://api.pagerduty.com/abilities
+    headers:
+      Accept: "application/vnd.pagerduty+json;version=2"
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "PagerDuty rejected the API key (401). Create a new REST API key in your PagerDuty user profile and update PAGERDUTY_API_KEY." }
+    "403": { state: needs_setup, message: "API key lacks required scopes (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.pagerduty.com/abilities
+    headers:
+      Accept: "application/vnd.pagerduty+json;version=2"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_incidents
     description: "List incidents"

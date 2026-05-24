@@ -9,10 +9,11 @@ metadata:
   tags: ["intercom", "messaging", "support", "customer-engagement"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
 auth:
-  method: "composio"
-  composioToolkit: "INTERCOM"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like INTERCOM_*."
+  type: http_bearer
+  token_env: INTERCOM_ACCESS_TOKEN
+
 transport:
   type: "sse"
   url: "https://mcp.intercom.com/sse"
@@ -20,6 +21,37 @@ env:
   - name: INTERCOM_ACCESS_TOKEN
     description: "Intercom access token from Developer Hub"
     required: true
+    sensitive: true
+
+# /me returns the authenticated app's own admin user. Idempotent.
+validation:
+  request:
+    method: GET
+    url: https://api.intercom.io/me
+    headers:
+      Accept: application/json
+      Intercom-Version: "2.11"
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Intercom rejected the access token (401). Regenerate at https://app.intercom.com/a/apps/_/developer-hub and update INTERCOM_ACCESS_TOKEN." }
+    "403": { state: needs_setup, message: "Token lacks required permissions (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.intercom.io/me
+    headers:
+      Intercom-Version: "2.11"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_conversations
     description: "List conversations"

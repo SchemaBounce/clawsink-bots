@@ -9,6 +9,11 @@ metadata:
   tags: ["netlify", "deployment", "hosting", "jamstack"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+auth:
+  type: http_bearer
+  token_env: NETLIFY_AUTH_TOKEN
+
 transport:
   type: "stdio"
   command: "npx"
@@ -17,6 +22,34 @@ env:
   - name: NETLIFY_AUTH_TOKEN
     description: "Netlify personal access token from app.netlify.com/user/applications"
     required: true
+    sensitive: true
+
+# /api/v1/user returns the authenticated user. Lightweight, idempotent.
+validation:
+  request:
+    method: GET
+    url: https://api.netlify.com/api/v1/user
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: email
+  on_status:
+    "401": { state: needs_setup, message: "Netlify rejected the access token (401). Generate a new one at https://app.netlify.com/user/applications and update NETLIFY_AUTH_TOKEN." }
+    "403": { state: needs_setup, message: "Token lacks required scopes (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.netlify.com/api/v1/user
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_sites
     description: "List all sites in the account"

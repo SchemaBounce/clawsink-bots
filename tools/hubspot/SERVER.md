@@ -9,10 +9,11 @@ metadata:
   tags: ["hubspot", "crm", "marketing", "sales", "contacts"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
 auth:
-  method: "composio"
-  composioToolkit: "HUBSPOT"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like HUBSPOT_*."
+  type: http_bearer
+  token_env: HUBSPOT_ACCESS_TOKEN
+
 transport:
   type: "sse"
   url: "https://mcp.hubspot.com/sse"
@@ -20,6 +21,33 @@ env:
   - name: HUBSPOT_ACCESS_TOKEN
     description: "HubSpot private app access token"
     required: true
+    sensitive: true
+
+# /crm/v3/objects/contacts?limit=1 is the lightest CRM endpoint —
+# returns 200 even when zero contacts exist, 401 on bad token.
+validation:
+  request:
+    method: GET
+    url: https://api.hubapi.com/crm/v3/objects/contacts?limit=1
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "HubSpot rejected the access token (401). Verify the private app token at https://app.hubspot.com/settings (Account > Integrations > Private Apps)." }
+    "403": { state: needs_setup, message: "Private app lacks required scopes (403). Grant at least crm.objects.contacts.read." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.hubapi.com/crm/v3/objects/contacts?limit=1
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_contacts
     description: "List contacts"
