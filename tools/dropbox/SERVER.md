@@ -9,10 +9,11 @@ metadata:
   tags: ["dropbox", "storage", "files", "cloud-storage"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
 auth:
-  method: "composio"
-  composioToolkit: "DROPBOX"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like DROPBOX_*."
+  type: http_bearer
+  token_env: DROPBOX_ACCESS_TOKEN
+
 transport:
   type: "sse"
   url: "https://mcp.dropbox.com/sse"
@@ -20,6 +21,39 @@ env:
   - name: DROPBOX_ACCESS_TOKEN
     description: "Dropbox access token from Dropbox App Console"
     required: true
+    sensitive: true
+
+# /2/users/get_current_account returns the authenticated account.
+# Dropbox requires POST with empty body for this endpoint.
+validation:
+  request:
+    method: POST
+    url: https://api.dropboxapi.com/2/users/get_current_account
+    headers:
+      Content-Type: application/json
+    body: "null"
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Dropbox rejected the access token (401). Generate a new one in Dropbox App Console and update DROPBOX_ACCESS_TOKEN." }
+    "403": { state: needs_setup, message: "Dropbox app lacks required scopes (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: POST
+    url: https://api.dropboxapi.com/2/users/get_current_account
+    headers:
+      Content-Type: application/json
+    body: "null"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_folder
     description: "List files in a folder"

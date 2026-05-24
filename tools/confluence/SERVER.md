@@ -9,6 +9,14 @@ metadata:
   tags: ["confluence", "atlassian", "wiki", "documentation"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Same Atlassian two-credential http_basic + per-tenant URL pattern
+# as Jira. The same Atlassian API token works for both products.
+auth:
+  type: http_basic
+  username_env: CONFLUENCE_EMAIL
+  password_env: CONFLUENCE_API_TOKEN
+
 transport:
   type: "stdio"
   command: "npx"
@@ -23,6 +31,37 @@ env:
   - name: CONFLUENCE_API_TOKEN
     description: "Atlassian API token"
     required: true
+    sensitive: true
+
+# /wiki/rest/api/user/current returns the authenticated user.
+validation:
+  request:
+    method: GET
+    url: "{CONFLUENCE_URL}/wiki/rest/api/user/current"
+    headers:
+      Accept: application/json
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: displayName
+  on_status:
+    "401": { state: needs_setup, message: "Confluence rejected the email/token combination (401). Verify the API token at https://id.atlassian.com/manage-profile/security/api-tokens." }
+    "403": { state: needs_setup, message: "Account lacks permission (403). The token's account needs at least Confluence read access." }
+    "404": { state: needs_setup, message: "Confluence host returned 404 — check CONFLUENCE_URL is the base URL (no /wiki suffix, no trailing slash)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: "{CONFLUENCE_URL}/wiki/rest/api/user/current"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: search_content
     description: "Search content across spaces"
