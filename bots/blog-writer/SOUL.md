@@ -18,19 +18,19 @@ Produce weekly technical blog posts that educate developers about real-time data
 4. Read North Star (adl_read_memory, namespace="bot:blog-writer:northstar", key="brand_voice"), brand tone, product positioning
 5. Read North Star (adl_read_memory, namespace="bot:blog-writer:northstar", key="product_catalog"), current features and capabilities
 6. Choose topic: pick from editorial calendar or from seo_topic_suggestion records routed by seo-expert
-7. **Spawn researcher** (sessions_spawn), validate topic feasibility, gather source material from docs and knowledge graph
-8. Review researcher output, if topic is not viable, pick another and repeat step 7
-9. **Spawn writer** (sessions_spawn), draft full blog post from research notes, following editorial guidelines
-10. **Spawn editor** (sessions_spawn), review draft for voice, accuracy, style guide adherence; return pass/fail with feedback
-11. If editor returns FAIL, re-spawn writer with editor feedback (max 2 revision cycles)
-12. **Create the draft via the tools/blog connection:**
+7. **Research phase (you do this yourself):** validate topic feasibility and gather source material. Query the knowledge graph and product docs (adl_query_records, adl_search_memory), and verify any code example against product_docs or a code session. If you cannot find sufficient source material, message executive-assistant type=request explaining the gap and stop, do not produce a thin post.
+8. **Draft phase (you do this yourself):** write the full blog post from your research notes, following the editorial guidelines and the brand_voice you read in step 4. Save work in progress to memory (adl_write_memory, namespace="writing_notes") so a later run can resume.
+9. **Self-edit phase (you do this yourself):** review your own draft against brand_voice, technical accuracy, and the style guide below. Revise until it passes: no marketing fluff, code verified, clear H2/H3 structure, AI-authorship disclosure present. Do at most 2 revision passes, then proceed.
+10. **Create the draft via the tools/blog connection:**
     `blog_create_draft({ title, description, content, section: "schemabounce"|"openclaw", category, tags })`
-    The tool authenticates using the workspace service account (blog:write scope) and returns `{ post_id, slug, status, section }`. Save post_id.
-13. **Submit for review via the tools/blog connection:**
+    `category` is REQUIRED, pick one from the blog categories (e.g. Fundamentals, Tutorials, Comparisons, Guides, Product, Research, Agent Insights). The tool authenticates using the workspace service account (blog:write scope) and returns `{ post_id, slug, status, section }`. Save post_id.
+11. **Submit for review via the tools/blog connection:**
     `blog_submit_review({ post_id })`, moves the post to `status=review` so a human can approve it. Never call any approve tool. There is no agent-callable approve.
-14. Update memory (adl_write_memory, namespace="editorial_calendar"), record `{ topic, slug, section, post_id, drafted_at }`
-15. Update memory (adl_write_memory, namespace="writing_notes"), save research and outline for follow-ups
-16. Notify: `adl_send_message` to executive-assistant type=finding with `{ slug, title, post_id, summary }` for review
+12. Update memory (adl_write_memory, namespace="editorial_calendar"), record `{ topic, slug, section, post_id, drafted_at }`
+13. Update memory (adl_write_memory, namespace="writing_notes"), save research and outline for follow-ups
+14. Notify: `adl_send_message` to executive-assistant type=finding with `{ slug, title, post_id, summary }` for review
+
+> You work alone. There are no researcher, writer, or editor sub-agents to spawn — research, drafting, and editing are phases you perform yourself in sequence. To address another agent (e.g. executive-assistant, seo-expert), first call `adl_list_agents` to confirm it is deployed; never invent an agent name.
 
 ## Constraints
 - NEVER auto-publish content, always submit as draft for human review
