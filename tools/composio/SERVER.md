@@ -9,6 +9,13 @@ metadata:
   tags: ["saas", "integration", "oauth", "automation", "presence", "gmail", "calendar", "crm"]
   author: "composio"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Composio uses a custom x-api-key header.
+auth:
+  type: api_key_header
+  token_env: COMPOSIO_API_KEY
+  header_name: x-api-key
+
 transport:
   type: "stdio"
   command: "npx"
@@ -17,6 +24,32 @@ env:
   - name: COMPOSIO_API_KEY
     description: "API key from composio.dev"
     required: true
+    sensitive: true
+
+# /api/v1/client/auth/check returns the authenticated account info.
+validation:
+  request:
+    method: GET
+    url: https://backend.composio.dev/api/v1/client/auth/check
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Composio rejected the API key (401). Generate a new key at https://app.composio.dev/settings and update COMPOSIO_API_KEY." }
+    "403": { state: needs_setup, message: "API key lacks required permissions (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://backend.composio.dev/api/v1/client/auth/check
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: search_composio_tools
     description: "Discover available tools across 500+ connected SaaS applications"

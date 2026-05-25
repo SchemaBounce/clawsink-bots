@@ -9,10 +9,14 @@ metadata:
   tags: ["clickup", "project-management", "tasks", "productivity"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# ClickUp's API expects the raw token (no "Bearer" prefix) in the
+# Authorization header — use the injection template form.
 auth:
-  method: "composio"
-  composioToolkit: "CLICKUP"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like CLICKUP_*."
+  injection:
+    header_name: Authorization
+    header_template: "{CLICKUP_API_TOKEN}"
+
 transport:
   type: "stdio"
   command: "npx"
@@ -21,6 +25,32 @@ env:
   - name: CLICKUP_API_TOKEN
     description: "ClickUp personal API token from Settings > Apps"
     required: true
+    sensitive: true
+
+# /api/v2/user returns the authenticated user record.
+validation:
+  request:
+    method: GET
+    url: https://api.clickup.com/api/v2/user
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "ClickUp rejected the API token (401). Regenerate at Settings > Apps in clickup.com and update CLICKUP_API_TOKEN." }
+    "403": { state: needs_setup, message: "Token lacks required permissions (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.clickup.com/api/v2/user
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_tasks
     description: "List tasks in a list"

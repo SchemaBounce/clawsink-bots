@@ -9,10 +9,17 @@ metadata:
   tags: ["notion", "productivity", "knowledge-base", "documentation", "wiki"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# The engine in core-api uses these blocks to verify credentials and
+# probe upstream reachability without per-server Go code.
+#
+# Previous metadata noted "method: composio" — that was aspirational
+# documentation; the actual runtime auth is direct NOTION_API_KEY as
+# a Bearer token, matching the curated mcp_validation.go path.
 auth:
-  method: "composio"
-  composioToolkit: "NOTION"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like NOTION_*."
+  type: http_bearer
+  token_env: NOTION_API_KEY
+
 transport:
   type: "stdio"
   command: "npx"
@@ -21,6 +28,40 @@ env:
   - name: NOTION_API_KEY
     description: "Notion Internal Integration Token"
     required: true
+    sensitive: true
+
+validation:
+  request:
+    method: GET
+    url: https://api.notion.com/v1/users/me
+    headers:
+      # Notion requires an explicit API version header on every call.
+      # See https://developers.notion.com/reference/versioning.
+      Notion-Version: "2022-06-28"
+      Accept: application/json
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: name
+  on_status:
+    "401": { state: needs_setup, message: "Notion rejected the integration token (401). Generate a fresh internal integration token at https://www.notion.so/profile/integrations." }
+    "403": { state: needs_setup, message: "Notion integration lacks required capabilities (403). Grant the integration access to the workspace pages or databases it needs." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.notion.com/v1/users/me
+    headers:
+      Notion-Version: "2022-06-28"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: search
     description: "Search across all pages and databases"

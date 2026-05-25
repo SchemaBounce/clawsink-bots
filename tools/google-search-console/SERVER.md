@@ -17,21 +17,24 @@ auth:
     - "openid"
     - "email"
   setupReason: "Real keyword data, impressions, CTR, position trends. Without this the SEO auditor falls back to internal-only checks and cannot identify almost-ranking opportunities."
-# Transport: a stdio MCP server we host inside the workspace OpenCLAW pod.
-# The npm package below is illustrative — replace with the actual package
-# we vendor or publish. The runtime resolves GOOGLE_REFRESH_TOKEN from
-# mcp_connections at pod-start and the MCP server uses it to mint short-lived
-# access tokens for every Google Search Console API call. No customer data
-# leaves the pod except to googleapis.com.
+# Transport: a real, published stdio MCP server — AminForou/mcp-gsc, PyPI
+# package `mcp-search-console` (MIT, ~900 GitHub stars). Hosted as a
+# uvx-launched sidecar inside the workspace OpenCLAW pod. Pinned to an explicit
+# version for reproducibility; the gateway pre-warms pinned uvx packages on pod
+# start. No customer data leaves the pod except to googleapis.com.
+#
+# AUTH INTEGRATION — STILL REQUIRED (do not assume this is end-to-end working):
+# mcp-search-console reads credentials from a FILE — GSC_OAUTH_CLIENT_SECRETS_FILE
+# (OAuth client secrets) or GSC_CREDENTIALS_PATH + GSC_SKIP_OAUTH=true (service
+# account). Our native-OAuth flow stores a refresh token in mcp_connections and
+# injects env vars at pod start. A small auth shim must materialize those env
+# values into the credentials file the package expects before it can authenticate.
+# Until that shim lands the server launches but cannot reach GSC. The package
+# itself is real and pinned — this is no longer a placeholder/fake reference.
 transport:
   type: "stdio"
-  command: "npx"
-  args: ["-y", "google-search-console-mcp@latest"]
-  # NOTE: at the time of writing the canonical npm package is still being
-  # vetted. Until it is, the SERVER.md is committed as a target spec; the
-  # OAuth handler in core-api (mcp_oauth_google_handler.go) lands the
-  # refresh token regardless, so when the package is finalised the runtime
-  # path lights up with no further frontend / handler changes.
+  command: "uvx"
+  args: ["mcp-search-console==0.3.2"]
 env:
   - name: GOOGLE_REFRESH_TOKEN
     description: "Workspace's Google OAuth refresh token. Issued by core-api after the user completes the consent flow opened from the deploy modal. Stored encrypted in mcp_connections; resolved server-side at pod start."

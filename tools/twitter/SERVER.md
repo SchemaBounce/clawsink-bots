@@ -9,10 +9,12 @@ metadata:
   tags: ["twitter", "x", "social", "tweets"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation (SchemaBounce #1614).
+# Twitter/X uses standard Bearer auth on the v2 API.
 auth:
-  method: "composio"
-  composioToolkit: "TWITTER"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like TWITTER_*."
+  type: http_bearer
+  token_env: TWITTER_BEARER_TOKEN
+
 transport:
   type: "stdio"
   command: "npx"
@@ -21,6 +23,29 @@ env:
   - name: TWITTER_BEARER_TOKEN
     description: "Twitter API v2 bearer token"
     required: true
+    sensitive: true
+
+# /2/users/me with a bearer token works for user-context tokens; app-
+# only bearer tokens will get a 403 (correctly mapped). Tight rate
+# limits on the Twitter free tier make this a 1-call-per-15-minute
+# operation in production.
+#
+# NO healthProbe block — Twitter API v2 free tier is so tightly
+# rate-limited (10-100 reads per 15min depending on the tier) that
+# periodic 5-min probing would saturate the quota immediately.
+validation:
+  request:
+    method: GET
+    url: https://api.twitter.com/2/users/me
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Twitter rejected the bearer token (401). Regenerate the token in your X Developer Portal app settings and update TWITTER_BEARER_TOKEN." }
+    "403": { state: needs_setup, message: "Bearer token type or app permissions insufficient (403). /2/users/me requires a user-context bearer; app-only bearers won't work here." }
+    "429": { state: failed, message: "Twitter API rate limit hit (429). The free tier has very tight limits — wait 15min before retrying." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
 tools:
   - name: post_tweet
     description: "Post a new tweet"
