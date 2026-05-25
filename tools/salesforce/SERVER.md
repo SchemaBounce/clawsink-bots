@@ -9,20 +9,30 @@ metadata:
   tags: ["salesforce", "crm", "sales", "leads", "opportunities"]
   author: "schemabounce"
   license: "MIT"
+# AUTH GAP (verified 2026-05-25): The official @salesforce/mcp server does NOT use
+# Composio managed-OAuth or env-var access tokens. It authorizes against orgs you have
+# logged in locally via the Salesforce CLI (`sf org login web`). The composio block below
+# is retained as the SchemaBounce-managed-auth aspiration, but it is NOT how this server
+# authenticates today. Until a Composio bridge or a Salesforce-hosted remote endpoint with
+# a public URL exists, this server requires local CLI org auth and is not end-to-end
+# managed-OAuth in the SchemaBounce workspace. Do not claim managed OAuth works here.
 auth:
   method: "composio"
   composioToolkit: "SALESFORCE"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like SALESFORCE_*."
+  setupReason: "Aspirational managed-OAuth via Composio. See AUTH GAP note above: the underlying official server actually uses local Salesforce CLI org authorization, not Composio, today."
+# Previous transport was url: "https://mcp.salesforce.com/sse" -- that host does NOT resolve
+# (DNS failure, curl rc=6), it was a fabricated/dead endpoint and has been removed.
+# Replaced with the official Salesforce DX MCP Server: npm @salesforce/mcp (stdio transport),
+# verified published version 0.30.12 (registry.npmjs.org returns 200). Source:
+# https://github.com/salesforcecli/mcp -- maintained by Salesforce (Apache-2.0).
 transport:
-  type: "sse"
-  url: "https://mcp.salesforce.com/sse"
+  type: "stdio"
+  command: "npx"
+  args: ["-y", "@salesforce/mcp@0.30.12", "--orgs", "DEFAULT_TARGET_ORG", "--toolsets", "all"]
 env:
-  - name: SALESFORCE_INSTANCE_URL
-    description: "Salesforce instance URL"
-    required: true
-  - name: SALESFORCE_ACCESS_TOKEN
-    description: "Salesforce access token"
-    required: true
+  - name: SF_MCP_AUTH
+    description: "Local Salesforce CLI org authorization is required before launch: run `sf org login web` to authorize the target org. The server reads CLI-stored org credentials; it does not accept an access token via env var. This is a setup prerequisite, not a secret value to inject."
+    required: false
 tools:
   - name: query_soql
     description: "Run a SOQL query"
@@ -61,7 +71,9 @@ tools:
 
 # Salesforce MCP Server
 
-Provides Salesforce CRM tools for bots that manage accounts, contacts, opportunities, and support cases. OAuth-gated -- connect via Composio for managed auth.
+Provides Salesforce CRM tools for bots that manage accounts, contacts, opportunities, and support cases. Backed by the official Salesforce DX MCP Server (`@salesforce/mcp`, stdio transport).
+
+> Auth gap (verified 2026-05-25): the official server authenticates against orgs you have logged into locally with the Salesforce CLI (`sf org login web`). It does not use Composio managed-OAuth or an env-var access token, so this entry is not end-to-end managed-OAuth in a SchemaBounce workspace yet. The prior `https://mcp.salesforce.com/sse` endpoint was fabricated (DNS does not resolve) and has been removed.
 
 ## Which Bots Use This
 
@@ -70,10 +82,12 @@ Provides Salesforce CRM tools for bots that manage accounts, contacts, opportuni
 
 ## Setup
 
-1. Create a Salesforce Connected App with appropriate OAuth scopes
-2. Obtain an access token via OAuth 2.0 flow (use Composio for managed auth)
-3. Add `SALESFORCE_INSTANCE_URL` and `SALESFORCE_ACCESS_TOKEN` to your workspace secrets
-4. The server starts automatically when a bot that references it runs
+1. Install the Salesforce CLI and authorize your org: `sf org login web`
+2. Confirm the org is the default target (`sf config set target-org <alias>`) so `--orgs DEFAULT_TARGET_ORG` resolves
+3. The runtime launches the server via `npx -y @salesforce/mcp@0.30.12 --orgs DEFAULT_TARGET_ORG --toolsets all`
+4. The server reads CLI-stored org credentials at launch (no access token env var)
+
+Note: this requires the Salesforce CLI and a local org login on the host running the server. It is not yet wired to Composio managed-OAuth or to a Salesforce-hosted remote endpoint with a public URL.
 
 ## Team Usage
 

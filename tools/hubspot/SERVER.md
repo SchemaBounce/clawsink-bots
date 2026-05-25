@@ -12,13 +12,27 @@ metadata:
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).
 auth:
   type: http_bearer
-  token_env: HUBSPOT_ACCESS_TOKEN
+  token_env: PRIVATE_APP_ACCESS_TOKEN
 
+# Transport switched to the official HubSpot stdio MCP package (verified 2026-05-25).
+# The previous remote endpoint `https://mcp.hubspot.com/sse` returned HTTP 404 on the
+# exact path (host root returns 401, but /sse, /mcp, /v1/sse, and POST /mcp all 404),
+# so it was not a usable MCP transport. HubSpot's GA remote server (mcp.hubspot.com)
+# also requires an interactive OAuth 2.0 flow, not the static private-app token in the
+# `env:` block below, so the remote URL cannot be wired up with this auth model anyway.
+#
+# `@hubspot/mcp-server` is HubSpot's official npm package (scope @hubspot), pinned to
+# 0.4.0 (latest dist-tag, verified HTTP 200 at registry.npmjs.org). It runs over stdio
+# via npx and authenticates with a HubSpot private app access token via the
+# PRIVATE_APP_ACCESS_TOKEN env var.
 transport:
-  type: "sse"
-  url: "https://mcp.hubspot.com/sse"
+  type: "stdio"
+  command: "npx"
+  args: ["-y", "@hubspot/mcp-server@0.4.0"]
 env:
-  - name: HUBSPOT_ACCESS_TOKEN
+  # NOTE: the official package reads PRIVATE_APP_ACCESS_TOKEN (renamed from the old
+  # HUBSPOT_ACCESS_TOKEN). Update workspace secrets to use the new key.
+  - name: PRIVATE_APP_ACCESS_TOKEN
     description: "HubSpot private app access token"
     required: true
     sensitive: true
@@ -86,7 +100,7 @@ tools:
 
 # HubSpot MCP Server
 
-Provides HubSpot CRM tools for bots that manage contacts, deals, companies, and marketing pipelines. OAuth-gated -- connect via Composio for managed auth.
+Provides HubSpot CRM tools for bots that manage contacts, deals, companies, and marketing pipelines. Runs HubSpot's official `@hubspot/mcp-server` package over stdio (npx), authenticated with a HubSpot private app access token.
 
 ## Which Bots Use This
 
@@ -97,8 +111,8 @@ Provides HubSpot CRM tools for bots that manage contacts, deals, companies, and 
 
 1. Create a HubSpot private app with the required scopes (CRM objects, contacts, deals)
 2. Copy the access token from the private app settings
-3. Add `HUBSPOT_ACCESS_TOKEN` to your workspace secrets
-4. The server starts automatically when a bot that references it runs
+3. Add `PRIVATE_APP_ACCESS_TOKEN` to your workspace secrets
+4. The server starts automatically when a bot that references it runs (it launches `npx -y @hubspot/mcp-server@0.4.0`)
 
 ## Team Usage
 
