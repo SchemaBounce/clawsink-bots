@@ -13,6 +13,16 @@
 
 # MCP Server Tools
 
+## tools/blog (required connection)
+
+The bot publishes via the dedicated blog connector. A workspace service account with the `blog:write` scope must be connected at activation time (see `connect-blog` setup step).
+
+- `blog_create_draft`: create a new blog post draft — params: `title`, `description`, `content`, `section` (schemabounce|openclaw), `category`, `tags[]`. Returns `{ post_id, slug, status, section }`.
+- `blog_submit_review`: move a draft to `status=review` for human approval — params: `post_id`. Never call any approve tool; there is none.
+- `blog_list`: list existing posts for the workspace — useful for duplicate-topic checks before drafting.
+
+## tools/github (recommended connection)
+
 - `github.create_pull_request`: publish blog post drafts as PRs to the content repository
 - `github.get_file_contents`: read existing blog posts to check for topic overlap
 
