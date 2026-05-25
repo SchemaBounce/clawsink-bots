@@ -9,6 +9,14 @@ metadata:
   tags: ["voice", "audio", "tts", "stt", "presence", "phone"]
   author: "elevenlabs"
   license: "MIT"
+# Declarative auth + validation (SchemaBounce #1614).
+# ElevenLabs uses a custom `xi-api-key` header — api_key_header
+# with the explicit header_name.
+auth:
+  type: api_key_header
+  token_env: ELEVENLABS_API_KEY
+  header_name: xi-api-key
+
 transport:
   type: "stdio"
   command: "uvx"
@@ -17,9 +25,39 @@ env:
   - name: ELEVENLABS_API_KEY
     description: "API key from elevenlabs.io"
     required: true
+    sensitive: true
   - name: ELEVENLABS_MCP_BASE_PATH
     description: "Base path for audio file output (default: ~/Desktop)"
     required: false
+
+# /v1/user returns the authenticated account's profile + subscription
+# info. Idempotent, no character generation cost.
+validation:
+  request:
+    method: GET
+    url: https://api.elevenlabs.io/v1/user
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: subscription
+  on_status:
+    "401": { state: needs_setup, message: "ElevenLabs rejected the API key (401). Check or regenerate at https://elevenlabs.io/app/settings/api-keys and update ELEVENLABS_API_KEY." }
+    "403": { state: needs_setup, message: "ElevenLabs API key lacks required permissions (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+# /v1/user is also rate-limit-friendly for periodic probing.
+healthProbe:
+  request:
+    method: GET
+    url: https://api.elevenlabs.io/v1/user
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: text_to_speech
     description: "Convert text to speech with a selected voice"

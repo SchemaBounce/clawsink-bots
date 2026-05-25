@@ -126,7 +126,13 @@ validate_manifest() {
 
   frontmatter=$(sed -n '/^---$/,/^---$/p' "$manifest")
 
-  if ! echo "$frontmatter" | grep -q "^toolPacks:"; then
+  if ! grep -q "^toolPacks:" <<< "$frontmatter"; then
+    return
+  fi
+
+  # Empty inline form (`toolPacks: []`) means "no refs" — skip validation entirely
+  # rather than tripping the "section exists but no refs were parsed" failure below.
+  if grep -Eq "^toolPacks:[[:space:]]*\[[[:space:]]*\][[:space:]]*$" <<< "$frontmatter"; then
     return
   fi
 

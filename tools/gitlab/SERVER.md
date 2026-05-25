@@ -9,6 +9,14 @@ metadata:
   tags: ["gitlab", "git", "merge-requests", "ci-cd", "devops"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# GitLab uses a custom PRIVATE-TOKEN header (NOT Authorization Bearer).
+# api_key_header with the explicit header_name handles this.
+auth:
+  type: api_key_header
+  token_env: GITLAB_PERSONAL_ACCESS_TOKEN
+  header_name: PRIVATE-TOKEN
+
 transport:
   type: "stdio"
   command: "npx"
@@ -17,9 +25,45 @@ env:
   - name: GITLAB_PERSONAL_ACCESS_TOKEN
     description: "GitLab PAT with api scope"
     required: true
+    sensitive: true
   - name: GITLAB_API_URL
     description: "GitLab API URL, defaults to https://gitlab.com/api/v4"
     required: false
+
+# /user returns the authenticated user. Same on both gitlab.com and
+# self-hosted instances.
+#
+# NOTE: this spec hard-codes https://gitlab.com — for self-hosted
+# GitLab instances, GITLAB_API_URL is set on the connection but the
+# current engine doesn't support {ENV_VAR} URL substitution + a
+# default fallback in one shape. Self-hosted instances will get
+# health_state='unverified' until Stage D.next adds optional-template
+# resolution.
+validation:
+  request:
+    method: GET
+    url: https://gitlab.com/api/v4/user
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: username
+  on_status:
+    "401": { state: needs_setup, message: "GitLab rejected the personal access token (401). Generate a new token at https://gitlab.com/-/profile/personal_access_tokens and update GITLAB_PERSONAL_ACCESS_TOKEN." }
+    "403": { state: needs_setup, message: "Token lacks required scopes (403). Add the 'api' scope to the PAT." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://gitlab.com/api/v4/user
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: create_issue
     description: "Create a new issue in a project"

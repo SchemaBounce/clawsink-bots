@@ -9,10 +9,11 @@ metadata:
   tags: ["cal", "scheduling", "calendar", "bookings"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
 auth:
-  method: "composio"
-  composioToolkit: "CAL"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like CAL_*."
+  type: http_bearer
+  token_env: CAL_API_KEY
+
 transport:
   type: "stdio"
   command: "npx"
@@ -21,6 +22,32 @@ env:
   - name: CAL_API_KEY
     description: "Cal.com API key from cal.com/settings/developer"
     required: true
+    sensitive: true
+
+# /v1/me returns the authenticated user. Idempotent, no cost.
+validation:
+  request:
+    method: GET
+    url: https://api.cal.com/v1/me
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Cal.com rejected the API key (401). Generate a new key at https://app.cal.com/settings/developer/api-keys and update CAL_API_KEY." }
+    "403": { state: needs_setup, message: "API key lacks required permissions (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.cal.com/v1/me
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_bookings
     description: "List upcoming and past bookings"

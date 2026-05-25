@@ -9,6 +9,13 @@ metadata:
   tags: ["pinecone", "vector", "embeddings", "ai", "search"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Pinecone uses Api-Key as the auth header.
+auth:
+  type: api_key_header
+  token_env: PINECONE_API_KEY
+  header_name: Api-Key
+
 transport:
   type: "stdio"
   command: "npx"
@@ -17,6 +24,36 @@ env:
   - name: PINECONE_API_KEY
     description: "Pinecone API key from app.pinecone.io"
     required: true
+    sensitive: true
+
+# /indexes lists all indexes in the account. Lightweight, idempotent.
+validation:
+  request:
+    method: GET
+    url: https://api.pinecone.io/indexes
+    headers:
+      X-Pinecone-API-Version: "2024-07"
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Pinecone rejected the API key (401). Generate a new key in your Pinecone console at https://app.pinecone.io and update PINECONE_API_KEY." }
+    "403": { state: needs_setup, message: "Pinecone API key lacks required permissions (403). Check the project the key was issued for." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.pinecone.io/indexes
+    headers:
+      X-Pinecone-API-Version: "2024-07"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_indexes
     description: "List all indexes in the account"

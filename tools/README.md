@@ -350,3 +350,229 @@ mcpServers:
 ### Note on ElevenLabs
 
 ElevenLabs is the only **Python-based** MCP server. It requires `uvx` (from the `uv` package manager) instead of `npx`. The transport config uses `command: "uvx"` with `args: ["elevenlabs-mcp"]`.
+
+---
+
+# Credential Validation Specs (SchemaBounce #1614)
+
+Each `SERVER.md` may optionally declare three additional YAML blocks that let SchemaBounce's generic validation engine in `core-api` verify the user's credentials against the upstream service and probe the upstream's reachability — without per-server Go code.
+
+These blocks are **declarative**: an author specifies _what_ to call, _how to authenticate_, and _how to interpret the response_. The engine handles the HTTP mechanics, retries, timeouts, audit logging, and credential redaction.
+
+## When to add a spec
+
+| Server type | Add a spec? | Engine behavior without one |
+|---|---|---|
+| HTTPS SaaS API with a testable endpoint (GitHub, Notion, Stripe, …) | **Yes** | Connection sits at `health_state = 'unverified'` — orange badge "Saved — not yet verified". |
+| Per-tenant HTTPS SaaS (Jira, Salesforce, Confluence) | **Yes** with URL template | same |
+| Stdio-only MCP with no HTTPS API (Postgres, MongoDB, Filesystem, Playwright) | **No** | `'unverified'` — correct; upstream health verifies via the MCP gateway probe instead. |
+| OAuth-managed service (Gmail, Google Calendar, Spotify) where token rotation lives elsewhere | **Not yet** | `'unverified'` — pending OAuth-refresh engine extension. |
+
+## The three blocks
+
+### `auth:` — how credentials reach the wire
+
+Four shapes are supported. Choose the simplest one that matches the upstream's auth scheme.
+
+**`http_bearer`** — single env var becomes the `Authorization: Bearer <token>` header. Most common shape.
+
+```yaml
+auth:
+  type: http_bearer
+  token_env: GITHUB_PERSONAL_ACCESS_TOKEN
+```
+
+**`api_key_header`** — single env var becomes the value of a named header. Custom header name (defaults to `X-API-Key`).
+
+```yaml
+auth:
+  type: api_key_header
+  token_env: EXA_API_KEY
+  header_name: x-api-key
+```
+
+**`http_basic`** — two shapes:
+
+```yaml
+# Single-credential (key as username, blank password — Stripe pattern):
+auth:
+  type: http_basic
+  token_env: STRIPE_API_KEY
+
+# Two-credential (Jira / Confluence / Zendesk pattern):
+auth:
+  type: http_basic
+  username_env: JIRA_EMAIL
+  password_env: JIRA_API_TOKEN
+```
+
+**`injection`** — explicit header template for upstreams whose auth doesn't fit a shortcut (Linear uses a raw token in `Authorization` with no `Bearer` prefix). The `{ENV_NAME}` token is substituted with the credential value at request time. Credentials never appear in logs.
+
+```yaml
+auth:
+  injection:
+    header_name: Authorization
+    header_template: "{LINEAR_API_KEY}"
+```
+
+Use `type: none` to declare "upstream has no auth" explicitly (rare).
+
+### `validation:` — synchronous "are these credentials good?" check
+
+Runs on connection-create and on Test Connection clicks. Bounded by `timeout_ms` (defaults to 10s).
+
+```yaml
+validation:
+  request:
+    method: GET
+    url: https://api.github.com/user
+    headers:
+      Accept: application/vnd.github+json
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: login
+  on_status:
+    "401": { state: needs_setup, message: "GitHub rejected the token (401). Check the PAT value." }
+    "403": { state: needs_setup, message: "Token lacks required scopes." }
+    "default": { state: failed }
+  timeout_ms: 5000
+```
+
+**Field rules:**
+
+| Field | Required? | Notes |
+|---|---|---|
+| `request.method` | Yes | One of GET, POST, PUT, DELETE, PATCH, HEAD. |
+| `request.url` | Yes | Absolute `https://` URL, OR a `{ENV_VAR}/path` template for per-tenant hosts. Resolved URL must still be https at runtime — engine refuses plain http. |
+| `request.headers` | No | Map of header name → value. Values may contain `{ENV_VAR}` placeholders. |
+| `request.body` | No | Verbatim request body. May contain `{ENV_VAR}` placeholders (useful for GraphQL queries with embedded fields). |
+| `expect.status` | No (default 200) | The happy-path HTTP status code → engine returns `health_state = 'connected'`. |
+| `expect.extract.authenticated_as_field` | No | Top-level JSON field whose value populates the audit log's "authenticated as" hint (e.g. GitHub's `login`, Jira's `displayName`). |
+| `on_status` | No | Per-code outcome overrides. Keys are HTTP status code strings; the special key `"default"` matches anything else. State must be one of: `connected`, `needs_setup`, `failed`, `unverified`. |
+| `timeout_ms` | No (default 10000) | Per-attempt timeout. Keep small; the engine is in the request path. |
+
+**State semantics:**
+
+- `connected` — green badge. Credentials work; upstream is reachable.
+- `needs_setup` — orange badge. Engine can talk to the upstream but the credential was rejected (401/403). The user needs to fix their credential.
+- `failed` — red badge. Network failure, 5xx, or an unmapped status code. Not the user's credential — usually a transient upstream issue or a real outage.
+- `unverified` — orange "Saved — not yet verified" badge. Engine has no opinion. Only used when no `validation` block is declared OR no `on_status` entry matches AND there's no `default`.
+
+### `healthProbe:` — periodic background health check
+
+Identical shape to `validation` plus an `interval_seconds` field. Runs on the engine's scheduler, separate from user-triggered Test Connection clicks. Use this when:
+
+- The upstream has a cheap idempotent endpoint that detects revoked tokens between user sessions.
+- You want the connection card to update without a user click.
+
+**Do NOT add `healthProbe` when:**
+
+- The upstream's only viable validation endpoint consumes metered resources (Exa search burns ~1 credit per call → 288 credits/day at 5min cadence per workspace per connection).
+- The upstream is rate-limited tightly (most public Twitter/X endpoints).
+
+```yaml
+healthProbe:
+  request:
+    method: GET
+    url: https://api.github.com/rate_limit
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300            # 5min; minimum 30s, default 300s
+```
+
+## URL templating — per-tenant hosts
+
+For services where the API host is per-tenant (Jira's customer Jira instance, Salesforce's instance URL, Mailchimp's server prefix), use `{ENV_VAR}` substitution in `request.url`:
+
+```yaml
+env:
+  - { name: JIRA_URL, required: true }
+  - { name: JIRA_EMAIL, required: true }
+  - { name: JIRA_API_TOKEN, required: true, sensitive: true }
+
+auth:
+  type: http_basic
+  username_env: JIRA_EMAIL
+  password_env: JIRA_API_TOKEN
+
+validation:
+  request:
+    method: GET
+    url: "{JIRA_URL}/rest/api/3/myself"
+    headers:
+      Accept: application/json
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: displayName
+  on_status:
+    "401": { state: needs_setup, message: "Jira rejected the email/token combination (401)." }
+    "403": { state: needs_setup, message: "Account lacks permission to read /myself (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+```
+
+Same `{ENV_VAR}` syntax works in `request.headers` values and `request.body`.
+
+## What the engine does NOT do (yet)
+
+- **Body-level success checks.** APIs that return HTTP 200 with `{ok: false}` (Slack `auth.test`) or `{errors: [...]}` (Linear GraphQL) require body inspection. Engine extension pending.
+- **AWS SigV4 / GCP service-account signing.** Cryptographic request signing isn't expressible declaratively yet. AWS/GCP MCP servers stay unverified for now.
+- **OAuth refresh flows.** Tokens that expire and require refresh-token grants are handled by the existing OAuth subsystem, not this engine.
+- **Nested JSON extraction.** `extract.authenticated_as_field` reads top-level fields only. Linear's `data.viewer.name` falls back to no hint.
+- **Composite identity strings.** Slack's "bot: foo (team: bar)" pattern needs `extract.authenticated_as_template` (engine extension).
+- **MCP-protocol probes.** Direct DB connections (Postgres, MongoDB) require MCP-side probes that run via the agent runtime, not this engine. Those probes live in `core-api/internal/handlers/mcp_probes.go` and remain authoritative for those servers.
+
+## Security invariants
+
+1. **No plain http.** Parse-time check requires `https://` or a `{template}` URL. Runtime check enforces `https://` after substitution. The only exception is loopback (`http://127.0.0.1` and `http://localhost`) for httptest fixtures.
+2. **Credentials never appear in audit rows.** The engine's `sanitizeErr` bounds error message length and the audit log columns are typed (state enum + structured detail) — no free-form credential capture.
+3. **Probe-interval floor.** Parse-time check requires `interval_seconds >= 30`. Sub-30s polling risks DoSing upstreams.
+4. **Mark secrets `sensitive: true`.** The `env:` block's `sensitive` flag drives audit-log redaction. Always set it on API keys, tokens, and passwords.
+
+## Testing your spec
+
+Every spec is automatically exercised by the round-trip test framework at `core-api/schemabounce-api/internal/adl/mcp_validation_engine_roundtrip_test.go`. For each `tools/{name}/SERVER.md` that declares a `validation` block, the test:
+
+1. **Happy path** — stubs the upstream returning `expect.status`; asserts engine returns `connected` and extracts the identity hint.
+2. **Each `on_status` code** — stubs the upstream returning each declared status code; asserts engine returns the mapped state with the spec's message.
+3. **Network failure** — points the engine at port 1 (refused); asserts engine returns `failed`.
+4. **Missing credential** — supplies empty creds; asserts engine returns `needs_setup`.
+
+Run it locally with:
+
+```bash
+cd /path/to/core-api/schemabounce-api
+CLAWSINK_BOTS_PATH=/path/to/clawsink-bots \
+  CGO_ENABLED=0 go test -count=1 -run='TestRoundTrip' -v ./internal/adl/...
+```
+
+CI runs this on every PR.
+
+## Adding a spec — checklist
+
+Before opening a PR with a new SERVER.md spec block:
+
+- [ ] Read the upstream's API docs to confirm the validation endpoint's status-code semantics. `401` is the common "bad credential" code; some services use `403` (token lacks scope) or `200 + ok:false` (Slack — not yet supported).
+- [ ] Confirm the endpoint is idempotent + cheap. No mutations, no metered resources unless explicitly opt-in.
+- [ ] Set `sensitive: true` on every credential env var.
+- [ ] Author `on_status` entries for at least `401`, `403`, and `"default"`. Concrete user-facing messages for each (e.g. "Check the PAT value", "Lacks required scopes").
+- [ ] Decide whether to include `healthProbe`. Yes for free idempotent endpoints; no for metered/expensive ones.
+- [ ] Make the URL https or `{TEMPLATE}`-prefixed. Parse-time enforcement will reject http.
+- [ ] Run the round-trip test locally — it MUST pass for your new spec.
+
+## Worked examples
+
+See these merged SERVER.md files for canonical patterns:
+
+| Pattern | Example | Why it's the canonical reference |
+|---|---|---|
+| Bearer + custom header | `tools/notion/SERVER.md` | Bearer auth with the upstream's required `Notion-Version` header carried in `request.headers`. |
+| API-key custom header | `tools/exa/SERVER.md` | `api_key_header` with non-default `header_name: x-api-key`. Validation only — no healthProbe to avoid burning credits. |
+| Bearer + extracted identity | `tools/github/SERVER.md` | Bearer + `extract.authenticated_as_field: login` for audit visibility. |
+
+(Stripe, Jira, Confluence, Zendesk patterns land in the next batch using `http_basic`.)

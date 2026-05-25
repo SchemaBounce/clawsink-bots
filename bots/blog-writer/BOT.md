@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.9"
+  version: "1.0.12"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -30,8 +30,8 @@ agent:
     - Step 2: `adl_read_memory` namespace `editorial_calendar` key `last_run_state`, get last run timestamp and section to alternate
     - Step 3: `adl_read_messages`, check for topic requests from executive-assistant, marketing-growth, or seo-expert
     - Step 4: Spawn researcher / writer / editor sub-agents in sequence (sessions_spawn) to produce a draft
-    - Step 5: When the editor returns PASS, call `adl_blog_create_draft` with the markdown post → returns post_id
-    - Step 6: Call `adl_blog_submit_review` with post_id → moves to human review
+    - Step 5: When the editor returns PASS, call `blog_create_draft` (via the tools/blog connection) with the markdown post → returns post_id
+    - Step 6: Call `blog_submit_review` with post_id → moves to human review
     - Step 7: `adl_write_memory` namespace `editorial_calendar` to record the topic, slug, and section
     - Step 8: `adl_send_message` to executive-assistant with finding "draft submitted for review", include slug
     - Approval is human-only, never call any approve tool. There isn't one.
@@ -85,17 +85,20 @@ skills:
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
 plugins: []
-mcpServers: []
-# Internal-only by design, first-party platform bot in its current form.
-# Publishing routes through the runtime built-ins adl_blog_create_draft
-# and adl_blog_submit_review (admin-workspace-gated). Research is read
-# from pre-staged Zone1 / ADL records by the bootstrap script. No
-# third-party MCP, no external SaaS in the data path.
+mcpServers:
+  - ref: "tools/blog"
+    required: true
+    reason: "Publish blog drafts via the dedicated blog connector (service account with blog:write)"
+# Publishing now goes through the dedicated tools/blog MCP connector. The bot
+# holds no credentials directly. The workspace operator creates a service
+# account with the blog:write scope, enters its client_id/client_secret +
+# SCHEMABOUNCE_API_URL in the Connect step below, and the runtime injects
+# those credentials into the tools/blog server at execution time. Human
+# approval (blog:manage) is never agent-callable; there is no approve tool.
 #
-# To extend for non-admin workspaces that want a more featureful flow,
-# re-add tools/exa (research), tools/firecrawl (crawl), tools/agentmail
-# (outreach), tools/github (publish-by-PR). Each requires its own
-# Connect step at activation time. Intentionally minimal today.
+# To extend with external publishing targets, add sibling connectors:
+# tools/github (publish-by-PR), tools/wordpress, tools/ghost. Each is a
+# separate Connect step at activation time.
 requirements:
   minTier: "starter"
 setup:
@@ -134,6 +137,17 @@ setup:
       ui:
         icon: search
         actionLabel: "Connect Web Search"
+    - id: connect-blog
+      name: "Connect Blog CMS"
+      description: "Service account credentials (client_id / client_secret + API URL) for the dedicated blog connector. The account must have the blog:write scope."
+      type: mcp_connection
+      ref: tools/blog
+      group: connections
+      priority: required
+      reason: "The blog connector is the only way to create and submit drafts. It requires a workspace service account with blog:write scope; the runtime injects those credentials at execution time."
+      ui:
+        icon: pencil
+        actionLabel: "Connect Blog CMS"
     - id: connect-github
       name: "Connect GitHub for publishing"
       description: "Publishes blog posts via pull requests to your content repository"

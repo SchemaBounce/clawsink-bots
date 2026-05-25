@@ -9,10 +9,15 @@ metadata:
   tags: ["stripe", "payments", "billing", "subscriptions", "invoices"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Stripe uses HTTP Basic with the API key as the username and an empty
+# password — the "single-credential http_basic" shape supported by the
+# engine. Matches the curated mcp_validation.go behavior we are
+# replacing.
 auth:
-  method: "composio"
-  composioToolkit: "STRIPE"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like STRIPE_*."
+  type: http_basic
+  token_env: STRIPE_API_KEY
+
 transport:
   type: "stdio"
   command: "npx"
@@ -21,6 +26,37 @@ env:
   - name: STRIPE_API_KEY
     description: "Stripe API secret key (sk_live_... or sk_test_...)"
     required: true
+    sensitive: true
+
+# /v1/balance is a no-cost, no-side-effect endpoint that returns 200
+# for a valid key and 401 for a bad one. Same endpoint the curated
+# validator used.
+validation:
+  request:
+    method: GET
+    url: https://api.stripe.com/v1/balance
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Stripe rejected the API key (401). Check or regenerate the secret key in your Stripe Dashboard at https://dashboard.stripe.com/apikeys." }
+    "403": { state: needs_setup, message: "Stripe API key lacks required permissions (403). Use a restricted key with at least 'Read' on Balance, or a secret key with full access." }
+    "402": { state: failed, message: "Stripe account is past due (402). Resolve billing at https://dashboard.stripe.com/billing." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+# /v1/balance is also safe to poll periodically — fast, no-cost,
+# idempotent. Catches revoked keys between user sessions.
+healthProbe:
+  request:
+    method: GET
+    url: https://api.stripe.com/v1/balance
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: stripe_list_customers
     description: "List customers with optional filters"

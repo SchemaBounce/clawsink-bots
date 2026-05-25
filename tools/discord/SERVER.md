@@ -9,10 +9,14 @@ metadata:
   tags: ["discord", "chat", "community", "messaging"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Discord bot tokens use a non-standard scheme: "Authorization: Bot
+# <TOKEN>" (not Bearer). Use the injection template form.
 auth:
-  method: "composio"
-  composioToolkit: "DISCORD"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like DISCORD_*."
+  injection:
+    header_name: Authorization
+    header_template: "Bot {DISCORD_BOT_TOKEN}"
+
 transport:
   type: "stdio"
   command: "npx"
@@ -21,6 +25,36 @@ env:
   - name: DISCORD_BOT_TOKEN
     description: "Discord bot token from discord.com/developers"
     required: true
+    sensitive: true
+
+# /users/@me returns the bot's own user object. Idempotent, no
+# side effects, no rate-limit cost worth worrying about at 5min cadence.
+validation:
+  request:
+    method: GET
+    url: https://discord.com/api/v10/users/@me
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: username
+  on_status:
+    "401": { state: needs_setup, message: "Discord rejected the bot token (401). Regenerate the bot token at https://discord.com/developers/applications and update DISCORD_BOT_TOKEN." }
+    "403": { state: needs_setup, message: "Bot lacks required intents/permissions (403)." }
+    "429": { state: failed, message: "Discord rate-limited the request (429). Retry in a minute." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://discord.com/api/v10/users/@me
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: send_message
     description: "Send a message to a channel"

@@ -9,10 +9,11 @@ metadata:
   tags: ["todoist", "tasks", "productivity", "project-management"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
 auth:
-  method: "composio"
-  composioToolkit: "TODOIST"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like TODOIST_*."
+  type: http_bearer
+  token_env: TODOIST_API_TOKEN
+
 transport:
   type: "stdio"
   command: "uvx"
@@ -21,6 +22,33 @@ env:
   - name: TODOIST_API_TOKEN
     description: "Todoist API token from todoist.com/prefs/integrations"
     required: true
+    sensitive: true
+
+# /rest/v2/projects is a small list; returns 200 with [] even for
+# new accounts with zero projects. Auth failures are cleanly 401.
+validation:
+  request:
+    method: GET
+    url: https://api.todoist.com/rest/v2/projects
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Todoist rejected the API token (401). Copy a fresh token from https://todoist.com/prefs/integrations and update TODOIST_API_TOKEN." }
+    "403": { state: needs_setup, message: "Token lacks required permissions (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.todoist.com/rest/v2/projects
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_tasks
     description: "List tasks with optional filters"

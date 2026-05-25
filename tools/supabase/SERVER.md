@@ -9,6 +9,13 @@ metadata:
   tags: ["supabase", "database", "auth", "storage", "postgres"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Supabase REST API uses Bearer auth on the service role key + a
+# matching apikey header. Per-tenant URL via {SUPABASE_URL}.
+auth:
+  type: http_bearer
+  token_env: SUPABASE_SERVICE_ROLE_KEY
+
 transport:
   type: "stdio"
   command: "npx"
@@ -20,6 +27,40 @@ env:
   - name: SUPABASE_SERVICE_ROLE_KEY
     description: "Service role key from the Supabase dashboard"
     required: true
+    sensitive: true
+
+# Hit the PostgREST root — returns the OpenAPI schema with HTTP 200
+# when the service key is valid. The apikey header is also required
+# alongside the bearer (Supabase quirk — duplication is intentional).
+validation:
+  request:
+    method: GET
+    url: "{SUPABASE_URL}/rest/v1/"
+    headers:
+      apikey: "{SUPABASE_SERVICE_ROLE_KEY}"
+      Accept: application/json
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Supabase rejected the service role key (401). Check the key under Project Settings > API and update SUPABASE_SERVICE_ROLE_KEY." }
+    "403": { state: needs_setup, message: "Service role key permissions insufficient (403)." }
+    "404": { state: needs_setup, message: "Supabase project URL returned 404 — verify SUPABASE_URL is the full https://...supabase.co project URL." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: "{SUPABASE_URL}/rest/v1/"
+    headers:
+      apikey: "{SUPABASE_SERVICE_ROLE_KEY}"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: query
     description: "Execute a SQL query against the database"

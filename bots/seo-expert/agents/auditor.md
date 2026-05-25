@@ -67,12 +67,20 @@ For now this stays inside `adl_proxy_call` since no Composio toolkit covers it c
 - Twitter Card tags: `twitter:card`, `twitter:title`, `twitter:image`
 - Title length (30-65 chars) and meta description length (120-160 chars)
 - `<link rel="canonical">` and whether it points to the same host
-- JSON-LD: any `<script type="application/ld+json">` blocks; check that they parse as JSON
-- H1 count (exactly 1)
+- JSON-LD: any `<script type="application/ld+json">` blocks; check that they parse as JSON (valid structured data aids rich-result eligibility; it is NOT required for AI features, so file these as warning/info, not critical). Validate only against *currently supported* rich-result types — do NOT flag missing `FAQPage` or `HowTo` markup as an opportunity: Google deprecated FAQ rich results (gone from Search as of May 2026) and HowTo rich results earlier, and is phasing out rarely-used types. Recommending them is out of date.
+- H1 count (exactly 1) and a sensible semantic heading outline (H2/H3 nesting, no skipped levels) — Google's AI features rely on crawlable, semantically structured content
+- Thin / commodity content: very low main-text word count, or a page that only restates common knowledge with no first-hand expertise or original perspective (metric_name `thin_content` / `low_expertise`, severity info/warning) — per Google's AI optimization guide, original people-first content is the foundation of AI-feature visibility
 
 Emit one `seo_findings` row per issue with `metric_name`, `severity` (info/warning/critical), `description`, `suggested_fix`. Common metric_name values: `og_logo_missing`, `og_image_missing`, `meta_description_missing`, `meta_description_too_short`, `meta_description_too_long`, `title_too_short`, `title_too_long`, `h1_missing`, `h1_multiple`, `canonical_missing`, `canonical_cross_host`, `json_ld_missing`, `json_ld_invalid`. Set `provider="meta"` on every meta-audit finding.
 
 A future iteration will move this to a dedicated MCP server (e.g., a community web-meta-audit MCP). Until then, `adl_proxy_call` with the existing SSRF guards is the path.
+
+### 1b. Crawlability & indexability (robots.txt + meta robots)
+
+Crawlability is the foundation of both organic ranking and AI-feature visibility — Google's generative AI features use publicly accessible, crawlable content via the standard Googlebot. Fetch `/robots.txt` via `adl_proxy_call` and scan each audited page's `<meta name="robots">` / `X-Robots-Tag`:
+
+- File a `critical` `seo_findings` (`metric_name="googlebot_blocked"`) if `robots.txt` disallows Googlebot from indexable content, or a page carries `noindex` it shouldn't. This is the single most damaging defect — it removes the page from Search AND AI features.
+- **Google-Extended mental model (do not get this wrong):** a `Disallow` on the `Google-Extended` user-agent only opts the site out of Gemini/Vertex AI *training and grounding* — it does **NOT** remove the site from AI Overviews or AI Mode, which are powered by the regular Googlebot. So never file a finding claiming "we're blocked from AI Overviews because of Google-Extended." To limit what AI features show from a page, the controls are `nosnippet` / `data-nosnippet` / `max-snippet` / `noindex`, not `Google-Extended`. If the workspace has *intentionally* set `Google-Extended: Disallow`, note it as `info`, not a defect.
 
 ### 2. Real keyword data from Google Search Console
 
@@ -100,9 +108,11 @@ Cap at the top 20 opportunities by `opportunity_score`. Set `provider="gsc"` if 
 
 Google PageSpeed Insights does not have a clean Composio toolkit. Defer to the next iteration when we add a dedicated PSI MCP server. For this run, skip step 3 and emit one `seo_findings` row with `metric_name="pagespeed_not_wired"`, severity `info`, describing the gap.
 
-### 4. AI-search citation visibility (GEO/LLMO, deferred)
+### 4. AI-search citation visibility (downstream outcome metric, deferred)
 
-Same situation as PSI — no Composio toolkit exposes "ask N LLMs about a brand query and check citation." Defer to a dedicated GEO MCP server. For this run, skip step 4 and emit one `seo_findings` row with `metric_name="geo_check_not_wired"`, severity `info`.
+Same situation as PSI — no Composio toolkit exposes "ask N LLMs about a brand query and check citation." Defer to a dedicated MCP server. For this run, skip step 4 and emit one `seo_findings` row with `metric_name="geo_check_not_wired"`, severity `info`.
+
+AI citation is an **outcome we monitor, not a lever we pull.** Google's AI features (AI Overviews, AI Mode) run on its core Search ranking and quality systems, so the way to raise AI citation is identical to raising organic ranking: original, expert, people-first content on crawlable, well-structured pages. Never emit a finding whose `suggested_fix` is llms.txt, an AI-text file, content chunking, or AI-specific keyword phrasing — Google states those are unnecessary.
 
 (Future iteration: ship `tools/seo-geo-check` as its own MCP server that wraps the multi-LLM fan-out. Keeps the runtime clean.)
 
@@ -129,7 +139,7 @@ Same situation as PSI — no Composio toolkit exposes "ask N LLMs about a brand 
 ## Guardrails
 
 - Never call any tool other than the seven listed in your `tools` array.
-- `adl_proxy_call` is allowed only for fetching sitemap URLs in step 1 — do not use it as a generic HTTP client.
+- `adl_proxy_call` is allowed only for fetching the audited site's own sitemap URLs (step 1) and its `/robots.txt` (step 1b) — do not use it as a generic HTTP client.
 - Cap total findings at 100 per run. Prioritize critical, then warning, then info.
 - If Composio returns an error with `code = "COMPOSIO_NOT_CONNECTED"`, the workspace itself has no Composio API key. Emit one `seo_findings` row asking the user to add one in Workspace Settings → Connections, then stop the run.
 

@@ -9,10 +9,17 @@ metadata:
   tags: ["jira", "project-management", "issues", "sprints", "agile"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Jira uses HTTP Basic with the user's email as username and an API
+# token as password — the "two-credential http_basic" shape — plus a
+# per-tenant URL templated via {JIRA_URL}. Both engine extensions
+# (http_basic two-cred + URL templating) ship in the same #1614
+# commit that consumes this spec.
 auth:
-  method: "composio"
-  composioToolkit: "JIRA"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like JIRA_*."
+  type: http_basic
+  username_env: JIRA_EMAIL
+  password_env: JIRA_API_TOKEN
+
 transport:
   type: "stdio"
   command: "npx"
@@ -21,12 +28,45 @@ env:
   - name: JIRA_API_TOKEN
     description: "Jira API Token for authentication"
     required: true
+    sensitive: true
   - name: JIRA_EMAIL
     description: "Email address associated with the Jira API token"
     required: true
   - name: JIRA_URL
     description: "Jira instance URL (e.g., https://company.atlassian.net)"
     required: true
+
+# /rest/api/3/myself returns the authenticated user — same endpoint
+# the curated mcp_validation.go path used. {JIRA_URL} substitutes the
+# customer's per-tenant Jira host at request time.
+validation:
+  request:
+    method: GET
+    url: "{JIRA_URL}/rest/api/3/myself"
+    headers:
+      Accept: application/json
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: displayName
+  on_status:
+    "401": { state: needs_setup, message: "Jira rejected the email/token combination (401). Verify the API token at https://id.atlassian.com/manage-profile/security/api-tokens and that the email matches the account that owns it." }
+    "403": { state: needs_setup, message: "Account lacks permission to read /myself (403). The token's account needs at least Jira read access." }
+    "404": { state: needs_setup, message: "Jira host returned 404 — check that JIRA_URL is the full https://...atlassian.net base (no trailing slash, no /rest path)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: "{JIRA_URL}/rest/api/3/myself"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: create_issue
     description: "Create a new Jira issue"

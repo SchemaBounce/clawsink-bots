@@ -13,6 +13,16 @@ auth:
   method: "composio"
   composioToolkit: "ZENDESK"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like ZENDESK_*."
+# TODO(#1614): Zendesk uses HTTP Basic with "<email>/token" as the
+# username (literal /token suffix appended to the email) and the API
+# token as password. The current engine's http_basic with
+# username_env doesn't support computing a derived username like
+# "{ZENDESK_EMAIL}/token" — it reads the raw env value. Pending
+# engine extension: either a `username_template` field, or a
+# generic credential-derivation step at substitution time. Until
+# then, zendesk stays health_state='unverified' (orange) via the
+# fallback path; do NOT add a partial spec that would lie.
+
 transport:
   type: "stdio"
   command: "npx"
@@ -27,6 +37,7 @@ env:
   - name: ZENDESK_API_TOKEN
     description: "Zendesk API token"
     required: true
+    sensitive: true
 tools:
   - name: list_tickets
     description: "List tickets with optional filters"

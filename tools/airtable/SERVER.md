@@ -9,6 +9,11 @@ metadata:
   tags: ["airtable", "database", "spreadsheet", "no-code"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+auth:
+  type: http_bearer
+  token_env: AIRTABLE_API_KEY
+
 transport:
   type: "stdio"
   command: "npx"
@@ -17,6 +22,33 @@ env:
   - name: AIRTABLE_API_KEY
     description: "Airtable personal access token from airtable.com/create/tokens"
     required: true
+    sensitive: true
+
+# /v0/meta/bases lists bases the token can access. Idempotent, no
+# side effects, the simplest token-scope check.
+validation:
+  request:
+    method: GET
+    url: https://api.airtable.com/v0/meta/bases
+  expect:
+    status: 200
+  on_status:
+    "401": { state: needs_setup, message: "Airtable rejected the personal access token (401). Generate a new one at https://airtable.com/create/tokens and update AIRTABLE_API_KEY." }
+    "403": { state: needs_setup, message: "Token lacks required scopes (403). Add at minimum 'schema.bases:read' on the token settings page." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.airtable.com/v0/meta/bases
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_bases
     description: "List all accessible bases"

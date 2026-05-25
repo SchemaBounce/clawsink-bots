@@ -9,6 +9,11 @@ metadata:
   tags: ["vercel", "deployment", "hosting", "frontend", "serverless"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+auth:
+  type: http_bearer
+  token_env: VERCEL_TOKEN
+
 transport:
   type: "stdio"
   command: "npx"
@@ -17,6 +22,35 @@ env:
   - name: VERCEL_TOKEN
     description: "Vercel API token from vercel.com/account/tokens"
     required: true
+    sensitive: true
+
+# /v2/user returns the authenticated user. Vercel deprecated /v9/user
+# in favor of /v2/user; /v2 is current.
+validation:
+  request:
+    method: GET
+    url: https://api.vercel.com/v2/user
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: user
+  on_status:
+    "401": { state: needs_setup, message: "Vercel rejected the API token (401). Generate a new one at https://vercel.com/account/tokens and update VERCEL_TOKEN." }
+    "403": { state: needs_setup, message: "Token lacks required permissions (403)." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.vercel.com/v2/user
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: list_projects
     description: "List all Vercel projects"
