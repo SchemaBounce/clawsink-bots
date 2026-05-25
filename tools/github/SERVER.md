@@ -17,6 +17,42 @@ env:
   - name: GITHUB_PERSONAL_ACCESS_TOKEN
     description: "GitHub PAT with repo and issues scope"
     required: true
+    sensitive: true
+
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# These three blocks let the generic validation engine in core-api
+# test credentials and probe upstream reachability without per-server
+# Go code. Credentials never leave the engine — only the env-var name
+# is referenced; the value substitutes at request time.
+auth:
+  type: http_bearer
+  token_env: GITHUB_PERSONAL_ACCESS_TOKEN
+
+validation:
+  request:
+    method: GET
+    url: https://api.github.com/user
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: login
+  on_status:
+    "401": { state: needs_setup, message: "GitHub rejected the token (401). Check the PAT value and that it has not been revoked." }
+    "403": { state: needs_setup, message: "Token lacks required scopes (403). Add 'repo' and 'issues' scopes on the GitHub PAT settings page." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.github.com/rate_limit
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: create_or_update_file
     description: "Create or update a file in a repository"
