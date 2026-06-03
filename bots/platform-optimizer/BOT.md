@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -49,8 +49,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

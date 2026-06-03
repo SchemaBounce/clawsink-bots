@@ -1,6 +1,6 @@
 ---
 name: recommender
-model: claude-sonnet-4-6
+model: sonnet
 think_level: medium
 tools:
   - adl_query_records

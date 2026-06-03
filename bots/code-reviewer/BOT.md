@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: code-reviewer
   displayName: "Code Reviewer"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Automated code review with security, quality, and architecture analysis."
   category: engineering
   tags: ["code-review", "security", "quality", "architecture", "pull-requests"]
@@ -35,8 +35,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

@@ -1,6 +1,6 @@
 ---
 name: auditor
-model: claude-haiku-4-5-20251001
+model: haiku
 think_level: low
 tools:
   - composio.search_composio_tools

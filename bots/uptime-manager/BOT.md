@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: uptime-manager
   displayName: "Uptime Manager"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Manages status pages, tracks SLA compliance, monitors uptime percentages, and produces incident postmortems."
   category: operations
   tags: ["uptime", "status-page", "sla", "postmortem", "incident-communication"]
@@ -35,8 +35,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

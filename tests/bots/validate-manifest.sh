@@ -87,16 +87,40 @@ validate_manifest() {
     errors=$((errors + 1))
   fi
 
-  # model.provider validation
+  # model.provider validation — must match the platform catalog
+  # (core-api/internal/llm/catalog.json chatProviders).
   local provider
   provider=$(echo "$frontmatter" | grep "provider:" | head -1 | awk '{print $2}' | tr -d '"')
   if [ -n "$provider" ]; then
     case "$provider" in
-      anthropic|openai|groq|mistral|ollama) ;;
+      anthropic|openai|google|meta|qwen|cerebras) ;;
       *) echo -e "  ${YELLOW}WARN${NC} Unknown model.provider: $provider"
          warnings=$((warnings + 1)) ;;
     esac
   fi
+
+  # model.preferred / model.fallback validation. Recommended form is an
+  # auto-updating alias (resolves to a concrete model at run time). Pinned
+  # dated IDs (claude-*, gpt-*, gemini-*, llama-*, qwen-*) are still accepted
+  # but discouraged. KEEP THIS ALIAS LIST IN SYNC with catalog.json `aliases`.
+  local known_aliases="opus_latest sonnet_latest haiku_latest gpt_latest gpt_mini_latest gemini_pro_latest gemini_flash_latest llama_latest llama_fast_latest cerebras_fast_latest qwen_latest"
+  local model_field model_val
+  for model_field in preferred fallback; do
+    model_val=$(echo "$frontmatter" | grep "${model_field}:" | head -1 | awk '{print $2}' | tr -d '"')
+    [ -z "$model_val" ] && continue
+    if echo " $known_aliases " | grep -q " $model_val "; then
+      continue  # known alias — good
+    fi
+    # Accept a pinned concrete id (has a provider prefix), but warn it's stale-prone.
+    case "$model_val" in
+      claude-*|gpt-*|o[0-9]*|gemini-*|llama-*|qwen*)
+        echo -e "  ${YELLOW}WARN${NC} model.${model_field} '$model_val' is a pinned ID; prefer an auto-updating alias (e.g. sonnet_latest)"
+        warnings=$((warnings + 1)) ;;
+      *)
+        echo -e "  ${RED}FAIL${NC} model.${model_field} '$model_val' is not a known alias or recognized model ID"
+        errors=$((errors + 1)) ;;
+    esac
+  done
 
   # cost.estimatedCostTier validation
   local cost_tier

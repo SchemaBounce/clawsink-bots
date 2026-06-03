@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-channel-manager
   displayName: "Channel Manager"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Syncs listings across Airbnb, VRBO, Lodgify, and Facebook Marketplace, detects calendar conflicts and monitors listing health."
   category: operations
   tags: ["str", "channel-management", "airbnb", "vrbo", "lodgify", "calendar-sync", "hospitality"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-turnover-coordinator
   displayName: "Turnover Coordinator"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Manages cleaning schedules between guests, tracks turnover status, ensures properties are guest-ready, flags maintenance issues."
   category: operations
   tags: ["str", "turnover", "cleaning", "maintenance", "scheduling", "hospitality"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

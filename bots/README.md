@@ -56,9 +56,9 @@ agent:
     - Write findings with adl_upsert_record to entity_type="x_findings"
     - Store unstructured analysis with adl_add_memory
 model:
-  provider: string       # "anthropic" or "openai"
-  preferred: string      # Model ID for normal runs
-  fallback: string       # Model ID if preferred unavailable
+  provider: string       # anthropic | openai | google | meta | qwen | cerebras
+  preferred: string      # Model alias (recommended) or pinned ID for normal runs
+  fallback: string       # Model alias or pinned ID if preferred unavailable
   thinkLevel: null | string  # null, "low", "medium", "high"
 cost:
   estimatedTokensPerRun: int    # Typical token consumption per run
@@ -820,13 +820,36 @@ Bootstrap private memory entries.
 ## Field Rules
 
 - `metadata.name` must match the directory name under `bots/`
-- `model.preferred` should use lighter models for routine tasks, more capable models for analytical tasks
+- `model.preferred` / `model.fallback` should use an **auto-updating alias** (below) rather than a pinned dated model ID. Aliases resolve to the current best model at run time, so a bot never goes stale. Use lighter models for routine tasks, more capable ones for analytical tasks.
 - `cost.estimatedCostTier` is derived from model choice + schedule frequency
 - `cost.estimatedTokensPerRun` is the typical token consumption per invocation (not a hard limit)
 - `schedule.default` must be a valid cron expression or `@every` / `@daily` / `@weekly` interval
 - `messaging.listensTo[].from` uses bot `metadata.name` values or `["*"]`
 - `data.entityTypesWrite` must include `{abbrev}_findings` as a convention
 - `agent.capabilities` should use values from the standard taxonomy: `operations`, `dev_devops`, `finance`, `analytics`, `customer_support`, `content_marketing`, `legal_compliance`, `management`, `research`, `data_engineering`, `procurement`, `security`
+
+## Model Aliases (auto-updating)
+
+Use these alias names in `model.preferred` / `model.fallback` instead of pinned dated
+model IDs. An alias resolves to a concrete model **at run time** from the platform catalog
+(`core-api/internal/llm/catalog.json`). When the platform adopts a newer model, every bot
+using the alias upgrades automatically — no manifest edit required.
+
+| Alias | Provider | Resolves to (today) | Use for |
+|-------|----------|---------------------|---------|
+| `haiku_latest` | anthropic | Claude Haiku | Routine/high-volume tasks — cheapest, fast |
+| `sonnet_latest` | anthropic | Claude Sonnet | Analytical/creative tasks — balanced |
+| `opus_latest` | anthropic | Claude Opus | Heavy reasoning — most capable, costly |
+| `gpt_latest` / `gpt_mini_latest` | openai | GPT-4.1 / GPT-4o-mini | OpenAI alternative |
+| `gemini_pro_latest` / `gemini_flash_latest` | google | Gemini 2.5 Pro / Flash | Long-context / cheap-fast |
+| `llama_latest` / `llama_fast_latest` | meta | Llama 4 Maverick / Scout | Open-weight |
+| `cerebras_fast_latest` | cerebras | Llama on Cerebras | Ultra-low-latency |
+| `qwen_latest` | qwen | Qwen Max | Qwen alternative |
+
+The `provider` field must match the alias's provider (e.g. `sonnet_latest` requires
+`provider: anthropic`). Pinned IDs (e.g. `claude-sonnet-4-6`) are still accepted but discouraged.
+**Sub-agent** `model:` fields use the bare tier words `haiku` / `sonnet` / `opus` / `inherit`
+(a separate convention — not these aliases).
 
 ## Validation
 

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -114,8 +114,8 @@ agent:
     - Do not loop one `adl_query_records` per entity type. Batch into one call with a multi-`entity_type` filter.
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

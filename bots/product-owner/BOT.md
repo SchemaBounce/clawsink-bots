@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: product-owner
   displayName: "Product Owner"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Customer feedback aggregation, market analysis, feature prioritization, backlog management via structured GitHub issue specs."
   category: management
   tags: ["product", "backlog", "feedback", "market-analysis", "prioritization", "github-issues"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

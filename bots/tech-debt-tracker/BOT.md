@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: tech-debt-tracker
   displayName: "Tech Debt Tracker"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Analyzes code review findings and quality metrics to identify technical debt patterns, track debt over time, and suggest refactoring priorities."
   category: engineering
   tags: ["tech-debt", "code-quality", "refactoring", "engineering"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

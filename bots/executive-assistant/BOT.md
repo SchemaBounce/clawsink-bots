@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
@@ -105,8 +105,8 @@ agent:
     - Do not generate audio briefings unless the user opted in. ElevenLabs calls cost real money per character.
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

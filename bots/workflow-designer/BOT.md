@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -389,8 +389,8 @@ model:
   # Sonnet only if a future eval shows Haiku struggling on complex
   # multi-agent chain prompts.
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-sonnet-4-6"
+  preferred: "haiku_latest"
+  fallback: "sonnet_latest"
   thinkLevel: "medium"
   maxTokenBudget: 16384
 cost:
