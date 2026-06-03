@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: legal-compliance
   displayName: "Legal & Compliance"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Contract review queue, GDPR/SOC2 compliance tracking, regulatory change monitoring."
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

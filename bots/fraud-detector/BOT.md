@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: fraud-detector
   displayName: "Fraud Detector"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Scores new transactions for fraud risk using pattern analysis and anomaly detection."
   category: fintech
   tags: ["fraud", "transactions", "risk", "cdc"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

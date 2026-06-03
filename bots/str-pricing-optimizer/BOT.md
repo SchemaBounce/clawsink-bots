@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-pricing-optimizer
   displayName: "Dynamic Pricing"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Analyzes market conditions, competitor rates, and demand patterns to optimize nightly rates and maximize revenue."
   category: finance
   tags: ["str", "dynamic-pricing", "revenue-management", "rate-optimization", "hospitality"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

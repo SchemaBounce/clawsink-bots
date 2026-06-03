@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: agent-cost-optimizer
   displayName: "Agent Cost Optimizer"
-  version: "0.1.3"
+  version: "0.1.4"
   description: "First-party platform bot. Audits per-agent token usage, model spend, and run patterns to surface concrete cost-saving recommendations, model downgrades, schedule reductions, runaway-agent detection. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["agents", "cost", "ops", "optimization", "platform", "tokens"]
@@ -31,8 +31,8 @@ agent:
     - Step 7: `adl_write_memory` namespace `cost:agents:run_state` key `last_run` with `{run_at, audits_written, recommendations_written, by_severity, by_finding_type, total_projected_monthly_savings_usd, current_monthly_run_rate_usd}`
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "sonnet_latest"
+  fallback: "haiku_latest"
   thinkLevel: "medium"
   maxTokenBudget: 12000
 cost:

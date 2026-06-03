@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: atlas
   displayName: "Atlas"
-  version: "2.0.4"
+  version: "2.0.5"
   description: "Site & agent concierge. Helps new users navigate SchemaBounce and pick the right agent for the job."
   category: productivity
   tags: ["concierge", "navigation", "onboarding", "agent-router", "free-tier"]
@@ -47,8 +47,8 @@ agent:
     - Target: 2-4 tool calls per message. Cap at 6.
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 4000
 cost:

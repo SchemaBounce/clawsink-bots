@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

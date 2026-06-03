@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-alert
   displayName: "Inventory Alert"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Detects low stock levels and triggers reorder alerts when inventory falls below thresholds."
   category: ecommerce
   tags: ["inventory", "stock", "alerts", "cdc"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

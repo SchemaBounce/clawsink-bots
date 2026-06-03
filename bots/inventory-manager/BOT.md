@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-manager
   displayName: "Inventory & Acquisition Manager"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Stock level monitoring, reorder calculations, vendor tracking, acquisition pipeline management."
   category: operations
   tags: ["inventory", "stock", "vendors", "reorder", "acquisition", "procurement"]
@@ -35,8 +35,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

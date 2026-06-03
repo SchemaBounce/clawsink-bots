@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.1.7"
+  version: "0.1.9"
   description: "Audits SchemaBounce SEO across modern signals (Google Search Console keyword data, Core Web Vitals, Open Graph, structured data, AI-search citation visibility), suggests blog topics, and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -36,8 +36,8 @@ agent:
     - Step 8: `adl_write_memory` namespace `seo:run:state` key `last_run` with timestamp + counts per metric_name.
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "sonnet_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 12000
 cost:

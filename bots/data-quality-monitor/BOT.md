@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-quality-monitor
   displayName: "Data Quality Monitor"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Validates data quality rules on incoming records across all entity types."
   category: engineering
   tags: ["data-quality", "validation", "cdc"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

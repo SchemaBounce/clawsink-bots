@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-marketer
   displayName: "Property Marketer"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Creates listing descriptions, manages social media, generates seasonal promotions, and optimizes property visibility across platforms."
   category: marketing
   tags: ["str", "listing-optimization", "social-media", "property-marketing", "seo", "hospitality"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

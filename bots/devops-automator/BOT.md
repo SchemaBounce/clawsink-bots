@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "sonnet_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 16000
 cost:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -113,8 +113,8 @@ agent:
     - Budget for 6-12 tool calls on a normal day, more during month-end close. Do not pad with extra discovery calls if you already have the action name from a prior step in the same run.
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

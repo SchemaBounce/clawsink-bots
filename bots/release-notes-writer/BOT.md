@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

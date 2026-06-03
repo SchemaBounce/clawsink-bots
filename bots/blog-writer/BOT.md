@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.13"
+  version: "1.0.15"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -37,8 +37,8 @@ agent:
     - Approval is human-only, never call any approve tool. There isn't one.
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "sonnet_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 16000
 cost:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.6"
+  version: "0.1.7"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -32,8 +32,8 @@ agent:
     - Step 8: `adl_write_memory` namespace `cost:run:state` key `last_run` with `{run_at, audits_written, recommendations_written, by_severity, by_finding_type, total_projected_monthly_usd_at_risk, critical_messages_sent, release_manager_requests_sent, sre_alerts_sent}`
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "sonnet_latest"
+  fallback: "haiku_latest"
   thinkLevel: "medium"
   maxTokenBudget: 12000
 cost:

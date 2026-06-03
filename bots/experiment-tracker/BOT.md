@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: experiment-tracker
   displayName: "Experiment Tracker"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "A/B experiment monitoring, statistical analysis, and ship/kill recommendations."
   category: analytics
   tags: ["experiments", "ab-testing", "statistics", "conversion", "growth"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-review-manager
   displayName: "Review Manager"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Monitors reviews across all platforms, drafts host responses, identifies feedback patterns, tracks rating trends."
   category: support
   tags: ["str", "review-management", "reputation", "guest-feedback", "ratings", "hospitality"]
@@ -34,8 +34,8 @@ agent:
     - Step 5: If new records → process deltas → write findings → update memory
 model:
   provider: "anthropic"
-  preferred: "claude-haiku-4-5-20251001"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "haiku_latest"
+  fallback: "haiku_latest"
   thinkLevel: "low"
   maxTokenBudget: 8000
 cost:
