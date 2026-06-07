@@ -4,11 +4,13 @@ MCP (Model Context Protocol) servers are standalone processes that expose tools 
 
 > ## ⚠️ Definitions only — and moving to `server.json`
 >
-> A file here is a **declaration** of an MCP server (transport + auth + env +
-> tools), NOT the server itself. The mcp-gateway runs each MCP **by its
-> transport** — `remote` (a URL, e.g. exa or an in-cluster service like
-> `chromadb-memory`), `stdio` npm/pypi (`npx`/`uvx`), or `stdio` docker (a
-> per-session container). Nothing is baked into the gateway image.
+> A file here is a **declaration** of an MCP server (transport + source + auth +
+> env + tools), NOT the server itself. **The mcp-gateway is the only execution
+> surface:** a `stdio` server runs as a child process INSIDE the gateway pod
+> (source = `npm` via `npx`, `pypi` via `uvx`, or `github` = a pinned,
+> checksum-verified release binary pulled into the gateway's source cache); a
+> `remote` server runs elsewhere and the gateway connects to its `url` (e.g.
+> exa). No per-session containers, nothing baked into the gateway image.
 >
 > The manifest format is migrating from `SERVER.md` (markdown frontmatter) to
 > **`server.json`** (machine-parseable, same `McpServerDef` schema). That same
