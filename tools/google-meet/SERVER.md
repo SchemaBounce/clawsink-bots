@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Google Meet video conferencing, create meetings and manage participants"
   tags: ["google", "meet", "video", "conferencing"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:

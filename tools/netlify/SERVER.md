@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Netlify, sites, deploys, forms, and serverless functions"
   tags: ["netlify", "deployment", "hosting", "jamstack"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

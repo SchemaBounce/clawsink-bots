@@ -7,6 +7,7 @@ metadata:
   version: 1.0.0
   description: Developer-friendly embedding database for agent memory
   tags: [memory, vector-search, collections, developer-friendly]
+  category: "ai-memory"
   author: Chroma
   license: Apache-2.0
 transport:

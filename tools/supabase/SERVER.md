@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Supabase, database, auth, storage, and edge functions"
   tags: ["supabase", "database", "auth", "storage", "postgres"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

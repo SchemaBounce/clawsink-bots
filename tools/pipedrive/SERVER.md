@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Pipedrive CRM, deals, contacts, activities, and sales pipeline"
   tags: ["pipedrive", "crm", "sales", "deals", "pipeline"]
+  category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 auth:

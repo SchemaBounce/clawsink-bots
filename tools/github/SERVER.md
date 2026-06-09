@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "GitHub API tools for issues, pull requests, repos, and actions"
   tags: ["github", "git", "issues", "pull-requests", "ci-cd"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 transport:

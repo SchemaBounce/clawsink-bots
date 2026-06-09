@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Playwright browser automation, testing, scraping, and web interaction"
   tags: ["playwright", "browser", "testing", "automation", "e2e"]
+  category: "browser-scraping"
   author: "schemabounce"
   license: "MIT"
 transport:

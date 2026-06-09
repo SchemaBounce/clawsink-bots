@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Vercel deployments, projects, domains, and deployment management"
   tags: ["vercel", "deployment", "hosting", "frontend", "serverless"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

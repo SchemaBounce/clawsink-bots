@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "SchemaBounce platform, workspaces, pipelines, schemas, drift, ADL, and analytics"
   tags: ["schemabounce", "platform", "pipelines", "schemas", "drift", "adl", "analytics"]
+  category: "platform"
   author: "schemabounce"
   license: "MIT"
 transport:

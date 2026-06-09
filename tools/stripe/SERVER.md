@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Stripe payment and billing tools for financial operations"
   tags: ["stripe", "payments", "billing", "subscriptions", "invoices"]
+  category: "accounting"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

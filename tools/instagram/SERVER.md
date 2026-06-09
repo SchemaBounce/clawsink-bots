@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Instagram Graph API, posts, stories, comments, and insights"
   tags: ["instagram", "social", "media", "marketing"]
+  category: "social-media"
   author: "schemabounce"
   license: "MIT"
 auth:

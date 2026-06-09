@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "ClickUp project management, tasks, lists, spaces, and goals"
   tags: ["clickup", "project-management", "tasks", "productivity"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

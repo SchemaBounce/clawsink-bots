@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Voice and audio for AI agents, text-to-speech, speech-to-text, voice cloning"
   tags: ["voice", "audio", "tts", "stt", "presence", "phone"]
+  category: "ai-memory"
   author: "elevenlabs"
   license: "MIT"
 # Declarative auth + validation (SchemaBounce #1614).

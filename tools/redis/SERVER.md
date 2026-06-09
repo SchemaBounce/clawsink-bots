@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Redis key-value store, keys, hashes, lists, sets, and pub/sub"
   tags: ["redis", "cache", "key-value", "database"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 transport:

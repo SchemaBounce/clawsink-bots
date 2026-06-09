@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Dropbox file storage, files, folders, sharing, and search"
   tags: ["dropbox", "storage", "files", "cloud-storage"]
+  category: "files-docs"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

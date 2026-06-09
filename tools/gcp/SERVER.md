@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Google Cloud Platform, Compute, Storage, BigQuery, and Cloud Run"
   tags: ["gcp", "google-cloud", "cloud", "infrastructure"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 transport:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Grafana observability, dashboards, Prometheus queries, and alerting"
   tags: ["grafana", "dashboards", "prometheus", "monitoring", "alerting"]
+  category: "observability"
   author: "schemabounce"
   license: "MIT"
 transport:

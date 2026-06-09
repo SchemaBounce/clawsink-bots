@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Unified SaaS integration gateway, 500+ app connections with managed OAuth"
   tags: ["saas", "integration", "oauth", "automation", "presence", "gmail", "calendar", "crm"]
+  category: "automation"
   author: "composio"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

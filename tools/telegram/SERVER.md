@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Telegram bot API, messages, channels, groups, and media"
   tags: ["telegram", "messaging", "bot", "chat"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "PostgreSQL database, queries, schema inspection, and data exploration"
   tags: ["postgres", "postgresql", "database", "sql"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 transport:

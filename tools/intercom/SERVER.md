@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Intercom customer messaging -- conversations, contacts, and articles"
   tags: ["intercom", "messaging", "support", "customer-engagement"]
+  category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

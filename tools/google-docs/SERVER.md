@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Google Docs document creation, reading, and editing"
   tags: ["google", "docs", "documents", "writing"]
+  category: "files-docs"
   author: "schemabounce"
   license: "MIT"
 auth:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Twitter/X API, tweets, timelines, users, and search"
   tags: ["twitter", "x", "social", "tweets"]
+  category: "social-media"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation (SchemaBounce #1614).

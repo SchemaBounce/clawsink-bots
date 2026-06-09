@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Mixpanel product analytics, events, funnels, retention, and user profiles"
   tags: ["mixpanel", "analytics", "product", "events", "funnels"]
+  category: "analytics"
   author: "schemabounce"
   license: "MIT"
 auth:

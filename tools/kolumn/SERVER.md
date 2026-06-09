@@ -7,6 +7,7 @@ metadata:
   version: "1.1.0"
   description: "Kolumn IaC, schema patterns, HCL generation, validation, and documentation"
   tags: ["kolumn", "iac", "schema", "hcl", "migration", "infrastructure-as-code"]
+  category: "platform"
   author: "schemabounce"
   license: "MIT"
 transport:

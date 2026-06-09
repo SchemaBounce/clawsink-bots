@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Puppeteer browser automation, navigation, screenshots, and scraping"
   tags: ["puppeteer", "browser", "automation", "scraping"]
+  category: "browser-scraping"
   author: "schemabounce"
   license: "MIT"
 transport:

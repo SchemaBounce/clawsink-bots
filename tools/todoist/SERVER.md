@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Todoist task management -- tasks, projects, labels, and reminders"
   tags: ["todoist", "tasks", "productivity", "project-management"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

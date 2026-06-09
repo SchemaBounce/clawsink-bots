@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "YouTube Data API, videos, channels, playlists, and analytics"
   tags: ["youtube", "video", "google", "content"]
+  category: "social-media"
   author: "schemabounce"
   license: "MIT"
 auth:

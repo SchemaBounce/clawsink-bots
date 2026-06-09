@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "MySQL database, queries, schema inspection, and data exploration"
   tags: ["mysql", "database", "sql", "mariadb"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 transport:

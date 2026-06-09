@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Cloud browser infrastructure for AI agents, browse, scrape, and automate the web"
   tags: ["browser", "web", "scraping", "automation", "presence"]
+  category: "browser-scraping"
   author: "hyperbrowser"
   license: "MIT"
 transport:

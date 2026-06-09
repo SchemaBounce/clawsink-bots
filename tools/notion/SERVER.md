@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Notion workspace tools for pages, databases, and knowledge management"
   tags: ["notion", "productivity", "knowledge-base", "documentation", "wiki"]
+  category: "files-docs"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

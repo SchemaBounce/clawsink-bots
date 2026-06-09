@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Terraform infrastructure as code, plan, apply, and state management"
   tags: ["terraform", "iac", "infrastructure", "hashicorp", "devops"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 transport:

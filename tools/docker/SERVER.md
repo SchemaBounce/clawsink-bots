@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Docker container management, images, containers, and registries"
   tags: ["docker", "containers", "images", "devops"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 transport:

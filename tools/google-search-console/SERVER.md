@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Google Search Console real keyword performance, indexation, and sitemap health. Native Google OAuth — no Composio in the data path."
   tags: ["google", "seo", "search-console", "gsc", "analytics"]
+  category: "analytics"
   author: "schemabounce"
   license: "MIT"
 auth:

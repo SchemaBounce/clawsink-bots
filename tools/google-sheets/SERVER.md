@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Google Sheets spreadsheet reading, writing, and formula management"
   tags: ["google", "sheets", "spreadsheet", "data"]
+  category: "files-docs"
   author: "schemabounce"
   license: "MIT"
 auth:

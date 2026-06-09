@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Google Drive file management. Read, search, and organize files and folders"
   tags: ["google", "drive", "storage", "files", "documents"]
+  category: "files-docs"
   author: "schemabounce"
   license: "MIT"
 auth:

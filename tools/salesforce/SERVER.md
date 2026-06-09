@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Salesforce CRM, accounts, contacts, opportunities, and cases"
   tags: ["salesforce", "crm", "sales", "leads", "opportunities"]
+  category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 # AUTH GAP (verified 2026-05-25): The official @salesforce/mcp server does NOT use

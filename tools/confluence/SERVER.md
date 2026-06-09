@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Confluence wiki -- pages, spaces, search, and content management"
   tags: ["confluence", "atlassian", "wiki", "documentation"]
+  category: "files-docs"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

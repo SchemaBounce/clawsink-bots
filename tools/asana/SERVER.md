@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Asana project management -- tasks, projects, teams, and portfolios"
   tags: ["asana", "project-management", "tasks", "enterprise"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 auth:

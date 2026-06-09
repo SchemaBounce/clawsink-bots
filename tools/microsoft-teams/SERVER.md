@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Microsoft Teams, messages, channels, and meetings"
   tags: ["microsoft", "teams", "chat", "meetings", "enterprise"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:

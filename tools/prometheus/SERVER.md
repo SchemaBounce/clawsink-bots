@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Prometheus metrics, PromQL queries, alerts, and targets"
   tags: ["prometheus", "metrics", "promql", "monitoring"]
+  category: "observability"
   author: "schemabounce"
   license: "MIT"
 transport:

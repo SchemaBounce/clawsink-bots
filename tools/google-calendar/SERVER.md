@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Google Calendar events, scheduling, and meeting management"
   tags: ["google", "calendar", "scheduling", "meetings"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Sentry error tracking, issues, events, releases, and performance"
   tags: ["sentry", "errors", "monitoring", "debugging", "performance"]
+  category: "observability"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

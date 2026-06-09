@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Trello boards, cards, lists, boards, and checklists"
   tags: ["trello", "kanban", "project-management", "boards"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 auth:

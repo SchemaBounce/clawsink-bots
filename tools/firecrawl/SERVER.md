@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Web crawling and data extraction API for AI agents, no browser required"
   tags: ["crawling", "scraping", "web", "extraction", "research", "presence"]
+  category: "browser-scraping"
   author: "firecrawl"
   license: "MIT"
 transport:

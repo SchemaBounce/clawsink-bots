@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Azure cloud management, VMs, storage, databases, and App Service"
   tags: ["azure", "microsoft", "cloud", "infrastructure"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 transport:

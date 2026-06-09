@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Discord bot integration, messages, channels, and server management"
   tags: ["discord", "chat", "community", "messaging"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

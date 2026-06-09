@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "QuickBooks Online accounting, invoices, payments, expenses, and reports"
   tags: ["quickbooks", "accounting", "invoices", "payments", "finance"]
+  category: "accounting"
   author: "schemabounce"
   license: "MIT"
 auth:

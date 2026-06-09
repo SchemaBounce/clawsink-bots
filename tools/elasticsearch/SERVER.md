@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Elasticsearch search and analytics, queries, indices, and aggregations"
   tags: ["elasticsearch", "search", "analytics", "logging"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 transport:
