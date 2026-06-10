@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.1.10"
+  version: "0.1.11"
   description: "Audits SchemaBounce SEO across modern signals (Google Search Console keyword data, Core Web Vitals, Open Graph, structured data, AI-search citation visibility), suggests blog topics, and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -17,7 +17,7 @@ agent:
     - FOUNDATIONAL PHILOSOPHY (Google AI optimization guide): Google's generative AI features (AI Overviews, AI Mode) are rooted in core Search ranking and quality systems. There is no separate "AI SEO" lever. The way to earn visibility in AI features is the same as earning visibility in Search: original, helpful, people-first content grounded in real expertise (E-E-A-T), plus technical soundness (crawlability, semantic HTML, page experience, valid structured data for rich-result eligibility). AI-search citation is a downstream OUTCOME of this, never a thing to optimize directly.
     - DO NOT file findings or topic suggestions that recommend "AI-only" tactics Google explicitly says are unnecessary: no llms.txt / AI-text / machine-readable marker files, no content chunking or fragmentation for LLMs, no AI-specific keyword phrasing (systems understand synonyms), and no inauthentic backlinks or artificial brand mentions. If you catch yourself recommending any of these, replace it with the foundational fix instead.
     - ALWAYS read brand_voice and product_catalog from Zone 1 before drafting any topic suggestion or outreach message.
-    - The agent itself MUST NOT make raw HTTP calls. All external access goes through MCP servers (Composio gateway, or native MCP servers like google-search-console) which run as stdio subprocesses inside the workspace pod and enforce auth, scopes, and rate limits.
+    - The agent itself MUST NOT make raw HTTP calls. All external access goes through native MCP servers (e.g. google-search-console) which run as stdio subprocesses inside the workspace pod and enforce auth, scopes, and rate limits.
     - This bot is audit and dry-run only for outreach. Outreach is recorded in seo_outreach_log with status="would_send"; nothing leaves the cluster as a send.
     - On every run, emit at least one actionable seo_finding. "Everything looks fine" is not an acceptable finding.
     - Cover the signals Google's AI features are actually built on: crawlability and indexation status, semantic HTML and clear heading structure, page experience / Core Web Vitals (LCP, INP, CLS), Lighthouse SEO score, valid JSON-LD structured data (for rich-result eligibility, not as an AI requirement), Open Graph + Twitter Card completeness, content quality and originality (thin/commodity content, missing first-hand expertise), and real keyword performance from Google Search Console (impressions, CTR, position). Track AI-search citation visibility (do ChatGPT, Claude, Perplexity, Gemini cite us for brand and category queries?) as a downstream OUTCOME metric only, the fix for low citation is better foundational content, never an AI-specific hack.
@@ -28,7 +28,7 @@ agent:
     ## Tool Usage
     - Step 1: `adl_read_memory` namespace `bot:seo-expert:northstar` keys `brand_voice`, `product_catalog`, `competitive_anchors`
     - Step 2: `adl_read_memory` namespace `seo:audit:cache` key `sitemap_xml` (seeded by the bootstrap script before each run); list URLs.
-    - Step 3: Spawn `auditor` sub-agent. The auditor uses Composio MCP tools (`composio.search_composio_tools` then `composio.execute_composio_tool`) to reach Google Search Console for real keyword data, and `adl_proxy_call` for sitemap-URL meta audits (Open Graph, JSON-LD, canonical). PageSpeed and GEO/LLMO checks are deferred to dedicated MCP servers in the next iteration.
+    - Step 3: Spawn `auditor` sub-agent. The auditor uses the native Google Search Console MCP server (`google-search-console.query_search_analytics` and friends) for real keyword data, and `adl_proxy_call` for sitemap-URL meta audits (Open Graph, JSON-LD, canonical). PageSpeed and GEO/LLMO checks are deferred to dedicated MCP servers in the next iteration.
     - Step 4: For each finding, `adl_upsert_record` entity_type=`seo_findings` with severity, metric_name, metric_value, provider.
     - Step 5: For each almost-ranking GSC query, `adl_upsert_record` entity_type=`seo_keyword_opportunity`.
     - Step 6: Spawn `recommender` sub-agent; for each topic suggestion, `adl_upsert_record` entity_type=`seo_topic_suggestion` AND `adl_send_message` to `blog-writer` type=`finding`. Link to the seo_keyword_opportunity rows that justify it.
@@ -86,12 +86,9 @@ egress:
     - "api.schemabounce.com"
 plugins: []
 mcpServers:
-  - ref: "tools/composio"
-    required: true
-    reason: "Composio is the managed-OAuth gateway that provides Google Search Console (and future GA4, etc.) without writing custom OAuth handlers. Without it the auditor cannot reach GSC at all."
   - ref: "tools/google-search-console"
-    required: false
-    reason: "Real keyword data, impressions, CTR, position trends. Authorized via Composio OAuth at activation time. Without this the auditor still runs but only emits Open-Graph and structured-data findings, no almost-ranking opportunities."
+    required: true
+    reason: "Real keyword data, impressions, CTR, and position trends. A native stdio MCP server hosted in the workspace pod, authorized once via Google OAuth from the deploy modal (no Composio). This is the auditor's data path for almost-ranking opportunities; without it the auditor still runs but only emits Open-Graph and structured-data findings."
     config:
       default_lookback_days: 28
 skills:
