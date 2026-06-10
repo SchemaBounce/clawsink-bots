@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.1.9"
+  version: "0.1.10"
   description: "Audits SchemaBounce SEO across modern signals (Google Search Console keyword data, Core Web Vitals, Open Graph, structured data, AI-search citation visibility), suggests blog topics, and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -94,6 +94,8 @@ mcpServers:
     reason: "Real keyword data, impressions, CTR, position trends. Authorized via Composio OAuth at activation time. Without this the auditor still runs but only emits Open-Graph and structured-data findings, no almost-ranking opportunities."
     config:
       default_lookback_days: 28
+skills:
+  - ref: "skills/platform-awareness@1.0.0"
 requirements:
   minTier: "starter"
 goals:
