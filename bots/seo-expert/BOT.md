@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.1"
+  version: "0.3.3"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console keyword data, Core Web Vitals, on-page meta, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -90,6 +90,8 @@ egress:
     - "api.perplexity.ai"
     - "mcp.citationbench.com"
     - "api.citationbench.com"
+    - "api.dataforseo.com"
+    - "backend.composio.dev"
 plugins: []
 mcpServers:
   - ref: "tools/google-search-console"
@@ -106,6 +108,12 @@ mcpServers:
   - ref: "tools/llms-txt-generator"
     required: false
     reason: "GEO tactic: generates llms.txt and llms-full.txt drafts for the connected site for human review before publishing. Requires OPENAI_API_KEY. Without it, the geo-auditor emits an info-level finding and skips the llms.txt draft step."
+  - ref: "tools/google-analytics"
+    required: false
+    reason: "GA4 traffic, engagement, and conversion data via Composio managed-OAuth. Supplements GSC keyword data with per-channel sessions, landing-page engagement rate, and conversion event verification. Requires COMPOSIO_API_KEY with a Google Analytics account connected in Composio. Without it, the auditor skips GA4-side engagement and conversion metrics; GSC and PageSpeed findings still run."
+  - ref: "tools/dataforseo"
+    required: false
+    reason: "Keyword difficulty, SERP gap analysis, backlink profile, and on-page crawl via the official DataForSEO MCP. Adds depth to almost-ranking opportunity scoring (keyword difficulty + volume from Labs), backlink context for outreach simulation, and structured on-page crawl data beyond adl_proxy_call. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD from a paid DataForSEO account (metered, customer-supplied). Without it, the auditor relies on GSC signals alone for opportunity scoring."
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/seo-operations@1.0.0"
@@ -259,6 +267,28 @@ setup:
       ui:
         inputType: text
         placeholder: "e.g., CDC = Change Data Capture"
+    - id: connect-google-analytics
+      name: "Connect Google Analytics"
+      description: "GA4 traffic, engagement, and conversion data via Composio managed-OAuth. Supplements GSC keyword signals with per-channel sessions and conversion verification."
+      type: mcp_connection
+      ref: tools/google-analytics
+      group: connections
+      priority: optional
+      reason: "Without it the auditor skips GA4 engagement and conversion metrics; GSC and PageSpeed findings still run. Requires COMPOSIO_API_KEY with a Google Analytics account connected in Composio."
+      ui:
+        icon: chart
+        actionLabel: "Connect Google Analytics"
+    - id: connect-dataforseo
+      name: "Connect DataForSEO"
+      description: "Keyword difficulty, SERP analysis, backlinks, and on-page crawl via the DataForSEO API. Requires a paid DataForSEO account (metered, customer-supplied)."
+      type: mcp_connection
+      ref: tools/dataforseo
+      group: connections
+      priority: optional
+      reason: "Without it the auditor relies on GSC signals alone for opportunity scoring. Adds keyword difficulty and volume from DataForSEO Labs, backlink context for outreach simulation, and structured on-page crawl data. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD."
+      ui:
+        icon: search
+        actionLabel: "Connect DataForSEO"
 ---
 
 # SEO Expert

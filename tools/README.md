@@ -614,3 +614,16 @@ See these merged SERVER.md files for canonical patterns:
 | Bearer + extracted identity | `tools/github/SERVER.md` | Bearer + `extract.authenticated_as_field: login` for audit visibility. |
 
 (Stripe, Jira, Confluence, Zendesk patterns land in the next batch using `http_basic`.)
+
+## BYO-Remote MCPs — no hosted manifest required
+
+Some SaaS SEO tools offer official remote MCP endpoints. Because these are customer-supplied remote connections (the customer brings their own paid subscription), they do not need a hosted manifest in this repo. Add them via the "Add custom MCP" flow in workspace settings using the `streamable-http` transport type and the customer's own API key or token.
+
+Known BYO-remote SEO MCPs (verified 2026-06-11):
+
+| Tool | Remote URL | Auth | Notes |
+|---|---|---|---|
+| **Ahrefs** | `https://api.ahrefs.com/mcp/mcp` | Bearer (Ahrefs API token) | Requires a paid Ahrefs subscription. Official endpoint. |
+| **Semrush** | `https://mcp.semrush.com/v1/mcp` | Bearer (Semrush API key) | Requires a paid Semrush subscription. Official endpoint. |
+
+These are NOT hosted here because they run on Ahrefs/Semrush infrastructure, not inside the workspace pod. The customer supplies their own account credentials. Do not author `SERVER.md` manifests for them — point customers to the BYO-remote path instead.
