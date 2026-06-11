@@ -196,7 +196,18 @@ CI. Do not add external binary invocations to this script.
 
 Never put secrets in SERVER.md — only declare variable names. Users configure actual values in their workspace settings.
 
-## Available Servers (66 total)
+## Short-Term Rental (STR) Integrations
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [lodgify](lodgify/) | Lodgify channel manager — properties, bookings, availability, rates across Airbnb/VRBO/Booking.com | stdio |
+| [airbnb](airbnb/) | Airbnb public listing search only (read-only, no auth, no host account management) | stdio |
+| [instagram](instagram/) | Instagram Graph API via Composio managed-OAuth — posts, insights, comments | stdio |
+| [facebook-pages](facebook-pages/) | Facebook Pages via Composio managed-OAuth — posts, analytics, Messenger | stdio |
+
+> **VRBO and Airbnb account management are not available as direct API integrations.** Neither platform exposes a public host-management API. STR hosts who need to manage availability, pricing, and bookings across Airbnb, VRBO, and Booking.com should use `tools/lodgify`, which distributes to all three channels through Lodgify's built-in channel manager. The `tools/airbnb` server is limited to public listing search (competitor research, pricing benchmarks) and cannot touch host account data.
+
+## Available Servers (70 total)
 
 ### Engineering & DevOps
 

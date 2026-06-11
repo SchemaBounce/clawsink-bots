@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-channel-manager
   displayName: "Channel Manager"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Syncs listings across Airbnb, VRBO, Lodgify, and Facebook Marketplace, detects calendar conflicts and monitors listing health."
   category: operations
   tags: ["str", "channel-management", "airbnb", "vrbo", "lodgify", "calendar-sync", "hospitality"]
@@ -65,7 +65,7 @@ zones:
   zone2Domains: ["channel-ops", "revenue"]
 egress:
   mode: "restricted"
-  allowedDomains: ["api.airbnb.com", "ws.airbnb.com", "api.vrbo.com", "app.lodgify.com", "graph.facebook.com"]
+  allowedDomains: ["api.airbnb.com", "ws.airbnb.com", "api.vrbo.com", "app.lodgify.com", "api.lodgify.com", "graph.facebook.com", "api.instagram.com", "backend.composio.dev"]
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
@@ -83,6 +83,15 @@ mcpServers:
   - ref: "tools/composio"
     required: true
     reason: "Connect to property management platforms for automated listing synchronization"
+  - ref: "tools/lodgify"
+    required: false
+    reason: "Direct Lodgify API access for property availability, bookings, rates, and calendar sync across all OTA channels"
+  - ref: "tools/instagram"
+    required: false
+    reason: "Publish approved social posts to Instagram after str-property-manager approval; read post insights"
+  - ref: "tools/facebook-pages"
+    required: false
+    reason: "Publish approved posts to Facebook Pages after str-property-manager approval; read Page analytics"
 presence:
   email:
     required: true
@@ -106,6 +115,18 @@ setup:
         icon: property
         actionLabel: "Connect PMS"
         helpUrl: "https://docs.schemabounce.com/integrations/property-management"
+    - id: connect-lodgify
+      name: "Connect Lodgify (recommended)"
+      description: "Enables direct Lodgify API access for property data, bookings, and rate management"
+      type: mcp_connection
+      ref: tools/lodgify
+      group: connections
+      priority: recommended
+      reason: "Lodgify acts as the channel manager for Airbnb, VRBO, and Booking.com — direct API access enables richer sync and booking management"
+      ui:
+        icon: property
+        actionLabel: "Connect Lodgify"
+        helpUrl: "https://docs.schemabounce.com/integrations/lodgify"
     - id: connect-browser
       name: "Connect web browser"
       description: "Enables browsing Airbnb, VRBO, and Lodgify to verify listing accuracy"
