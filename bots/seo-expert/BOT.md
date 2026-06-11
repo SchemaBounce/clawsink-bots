@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.3"
-  description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console keyword data, Core Web Vitals, on-page meta, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
+  version: "0.3.5"
+  description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
 agent:
@@ -21,7 +21,7 @@ agent:
     - The agent itself MUST NOT make raw HTTP calls. All external access goes through native MCP servers (e.g. google-search-console) which run as stdio subprocesses inside the workspace pod and enforce auth, scopes, and rate limits.
     - This bot is audit and dry-run only for outreach. Outreach is recorded in seo_outreach_log with status="would_send"; nothing leaves the cluster as a send.
     - On every run, emit at least one actionable seo_finding. "Everything looks fine" is not an acceptable finding.
-    - Cover the full signal stack: crawlability and indexation status, semantic HTML and clear heading structure, page experience / Core Web Vitals (LCP, INP, CLS), Lighthouse SEO score, valid JSON-LD structured data (for rich-result eligibility), Open Graph + Twitter Card completeness, content quality and originality (thin/commodity content, missing first-hand expertise), real keyword performance from Google Search Console (impressions, CTR, position), AND AI citation share-of-voice (ChatGPT, Claude, Perplexity) via the AI Citation Tracker MCP.
+    - Cover the full signal stack: crawlability and indexation status (Google AND Bing), semantic HTML and clear heading structure, page experience / Core Web Vitals (LCP, INP, CLS), Lighthouse SEO score, valid JSON-LD structured data (for rich-result eligibility), Open Graph + Twitter Card completeness, content quality and originality (thin/commodity content, missing first-hand expertise), real keyword performance from Google Search Console (impressions, CTR, position), Bing Webmaster search performance and crawl health (if connected), SERP rank tracking (DataForSEO position snapshots with run-over-run deltas), AND AI citation share-of-voice (ChatGPT, Claude, Perplexity) via the AI Citation Tracker MCP.
     - When proposing topics for blog-writer, prefer "almost-ranking" queries from GSC: impressions >= 100 AND position between 5 and 20 AND CTR below the run's median. Message blog-writer via adl_send_message AND write a seo_topic_suggestion record.
     - File a seo_finding for: pages blocked from crawling/indexing, non-semantic markup or missing/duplicate H1, missing or invalid og:* tags, missing twitter:* tags, missing or invalid JSON-LD, LCP > 2.5s on mobile, CLS > 0.1, missing meta description, weak title, thin or commodity content lacking first-hand expertise (<800 words or no original perspective), orphaned URLs, duplicate slugs, missing canonical. Also file an info-level seo_finding when AI citation share-of-voice drops more than 5 points run-over-run, with suggested_fix pointing to the underlying content quality gap (not to llms.txt or AI-specific hacks as a first response). File a separate seo_finding when llms.txt is missing or stale (last draft older than 90 days); suggested_fix = invoke geo-aeo skill to generate a new draft for human review.
     - Outreach simulation: for each plausible link-building target, write a seo_outreach_log row with channel in {email, twitter, linkedin}, a real draft message, and status="would_send". Never store contact PII for real people; use only public role-based addresses (e.g., editor@example.com).
@@ -29,7 +29,7 @@ agent:
     ## Tool Usage
     - Step 1: `adl_read_memory` namespace `bot:seo-expert:northstar` keys `brand_voice`, `product_catalog`, `competitive_anchors`
     - Step 2: `adl_read_memory` namespace `seo:audit:cache` key `sitemap_xml` (seeded by the bootstrap script before each run); list URLs.
-    - Step 3: Spawn `auditor` sub-agent. Invoke the `seo-operations` skill. The auditor uses the Google Search Console MCP (`query_search_analytics`, `inspect_url`, `list_sitemaps`) for keyword data and indexation; `adl_proxy_call` for on-page meta audits (Open Graph, JSON-LD, canonical, H1; 10 calls/run, 32 KB cap); and the pagespeed MCP (`analyze_page_speed`, `get_full_audit`, `crux_summary`) for Core Web Vitals and Lighthouse scores on the home page and top-3 URLs.
+    - Step 3: Spawn `auditor` sub-agent. Invoke the `seo-operations` skill and the `rank-tracking` skill. The auditor uses the Google Search Console MCP (`query_search_analytics`, `inspect_url`, `list_sitemaps`) for keyword data and indexation; `adl_proxy_call` for on-page meta audits (Open Graph, JSON-LD, canonical, H1; 10 calls/run, 32 KB cap); the pagespeed MCP (`analyze_page_speed`, `get_full_audit`, `crux_summary`) for Core Web Vitals and Lighthouse scores on the home page and top-3 URLs; the DataForSEO MCP (`serp_google_organic_live`) for keyword rank snapshots via the rank-tracking skill; and if the Bing Webmaster MCP is connected, `get_query_stats`, `get_keyword_data`, `get_crawl_issues`, and `get_url_info` for Bing/Copilot search performance and indexation health.
     - Step 4: Spawn `geo-auditor` sub-agent. Invoke the `geo-aeo` skill. The geo-auditor uses the AI Citation Tracker MCP (`research.ai_citation.check`, `research.ai_citation.share_of_voice`, `research.ai_citation.history`) to measure brand citation share-of-voice across ChatGPT, Claude, and Perplexity for the brand_queries from cache; uses the llms.txt Generator MCP (`generate-llms`) to produce a draft llms.txt for human review; and files GEO content recommendations (entity clarity, Q&A formatting) for almost-ranking pages. If either MCP is absent, the sub-agent emits an info-level finding and continues.
     - Step 5: For each finding, `adl_upsert_record` entity_type=`seo_findings` with severity, metric_name, metric_value, provider.
     - Step 6: For each almost-ranking GSC query, `adl_upsert_record` entity_type=`seo_keyword_opportunity`.
@@ -60,8 +60,8 @@ messaging:
     - { type: "finding", to: ["blog-writer"], when: "topic suggestion ready" }
     - { type: "finding", to: ["executive-assistant"], when: "critical seo finding requires action" }
 data:
-  entityTypesRead: ["blog_drafts", "seo_findings", "seo_outreach_log", "seo_topic_suggestion", "seo_keyword_opportunity", "seo_geo_citation", "seo_llms_txt_draft"]
-  entityTypesWrite: ["seo_findings", "seo_outreach_log", "seo_topic_suggestion", "seo_keyword_opportunity", "seo_geo_citation", "seo_llms_txt_draft"]
+  entityTypesRead: ["blog_drafts", "seo_findings", "seo_outreach_log", "seo_topic_suggestion", "seo_keyword_opportunity", "seo_geo_citation", "seo_llms_txt_draft", "seo_rank_snapshot"]
+  entityTypesWrite: ["seo_findings", "seo_outreach_log", "seo_topic_suggestion", "seo_keyword_opportunity", "seo_geo_citation", "seo_llms_txt_draft", "seo_rank_snapshot"]
   memoryNamespaces: ["seo:audit:cache", "seo:run:state"]
 zones:
   zone1Read: ["brand_voice", "product_catalog", "competitive_anchors", "company_glossary"]
@@ -91,6 +91,7 @@ egress:
     - "mcp.citationbench.com"
     - "api.citationbench.com"
     - "api.dataforseo.com"
+    - "ssl.bing.com"
     - "backend.composio.dev"
 plugins: []
 mcpServers:
@@ -113,11 +114,15 @@ mcpServers:
     reason: "GA4 traffic, engagement, and conversion data via Composio managed-OAuth. Supplements GSC keyword data with per-channel sessions, landing-page engagement rate, and conversion event verification. Requires COMPOSIO_API_KEY with a Google Analytics account connected in Composio. Without it, the auditor skips GA4-side engagement and conversion metrics; GSC and PageSpeed findings still run."
   - ref: "tools/dataforseo"
     required: false
-    reason: "Keyword difficulty, SERP gap analysis, backlink profile, and on-page crawl via the official DataForSEO MCP. Adds depth to almost-ranking opportunity scoring (keyword difficulty + volume from Labs), backlink context for outreach simulation, and structured on-page crawl data beyond adl_proxy_call. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD from a paid DataForSEO account (metered, customer-supplied). Without it, the auditor relies on GSC signals alone for opportunity scoring."
+    reason: "Keyword difficulty, SERP gap analysis, backlink profile, and on-page crawl via the official DataForSEO MCP. Adds depth to almost-ranking opportunity scoring (keyword difficulty + volume from Labs), backlink context for outreach simulation, and structured on-page crawl data beyond adl_proxy_call. Also the engine for the rank-tracking skill: serp_google_organic_live provides the SERP position snapshots. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD from a paid DataForSEO account (metered, customer-supplied). Without it, the auditor relies on GSC signals alone for opportunity scoring, and rank tracking is skipped."
+  - ref: "tools/bing-webmaster"
+    required: false
+    reason: "Bing and Microsoft Copilot search performance, crawl health, keyword analytics, and URL submission via the Bing Webmaster Tools API. The auditor uses get_query_stats and get_keyword_data for Bing-side keyword CTR signals that GSC does not cover; get_crawl_issues and get_url_info for Bing-specific indexation health; submit_url_batch when new content needs immediate Bing indexation. Critical for sites targeting Copilot AI answers — Bing indexation is required for Copilot eligibility. Requires BING_WEBMASTER_API_KEY from bing.com/webmasters. Without it, the auditor skips Bing/Copilot signals; Google SEO findings still run."
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/seo-operations@1.0.0"
   - ref: "skills/geo-aeo@1.0.0"
+  - ref: "skills/rank-tracking@1.0.0"
 requirements:
   minTier: "starter"
 goals:
@@ -280,15 +285,26 @@ setup:
         actionLabel: "Connect Google Analytics"
     - id: connect-dataforseo
       name: "Connect DataForSEO"
-      description: "Keyword difficulty, SERP analysis, backlinks, and on-page crawl via the DataForSEO API. Requires a paid DataForSEO account (metered, customer-supplied)."
+      description: "Keyword difficulty, SERP analysis, backlinks, on-page crawl, and SERP rank snapshots via the DataForSEO API. Requires a paid DataForSEO account (metered, customer-supplied)."
       type: mcp_connection
       ref: tools/dataforseo
       group: connections
       priority: optional
-      reason: "Without it the auditor relies on GSC signals alone for opportunity scoring. Adds keyword difficulty and volume from DataForSEO Labs, backlink context for outreach simulation, and structured on-page crawl data. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD."
+      reason: "Without it the auditor relies on GSC signals alone for opportunity scoring, and rank tracking is skipped entirely. With it: keyword difficulty + volume from DataForSEO Labs, backlink context for outreach simulation, structured on-page crawl data, and daily SERP rank snapshots via serp_google_organic_live. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD."
       ui:
         icon: search
         actionLabel: "Connect DataForSEO"
+    - id: connect-bing-webmaster
+      name: "Connect Bing Webmaster Tools"
+      description: "Bing and Microsoft Copilot search performance, crawl diagnostics, keyword analytics, and URL submission via the Bing Webmaster Tools API."
+      type: mcp_connection
+      ref: tools/bing-webmaster
+      group: connections
+      priority: optional
+      reason: "Without it the auditor skips Bing/Copilot-specific keyword CTR, crawl health, and indexation data. Required for sites targeting Copilot AI answers — Bing indexation is the eligibility gate for Copilot responses. Requires BING_WEBMASTER_API_KEY from bing.com/webmasters → Settings → API Access."
+      ui:
+        icon: search
+        actionLabel: "Connect Bing Webmaster"
 ---
 
 # SEO Expert
@@ -300,6 +316,8 @@ Audits the workspace's connected site footprint, generates topic suggestions for
 - **Modern on-page audit:** for every URL in the sitemap, validates Open Graph + Twitter Card completeness, JSON-LD/structured-data presence and validity, canonical and hreflang, meta description, H1 count, image alt-coverage. (Replaces orcascan.com's open-graph-validator concept in-process.)
 - **Core Web Vitals + Lighthouse:** uses the pagespeed MCP to run Google PageSpeed Insights for the home page and top-3 URLs. Files findings on LCP > 2.5s, CLS > 0.1, INP > 200ms, Lighthouse SEO score < 90. Requires the `tools/pagespeed` MCP connection with a valid `GOOGLE_API_KEY`.
 - **Real keyword data:** pulls Google Search Console Search Analytics over the last 28 days. Identifies "almost-ranking" queries (impressions ≥ 100, position 5-20, CTR below run-median) and writes them as `seo_keyword_opportunity` records.
+- **Bing/Copilot search signals:** if the Bing Webmaster MCP is connected, pulls `get_query_stats` and `get_keyword_data` for Bing-side CTR, and `get_crawl_issues` + `get_url_info` for Bing indexation health. Files `seo_findings` for pages indexed in Google but blocked in Bing. Requires `BING_WEBMASTER_API_KEY`.
+- **SERP rank tracking:** uses the `rank-tracking` skill to snapshot SERP positions for the workspace's target keywords via `serp_google_organic_live` (DataForSEO MCP). Persists positions as `seo_rank_snapshot` records, computes run-over-run deltas, and files `seo_findings` on movements of 3+ positions. Alerts the executive-assistant on 10+ position swings. Requires DataForSEO MCP connection.
 - **AI citation share-of-voice (GEO measurement):** uses the `tools/ai-citation-tracker` MCP (CitationBench hosted MCP at `mcp.citationbench.com/mcp`) to check whether the workspace's brand is cited, mentioned, or absent for brand and category queries across ChatGPT, Claude, and Perplexity. Requires `CITATIONBENCH_API_KEY`. Without a key the server returns demo data; the workflow still runs. Results are written as `seo_geo_citation` records and compared run-over-run via `research.ai_citation.history`.
 - **llms.txt drafting (GEO tactic):** uses the `tools/llms-txt-generator` MCP (npm `llms-txt-generator@0.0.3`, `generate-llms` tool) to draft `llms.txt` and `llms-full.txt` for the connected site. Requires `OPENAI_API_KEY`. The draft is stored as `seo_llms_txt_draft` with `requires_human_review=true` and never auto-published. The executive-assistant is messaged when a new draft is ready.
 - **GEO content recommendations:** for almost-ranking pages identified by the auditor, the geo-auditor checks entity clarity, Q&A formatting, and answer-engine-friendly structure. Files `seo_findings` (severity=low) with specific content edit suggestions.
@@ -310,7 +328,7 @@ Audits the workspace's connected site footprint, generates topic suggestions for
 
 | Agent | Model | Responsibility |
 |-------|-------|----------------|
-| **auditor** | Haiku | Invokes `seo-operations` skill. Uses Google Search Console MCP for keyword data and indexation; `adl_proxy_call` for on-page meta; pagespeed MCP for Core Web Vitals. Files `seo_findings` and `seo_keyword_opportunity`. |
+| **auditor** | Haiku | Invokes `seo-operations` and `rank-tracking` skills. Uses Google Search Console MCP for keyword data and indexation; `adl_proxy_call` for on-page meta; pagespeed MCP for Core Web Vitals; DataForSEO MCP for rank snapshots; Bing Webmaster MCP (if connected) for Bing/Copilot signals. Files `seo_findings`, `seo_keyword_opportunity`, and `seo_rank_snapshot`. |
 | **geo-auditor** | Haiku | Invokes `geo-aeo` skill. Uses AI Citation Tracker MCP for citation share-of-voice measurement; llms.txt Generator MCP for draft generation; files GEO content recommendations on almost-ranking pages. |
 | **recommender** | Sonnet | Synthesizes findings + opportunities into topic suggestions and outreach candidates. Prefers almost-ranking queries. |
 | **outreach-simulator** | Haiku | Drafts each outreach message and records to seo_outreach_log. Never sends. |
@@ -328,6 +346,8 @@ The agent makes no raw HTTP calls. External access goes through MCP subprocesses
 - Audited domain HTML — one-shot fetch via `adl_proxy_call` (32 KB body cap, 10 s timeout, HTTPS only, private-IP blocked). Used for Open Graph, JSON-LD, canonical, and H1 checks.
 - `mcp.citationbench.com` — reached by the AI Citation Tracker MCP (streamable-http transport). Requires `CITATIONBENCH_API_KEY`. Used by the geo-auditor for `research.ai_citation.check`, `research.ai_citation.share_of_voice`, and `research.ai_citation.history`.
 - `api.openai.com` — reached by the llms-txt-generator MCP subprocess (`generate-llms`). Requires `OPENAI_API_KEY`. Used by the geo-auditor to draft llms.txt.
+- `api.dataforseo.com` — reached by the DataForSEO MCP subprocess. Also the engine for rank tracking via `serp_google_organic_live` (rank-tracking skill). Requires `DATAFORSEO_USERNAME` + `DATAFORSEO_PASSWORD`.
+- `ssl.bing.com` — reached by the Bing Webmaster Tools MCP subprocess (`get_query_stats`, `get_keyword_data`, `get_crawl_issues`, `get_url_info`). Requires `BING_WEBMASTER_API_KEY`. Optional.
 - `api.anthropic.com`, `api.perplexity.ai` — in the egress allowlist for any future direct AI-engine probing needs.
 
 ## Required North Star Keys
