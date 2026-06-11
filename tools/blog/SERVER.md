@@ -11,33 +11,26 @@ metadata:
   license: "MIT"
 transport:
   type: "stdio"
-  command: "sb-blog-mcp"
-  args: []
+  packageType: "github"
+  repo: "SchemaBounce/Internal-mcp"
+  ref: "v2.0.0-alpha.1"
+  asset: "sb-blog-mcp-linux-amd64"
 env:
-  - name: SCHEMABOUNCE_API_URL
-    description: "SchemaBounce API base URL (e.g. https://api.schemabounce.com or http://localhost:8080 for local dev)"
-    required: true
   - name: SCHEMABOUNCE_CLIENT_ID
     description: "Service account client ID with blog:write scope (e.g. sa_...)"
     required: true
+    sensitive: true
   - name: SCHEMABOUNCE_CLIENT_SECRET
     description: "Service account client secret — shown only once at creation time"
     required: true
     sensitive: true
+  - name: SCHEMABOUNCE_API_URL
+    description: "SchemaBounce API base URL (defaults to the platform endpoint)"
+    required: false
 validation:
-  request:
-    method: GET
-    url: "{SCHEMABOUNCE_API_URL}/api/v1/workspaces"
-    headers:
-      Accept: application/json
-      Authorization: "Bearer {SCHEMABOUNCE_CLIENT_SECRET}"
-  expect:
-    status: 200
-  on_status:
-    "401": { state: needs_setup, message: "Service account credentials rejected (401). Check SCHEMABOUNCE_CLIENT_ID and SCHEMABOUNCE_CLIENT_SECRET." }
-    "403": { state: needs_setup, message: "Service account lacks required scope (403). Ensure the account has blog:write." }
-    "default": { state: failed }
-  timeout_ms: 5000
+  tool:
+    name: blog_list
+    args: {}
 tools:
   - name: blog_create_draft
     description: "Create a new blog post draft. Returns post_id, slug, and status."

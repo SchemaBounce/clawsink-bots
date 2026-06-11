@@ -11,33 +11,26 @@ metadata:
   license: "MIT"
 transport:
   type: "stdio"
-  command: "sb-workspace-health-mcp"
-  args: []
+  packageType: "github"
+  repo: "SchemaBounce/Internal-mcp"
+  ref: "v2.0.0-alpha.1"
+  asset: "sb-workspace-health-mcp-linux-amd64"
 env:
-  - name: SCHEMABOUNCE_API_URL
-    description: "SchemaBounce API base URL (e.g. https://api.schemabounce.com or http://localhost:8080 for local dev)"
-    required: true
   - name: SCHEMABOUNCE_CLIENT_ID
     description: "Platform admin service account client ID (must be an admin_sa_ prefixed account). Read-only tools require the platform-admin-readonly role; mutation tools require the platform-admin role."
     required: true
+    sensitive: true
   - name: SCHEMABOUNCE_CLIENT_SECRET
     description: "Platform admin service account client secret — shown only once at creation time. MUST belong to a platform admin service account (admin_sa_). Standard workspace service accounts (sa_) will receive 403 on every tool call."
     required: true
     sensitive: true
+  - name: SCHEMABOUNCE_API_URL
+    description: "SchemaBounce API base URL (defaults to the platform endpoint)"
+    required: false
 validation:
-  request:
-    method: GET
-    url: "{SCHEMABOUNCE_API_URL}/api/v1/admin/platform/health"
-    headers:
-      Accept: application/json
-      Authorization: "Bearer {SCHEMABOUNCE_CLIENT_SECRET}"
-  expect:
-    status: 200
-  on_status:
-    "401": { state: needs_setup, message: "Admin service account credentials rejected (401). Check SCHEMABOUNCE_CLIENT_ID and SCHEMABOUNCE_CLIENT_SECRET." }
-    "403": { state: needs_setup, message: "Credential is not a platform admin service account (403). The client ID must be an admin_sa_ account with the platform-admin or platform-admin-readonly role." }
-    "default": { state: failed }
-  timeout_ms: 5000
+  tool:
+    name: platform_health
+    args: {}
 tools:
   - name: workspace_health_list
     description: "List all workspaces with their current health state, subscription tier, and last reconcile timestamp. Paginated. Read-only."
