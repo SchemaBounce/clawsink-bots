@@ -20,6 +20,7 @@ env:
   - name: ARGOCD_AUTH_TOKEN
     description: "Argo CD API token or JWT for authentication"
     required: true
+    sensitive: true
   - name: ARGOCD_INSECURE
     description: "Set to true to skip TLS certificate verification"
     required: false

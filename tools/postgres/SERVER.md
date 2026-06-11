@@ -17,6 +17,7 @@ env:
   - name: POSTGRES_CONNECTION_STRING
     description: "PostgreSQL connection string e.g. postgresql://user:pass@host:5432/db"
     required: true
+    sensitive: true
 tools:
   - name: query
     description: "Execute read-only SQL query"

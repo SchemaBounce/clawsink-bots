@@ -17,6 +17,7 @@ env:
   - name: AGENTPHONE_API_KEY
     description: "API key from agentphone.to"
     required: true
+    sensitive: true
 tools:
   - name: account_overview
     description: "Full snapshot of account, agents, numbers, webhook, usage"

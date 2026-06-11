@@ -18,12 +18,18 @@ transport:
   command: "npx"
   args: ["-y", "whatsapp-mcp@0.1.3"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: WHATSAPP_ACCESS_TOKEN
     description: "WhatsApp Business API access token"
-    required: true
+    required: false
+    sensitive: true
   - name: WHATSAPP_PHONE_NUMBER_ID
     description: "WhatsApp Business phone number ID"
-    required: true
+    required: false
 tools:
   - name: send_message
     description: "Send a text message to a phone number"

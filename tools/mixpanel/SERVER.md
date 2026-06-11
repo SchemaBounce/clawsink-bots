@@ -18,12 +18,18 @@ transport:
   command: "npx"
   args: ["-y", "mixpanel-mcp-server@2.0.2"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: MIXPANEL_PROJECT_TOKEN
     description: "Mixpanel project token"
-    required: true
+    required: false
   - name: MIXPANEL_API_SECRET
     description: "Required for data export APIs"
     required: false
+    sensitive: true
 tools:
   - name: query_events
     description: "Query events with filters"

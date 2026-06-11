@@ -18,12 +18,18 @@ transport:
   command: "npx"
   args: ["-y", "@twilio-alpha/mcp@0.7.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: TWILIO_ACCOUNT_SID
     description: "Twilio Account SID from twilio.com/console"
-    required: true
+    required: false
   - name: TWILIO_AUTH_TOKEN
     description: "Twilio Auth Token from twilio.com/console"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: send_sms
     description: "Send an SMS message"

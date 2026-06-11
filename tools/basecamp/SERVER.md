@@ -18,12 +18,18 @@ transport:
   command: "npx"
   args: ["-y", "basecamp-mcp@1.1.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: BASECAMP_ACCESS_TOKEN
     description: "Basecamp OAuth access token"
-    required: true
+    required: false
+    sensitive: true
   - name: BASECAMP_ACCOUNT_ID
     description: "Basecamp account ID"
-    required: true
+    required: false
 tools:
   - name: list_projects
     description: "List all projects in the account"

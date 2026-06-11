@@ -18,9 +18,15 @@ transport:
   command: "npx"
   args: ["-y", "pipedrive-mcp-server@1.0.2"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: PIPEDRIVE_API_TOKEN
     description: "Pipedrive API token from Settings > Personal preferences"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: list_deals
     description: "List deals"

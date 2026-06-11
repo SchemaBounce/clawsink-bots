@@ -18,9 +18,15 @@ transport:
   command: "npx"
   args: ["-y", "instagram-mcp@1.1.7"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Meta native OAuth (Facebook/Instagram Graph API)
+  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
+  # Leaving these blank uses the workspace's connected OAuth integration;
+  # provide values only to override. Marked required:true previously, which
+  # made the setup/reconnect modal demand credentials the OAuth flow already covers.
   - name: INSTAGRAM_ACCESS_TOKEN
     description: "Instagram Graph API access token"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: get_profile
     description: "Get the authenticated user's profile"

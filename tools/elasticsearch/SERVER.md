@@ -17,9 +17,11 @@ env:
   - name: ELASTICSEARCH_URL
     description: "Elasticsearch cluster URL e.g. https://localhost:9200"
     required: true
+    sensitive: true
   - name: ELASTICSEARCH_API_KEY
     description: "Elasticsearch API key"
     required: false
+    sensitive: true
 tools:
   - name: search
     description: "Search documents"

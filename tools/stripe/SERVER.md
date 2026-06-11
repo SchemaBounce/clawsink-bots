@@ -23,9 +23,14 @@ transport:
   command: "npx"
   args: ["-y", "@stripe/mcp@0.3.3", "--tools=all"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: STRIPE_API_KEY
     description: "Stripe API secret key (sk_live_... or sk_test_...)"
-    required: true
+    required: false
     sensitive: true
 
 # /v1/balance is a no-cost, no-side-effect endpoint that returns 200

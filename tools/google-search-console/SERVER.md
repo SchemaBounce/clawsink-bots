@@ -17,36 +17,40 @@ auth:
     - "openid"
     - "email"
   setupReason: "Real keyword data, impressions, CTR, position trends. Without this the SEO auditor falls back to internal-only checks and cannot identify almost-ranking opportunities."
-# Transport: a real, published stdio MCP server — AminForou/mcp-gsc, PyPI
-# package `mcp-search-console` (MIT, ~900 GitHub stars). Hosted as a
+# Transport: a real, published stdio MCP server — crunchtools/mcp-google-search-console,
+# PyPI package `mcp-google-search-console-crunchtools` (MIT). Hosted as a
 # uvx-launched sidecar inside the workspace OpenCLAW pod. Pinned to an explicit
 # version for reproducibility; the gateway pre-warms pinned uvx packages on pod
 # start. No customer data leaves the pod except to googleapis.com.
 #
-# AUTH INTEGRATION — STILL REQUIRED (do not assume this is end-to-end working):
-# mcp-search-console reads credentials from a FILE — GSC_OAUTH_CLIENT_SECRETS_FILE
-# (OAuth client secrets) or GSC_CREDENTIALS_PATH + GSC_SKIP_OAUTH=true (service
-# account). Our native-OAuth flow stores a refresh token in mcp_connections and
-# injects env vars at pod start. A small auth shim must materialize those env
-# values into the credentials file the package expects before it can authenticate.
-# Until that shim lands the server launches but cannot reach GSC. The package
-# itself is real and pinned — this is no longer a placeholder/fake reference.
+# AUTH: env-var only, no credentials file. The package reads GSC_CLIENT_ID,
+# GSC_CLIENT_SECRET, and GSC_REFRESH_TOKEN straight from the environment. Our
+# native-OAuth flow stores the user's refresh token on the connection and serves
+# the platform client id/secret via the gated platform fallback; core-api aliases
+# GSC_* to the canonical GOOGLE_* names in ResolveConnectionSecret, so all three
+# are injected at pod start with no credentials-file shim. (Replaces the earlier
+# AminForou `mcp-search-console` package, which needed a file shim never built.)
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["mcp-search-console==0.3.2"]
+  args: ["mcp-google-search-console-crunchtools==0.1.0"]
 env:
-  - name: GOOGLE_REFRESH_TOKEN
-    description: "Workspace's Google OAuth refresh token. Issued by core-api after the user completes the consent flow opened from the deploy modal. Stored encrypted in mcp_connections; resolved server-side at pod start."
-    required: true
+  # OPTIONAL: credentials are bridged from the workspace's Google OAuth
+  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
+  # Leaving these blank uses the workspace's connected OAuth integration;
+  # provide values only to override. Marked required:true previously, which
+  # made the setup/reconnect modal demand credentials the OAuth flow already covers.
+  - name: GSC_REFRESH_TOKEN
+    description: "Workspace's Google OAuth refresh token. Issued by core-api after the user completes the consent flow opened from the deploy modal. Stored encrypted in mcp_connections; core-api aliases it from the connection's GOOGLE_REFRESH_TOKEN at pod start."
+    required: false
     sensitive: true
-  - name: GOOGLE_OAUTH_CLIENT_ID
-    description: "Platform-level Google OAuth client ID (same one that issued the refresh token). Sourced from the SchemaBounce-owned Google Cloud project, not per-customer."
-    required: true
+  - name: GSC_CLIENT_ID
+    description: "Platform-level Google OAuth client ID (same one that issued the refresh token). From the SchemaBounce-owned Google Cloud project, not per-customer; core-api aliases it from GOOGLE_OAUTH_CLIENT_ID (platform fallback, gated on a completed Google OAuth for this connection)."
+    required: false
     sensitive: false
-  - name: GOOGLE_OAUTH_CLIENT_SECRET
-    description: "Platform-level Google OAuth client secret. Used by the MCP server to mint access tokens from the stored refresh token. Sourced from the SchemaBounce-owned Google Cloud project."
-    required: true
+  - name: GSC_CLIENT_SECRET
+    description: "Platform-level Google OAuth client secret, used to mint access tokens from the stored refresh token. From the SchemaBounce-owned Google Cloud project; core-api aliases it from GOOGLE_OAUTH_CLIENT_SECRET (platform fallback, gated)."
+    required: false
     sensitive: true
 tools:
   - name: query_search_analytics

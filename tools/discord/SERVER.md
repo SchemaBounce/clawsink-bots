@@ -22,9 +22,14 @@ transport:
   command: "npx"
   args: ["-y", "discord-mcp-server@1.0.1"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: DISCORD_BOT_TOKEN
     description: "Discord bot token from discord.com/developers"
-    required: true
+    required: false
     sensitive: true
 
 # /users/@me returns the bot's own user object. Idempotent, no

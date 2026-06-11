@@ -18,9 +18,15 @@ transport:
   command: "npx"
   args: ["-y", "youtube-mcp@0.1.2"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: YOUTUBE_API_KEY
     description: "YouTube Data API v3 key"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: search_videos
     description: "Search for videos by query"

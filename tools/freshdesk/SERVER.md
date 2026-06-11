@@ -17,12 +17,18 @@ transport:
   type: "sse"
   url: "https://mcp.composio.dev/freshdesk"
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: FRESHDESK_DOMAIN
     description: "Your Freshdesk domain e.g. mycompany.freshdesk.com"
-    required: true
+    required: false
   - name: FRESHDESK_API_KEY
     description: "Freshdesk API key from Profile Settings"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: list_tickets
     description: "List tickets with optional filters"

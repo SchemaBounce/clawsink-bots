@@ -18,15 +18,21 @@ transport:
   command: "npx"
   args: ["-y", "google-drive-mcp@1.2.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: GOOGLE_CLIENT_ID
     description: "Google OAuth 2.0 client ID"
-    required: true
+    required: false
   - name: GOOGLE_CLIENT_SECRET
     description: "Google OAuth 2.0 client secret"
-    required: true
+    required: false
+    sensitive: true
   - name: GOOGLE_REDIRECT_URI
     description: "OAuth redirect URI"
-    required: true
+    required: false
 tools:
   - name: list_files
     description: "List files and folders in a directory"

@@ -9,6 +9,14 @@ metadata:
   tags: ["grafana", "dashboards", "prometheus", "monitoring", "alerting"]
   author: "schemabounce"
   license: "MIT"
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Grafana uses a service account token (or legacy API key) as a Bearer token.
+# Validation calls /api/user which returns the authenticated user object (200)
+# or 401 for an invalid token. HealthProbe uses /api/health — a public endpoint
+# that returns {"database":"ok"} without credentials, confirming Grafana is up.
+auth:
+  type: http_bearer
+  token_env: GRAFANA_API_KEY
 transport:
   type: "stdio"
   command: "npx"
@@ -20,6 +28,33 @@ env:
   - name: GRAFANA_API_KEY
     description: "Grafana API key or service account token"
     required: true
+    sensitive: true
+
+validation:
+  request:
+    method: GET
+    url: "{GRAFANA_URL}/api/user"
+  expect:
+    status: 200
+    extract:
+      authenticated_as_field: login
+  on_status:
+    "401": { state: needs_setup, message: "Grafana rejected the API key or service account token (401). Regenerate the token under Administration > Service Accounts in your Grafana instance." }
+    "403": { state: needs_setup, message: "Token lacks required access (403). The service account needs at least the Viewer role." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: "{GRAFANA_URL}/api/health"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 120
+
 tools:
   - name: search_dashboards
     description: "Search dashboards by name or tag"

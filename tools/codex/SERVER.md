@@ -19,6 +19,7 @@ env:
   - name: REPO_CLONE_TOKEN
     description: "Git personal access token with repo read/write scope. Used by the sandboxed container to clone the target repo; kept separate from the tools/github MCP token because the two run in different trust contexts (see README body)."
     required: true
+    sensitive: true
 tools:
   - name: code_session_create
     description: "Provision a sandboxed container and clone a repository"

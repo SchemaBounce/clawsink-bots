@@ -18,18 +18,25 @@ transport:
   command: "npx"
   args: ["-y", "quickbooks-mcp@0.5.1"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: QUICKBOOKS_CLIENT_ID
     description: "QuickBooks OAuth client ID"
-    required: true
+    required: false
   - name: QUICKBOOKS_CLIENT_SECRET
     description: "QuickBooks OAuth client secret"
-    required: true
+    required: false
+    sensitive: true
   - name: QUICKBOOKS_REALM_ID
     description: "QuickBooks company ID"
-    required: true
+    required: false
   - name: QUICKBOOKS_REFRESH_TOKEN
     description: "QuickBooks OAuth refresh token"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: create_invoice
     description: "Create an invoice"
