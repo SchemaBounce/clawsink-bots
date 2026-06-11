@@ -37,6 +37,42 @@ env:
   - name: DD_SITE
     description: "Datadog site e.g. datadoghq.com or datadoghq.eu (must match the transport host)"
     required: false
+
+# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Datadog uses a custom DD-API-KEY header (not Bearer/Basic), so the injection
+# block is used instead of auth.type. The validation endpoint is the official
+# Datadog API key validation route: GET /api/v1/validate returns 200 for a valid
+# key, 403 for an invalid one.
+# NOTE: The URL below is for US1 (datadoghq.com). Non-US1 users must set
+# DD_SITE to their site (e.g. datadoghq.eu) and ensure the mcp transport host
+# also matches — the validation URL is not automatically templated from DD_SITE.
+auth:
+  injection:
+    header_name: DD-API-KEY
+    header_template: "{DD_API_KEY}"
+
+validation:
+  request:
+    method: GET
+    url: https://api.datadoghq.com/api/v1/validate
+  expect:
+    status: 200
+  on_status:
+    "403": { state: needs_setup, message: "Datadog rejected the API key (403). Verify or regenerate the key at https://app.datadoghq.com/organization-settings/api-keys and update DD_API_KEY." }
+    "default": { state: failed }
+  timeout_ms: 5000
+
+healthProbe:
+  request:
+    method: GET
+    url: https://api.datadoghq.com/api/v1/validate
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
+
 tools:
   - name: query_metrics
     description: "Query time-series metrics"

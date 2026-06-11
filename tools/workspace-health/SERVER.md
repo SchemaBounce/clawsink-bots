@@ -31,6 +31,11 @@ validation:
   tool:
     name: platform_health
     args: {}
+healthProbe:
+  tool:
+    name: platform_health
+    args: {}
+  interval_seconds: 300
 tools:
   - name: workspace_health_list
     description: "List all workspaces with their current health state, subscription tier, and last reconcile timestamp. Paginated. Read-only."

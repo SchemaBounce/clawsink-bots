@@ -17,6 +17,19 @@ env:
   - name: PROMETHEUS_URL
     description: "Prometheus server URL e.g. http://localhost:9090"
     required: true
+# Prometheus exposes /-/healthy (HTTP 200 "Prometheus Server is Healthy.") with
+# no auth requirement. Used as a pure reachability probe — Prometheus has no
+# API token credential to validate so there is no validation: block.
+healthProbe:
+  request:
+    method: GET
+    url: "{PROMETHEUS_URL}/-/healthy"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 120
 tools:
   - name: query_instant
     description: "PromQL instant query"

@@ -39,6 +39,16 @@ validation:
     body_contains: '"ok":true'
   on_status:
     "default": { state: needs_setup, message: "Slack bot token rejected — re-add a valid xoxb- token" }
+healthProbe:
+  request:
+    method: POST
+    url: "https://slack.com/api/auth.test"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
 tools:
   - name: slack_list_channels
     description: "List public channels in the workspace"

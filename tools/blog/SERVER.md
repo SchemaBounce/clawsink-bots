@@ -31,6 +31,11 @@ validation:
   tool:
     name: blog_list
     args: {}
+healthProbe:
+  tool:
+    name: blog_list
+    args: {}
+  interval_seconds: 300
 tools:
   - name: blog_create_draft
     description: "Create a new blog post draft. Returns post_id, slug, and status."
