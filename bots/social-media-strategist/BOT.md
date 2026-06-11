@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]
@@ -85,6 +85,12 @@ mcpServers:
   - ref: "tools/composio"
     required: true
     reason: "Connect to social media scheduling and analytics platforms for content distribution"
+  - ref: "tools/linkedin"
+    required: false
+    reason: "Research and draft B2B content for LinkedIn and read company page analytics for the content calendar"
+  - ref: "tools/reddit"
+    required: false
+    reason: "Research subreddit conversations and draft community content for strategy planning"
 presence:
   email:
     required: false

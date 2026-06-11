@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-monitor
   displayName: "Social Media Monitor"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Monitors brand mentions and sentiment across platforms."
   category: marketing
   tags: ["social-media", "sentiment", "brand"]
@@ -75,6 +75,9 @@ mcpServers:
   - ref: "tools/firecrawl"
     required: false
     reason: "Crawl review sites and forums for comprehensive brand sentiment data"
+  - ref: "tools/reddit"
+    required: false
+    reason: "Read and search subreddits for brand mentions and sentiment, monitoring only"
 presence:
   web:
     browsing: true
