@@ -23,104 +23,168 @@ env:
     description: "SchemaBounce service account client secret"
     required: true
 tools:
-  - name: schemabounce_list_workspaces
-    description: "List all accessible workspaces"
+  - name: sb_workspace_list
+    description: "List the workspaces visible to the current credential"
     category: workspaces
-  - name: schemabounce_get_workspace_overview
-    description: "Get workspace overview with environment and pipeline counts"
+  - name: sb_workspace_inspect
+    description: "Full snapshot of one workspace: status, tier, members, environments"
     category: workspaces
-  - name: schemabounce_list_environments
+  - name: sb_workspace_provision
+    description: "Create a new workspace, optionally with initial environments and member invitations"
+    category: workspaces
+  - name: sb_workspace_archive
+    description: "Archive a workspace (recoverable) or hard-delete it (irreversible cascade)"
+    category: workspaces
+  - name: sb_member_manage
+    description: "List, add, remove, or change role of workspace members"
+    category: workspaces
+  - name: sb_env_list
     description: "List environments in a workspace"
     category: environments
-  - name: schemabounce_get_pipeline_health
-    description: "Get pipeline health metrics for an environment"
-    category: pipelines
-  - name: schemabounce_list_routes
-    description: "List pipeline routes in an environment"
-    category: pipelines
-  - name: schemabounce_get_route_detail
-    description: "Get detailed route configuration and status"
-    category: pipelines
-  - name: schemabounce_get_schema_state
-    description: "Get current schema state for an environment"
-    category: schemas
-  - name: schemabounce_get_drift_report
-    description: "Get schema drift detection report"
-    category: schemas
-  - name: schemabounce_get_source_status
-    description: "Get source connection status and health"
+  - name: sb_env_manage
+    description: "Create, update, or delete an environment"
+    category: environments
+  - name: sb_env_promote
+    description: "Copy resources between environments (routes, sinks, sources, secrets)"
+    category: environments
+  - name: sb_route_list
+    description: "List pipeline routes in a workspace, optionally filtered by environment_id and/or status"
+    category: pipeline
+  - name: sb_route_inspect
+    description: "Deep-dive on one route: config, HCL definition, deployment history, open PRs, and bound sinks/source"
+    category: pipeline
+  - name: sb_route_create
+    description: "Create a pipeline route bound to an environment, with source config and sink bindings"
+    category: pipeline
+  - name: sb_route_update
+    description: "Patch a route's name, source_config, or sink bindings"
+    category: pipeline
+  - name: sb_route_lifecycle
+    description: "Deploy, pause, resume, or archive a pipeline route"
+    category: pipeline
+  - name: sb_source_manage
+    description: "List/create/update/delete CDC sources, plus test connectivity and discover schema"
     category: sources
-  - name: schemabounce_search_catalog
-    description: "Search the schema catalog across environments"
+  - name: sb_source_inspect
+    description: "Deep snapshot of one CDC source: status, replication lag, tables, downstream subscribers"
+    category: sources
+  - name: sb_cdc_resync
+    description: "Restart CDC ingestion from a snapshot, a specific LSN, or a timestamp"
+    category: sources
+  - name: sb_sink_manage
+    description: "List/create/update/delete sinks (env-scoped) plus test connectivity"
+    category: sinks
+  - name: sb_schema_state
+    description: "Fetch the Kolumn state file and/or resource list, dependency graph, and statistics for an environment"
+    category: schema
+  - name: sb_drift_report
+    description: "Workspace-wide or per-environment drift report (managed resources whose runtime state diverges from declared HCL)"
+    category: schema
+  - name: sb_drift_resolve
+    description: "Re-sync drifted resources in an environment"
+    category: schema
+  - name: sb_catalog_search
+    description: "Search the schema catalog for tables, columns, and assets"
     category: catalog
-  - name: schemabounce_get_agent_insights
-    description: "Get AI agent activity insights and metrics"
-    category: agents
-  - name: schemabounce_query_usage
-    description: "Query platform usage and billing metrics"
-    category: analytics
-  - name: schemabounce_get_audit_log
-    description: "Get audit log entries for compliance and tracking"
-    category: analytics
-  - name: schemabounce_execute_query
-    description: "Execute a read-only SQL query against environment databases"
+  - name: sb_query_run
+    description: "Execute SQL through an analytics connection (read-only enforced by backend permissions)"
     category: queries
-  - name: schemabounce_adl_status
-    description: "Get ADL (Agent Data Layer) infrastructure status"
+  - name: sb_credential_list
+    description: "Unified list of service accounts, API keys, and OAuth clients"
+    category: credentials
+  - name: sb_credential_manage
+    description: "Create/update/delete service accounts, API keys, and OAuth clients"
+    category: credentials
+  - name: sb_credential_rotate
+    description: "Rotate a service account / admin SA / API key / OAuth client secret"
+    category: credentials
+  - name: sb_secret_manage
+    description: "List/create/update/delete secrets within an environment"
+    category: secrets
+  - name: sb_secret_rotate
+    description: "Rotate (replace value) or revoke (mark unusable) an env secret"
+    category: secrets
+  - name: sb_adl_status
+    description: "ADL system status: tier, postgres/pgvector/AGE/redis/duckdb readiness, storage usage, connection info, data stats"
     category: adl
-  - name: schemabounce_adl_query
-    description: "Query ADL records by entity type with filters"
+  - name: sb_adl_records
+    description: "Query / get / upsert / delete records in the Agent Data Layer"
     category: adl
-  - name: schemabounce_adl_get_record
-    description: "Get a single ADL record by ID"
+  - name: sb_adl_bulk
+    description: "Bulk upsert or delete records (up to 1000)"
     category: adl
-  - name: schemabounce_adl_upsert_record
-    description: "Create or update an ADL record"
+  - name: sb_adl_memory
+    description: "Read/write agent memory (key/value store, namespaced)"
     category: adl
-  - name: schemabounce_adl_delete_record
-    description: "Delete an ADL record"
+  - name: sb_adl_graph
+    description: "Add/list/delete edges and traverse neighbors on the AGE-backed knowledge graph"
     category: adl
-  - name: schemabounce_adl_memory
-    description: "Read or write agent private memory"
+  - name: sb_adl_search
+    description: "Semantic search over ADL records via pgvector embeddings"
     category: adl
-  - name: schemabounce_adl_actions
-    description: "Get agent action history and logs"
-    category: adl
-  - name: schemabounce_adl_update_config
-    description: "Update ADL agent configuration"
-    category: adl
-  - name: schemabounce_adl_bulk_upsert
-    description: "Bulk create or update ADL records"
-    category: adl
-  - name: schemabounce_adl_bulk_delete
-    description: "Bulk delete ADL records"
-    category: adl
-  - name: schemabounce_adl_graph_add_edge
-    description: "Add an edge to the ADL knowledge graph"
-    category: graph
-  - name: schemabounce_adl_graph_list_edges
-    description: "List edges in the ADL knowledge graph"
-    category: graph
-  - name: schemabounce_adl_graph_delete_edge
-    description: "Delete an edge from the ADL knowledge graph"
-    category: graph
-  - name: schemabounce_adl_graph_neighbors
-    description: "Find neighbor entities in the ADL knowledge graph"
-    category: graph
-  - name: schemabounce_adl_semantic_search
-    description: "Semantic vector search across ADL records"
-    category: search
+  - name: sb_agent_manage
+    description: "List/get/create/update/move/delete agents in the workspace, plus dispatch a chat message"
+    category: agents
+  - name: sb_bot_marketplace
+    description: "Browse the marketplace (bots, teams, MCP tools) and activate bots/teams in the workspace"
+    category: agents
+  - name: sb_agent_lifecycle
+    description: "Enable, disable, resume, restore, set run-mode, or kick off a run for a deployed agent"
+    category: agents
+  - name: sb_agent_runs
+    description: "List, fetch, and aggregate agent-run records"
+    category: agents
+  - name: sb_agent_sessions
+    description: "List sessions, fetch message history, or terminate a session for a deployed agent"
+    category: agents
+  - name: sb_agent_mcp_access
+    description: "List/grant/revoke MCP-connection access for an agent, and store/check per-agent encrypted secrets"
+    category: agents
+  - name: sb_agent_proposals
+    description: "List, approve, or reject agent-authored improvement proposals"
+    category: agents
+  - name: sb_llm_keys
+    description: "List/set/verify/delete LLM provider API keys; list available models; read/write billing config"
+    category: automation
+  - name: sb_workflow_manage
+    description: "List/get/create/update/delete workflows, trigger runs, and inspect run history"
+    category: automation
+  - name: sb_schedule_manage
+    description: "Create/list/update/delete cron-scheduled tasks that trigger workflows or chat with agents on a schedule"
+    category: automation
+  - name: sb_automation_inspect
+    description: "List the workspace's automations (scheduled, event-driven, manual) plus aggregate stats"
+    category: automation
+  - name: sb_audit_search
+    description: "Filtered search across the workspace audit log"
+    category: audit
+  - name: sb_audit_export
+    description: "Trigger an export of audit events (CSV / JSON / NDJSON)"
+    category: audit
+  - name: sb_billing_inspect
+    description: "Snapshot of plan, addons, subscription, recent invoices, and credit balance for the workspace"
+    category: billing
+  - name: sb_billing_manage
+    description: "Change plan, add/remove addons, generate Stripe checkout URL, or generate a customer-portal URL"
+    category: billing
+  - name: sb_sso_manage
+    description: "Configure the workspace's SSO connection (OIDC or SAML), claim to role mappings, and fetch SAML metadata URL"
+    category: sso
+  - name: sb_files_manage
+    description: "List/get/upload/delete files in the Agent Data Layer"
+    category: files
+  - name: sb_a2a_dispatch
+    description: "Read an agent card and dispatch a JSON-RPC call to an A2A-protocol agent"
+    category: a2a
 ---
 
 # SchemaBounce MCP Server
 
 Provides full read/write access to the SchemaBounce platform for agents that manage workspaces, monitor pipelines, track schema drift, query analytics, and interact with the Agent Data Layer.
 
-This is the **core platform MCP server** — every bot deployed on SchemaBounce can access their workspace's data through these 29 tools.
+This is the **core platform MCP server** with 51 tools across 10 domains. Every bot deployed on SchemaBounce can reach their workspace's data through these tools.
 
 ## Which Bots Use This
-
-Every bot has implicit access to ADL tools via the standard tool set. This MCP server extends that with platform-level operations:
 
 - **sre-devops** — Monitor pipeline health, check environment status, query audit logs
 - **data-analyst** — Execute read-only SQL queries, search the schema catalog, query usage metrics
