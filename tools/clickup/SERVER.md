@@ -22,9 +22,14 @@ transport:
   command: "npx"
   args: ["-y", "clickup-mcp@1.0.1"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: CLICKUP_API_TOKEN
     description: "ClickUp personal API token from Settings > Apps"
-    required: true
+    required: false
     sensitive: true
 
 # /api/v2/user returns the authenticated user record.

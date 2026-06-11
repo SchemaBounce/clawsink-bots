@@ -35,17 +35,22 @@ transport:
   command: "uvx"
   args: ["mcp-google-search-console-crunchtools==0.1.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Google OAuth
+  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
+  # Leaving these blank uses the workspace's connected OAuth integration;
+  # provide values only to override. Marked required:true previously, which
+  # made the setup/reconnect modal demand credentials the OAuth flow already covers.
   - name: GSC_REFRESH_TOKEN
     description: "Workspace's Google OAuth refresh token. Issued by core-api after the user completes the consent flow opened from the deploy modal. Stored encrypted in mcp_connections; core-api aliases it from the connection's GOOGLE_REFRESH_TOKEN at pod start."
-    required: true
+    required: false
     sensitive: true
   - name: GSC_CLIENT_ID
     description: "Platform-level Google OAuth client ID (same one that issued the refresh token). From the SchemaBounce-owned Google Cloud project, not per-customer; core-api aliases it from GOOGLE_OAUTH_CLIENT_ID (platform fallback, gated on a completed Google OAuth for this connection)."
-    required: true
+    required: false
     sensitive: false
   - name: GSC_CLIENT_SECRET
     description: "Platform-level Google OAuth client secret, used to mint access tokens from the stored refresh token. From the SchemaBounce-owned Google Cloud project; core-api aliases it from GOOGLE_OAUTH_CLIENT_SECRET (platform fallback, gated)."
-    required: true
+    required: false
     sensitive: true
 tools:
   - name: query_search_analytics

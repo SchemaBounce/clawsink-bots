@@ -25,16 +25,21 @@ transport:
   command: "npx"
   args: ["-y", "@xuandev/atlassian-mcp@1.1.1"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Atlassian OAuth (Jira cloud)
+  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
+  # Leaving these blank uses the workspace's connected OAuth integration;
+  # provide values only to override. Marked required:true previously, which
+  # made the setup/reconnect modal demand credentials the OAuth flow already covers.
   - name: JIRA_API_TOKEN
     description: "Jira API Token for authentication"
-    required: true
+    required: false
     sensitive: true
   - name: JIRA_EMAIL
     description: "Email address associated with the Jira API token"
-    required: true
+    required: false
   - name: JIRA_URL
     description: "Jira instance URL (e.g., https://company.atlassian.net)"
-    required: true
+    required: false
 
 # /rest/api/3/myself returns the authenticated user — same endpoint
 # the curated mcp_validation.go path used. {JIRA_URL} substitutes the

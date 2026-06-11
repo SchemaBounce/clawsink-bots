@@ -18,12 +18,17 @@ transport:
   command: "npx"
   args: ["-y", "trello-mcp@1.0.3"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: TRELLO_API_KEY
     description: "Trello API key from trello.com/power-ups/admin"
-    required: true
+    required: false
   - name: TRELLO_TOKEN
     description: "Trello API token from trello.com/power-ups/admin"
-    required: true
+    required: false
 tools:
   - name: list_boards
     description: "List all boards for the authenticated user"

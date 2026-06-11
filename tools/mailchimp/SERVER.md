@@ -18,12 +18,17 @@ transport:
   command: "npx"
   args: ["-y", "@agentx-ai/mailchimp-mcp-server@1.1.1"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: MAILCHIMP_API_KEY
     description: "Mailchimp API key from Account > Extras > API keys"
-    required: true
+    required: false
   - name: MAILCHIMP_SERVER_PREFIX
     description: "Mailchimp server prefix e.g. us14"
-    required: true
+    required: false
 tools:
   - name: list_campaigns
     description: "List email campaigns"

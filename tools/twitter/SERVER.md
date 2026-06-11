@@ -20,9 +20,14 @@ transport:
   command: "npx"
   args: ["-y", "twitter-mcp@0.1.1"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: TWITTER_BEARER_TOKEN
     description: "Twitter API v2 bearer token"
-    required: true
+    required: false
     sensitive: true
 
 # /2/users/me with a bearer token works for user-context tokens; app-

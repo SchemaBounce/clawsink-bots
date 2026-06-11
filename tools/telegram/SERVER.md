@@ -18,9 +18,14 @@ transport:
   command: "npx"
   args: ["-y", "telegram-mcp@0.1.20"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: TELEGRAM_BOT_TOKEN
     description: "Telegram bot token from @BotFather"
-    required: true
+    required: false
 tools:
   - name: send_message
     description: "Send a text message to a chat"

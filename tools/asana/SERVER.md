@@ -17,9 +17,14 @@ transport:
   type: "sse"
   url: "https://mcp.asana.com/sse"
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: ASANA_ACCESS_TOKEN
     description: "Asana personal access token"
-    required: true
+    required: false
 tools:
   - name: list_tasks
     description: "List tasks in a project"

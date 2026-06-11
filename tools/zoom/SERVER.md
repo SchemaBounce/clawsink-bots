@@ -18,15 +18,20 @@ transport:
   command: "npx"
   args: ["-y", "zoom-mcp-server@0.6.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: ZOOM_ACCOUNT_ID
     description: "Zoom Server-to-Server OAuth account ID"
-    required: true
+    required: false
   - name: ZOOM_CLIENT_ID
     description: "Zoom Server-to-Server OAuth client ID"
-    required: true
+    required: false
   - name: ZOOM_CLIENT_SECRET
     description: "Zoom Server-to-Server OAuth client secret"
-    required: true
+    required: false
 tools:
   - name: create_meeting
     description: "Create a new Zoom meeting"
