@@ -45,6 +45,12 @@ if ! bash "$SCRIPT_DIR/bots/validate-integrity.sh"; then
 fi
 echo ""
 
+echo "=== Validating MCP Server Manifests (tools/**) ==="
+if ! bash "$SCRIPT_DIR/tools/validate-manifest.sh"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
 if [ $FAILURES -gt 0 ]; then
   echo "❌ $FAILURES validation suite(s) had failures"
   exit 1

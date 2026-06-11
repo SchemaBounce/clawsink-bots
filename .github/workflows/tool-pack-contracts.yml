@@ -6,6 +6,7 @@ on:
       - 'packs/**'
       - 'bots/**'
       - 'teams/**'
+      - 'tools/**'
       - 'tests/**'
       - 'README.md'
       - '.github/workflows/tool-pack-contracts.yml'
@@ -107,6 +108,21 @@ jobs:
           name: pack-catalog
           path: pack-catalog.csv
           retention-days: 7
+
+  tool-manifest-contracts:
+    name: MCP Tool Manifest Contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PyYAML
+        run: pip3 install --quiet pyyaml
+
+      - name: Validate MCP server manifests (tools/**/SERVER.md)
+        run: bash tests/tools/validate-manifest.sh
 
   runtime-integration:
     name: Runtime Integration
