@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.1.12"
-  description: "Audits SchemaBounce SEO across modern signals (Google Search Console keyword data, Core Web Vitals, Open Graph, structured data, AI-search citation visibility), suggests blog topics, and drafts simulated outreach for human review."
+  version: "0.1.13"
+  description: "Audits SchemaBounce SEO across core signals (Google Search Console keyword data, Core Web Vitals via PageSpeed Insights, Open Graph, structured data), surfaces topic opportunities for the blog writer, and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
 agent:
@@ -28,7 +28,7 @@ agent:
     ## Tool Usage
     - Step 1: `adl_read_memory` namespace `bot:seo-expert:northstar` keys `brand_voice`, `product_catalog`, `competitive_anchors`
     - Step 2: `adl_read_memory` namespace `seo:audit:cache` key `sitemap_xml` (seeded by the bootstrap script before each run); list URLs.
-    - Step 3: Spawn `auditor` sub-agent. The auditor uses the native Google Search Console MCP server (`google-search-console.query_search_analytics` and friends) for real keyword data, and `adl_proxy_call` for sitemap-URL meta audits (Open Graph, JSON-LD, canonical). PageSpeed and GEO/LLMO checks are deferred to dedicated MCP servers in the next iteration.
+    - Step 3: Spawn `auditor` sub-agent. The auditor uses the native Google Search Console MCP server (`query_search_analytics`, `inspect_url`, `list_sitemaps`) for real keyword data and indexation status; `adl_proxy_call` for sitemap-URL meta audits (Open Graph, JSON-LD, canonical, H1; 10 calls/run, 32 KB cap); and the pagespeed MCP (`analyze_page_speed`, `get_full_audit`, `crux_summary`) for Core Web Vitals and Lighthouse scores on the home page and top-3 URLs. GEO/citation visibility (querying external LLMs for brand mentions) has no MCP available yet and is deferred.
     - Step 4: For each finding, `adl_upsert_record` entity_type=`seo_findings` with severity, metric_name, metric_value, provider.
     - Step 5: For each almost-ranking GSC query, `adl_upsert_record` entity_type=`seo_keyword_opportunity`.
     - Step 6: Spawn `recommender` sub-agent; for each topic suggestion, `adl_upsert_record` entity_type=`seo_topic_suggestion` AND `adl_send_message` to `blog-writer` type=`finding`. Link to the seo_keyword_opportunity rows that justify it.
@@ -91,6 +91,9 @@ mcpServers:
     reason: "Real keyword data, impressions, CTR, and position trends. A native stdio MCP server hosted in the workspace pod, authorized once via Google OAuth from the deploy modal (no Composio). This is the auditor's data path for almost-ranking opportunities; without it the auditor still runs but only emits Open-Graph and structured-data findings."
     config:
       default_lookback_days: 28
+  - ref: "tools/pagespeed"
+    required: false
+    reason: "Core Web Vitals and Lighthouse scores via Google PageSpeed Insights API. The auditor calls analyze_page_speed, get_full_audit, and crux_summary for the site's home page and top-3 URLs. Requires GOOGLE_API_KEY with PageSpeed Insights API enabled. Without it, the auditor skips performance metrics (LCP, CLS, INP, Lighthouse SEO score) and emits only on-page meta and GSC keyword findings."
 skills:
   - ref: "skills/platform-awareness@1.0.0"
 requirements:
@@ -135,9 +138,9 @@ Audits SchemaBounce's published content footprint, generates topic suggestions f
 ## What It Does
 
 - **Modern on-page audit:** for every URL in the sitemap, validates Open Graph + Twitter Card completeness, JSON-LD/structured-data presence and validity, canonical and hreflang, meta description, H1 count, image alt-coverage. (Replaces orcascan.com's open-graph-validator concept in-process.)
-- **Core Web Vitals + Lighthouse:** runs PageSpeed Insights for the home page and top URLs. Files findings on LCP > 2.5s, CLS > 0.1, INP > 200ms, Lighthouse SEO score < 90.
+- **Core Web Vitals + Lighthouse:** uses the pagespeed MCP to run Google PageSpeed Insights for the home page and top-3 URLs. Files findings on LCP > 2.5s, CLS > 0.1, INP > 200ms, Lighthouse SEO score < 90. Requires the `tools/pagespeed` MCP connection with a valid `GOOGLE_API_KEY`.
 - **Real keyword data:** pulls Google Search Console Search Analytics over the last 28 days. Identifies "almost-ranking" queries (impressions ≥ 100, position 5-20, CTR below run-median) and writes them as `seo_keyword_opportunity` records.
-- **AI-search citation visibility (GEO/LLMO):** for 5-10 brand-relevant queries, asks Anthropic Claude, OpenAI ChatGPT, and Perplexity whether SchemaBounce is cited. Files a finding when citation rate is below 25% across providers. (umoren.ai concept implemented in-process.)
+- **AI-search citation visibility (GEO/LLMO):** not yet implemented. No MCP is available to query Claude, ChatGPT, and Perplexity for brand citations in-process. The `brand_queries` memory key is staged for when a GEO MCP is wired. Track citation manually as a quarterly exercise until then.
 - **Topic suggestions:** turns almost-ranking queries into concrete topics for blog-writer; messages them via `adl_send_message` and writes durable `seo_topic_suggestion` records.
 - **Outreach simulation:** drafts plausible link-building outreach (guest post pitches, broken-link replacements) and records in `seo_outreach_log` with `status="would_send"`. Never sends.
 
@@ -145,7 +148,7 @@ Audits SchemaBounce's published content footprint, generates topic suggestions f
 
 | Agent | Model | Responsibility |
 |-------|-------|----------------|
-| **auditor** | Haiku | Runs `adl_seo_meta_audit`, `adl_seo_pagespeed_audit`, `adl_seo_fetch_gsc_keywords`, `adl_seo_geo_visibility_check`. Files `seo_findings` and `seo_keyword_opportunity`. |
+| **auditor** | Haiku | Uses `query_search_analytics`, `inspect_url`, `list_sitemaps` (Google Search Console MCP) for keyword data and indexation; `adl_proxy_call` for on-page meta (Open Graph, JSON-LD, canonical, H1) per sitemap URL; `analyze_page_speed`, `get_full_audit`, `crux_summary` (pagespeed MCP) for Core Web Vitals. Files `seo_findings` and `seo_keyword_opportunity`. |
 | **recommender** | Sonnet | Synthesizes findings + opportunities into topic suggestions and outreach candidates. Prefers almost-ranking queries. |
 | **outreach-simulator** | Haiku | Drafts each outreach message and records to seo_outreach_log. Never sends. |
 
@@ -155,12 +158,12 @@ The audit, GSC pulls, PageSpeed, and AI-search citation checks are real and prod
 
 ## External APIs This Agent Reaches
 
-The agent itself never makes raw HTTP calls. The four built-in OpenCLAW tools (`adl_seo_*`) are server-side, with SSRF guards, allowlists, and timeouts. They reach:
+The agent makes no raw HTTP calls. External access goes through MCP subprocesses and the ADL proxy:
 
-- `searchconsole.googleapis.com` (Google Search Console Search Analytics, URL Inspection, Sitemaps API)
-- `pagespeedonline.googleapis.com` (PageSpeed Insights / Lighthouse)
-- `api.anthropic.com`, `api.openai.com`, `api.perplexity.ai` via the existing ClawShell virtual-key proxy (citation visibility check; the agent never sees a real API key)
-- The audited domain itself (one-shot HTML fetch for `adl_seo_meta_audit`, capped at 2 MB body, 10 s timeout, http(s) only, private-IP denied)
+- `searchconsole.googleapis.com` — reached by the Google Search Console MCP subprocess (`query_search_analytics`, `inspect_url`, `list_sitemaps`).
+- `pagespeedonline.googleapis.com` — reached by the pagespeed MCP subprocess (`analyze_page_speed`, `get_full_audit`, `crux_summary`). Requires `GOOGLE_API_KEY`.
+- Audited domain HTML — one-shot fetch via `adl_proxy_call` (32 KB body cap, 10 s timeout, HTTPS only, private-IP blocked). Used for Open Graph, JSON-LD, canonical, and H1 checks.
+- `api.anthropic.com`, `api.openai.com`, `api.perplexity.ai` — in the egress allowlist for a future GEO/citation-visibility MCP. Not currently used.
 
 ## Required North Star Keys
 
@@ -177,7 +180,7 @@ Before each run, the bootstrap script writes:
 
 - `seo:audit:cache/sitemap_xml`: raw `public/sitemap.xml` content
 - `seo:audit:cache/published_posts_json`: JSON list returned by `GET /api/v1/blog/posts`
-- `seo:audit:cache/brand_queries`: JSON array of 5-10 queries the GEO check uses (e.g., "real-time CDC platform", "schemabounce vs fivetran"). Owned by the workspace operator.
+- `seo:audit:cache/brand_queries`: JSON array of 5-10 brand-relevant queries (e.g., "real-time CDC platform", "schemabounce vs fivetran"). Staged for when a GEO/citation-visibility MCP is wired; not read by any current sub-agent.
 - `seo:audit:cache/site_url`: the GSC property URL for the workspace (e.g., `https://schemabounce.com/`)
 
-These are read by the auditor sub-agent. The agent itself does no outbound HTTP, every external call is brokered by an `adl_seo_*` built-in.
+The auditor sub-agent reads these at run start. The agent itself does no direct outbound HTTP; all external calls go through MCP subprocesses or `adl_proxy_call`.
