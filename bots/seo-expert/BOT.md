@@ -4,8 +4,8 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.2.1"
-  description: "Audits SchemaBounce SEO and GEO/AEO: Google Search Console keyword data, Core Web Vitals, on-page meta, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
+  version: "0.3.1"
+  description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console keyword data, Core Web Vitals, on-page meta, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
 agent:
@@ -75,8 +75,12 @@ presence:
     browsing: true
     crawling: true
 egress:
-  mode: "allowlist"
-  allowlist:
+  mode: "restricted"
+  # Page fetches (sitemap, robots.txt, per-URL meta audit) go through adl_proxy_call,
+  # which uses the ADL's own SSRF-guarded proxy — NOT the egress allowedDomains list.
+  # The workspace's audited domain therefore does NOT need to appear here.
+  # If future direct-proxy use is added, the admin can extend allowedDomains per-seat.
+  allowedDomains:
     - "googleapis.com"
     - "www.googleapis.com"
     - "searchconsole.googleapis.com"
@@ -86,8 +90,6 @@ egress:
     - "api.perplexity.ai"
     - "mcp.citationbench.com"
     - "api.citationbench.com"
-    - "schemabounce.com"
-    - "api.schemabounce.com"
 plugins: []
 mcpServers:
   - ref: "tools/google-search-console"
@@ -103,7 +105,7 @@ mcpServers:
     reason: "GEO measurement: tracks AI citation share-of-voice for brand and category queries across ChatGPT, Claude, and Perplexity via the CitationBench hosted MCP. Requires CITATIONBENCH_API_KEY. Without it, the geo-auditor emits an info-level finding noting measurement is unavailable and skips Part A of the geo-aeo skill; Parts B and C (llms.txt drafting and content recommendations) still run."
   - ref: "tools/llms-txt-generator"
     required: false
-    reason: "GEO tactic: generates llms.txt and llms-full.txt drafts for schemabounce.com for human review before publishing. Requires OPENAI_API_KEY. Without it, the geo-auditor emits an info-level finding and skips the llms.txt draft step."
+    reason: "GEO tactic: generates llms.txt and llms-full.txt drafts for the connected site for human review before publishing. Requires OPENAI_API_KEY. Without it, the geo-auditor emits an info-level finding and skips the llms.txt draft step."
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/seo-operations@1.0.0"
@@ -141,19 +143,135 @@ goals:
       operator: "=="
       value: 1
       period: per_run
+setup:
+  steps:
+    - id: set-brand-voice
+      name: "Define brand voice"
+      description: "Tone, style guidelines, and terminology preferences for all content"
+      type: north_star
+      key: brand_voice
+      group: configuration
+      priority: required
+      reason: "Every topic suggestion and outreach draft must match the established brand tone"
+      ui:
+        inputType: text
+        placeholder: "e.g., Technical but approachable, developer-focused, no marketing jargon"
+    - id: set-product-catalog
+      name: "Define product catalog"
+      description: "Current features, product names, and positioning for accurate topic suggestions"
+      type: north_star
+      key: product_catalog
+      group: configuration
+      priority: required
+      reason: "Prevents topic suggestions that reference outdated features or incorrect product names"
+      ui:
+        inputType: text
+        placeholder: "Product names, feature list, positioning summary"
+    - id: set-competitive-anchors
+      name: "Define competitive anchors"
+      description: "How the workspace's product compares to alternatives; used for almost-ranking query framing"
+      type: north_star
+      key: competitive_anchors
+      group: configuration
+      priority: required
+      reason: "Almost-ranking queries often include comparison terms; accurate framing prevents misleading suggestions"
+      ui:
+        inputType: text
+        placeholder: "e.g., vs Fivetran: real-time vs batch; vs Airbyte: hosted vs self-managed"
+    - id: set-site-url
+      name: "Set the site URL to audit"
+      description: "The Google Search Console property URL for the site this bot audits (must match your verified GSC property exactly)"
+      type: config
+      group: configuration
+      target:
+        namespace: seo:audit:cache
+        key: site_url
+      priority: required
+      reason: "The auditor passes this URL to Google Search Console and uses it as the sitemap base. It must match a verified GSC property."
+      ui:
+        inputType: text
+        placeholder: "https://www.yoursite.com/"
+    - id: set-brand-queries
+      name: "Set brand and category queries"
+      description: "JSON array of 5-10 queries to track for AI citation share-of-voice (brand + category)"
+      type: config
+      group: configuration
+      target:
+        namespace: seo:audit:cache
+        key: brand_queries
+      priority: required
+      reason: "The geo-auditor uses these queries to measure brand citation across ChatGPT, Claude, and Perplexity run-over-run"
+      ui:
+        inputType: json
+        placeholder: '["your brand name", "your brand vs competitor", "category keyword you want to rank for"]'
+    - id: connect-google-search-console
+      name: "Connect Google Search Console"
+      description: "Authorize the Google Search Console MCP server with your Google account to pull keyword and indexation data"
+      type: mcp_connection
+      ref: tools/google-search-console
+      group: connections
+      priority: required
+      reason: "Real keyword data (impressions, CTR, position) and indexation status require a verified GSC connection; without it the auditor falls back to on-page meta findings only"
+      ui:
+        icon: google
+        actionLabel: "Connect Google Search Console"
+    - id: connect-pagespeed
+      name: "Connect PageSpeed Insights"
+      description: "Google PageSpeed Insights API for Core Web Vitals and Lighthouse SEO scores"
+      type: mcp_connection
+      ref: tools/pagespeed
+      group: connections
+      priority: optional
+      reason: "Without it the auditor skips LCP, CLS, INP, and Lighthouse SEO score measurements; on-page meta and GSC findings still run"
+      ui:
+        icon: gauge
+        actionLabel: "Connect PageSpeed"
+    - id: connect-ai-citation-tracker
+      name: "Connect AI Citation Tracker"
+      description: "CitationBench MCP for measuring brand citation share-of-voice across ChatGPT, Claude, and Perplexity"
+      type: mcp_connection
+      ref: tools/ai-citation-tracker
+      group: connections
+      priority: optional
+      reason: "Without CITATIONBENCH_API_KEY the geo-auditor skips AI citation measurement and emits an info-level finding; the audit and topic suggestions still run"
+      ui:
+        icon: chart
+        actionLabel: "Connect Citation Tracker"
+    - id: connect-llms-txt-generator
+      name: "Connect llms.txt Generator"
+      description: "Generates llms.txt and llms-full.txt drafts for human review"
+      type: mcp_connection
+      ref: tools/llms-txt-generator
+      group: connections
+      priority: optional
+      reason: "Without OPENAI_API_KEY the geo-auditor skips the llms.txt draft step and emits an info-level finding"
+      ui:
+        icon: file
+        actionLabel: "Connect llms.txt Generator"
+    - id: set-company-glossary
+      name: "Define company glossary"
+      description: "Technical terms, acronyms, and product-specific terminology"
+      type: north_star
+      key: company_glossary
+      group: configuration
+      priority: recommended
+      reason: "Ensures topic suggestions and outreach drafts use consistent internal terminology"
+      ui:
+        inputType: text
+        placeholder: "e.g., CDC = Change Data Capture"
 ---
 
 # SEO Expert
 
-Audits SchemaBounce's published content footprint, generates topic suggestions for the blog-writer, and drafts simulated outreach for review. **Audit and dry-run only.** Real sends require credentials and a Phase 2 plan; this bot does not perform any external send.
+Audits the workspace's connected site footprint, generates topic suggestions for the blog-writer, and drafts simulated outreach for review. **Audit and dry-run only.** Real sends require credentials and a Phase 2 plan; this bot does not perform any external send.
 
 ## What It Does
 
 - **Modern on-page audit:** for every URL in the sitemap, validates Open Graph + Twitter Card completeness, JSON-LD/structured-data presence and validity, canonical and hreflang, meta description, H1 count, image alt-coverage. (Replaces orcascan.com's open-graph-validator concept in-process.)
 - **Core Web Vitals + Lighthouse:** uses the pagespeed MCP to run Google PageSpeed Insights for the home page and top-3 URLs. Files findings on LCP > 2.5s, CLS > 0.1, INP > 200ms, Lighthouse SEO score < 90. Requires the `tools/pagespeed` MCP connection with a valid `GOOGLE_API_KEY`.
 - **Real keyword data:** pulls Google Search Console Search Analytics over the last 28 days. Identifies "almost-ranking" queries (impressions ≥ 100, position 5-20, CTR below run-median) and writes them as `seo_keyword_opportunity` records.
-- **AI citation share-of-voice (GEO measurement):** uses the `tools/ai-citation-tracker` MCP (CitationBench hosted MCP at `mcp.citationbench.com/mcp`) to check whether SchemaBounce is cited, mentioned, or absent for brand and category queries across ChatGPT, Claude, and Perplexity. Requires `CITATIONBENCH_API_KEY`. Without a key the server returns demo data; the workflow still runs. Results are written as `seo_geo_citation` records and compared run-over-run via `research.ai_citation.history`.
-- **llms.txt drafting (GEO tactic):** uses the `tools/llms-txt-generator` MCP (npm `llms-txt-generator@0.0.3`, `generate-llms` tool) to draft `llms.txt` and `llms-full.txt` for schemabounce.com. Requires `OPENAI_API_KEY`. The draft is stored as `seo_llms_txt_draft` with `requires_human_review=true` and never auto-published. The executive-assistant is messaged when a new draft is ready.
+- **AI citation share-of-voice (GEO measurement):** uses the `tools/ai-citation-tracker` MCP (CitationBench hosted MCP at `mcp.citationbench.com/mcp`) to check whether the workspace's brand is cited, mentioned, or absent for brand and category queries across ChatGPT, Claude, and Perplexity. Requires `CITATIONBENCH_API_KEY`. Without a key the server returns demo data; the workflow still runs. Results are written as `seo_geo_citation` records and compared run-over-run via `research.ai_citation.history`.
+- **llms.txt drafting (GEO tactic):** uses the `tools/llms-txt-generator` MCP (npm `llms-txt-generator@0.0.3`, `generate-llms` tool) to draft `llms.txt` and `llms-full.txt` for the connected site. Requires `OPENAI_API_KEY`. The draft is stored as `seo_llms_txt_draft` with `requires_human_review=true` and never auto-published. The executive-assistant is messaged when a new draft is ready.
 - **GEO content recommendations:** for almost-ranking pages identified by the auditor, the geo-auditor checks entity clarity, Q&A formatting, and answer-engine-friendly structure. Files `seo_findings` (severity=low) with specific content edit suggestions.
 - **Topic suggestions:** turns almost-ranking queries into concrete topics for blog-writer; messages them via `adl_send_message` and writes durable `seo_topic_suggestion` records.
 - **Outreach simulation:** drafts plausible link-building outreach (guest post pitches, broken-link replacements) and records in `seo_outreach_log` with `status="would_send"`. Never sends.
@@ -197,7 +315,7 @@ Before each run, the bootstrap script writes:
 
 - `seo:audit:cache/sitemap_xml`: raw `public/sitemap.xml` content
 - `seo:audit:cache/published_posts_json`: JSON list returned by `GET /api/v1/blog/posts`
-- `seo:audit:cache/brand_queries`: JSON array of 5-10 brand-relevant queries (e.g., "real-time CDC platform", "schemabounce vs fivetran"). Read by the geo-auditor sub-agent for AI citation share-of-voice checks via the AI Citation Tracker MCP.
-- `seo:audit:cache/site_url`: the GSC property URL for the workspace (e.g., `https://schemabounce.com/`)
+- `seo:audit:cache/brand_queries`: JSON array of 5-10 brand-relevant queries set via the `set-brand-queries` setup step. Read by the geo-auditor sub-agent for AI citation share-of-voice checks via the AI Citation Tracker MCP.
+- `seo:audit:cache/site_url`: the GSC property URL set via the `set-site-url` setup step (e.g., `https://www.yoursite.com/`). Must match a verified GSC property exactly.
 
 The auditor sub-agent reads these at run start. The agent itself does no direct outbound HTTP; all external calls go through MCP subprocesses or `adl_proxy_call`.
