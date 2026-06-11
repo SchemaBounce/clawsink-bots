@@ -164,7 +164,11 @@ The `tools` section is a declarative listing for marketplace display and depende
 
 ## Validation
 
-1. `SERVER.md` has valid YAML frontmatter with `kind: McpServer`
+`tests/tools/validate-manifest.sh` enforces the full `McpServerDef` structural
+contract on every manifest. Both `server.json` and `SERVER.md` are validated
+when present; a malformed `server.json` fails CI even if a `SERVER.md` also exists.
+
+1. `SERVER.md` has valid YAML frontmatter with `kind: McpServer`, OR `server.json` parses as valid JSON
 2. `metadata.name` matches the directory name under `tools/`
 3. `transport.type` is one of: `stdio`, `sse`, `streamable-http`
 4. `transport.command` is present when type is `stdio`
@@ -174,6 +178,13 @@ The `tools` section is a declarative listing for marketplace display and depende
 8. All `tools[].name` are unique within the server
 9. All bot `mcpServers[].ref` point to valid `tools/` directories
 10. All team `mcpServers[].ref` point to valid `tools/` directories
+
+**Cross-repo guard note:** This validator enforces structure only. First-party
+manifest-to-binary parity (e.g. tool names declared in `tools/schemabounce/`
+matching the tools the `schemabounce-mcp` binary actually exposes) cannot be
+enforced here because the binary lives in a separate repo. That contract is
+enforced by `TestToolsList_MatchesManifest` in the `schemabounce-mcp` repo's
+CI. Do not add external binary invocations to this script.
 
 ## What the Platform Does
 
