@@ -32,6 +32,7 @@ env:
   - name: ZOOM_CLIENT_SECRET
     description: "Zoom Server-to-Server OAuth client secret"
     required: false
+    sensitive: true
 tools:
   - name: create_meeting
     description: "Create a new Zoom meeting"

@@ -25,6 +25,7 @@ env:
   - name: ASANA_ACCESS_TOKEN
     description: "Asana personal access token"
     required: false
+    sensitive: true
 tools:
   - name: list_tasks
     description: "List tasks in a project"

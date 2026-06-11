@@ -26,6 +26,7 @@ env:
   - name: MAILCHIMP_API_KEY
     description: "Mailchimp API key from Account > Extras > API keys"
     required: false
+    sensitive: true
   - name: MAILCHIMP_SERVER_PREFIX
     description: "Mailchimp server prefix e.g. us14"
     required: false

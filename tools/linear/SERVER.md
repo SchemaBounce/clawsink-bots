@@ -26,6 +26,7 @@ env:
   - name: LINEAR_API_KEY
     description: "Linear Personal API Key"
     required: false
+    sensitive: true
 tools:
   - name: create_issue
     description: "Create a new Linear issue"

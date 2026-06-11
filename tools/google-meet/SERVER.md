@@ -29,6 +29,7 @@ env:
   - name: GOOGLE_CLIENT_SECRET
     description: "Google OAuth client secret"
     required: false
+    sensitive: true
   - name: GOOGLE_REDIRECT_URI
     description: "Google OAuth redirect URI"
     required: false

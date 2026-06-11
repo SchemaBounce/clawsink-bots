@@ -26,6 +26,7 @@ env:
   - name: WHATSAPP_ACCESS_TOKEN
     description: "WhatsApp Business API access token"
     required: false
+    sensitive: true
   - name: WHATSAPP_PHONE_NUMBER_ID
     description: "WhatsApp Business phone number ID"
     required: false

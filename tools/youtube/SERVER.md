@@ -26,6 +26,7 @@ env:
   - name: YOUTUBE_API_KEY
     description: "YouTube Data API v3 key"
     required: false
+    sensitive: true
 tools:
   - name: search_videos
     description: "Search for videos by query"

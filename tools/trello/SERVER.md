@@ -26,9 +26,11 @@ env:
   - name: TRELLO_API_KEY
     description: "Trello API key from trello.com/power-ups/admin"
     required: false
+    sensitive: true
   - name: TRELLO_TOKEN
     description: "Trello API token from trello.com/power-ups/admin"
     required: false
+    sensitive: true
 tools:
   - name: list_boards
     description: "List all boards for the authenticated user"

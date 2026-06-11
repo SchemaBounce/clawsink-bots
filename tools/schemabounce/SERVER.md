@@ -19,9 +19,11 @@ env:
   - name: KOLUMN_CLIENT_ID
     description: "SchemaBounce service account client ID"
     required: true
+    sensitive: true
   - name: KOLUMN_CLIENT_SECRET
     description: "SchemaBounce service account client secret"
     required: true
+    sensitive: true
 tools:
   - name: sb_workspace_list
     description: "List the workspaces visible to the current credential"

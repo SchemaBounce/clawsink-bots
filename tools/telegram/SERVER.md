@@ -26,6 +26,7 @@ env:
   - name: TELEGRAM_BOT_TOKEN
     description: "Telegram bot token from @BotFather"
     required: false
+    sensitive: true
 tools:
   - name: send_message
     description: "Send a text message to a chat"

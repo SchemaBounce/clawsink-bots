@@ -26,6 +26,7 @@ env:
   - name: ZAPIER_API_KEY
     description: "Zapier API key from zapier.com/app/developer"
     required: false
+    sensitive: true
 tools:
   - name: list_zaps
     description: "List all zaps in the account"

@@ -34,6 +34,7 @@ env:
   - name: GOOGLE_APPLICATION_CREDENTIALS
     description: "Path to GCP service account JSON key (used as Application Default Credentials)"
     required: true
+    sensitive: true
   - name: GCP_PROJECT_ID
     description: "Google Cloud project ID (passed to the server via --project-id)"
     required: true

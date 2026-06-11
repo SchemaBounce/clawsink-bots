@@ -29,6 +29,7 @@ env:
   - name: N8N_API_KEY
     description: "n8n API key"
     required: false
+    sensitive: true
 tools:
   - name: list_workflows
     description: "List all workflows in the instance"

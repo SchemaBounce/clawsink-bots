@@ -29,6 +29,7 @@ env:
   - name: MICROSOFT_CLIENT_SECRET
     description: "Azure AD application client secret"
     required: false
+    sensitive: true
   - name: MICROSOFT_TENANT_ID
     description: "Azure AD tenant ID"
     required: false

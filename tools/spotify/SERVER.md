@@ -29,6 +29,7 @@ env:
   - name: SPOTIFY_CLIENT_SECRET
     description: "Spotify app client secret"
     required: false
+    sensitive: true
 tools:
   - name: search_tracks
     description: "Search for tracks by query"

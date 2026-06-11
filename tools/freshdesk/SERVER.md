@@ -28,6 +28,7 @@ env:
   - name: FRESHDESK_API_KEY
     description: "Freshdesk API key from Profile Settings"
     required: false
+    sensitive: true
 tools:
   - name: list_tickets
     description: "List tickets with optional filters"

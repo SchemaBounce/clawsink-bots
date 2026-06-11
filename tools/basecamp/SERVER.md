@@ -26,6 +26,7 @@ env:
   - name: BASECAMP_ACCESS_TOKEN
     description: "Basecamp OAuth access token"
     required: false
+    sensitive: true
   - name: BASECAMP_ACCOUNT_ID
     description: "Basecamp account ID"
     required: false

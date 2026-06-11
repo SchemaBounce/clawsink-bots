@@ -20,6 +20,7 @@ env:
   - name: GRAFANA_API_KEY
     description: "Grafana API key or service account token"
     required: true
+    sensitive: true
 tools:
   - name: search_dashboards
     description: "Search dashboards by name or tag"

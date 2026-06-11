@@ -26,6 +26,7 @@ env:
   - name: SHOPIFY_ACCESS_TOKEN
     description: "Shopify Admin API access token"
     required: false
+    sensitive: true
   - name: SHOPIFY_STORE_DOMAIN
     description: "Your store domain e.g. your-store.myshopify.com"
     required: false

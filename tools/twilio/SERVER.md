@@ -29,6 +29,7 @@ env:
   - name: TWILIO_AUTH_TOKEN
     description: "Twilio Auth Token from twilio.com/console"
     required: false
+    sensitive: true
 tools:
   - name: send_sms
     description: "Send an SMS message"

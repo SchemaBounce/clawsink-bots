@@ -28,10 +28,12 @@ env:
   - name: DD_API_KEY
     description: "Datadog API key (sent as DD-API-KEY header)"
     required: true
+    sensitive: true
   # Renamed from DD_APP_KEY: Datadog's documented header/var is DD_APPLICATION_KEY (DD-APPLICATION-KEY header).
   - name: DD_APPLICATION_KEY
     description: "Datadog Application key (sent as DD-APPLICATION-KEY header)"
     required: true
+    sensitive: true
   - name: DD_SITE
     description: "Datadog site e.g. datadoghq.com or datadoghq.eu (must match the transport host)"
     required: false

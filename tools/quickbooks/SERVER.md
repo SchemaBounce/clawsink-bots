@@ -29,12 +29,14 @@ env:
   - name: QUICKBOOKS_CLIENT_SECRET
     description: "QuickBooks OAuth client secret"
     required: false
+    sensitive: true
   - name: QUICKBOOKS_REALM_ID
     description: "QuickBooks company ID"
     required: false
   - name: QUICKBOOKS_REFRESH_TOKEN
     description: "QuickBooks OAuth refresh token"
     required: false
+    sensitive: true
 tools:
   - name: create_invoice
     description: "Create an invoice"

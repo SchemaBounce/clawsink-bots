@@ -26,6 +26,7 @@ env:
   - name: PIPEDRIVE_API_TOKEN
     description: "Pipedrive API token from Settings > Personal preferences"
     required: false
+    sensitive: true
 tools:
   - name: list_deals
     description: "List deals"

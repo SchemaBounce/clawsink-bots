@@ -23,6 +23,7 @@ env:
   - name: SNOWFLAKE_PASSWORD
     description: "Snowflake password"
     required: true
+    sensitive: true
   - name: SNOWFLAKE_WAREHOUSE
     description: "Snowflake warehouse name"
     required: false

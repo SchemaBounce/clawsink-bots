@@ -29,6 +29,7 @@ env:
   - name: XERO_CLIENT_SECRET
     description: "Xero OAuth2 client secret"
     required: false
+    sensitive: true
   - name: XERO_TENANT_ID
     description: "Xero organization tenant ID"
     required: false

@@ -29,6 +29,7 @@ env:
   - name: MIXPANEL_API_SECRET
     description: "Required for data export APIs"
     required: false
+    sensitive: true
 tools:
   - name: query_events
     description: "Query events with filters"

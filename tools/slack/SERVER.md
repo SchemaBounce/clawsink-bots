@@ -17,6 +17,7 @@ env:
   - name: SLACK_BOT_TOKEN
     description: "Slack Bot User OAuth Token (xoxb-...)"
     required: true
+    sensitive: true
   - name: SLACK_TEAM_ID
     description: "Slack workspace/team ID"
     required: true

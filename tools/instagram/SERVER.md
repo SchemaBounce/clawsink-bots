@@ -26,6 +26,7 @@ env:
   - name: INSTAGRAM_ACCESS_TOKEN
     description: "Instagram Graph API access token"
     required: false
+    sensitive: true
 tools:
   - name: get_profile
     description: "Get the authenticated user's profile"
