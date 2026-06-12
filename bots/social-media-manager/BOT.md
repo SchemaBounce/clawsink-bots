@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
   tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "marketing", "approval-gate", "composio"]
@@ -87,7 +87,7 @@ mcpServers:
     reason: "Read video and channel statistics, list playlists and captions, and reply to comments after human approval via Composio managed OAuth"
   - ref: "tools/discord"
     required: false
-    reason: "Read connected Discord servers, membership, and server-widget presence for community context. The registered Composio DISCORD toolkit is account and community reads only and cannot post to channels"
+    reason: "Post approved community updates, replies, and reactions to Discord channels via the Composio DISCORDBOT toolkit, and read channel activity. Posting runs behind the human-approval gate"
   - ref: "tools/agentmail"
     required: false
     reason: "Notify the configured manager when a draft is waiting for approval and send publishing status summaries"
@@ -271,11 +271,9 @@ The gate is **prompt-enforced**. The bot self-enforces it on every run. Runtime 
 | Instagram | Two-step container-then-publish flow, post insights |
 | Facebook Pages | Page posts, photo posts, comment replies, Page analytics |
 | YouTube | Video and channel statistics, comment reads, comment replies after approval, captions and playlists |
-| Discord | Read-only community context: connected servers, membership, and server-widget presence. No posting |
+| Discord | Channel posts and replies, reactions, channel and member reads, channel management. Posting is approval-gated |
 
-All of these run through Composio managed OAuth, so the workspace connects each account once in Composio.
-
-Discord is the one read-only entry here. The registered Composio Discord toolkit is an account-level OAuth integration that reads servers, membership, and presence. It cannot post to channels, so this bot never publishes to Discord. Channel posting would need a separate Discord bot-token integration that is not wired.
+All of these run through Composio managed OAuth, so the workspace connects each account once in Composio. Discord connects a bot through the Composio DISCORDBOT toolkit.
 
 ## Platforms Pending De-Fiction
 
