@@ -4,112 +4,96 @@ kind: McpServer
 metadata:
   name: discord
   displayName: "Discord"
-  version: "1.0.0"
-  description: "Discord bot integration, messages, channels, and server management"
-  tags: ["discord", "chat", "community", "messaging"]
+  version: "2.0.0"
+  description: "Discord account and community reads via Composio managed-OAuth. List the connected account's servers, read server-widget presence, resolve invites, and read user profiles and linked connections."
+  tags: ["discord", "community", "social", "composio"]
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
-# Discord bot tokens use a non-standard scheme: "Authorization: Bot
-# <TOKEN>" (not Bearer). Use the injection template form.
 auth:
-  injection:
-    header_name: Authorization
-    header_template: "Bot {DISCORD_BOT_TOKEN}"
-
+  method: "composio"
+  composioToolkit: "DISCORD"
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with DISCORD_* action names (e.g. DISCORD_LIST_MY_GUILDS, DISCORD_GET_GUILD_WIDGET, DISCORD_GET_MY_USER)."
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "discord-mcp-server@1.0.1"]
+  args: ["-y", "@composio/mcp@1.0.9"]
 env:
   # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: DISCORD_BOT_TOKEN
-    description: "Discord bot token from discord.com/developers"
+  # connection. Leaving this blank uses the workspace's Composio integration for
+  # this service; provide a value only to override the managed connection. Do not
+  # mark this required:true, that makes the setup/reconnect modal demand a key the
+  # managed OAuth flow already covers.
+  - name: COMPOSIO_API_KEY
+    description: "Composio API key from composio.dev/settings. Authenticates the Composio MCP gateway. Your Discord account is then connected inside Composio via OAuth."
     required: false
     sensitive: true
 
-# /users/@me returns the bot's own user object. Idempotent, no
-# side effects, no rate-limit cost worth worrying about at 5min cadence.
-validation:
-  request:
-    method: GET
-    url: https://discord.com/api/v10/users/@me
-  expect:
-    status: 200
-    extract:
-      authenticated_as_field: username
-  on_status:
-    "401": { state: needs_setup, message: "Discord rejected the bot token (401). Regenerate the bot token at https://discord.com/developers/applications and update DISCORD_BOT_TOKEN." }
-    "403": { state: needs_setup, message: "Bot lacks required intents/permissions (403)." }
-    "429": { state: failed, message: "Discord rate-limited the request (429). Retry in a minute." }
-    "default": { state: failed }
-  timeout_ms: 5000
-
-healthProbe:
-  request:
-    method: GET
-    url: https://discord.com/api/v10/users/@me
-  expect:
-    status: 200
-  on_status:
-    "default": { state: failed }
-  timeout_ms: 3000
-  interval_seconds: 300
-
 tools:
-  - name: send_message
-    description: "Send a message to a channel"
-    category: messages
-  - name: read_messages
-    description: "Read recent messages from a channel"
-    category: messages
-  - name: list_channels
-    description: "List channels in a guild"
-    category: channels
-  - name: list_guilds
-    description: "List guilds the bot is a member of"
-    category: guilds
-  - name: create_channel
-    description: "Create a new channel in a guild"
-    category: channels
-  - name: add_reaction
-    description: "Add a reaction to a message"
-    category: messages
+  - name: list_my_guilds
+    description: "List the Discord servers the connected account belongs to"
+    category: community
+  - name: get_my_guild_member
+    description: "Get the connected account's membership details in a server"
+    category: community
+  - name: get_guild_widget
+    description: "Read a server's public widget: online member count, voice channels, and instant invite"
+    category: community
+  - name: get_guild_template
+    description: "Retrieve a server template's structure"
+    category: community
+  - name: resolve_invite
+    description: "Resolve a Discord invite code to its server and channel metadata"
+    category: community
+  - name: get_my_user
+    description: "Get the connected account's own profile"
+    category: profile
   - name: get_user
-    description: "Get details of a Discord user"
-    category: guilds
+    description: "Retrieve a Discord user's public profile by id"
+    category: profile
+  - name: list_my_connections
+    description: "List third-party accounts linked to the connected Discord account"
+    category: profile
+  - name: list_sticker_packs
+    description: "List the available Discord sticker packs"
+    category: profile
 ---
 
 # Discord MCP Server
 
-Provides Discord bot tools for sending messages, managing channels, and interacting with server communities.
+Provides Discord account and community read tools via Composio's managed-OAuth gateway. Covers the connected account's server list and membership, public server-widget presence, invite resolution, and user profile reads.
+
+## Auth Model: Composio
+
+This server is backed by the Composio DISCORD toolkit (27 tools). Authentication is managed by Composio. The user connects their Discord account in Composio via OAuth once, then bots call `execute_composio_tool` with `DISCORD_*` action names. The friendly tools above map to real toolkit actions such as `DISCORD_LIST_MY_GUILDS`, `DISCORD_GET_GUILD_WIDGET`, `DISCORD_GET_MY_GUILD_MEMBER`, and `DISCORD_INVITE_RESOLVE`.
+
+No manual API key is required. The workspace's Composio-managed OAuth connection covers authentication, so the `COMPOSIO_API_KEY` env field is optional and acts only as an override.
+
+## Scope: Account and Community Reads, Not Channel Messaging
+
+The Composio DISCORD toolkit is an account-level OAuth integration. It reads the connected account's servers, membership, server-widget presence, invites, profile, and linked connections. It does not send messages to channels and does not read channel message history. Posting and channel-message reads need a separate Discord bot-token integration (the Composio DISCORDBOT toolkit), which is not wired here. Bots that reference this server should treat it as a read-only community-context source.
+
+## External Requirements
+
+- A **Discord account** connected in Composio via OAuth.
+- The connected account must be a member of the servers you want to read.
+- Server-widget reads (`get_guild_widget`) only return data for servers that have the widget enabled in Server Settings.
 
 ## Which Bots Use This
 
-- **devrel** -- Manages developer community channels, responds to questions, posts announcements
-- **customer-support** -- Monitors community support channels for customer issues
-- **community-manager** -- Moderates discussions, tracks engagement metrics
-- **marketing-coordinator** -- Posts product updates and announcements
+- **social-media-manager** -- Reads server membership and presence for community context. It does not post to Discord.
+- **social-media-monitor** -- Reads server membership and server-widget presence for community-health signals. Monitoring only, no posting.
 
 ## Setup
 
-1. Create a Discord bot at the [Discord Developer Portal](https://discord.com/developers/applications)
-2. Copy the bot token and add it to your workspace secrets as `DISCORD_BOT_TOKEN`
-3. Invite the bot to your server with appropriate permissions
-4. The server starts automatically when a bot that references it runs
+1. Sign up at [composio.dev](https://composio.dev) and get your API key.
+2. Add `COMPOSIO_API_KEY` to your workspace secrets if you want to override the managed connection. Otherwise leave it blank.
+3. In Composio, connect your Discord account via OAuth under the Discord toolkit.
+4. The server starts automatically when a bot that references it runs.
 
 ## Team Usage
-
-Add to your TEAM.md to share a single Discord server instance across bots:
 
 ```yaml
 mcpServers:
   - ref: "tools/discord"
-    reason: "Community bots need Discord access for engagement and support"
-    config:
-      default_guild_id: "your-guild-id"
+    reason: "Community bots need read access to Discord servers and presence for community context"
 ```

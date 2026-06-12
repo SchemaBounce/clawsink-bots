@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-monitor
   displayName: "Social Media Monitor"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Monitors brand mentions and sentiment across platforms."
   category: marketing
   tags: ["social-media", "sentiment", "brand"]
@@ -59,7 +59,7 @@ zones:
   zone2Domains: ["marketing"]
 egress:
   mode: "restricted"
-  allowedDomains: ["api.twitter.com", "api.x.com", "api.linkedin.com", "graph.facebook.com"]
+  allowedDomains: ["api.twitter.com", "api.x.com", "api.linkedin.com", "graph.facebook.com", "backend.composio.dev"]
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
@@ -78,6 +78,9 @@ mcpServers:
   - ref: "tools/reddit"
     required: false
     reason: "Read and search subreddits for brand mentions and sentiment, monitoring only"
+  - ref: "tools/discord"
+    required: false
+    reason: "Read the connected account's Discord servers and server-widget presence (online member counts) for community-health signals. Monitoring only, no message reads or posting"
 presence:
   web:
     browsing: true
