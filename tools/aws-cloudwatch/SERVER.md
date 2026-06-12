@@ -4,23 +4,30 @@ kind: McpServer
 metadata:
   name: aws-cloudwatch
   displayName: "AWS CloudWatch"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "AWS CloudWatch, logs, metrics, alarms, and dashboards"
   tags: ["aws", "cloudwatch", "monitoring", "logs", "metrics", "alarms"]
   category: "observability"
   author: "schemabounce"
   license: "MIT"
+# PACKAGE MIGRATION (2026-06-10): the original awslabs.cloudwatch-logs-mcp-server
+# package was yanked on PyPI (reason: "Superceeded by awslabs.cloudwatch-mcp-server").
+# Updated to the successor package awslabs.cloudwatch-mcp-server==0.1.4 (latest stable,
+# confirmed via pypi.org/pypi/awslabs.cloudwatch-mcp-server/json on 2026-06-10).
+# The new package provides unified CloudWatch telemetry covering logs, metrics, and alarms.
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["awslabs.cloudwatch-logs-mcp-server"]
+  args: ["awslabs.cloudwatch-mcp-server==0.1.4"]
 env:
   - name: AWS_ACCESS_KEY_ID
     description: "AWS access key ID"
     required: true
+    sensitive: true
   - name: AWS_SECRET_ACCESS_KEY
     description: "AWS secret access key"
     required: true
+    sensitive: true
   - name: AWS_REGION
     description: "AWS region for CloudWatch e.g. us-east-1"
     required: false

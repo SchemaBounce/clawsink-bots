@@ -18,9 +18,38 @@ env:
   - name: SLACK_BOT_TOKEN
     description: "Slack Bot User OAuth Token (xoxb-...)"
     required: true
+    sensitive: true
   - name: SLACK_TEAM_ID
     description: "Slack workspace/team ID"
     required: true
+
+# Declarative auth + validation (SchemaBounce MCP_CONNECTION_VALIDATION_SPEC).
+# Replaces the hardcoded Go slackValidator. NOTE: Slack's auth.test returns HTTP
+# 200 even for an INVALID token (body {"ok":false,"error":"invalid_auth"}), so a
+# status-only check would be a false-green — body_contains '"ok":true' is the
+# real auth discriminator.
+auth:
+  type: http_bearer
+  token_env: SLACK_BOT_TOKEN
+validation:
+  request:
+    method: POST
+    url: "https://slack.com/api/auth.test"
+  expect:
+    status: 200
+    body_contains: '"ok":true'
+  on_status:
+    "default": { state: needs_setup, message: "Slack bot token rejected — re-add a valid xoxb- token" }
+healthProbe:
+  request:
+    method: POST
+    url: "https://slack.com/api/auth.test"
+  expect:
+    status: 200
+  on_status:
+    "default": { state: failed }
+  timeout_ms: 3000
+  interval_seconds: 300
 tools:
   - name: slack_list_channels
     description: "List public channels in the workspace"

@@ -19,15 +19,21 @@ transport:
   command: "npx"
   args: ["-y", "teams-mcp-server@1.0.12"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: MICROSOFT_CLIENT_ID
     description: "Azure AD application client ID"
-    required: true
+    required: false
   - name: MICROSOFT_CLIENT_SECRET
     description: "Azure AD application client secret"
-    required: true
+    required: false
+    sensitive: true
   - name: MICROSOFT_TENANT_ID
     description: "Azure AD tenant ID"
-    required: true
+    required: false
 tools:
   - name: send_message
     description: "Send a message to a Teams channel or chat"

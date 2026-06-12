@@ -23,15 +23,20 @@ transport:
   command: "npx"
   args: ["-y", "confluence-mcp-server@1.1.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Atlassian OAuth (Confluence cloud)
+  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
+  # Leaving these blank uses the workspace's connected OAuth integration;
+  # provide values only to override. Marked required:true previously, which
+  # made the setup/reconnect modal demand credentials the OAuth flow already covers.
   - name: CONFLUENCE_URL
     description: "Confluence instance URL"
-    required: true
+    required: false
   - name: CONFLUENCE_EMAIL
     description: "Confluence user email"
-    required: true
+    required: false
   - name: CONFLUENCE_API_TOKEN
     description: "Atlassian API token"
-    required: true
+    required: false
     sensitive: true
 
 # /wiki/rest/api/user/current returns the authenticated user.

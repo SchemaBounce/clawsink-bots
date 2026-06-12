@@ -29,15 +29,20 @@ transport:
   command: "npx"
   args: ["-y", "zendesk-mcp@1.0.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: ZENDESK_SUBDOMAIN
     description: "Your Zendesk subdomain e.g. mycompany"
-    required: true
+    required: false
   - name: ZENDESK_EMAIL
     description: "Zendesk agent email address"
-    required: true
+    required: false
   - name: ZENDESK_API_TOKEN
     description: "Zendesk API token"
-    required: true
+    required: false
     sensitive: true
 tools:
   - name: list_tickets

@@ -34,6 +34,7 @@ env:
   - name: SF_MCP_AUTH
     description: "Local Salesforce CLI org authorization is required before launch: run `sf org login web` to authorize the target org. The server reads CLI-stored org credentials; it does not accept an access token via env var. This is a setup prerequisite, not a secret value to inject."
     required: false
+    sensitive: true
 tools:
   - name: query_soql
     description: "Run a SOQL query"

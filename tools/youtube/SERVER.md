@@ -4,73 +4,104 @@ kind: McpServer
 metadata:
   name: youtube
   displayName: "YouTube"
-  version: "1.0.0"
-  description: "YouTube Data API, videos, channels, playlists, and analytics"
-  tags: ["youtube", "video", "google", "content"]
-  category: "social-media"
+  version: "2.0.0"
+  description: "YouTube Data API via Composio managed-OAuth. Search videos, read video and channel statistics, read and reply to comments, list playlists and captions, and find trending videos."
+  tags: ["youtube", "video", "social", "marketing", "composio"]
   author: "schemabounce"
   license: "MIT"
 auth:
   method: "composio"
   composioToolkit: "YOUTUBE"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like YOUTUBE_*."
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with YOUTUBE_* action names (e.g. YOUTUBE_SEARCH_YOU_TUBE, YOUTUBE_LIST_COMMENT_THREADS, YOUTUBE_GET_CHANNEL_STATISTICS)."
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "youtube-mcp@0.1.2"]
+  args: ["-y", "@composio/mcp@1.0.9"]
 env:
-  - name: YOUTUBE_API_KEY
-    description: "YouTube Data API v3 key"
-    required: true
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving this blank uses the workspace's Composio integration for
+  # this service; provide a value only to override the managed connection. Do not
+  # mark this required:true, that makes the setup/reconnect modal demand a key the
+  # managed OAuth flow already covers.
+  - name: COMPOSIO_API_KEY
+    description: "Composio API key from composio.dev/settings. Authenticates the Composio MCP gateway. Your YouTube account is then connected inside Composio via OAuth."
+    required: false
+    sensitive: true
+
 tools:
   - name: search_videos
-    description: "Search for videos by query"
+    description: "Search YouTube for videos, channels, or playlists by query"
+    category: discovery
+  - name: list_most_popular
+    description: "List trending and most-popular videos for a region"
+    category: discovery
+  - name: get_video_details
+    description: "Get details and statistics (views, likes, comment counts) for one or more videos"
     category: videos
-  - name: get_video
-    description: "Get details of a specific video"
-    category: videos
-  - name: list_playlists
-    description: "List playlists for a channel"
+  - name: get_channel_statistics
+    description: "Get channel statistics including subscriber, view, and video counts"
     category: channels
-  - name: get_channel
-    description: "Get channel information and statistics"
+  - name: get_channel_id_by_handle
+    description: "Resolve a channel handle or URL to its channel id"
     category: channels
+  - name: list_channel_videos
+    description: "List the videos published by a channel"
+    category: channels
+  - name: list_comment_threads
+    description: "List top-level comment threads on a video, with optional replies"
+    category: engagement
   - name: list_comments
-    description: "List comments on a video"
-    category: videos
-  - name: get_analytics
-    description: "Get video or channel analytics data"
-    category: analytics
-  - name: list_subscriptions
-    description: "List channel subscriptions"
-    category: channels
+    description: "List individual comments on a video"
+    category: engagement
+  - name: post_comment
+    description: "Post a top-level comment on a video"
+    category: engagement
+  - name: reply_to_comment
+    description: "Reply to an existing comment"
+    category: engagement
+  - name: list_playlists
+    description: "List the authenticated user's playlists"
+    category: playlists
+  - name: list_playlist_items
+    description: "List the videos in a playlist"
+    category: playlists
+  - name: list_captions
+    description: "List the caption tracks available for a video"
+    category: captions
 ---
 
 # YouTube MCP Server
 
-Provides YouTube Data API tools for searching videos, managing playlists, and retrieving channel analytics.
+Provides YouTube Data API tools via Composio's managed-OAuth gateway. Covers video and channel search, video and channel statistics, comment reading and replies, playlist listing, caption listing, and trending discovery.
+
+## Auth Model: Composio
+
+This server is backed by the Composio YOUTUBE toolkit (47 tools). Authentication is managed by Composio. The user connects their Google or YouTube account in Composio via OAuth once, then bots call `execute_composio_tool` with `YOUTUBE_*` action names. The friendly tools above map to real toolkit actions such as `YOUTUBE_SEARCH_YOU_TUBE`, `YOUTUBE_GET_VIDEO_DETAILS_BATCH`, `YOUTUBE_GET_CHANNEL_STATISTICS`, `YOUTUBE_LIST_COMMENT_THREADS`, and `YOUTUBE_POST_COMMENT`.
+
+No manual API key is required. The workspace's Composio-managed OAuth connection covers authentication, so the `COMPOSIO_API_KEY` env field is optional and acts only as an override.
+
+## External Requirements
+
+- A **Google or YouTube account** connected in Composio via OAuth.
+- Read actions (search, statistics, comment reads, captions, playlists) work with read scopes.
+- Write actions (`post_comment`, `reply_to_comment`) require channel ownership plus the matching YouTube OAuth scopes. Composio requests these during the OAuth grant.
+- Channel statistics cover subscriber, view, and video counts. Watch-time and audience demographics come from the separate YouTube Analytics API and are out of scope for this server's declared tools.
 
 ## Which Bots Use This
 
-- **content-strategist** -- Analyzes video performance and plans content calendars
-- **marketing-manager** -- Tracks channel growth and engagement metrics
-- **data-analyst** -- Pulls video analytics for reporting dashboards
+- **social-media-manager** -- Reads video and channel statistics for reporting, replies to comments after human approval, and reads captions and playlists. Comment replies follow the same approval gate as any public post.
 
 ## Setup
 
-1. Enable the YouTube Data API v3 in your [Google Cloud Console](https://console.cloud.google.com/)
-2. Create an API key (or OAuth credentials for write operations)
-3. Add `YOUTUBE_API_KEY` to your workspace secrets
-4. The server starts automatically when a bot that references it runs
+1. Sign up at [composio.dev](https://composio.dev) and get your API key.
+2. Add `COMPOSIO_API_KEY` to your workspace secrets if you want to override the managed connection. Otherwise leave it blank.
+3. In Composio, connect your Google or YouTube account via OAuth under the YouTube toolkit.
+4. The server starts automatically when a bot that references it runs.
 
 ## Team Usage
-
-Add to your TEAM.md to share a single YouTube server instance across bots:
 
 ```yaml
 mcpServers:
   - ref: "tools/youtube"
-    reason: "Bots need YouTube access for video analytics and content management"
-    config:
-      default_max_results: 25
+    reason: "Marketing bots need YouTube access for video statistics, comment engagement, and content research"
 ```

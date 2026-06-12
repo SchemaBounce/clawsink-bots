@@ -18,6 +18,7 @@ env:
   - name: AGENTMAIL_API_KEY
     description: "API key from agentmail.dev"
     required: true
+    sensitive: true
 tools:
   - name: list_inboxes
     description: "List all inboxes for the agent"

@@ -21,6 +21,7 @@ env:
   - name: AZURE_CLIENT_SECRET
     description: "Azure service principal client secret"
     required: true
+    sensitive: true
   - name: AZURE_TENANT_ID
     description: "Azure Active Directory tenant ID"
     required: true

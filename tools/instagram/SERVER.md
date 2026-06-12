@@ -4,72 +4,104 @@ kind: McpServer
 metadata:
   name: instagram
   displayName: "Instagram"
-  version: "1.0.0"
-  description: "Instagram Graph API, posts, stories, comments, and insights"
-  tags: ["instagram", "social", "media", "marketing"]
-  category: "social-media"
+  version: "1.1.0"
+  description: "Instagram Graph API via Composio managed-OAuth. Create posts, publish media, read insights, and manage comments."
+  tags: ["instagram", "social", "media", "marketing", "composio"]
   author: "schemabounce"
   license: "MIT"
 auth:
   method: "composio"
   composioToolkit: "INSTAGRAM"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like INSTAGRAM_*."
+  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with INSTAGRAM_* action names (e.g. INSTAGRAM_GET_USER_INFO, INSTAGRAM_POST_IG_USER_MEDIA)."
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "instagram-mcp@1.1.7"]
+  args: ["-y", "@composio/mcp@1.0.9"]
 env:
-  - name: INSTAGRAM_ACCESS_TOKEN
-    description: "Instagram Graph API access token"
+  - name: COMPOSIO_API_KEY
+    description: "Composio API key from composio.dev/settings. Required to authenticate the Composio MCP gateway. Your Instagram account is then connected inside Composio via OAuth."
     required: true
+    sensitive: true
+
 tools:
-  - name: get_profile
-    description: "Get the authenticated user's profile"
-    category: posts
-  - name: list_media
-    description: "List recent media posts"
-    category: posts
-  - name: create_post
-    description: "Create a new image or carousel post"
-    category: posts
-  - name: get_comments
-    description: "Get comments on a media post"
-    category: comments
-  - name: reply_to_comment
-    description: "Reply to a comment on a post"
-    category: comments
-  - name: get_insights
-    description: "Get account or post performance insights"
+  - name: get_user_info
+    description: "Get Instagram business account profile details"
+    category: profile
+  - name: get_user_media
+    description: "List published media from the account"
+    category: media
+  - name: post_ig_user_media
+    description: "Create a media container for an image, video, or reel (first step of the two-step publish flow)"
+    category: media
+  - name: publish_ig_user_media
+    description: "Publish a prepared media container to Instagram (second step; requires manager approval before calling)"
+    category: media
+  - name: create_carousel_container
+    description: "Draft a carousel post with 2-10 media items before publishing"
+    category: media
+  - name: get_ig_user_stories
+    description: "Fetch active 24-hour stories on the account"
+    category: media
+  - name: get_ig_media_insights
+    description: "Get performance data for a post (views, reach, engagement, impressions)"
     category: insights
-  - name: list_stories
-    description: "List active stories"
-    category: posts
+  - name: get_user_insights
+    description: "Get account-level analytics and statistics"
+    category: insights
+  - name: get_ig_user_content_publishing_limit
+    description: "Check the account's remaining daily content publishing quota"
+    category: limits
+  - name: get_ig_media_comments
+    description: "Retrieve comments on a specific Instagram post"
+    category: comments
+  - name: post_ig_media_comments
+    description: "Post a comment on an Instagram media item"
+    category: comments
+  - name: post_ig_comment_replies
+    description: "Reply to a specific comment on a post"
+    category: comments
 ---
 
 # Instagram MCP Server
 
-Provides Instagram Graph API tools for managing posts, responding to comments, and tracking engagement insights.
+Provides Instagram Graph API tools via Composio's managed-OAuth gateway. Handles the two-step container-then-publish flow required by the Graph API, post performance insights, and comment management.
+
+## Auth Model: Composio
+
+This server is backed by the Composio INSTAGRAM toolkit (36 tools). Authentication is managed by Composio — the user connects their Instagram Business Account in Composio via OAuth once, then bots call `execute_composio_tool` with `INSTAGRAM_*` action names.
+
+**Why Composio and not a standalone npm package:** The only available standalone npm package for Instagram MCP (`instagram-mcp`) uses RapidAPI (a third-party scraper), not the official Instagram Graph API. Composio's INSTAGRAM toolkit uses the Graph API directly and supports content publishing, which the RapidAPI route does not.
+
+## External Requirements
+
+- A **Meta Business Account** connected to an Instagram Business or Creator account
+- **App Review** approval from Meta for the `instagram_content_publish` permission if publishing programmatically from your own Meta App
+- If using Composio's managed OAuth, Composio handles the App Review surface on your behalf
 
 ## Which Bots Use This
 
-- **marketing-manager** -- Publishes posts, monitors engagement, and tracks social media performance
-- **content-strategist** -- Analyzes post insights and plans content calendars
+- **str-channel-manager** -- Publishes approved property social posts after str-property-manager approval
+- **str-property-marketer** -- Reads post insights and checks publishing limits for content planning
 
 ## Setup
 
-1. Create a Meta app with Instagram Graph API permissions in the [Meta Developer Portal](https://developers.facebook.com/)
-2. Generate a long-lived access token with `instagram_basic`, `instagram_content_publish`, and `instagram_manage_comments` permissions
-3. Add `INSTAGRAM_ACCESS_TOKEN` to your workspace secrets
+1. Sign up at [composio.dev](https://composio.dev) and get your API key
+2. Add `COMPOSIO_API_KEY` to your workspace secrets
+3. In Composio, connect your Instagram Business Account via OAuth under the Instagram toolkit
 4. The server starts automatically when a bot that references it runs
 
-## Team Usage
+## Two-Step Publish Flow
 
-Add to your TEAM.md to share a single Instagram server instance across bots:
+Instagram's Graph API requires two calls to publish a post:
+1. `post_ig_user_media` — create a media container (returns a `creation_id`)
+2. `publish_ig_user_media` — publish the container using the `creation_id`
+
+The `social-publishing` skill enforces a **human-approval gate** between steps. Bots must send the draft container ID to str-property-manager and wait for approval before calling `publish_ig_user_media`.
+
+## Team Usage
 
 ```yaml
 mcpServers:
   - ref: "tools/instagram"
-    reason: "Bots need Instagram access for social media management and analytics"
-    config:
-      default_media_type: "IMAGE"
+    reason: "Social media bots need Instagram access for property promotion and engagement monitoring"
 ```

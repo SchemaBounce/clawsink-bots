@@ -18,6 +18,7 @@ env:
   - name: MONGODB_CONNECTION_STRING
     description: "MongoDB connection URI e.g. mongodb://user:pass@host:27017/db"
     required: true
+    sensitive: true
 tools:
   - name: find
     description: "Query documents"

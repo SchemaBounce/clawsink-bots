@@ -18,6 +18,7 @@ env:
   - name: GOOGLE_APPLICATION_CREDENTIALS
     description: "Path to GCP service account JSON key"
     required: true
+    sensitive: true
   - name: GCP_PROJECT_ID
     description: "GCP project ID"
     required: true

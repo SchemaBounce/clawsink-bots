@@ -18,6 +18,7 @@ env:
   - name: TERRAFORM_CLOUD_TOKEN
     description: "Terraform Cloud API token"
     required: false
+    sensitive: true
 tools:
   - name: plan
     description: "Run terraform plan"

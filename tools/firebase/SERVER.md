@@ -18,6 +18,7 @@ env:
   - name: GOOGLE_APPLICATION_CREDENTIALS
     description: "Path to Firebase service account JSON key"
     required: true
+    sensitive: true
 tools:
   - name: query_logs
     description: "Query Firebase log entries"

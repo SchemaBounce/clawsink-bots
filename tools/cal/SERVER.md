@@ -20,9 +20,14 @@ transport:
   command: "npx"
   args: ["-y", "cal-mcp@1.0.6"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: CAL_API_KEY
     description: "Cal.com API key from cal.com/settings/developer"
-    required: true
+    required: false
     sensitive: true
 
 # /v1/me returns the authenticated user. Idempotent, no cost.

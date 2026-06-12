@@ -18,6 +18,7 @@ env:
   - name: KUBECONFIG
     description: "Path to kubeconfig file, defaults to ~/.kube/config"
     required: false
+    sensitive: true
 tools:
   - name: list_pods
     description: "List pods in a namespace"

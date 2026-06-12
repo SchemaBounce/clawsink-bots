@@ -18,6 +18,7 @@ env:
   - name: FIRECRAWL_API_KEY
     description: "API key from firecrawl.dev"
     required: true
+    sensitive: true
 tools:
   - name: firecrawl_scrape
     description: "Extract content from a single URL in JSON, markdown, or branded formats"

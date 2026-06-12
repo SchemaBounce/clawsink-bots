@@ -19,12 +19,18 @@ transport:
   command: "npx"
   args: ["-y", "n8n-mcp@2.47.6"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: N8N_API_URL
     description: "n8n instance URL"
-    required: true
+    required: false
   - name: N8N_API_KEY
     description: "n8n API key"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: list_workflows
     description: "List all workflows in the instance"

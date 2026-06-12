@@ -18,6 +18,7 @@ env:
   - name: HYPERBROWSER_API_KEY
     description: "API key from hyperbrowser.ai"
     required: true
+    sensitive: true
 tools:
   - name: scrape_webpage
     description: "Extract formatted content (markdown, screenshot) from any webpage"

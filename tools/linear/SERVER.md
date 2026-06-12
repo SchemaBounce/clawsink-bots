@@ -19,9 +19,15 @@ transport:
   command: "npx"
   args: ["-y", "linear-mcp@1.2.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: LINEAR_API_KEY
     description: "Linear Personal API Key"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: create_issue
     description: "Create a new Linear issue"

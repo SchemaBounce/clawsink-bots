@@ -27,6 +27,7 @@ env:
   - name: MYSQL_PASSWORD
     description: "MySQL password"
     required: true
+    sensitive: true
   - name: MYSQL_DATABASE
     description: "MySQL database name"
     required: true

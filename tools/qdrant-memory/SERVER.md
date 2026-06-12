@@ -20,6 +20,7 @@ env:
   - name: QDRANT_API_KEY
     description: Qdrant API key (if authentication enabled)
     required: false
+    sensitive: true
   - name: EMBEDDING_MODEL
     description: Embedding model name (default sentence-transformers/all-MiniLM-L6-v2)
     required: false

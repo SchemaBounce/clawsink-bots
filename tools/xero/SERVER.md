@@ -19,15 +19,21 @@ transport:
   command: "npx"
   args: ["-y", "xero-mcp@1.5.2"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: XERO_CLIENT_ID
     description: "Xero OAuth2 client ID"
-    required: true
+    required: false
   - name: XERO_CLIENT_SECRET
     description: "Xero OAuth2 client secret"
-    required: true
+    required: false
+    sensitive: true
   - name: XERO_TENANT_ID
     description: "Xero organization tenant ID"
-    required: true
+    required: false
 tools:
   - name: create_invoice
     description: "Create a sales invoice"

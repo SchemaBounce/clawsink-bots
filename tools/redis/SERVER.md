@@ -18,6 +18,7 @@ env:
   - name: REDIS_URL
     description: "Redis connection URL e.g. redis://localhost:6379"
     required: true
+    sensitive: true
 tools:
   - name: get
     description: "Get key value"

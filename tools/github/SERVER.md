@@ -15,9 +15,14 @@ transport:
   command: "npx"
   args: ["-y", "@modelcontextprotocol/server-github@2025.4.8"]
 env:
+  # OPTIONAL: the token is bridged from the workspace's connected GitHub
+  # (Settings -> Git Connections) by core-api's ResolveConnectionSecret OAuth
+  # bridge, so leaving this blank uses that connection. Provide a PAT only to
+  # override it. Marked required:true previously, which made the setup/reconnect
+  # modal demand a PAT even though the workspace OAuth already covers it.
   - name: GITHUB_PERSONAL_ACCESS_TOKEN
-    description: "GitHub PAT with repo and issues scope"
-    required: true
+    description: "Optional GitHub PAT with repo + issues scope. Leave blank to use your connected GitHub (Settings -> Git Connections); provide one only to override."
+    required: false
     sensitive: true
 
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

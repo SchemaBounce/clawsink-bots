@@ -19,15 +19,21 @@ transport:
   command: "npx"
   args: ["-y", "@gongrzhe/server-gmail-autoauth-mcp@1.1.11"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: GOOGLE_CLIENT_ID
     description: "Google OAuth client ID"
-    required: true
+    required: false
   - name: GOOGLE_CLIENT_SECRET
     description: "Google OAuth client secret"
-    required: true
+    required: false
+    sensitive: true
   - name: GOOGLE_REDIRECT_URI
     description: "Google OAuth redirect URI"
-    required: true
+    required: false
 tools:
   - name: send_email
     description: "Send an email"

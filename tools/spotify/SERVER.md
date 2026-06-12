@@ -19,12 +19,18 @@ transport:
   command: "npx"
   args: ["-y", "spotify-mcp@0.1.4"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: SPOTIFY_CLIENT_ID
     description: "Spotify app client ID"
-    required: true
+    required: false
   - name: SPOTIFY_CLIENT_SECRET
     description: "Spotify app client secret"
-    required: true
+    required: false
+    sensitive: true
 tools:
   - name: search_tracks
     description: "Search for tracks by query"

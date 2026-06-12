@@ -19,9 +19,14 @@ transport:
   type: "sse"
   url: "https://mcp.dropbox.com/sse"
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   - name: DROPBOX_ACCESS_TOKEN
     description: "Dropbox access token from Dropbox App Console"
-    required: true
+    required: false
     sensitive: true
 
 # /2/users/get_current_account returns the authenticated account.

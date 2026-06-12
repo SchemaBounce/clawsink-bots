@@ -31,11 +31,16 @@ transport:
   command: "npx"
   args: ["-y", "@hubspot/mcp-server@0.4.0"]
 env:
+  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
+  # connection. Leaving these blank uses the workspace's Composio integration for
+  # this service; provide values only to override the managed connection. Marked
+  # required:true previously, which made the setup/reconnect modal demand
+  # credentials the managed flow already covers.
   # NOTE: the official package reads PRIVATE_APP_ACCESS_TOKEN (renamed from the old
   # HUBSPOT_ACCESS_TOKEN). Update workspace secrets to use the new key.
   - name: PRIVATE_APP_ACCESS_TOKEN
     description: "HubSpot private app access token"
-    required: true
+    required: false
     sensitive: true
 
 # /crm/v3/objects/contacts?limit=1 is the lightest CRM endpoint —
