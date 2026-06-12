@@ -19,6 +19,7 @@ bots:
   - ref: "bots/content-scheduler@1.0.0"
   - ref: "bots/seo-expert@1.0.0"
   - ref: "bots/social-media-strategist@1.0.0"
+  - ref: "bots/social-media-manager@1.0.0"
   - ref: "bots/devrel@1.0.0"
 dataKits:
   - ref: "data-kits/marketing@1.0.0"
@@ -81,6 +82,10 @@ orgChart:
       role: specialist
       reportsTo: marketing-growth
       domain: social-and-community
+    - bot: social-media-manager
+      role: support
+      reportsTo: marketing-growth
+      domain: social-and-community
     - bot: devrel
       role: specialist
       reportsTo: marketing-growth
@@ -104,7 +109,7 @@ orgChart:
 ---
 # Marketing
 
-Seven bots covering the full marketing function: growth strategy and analytics, brand governance, content creation, content scheduling, SEO optimization, social media strategy, and developer relations.
+Eight bots covering the full marketing function: growth strategy and analytics, brand governance, content creation, content scheduling, SEO optimization, social media strategy, social publishing, and developer relations.
 
 ## Included Bots
 
@@ -116,6 +121,7 @@ Seven bots covering the full marketing function: growth strategy and analytics, 
 | Content Scheduler | Support, content | Editorial calendar, scheduling, and multi-channel publishing |
 | SEO Expert | Support, content | Keyword strategy, on-page optimization, organic traffic |
 | Social Media Strategist | Specialist, social | Social strategy, community engagement, paid social |
+| Social Media Manager | Support, social | Publishing approved content and engagement, behind a human approval gate |
 | DevRel | Specialist, social | Developer community, technical content, open source presence |
 
 ## How They Work Together
@@ -126,6 +132,7 @@ Marketing Growth drives overall strategy and coordinates demand generation acros
 - Blog Writer completes a draft -> finding to SEO Expert for keyword review
 - SEO Expert approves -> finding to Content Scheduler for calendar placement
 - Content Scheduler publishes -> finding to Social Media Strategist for social distribution
+- Social Media Strategist drafts a post -> request to Social Media Manager, which publishes only after a human approves
 - Brand Guardian detects a brand inconsistency -> alert to the owning bot and Marketing Growth
 - Marketing Growth reviews weekly MQL metrics -> briefing to all bots
 

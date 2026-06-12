@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]
@@ -56,6 +56,7 @@ messaging:
     - { type: "finding", to: ["executive-assistant"], when: "viral content opportunity or reputation risk detected" }
     - { type: "finding", to: ["marketing-growth"], when: "engagement trend requiring campaign adjustment" }
     - { type: "request", to: ["content-scheduler"], when: "content calendar items ready for scheduling" }
+    - { type: "request", to: ["social-media-manager"], when: "drafts and content_calendar_items are ready for publishing review" }
     - { type: "finding", to: ["blog-writer"], when: "high-performing social topic suitable for long-form blog content" }
 data:
   entityTypesRead: ["social_metrics", "engagement_data", "industry_posts"]
