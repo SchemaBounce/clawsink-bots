@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "HubSpot CRM, contacts, deals, companies, and marketing automation"
   tags: ["hubspot", "crm", "marketing", "sales", "contacts"]
+  category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

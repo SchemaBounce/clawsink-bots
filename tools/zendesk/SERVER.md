@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Zendesk support -- tickets, users, organizations, and knowledge base"
   tags: ["zendesk", "support", "helpdesk", "tickets", "customer-service"]
+  category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 auth:

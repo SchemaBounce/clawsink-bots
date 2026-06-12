@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Airtable databases -- records, tables, views, and automations"
   tags: ["airtable", "database", "spreadsheet", "no-code"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Xero accounting, invoices, contacts, bank transactions, and reports"
   tags: ["xero", "accounting", "invoices", "finance", "bookkeeping"]
+  category: "accounting"
   author: "schemabounce"
   license: "MIT"
 auth:

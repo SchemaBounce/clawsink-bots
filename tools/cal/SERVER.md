@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Cal.com scheduling, bookings, availability, and event types"
   tags: ["cal", "scheduling", "calendar", "bookings"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

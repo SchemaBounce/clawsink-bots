@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Brave Search API, web search, news, and local results"
   tags: ["brave", "search", "web", "news"]
+  category: "browser-scraping"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation (SchemaBounce #1614).

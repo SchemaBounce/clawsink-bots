@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Slack workspace tools for channels, messages, and user management"
   tags: ["slack", "messaging", "channels", "notifications"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 transport:

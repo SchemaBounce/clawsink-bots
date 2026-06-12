@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Pinecone vector database, indexes, upsert, query, and namespaces"
   tags: ["pinecone", "vector", "embeddings", "ai", "search"]
+  category: "ai-memory"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

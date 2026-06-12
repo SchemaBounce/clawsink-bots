@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Shopify e-commerce, products, orders, inventory, and customer management"
   tags: ["shopify", "ecommerce", "inventory", "orders", "products"]
+  category: "ecommerce"
   author: "schemabounce"
   license: "MIT"
 auth:

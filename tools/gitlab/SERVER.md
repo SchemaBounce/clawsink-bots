@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "GitLab API, projects, merge requests, issues, and CI/CD pipelines"
   tags: ["gitlab", "git", "merge-requests", "ci-cd", "devops"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

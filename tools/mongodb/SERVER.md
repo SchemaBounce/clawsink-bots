@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "MongoDB database, queries, collections, documents, and aggregation"
   tags: ["mongodb", "nosql", "database", "documents"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 transport:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Zapier automation, trigger zaps, list workflows, and manage connections"
   tags: ["zapier", "automation", "workflow", "integration"]
+  category: "automation"
   author: "schemabounce"
   license: "MIT"
 auth:

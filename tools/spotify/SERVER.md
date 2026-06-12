@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Spotify Web API, tracks, playlists, artists, and playback"
   tags: ["spotify", "music", "audio", "streaming"]
+  category: "social-media"
   author: "schemabounce"
   license: "MIT"
 auth:

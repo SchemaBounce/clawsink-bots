@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "PagerDuty incident management, incidents, services, and on-call schedules"
   tags: ["pagerduty", "incidents", "oncall", "alerting"]
+  category: "observability"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

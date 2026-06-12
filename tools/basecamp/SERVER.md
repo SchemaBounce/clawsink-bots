@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Basecamp project management, projects, todos, messages, and schedules"
   tags: ["basecamp", "project-management", "collaboration", "todos"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 auth:

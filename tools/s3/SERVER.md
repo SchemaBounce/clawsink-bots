@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "AWS S3, buckets, objects, presigned URLs, and storage management"
   tags: ["s3", "aws", "storage", "objects", "cloud"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 transport:

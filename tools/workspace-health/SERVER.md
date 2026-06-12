@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "INTERNAL-ONLY cross-workspace health inspection and remediation for the customer-success agent — never granted to customer agents"
   tags: ["ops", "health", "internal", "admin"]
+  category: "platform"
   author: "schemabounce"
   license: "MIT"
 transport:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Firebase application monitoring, logs, analytics, Firestore, and auth"
   tags: ["firebase", "google", "logs", "analytics", "firestore"]
+  category: "observability"
   author: "schemabounce"
   license: "MIT"
 transport:

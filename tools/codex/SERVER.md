@@ -7,6 +7,7 @@ metadata:
   version: "0.1.0"
   description: "[Preview] Sandboxed OpenAI Codex sessions for implementation. Managed inference, backend service not yet deployed"
   tags: ["codex", "openai", "coding", "implementation", "managed", "preview"]
+  category: "ai-memory"
   author: "schemabounce"
   license: "MIT"
 transport:

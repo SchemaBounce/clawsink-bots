@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "SQLite database, queries, schema inspection, and in-memory databases"
   tags: ["sqlite", "database", "sql", "embedded"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 transport:

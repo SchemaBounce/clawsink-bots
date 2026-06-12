@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Phone and SMS for AI agents, provision numbers, send texts, make calls"
   tags: ["phone", "sms", "voice", "calls", "presence", "communication"]
+  category: "communication"
   author: "agentphone"
   license: "MIT"
 transport:

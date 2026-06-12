@@ -7,6 +7,7 @@ metadata:
   version: "1.0.1"
   description: "AWS CloudWatch, logs, metrics, alarms, and dashboards"
   tags: ["aws", "cloudwatch", "monitoring", "logs", "metrics", "alarms"]
+  category: "observability"
   author: "schemabounce"
   license: "MIT"
 # PACKAGE MIGRATION (2026-06-10): the original awslabs.cloudwatch-logs-mcp-server
