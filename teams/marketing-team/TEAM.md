@@ -20,6 +20,7 @@ bots:
   - ref: "bots/seo-expert@1.0.0"
   - ref: "bots/social-media-strategist@1.0.0"
   - ref: "bots/social-media-manager@1.0.0"
+  - ref: "bots/social-media-monitor@1.0.0"
   - ref: "bots/devrel@1.0.0"
 dataKits:
   - ref: "data-kits/marketing@1.0.0"
@@ -86,6 +87,10 @@ orgChart:
       role: support
       reportsTo: marketing-growth
       domain: social-and-community
+    - bot: social-media-monitor
+      role: support
+      reportsTo: social-media-strategist
+      domain: social-and-community
     - bot: devrel
       role: specialist
       reportsTo: marketing-growth
@@ -105,11 +110,11 @@ orgChart:
         chain: [seo-expert, marketing-growth]
       - name: "Social Crisis"
         trigger: "social_sentiment_negative_spike"
-        chain: [social-media-strategist, marketing-growth]
+        chain: [social-media-monitor, social-media-strategist, marketing-growth]
 ---
 # Marketing
 
-Eight bots covering the full marketing function: growth strategy and analytics, brand governance, content creation, content scheduling, SEO optimization, social media strategy, social publishing, and developer relations.
+Nine bots covering the full marketing function: growth strategy and analytics, brand governance, content creation, content scheduling, SEO optimization, social media strategy, social publishing, social listening, and developer relations.
 
 ## Included Bots
 
@@ -122,6 +127,7 @@ Eight bots covering the full marketing function: growth strategy and analytics, 
 | SEO Expert | Support, content | Keyword strategy, on-page optimization, organic traffic |
 | Social Media Strategist | Specialist, social | Social strategy, community engagement, paid social |
 | Social Media Manager | Support, social | Publishing approved content and engagement, behind a human approval gate |
+| Social Media Monitor | Support, social | Brand mention and sentiment listening across platforms, alerts on crises |
 | DevRel | Specialist, social | Developer community, technical content, open source presence |
 
 ## How They Work Together
