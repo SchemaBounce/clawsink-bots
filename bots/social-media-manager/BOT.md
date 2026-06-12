@@ -4,10 +4,10 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.5"
+  version: "1.0.6"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
-  tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "marketing", "approval-gate", "composio"]
+  tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "tiktok", "marketing", "approval-gate", "composio"]
 agent:
   capabilities: ["content", "operations"]
   hostingMode: "openclaw"
@@ -64,7 +64,7 @@ zones:
   zone2Domains: ["marketing"]
 egress:
   mode: "restricted"
-  allowedDomains: ["api.linkedin.com", "oauth.reddit.com", "www.reddit.com", "graph.facebook.com", "graph.instagram.com", "api.instagram.com", "backend.composio.dev"]
+  allowedDomains: ["api.linkedin.com", "oauth.reddit.com", "www.reddit.com", "graph.facebook.com", "graph.instagram.com", "api.instagram.com", "open.tiktokapis.com", "backend.composio.dev"]
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
@@ -94,6 +94,9 @@ mcpServers:
   - ref: "tools/telegram"
     required: false
     reason: "Broadcast approved posts to Telegram channels after human approval via the Composio TELEGRAM toolkit, and read channel history. Posting runs behind the approval gate"
+  - ref: "tools/tiktok"
+    required: false
+    reason: "Publish approved short-form videos and photos to TikTok after human approval via the Composio TIKTOK toolkit, read the video list and user stats. Posting runs behind the approval gate"
   - ref: "tools/agentmail"
     required: false
     reason: "Notify the configured manager when a draft is waiting for approval and send publishing status summaries"
@@ -280,10 +283,11 @@ The gate is **prompt-enforced**. The bot self-enforces it on every run. Runtime 
 | Discord | Channel posts and replies, reactions, channel and member reads, channel management. Posting is approval-gated |
 | Twitter / X | Posts, replies, deletes, single-tweet lookup, recent and full-archive search. Posting is approval-gated |
 | Telegram | Channel and chat broadcast posts, update polling, chat history and chat info reads. Posting is approval-gated |
+| TikTok | Video and photo posts, publish-status checks, video list, account stats. Posting is approval-gated. Needs your own TikTok Developer app, and public posting needs an audited app |
 
 All of these run through Composio, so the workspace connects each account once in Composio. Discord connects a bot through the Composio DISCORDBOT toolkit. Telegram connects a @BotFather bot token through the Composio TELEGRAM toolkit.
 
-Twitter is the one connection that is not zero-setup. As of February 2026 Composio removed managed credentials for Twitter, so the workspace must connect its own Twitter/X Developer app (OAuth 2.0 user-context) in Composio under the Twitter toolkit.
+Twitter and TikTok are the connections that are not zero-setup. As of February 2026 Composio removed managed credentials for Twitter, so the workspace must connect its own Twitter/X Developer app (OAuth 2.0 user-context) in Composio under the Twitter toolkit. TikTok has no managed Composio app either, so the workspace connects its own TikTok Developer app (Content Posting API and Login Kit, OAuth 2.0). TikTok public posting also needs an audited app. Until TikTok audits the app, posts go out as private or draft to the developer's own account.
 
 ## Platforms Pending De-Fiction
 
