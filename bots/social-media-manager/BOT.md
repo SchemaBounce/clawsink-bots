@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
   tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "tiktok", "marketing", "approval-gate", "composio"]
@@ -288,10 +288,6 @@ The gate is **prompt-enforced**. The bot self-enforces it on every run. Runtime 
 All of these run through Composio, so the workspace connects each account once in Composio. Discord connects a bot through the Composio DISCORDBOT toolkit. Telegram connects a @BotFather bot token through the Composio TELEGRAM toolkit.
 
 Twitter and TikTok are the connections that are not zero-setup. As of February 2026 Composio removed managed credentials for Twitter, so the workspace must connect its own Twitter/X Developer app (OAuth 2.0 user-context) in Composio under the Twitter toolkit. TikTok has no managed Composio app either, so the workspace connects its own TikTok Developer app (Content Posting API and Login Kit, OAuth 2.0). TikTok public posting also needs an audited app. Until TikTok audits the app, posts go out as private or draft to the developer's own account.
-
-## Platforms Pending De-Fiction
-
-WhatsApp is not wired here on purpose. Its MCP manifest currently describes tools that do not exist in the package that would run, so granting it would be dishonest. It is coming once its integration is de-fictioned against a real package.
 
 ## How It Works With the Team
 

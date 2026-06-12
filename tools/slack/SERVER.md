@@ -69,9 +69,6 @@ tools:
   - name: slack_get_thread_replies
     description: "Get replies in a message thread"
     category: messages
-  - name: slack_search_messages
-    description: "Search messages across the workspace"
-    category: messages
   - name: slack_get_users
     description: "List users in the workspace"
     category: users
