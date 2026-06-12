@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.12"
+  version: "1.0.14"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -69,11 +69,9 @@ skills:
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
 mcpServers:
-# tools/codex was declared here previously but its backend MCP service
-# is not deployed and the tool is not in the runtime registry, silent
-# no-op when activated. Stripped 2026-04-27 per the no-vaporware sweep.
-# Re-add once the codex backend ships and the SERVER.md graduates from
-# preview.
+  - ref: "tools/code-sandbox"
+    required: false
+    reason: "Spawns sandboxed Claude Code sessions when an implementation plan calls for code; the dedicated coding-agent bot covers most implementation work"
   - ref: "tools/github"
     required: true
     reason: "Creates branches, pull requests, and manages issues"
@@ -106,18 +104,18 @@ setup:
         icon: github
         actionLabel: "Connect GitHub"
         helpUrl: "https://docs.schemabounce.com/integrations/github"
-    - id: enable-codex
-      name: "Enable Codex (Preview, coming soon)"
-      description: "Confirms workspace credit balance and provisions the sandboxed Codex service. Preview. The backend service is not yet live; this setup step will succeed once the Codex managed-inference service is deployed."
+    - id: enable-code-sandbox
+      name: "Enable Code Sandbox"
+      description: "Hosted Claude Code sessions in per-workspace sandboxes, metered on workspace credits. Optional here; the coding-agent bot is the primary implementer."
       type: mcp_connection
-      ref: tools/codex
+      ref: tools/code-sandbox
       group: connections
       priority: recommended
-      reason: "Intended default coding agent, will be required once the backend ships; optional until then"
+      reason: "Lets the architect run code sessions directly when a plan calls for it"
       ui:
         icon: code
-        actionLabel: "Enable Codex"
-        helpUrl: "https://docs.schemabounce.com/integrations/codex"
+        actionLabel: "Enable Code Sandbox"
+        helpUrl: "https://docs.schemabounce.com/integrations/code-sandbox"
     - id: set-repo-config
       name: "Set repository configuration"
       description: "Repository URL, main branch, test commands, and build commands"
@@ -234,7 +232,7 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 
 ## MCP Servers
 
-- **codex** (preview, optional today) -- Intended default coding agent. Will spawn sandboxed OpenAI Codex sessions for implementation, billed via workspace credits (managed inference, no customer API key). Provides (once the backend ships) `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/codex/SERVER.md` for the preview status and what still needs to be built.
+- **code-sandbox** (optional) -- Hosted Claude Code sessions in per-workspace sandboxes, billed via workspace credits (or a user's personal Claude subscription token). Provides `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/code-sandbox/SERVER.md`. Most implementation work goes through the dedicated coding-agent bot; this grant lets the architect run a session directly when a plan calls for it.
 - **github** (required) -- Creates branches, pull requests, and manages issues. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools.
 
 ## Recommended North Star Keys

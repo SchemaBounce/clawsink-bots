@@ -4,7 +4,7 @@ kind: Team
 metadata:
   name: engineering-team
   displayName: "Engineering"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "End-to-end engineering automation from architecture oversight to production reliability, covering the full software development lifecycle"
   domain: engineering
   category: engineering
@@ -14,6 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/software-architect@1.0.0"
+  - ref: "bots/coding-agent@1.0.0"
   - ref: "bots/sre-devops@1.0.0"
   - ref: "bots/code-reviewer@1.0.0"
   - ref: "bots/api-tester@1.0.0"
@@ -38,8 +39,8 @@ plugins:
         alerts: "engineering-alerts"
         releases: "release-updates"
 mcpServers:
-  - ref: "tools/codex"
-    reason: "Shared coding agent for all engineering bots"
+  - ref: "tools/code-sandbox"
+    reason: "Shared sandboxed Claude Code sessions for the coding-agent, software-architect, and documentation-writer bots"
     config:
       default_branch: "development"
   - ref: "tools/github"
@@ -96,6 +97,10 @@ orgChart:
     - bot: software-architect
       role: lead
       reportsTo: null
+      domain: engineering
+    - bot: coding-agent
+      role: specialist
+      reportsTo: software-architect
       domain: engineering
     - bot: code-reviewer
       role: specialist
@@ -161,13 +166,14 @@ orgChart:
 ---
 # Engineering
 
-Ten bots covering the full software engineering lifecycle: architecture oversight, code quality enforcement, automated testing, CI/CD monitoring, bug triage, release coordination, infrastructure reliability, tech debt management, documentation automation, and uptime monitoring.
+Eleven bots covering the full software engineering lifecycle: architecture oversight, code implementation, code quality enforcement, automated testing, CI/CD monitoring, bug triage, release coordination, infrastructure reliability, tech debt management, documentation automation, and uptime monitoring.
 
 ## Included Bots
 
 | Bot | Role | Schedule |
 |-----|------|----------|
 | Software Architect | Implementation orchestration, technical leadership | Event-triggered |
+| Coding Agent | Sandboxed code sessions, tested PRs from assigned issues | Event-triggered |
 | SRE & DevOps | Infrastructure monitoring, incident response | @every 4h |
 | Code Reviewer | PR review, code quality gates | CDC on pull_requests |
 | API Tester | API endpoint validation, regression detection | @daily |
@@ -180,10 +186,11 @@ Ten bots covering the full software engineering lifecycle: architecture oversigh
 
 ## How They Work Together
 
-The Software Architect leads the team, making technical decisions and coordinating across all engineering functions. The Code Reviewer and API Tester form the quality gate layer, catching issues before they reach production. The Tech Debt Tracker monitors codebase health and routes refactoring work through the Software Architect. Bug Triage prioritizes incoming issues and flags release blockers. The DevOps Automator watches CI/CD health and escalates failures to SRE & DevOps. The Release Manager coordinates deployments using quality signals from all other bots. The Documentation Writer keeps technical docs in sync with code changes. The Uptime Manager tracks SLA compliance and alerts SRE & DevOps when availability thresholds are at risk.
+The Software Architect leads the team, making technical decisions and coordinating across all engineering functions. The Coding Agent turns approved plans and assigned issues into tested pull requests through sandboxed code sessions. The Code Reviewer and API Tester form the quality gate layer, catching issues before they reach production. The Tech Debt Tracker monitors codebase health and routes refactoring work through the Software Architect. Bug Triage prioritizes incoming issues and flags release blockers. The DevOps Automator watches CI/CD health and escalates failures to SRE & DevOps. The Release Manager coordinates deployments using quality signals from all other bots. The Documentation Writer keeps technical docs in sync with code changes. The Uptime Manager tracks SLA compliance and alerts SRE & DevOps when availability thresholds are at risk.
 
 **Communication flow:**
-- Software Architect delegates tasks to Code Reviewer, Documentation Writer
+- Software Architect delegates tasks to Coding Agent, Code Reviewer, Documentation Writer
+- Coding Agent delivers a tested PR -> request to Code Reviewer, finding to Release Manager
 - Code Reviewer detects quality trends -> finding to Software Architect
 - API Tester catches test failures -> alert to Bug Triage
 - API Tester detects performance regression -> alert to SRE & DevOps
