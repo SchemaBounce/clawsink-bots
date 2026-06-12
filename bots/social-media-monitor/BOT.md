@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-monitor
   displayName: "Social Media Monitor"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Monitors brand mentions and sentiment across platforms."
   category: marketing
   tags: ["social-media", "sentiment", "brand"]
@@ -81,6 +81,12 @@ mcpServers:
   - ref: "tools/discord"
     required: false
     reason: "Read recent channel messages and server context across connected Discord servers for brand mentions and community-health signals. Monitoring only, no posting"
+  - ref: "tools/twitter"
+    required: false
+    reason: "Search recent tweets for brand mentions and sentiment via the Composio TWITTER toolkit. Monitoring only, no posting"
+  - ref: "tools/telegram"
+    required: false
+    reason: "Read channel history across connected Telegram channels for community-health signals via the Composio TELEGRAM toolkit. Monitoring only, no posting"
 presence:
   web:
     browsing: true

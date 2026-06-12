@@ -4,10 +4,10 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
-  tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "marketing", "approval-gate", "composio"]
+  tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "marketing", "approval-gate", "composio"]
 agent:
   capabilities: ["content", "operations"]
   hostingMode: "openclaw"
@@ -88,6 +88,12 @@ mcpServers:
   - ref: "tools/discord"
     required: false
     reason: "Post approved community updates, replies, and reactions to Discord channels via the Composio DISCORDBOT toolkit, and read channel activity. Posting runs behind the human-approval gate"
+  - ref: "tools/twitter"
+    required: false
+    reason: "Publish approved tweets and replies after human approval via the Composio TWITTER toolkit, delete when needed, and search recent and full-archive conversations for context. Posting runs behind the approval gate"
+  - ref: "tools/telegram"
+    required: false
+    reason: "Broadcast approved posts to Telegram channels after human approval via the Composio TELEGRAM toolkit, and read channel history. Posting runs behind the approval gate"
   - ref: "tools/agentmail"
     required: false
     reason: "Notify the configured manager when a draft is waiting for approval and send publishing status summaries"
@@ -272,12 +278,16 @@ The gate is **prompt-enforced**. The bot self-enforces it on every run. Runtime 
 | Facebook Pages | Page posts, photo posts, comment replies, Page analytics |
 | YouTube | Video and channel statistics, comment reads, comment replies after approval, captions and playlists |
 | Discord | Channel posts and replies, reactions, channel and member reads, channel management. Posting is approval-gated |
+| Twitter / X | Posts, replies, deletes, single-tweet lookup, recent and full-archive search. Posting is approval-gated |
+| Telegram | Channel and chat broadcast posts, update polling, chat history and chat info reads. Posting is approval-gated |
 
-All of these run through Composio managed OAuth, so the workspace connects each account once in Composio. Discord connects a bot through the Composio DISCORDBOT toolkit.
+All of these run through Composio, so the workspace connects each account once in Composio. Discord connects a bot through the Composio DISCORDBOT toolkit. Telegram connects a @BotFather bot token through the Composio TELEGRAM toolkit.
+
+Twitter is the one connection that is not zero-setup. As of February 2026 Composio removed managed credentials for Twitter, so the workspace must connect its own Twitter/X Developer app (OAuth 2.0 user-context) in Composio under the Twitter toolkit.
 
 ## Platforms Pending De-Fiction
 
-X (Twitter), WhatsApp, and Telegram are not wired here on purpose. Their MCP manifests currently describe tools that do not exist in the packages that would run, so granting them would be dishonest. They are coming once their integrations are de-fictioned against a real package.
+WhatsApp is not wired here on purpose. Its MCP manifest currently describes tools that do not exist in the package that would run, so granting it would be dishonest. It is coming once its integration is de-fictioned against a real package.
 
 ## How It Works With the Team
 
