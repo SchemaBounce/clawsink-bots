@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Gmail email management. Send, read, search, and organize messages"
   tags: ["google", "gmail", "email", "messaging"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:

@@ -7,6 +7,7 @@ metadata:
   version: 1.0.0
   description: Purpose-built agent memory layer with automatic fact extraction and personalization
   tags: [memory, vector-search, fact-extraction, personalization]
+  category: "ai-memory"
   author: Mem0 AI
   license: Apache-2.0
 transport:

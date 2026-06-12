@@ -5,7 +5,7 @@
 # (schemabounce-api/internal/clawsink/parsing.go + types.go).
 #
 # Checks:
-#   1.  SERVER.md exists and has valid YAML frontmatter
+#   1.  Manifest exists (SERVER.md with YAML frontmatter, or server.json as JSON)
 #   2.  Required top-level fields: apiVersion, kind, metadata, transport
 #   3.  kind == "McpServer"
 #   4.  metadata.name, displayName, version, description are non-empty
@@ -24,6 +24,20 @@
 #   13. network block: scope must be a known value; restricted/private-network require
 #       allowedDomains; private-network is forbidden on npm/pypi packageType
 #
+# Manifest precedence (mirrors McpServerDefFilenames in parsing.go):
+#   server.json is preferred at runtime. For CI, BOTH files are validated when
+#   present — malformed server.json fails the job regardless of SERVER.md presence.
+#   New servers should write server.json; SERVER.md remains supported.
+#
+# Cross-repo guard note:
+#   This validator enforces STRUCTURE only (McpServerDef schema, field types,
+#   transport rules). First-party manifest<->binary PARITY (e.g. tool names in
+#   tools/schemabounce/SERVER.md matching the schemabounce-mcp binary's
+#   tools/list) cannot be enforced here — the binary lives in a separate repo.
+#   That contract is enforced by TestToolsList_MatchesManifest in the owning
+#   repo's CI (schemabounce-mcp). Do not attempt to build or invoke external
+#   binaries from this script.
+#
 # Usage:
 #   ./tests/tools/validate-manifest.sh               # validate all tools/**
 #   ./tests/tools/validate-manifest.sh /tmp/badtool  # validate a specific tools dir
@@ -37,6 +51,7 @@ TOOLS_DIR="${1:-$REPO_ROOT/tools}"
 python3 - "$TOOLS_DIR" << 'PYEOF'
 import sys
 import os
+import json
 
 try:
     import yaml
@@ -83,36 +98,13 @@ def extract_frontmatter(content):
     return None, "SERVER.md missing closing --- delimiter"
 
 
-def validate_server(tool_name, server_path):
-    global PASS_COUNT, FAIL_COUNT, WARN_COUNT
+def _validate_parsed(tool_name, fm):
+    """Validate a parsed McpServerDef dict. Returns (errors, warnings)."""
     errors = []
     warnings = []
 
-    if not os.path.isfile(server_path):
-        print(f"  {RED}FAIL{NC} [{tool_name}] SERVER.md not found at {server_path}")
-        FAIL_COUNT += 1
-        return
-
-    with open(server_path, "r", encoding="utf-8") as fh:
-        content = fh.read()
-
-    fm_text, err = extract_frontmatter(content)
-    if err:
-        print(f"  {RED}FAIL{NC} [{tool_name}] {err}")
-        FAIL_COUNT += 1
-        return
-
-    try:
-        fm = yaml.safe_load(fm_text)
-    except yaml.YAMLError as exc:
-        print(f"  {RED}FAIL{NC} [{tool_name}] YAML parse error: {exc}")
-        FAIL_COUNT += 1
-        return
-
     if not isinstance(fm, dict):
-        print(f"  {RED}FAIL{NC} [{tool_name}] frontmatter did not parse to a YAML mapping")
-        FAIL_COUNT += 1
-        return
+        return ["manifest did not parse to a mapping"], []
 
     # ── 1. Required top-level fields ─────────────────────────────────────────
     for field in ("apiVersion", "kind", "metadata", "transport"):
@@ -136,7 +128,7 @@ def validate_server(tool_name, server_path):
                 f"metadata.name {meta_name!r} does not match directory name {tool_name!r}"
             )
     else:
-        errors.append("metadata must be a YAML mapping")
+        errors.append("metadata must be a mapping")
 
     # ── 4. transport block ───────────────────────────────────────────────────
     transport = fm.get("transport") or {}
@@ -172,17 +164,17 @@ def validate_server(tool_name, server_path):
                         f"transport.url is required for transport.type={t_type!r}"
                     )
     else:
-        errors.append("transport must be a YAML mapping")
+        errors.append("transport must be a mapping")
 
     # ── 5. env entries ───────────────────────────────────────────────────────
     env_list = fm.get("env") or []
     if env_list:
         if not isinstance(env_list, list):
-            errors.append("env must be a YAML sequence")
+            errors.append("env must be a sequence")
         else:
             for i, entry in enumerate(env_list):
                 if not isinstance(entry, dict):
-                    errors.append(f"env[{i}] must be a YAML mapping")
+                    errors.append(f"env[{i}] must be a mapping")
                     continue
                 if not entry.get("name"):
                     errors.append(f"env[{i}].name is missing or empty")
@@ -198,12 +190,12 @@ def validate_server(tool_name, server_path):
     tools_list = fm.get("tools") or []
     if tools_list:
         if not isinstance(tools_list, list):
-            errors.append("tools must be a YAML sequence")
+            errors.append("tools must be a sequence")
         else:
             seen: dict = {}
             for i, t in enumerate(tools_list):
                 if not isinstance(t, dict):
-                    errors.append(f"tools[{i}] must be a YAML mapping")
+                    errors.append(f"tools[{i}] must be a mapping")
                     continue
                 tname = t.get("name", "")
                 if not tname:
@@ -279,8 +271,6 @@ def validate_server(tool_name, server_path):
                 errs.append(
                     f"{block}.request.method {method!r} is not a supported HTTP verb"
                 )
-        on_status = (req.get("on_status") or {}) if isinstance(req, dict) else {}
-        # on_status may live on the parent block, not on request — check parent too
         return errs
 
     def check_on_status(on_status, block):
@@ -385,22 +375,83 @@ def validate_server(tool_name, server_path):
                         f"no checksum provenance)"
                     )
 
-    # ── Report ────────────────────────────────────────────────────────────────
+    return errors, warnings
+
+
+def _report(tool_name, source_label, errors, warnings):
+    """Print PASS/WARN/FAIL for one manifest and update global counters."""
+    global PASS_COUNT, FAIL_COUNT, WARN_COUNT
     if errors:
-        print(f"  {RED}FAIL{NC} [{tool_name}]")
+        print(f"  {RED}FAIL{NC} [{tool_name}] ({source_label})")
         for e in errors:
             print(f"       {RED}x{NC} {e}")
         for w in warnings:
             print(f"       {YELLOW}!{NC} {w}")
         FAIL_COUNT += 1
     elif warnings:
-        print(f"  {YELLOW}WARN{NC} [{tool_name}]")
+        print(f"  {YELLOW}WARN{NC} [{tool_name}] ({source_label})")
         for w in warnings:
             print(f"       {YELLOW}!{NC} {w}")
         WARN_COUNT += 1
     else:
-        print(f"  {GREEN}PASS{NC} [{tool_name}]")
+        print(f"  {GREEN}PASS{NC} [{tool_name}] ({source_label})")
         PASS_COUNT += 1
+
+
+def validate_server(tool_name, server_path):
+    """Parse SERVER.md YAML frontmatter and validate the McpServerDef."""
+    global FAIL_COUNT
+    if not os.path.isfile(server_path):
+        print(f"  {RED}FAIL{NC} [{tool_name}] SERVER.md not found at {server_path}")
+        FAIL_COUNT += 1
+        return
+
+    with open(server_path, "r", encoding="utf-8") as fh:
+        content = fh.read()
+
+    fm_text, err = extract_frontmatter(content)
+    if err:
+        print(f"  {RED}FAIL{NC} [{tool_name}] (SERVER.md) {err}")
+        FAIL_COUNT += 1
+        return
+
+    try:
+        fm = yaml.safe_load(fm_text)
+    except yaml.YAMLError as exc:
+        print(f"  {RED}FAIL{NC} [{tool_name}] (SERVER.md) YAML parse error: {exc}")
+        FAIL_COUNT += 1
+        return
+
+    errors, warnings = _validate_parsed(tool_name, fm)
+    _report(tool_name, "SERVER.md", errors, warnings)
+
+
+def validate_server_json(tool_name, server_path):
+    """Parse server.json as JSON and validate the McpServerDef.
+
+    server.json uses the same McpServerDef schema as SERVER.md (just JSON
+    instead of YAML frontmatter). Runtime precedence: server.json is preferred
+    over SERVER.md (McpServerDefFilenames order in parsing.go). CI validates
+    both when both are present.
+    """
+    global FAIL_COUNT
+    if not os.path.isfile(server_path):
+        print(f"  {RED}FAIL{NC} [{tool_name}] server.json not found at {server_path}")
+        FAIL_COUNT += 1
+        return
+
+    with open(server_path, "r", encoding="utf-8") as fh:
+        raw = fh.read()
+
+    try:
+        fm = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        print(f"  {RED}FAIL{NC} [{tool_name}] (server.json) JSON parse error: {exc}")
+        FAIL_COUNT += 1
+        return
+
+    errors, warnings = _validate_parsed(tool_name, fm)
+    _report(tool_name, "server.json", errors, warnings)
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
@@ -421,19 +472,16 @@ for entry in tool_entries:
     tool_name = entry.name
     server_json = os.path.join(entry.path, "server.json")
     server_md   = os.path.join(entry.path, "SERVER.md")
-    # server.json takes precedence (McpServerDefFilenames order in parsing.go).
-    # JSON validation uses the same McpServerDef struct; for now only SERVER.md
-    # is validated here because no server.json files exist in the catalog yet.
-    # TODO: add JSON-form validation when server.json files are introduced.
-    if os.path.isfile(server_md):
+    has_json = os.path.isfile(server_json)
+    has_md   = os.path.isfile(server_md)
+    # Validate every manifest file that exists. Runtime prefers server.json;
+    # CI validates both so a malformed server.json is caught regardless of
+    # whether a SERVER.md also exists.
+    if has_json:
+        validate_server_json(tool_name, server_json)
+    if has_md:
         validate_server(tool_name, server_md)
-    elif os.path.isfile(server_json):
-        print(
-            f"  {YELLOW}WARN{NC} [{tool_name}] server.json found but "
-            f"JSON-form validation is not yet implemented in this script"
-        )
-        WARN_COUNT += 1
-    else:
+    if not has_json and not has_md:
         print(
             f"  {YELLOW}WARN{NC} [{tool_name}] no SERVER.md or server.json found"
         )

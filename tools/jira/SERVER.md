@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Jira project management tools for issues, sprints, and boards"
   tags: ["jira", "project-management", "issues", "sprints", "agile"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

@@ -164,7 +164,11 @@ The `tools` section is a declarative listing for marketplace display and depende
 
 ## Validation
 
-1. `SERVER.md` has valid YAML frontmatter with `kind: McpServer`
+`tests/tools/validate-manifest.sh` enforces the full `McpServerDef` structural
+contract on every manifest. Both `server.json` and `SERVER.md` are validated
+when present; a malformed `server.json` fails CI even if a `SERVER.md` also exists.
+
+1. `SERVER.md` has valid YAML frontmatter with `kind: McpServer`, OR `server.json` parses as valid JSON
 2. `metadata.name` matches the directory name under `tools/`
 3. `transport.type` is one of: `stdio`, `sse`, `streamable-http`
 4. `transport.command` is present when type is `stdio`
@@ -174,6 +178,13 @@ The `tools` section is a declarative listing for marketplace display and depende
 8. All `tools[].name` are unique within the server
 9. All bot `mcpServers[].ref` point to valid `tools/` directories
 10. All team `mcpServers[].ref` point to valid `tools/` directories
+
+**Cross-repo guard note:** This validator enforces structure only. First-party
+manifest-to-binary parity (e.g. tool names declared in `tools/schemabounce/`
+matching the tools the `schemabounce-mcp` binary actually exposes) cannot be
+enforced here because the binary lives in a separate repo. That contract is
+enforced by `TestToolsList_MatchesManifest` in the `schemabounce-mcp` repo's
+CI. Do not add external binary invocations to this script.
 
 ## What the Platform Does
 
@@ -185,7 +196,18 @@ The `tools` section is a declarative listing for marketplace display and depende
 
 Never put secrets in SERVER.md — only declare variable names. Users configure actual values in their workspace settings.
 
-## Available Servers (66 total)
+## Short-Term Rental (STR) Integrations
+
+| Server | Description | Transport |
+|--------|-------------|-----------|
+| [lodgify](lodgify/) | Lodgify channel manager — properties, bookings, availability, rates across Airbnb/VRBO/Booking.com | stdio |
+| [airbnb](airbnb/) | Airbnb public listing search only (read-only, no auth, no host account management) | stdio |
+| [instagram](instagram/) | Instagram Graph API via Composio managed-OAuth — posts, insights, comments | stdio |
+| [facebook-pages](facebook-pages/) | Facebook Pages via Composio managed-OAuth — posts, analytics, Messenger | stdio |
+
+> **VRBO and Airbnb account management are not available as direct API integrations.** Neither platform exposes a public host-management API. STR hosts who need to manage availability, pricing, and bookings across Airbnb, VRBO, and Booking.com should use `tools/lodgify`, which distributes to all three channels through Lodgify's built-in channel manager. The `tools/airbnb` server is limited to public listing search (competitor research, pricing benchmarks) and cannot touch host account data.
+
+## Available Servers (70 total)
 
 ### Engineering & DevOps
 
@@ -592,3 +614,16 @@ See these merged SERVER.md files for canonical patterns:
 | Bearer + extracted identity | `tools/github/SERVER.md` | Bearer + `extract.authenticated_as_field: login` for audit visibility. |
 
 (Stripe, Jira, Confluence, Zendesk patterns land in the next batch using `http_basic`.)
+
+## BYO-Remote MCPs — no hosted manifest required
+
+Some SaaS SEO tools offer official remote MCP endpoints. Because these are customer-supplied remote connections (the customer brings their own paid subscription), they do not need a hosted manifest in this repo. Add them via the "Add custom MCP" flow in workspace settings using the `streamable-http` transport type and the customer's own API key or token.
+
+Known BYO-remote SEO MCPs (verified 2026-06-11):
+
+| Tool | Remote URL | Auth | Notes |
+|---|---|---|---|
+| **Ahrefs** | `https://api.ahrefs.com/mcp/mcp` | Bearer (Ahrefs API token) | Requires a paid Ahrefs subscription. Official endpoint. |
+| **Semrush** | `https://mcp.semrush.com/v1/mcp` | Bearer (Semrush API key) | Requires a paid Semrush subscription. Official endpoint. |
+
+These are NOT hosted here because they run on Ahrefs/Semrush infrastructure, not inside the workspace pod. The customer supplies their own account credentials. Do not author `SERVER.md` manifests for them — point customers to the BYO-remote path instead.

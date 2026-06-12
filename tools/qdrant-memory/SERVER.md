@@ -7,6 +7,7 @@ metadata:
   version: 1.0.0
   description: High-performance vector database for agent memory with advanced filtering
   tags: [memory, vector-search, filtering, rust]
+  category: "ai-memory"
   author: Qdrant
   license: Apache-2.0
 transport:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Zoom video conferencing, meetings, webinars, and recordings"
   tags: ["zoom", "video", "conferencing", "meetings", "webinars"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:

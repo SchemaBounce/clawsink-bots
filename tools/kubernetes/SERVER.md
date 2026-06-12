@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Kubernetes cluster management, pods, services, deployments, and logs"
   tags: ["kubernetes", "k8s", "containers", "orchestration", "devops"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 transport:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Freshdesk helpdesk -- tickets, contacts, agents, and canned responses"
   tags: ["freshdesk", "helpdesk", "support", "tickets"]
+  category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 auth:

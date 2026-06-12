@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Mailchimp email marketing, campaigns, audiences, templates, and analytics"
   tags: ["mailchimp", "email", "marketing", "campaigns", "newsletters"]
+  category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 auth:

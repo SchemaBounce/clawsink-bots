@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "WhatsApp Business API, messages, templates, and media"
   tags: ["whatsapp", "messaging", "business", "chat"]
+  category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:

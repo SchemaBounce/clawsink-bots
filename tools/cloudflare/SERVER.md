@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Cloudflare. DNS, Workers, Pages, and CDN management"
   tags: ["cloudflare", "cdn", "dns", "workers", "edge"]
+  category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
 # Declarative auth + validation + healthProbe (SchemaBounce #1614).

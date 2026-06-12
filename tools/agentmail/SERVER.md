@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Email identity for AI agents. Send, receive, and manage email"
   tags: ["email", "communication", "identity", "presence", "inbox"]
+  category: "communication"
   author: "agentmail"
   license: "MIT"
 transport:

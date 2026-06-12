@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Linear project management tools for issues, projects, and cycles"
   tags: ["linear", "project-management", "issues", "cycles", "roadmap"]
+  category: "project-issue"
   author: "schemabounce"
   license: "MIT"
 auth:

@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Semantic web search for AI agents, token-efficient, embedding-based search"
   tags: ["search", "web", "semantic", "research", "presence"]
+  category: "browser-scraping"
   author: "exa"
   license: "MIT"
 # Declarative auth + validation (SchemaBounce #1614).

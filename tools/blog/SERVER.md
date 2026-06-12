@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Publish blog drafts to the SchemaBounce CMS via a workspace service account with blog:write scope"
   tags: ["blog", "cms", "content", "publishing", "schemabounce"]
+  category: "platform"
   author: "schemabounce"
   license: "MIT"
 transport:

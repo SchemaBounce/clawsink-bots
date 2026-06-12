@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   description: "Snowflake data warehouse. SQL queries, warehouses, databases, and stages"
   tags: ["snowflake", "data-warehouse", "analytics", "sql", "cloud"]
+  category: "databases"
   author: "schemabounce"
   license: "MIT"
 transport:
