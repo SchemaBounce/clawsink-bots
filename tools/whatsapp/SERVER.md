@@ -4,78 +4,83 @@ kind: McpServer
 metadata:
   name: whatsapp
   displayName: "WhatsApp"
-  version: "1.0.0"
-  description: "WhatsApp Business API, messages, templates, and media"
-  tags: ["whatsapp", "messaging", "business", "chat"]
+  version: "2.0.0"
+  description: "WhatsApp Business messaging via Composio. Send text, template, and media messages, list templates, and read the business profile through the WhatsApp Business API."
+  tags: ["whatsapp", "messaging", "business", "chat", "composio"]
   category: "communication"
   author: "schemabounce"
   license: "MIT"
 auth:
   method: "composio"
   composioToolkit: "WHATSAPP"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like WHATSAPP_*."
+  setupReason: "Authorized via Composio against your WhatsApp Business account. The agent calls execute_composio_tool with WHATSAPP_* action names (e.g. WHATSAPP_SEND_MESSAGE, WHATSAPP_SEND_TEMPLATE_MESSAGE, WHATSAPP_GET_MESSAGE_TEMPLATES)."
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "whatsapp-mcp@0.1.3"]
+  args: ["-y", "@composio/mcp@1.0.9"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: WHATSAPP_ACCESS_TOKEN
-    description: "WhatsApp Business API access token"
+  # OPTIONAL: credentials are bridged from the workspace's Composio connection.
+  # Leaving this blank uses the workspace's Composio integration for this service;
+  # provide a value only to override the managed connection. Do not mark this
+  # required:true, that makes the setup/reconnect modal demand a key the Composio
+  # flow already covers.
+  - name: COMPOSIO_API_KEY
+    description: "Composio API key from composio.dev/settings. Authenticates the Composio MCP gateway. Your WhatsApp Business account is then connected inside Composio."
     required: false
     sensitive: true
-  - name: WHATSAPP_PHONE_NUMBER_ID
-    description: "WhatsApp Business phone number ID"
-    required: false
+
 tools:
   - name: send_message
-    description: "Send a text message to a phone number"
+    description: "Send a text message to a WhatsApp Business contact"
     category: messages
   - name: send_template
-    description: "Send a pre-approved template message"
-    category: templates
+    description: "Send a pre-approved template message, required for business-initiated conversations outside the 24-hour window"
+    category: messages
   - name: send_media
-    description: "Send an image, video, or document"
-    category: media
-  - name: get_message_status
-    description: "Get delivery status of a sent message"
+    description: "Send an image, document, or other media message"
     category: messages
   - name: list_templates
-    description: "List approved message templates"
+    description: "List the account's approved message templates"
     category: templates
   - name: get_business_profile
-    description: "Get the WhatsApp Business profile"
-    category: messages
+    description: "Read the WhatsApp Business profile"
+    category: profile
 ---
 
 # WhatsApp MCP Server
 
-Provides WhatsApp Business API tools for sending messages, managing templates, and sharing media with customers.
+Provides WhatsApp Business messaging via Composio's managed gateway. Covers text, template, and media messages, template listing, and the business profile.
+
+## Auth Model: Composio (WHATSAPP)
+
+This server is backed by the Composio WHATSAPP toolkit (17 tools). Authentication is managed by Composio against your WhatsApp Business account. Bots call `execute_composio_tool` with `WHATSAPP_*` action names. The friendly tools above map to real toolkit actions such as `WHATSAPP_SEND_MESSAGE`, `WHATSAPP_SEND_TEMPLATE_MESSAGE`, `WHATSAPP_SEND_MEDIA`, and `WHATSAPP_GET_MESSAGE_TEMPLATES`.
+
+## Business Accounts Only
+
+The WhatsApp toolkit uses the WhatsApp Business API. It supports WhatsApp Business accounts, not personal accounts. Delivery state arrives by webhook, so there is no polling action for message status.
+
+## External Requirements
+
+- A **Meta WhatsApp Business account** and a registered business phone number, connected in Composio.
+- Business-initiated messages outside the 24-hour customer-service window must use an approved template.
 
 ## Which Bots Use This
 
-- **customer-support** -- Handles customer inquiries via WhatsApp Business
-- **sales-pipeline** -- Sends follow-up messages and templates to prospects
+- **customer-support** -- Handles customer inquiries over WhatsApp Business.
+- **sales-pipeline** -- Sends follow-up and template messages to prospects.
+
+WhatsApp is a customer-comms channel. It is not part of the social-media-manager publishing suite.
 
 ## Setup
 
-1. Set up a WhatsApp Business account and create an app in the [Meta Developer Portal](https://developers.facebook.com/)
-2. Generate a permanent access token and note your phone number ID
-3. Add `WHATSAPP_ACCESS_TOKEN` and `WHATSAPP_PHONE_NUMBER_ID` to your workspace secrets
-4. The server starts automatically when a bot that references it runs
+1. Sign up at [composio.dev](https://composio.dev) and get your API key.
+2. In Composio, connect your WhatsApp Business account under the WhatsApp toolkit.
+3. The server starts automatically when a bot that references it runs.
 
 ## Team Usage
-
-Add to your TEAM.md to share a single WhatsApp server instance across bots:
 
 ```yaml
 mcpServers:
   - ref: "tools/whatsapp"
-    reason: "Bots need WhatsApp access for customer communication and sales outreach"
-    config:
-      default_language: "en"
+    reason: "Customer-comms bots need WhatsApp Business messaging for inquiries and follow-ups"
 ```

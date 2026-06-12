@@ -4,39 +4,37 @@ kind: McpServer
 metadata:
   name: mailchimp
   displayName: "Mailchimp"
-  version: "1.0.0"
-  description: "Mailchimp email marketing, campaigns, audiences, templates, and analytics"
-  tags: ["mailchimp", "email", "marketing", "campaigns", "newsletters"]
+  version: "2.0.0"
+  description: "Mailchimp email marketing via Composio. Manage campaigns, audiences, members, templates, and campaign reports."
+  tags: ["mailchimp", "email", "marketing", "campaigns", "newsletters", "composio"]
   category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
 auth:
   method: "composio"
   composioToolkit: "MAILCHIMP"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like MAILCHIMP_*."
+  setupReason: "Authorized via Composio against your Mailchimp account. The agent calls execute_composio_tool with MAILCHIMP_* action names (e.g. MAILCHIMP_LIST_CAMPAIGNS, MAILCHIMP_SEND_CAMPAIGN, MAILCHIMP_ADD_OR_UPDATE_LIST_MEMBER)."
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@agentx-ai/mailchimp-mcp-server@1.1.1"]
+  args: ["-y", "@composio/mcp@1.0.9"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: MAILCHIMP_API_KEY
-    description: "Mailchimp API key from Account > Extras > API keys"
+  # OPTIONAL: credentials are bridged from the workspace's Composio connection.
+  # Leaving this blank uses the workspace's Composio integration for this service;
+  # provide a value only to override the managed connection. Do not mark this
+  # required:true, that makes the setup/reconnect modal demand a key the Composio
+  # flow already covers.
+  - name: COMPOSIO_API_KEY
+    description: "Composio API key from composio.dev/settings. Authenticates the Composio MCP gateway. Your Mailchimp account is then connected inside Composio."
     required: false
     sensitive: true
-  - name: MAILCHIMP_SERVER_PREFIX
-    description: "Mailchimp server prefix e.g. us14"
-    required: false
+
 tools:
   - name: list_campaigns
     description: "List email campaigns"
     category: campaigns
   - name: get_campaign
-    description: "Get campaign details"
+    description: "Get a campaign's details"
     category: campaigns
   - name: create_campaign
     description: "Create an email campaign"
@@ -45,49 +43,49 @@ tools:
     description: "Send a campaign"
     category: campaigns
   - name: list_audiences
-    description: "List audiences"
+    description: "List audiences (lists)"
     category: audiences
   - name: list_members
-    description: "List audience members"
+    description: "List members of an audience"
     category: members
   - name: add_member
-    description: "Add a member to an audience"
+    description: "Add or update a member in an audience"
     category: members
-  - name: search_members
-    description: "Search audience members"
-    category: members
+  - name: get_campaign_report
+    description: "Get a campaign's performance report"
+    category: reports
   - name: list_templates
     description: "List email templates"
     category: templates
-  - name: get_campaign_report
-    description: "Get campaign performance report"
-    category: reports
 ---
 
 # Mailchimp MCP Server
 
-Provides Mailchimp email marketing tools for bots that need to manage campaigns, audiences, templates, and track campaign analytics.
+Provides Mailchimp email marketing via Composio's managed gateway. Covers campaign management, audiences, members, templates, and campaign reports.
+
+## Auth Model: Composio (MAILCHIMP)
+
+This server is backed by the Composio MAILCHIMP toolkit (272 tools). Authentication is managed by Composio. Bots call `execute_composio_tool` with `MAILCHIMP_*` action names. The friendly tools above map to real toolkit actions such as `MAILCHIMP_LIST_CAMPAIGNS`, `MAILCHIMP_GET_CAMPAIGN`, `MAILCHIMP_SEND_CAMPAIGN`, `MAILCHIMP_GET_LISTS_INFO`, `MAILCHIMP_LIST_MEMBERS`, and `MAILCHIMP_ADD_OR_UPDATE_LIST_MEMBER`.
+
+## External Requirements
+
+- A **Mailchimp account**, connected in Composio under the Mailchimp toolkit.
 
 ## Which Bots Use This
 
-- **marketing-manager** — Campaign management, audience segmentation, and performance tracking
-- **content-strategist** — Email template management and newsletter scheduling
+- **marketing-growth** -- Campaign management, audience segmentation, and performance tracking.
+- **content-scheduler** -- Newsletter scheduling and email template management.
 
 ## Setup
 
-1. Get your API key from Mailchimp Account > Extras > API keys
-2. Note your server prefix (the `usXX` part of your Mailchimp URL)
-3. Add `MAILCHIMP_API_KEY` and `MAILCHIMP_SERVER_PREFIX` to your workspace secrets
-4. The server starts automatically when a bot that references it runs
+1. Sign up at [composio.dev](https://composio.dev) and get your API key.
+2. In Composio, connect your Mailchimp account under the Mailchimp toolkit.
+3. The server starts automatically when a bot that references it runs.
 
 ## Team Usage
-
-Add to your TEAM.md to share a single Mailchimp server instance across bots:
 
 ```yaml
 mcpServers:
   - ref: "tools/mailchimp"
-    reason: "Bots need Mailchimp access for email campaigns, audience management, and analytics"
-    config:
-      default_audience: "main"
+    reason: "Marketing bots need Mailchimp access for email campaigns, audience management, and analytics"
 ```
