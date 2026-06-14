@@ -1,17 +1,24 @@
 ## Social Publishing
 
-Draft social posts, hold them behind explicit human approval, then publish to connected platforms. The gate is enforced two ways and both must hold: you self-enforce it, AND the runtime hard-blocks every publish-class tool call unless you pass `_sb_draft_id` naming an approved draft. Still treat the discipline as yours, do not rely on the block as a safety net.
+Publish to connected social platforms only after explicit human approval. Approval is enforced by the runtime: every publish is an external action, and the runtime BLOCKS it until a human approves it in the Actions queue. Treat the discipline as yours; do not rely on the block as a safety net.
 
-### Record Schema (`mkt_social_posts`, snake_case)
-Write these fields in the record `data`: `platform`, `target` (account/page/subreddit/channel), `text` (full post), `media_ref` (optional), `source_bot` (your own agent id), `status`. The human approval queue and the approval endpoint read these exact field names, so use snake_case.
+### How the approval gate works
+A publish tool call (LinkedIn `create_post`, Reddit `create_post`, Facebook `create_post`, Instagram `publish_ig_user_media`, and the rest) is an external action. When you call it:
+1. The runtime refuses the first attempt and records the exact call as an `external_action` awaiting approval. The refusal text names an action id (`act_...`).
+2. A human reviews it in the Actions queue. They see the tool, the target, and the full arguments including the post text, then approve or reject.
+3. Once approved, call the SAME tool again with `_sb_action_id` set to that action id. The runtime verifies the approval AND that the arguments still match what was approved, then publishes. If the arguments changed since approval, it is refused; resubmit.
 
-### Approval Gate Protocol (mandatory, every platform)
-1. Draft the content. Write it with `adl_write_record` (entity_type `mkt_social_posts`) using the schema above, with `status` set to `pending_approval`.
-2. Send an approval request with `adl_send_message` to the designated approver, with the draft id and the full preview. The approver is the property manager (str-property-manager) for STR, or the configured manager for marketing. Read the approver from config; do not hardcode one. A human reviews the draft in the Approvals queue.
-3. STOP. Do not call any publish or write action until the draft is approved. Approval arrives two ways that agree: an `approval`-type message in `adl_read_messages` referencing the draft id, and the record `status` flipping to `approved` with `approved_by` set. If the record `status` is `rejected`, do not publish. Revise and resubmit, or drop it.
-4. Single-step platforms publish in one irreversible call: LinkedIn `create_post` / `create_article_share`, Reddit `create_post` / `create_comment`, Facebook `create_post` / `create_photo_post`. The gate is BEFORE that call. There is no draft container to hold.
-5. Instagram is two-step: `post_ig_user_media` creates a non-public container (allowed before approval to obtain the `creation_id`), then STOP and gate, then `publish_ig_user_media` only after approval.
-6. **On every publish-class tool call, pass `_sb_draft_id` set to the approved draft's entity_id** (for example `linkedin__create_post` with `_sb_draft_id: "post_123"`). The runtime verifies the draft is approved, removes `_sb_draft_id` before the call reaches the platform, and marks the draft `published` on success. If the draft is not approved, the call is refused. You do not need to write the `published` status yourself, the runtime does it.
+The approval binds to the actual publish call, so what the human approves is exactly what posts. You do not write a separate approval record to drive the gate.
+
+### Optional content record (`mkt_social_posts`, snake_case)
+You may still write the post as a `mkt_social_posts` record (`platform`, `target`, `text`, `media_ref`, `source_bot`, `status`) for history and a richer preview. This is content history only. It does NOT gate the publish; the publish call itself is the gate.
+
+### Protocol (every platform)
+1. Prepare the exact post content.
+2. Call the publish tool with the real arguments and NO `_sb_action_id`. Expect a refusal naming an action id, then STOP.
+3. Tell the approver (with `adl_send_message`; read the approver from config, do not hardcode one) that an action is waiting in the Actions queue, and include a preview.
+4. When it is approved (an `approval` message arrives in `adl_read_messages` and the action shows approved), call the SAME tool again with `_sb_action_id` set to the action id. If it was rejected, do not publish. Revise and resubmit, or drop it.
+5. Instagram is two-step: `instagram__post_ig_user_media` (creates a non-public container) and `instagram__publish_ig_user_media` (makes it public) are BOTH external actions and both gated. An operator can set an approval policy to auto-approve the container step and require approval only on the public publish.
 
 ### Per-Platform Format
 - Instagram: 2,200-char caption, up to 30 hashtags, hook in first 125 chars.
@@ -20,7 +27,7 @@ Write these fields in the record `data`: `platform`, `target` (account/page/subr
 - Reddit: call `get_subreddit_rules` and honor account-age, karma, and per-subreddit rules before drafting. Respect self-promotion limits.
 
 ### Hard Rules
-- Never publish without confirmed approval in `adl_read_messages`.
+- Never publish without an approved action. Confirm both the `approval` message in `adl_read_messages` and that you are re-calling with the matching `_sb_action_id`.
 - Never publish to a platform the workspace has not connected.
 - Honor per-subreddit rules and platform rate limits.
 - Never post exact nightly rates (STR).
