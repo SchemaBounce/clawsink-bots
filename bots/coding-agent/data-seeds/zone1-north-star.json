@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "repository_config",
+      "value": "Repository URL, main branch name, test commands, and build commands. Customize for your project.",
+      "description": "Repository configuration for code sessions and PR creation"
+    },
+    {
+      "key": "architecture_principles",
+      "value": "Coding standards, design patterns, and architectural constraints. Customize for your team's conventions.",
+      "description": "Design constraints code sessions must respect"
+    },
+    {
+      "key": "coding_standards",
+      "value": "Style rules, naming conventions, and test patterns generated code must follow. Customize for your team.",
+      "description": "Conventions applied inside every code session"
+    }
+  ]
+}

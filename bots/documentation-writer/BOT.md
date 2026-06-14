@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.14"
+  version: "1.0.16"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -87,11 +87,9 @@ presence:
     browsing: false
     crawling: true
 mcpServers:
-# tools/codex was declared here previously but its backend MCP service
-# is not deployed and the tool is not in the runtime registry, silent
-# no-op when activated. Stripped 2026-04-27 per the no-vaporware sweep.
-# Re-add once the codex backend ships and the SERVER.md graduates from
-# preview.
+  - ref: "tools/code-sandbox"
+    required: false
+    reason: "Spawns sandboxed Claude Code sessions for documentation file edits in the repository"
   - ref: "tools/github"
     required: true
     reason: "Creates doc PRs linked to implementation PRs"
@@ -153,18 +151,18 @@ setup:
       ui:
         icon: github
         actionLabel: "Connect GitHub"
-    - id: enable-codex
-      name: "Enable Codex (Preview, coming soon)"
-      description: "Confirms workspace credit balance and provisions the sandboxed Codex service for documentation file edits. Preview, backend service is not yet live."
+    - id: enable-code-sandbox
+      name: "Enable Code Sandbox"
+      description: "Hosted Claude Code sessions in per-workspace sandboxes for documentation file edits, metered on workspace credits."
       type: mcp_connection
-      ref: tools/codex
+      ref: tools/code-sandbox
       group: connections
       priority: recommended
-      reason: "Intended default coding agent for doc file edits, will be required once the backend ships; optional until then"
+      reason: "Doc file edits run inside sandboxed code sessions that produce reviewable doc PRs"
       ui:
         icon: code
-        actionLabel: "Enable Codex"
-        helpUrl: "https://docs.schemabounce.com/integrations/codex"
+        actionLabel: "Enable Code Sandbox"
+        helpUrl: "https://docs.schemabounce.com/integrations/code-sandbox"
     - id: import-implementation-plans
       name: "Connect implementation plan data"
       description: "Implementation plans from software-architect that trigger doc updates"

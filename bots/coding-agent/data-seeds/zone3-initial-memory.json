@@ -1,0 +1,22 @@
+{
+  "namespaces": [
+    {
+      "namespace": "working_notes",
+      "entries": [
+        {
+          "key": "first_run",
+          "value": "First run. Read repository_config and coding_standards from North Star. No active code session."
+        }
+      ]
+    },
+    {
+      "namespace": "codebase_map",
+      "entries": [
+        {
+          "key": "init",
+          "value": "No codebase mapping yet. Will build as repositories are explored during code sessions."
+        }
+      ]
+    }
+  ]
+}

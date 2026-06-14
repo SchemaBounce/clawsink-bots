@@ -1,0 +1,14 @@
+{
+  "entityTypes": [
+    {
+      "name": "code_sessions",
+      "description": "Audit records for sandboxed code sessions tracking execution state, test results, and outcomes",
+      "fields": ["session_id", "implementation_plan_ref", "engine", "status", "files_changed", "tests_passed", "test_output", "retry_count", "credits_used"]
+    },
+    {
+      "name": "pull_requests",
+      "description": "Pull requests delivered by code sessions, linked to their implementation plans and originating issues",
+      "fields": ["pr_url", "branch", "implementation_plan_ref", "linked_issues", "review_status", "approval_status"]
+    }
+  ]
+}
