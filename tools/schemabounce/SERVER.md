@@ -143,6 +143,9 @@ tools:
   - name: sb_agent_mcp_access
     description: "List/grant/revoke MCP-connection access for an agent, and store/check per-agent encrypted secrets"
     category: agents
+  - name: sb_agent_access_policy
+    description: "Read an agent's AWS-IAM-style data-access policy, dry-run-check an (action, resource), or list the action/resource catalog (read-only)"
+    category: agents
   - name: sb_agent_proposals
     description: "List, approve, or reject agent-authored improvement proposals"
     category: agents
