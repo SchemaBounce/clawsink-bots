@@ -90,7 +90,7 @@ The user connects their Google Analytics account inside Composio once via OAuth.
 ## Setup
 
 1. Sign up at [composio.dev](https://composio.dev) and get your API key.
-2. Add `COMPOSIO_API_KEY` to your workspace secrets.
+2. Add `COMPOSIO_API_KEY` in the MCP connection setup.
 3. In Composio, connect your Google Analytics account via OAuth under the Google Analytics toolkit.
 4. The server starts automatically when a bot that references it runs.
 

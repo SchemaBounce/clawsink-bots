@@ -73,7 +73,7 @@ Provides Brave Search API tools for bots that need web search, news results, and
 ## Setup
 
 1. Get a Brave Search API key from [brave.com/search/api/](https://brave.com/search/api/)
-2. Add `BRAVE_API_KEY` to your workspace secrets
+2. Add `BRAVE_API_KEY` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -118,7 +118,7 @@ Provides Stripe payment and billing tools for bots that manage financial operati
 ## Setup
 
 1. Get your Stripe API key from the Stripe Dashboard (use test keys for development)
-2. Add `STRIPE_API_KEY` to your workspace secrets
+2. Add `STRIPE_API_KEY` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -66,7 +66,7 @@ The bot does **not** push directly to production. Deployment is a human step.
 
 ## Setup
 
-1. Add `OPENAI_API_KEY` to your workspace secrets (the generator uses GPT to synthesize descriptions).
+1. Add `OPENAI_API_KEY` in the MCP connection setup (the generator uses GPT to synthesize descriptions).
 2. Connect this MCP server from the SEO Expert deploy modal.
 
 ## Team Usage

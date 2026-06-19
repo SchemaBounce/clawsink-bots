@@ -104,7 +104,7 @@ Meta-gateway providing unified access to 500+ SaaS applications with managed OAu
 ## Setup
 
 1. Sign up at [composio.dev](https://composio.dev) and get your API key
-2. Add `COMPOSIO_API_KEY` to your workspace secrets
+2. Add `COMPOSIO_API_KEY` in the MCP connection setup
 3. Use `initiate_connection` to set up OAuth for specific SaaS apps
 
 ## How It Works

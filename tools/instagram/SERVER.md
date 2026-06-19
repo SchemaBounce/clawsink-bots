@@ -86,7 +86,7 @@ This server is backed by the Composio INSTAGRAM toolkit (36 tools). Authenticati
 ## Setup
 
 1. Sign up at [composio.dev](https://composio.dev) and get your API key
-2. Add `COMPOSIO_API_KEY` to your workspace secrets
+2. Add `COMPOSIO_API_KEY` in the MCP connection setup
 3. In Composio, connect your Instagram Business Account via OAuth under the Instagram toolkit
 4. The server starts automatically when a bot that references it runs
 

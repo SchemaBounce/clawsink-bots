@@ -97,7 +97,7 @@ Provides ClickUp API tools for managing tasks, organizing spaces and lists, and 
 
 1. Log in to [ClickUp](https://app.clickup.com/) and navigate to Settings > Apps
 2. Copy your personal API token
-3. Add `CLICKUP_API_TOKEN` to your workspace secrets
+3. Add `CLICKUP_API_TOKEN` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

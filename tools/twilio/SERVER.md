@@ -72,7 +72,7 @@ Provides Twilio communications tools for SMS, voice calls, and phone number mana
 ## Setup
 
 1. Get your Account SID and Auth Token from the [Twilio Console](https://www.twilio.com/console)
-2. Add them to your workspace secrets as `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN`
+2. Add them in the MCP connection setup as `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN`
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

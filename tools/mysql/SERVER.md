@@ -57,7 +57,7 @@ Provides MySQL database tools for bots that need to query data, inspect schemas,
 ## Setup
 
 1. Ensure your MySQL server is accessible from the workspace network
-2. Add `MYSQL_HOST`, `MYSQL_USER`, `MYSQL_PASSWORD`, and `MYSQL_DATABASE` to your workspace secrets
+2. Add `MYSQL_HOST`, `MYSQL_USER`, `MYSQL_PASSWORD`, and `MYSQL_DATABASE` in the MCP connection setup
 3. Optionally set `MYSQL_PORT` if not using the default 3306
 4. The server starts automatically when a bot that references it runs
 

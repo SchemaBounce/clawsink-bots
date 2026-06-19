@@ -102,7 +102,7 @@ Provides Dropbox file storage tools for bots that need to manage files, folders,
 
 1. Create an app in the Dropbox App Console
 2. Generate an access token
-3. Add `DROPBOX_ACCESS_TOKEN` to your workspace secrets
+3. Add `DROPBOX_ACCESS_TOKEN` in the MCP connection setup
 4. The server connects via SSE when a bot that references it runs
 
 ## Team Usage

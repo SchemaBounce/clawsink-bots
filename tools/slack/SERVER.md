@@ -93,7 +93,7 @@ Provides Slack workspace tools for bots that need to post updates, read channels
 
 1. Create a Slack App in your workspace with Bot Token Scopes: `channels:read`, `chat:write`, `reactions:write`, `search:read`, `users:read`
 2. Install the app and copy the Bot User OAuth Token
-3. Add `SLACK_BOT_TOKEN` and `SLACK_TEAM_ID` to your workspace secrets
+3. Add `SLACK_BOT_TOKEN` and `SLACK_TEAM_ID` in the MCP connection setup
 
 ## Team Usage
 

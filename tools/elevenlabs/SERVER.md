@@ -139,7 +139,7 @@ Provides voice and audio capabilities for AI agents. Agents can speak, listen, c
 ## Setup
 
 1. Sign up at [elevenlabs.io](https://elevenlabs.io) and get your API key
-2. Add `ELEVENLABS_API_KEY` to your workspace secrets
+2. Add `ELEVENLABS_API_KEY` in the MCP connection setup
 3. Ensure `uv` is installed: `curl -LsSf https://astral.sh/uv/install.sh | sh`
 
 ## Presence Integration

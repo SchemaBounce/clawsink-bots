@@ -90,7 +90,7 @@ Provides Netlify API tools for bots that manage sites, deployments, forms, and s
 ## Setup
 
 1. Create a personal access token at [app.netlify.com/user/applications](https://app.netlify.com/user/applications)
-2. Add `NETLIFY_AUTH_TOKEN` to your workspace secrets
+2. Add `NETLIFY_AUTH_TOKEN` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -96,8 +96,10 @@ Provides Grafana observability tools for bots that need dashboard access, Promet
 
 1. Create a Grafana service account with Viewer or Editor role from your Grafana instance administration settings
 2. Generate an API key or service account token for the service account
-3. Add `GRAFANA_URL` and `GRAFANA_API_KEY` to your workspace secrets
+3. Add `GRAFANA_URL` and `GRAFANA_API_KEY` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
+
+> These values live on the MCP connection (encrypted) and are injected by the gateway when a tool runs. The agent is granted the server's tools, not the raw credential, so it cannot read or echo the token. There is nothing else to store.
 
 ## Team Usage
 

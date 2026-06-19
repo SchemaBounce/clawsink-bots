@@ -73,7 +73,7 @@ Provides Freshdesk helpdesk tools for bots that manage support tickets, track co
 ## Setup
 
 1. Get your API key from Freshdesk Profile Settings (top right > Profile Settings > API Key)
-2. Add `FRESHDESK_DOMAIN` and `FRESHDESK_API_KEY` to your workspace secrets
+2. Add `FRESHDESK_DOMAIN` and `FRESHDESK_API_KEY` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

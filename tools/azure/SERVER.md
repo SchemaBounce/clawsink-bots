@@ -67,7 +67,7 @@ Provides Azure cloud management tools for bots that need to manage virtual machi
 ## Setup
 
 1. Create an Azure service principal with appropriate role assignments for the resources your bots need
-2. Add `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` to your workspace secrets
+2. Add `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

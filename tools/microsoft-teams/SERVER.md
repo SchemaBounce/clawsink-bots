@@ -73,7 +73,7 @@ Provides Microsoft Teams tools for enterprise messaging, channel management, and
 
 1. Register an application in [Azure Active Directory](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade)
 2. Grant Microsoft Graph API permissions: `ChannelMessage.Send`, `Channel.ReadBasic.All`, `Team.ReadBasic.All`, `OnlineMeetings.ReadWrite`
-3. Add the credentials to your workspace secrets as `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET`, and `MICROSOFT_TENANT_ID`
+3. Add the credentials in the MCP connection setup as `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET`, and `MICROSOFT_TENANT_ID`
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

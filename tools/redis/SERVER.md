@@ -61,7 +61,7 @@ Provides Redis key-value store tools for bots that need to inspect caches, manag
 ## Setup
 
 1. Prepare a Redis connection URL
-2. Add `REDIS_URL` to your workspace secrets
+2. Add `REDIS_URL` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

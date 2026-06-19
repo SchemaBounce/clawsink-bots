@@ -62,7 +62,7 @@ Provides Google Cloud Platform API access for bots that manage compute instances
 
 1. Create a GCP service account with appropriate roles for the services your bots need
 2. Download the JSON key file and make it available to the workspace
-3. Add `GOOGLE_APPLICATION_CREDENTIALS` (path to the key file) and `GCP_PROJECT_ID` to your workspace secrets
+3. Add `GOOGLE_APPLICATION_CREDENTIALS` (path to the key file) and `GCP_PROJECT_ID` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

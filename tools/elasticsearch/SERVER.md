@@ -59,7 +59,7 @@ Provides Elasticsearch tools for bots that need full-text search, log analysis, 
 ## Setup
 
 1. Ensure your Elasticsearch cluster is accessible from the workspace network
-2. Add `ELASTICSEARCH_URL` to your workspace secrets
+2. Add `ELASTICSEARCH_URL` in the MCP connection setup
 3. Optionally add `ELASTICSEARCH_API_KEY` for authenticated clusters
 4. The server starts automatically when a bot that references it runs
 

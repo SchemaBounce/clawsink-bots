@@ -69,7 +69,7 @@ Provides Google BigQuery tools for bots that need to run SQL queries against lar
 
 1. Create a GCP service account with BigQuery access (`roles/bigquery.dataViewer` + `roles/bigquery.jobUser`)
 2. Download the JSON key file
-3. Add `GOOGLE_APPLICATION_CREDENTIALS` (path to key file) and `GCP_PROJECT_ID` to your workspace secrets
+3. Add `GOOGLE_APPLICATION_CREDENTIALS` (path to key file) and `GCP_PROJECT_ID` in the MCP connection setup
 4. The server runs locally over stdio via `npx @ergut/mcp-bigquery-server` when a bot that references it runs
 
 This server provides read-only BigQuery access (SQL queries plus schema and dataset inspection). It does not create or modify datasets.

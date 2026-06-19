@@ -68,7 +68,7 @@ Provides cloud browser infrastructure for AI agents. Agents can browse websites,
 ## Setup
 
 1. Sign up at [hyperbrowser.ai](https://hyperbrowser.ai) and get your API key
-2. Add `HYPERBROWSER_API_KEY` to your workspace secrets
+2. Add `HYPERBROWSER_API_KEY` in the MCP connection setup
 
 ## Key Features
 

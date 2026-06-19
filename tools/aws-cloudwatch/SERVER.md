@@ -70,7 +70,7 @@ Provides focused CloudWatch tools for bots that need log analysis, metric querie
 ## Setup
 
 1. Create an IAM user or role with `CloudWatchReadOnlyAccess` and `CloudWatchLogsReadOnlyAccess` policies (add `CloudWatchFullAccess` if bots need to create alarms)
-2. Add `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to your workspace secrets
+2. Add `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in the MCP connection setup
 3. Optionally set `AWS_REGION` for a default region
 4. The server starts automatically when a bot that references it runs
 

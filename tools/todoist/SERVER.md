@@ -94,7 +94,7 @@ Provides Todoist task management tools for bots that organize work, track action
 ## Setup
 
 1. Get your API token from https://todoist.com/prefs/integrations (under "Developer")
-2. Add `TODOIST_API_TOKEN` to your workspace secrets
+2. Add `TODOIST_API_TOKEN` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

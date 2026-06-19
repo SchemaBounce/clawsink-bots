@@ -118,7 +118,7 @@ Provides Notion workspace tools for bots that manage knowledge bases, documentat
 
 1. Create an Internal Integration at [notion.so/my-integrations](https://www.notion.so/my-integrations)
 2. Share the pages/databases you want the bots to access with the integration
-3. Add the integration token to your workspace secrets as `NOTION_API_KEY`
+3. Add the integration token in the MCP connection setup as `NOTION_API_KEY`
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

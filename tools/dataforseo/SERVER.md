@@ -112,7 +112,7 @@ The `dataforseo-mcp-server` supports ten modules. Set `ENABLED_MODULES` to a com
 
 1. Register at [app.dataforseo.com/register](https://app.dataforseo.com/register).
 2. After registration, your API login and password appear in the API Access section.
-3. Add `DATAFORSEO_USERNAME` (your login email) and `DATAFORSEO_PASSWORD` to your workspace secrets.
+3. Add `DATAFORSEO_USERNAME` (your login email) and `DATAFORSEO_PASSWORD` in the MCP connection setup.
 4. Optionally set `ENABLED_MODULES` to a comma-separated list of module names to limit exposed tools.
 
 ## BYO-Remote Alternatives

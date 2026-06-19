@@ -91,7 +91,7 @@ Provides Pinecone vector database tools for bots that work with embeddings, sema
 ## Setup
 
 1. Create an API key at [app.pinecone.io](https://app.pinecone.io)
-2. Add `PINECONE_API_KEY` to your workspace secrets
+2. Add `PINECONE_API_KEY` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

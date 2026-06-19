@@ -94,7 +94,7 @@ Provides semantic web search optimized for AI agents. Unlike traditional search 
 ## Setup
 
 1. Sign up at [exa.ai](https://exa.ai) and get your API key
-2. Add `EXA_API_KEY` to your workspace secrets
+2. Add `EXA_API_KEY` in the MCP connection setup
 
 ## Key Features
 

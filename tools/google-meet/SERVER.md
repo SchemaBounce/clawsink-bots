@@ -62,7 +62,7 @@ Google Meet links are created through Google Calendar events with `conferenceDat
 
 1. Create a Google Cloud project and enable the Calendar API (Meet links are created via Calendar)
 2. Create OAuth 2.0 credentials (client ID and secret)
-3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` to your workspace secrets
+3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

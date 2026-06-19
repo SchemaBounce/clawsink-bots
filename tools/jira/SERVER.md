@@ -134,7 +134,7 @@ Provides Jira project management tools for bots that manage sprints, issues, bac
 ## Setup
 
 1. Create a Jira API Token at [id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
-2. Add it to your workspace secrets as `JIRA_API_TOKEN` along with your `JIRA_EMAIL` and `JIRA_URL`
+2. Add it in the MCP connection setup as `JIRA_API_TOKEN` along with your `JIRA_EMAIL` and `JIRA_URL`
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

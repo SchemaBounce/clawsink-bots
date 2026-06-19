@@ -103,7 +103,7 @@ Provides Sentry error tracking tools for monitoring issues, analyzing crash even
 
 1. Create an auth token at [Sentry Settings > Auth Tokens](https://sentry.io/settings/auth-tokens/)
 2. Grant `project:read`, `issue:read`, and `event:read` scopes
-3. Add it to your workspace secrets as `SENTRY_AUTH_TOKEN`
+3. Add it in the MCP connection setup as `SENTRY_AUTH_TOKEN`
 4. Optionally set `SENTRY_ORGANIZATION` to default to a specific org
 5. The server starts automatically when a bot that references it runs
 

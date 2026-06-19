@@ -62,7 +62,7 @@ Provides fast web crawling and data extraction for AI agents without spinning up
 ## Setup
 
 1. Sign up at [firecrawl.dev](https://firecrawl.dev) and get your API key
-2. Add `FIRECRAWL_API_KEY` to your workspace secrets
+2. Add `FIRECRAWL_API_KEY` in the MCP connection setup
 
 ## When to Use Firecrawl vs Hyperbrowser
 

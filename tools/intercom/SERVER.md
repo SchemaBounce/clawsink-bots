@@ -102,7 +102,7 @@ Provides Intercom customer messaging tools for bots that manage conversations, t
 ## Setup
 
 1. Create an Intercom app in the Developer Hub and generate an access token
-2. Add `INTERCOM_ACCESS_TOKEN` to your workspace secrets
+2. Add `INTERCOM_ACCESS_TOKEN` in the MCP connection setup
 3. The server connects via SSE to Intercom's hosted MCP endpoint
 
 ## Team Usage

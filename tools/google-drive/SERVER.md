@@ -69,7 +69,7 @@ Provides Google Drive API tools for bots that manage files, documents, and folde
 
 1. Create a Google Cloud project and enable the Drive API
 2. Create OAuth 2.0 credentials (Desktop or Web application type)
-3. Add the credentials to your workspace secrets
+3. Add the credentials in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 **Note:** Google Drive requires OAuth authentication. Connect via Composio for managed OAuth, or provide service account credentials for server-to-server access.

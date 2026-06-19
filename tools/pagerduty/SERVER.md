@@ -101,7 +101,7 @@ Provides PagerDuty incident management tools for bots that need to create, ackno
 ## Setup
 
 1. Create a PagerDuty REST API key from your PagerDuty account under Integrations > API Access Keys
-2. Add `PAGERDUTY_API_KEY` to your workspace secrets
+2. Add `PAGERDUTY_API_KEY` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -74,7 +74,7 @@ Provides Asana project management tools for bots that coordinate tasks, track pr
 ## Setup
 
 1. Create an Asana personal access token at https://app.asana.com/0/developer-console
-2. Add `ASANA_ACCESS_TOKEN` to your workspace secrets
+2. Add `ASANA_ACCESS_TOKEN` in the MCP connection setup
 3. The server connects via SSE to Asana's hosted MCP endpoint
 
 ## Team Usage

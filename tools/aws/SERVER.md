@@ -74,7 +74,7 @@ Provides broad AWS API access for bots that manage cloud infrastructure, deploym
 ## Setup
 
 1. Create an IAM user or role with appropriate permissions for the AWS services your bots need
-2. Add `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to your workspace secrets
+2. Add `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in the MCP connection setup
 3. Optionally set `AWS_REGION` for a default region (bots can override per-request)
 4. The server starts automatically when a bot that references it runs
 

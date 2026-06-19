@@ -90,7 +90,7 @@ Provides Cloudflare API tools for bots that manage DNS records, Workers, Pages d
 ## Setup
 
 1. Create a Cloudflare API token at [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) with the required permissions (Zone:Read, DNS:Edit, Workers:Edit, Pages:Read)
-2. Add `CLOUDFLARE_API_TOKEN` to your workspace secrets
+2. Add `CLOUDFLARE_API_TOKEN` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage
