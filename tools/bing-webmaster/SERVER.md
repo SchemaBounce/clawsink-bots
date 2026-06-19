@@ -149,7 +149,7 @@ Provides access to Bing and Microsoft Copilot search performance data, crawl hea
 
 1. Sign in at [bing.com/webmasters](https://www.bing.com/webmasters) and verify your site.
 2. Go to **Settings → API Access** and generate an API key.
-3. Add `BING_WEBMASTER_API_KEY` to your workspace secrets.
+3. Add `BING_WEBMASTER_API_KEY` in the MCP connection setup.
 
 ## Relationship to DataForSEO and Rank Tracking
 

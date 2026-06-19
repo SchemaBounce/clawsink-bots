@@ -90,7 +90,7 @@ Provides Airtable database tools for bots that manage structured data, track inv
 ## Setup
 
 1. Create a personal access token at https://airtable.com/create/tokens with scopes for the bases you need
-2. Add `AIRTABLE_API_KEY` to your workspace secrets
+2. Add `AIRTABLE_API_KEY` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -59,7 +59,7 @@ Provides Zapier API tools for triggering zaps, listing workflows, and searching 
 
 1. Log in to [Zapier](https://zapier.com/) and navigate to Developer settings
 2. Generate an API key
-3. Add `ZAPIER_API_KEY` to your workspace secrets
+3. Add `ZAPIER_API_KEY` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

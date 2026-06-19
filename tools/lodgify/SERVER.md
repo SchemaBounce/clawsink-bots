@@ -150,7 +150,7 @@ Verified: https://www.npmjs.com/package/@mikerob/lodgify-mcp
 
 1. Log in to Lodgify and go to Settings -> Account -> Public API
 2. Generate or copy your Public API key
-3. Add it to your workspace secrets as `LODGIFY_API_KEY`
+3. Add it in the MCP connection setup as `LODGIFY_API_KEY`
 4. The server starts automatically when a bot that references it runs
 
 ## Why Lodgify Instead of Direct OTA APIs

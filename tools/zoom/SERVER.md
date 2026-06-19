@@ -73,7 +73,7 @@ Provides Zoom tools for meeting management, recording access, and participant tr
 
 1. Create a Server-to-Server OAuth app in the [Zoom App Marketplace](https://marketplace.zoom.us/)
 2. Copy the Account ID, Client ID, and Client Secret
-3. Add them to your workspace secrets as `ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, and `ZOOM_CLIENT_SECRET`
+3. Add them in the MCP connection setup as `ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, and `ZOOM_CLIENT_SECRET`
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

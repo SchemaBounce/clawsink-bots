@@ -94,7 +94,7 @@ No manual API key is required. The workspace's Composio-managed OAuth connection
 ## Setup
 
 1. Sign up at [composio.dev](https://composio.dev) and get your API key.
-2. Add `COMPOSIO_API_KEY` to your workspace secrets if you want to override the managed connection. Otherwise leave it blank.
+2. Add `COMPOSIO_API_KEY` in the MCP connection setup if you want to override the managed connection. Otherwise leave it blank.
 3. In Composio, connect your Google or YouTube account via OAuth under the YouTube toolkit.
 4. The server starts automatically when a bot that references it runs.
 

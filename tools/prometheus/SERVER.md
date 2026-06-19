@@ -67,8 +67,10 @@ Provides direct Prometheus API access for bots that need to run PromQL queries, 
 ## Setup
 
 1. Ensure your Prometheus instance is accessible from the workspace network
-2. Add `PROMETHEUS_URL` to your workspace secrets (e.g. `http://prometheus.monitoring:9090`)
+2. Add `PROMETHEUS_URL` in the MCP connection setup (e.g. `http://prometheus.monitoring:9090`)
 3. The server starts automatically when a bot that references it runs
+
+> `PROMETHEUS_URL` lives on the MCP connection and is injected by the gateway when a tool runs. The agent is granted the server's tools, not the raw value. There is nothing else to store.
 
 ## Team Usage
 

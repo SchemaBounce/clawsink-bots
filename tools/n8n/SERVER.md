@@ -67,7 +67,7 @@ Provides n8n API tools for managing workflows, triggering executions, and monito
 
 1. Deploy an n8n instance (self-hosted or [n8n.cloud](https://n8n.cloud/))
 2. Enable the API and generate an API key in Settings > API
-3. Add `N8N_API_URL` and `N8N_API_KEY` to your workspace secrets
+3. Add `N8N_API_URL` and `N8N_API_KEY` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

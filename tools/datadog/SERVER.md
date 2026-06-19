@@ -116,7 +116,7 @@ Provides Datadog observability tools for bots that need real-time metrics, log a
 This connects to Datadog's official Bits AI MCP Server (https://docs.datadoghq.com/bits_ai/mcp_server/), a Datadog-hosted remote service over Streamable HTTP. There is no local binary to install for the remote path and no npm/pypi package; Datadog also ships a `datadog_mcp_cli` stdio binary for cases where remote auth is unreliable, but that is out of scope for this remote entry.
 
 1. Create a scoped Datadog API key and Application key from a service account with only the permissions your bots need
-2. Add `DD_API_KEY` and `DD_APPLICATION_KEY` to your workspace secrets (these are sent as the `DD-API-KEY` and `DD-APPLICATION-KEY` headers)
+2. Add `DD_API_KEY` and `DD_APPLICATION_KEY` in the MCP connection setup (these are sent as the `DD-API-KEY` and `DD-APPLICATION-KEY` headers)
 3. Optionally set `DD_SITE` and the transport host to match your Datadog site (e.g. `mcp.datadoghq.eu` for EU)
 4. The server starts automatically when a bot that references it runs
 

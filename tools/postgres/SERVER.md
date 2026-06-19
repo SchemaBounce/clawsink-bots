@@ -45,7 +45,7 @@ Provides PostgreSQL database tools for bots that need to query data, inspect sch
 ## Setup
 
 1. Prepare a PostgreSQL connection string with read-only credentials
-2. Add `POSTGRES_CONNECTION_STRING` to your workspace secrets
+2. Add `POSTGRES_CONNECTION_STRING` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 **Note:** Read-only by default for safety. Use a dedicated read-only database user to prevent accidental writes.

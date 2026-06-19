@@ -99,7 +99,7 @@ Runs Google PageSpeed Insights analyses and retrieves Chrome UX Report field dat
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials) and create an API key.
 2. Enable the [PageSpeed Insights API](https://console.cloud.google.com/apis/library/pagespeedonline.googleapis.com) on that key.
-3. Add `GOOGLE_API_KEY` to your workspace secrets when deploying an agent that uses this MCP.
+3. Add `GOOGLE_API_KEY` in the MCP connection setup when deploying an agent that uses this MCP.
 
 ## Key Features
 

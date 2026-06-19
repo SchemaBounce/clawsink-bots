@@ -72,7 +72,7 @@ Provides Pipedrive CRM tools for bots that manage deals, contacts, activities, a
 ## Setup
 
 1. Get your Pipedrive API token from Settings > Personal preferences > API in your Pipedrive account
-2. Add `PIPEDRIVE_API_TOKEN` to your workspace secrets
+2. Add `PIPEDRIVE_API_TOKEN` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

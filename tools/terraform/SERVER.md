@@ -60,7 +60,7 @@ Provides Terraform tools for infrastructure planning, state inspection, and Terr
 
 1. Install the [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) on the host
 2. Optionally create a Terraform Cloud API token at [app.terraform.io/settings/tokens](https://app.terraform.io/app/settings/tokens)
-3. Add it to your workspace secrets as `TERRAFORM_CLOUD_TOKEN` if using Terraform Cloud
+3. Add it in the MCP connection setup as `TERRAFORM_CLOUD_TOKEN` if using Terraform Cloud
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

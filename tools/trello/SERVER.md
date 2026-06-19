@@ -71,7 +71,7 @@ Provides Trello API tools for bots that manage kanban boards, cards, lists, and 
 ## Setup
 
 1. Get your Trello API key and token from [trello.com/power-ups/admin](https://trello.com/power-ups/admin)
-2. Add `TRELLO_API_KEY` and `TRELLO_TOKEN` to your workspace secrets
+2. Add `TRELLO_API_KEY` and `TRELLO_TOKEN` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

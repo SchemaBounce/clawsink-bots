@@ -57,7 +57,7 @@ Provides MongoDB database tools for bots that need to query documents, manage co
 ## Setup
 
 1. Prepare a MongoDB connection URI with appropriate credentials
-2. Add `MONGODB_CONNECTION_STRING` to your workspace secrets
+2. Add `MONGODB_CONNECTION_STRING` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

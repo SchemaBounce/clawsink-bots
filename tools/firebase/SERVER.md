@@ -61,7 +61,7 @@ Provides Firebase API tools for bots that need application monitoring, Firestore
 ## Setup
 
 1. Create a Firebase service account and download the JSON key file
-2. Add the path to the key file as `GOOGLE_APPLICATION_CREDENTIALS` in your workspace secrets
+2. Add the path to the key file as `GOOGLE_APPLICATION_CREDENTIALS` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -71,7 +71,7 @@ Provides full email identity for AI agents. Agents get their own email address a
 ## Setup
 
 1. Sign up at [agentmail.dev](https://agentmail.dev) and get your API key
-2. Add `AGENTMAIL_API_KEY` to your workspace secrets
+2. Add `AGENTMAIL_API_KEY` in the MCP connection setup
 3. Each agent that needs email will have an inbox auto-provisioned on activation
 
 ## Presence Integration

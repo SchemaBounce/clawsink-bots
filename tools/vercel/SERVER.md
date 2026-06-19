@@ -92,7 +92,7 @@ Provides Vercel tools for managing deployments, projects, and domains on the Ver
 ## Setup
 
 1. Create an API token at [Vercel Account Tokens](https://vercel.com/account/tokens)
-2. Add it to your workspace secrets as `VERCEL_TOKEN`
+2. Add it in the MCP connection setup as `VERCEL_TOKEN`
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -74,7 +74,7 @@ Provides Linear project management tools for bots that manage issues, projects, 
 ## Setup
 
 1. Create a Personal API Key in Linear under Settings > API
-2. Add it to your workspace secrets as `LINEAR_API_KEY`
+2. Add it in the MCP connection setup as `LINEAR_API_KEY`
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

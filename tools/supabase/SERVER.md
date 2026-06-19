@@ -98,7 +98,7 @@ Provides Supabase tools for bots that manage databases, auth users, storage buck
 ## Setup
 
 1. Get your Supabase project URL and service role key from the [Supabase dashboard](https://supabase.com/dashboard)
-2. Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to your workspace secrets
+2. Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

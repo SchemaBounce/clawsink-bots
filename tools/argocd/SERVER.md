@@ -84,8 +84,10 @@ Provides full Argo CD API access for bots that manage GitOps deployments, monito
 
 1. Generate an Argo CD API token: `argocd account generate-token --account <account>`
 2. Or use a JWT from Argo CD SSO authentication
-3. Add `ARGOCD_BASE_URL` and `ARGOCD_AUTH_TOKEN` to your workspace secrets
+3. Add `ARGOCD_BASE_URL` and `ARGOCD_AUTH_TOKEN` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
+
+> These values live on the MCP connection (encrypted) and are injected by the gateway when a tool runs. The agent is granted the server's tools, not the raw credential, so it cannot read or echo the token. There is nothing else to store.
 
 ## Team Usage
 

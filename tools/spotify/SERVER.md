@@ -68,7 +68,7 @@ Provides Spotify Web API tools for searching music, managing playlists, and retr
 
 1. Create a Spotify app in the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
 2. Copy the Client ID and Client Secret
-3. Add `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` to your workspace secrets
+3. Add `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

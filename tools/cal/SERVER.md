@@ -88,7 +88,7 @@ Provides Cal.com API tools for managing bookings, checking availability, and con
 
 1. Log in to [Cal.com](https://cal.com/) and navigate to Settings > Developer
 2. Generate an API key
-3. Add `CAL_API_KEY` to your workspace secrets
+3. Add `CAL_API_KEY` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

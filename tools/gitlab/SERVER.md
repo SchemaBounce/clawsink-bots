@@ -120,7 +120,7 @@ Provides GitLab API tools for project management, merge requests, issue tracking
 ## Setup
 
 1. Create a GitLab Personal Access Token with `api` scope at Settings > Access Tokens
-2. Add it to your workspace secrets as `GITLAB_PERSONAL_ACCESS_TOKEN`
+2. Add it in the MCP connection setup as `GITLAB_PERSONAL_ACCESS_TOKEN`
 3. For self-hosted GitLab, also set `GITLAB_API_URL` to your instance's API endpoint
 4. The server starts automatically when a bot that references it runs
 

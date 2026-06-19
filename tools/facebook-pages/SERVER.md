@@ -84,7 +84,7 @@ This server is backed by the Composio FACEBOOK toolkit (43 tools). Authenticatio
 ## Setup
 
 1. Sign up at [composio.dev](https://composio.dev) and get your API key
-2. Add `COMPOSIO_API_KEY` to your workspace secrets
+2. Add `COMPOSIO_API_KEY` in the MCP connection setup
 3. In Composio, connect your Facebook Page via OAuth under the Facebook toolkit
 4. The server starts automatically when a bot that references it runs
 

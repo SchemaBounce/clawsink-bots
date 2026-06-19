@@ -67,7 +67,7 @@ Provides Mixpanel product analytics tools for bots that need to query events, an
 ## Setup
 
 1. Get your project token from Mixpanel project settings
-2. Add `MIXPANEL_PROJECT_TOKEN` to your workspace secrets
+2. Add `MIXPANEL_PROJECT_TOKEN` in the MCP connection setup
 3. Optionally add `MIXPANEL_API_SECRET` for data export APIs
 4. The server starts automatically when a bot that references it runs
 

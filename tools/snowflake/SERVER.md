@@ -66,7 +66,7 @@ Provides Snowflake data warehouse tools for bots that need to run SQL queries, e
 ## Setup
 
 1. Prepare your Snowflake account identifier and credentials
-2. Add `SNOWFLAKE_ACCOUNT`, `SNOWFLAKE_USER`, and `SNOWFLAKE_PASSWORD` to your workspace secrets
+2. Add `SNOWFLAKE_ACCOUNT`, `SNOWFLAKE_USER`, and `SNOWFLAKE_PASSWORD` in the MCP connection setup
 3. Optionally set `SNOWFLAKE_WAREHOUSE` and `SNOWFLAKE_DATABASE` for default context
 4. The server starts automatically when a bot that references it runs
 

@@ -158,8 +158,10 @@ Provides comprehensive GitHub API tools for bots that manage code, issues, pull 
 ## Setup
 
 1. Create a GitHub Personal Access Token with `repo` and `issues` scopes
-2. Add it to your workspace secrets as `GITHUB_PERSONAL_ACCESS_TOKEN`
+2. Add it in the MCP connection setup as `GITHUB_PERSONAL_ACCESS_TOKEN`
 3. The server starts automatically when a bot that references it runs
+
+> If your workspace already has a GitHub OAuth connection, `GITHUB_PERSONAL_ACCESS_TOKEN` is optional and you can leave it blank. When set, it lives on the MCP connection (encrypted) and is injected by the gateway when a tool runs. The agent is granted the server's tools, not the raw credential, so it cannot read or echo the token. There is nothing else to store.
 
 ## Team Usage
 

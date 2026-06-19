@@ -75,7 +75,7 @@ Provides Gmail API tools for bots that send, read, search, and organize email me
 
 1. Create a Google Cloud project and enable the Gmail API
 2. Create OAuth 2.0 credentials (client ID and secret)
-3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` to your workspace secrets
+3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

@@ -89,7 +89,7 @@ Provides Zendesk support tools for bots that manage tickets, monitor customer is
 ## Setup
 
 1. Generate a Zendesk API token at Admin Center > Apps and integrations > Zendesk API > Zendesk API Settings
-2. Add `ZENDESK_SUBDOMAIN`, `ZENDESK_EMAIL`, and `ZENDESK_API_TOKEN` to your workspace secrets
+2. Add `ZENDESK_SUBDOMAIN`, `ZENDESK_EMAIL`, and `ZENDESK_API_TOKEN` in the MCP connection setup
 3. The server starts automatically when a bot that references it runs
 
 ## Team Usage

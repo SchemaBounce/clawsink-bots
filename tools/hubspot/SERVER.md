@@ -37,7 +37,7 @@ env:
   # required:true previously, which made the setup/reconnect modal demand
   # credentials the managed flow already covers.
   # NOTE: the official package reads PRIVATE_APP_ACCESS_TOKEN (renamed from the old
-  # HUBSPOT_ACCESS_TOKEN). Update workspace secrets to use the new key.
+  # HUBSPOT_ACCESS_TOKEN). Update the MCP connection to use the new key.
   - name: PRIVATE_APP_ACCESS_TOKEN
     description: "HubSpot private app access token"
     required: false
@@ -117,7 +117,7 @@ Provides HubSpot CRM tools for bots that manage contacts, deals, companies, and 
 
 1. Create a HubSpot private app with the required scopes (CRM objects, contacts, deals)
 2. Copy the access token from the private app settings
-3. Add `PRIVATE_APP_ACCESS_TOKEN` to your workspace secrets
+3. Add `PRIVATE_APP_ACCESS_TOKEN` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs (it launches `npx -y @hubspot/mcp-server@0.4.0`)
 
 ## Team Usage

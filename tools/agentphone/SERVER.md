@@ -116,7 +116,7 @@ Provides phone numbers and SMS/voice capabilities for AI agents. Agents can prov
 ## Setup
 
 1. Sign up at [agentphone.to](https://agentphone.to) and get your API key
-2. Add `AGENTPHONE_API_KEY` to your workspace secrets
+2. Add `AGENTPHONE_API_KEY` in the MCP connection setup
 3. Use `buy_number` to provision phone numbers for agents
 
 ## Presence Integration

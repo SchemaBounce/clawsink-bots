@@ -84,7 +84,7 @@ Provides Shopify Admin API tools for bots that manage e-commerce products, order
 
 1. Create a Shopify Custom App in your store's admin (Settings > Apps and sales channels > Develop apps)
 2. Grant Admin API access scopes: `read_products`, `write_products`, `read_orders`, `write_orders`, `read_inventory`, `write_inventory`, `read_customers`
-3. Add `SHOPIFY_ACCESS_TOKEN` and `SHOPIFY_STORE_DOMAIN` to your workspace secrets
+3. Add `SHOPIFY_ACCESS_TOKEN` and `SHOPIFY_STORE_DOMAIN` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

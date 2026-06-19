@@ -71,7 +71,7 @@ Provides Basecamp API tools for bots that manage projects, to-do lists, messages
 
 1. Create a Basecamp integration and obtain an OAuth access token
 2. Find your Basecamp account ID from the URL (e.g., `https://3.basecamp.com/1234567/`)
-3. Add `BASECAMP_ACCESS_TOKEN` and `BASECAMP_ACCOUNT_ID` to your workspace secrets
+3. Add `BASECAMP_ACCESS_TOKEN` and `BASECAMP_ACCOUNT_ID` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

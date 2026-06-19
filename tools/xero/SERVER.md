@@ -82,7 +82,7 @@ Provides Xero accounting tools for bots that manage invoicing, contacts, bank tr
 ## Setup
 
 1. Create a Xero app at [developer.xero.com](https://developer.xero.com) and note the client ID and secret
-2. Add `XERO_CLIENT_ID`, `XERO_CLIENT_SECRET`, and `XERO_TENANT_ID` to your workspace secrets
+2. Add `XERO_CLIENT_ID`, `XERO_CLIENT_SECRET`, and `XERO_TENANT_ID` in the MCP connection setup
 3. The tenant ID can be found in your Xero organization settings
 4. The server starts automatically when a bot that references it runs
 

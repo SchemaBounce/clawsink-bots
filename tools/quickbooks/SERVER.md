@@ -90,7 +90,7 @@ Provides QuickBooks Online API tools for bots that manage invoices, payments, ex
 
 1. Create a QuickBooks Developer account and register an app at developer.intuit.com
 2. Connect your QuickBooks Online company and obtain OAuth credentials
-3. Add `QUICKBOOKS_CLIENT_ID`, `QUICKBOOKS_CLIENT_SECRET`, `QUICKBOOKS_REALM_ID`, and `QUICKBOOKS_REFRESH_TOKEN` to your workspace secrets
+3. Add `QUICKBOOKS_CLIENT_ID`, `QUICKBOOKS_CLIENT_SECRET`, `QUICKBOOKS_REALM_ID`, and `QUICKBOOKS_REFRESH_TOKEN` in the MCP connection setup
 4. The server starts automatically when a bot that references it runs
 
 ## Team Usage

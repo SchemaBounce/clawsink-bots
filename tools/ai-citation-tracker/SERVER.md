@@ -87,7 +87,7 @@ Without `CITATIONBENCH_API_KEY`, the server returns shape-complete demo data. Us
 ## Setup
 
 1. Sign up at [citationbench.com](https://citationbench.com).
-2. Add your `CITATIONBENCH_API_KEY` to workspace secrets.
+2. Add your `CITATIONBENCH_API_KEY` in the MCP connection setup.
 3. Connect this MCP server from the SEO Expert deploy modal.
 
 ## Team Usage
