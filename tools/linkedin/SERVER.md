@@ -28,6 +28,12 @@ env:
     required: false
     sensitive: true
 
+# Read-only canary for end-to-end connection validation. get_my_info only reads
+# the authenticated profile, so it safely proves a real provider call.
+validation:
+  tool:
+    name: get_my_info
+
 tools:
   - name: get_my_info
     description: "Get the authenticated LinkedIn member's profile information"

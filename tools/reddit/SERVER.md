@@ -28,6 +28,12 @@ env:
     required: false
     sensitive: true
 
+# Read-only canary for end-to-end connection validation. get_user_info only
+# reads the authenticated account, so it safely proves a real provider call.
+validation:
+  tool:
+    name: get_user_info
+
 tools:
   - name: get_user_info
     description: "Get account data for a Reddit user, including karma scores"

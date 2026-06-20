@@ -23,6 +23,12 @@ env:
     required: true
     sensitive: true
 
+# Read-only canary for end-to-end connection validation. list_managed_pages
+# takes no arguments and only reads, so it safely proves a real provider call.
+validation:
+  tool:
+    name: list_managed_pages
+
 tools:
   - name: list_managed_pages
     description: "List all Facebook Pages the authenticated user manages"
