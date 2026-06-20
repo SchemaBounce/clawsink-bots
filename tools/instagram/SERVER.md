@@ -23,11 +23,10 @@ env:
     required: true
     sensitive: true
 
-# Read-only canary for end-to-end connection validation. get_user_info only
-# reads the authenticated account, so it safely proves a real provider call.
-validation:
-  tool:
-    name: get_user_info
+# No MCP read-only canary here: @composio/mcp is a stdio<->HTTP proxy CLI that
+# exposes no per-action MCP tools, so a tools/call canary can never match the
+# live tool list. Composio connections are verified by their Composio account
+# status (ACTIVE), not an MCP tool call — see core-api RecordComposioVerdict.
 
 tools:
   - name: get_user_info
