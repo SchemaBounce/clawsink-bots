@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -437,7 +437,6 @@ skills:
   - ref: "skills/workflow-designer@1.0.0"
   - ref: "skills/pipeline-proposer@1.0.0"
 plugins: []
-mcpServers: []
 # Internal-only by design, first-party platform bot. The workflow-designer
 # creates and edits workflow definition records via adl_create_workflow /
 # adl_list_workflows / adl_get_workflow / adl_update_workflow /

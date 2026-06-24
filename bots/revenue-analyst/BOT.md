@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revenue-analyst
   displayName: "Revenue Analyst"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Daily revenue analysis and trend reporting."
   category: finance
   tags: ["revenue", "analytics", "trends"]
@@ -73,16 +73,6 @@ skills:
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/data-ops@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
-mcpServers:
-  - ref: "tools/stripe"
-    required: false
-    reason: "Analyzes MRR/ARR trends and subscription metrics from Stripe"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for industry revenue benchmarks, SaaS metrics, and financial trend data"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl financial data sources and industry reports for revenue benchmarking"
 requirements:
   minTier: "starter"
 setup:

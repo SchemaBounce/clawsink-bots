@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: bug-triage
   displayName: "Bug Triage"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Triages bug reports by severity and assigns owners."
   category: engineering
   tags: ["bugs", "triage", "severity"]
@@ -73,25 +73,6 @@ presence:
     search: true
     browsing: true
     crawling: false
-mcpServers:
-  - ref: "tools/github"
-    required: false
-    reason: "Creates bug issues, searches for duplicates, labels and assigns issues"
-  - ref: "tools/jira"
-    required: false
-    reason: "Creates and tracks bugs in Jira project"
-  - ref: "tools/linear"
-    required: false
-    reason: "Creates and tracks bugs in Linear"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for known bugs, CVEs, and related issue reports across public trackers"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse error tracking dashboards and stack trace analysis tools"
-  - ref: "tools/composio"
-    required: false
-    reason: "Sync triage decisions with project management and incident tracking SaaS tools"
 requirements:
   minTier: "starter"
 setup:

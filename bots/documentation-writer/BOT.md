@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.16"
+  version: "1.0.17"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -86,34 +86,6 @@ presence:
     search: true
     browsing: false
     crawling: true
-mcpServers:
-  - ref: "tools/code-sandbox"
-    required: false
-    reason: "Spawns sandboxed Claude Code sessions for documentation file edits in the repository"
-  - ref: "tools/github"
-    required: true
-    reason: "Creates doc PRs linked to implementation PRs"
-  - ref: "tools/notion"
-    required: false
-    reason: "Updates documentation pages in Notion workspace"
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Send doc review requests and update notifications to engineering stakeholders"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for API documentation standards, technical writing guides, and reference material"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl existing documentation sites to identify gaps and outdated content"
-  - ref: "tools/composio"
-    required: false
-    reason: "Sync documentation status with project management and knowledge base platforms"
-  - ref: "tools/confluence"
-    required: false
-    reason: "Create and update wiki pages in Confluence"
-  - ref: "tools/google-docs"
-    required: false
-    reason: "Create and edit documentation in Google Docs"
 requirements:
   minTier: "team"
 setup:

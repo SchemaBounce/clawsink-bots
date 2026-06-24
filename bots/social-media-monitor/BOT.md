@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-monitor
   displayName: "Social Media Monitor"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Monitors brand mentions and sentiment across platforms."
   category: marketing
   tags: ["social-media", "sentiment", "brand"]
@@ -65,28 +65,6 @@ skills:
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
-mcpServers:
-  - ref: "tools/exa"
-    required: true
-    reason: "Search social media and news for brand mentions, trending topics, and sentiment signals"
-  - ref: "tools/hyperbrowser"
-    required: true
-    reason: "Browse social media platforms and news sites to analyze brand mention context"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl review sites and forums for comprehensive brand sentiment data"
-  - ref: "tools/reddit"
-    required: false
-    reason: "Read and search subreddits for brand mentions and sentiment, monitoring only"
-  - ref: "tools/discord"
-    required: false
-    reason: "Read recent channel messages and server context across connected Discord servers for brand mentions and community-health signals. Monitoring only, no posting"
-  - ref: "tools/twitter"
-    required: false
-    reason: "Search recent tweets for brand mentions and sentiment via the Composio TWITTER toolkit. Monitoring only, no posting"
-  - ref: "tools/telegram"
-    required: false
-    reason: "Read channel history across connected Telegram channels for community-health signals via the Composio TELEGRAM toolkit. Monitoring only, no posting"
 presence:
   web:
     browsing: true

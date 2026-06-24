@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: meeting-summarizer
   displayName: "Meeting Summarizer"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Summarizes meeting notes and creates action items."
   category: productivity
   tags: ["meetings", "notes", "actions"]
@@ -74,16 +74,6 @@ plugins:
     reason: "Google Calendar for meeting context and attendee lists, Drive for storing and sharing summaries"
     config:
       scopes: ["calendar.readonly", "drive"]
-mcpServers:
-  - ref: "tools/notion"
-    required: false
-    reason: "Publishes meeting summaries and action items to Notion pages"
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Email meeting summaries, action items, and follow-up reminders to attendees"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to calendar and project management tools for meeting context and task assignment"
 requirements:
   minTier: "starter"
 setup:

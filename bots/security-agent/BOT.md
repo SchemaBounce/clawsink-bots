@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: security-agent
   displayName: "Security Agent"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Vulnerability scanning, security policy audits, CVE monitoring, pen test posture checks, secret rotation tracking."
   category: operations
   tags: ["security", "pentest", "vulnerabilities", "cve", "policy", "compliance", "secrets"]
@@ -71,19 +71,6 @@ skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
-mcpServers:
-  - ref: "tools/github"
-    required: false
-    reason: "Scans repository code for security vulnerabilities"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search CVE databases and security advisories for vulnerability intelligence"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse NVD, OSV, and security advisory pages for detailed vulnerability analysis"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to security tools and ticketing systems for vulnerability tracking"
 presence:
   web:
     browsing: true

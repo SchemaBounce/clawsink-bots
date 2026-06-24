@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: compliance-auditor
   displayName: "Compliance Auditor"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Checks regulatory compliance on new financial records."
   category: fintech
   tags: ["compliance", "audit", "regulatory", "cdc"]
@@ -64,13 +64,6 @@ presence:
   email:
     required: true
     provider: agentmail
-mcpServers:
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Send compliance violation notices and audit reports to regulatory contacts"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to compliance management and document signing platforms"
 egress:
   mode: "none"
 skills:

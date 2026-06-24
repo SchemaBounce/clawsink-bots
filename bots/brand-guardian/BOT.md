@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: brand-guardian
   displayName: "Brand Guardian"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Brand consistency monitoring, guideline enforcement, and asset review."
   category: design
   tags: ["brand", "consistency", "guidelines", "design", "content-review", "brand-audit"]
@@ -68,19 +68,6 @@ presence:
     search: true
     browsing: false
     crawling: true
-mcpServers:
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Send brand violation alerts and guideline update notifications to content creators"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for brand mentions and competitor messaging across the web"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl published content pages to audit brand consistency across channels"
-  - ref: "tools/composio"
-    required: false
-    reason: "Monitor brand mentions in connected marketing and social platforms"
 egress:
   mode: "none"
 skills:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: content-scheduler
   displayName: "Content Scheduler"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Plans and schedules content calendar across channels."
   category: marketing
   tags: ["content", "calendar", "planning"]
@@ -67,19 +67,6 @@ presence:
     search: true
     browsing: false
     crawling: true
-mcpServers:
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Send content deadline reminders and publishing schedule notifications to creators"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for optimal publishing times and trending content topics"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl competitor content calendars and publishing patterns"
-  - ref: "tools/composio"
-    required: false
-    reason: "Sync content schedules with CMS, social media, and marketing automation platforms"
 egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com"]

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sprint-planner
   displayName: "Sprint Planner"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Sprint planning, backlog prioritization, and velocity tracking."
   category: project-management
   tags: ["sprints", "backlog", "velocity", "prioritization", "agile", "RICE"]
@@ -80,13 +80,6 @@ plugins:
     slot: "channel"
     required: false
     reason: "Sends sprint plan summaries, velocity alerts, and overcommitment warnings to team channels"
-mcpServers:
-  - ref: "tools/jira"
-    required: false
-    reason: "Manages sprints, creates and assigns issues, tracks velocity"
-  - ref: "tools/linear"
-    required: false
-    reason: "Manages cycles, creates and assigns issues in Linear"
 requirements:
   minTier: "starter"
 setup:

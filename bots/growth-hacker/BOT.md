@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: growth-hacker
   displayName: "Growth Hacker"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Rapid experimentation, viral loop design, and acquisition channel optimization."
   category: marketing
   tags: ["growth", "experiments", "acquisition", "viral", "funnels", "optimization"]
@@ -84,19 +84,6 @@ toolPacks:
     reason: "A/B test significance, cohort analysis, and statistical modeling"
   - ref: "packs/data-transform@1.0.0"
     reason: "Parse and merge marketing datasets from multiple channels"
-mcpServers:
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Email growth experiment results and channel performance reports to stakeholders"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for growth tactics, viral loop case studies, and channel benchmarks"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl competitor landing pages and funnel structures for optimization ideas"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to Google Ads, Meta Ads, and analytics platforms for campaign data"
 automations:
   triggers:
     - entityType: "campaign_results"

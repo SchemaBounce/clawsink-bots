@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: coding-agent
   displayName: "Coding Agent"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Implements assigned issues end to end: plans the change, runs a sandboxed Claude Code session, tests inside the sandbox, and delivers a pull request for review."
   category: engineering
   tags: ["coding", "implementation", "claude-code", "testing", "pull-requests"]
@@ -69,13 +69,6 @@ skills:
   - ref: "skills/implementation-planning@1.0.0"
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
-mcpServers:
-  - ref: "tools/code-sandbox"
-    required: true
-    reason: "Runs sandboxed Claude Code sessions that implement, test, and push the change"
-  - ref: "tools/github"
-    required: true
-    reason: "Reads assigned issues, links PRs to issues, and manages labels"
 automations:
   triggers:
     - name: "Implement assigned issue"

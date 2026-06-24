@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: churn-predictor
   displayName: "Churn Predictor"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Analyzes user activity patterns to predict and flag churn risk."
   category: saas
   tags: ["churn", "retention", "analytics", "cdc"]
@@ -74,19 +74,6 @@ presence:
     search: true
     browsing: false
     crawling: true
-mcpServers:
-  - ref: "tools/stripe"
-    required: false
-    reason: "Analyzes subscription churn signals from billing data"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for industry churn benchmarks and retention best practices"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl customer review sites and forums for churn sentiment signals"
-  - ref: "tools/google-calendar"
-    required: false
-    reason: "Schedule proactive check-in calls with at-risk customers"
 requirements:
   minTier: "starter"
 setup:

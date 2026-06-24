@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.6"
+  version: "0.3.7"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -94,30 +94,6 @@ egress:
     - "ssl.bing.com"
     - "backend.composio.dev"
 plugins: []
-mcpServers:
-  - ref: "tools/google-search-console"
-    required: true
-    reason: "Real keyword data, impressions, CTR, and position trends. A native stdio MCP server hosted in the workspace pod, authorized once via Google OAuth from the deploy modal (no Composio). This is the auditor's data path for almost-ranking opportunities; without it the auditor still runs but only emits Open-Graph and structured-data findings."
-    config:
-      default_lookback_days: 28
-  - ref: "tools/pagespeed"
-    required: false
-    reason: "Core Web Vitals and Lighthouse scores via Google PageSpeed Insights API. The auditor calls analyze_page_speed, get_full_audit, and crux_summary for the site's home page and top-3 URLs. Requires GOOGLE_API_KEY with PageSpeed Insights API enabled. Without it, the auditor skips performance metrics (LCP, CLS, INP, Lighthouse SEO score) and emits only on-page meta and GSC keyword findings."
-  - ref: "tools/ai-citation-tracker"
-    required: false
-    reason: "GEO measurement: tracks AI citation share-of-voice for brand and category queries across ChatGPT, Claude, and Perplexity via the CitationBench hosted MCP. Requires CITATIONBENCH_API_KEY. Without it, the geo-auditor emits an info-level finding noting measurement is unavailable and skips Part A of the geo-aeo skill; Parts B and C (llms.txt drafting and content recommendations) still run."
-  - ref: "tools/llms-txt-generator"
-    required: false
-    reason: "GEO tactic: generates llms.txt and llms-full.txt drafts for the connected site for human review before publishing. Requires OPENAI_API_KEY. Without it, the geo-auditor emits an info-level finding and skips the llms.txt draft step."
-  - ref: "tools/google-analytics"
-    required: false
-    reason: "GA4 traffic, engagement, and conversion data via Composio managed-OAuth. Supplements GSC keyword data with per-channel sessions, landing-page engagement rate, and conversion event verification. Requires COMPOSIO_API_KEY with a Google Analytics account connected in Composio. Without it, the auditor skips GA4-side engagement and conversion metrics; GSC and PageSpeed findings still run."
-  - ref: "tools/dataforseo"
-    required: false
-    reason: "Keyword difficulty, SERP gap analysis, backlink profile, and on-page crawl via the official DataForSEO MCP. Adds depth to almost-ranking opportunity scoring (keyword difficulty + volume from Labs), backlink context for outreach simulation, and structured on-page crawl data beyond adl_proxy_call. Also the engine for the rank-tracking skill: serp_google_organic_live provides the SERP position snapshots. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD from a paid DataForSEO account (metered, customer-supplied). Without it, the auditor relies on GSC signals alone for opportunity scoring, and rank tracking is skipped."
-  - ref: "tools/bing-webmaster"
-    required: false
-    reason: "Bing and Microsoft Copilot search performance, crawl health, keyword analytics, and URL submission via the Bing Webmaster Tools API. The auditor uses get_query_stats and get_keyword_data for Bing-side keyword CTR signals that GSC does not cover; get_crawl_issues and get_url_info for Bing-specific indexation health; submit_url_batch when new content needs immediate Bing indexation. Critical for sites targeting Copilot AI answers — Bing indexation is required for Copilot eligibility. Requires BING_WEBMASTER_API_KEY from bing.com/webmasters. Without it, the auditor skips Bing/Copilot signals; Google SEO findings still run."
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/seo-operations@1.0.0"

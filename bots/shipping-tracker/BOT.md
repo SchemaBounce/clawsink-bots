@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: shipping-tracker
   displayName: "Shipping Tracker"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Monitors shipment status changes and detects delivery issues."
   category: ecommerce
   tags: ["shipping", "logistics", "tracking", "cdc"]
@@ -67,10 +67,6 @@ skills:
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/cdc-event-analysis@1.0.0"
 plugins: []
-mcpServers:
-  - ref: "tools/composio"
-    required: true
-    reason: "Carrier APIs (UPS, FedEx, USPS, DHL) reached through Composio's managed-OAuth gateway. Setup wizard prompts the operator to connect Composio + the relevant carrier toolkits when activating this bot."
 requirements:
   minTier: "starter"
 setup:

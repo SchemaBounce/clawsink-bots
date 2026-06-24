@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: api-tester
   displayName: "API Tester"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "API endpoint testing, performance benchmarking, and health monitoring."
   category: engineering
   tags: ["api-testing", "performance", "health-monitoring", "regression", "benchmarks"]
@@ -66,16 +66,6 @@ presence:
     search: true
     browsing: true
     crawling: false
-mcpServers:
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for API documentation, changelog updates, and known issues for endpoints under test"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse API documentation portals and interactive API explorers"
-  - ref: "tools/composio"
-    required: false
-    reason: "Integrate with project management tools to sync test results and create tickets"
 egress:
   mode: "open"
 skills:

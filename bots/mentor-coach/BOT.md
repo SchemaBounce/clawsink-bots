@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: mentor-coach
   displayName: "Mentor / Coach"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Bot team performance analysis, process improvement, harmony monitoring, weekly team health reports."
   category: management
   tags: ["mentor", "coaching", "team-health", "performance", "harmony", "process-improvement"]
@@ -72,7 +72,6 @@ plugins:
     slot: "memory"
     required: true
     reason: "Cross-run learning from 11 bot finding streams; retains team performance baselines and coaching history across runs"
-mcpServers: []
 # Internal-only by design, first-party platform bot. Analyses other
 # bots' agent_runs and inter-bot messages within this workspace via
 # adl_query_records and adl_query_duckdb. Sends weekly health findings

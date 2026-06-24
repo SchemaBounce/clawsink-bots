@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ux-researcher
   displayName: "UX Researcher"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "User research synthesis, feedback analysis, and usability insight generation."
   category: design
   tags: ["ux", "research", "usability", "feedback", "user-experience", "design"]
@@ -67,16 +67,6 @@ skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/brand-audit@1.0.0"
-mcpServers:
-  - ref: "tools/exa"
-    required: true
-    reason: "Research UX best practices, competitor product experiences, and usability benchmarks"
-  - ref: "tools/hyperbrowser"
-    required: true
-    reason: "Browse competitor products and review sites to analyze user experience patterns"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl user forums, review sites, and community discussions for qualitative feedback"
 presence:
   web:
     browsing: true

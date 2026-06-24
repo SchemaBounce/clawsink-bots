@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -94,19 +94,6 @@ presence:
     search: true
     browsing: true
     crawling: false
-mcpServers:
-  - ref: "tools/github"
-    required: false
-    reason: "Monitors CI/CD pipelines and GitHub Actions workflows"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for deployment best practices, incident postmortems, and infrastructure documentation"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse cloud provider consoles, monitoring dashboards, and CI/CD pipeline UIs"
-  - ref: "tools/composio"
-    required: false
-    reason: "Integrate with PagerDuty, Datadog, and other DevOps SaaS platforms via Composio managed-OAuth gateway"
 # tools/aws, tools/gcp, tools/kubernetes, tools/docker were declared here
 # previously but are not yet wired in the runtime registry, clicking
 # Connect on them produced silent no-ops. Stripped 2026-04-27 per the
