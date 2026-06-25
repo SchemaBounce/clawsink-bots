@@ -14,9 +14,12 @@ auth:
   composioToolkit: "TIKTOK"
   setupReason: "Authorized via Composio against your own TikTok Developer app. The agent calls execute_composio_tool with TIKTOK_* action names (e.g. TIKTOK_PUBLISH_VIDEO, TIKTOK_LIST_VIDEOS, TIKTOK_GET_USER_STATS)."
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "@composio/mcp@1.0.9"]
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
+  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
+  # on the connection's transport_config, where the gateway reads it. There is no
+  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
+  # tools and exits before the handshake (gateway child_exited / start 500).
+  type: "streamable-http"
 env:
   # OPTIONAL: credentials are bridged from the workspace's Composio connection.
   # Leaving this blank uses the workspace's Composio integration for this

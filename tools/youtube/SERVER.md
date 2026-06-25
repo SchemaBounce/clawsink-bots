@@ -14,9 +14,12 @@ auth:
   composioToolkit: "YOUTUBE"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with YOUTUBE_* action names (e.g. YOUTUBE_SEARCH_YOU_TUBE, YOUTUBE_LIST_COMMENT_THREADS, YOUTUBE_GET_CHANNEL_STATISTICS)."
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "@composio/mcp@1.0.9"]
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
+  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
+  # on the connection's transport_config, where the gateway reads it. There is no
+  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
+  # tools and exits before the handshake (gateway child_exited / start 500).
+  type: "streamable-http"
 env:
   # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
   # connection. Leaving this blank uses the workspace's Composio integration for

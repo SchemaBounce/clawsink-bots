@@ -27,9 +27,12 @@ auth:
   composioToolkit: "GOOGLE_ANALYTICS"
   setupReason: "Authorized via Composio's managed-OAuth gateway. Connect your Google Analytics account inside Composio; the agent calls execute_composio_tool with GOOGLEANALYTICS_* action names (e.g. GOOGLEANALYTICS_RUN_REPORT, GOOGLEANALYTICS_LIST_ACCOUNT_SUMMARIES)."
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "@composio/mcp@1.0.9"]
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
+  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
+  # on the connection's transport_config, where the gateway reads it. There is no
+  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
+  # tools and exits before the handshake (gateway child_exited / start 500).
+  type: "streamable-http"
 env:
   - name: COMPOSIO_API_KEY
     description: "Composio API key from composio.dev/settings. Authenticates the Composio MCP subprocess. Your Google Analytics account is then connected inside Composio via OAuth."
