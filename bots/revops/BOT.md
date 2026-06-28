@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revops
   displayName: "Revenue Operations"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "CAC/LTV analysis, pipeline-to-revenue attribution, conversion funnel optimization, and revenue forecasting."
   category: finance
   tags: ["revenue-operations", "attribution", "cac-ltv", "forecasting", "conversion"]
@@ -76,22 +76,6 @@ plugins:
     config:
       apps: ["stripe"]
       scopes: ["charges:read", "subscriptions:read"]
-mcpServers:
-  - ref: "tools/stripe"
-    required: false
-    reason: "Revenue operations analysis including CAC/LTV from payment data"
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Email revenue forecasts, pipeline reports, and CAC/LTV analysis to leadership"
-  - ref: "tools/exa"
-    required: false
-    reason: "Research industry benchmarks and market data for revenue forecasting"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse competitor pricing pages and industry report sites for market intelligence"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to CRM and analytics platforms for revenue attribution data"
 presence:
   email:
     required: false

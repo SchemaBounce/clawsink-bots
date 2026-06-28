@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -188,37 +188,6 @@ presence:
   phone:
     required: false
     provider: agentphone
-mcpServers:
-  - ref: "tools/slack"
-    required: false
-    reason: "Monitors support channels for customer issues and escalations"
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Send ticket updates, resolution confirmations, and follow-up emails to customers"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search knowledge bases and documentation for answers to customer questions"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse product documentation and help center pages to assist with customer issues"
-  - ref: "tools/elevenlabs"
-    required: false
-    reason: "Generate voice responses for phone-based support escalations"
-  - ref: "tools/agentphone"
-    required: false
-    reason: "Make outbound support calls for critical issues and churn-risk callbacks"
-  - ref: "tools/composio"
-    required: true
-    reason: "Sync ticket data with helpdesk, CRM, and customer success platforms"
-  - ref: "tools/zendesk"
-    required: false
-    reason: "Create, update, and search support tickets in Zendesk"
-  - ref: "tools/freshdesk"
-    required: false
-    reason: "Manage helpdesk tickets, contacts, and canned responses"
-  - ref: "tools/intercom"
-    required: false
-    reason: "Handle customer conversations and manage contact records"
 requirements:
   minTier: "starter"
 setup:

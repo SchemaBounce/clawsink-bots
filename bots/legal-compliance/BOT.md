@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: legal-compliance
   displayName: "Legal & Compliance"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Contract review queue, GDPR/SOC2 compliance tracking, regulatory change monitoring."
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
@@ -66,13 +66,6 @@ presence:
     provider: agentmail
 egress:
   mode: "none"
-mcpServers:
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Send compliance alerts, contract renewal reminders, and regulatory deadline notifications"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to contract management and compliance tracking SaaS platforms"
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]
@@ -88,22 +88,6 @@ plugins:
   - ref: "n8n-workflow@latest"
     required: true
     reason: "Triggers release pipelines, version tagging, and deployment promotion workflows"
-mcpServers:
-  - ref: "tools/github"
-    required: false
-    reason: "Creates release branches, merges PRs, creates releases and tags"
-  - ref: "tools/slack"
-    required: false
-    reason: "Announces releases to engineering channels"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for dependency advisories, security bulletins, and release best practices"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse CI/CD dashboards and deployment status pages to verify release readiness"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to CI/CD platforms, project management tools, and deployment services"
 requirements:
   minTier: "starter"
 setup:

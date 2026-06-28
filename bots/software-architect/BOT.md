@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.14"
+  version: "1.0.15"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -68,22 +68,6 @@ skills:
   - ref: "skills/implementation-planning@1.0.0"
   - ref: "skills/test-generation@1.0.0"
   - ref: "skills/pr-creation@1.0.0"
-mcpServers:
-  - ref: "tools/code-sandbox"
-    required: false
-    reason: "Spawns sandboxed Claude Code sessions when an implementation plan calls for code; the dedicated coding-agent bot covers most implementation work"
-  - ref: "tools/github"
-    required: true
-    reason: "Creates branches, pull requests, and manages issues"
-  - ref: "tools/exa"
-    required: false
-    reason: "Research library documentation, API references, and best practices for implementation decisions"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse documentation sites and Stack Overflow for technical reference during implementation"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to project management and CI/CD tools for implementation tracking"
 presence:
   web:
     browsing: true

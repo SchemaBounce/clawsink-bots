@@ -53,6 +53,12 @@ env:
     description: "Platform-level Google OAuth client secret, used to mint access tokens from the stored refresh token. From the SchemaBounce-owned Google Cloud project; core-api aliases it from GOOGLE_OAUTH_CLIENT_SECRET (platform fallback, gated)."
     required: false
     sensitive: true
+# Read-only canary for end-to-end connection validation. list_sites takes no
+# arguments and only reads, so it safely proves a real provider call.
+validation:
+  tool:
+    name: list_sites
+
 tools:
   - name: query_search_analytics
     description: "Query Search Analytics over a date range. Dimensions: query, page, country, device, searchAppearance. Returns clicks, impressions, CTR, position."

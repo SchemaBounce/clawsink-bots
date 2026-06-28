@@ -14,14 +14,22 @@ auth:
   composioToolkit: "INSTAGRAM"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with INSTAGRAM_* action names (e.g. INSTAGRAM_GET_USER_INFO, INSTAGRAM_POST_IG_USER_MEDIA)."
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "@composio/mcp@1.0.9"]
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
+  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
+  # on the connection's transport_config, where the gateway reads it. There is no
+  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
+  # tools and exits before the handshake (gateway child_exited / start 500).
+  type: "streamable-http"
 env:
   - name: COMPOSIO_API_KEY
     description: "Composio API key from composio.dev/settings. Required to authenticate the Composio MCP gateway. Your Instagram account is then connected inside Composio via OAuth."
     required: true
     sensitive: true
+
+# No MCP read-only canary here: @composio/mcp is a stdio<->HTTP proxy CLI that
+# exposes no per-action MCP tools, so a tools/call canary can never match the
+# live tool list. Composio connections are verified by their Composio account
+# status (ACTIVE), not an MCP tool call — see core-api RecordComposioVerdict.
 
 tools:
   - name: get_user_info

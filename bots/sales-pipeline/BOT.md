@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -171,34 +171,6 @@ plugins:
     slot: "oauth"
     required: true
     reason: "OAuth access to CRM platforms (Salesforce, HubSpot, Pipedrive) for reading deal stages and pipeline data"
-mcpServers:
-  - ref: "tools/stripe"
-    required: false
-    reason: "Verifies deal payments and tracks payment-linked revenue"
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Send deal alerts and pipeline health summaries to sales stakeholders"
-  - ref: "tools/exa"
-    required: false
-    reason: "Research prospect companies and competitive intelligence for deal qualification"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse prospect websites and LinkedIn profiles for deal enrichment"
-  - ref: "tools/composio"
-    required: true
-    reason: "Connect to CRM platforms (Salesforce, HubSpot, Pipedrive) for deal data sync"
-  - ref: "tools/salesforce"
-    required: false
-    reason: "Query accounts, contacts, opportunities, and cases in Salesforce CRM"
-  - ref: "tools/hubspot"
-    required: false
-    reason: "Manage contacts, deals, companies, and pipeline stages in HubSpot"
-  - ref: "tools/google-calendar"
-    required: false
-    reason: "Schedule demo calls and follow-up meetings with prospects"
-  - ref: "tools/gmail"
-    required: false
-    reason: "Send personalized follow-up emails to prospects and buyers"
 presence:
   email:
     required: true

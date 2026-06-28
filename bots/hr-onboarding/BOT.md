@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]
@@ -81,22 +81,6 @@ toolPacks:
     reason: "Business day calculations and onboarding timeline management"
   - ref: "packs/document-gen@1.0.0"
     reason: "Generate onboarding checklists and welcome documents"
-mcpServers:
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Send onboarding welcome emails, checklist reminders, and task notifications to new hires"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for onboarding best practices and compliance requirements by role"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse HR platforms and benefits portals to verify onboarding resource links"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to HRIS, payroll, and benefits SaaS platforms for onboarding automation"
-  - ref: "tools/elevenlabs"
-    required: false
-    reason: "Generate voice welcome messages and onboarding orientation audio guides"
 plugins:
   - ref: "n8n-workflow@latest"
     required: true

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -114,7 +114,6 @@ plugins:
     config:
       embedding_model: "text-embedding-3-small"
       max_results: 20
-mcpServers: []
 # Internal-only by design, first-party platform bot. Optimises this
 # workspace's crystallization candidates, agent efficiency, data health,
 # and platform ROI via adl_list_crystallization_candidates,

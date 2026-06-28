@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: order-fulfillment
   displayName: "Order Fulfillment"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Orchestrates order processing workflows from receipt through delivery."
   category: ecommerce
   tags: ["orders", "fulfillment", "workflow", "cdc"]
@@ -69,13 +69,6 @@ presence:
     provider: agentmail
 egress:
   mode: "none"
-mcpServers:
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Send order confirmation emails, shipping notifications, and fulfillment updates to customers"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to shipping carriers, warehouse management, and e-commerce platforms for order processing"
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: price-optimizer
   displayName: "Price Optimizer"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Adjusts pricing recommendations based on market price changes."
   category: ecommerce
   tags: ["pricing", "optimization", "market-analysis", "cdc"]
@@ -65,13 +65,6 @@ presence:
     crawling: true
 egress:
   mode: "none"
-mcpServers:
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for competitor pricing, market price benchmarks, and pricing trend data"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl competitor product pages and pricing tables for real-time price comparison"
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"

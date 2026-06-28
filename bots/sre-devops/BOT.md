@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -76,19 +76,6 @@ skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/pipeline-monitoring@1.0.0"
   - ref: "skills/sla-compliance@1.0.0"
-mcpServers:
-  - ref: "tools/slack"
-    required: false
-    reason: "Posts incident alerts and status updates to operations channels"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for known outage reports, CVE advisories, and infrastructure incident patterns"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse cloud provider status pages and monitoring dashboards for incident correlation"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to PagerDuty, Datadog, and other monitoring SaaS via the Composio managed-OAuth gateway"
 # tools/firebase, tools/datadog, tools/aws-cloudwatch, tools/grafana,
 # tools/pagerduty, tools/sentry were declared here previously but are not
 # yet wired in the runtime registry, clicking Connect on them produced

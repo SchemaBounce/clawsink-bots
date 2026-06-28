@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: infrastructure-reporter
   displayName: "Infrastructure Reporter"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Periodic infrastructure health summary reports."
   category: engineering
   tags: ["infrastructure", "health", "monitoring"]
@@ -63,7 +63,6 @@ skills:
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/scheduled-report@1.0.0"
 plugins: []
-mcpServers: []
 # Internal-only by design, first-party platform bot. Reads pipeline,
 # environment, and ADL infrastructure state via adl_list_pipeline_routes,
 # adl_get_route_status, adl_list_workflows, adl_get_data_stats runtime

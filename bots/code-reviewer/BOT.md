@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: code-reviewer
   displayName: "Code Reviewer"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Automated code review with security, quality, and architecture analysis."
   category: engineering
   tags: ["code-review", "security", "quality", "architecture", "pull-requests"]
@@ -74,19 +74,6 @@ presence:
     search: true
     browsing: true
     crawling: false
-mcpServers:
-  - ref: "tools/github"
-    required: false
-    reason: "Reviews pull requests, adds code review comments, searches for related issues"
-  - ref: "tools/exa"
-    required: false
-    reason: "Search for security advisories, CVE databases, and best practice documentation"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse library documentation and security advisory pages for vulnerability context"
-  - ref: "tools/composio"
-    required: false
-    reason: "Sync review findings with project management and CI/CD pipeline tools"
 automations:
   triggers:
     - name: "Review new pull request"

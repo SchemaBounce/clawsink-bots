@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-reporter
   displayName: "Executive Reporter"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "C-suite executive summaries, KPI dashboards, and cross-domain business intelligence."
   category: analytics
   tags: ["executive", "reports", "KPI", "dashboards", "business-intelligence", "c-suite"]
@@ -67,19 +67,6 @@ presence:
     search: true
     browsing: true
     crawling: true
-mcpServers:
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Distribute executive summaries and KPI reports to C-suite stakeholders"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for industry benchmarks, market data, and competitor intelligence for executive context"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse financial data portals and industry analyst report sites"
-  - ref: "tools/firecrawl"
-    required: false
-    reason: "Crawl market research publications and industry benchmark databases"
 egress:
   mode: "none"
 skills:

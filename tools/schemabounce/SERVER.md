@@ -26,162 +26,51 @@ env:
     required: true
     sensitive: true
 tools:
-  - name: sb_workspace_list
-    description: "List the workspaces visible to the current credential"
+  - name: sb_workspace
+    description: "Workspaces and members. Actions: list, inspect, provision, archive, member_list, member_add, member_remove, member_update_role"
     category: workspaces
-  - name: sb_workspace_inspect
-    description: "Full snapshot of one workspace: status, tier, members, environments"
-    category: workspaces
-  - name: sb_workspace_provision
-    description: "Create a new workspace, optionally with initial environments and member invitations"
-    category: workspaces
-  - name: sb_workspace_archive
-    description: "Archive a workspace (recoverable) or hard-delete it (irreversible cascade)"
-    category: workspaces
-  - name: sb_member_manage
-    description: "List, add, remove, or change role of workspace members"
-    category: workspaces
-  - name: sb_env_list
-    description: "List environments in a workspace"
+  - name: sb_env
+    description: "Environments. Actions: list, create, update, delete, promote"
     category: environments
-  - name: sb_env_manage
-    description: "Create, update, or delete an environment"
-    category: environments
-  - name: sb_env_promote
-    description: "Copy resources between environments (routes, sinks, sources, secrets)"
-    category: environments
-  - name: sb_route_list
-    description: "List pipeline routes in a workspace, optionally filtered by environment_id and/or status"
+  - name: sb_route
+    description: "Pipeline routes. Actions: list, inspect, create, update, lifecycle"
     category: pipeline
-  - name: sb_route_inspect
-    description: "Deep-dive on one route: config, HCL definition, deployment history, open PRs, and bound sinks/source"
-    category: pipeline
-  - name: sb_route_create
-    description: "Create a pipeline route bound to an environment, with source config and sink bindings"
-    category: pipeline
-  - name: sb_route_update
-    description: "Patch a route's name, source_config, or sink bindings"
-    category: pipeline
-  - name: sb_route_lifecycle
-    description: "Deploy, pause, resume, or archive a pipeline route"
-    category: pipeline
-  - name: sb_source_manage
-    description: "List/create/update/delete CDC sources, plus test connectivity and discover schema"
+  - name: sb_source
+    description: "CDC sources. Actions: inspect, list, create, update, delete, test, discover, cdc_resync"
     category: sources
-  - name: sb_source_inspect
-    description: "Deep snapshot of one CDC source: status, replication lag, tables, downstream subscribers"
-    category: sources
-  - name: sb_cdc_resync
-    description: "Restart CDC ingestion from a snapshot, a specific LSN, or a timestamp"
-    category: sources
-  - name: sb_sink_manage
-    description: "List/create/update/delete sinks (env-scoped) plus test connectivity"
+  - name: sb_sink
+    description: "Sinks (env-scoped). Actions: list, create, update, delete, test"
     category: sinks
-  - name: sb_schema_state
-    description: "Fetch the Kolumn state file and/or resource list, dependency graph, and statistics for an environment"
+  - name: sb_schema
+    description: "Schema, drift, catalog, and queries. Actions: state, drift_report, drift_resolve, catalog_search, query_run"
     category: schema
-  - name: sb_drift_report
-    description: "Workspace-wide or per-environment drift report (managed resources whose runtime state diverges from declared HCL)"
-    category: schema
-  - name: sb_drift_resolve
-    description: "Re-sync drifted resources in an environment"
-    category: schema
-  - name: sb_catalog_search
-    description: "Search the schema catalog for tables, columns, and assets"
-    category: catalog
-  - name: sb_query_run
-    description: "Execute SQL through an analytics connection (read-only enforced by backend permissions)"
-    category: queries
-  - name: sb_credential_list
-    description: "Unified list of service accounts, API keys, and OAuth clients"
+  - name: sb_credential
+    description: "Service accounts, API keys, OAuth clients, and env secrets. Actions: list, create_sa, update_sa, delete_sa, create_api_key, revoke_api_key, create_oauth_client, revoke_oauth_client, rotate, secret_list, secret_create, secret_update, secret_delete, secret_rotate"
     category: credentials
-  - name: sb_credential_manage
-    description: "Create/update/delete service accounts, API keys, and OAuth clients"
-    category: credentials
-  - name: sb_credential_rotate
-    description: "Rotate a service account / admin SA / API key / OAuth client secret"
-    category: credentials
-  - name: sb_secret_manage
-    description: "List/create/update/delete secrets within an environment"
-    category: secrets
-  - name: sb_secret_rotate
-    description: "Rotate (replace value) or revoke (mark unusable) an env secret"
-    category: secrets
-  - name: sb_adl_status
-    description: "ADL system status: tier, postgres/pgvector/AGE/redis/duckdb readiness, storage usage, connection info, data stats"
+  - name: sb_adl
+    description: "Agent Data Layer data plane. Actions: status, records_query, records_get, records_upsert, records_delete, bulk_upsert, bulk_delete, memory_get, memory_set, memory_delete, memory_list_namespaces, memory_list_keys, memory_log, graph_add_edge, graph_list_edges, graph_delete_edge, graph_neighbors, search"
     category: adl
-  - name: sb_adl_records
-    description: "Query / get / upsert / delete records in the Agent Data Layer"
-    category: adl
-  - name: sb_adl_bulk
-    description: "Bulk upsert or delete records (up to 1000)"
-    category: adl
-  - name: sb_adl_memory
-    description: "Read/write agent memory (key/value store, namespaced)"
-    category: adl
-  - name: sb_adl_graph
-    description: "Add/list/delete edges and traverse neighbors on the AGE-backed knowledge graph"
-    category: adl
-  - name: sb_adl_search
-    description: "Semantic search over ADL records via pgvector embeddings"
-    category: adl
-  - name: sb_agent_manage
-    description: "List/get/create/update/move/delete agents in the workspace, plus dispatch a chat message"
+  - name: sb_agent
+    description: "Agents: manage, lifecycle, runs, sessions, proposals. Actions: manage_list, manage_get, manage_create, manage_update, manage_move, manage_delete, chat, lifecycle_enable, lifecycle_disable, lifecycle_resume, lifecycle_restore, lifecycle_set_run_mode, run, runs_list_all, runs_list, runs_get, runs_usage, runs_sync_status, whoami, sessions_list, sessions_messages, sessions_end, proposals_list, proposals_approve, proposals_reject"
     category: agents
-  - name: sb_bot_marketplace
-    description: "Browse the marketplace (bots, teams, MCP tools) and activate bots/teams in the workspace"
+  - name: sb_marketplace
+    description: "Marketplace browse + activation. Actions: list_bots, list_teams, list_tools, activate_bot, activate_team, hot_swap_skills"
     category: agents
-  - name: sb_agent_lifecycle
-    description: "Enable, disable, resume, restore, set run-mode, or kick off a run for a deployed agent"
+  - name: sb_access
+    description: "Agent permissions end-to-end. Actions: connection_create, connection_list, connection_get, connection_delete, connection_validate, grant, revoke, list_grants, set_tool_allowlist, policy_get, policy_set, policy_check, list_policy_actions, store_secret, secret_status"
     category: agents
-  - name: sb_agent_runs
-    description: "List, fetch, and aggregate agent-run records"
-    category: agents
-  - name: sb_agent_sessions
-    description: "List sessions, fetch message history, or terminate a session for a deployed agent"
-    category: agents
-  - name: sb_agent_mcp_access
-    description: "List/grant/revoke MCP-connection access for an agent, and store/check per-agent encrypted secrets"
-    category: agents
-  - name: sb_agent_access_policy
-    description: "Read an agent's AWS-IAM-style data-access policy, dry-run-check an (action, resource), or list the action/resource catalog (read-only)"
-    category: agents
-  - name: sb_agent_proposals
-    description: "List, approve, or reject agent-authored improvement proposals"
-    category: agents
-  - name: sb_llm_keys
-    description: "List/set/verify/delete LLM provider API keys; list available models; read/write billing config"
+  - name: sb_automation
+    description: "Automation: inspect, schedules, workflows, LLM keys. Actions: inspect, schedule_list, schedule_create, schedule_update, schedule_delete, workflow_list, workflow_get, workflow_create, workflow_update, workflow_delete, workflow_trigger, workflow_runs, llm_list, llm_set, llm_verify, llm_delete, llm_models, llm_get_billing, llm_set_billing"
     category: automation
-  - name: sb_workflow_manage
-    description: "List/get/create/update/delete workflows, trigger runs, and inspect run history"
-    category: automation
-  - name: sb_schedule_manage
-    description: "Create/list/update/delete cron-scheduled tasks that trigger workflows or chat with agents on a schedule"
-    category: automation
-  - name: sb_automation_inspect
-    description: "List the workspace's automations (scheduled, event-driven, manual) plus aggregate stats"
-    category: automation
-  - name: sb_audit_search
-    description: "Filtered search across the workspace audit log"
+  - name: sb_audit
+    description: "Workspace audit log. Actions: search, export"
     category: audit
-  - name: sb_audit_export
-    description: "Trigger an export of audit events (CSV / JSON / NDJSON)"
-    category: audit
-  - name: sb_billing_inspect
-    description: "Snapshot of plan, addons, subscription, recent invoices, and credit balance for the workspace"
+  - name: sb_billing
+    description: "Billing. Actions: inspect, change_plan, add_addon, remove_addon, checkout_url, portal_url"
     category: billing
-  - name: sb_billing_manage
-    description: "Change plan, add/remove addons, generate Stripe checkout URL, or generate a customer-portal URL"
-    category: billing
-  - name: sb_sso_manage
-    description: "Configure the workspace's SSO connection (OIDC or SAML), claim to role mappings, and fetch SAML metadata URL"
-    category: sso
-  - name: sb_files_manage
-    description: "List/get/upload/delete files in the Agent Data Layer"
-    category: files
-  - name: sb_a2a_dispatch
-    description: "Read an agent card and dispatch a JSON-RPC call to an A2A-protocol agent"
-    category: a2a
+  - name: sb_ops
+    description: "Ops: ADL files, SSO config, and A2A dispatch. Actions: files_list, files_get, files_get_content, files_upload, files_delete, sso_status, sso_connection_create, sso_connection_update, sso_connection_delete, sso_mappings_list, sso_mapping_upsert, sso_mapping_delete, a2a_agent_card, a2a_rpc"
+    category: ops
 ---
 
 # SchemaBounce MCP Server

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
   tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "tiktok", "marketing", "approval-gate", "composio"]
@@ -69,40 +69,6 @@ skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/social-publishing@2.0.0"
-mcpServers:
-  - ref: "tools/linkedin"
-    required: false
-    reason: "Publish approved B2B posts and article shares to LinkedIn after human approval; reply to comments and read page analytics"
-  - ref: "tools/reddit"
-    required: false
-    reason: "Publish approved community posts and comments after human approval; read subreddit rules to stay compliant before drafting"
-  - ref: "tools/instagram"
-    required: false
-    reason: "Publish approved Instagram posts after human approval via the two-step container flow; read post insights"
-  - ref: "tools/facebook-pages"
-    required: false
-    reason: "Publish approved Facebook Page posts after human approval; reply to comments and read Page analytics"
-  - ref: "tools/youtube"
-    required: false
-    reason: "Read video and channel statistics, list playlists and captions, and reply to comments after human approval via Composio managed OAuth"
-  - ref: "tools/discord"
-    required: false
-    reason: "Post approved community updates, replies, and reactions to Discord channels via the Composio DISCORDBOT toolkit, and read channel activity. Posting runs behind the human-approval gate"
-  - ref: "tools/twitter"
-    required: false
-    reason: "Publish approved tweets and replies after human approval via the Composio TWITTER toolkit, delete when needed, and search recent and full-archive conversations for context. Posting runs behind the approval gate"
-  - ref: "tools/telegram"
-    required: false
-    reason: "Broadcast approved posts to Telegram channels after human approval via the Composio TELEGRAM toolkit, and read channel history. Posting runs behind the approval gate"
-  - ref: "tools/tiktok"
-    required: false
-    reason: "Publish approved short-form videos and photos to TikTok after human approval via the Composio TIKTOK toolkit, read the video list and user stats. Posting runs behind the approval gate"
-  - ref: "tools/agentmail"
-    required: false
-    reason: "Notify the configured manager when a draft is waiting for approval and send publishing status summaries"
-  - ref: "tools/composio"
-    required: false
-    reason: "Composio managed-OAuth broker backing the LinkedIn, Reddit, Instagram, and Facebook connections"
 presence:
   email:
     required: false

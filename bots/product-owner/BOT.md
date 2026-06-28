@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: product-owner
   displayName: "Product Owner"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Customer feedback aggregation, market analysis, feature prioritization, backlog management via structured GitHub issue specs."
   category: management
   tags: ["product", "backlog", "feedback", "market-analysis", "prioritization", "github-issues"]
@@ -75,25 +75,6 @@ skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/record-monitoring@1.0.0"
-mcpServers:
-  - ref: "tools/jira"
-    required: false
-    reason: "Prioritizes backlog, creates feature requests, manages roadmap"
-  - ref: "tools/linear"
-    required: false
-    reason: "Prioritizes backlog and roadmap in Linear"
-  - ref: "tools/agentmail"
-    required: true
-    reason: "Send feature prioritization updates, roadmap changes, and stakeholder communications"
-  - ref: "tools/exa"
-    required: true
-    reason: "Search for customer feedback trends, feature request patterns, and competitive product capabilities"
-  - ref: "tools/hyperbrowser"
-    required: false
-    reason: "Browse competitor product pages and user forums to gather feature intelligence"
-  - ref: "tools/composio"
-    required: false
-    reason: "Connect to product management and customer feedback SaaS platforms"
 requirements:
   minTier: "starter"
 setup:
