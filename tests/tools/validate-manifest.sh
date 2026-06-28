@@ -158,8 +158,26 @@ def _validate_parsed(tool_name, fm):
                             "(npm/pypi or unspecified packageType)"
                         )
             else:
-                # sse / streamable-http
-                if not transport.get("url"):
+                # sse / streamable-http: a static url is required EXCEPT for
+                # Composio-managed servers. Their scoped, per-connected-account
+                # Composio MCP URL is resolved at connection time
+                # (ComposioOAuthClient.EnsureMcpInstanceURL) and stored on the
+                # connection's transport_config where the gateway reads it, so it is
+                # intentionally absent from the catalog manifest. Identify them by
+                # the Composio gateway credential they declare: the per-toolkit
+                # servers use auth.method == "composio", and the composio meta-server
+                # uses auth.type api_key_header — both declare COMPOSIO_API_KEY.
+                auth_block = fm.get("auth") or {}
+                env_names = {
+                    e.get("name")
+                    for e in (fm.get("env") or [])
+                    if isinstance(e, dict)
+                }
+                is_composio_managed = (
+                    (isinstance(auth_block, dict) and auth_block.get("method") == "composio")
+                    or "COMPOSIO_API_KEY" in env_names
+                )
+                if not transport.get("url") and not is_composio_managed:
                     errors.append(
                         f"transport.url is required for transport.type={t_type!r}"
                     )
