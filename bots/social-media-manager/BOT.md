@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
   tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "tiktok", "marketing", "approval-gate", "composio"]
@@ -68,7 +68,7 @@ egress:
 skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/social-publishing@2.0.0"
+  - ref: "skills/social-publishing@2.1.0"
 presence:
   email:
     required: false
