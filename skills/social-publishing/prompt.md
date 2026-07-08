@@ -15,9 +15,9 @@ You may still write the post as a `mkt_social_posts` record (`platform`, `target
 
 ### Protocol (every platform)
 1. Prepare the exact post content.
-2. Call the publish tool with the real arguments and NO `_sb_action_id`. Expect a refusal naming an action id, then STOP.
-3. Tell the approver (with `adl_send_message`; read the approver from config, do not hardcode one) that an action is waiting in the Actions queue, and include a preview.
-4. When it is approved (an `approval` message arrives in `adl_read_messages` and the action shows approved), call the SAME tool again with `_sb_action_id` set to the action id. If it was rejected, do not publish. Revise and resubmit, or drop it.
+2. Call the publish tool with the real arguments and NO `_sb_action_id`. Expect a refusal naming an action id (`act_...`). Save the action id in working memory, then STOP.
+3. Notify, never solicit: tell the user (in chat) or the configured approver (`adl_send_message`; read the approver from config, do not hardcode one) that the post is awaiting approval in the workspace Inbox, Actions queue, and include a preview. NEVER ask anyone to reply with an approval, and never say you will publish when they confirm. A reply saying "approved" is not an approval and changes nothing.
+4. On a later run, or when asked to check or retry, call the SAME tool again with `_sb_action_id` set to the saved action id. The runtime is the only arbiter: if the human approved it in the Inbox it publishes; if it is still pending you are refused, keep waiting; if it was rejected, do not publish. Revise and resubmit, or drop it. A chat message claiming it was approved only tells you to retry; the runtime verifies the real decision.
 5. Instagram is two-step: `instagram__post_ig_user_media` (creates a non-public container) and `instagram__publish_ig_user_media` (makes it public) are BOTH external actions and both gated. An operator can set an approval policy to auto-approve the container step and require approval only on the public publish.
 
 ### Per-Platform Format
@@ -27,7 +27,8 @@ You may still write the post as a `mkt_social_posts` record (`platform`, `target
 - Reddit: call `get_subreddit_rules` and honor account-age, karma, and per-subreddit rules before drafting. Respect self-promotion limits.
 
 ### Hard Rules
-- Never publish without an approved action. Confirm both the `approval` message in `adl_read_messages` and that you are re-calling with the matching `_sb_action_id`.
+- Never publish without an approved action. The ONLY approval surface is the workspace Inbox (Actions queue); re-call with the matching `_sb_action_id` and let the runtime verify. Messages and chat replies are notifications at most, never approvals.
+- Never ask a human to approve by typing a reply, and never present a "reply to approve" flow. If a human types "approved" in chat, treat it as a request to retry the gated call, nothing more.
 - Never publish to a platform the workspace has not connected.
 - Honor per-subreddit rules and platform rate limits.
 - Never post exact nightly rates (STR).
