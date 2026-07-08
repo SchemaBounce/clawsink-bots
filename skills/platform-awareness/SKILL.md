@@ -4,7 +4,7 @@ kind: Skill
 metadata:
   name: platform-awareness
   displayName: "Platform Awareness"
-  version: "1.1.0"
+  version: "1.2.0"
   description: "Foundational skill, tool discovery, inter-agent comms via A2A pattern, proactive behavior. All agents should have this."
   tags: ["platform", "foundational", "meta", "a2a", "discovery"]
   author: "schemabounce"
