@@ -5,104 +5,47 @@ metadata:
   name: vercel
   displayName: "Vercel"
   version: "1.0.0"
-  description: "Vercel deployments, projects, domains, and deployment management"
-  tags: ["vercel", "deployment", "hosting", "frontend", "serverless"]
-  category: "cloud-infra"
-  author: "schemabounce"
-  license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+  description: "Vercel's official hosted MCP server. Connect with your Vercel account to inspect projects and deployments."
+  tags: ["deployment", "hosting", "serverless", "frontend"]
+  category: "developer-tools"
+  author: "vercel"
+  license: "Proprietary"
+
+# This entry replaces the VERCEL_TOKEN API-key entry: remote hosted OAuth is the default
+# so we no longer pay Composio for managed auth. Existing connections keep
+# their serverRef and reconnect once via the OAuth flow.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  type: http_bearer
-  token_env: VERCEL_TOKEN
+  type: oauth2_mcp
 
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "vercel-mcp-server@1.0.0"]
-env:
-  - name: VERCEL_TOKEN
-    description: "Vercel API token from vercel.com/account/tokens"
-    required: true
-    sensitive: true
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://mcp.vercel.com"
 
-# /v2/user returns the authenticated user. Vercel deprecated /v9/user
-# in favor of /v2/user; /v2 is current.
-validation:
-  request:
-    method: GET
-    url: https://api.vercel.com/v2/user
-  expect:
-    status: 200
-    extract:
-      authenticated_as_field: user
-  on_status:
-    "401": { state: needs_setup, message: "Vercel rejected the API token (401). Generate a new one at https://vercel.com/account/tokens and update VERCEL_TOKEN." }
-    "403": { state: needs_setup, message: "Token lacks required permissions (403)." }
-    "default": { state: failed }
-  timeout_ms: 5000
-
-healthProbe:
-  request:
-    method: GET
-    url: https://api.vercel.com/v2/user
-  expect:
-    status: 200
-  on_status:
-    "default": { state: failed }
-  timeout_ms: 3000
-  interval_seconds: 300
-
-tools:
-  - name: list_projects
-    description: "List all Vercel projects"
-    category: projects
-  - name: get_project
-    description: "Get details of a specific project"
-    category: projects
-  - name: list_deployments
-    description: "List deployments for a project"
-    category: deployments
-  - name: get_deployment
-    description: "Get details of a specific deployment"
-    category: deployments
-  - name: list_domains
-    description: "List domains for a project"
-    category: domains
-  - name: create_deployment
-    description: "Create a new deployment"
-    category: deployments
-  - name: list_env_vars
-    description: "List environment variables for a project"
-    category: projects
-  - name: get_deployment_logs
-    description: "Get logs for a deployment"
-    category: deployments
+env: []
 ---
 
 # Vercel MCP Server
 
-Provides Vercel tools for managing deployments, projects, and domains on the Vercel platform.
+Vercel's official hosted MCP server. Connect with your Vercel account to inspect projects and deployments.
 
-## Which Bots Use This
+## How authentication works
 
-- **devops-automator** -- Monitors deployment status, manages environment variables, triggers redeployments
-- **release-manager** -- Tracks production deployments, verifies successful rollouts
-- **sre-devops** -- Investigates deployment failures, checks build logs
+1. Click **Connect account** on the Vercel card.
+2. A Vercel sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-## Setup
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-1. Create an API token at [Vercel Account Tokens](https://vercel.com/account/tokens)
-2. Add it in the MCP connection setup as `VERCEL_TOKEN`
-3. The server starts automatically when a bot that references it runs
+## Notes
 
-## Team Usage
-
-Add to your TEAM.md to share a single Vercel server instance across deployment bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/vercel"
-    reason: "Deployment bots need Vercel access for managing frontend deployments"
-    config:
-      default_team: "your-team-slug"
-```
+- No scopes pin: the client requests the server's advertised default set (which includes the refresh-token scope), so token refresh keeps working.
+- Tools are served by the vendor and discovered at session start (projects, deployments, and logs).
+- Replaces the VERCEL_TOKEN API-key entry. An existing connection shows Reconnect once, then uses OAuth.

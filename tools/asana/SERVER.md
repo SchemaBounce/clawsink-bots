@@ -5,86 +5,47 @@ metadata:
   name: asana
   displayName: "Asana"
   version: "1.0.0"
-  description: "Asana project management -- tasks, projects, teams, and portfolios"
-  tags: ["asana", "project-management", "tasks", "enterprise"]
-  category: "project-issue"
-  author: "schemabounce"
-  license: "MIT"
+  description: "Asana's official hosted MCP server. Connect with your Asana account; no API key or Composio setup."
+  tags: ["tasks", "project-management", "work", "collaboration"]
+  category: "productivity"
+  author: "asana"
+  license: "Proprietary"
+
+# This entry replaces the Composio-routed Asana toolkit: remote hosted OAuth is the default
+# so we no longer pay Composio for managed auth. Existing connections keep
+# their serverRef and reconnect once via the OAuth flow.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  method: "composio"
-  composioToolkit: "ASANA"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like ASANA_*."
+  type: oauth2_mcp
+
 transport:
-  type: "sse"
-  url: "https://mcp.asana.com/sse"
-env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: ASANA_ACCESS_TOKEN
-    description: "Asana personal access token"
-    required: false
-    sensitive: true
-tools:
-  - name: list_tasks
-    description: "List tasks in a project"
-    category: tasks
-  - name: create_task
-    description: "Create a new task"
-    category: tasks
-  - name: update_task
-    description: "Update an existing task"
-    category: tasks
-  - name: complete_task
-    description: "Mark a task as complete"
-    category: tasks
-  - name: list_projects
-    description: "List projects in a workspace"
-    category: projects
-  - name: create_project
-    description: "Create a new project"
-    category: projects
-  - name: list_sections
-    description: "List sections in a project"
-    category: sections
-  - name: list_workspaces
-    description: "List accessible workspaces"
-    category: workspaces
-  - name: search_tasks
-    description: "Search tasks across projects"
-    category: tasks
-  - name: add_comment
-    description: "Add a comment to a task"
-    category: tasks
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://mcp.asana.com/mcp"
+
+env: []
 ---
 
 # Asana MCP Server
 
-Provides Asana project management tools for bots that coordinate tasks, track projects, and manage team workflows.
+Asana's official hosted MCP server. Connect with your Asana account; no API key or Composio setup.
 
-> **Note:** Asana's MCP server is OAuth-gated. Connect via Composio for managed auth.
+## How authentication works
 
-## Which Bots Use This
+1. Click **Connect account** on the Asana card.
+2. A Asana sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-- **project-manager** -- Creates and tracks project tasks, milestones, and assignments
-- **executive-assistant** -- Monitors task progress and surfaces overdue items
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-## Setup
+## Notes
 
-1. Create an Asana personal access token at https://app.asana.com/0/developer-console
-2. Add `ASANA_ACCESS_TOKEN` in the MCP connection setup
-3. The server connects via SSE to Asana's hosted MCP endpoint
-
-## Team Usage
-
-Add to your TEAM.md to share a single Asana server instance across bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/asana"
-    reason: "Bots need project management access for task tracking and coordination"
-    config:
-      default_workspace: "your-workspace-gid"
-```
+- No scopes pin: the client requests the server's advertised default set (which includes the refresh-token scope), so token refresh keeps working.
+- Tools are served by the vendor and discovered at session start (tasks, projects, and workspaces).
+- Replaces the Composio-routed Asana toolkit. An existing connection shows Reconnect once, then uses OAuth.

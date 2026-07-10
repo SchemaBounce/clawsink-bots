@@ -5,102 +5,47 @@ metadata:
   name: netlify
   displayName: "Netlify"
   version: "1.0.0"
-  description: "Netlify, sites, deploys, forms, and serverless functions"
-  tags: ["netlify", "deployment", "hosting", "jamstack"]
-  category: "cloud-infra"
-  author: "schemabounce"
-  license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+  description: "Netlify's official hosted MCP server. Connect with your Netlify account to manage sites and deploys."
+  tags: ["deployment", "hosting", "web", "cdn"]
+  category: "developer-tools"
+  author: "netlify"
+  license: "Proprietary"
+
+# This entry replaces the NETLIFY_AUTH_TOKEN API-key entry: remote hosted OAuth is the default
+# so we no longer pay Composio for managed auth. Existing connections keep
+# their serverRef and reconnect once via the OAuth flow.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  type: http_bearer
-  token_env: NETLIFY_AUTH_TOKEN
+  type: oauth2_mcp
 
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "@netlify/mcp@1.15.1"]
-env:
-  - name: NETLIFY_AUTH_TOKEN
-    description: "Netlify personal access token from app.netlify.com/user/applications"
-    required: true
-    sensitive: true
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://netlify-mcp.netlify.app/mcp"
 
-# /api/v1/user returns the authenticated user. Lightweight, idempotent.
-validation:
-  request:
-    method: GET
-    url: https://api.netlify.com/api/v1/user
-  expect:
-    status: 200
-    extract:
-      authenticated_as_field: email
-  on_status:
-    "401": { state: needs_setup, message: "Netlify rejected the access token (401). Generate a new one at https://app.netlify.com/user/applications and update NETLIFY_AUTH_TOKEN." }
-    "403": { state: needs_setup, message: "Token lacks required scopes (403)." }
-    "default": { state: failed }
-  timeout_ms: 5000
-
-healthProbe:
-  request:
-    method: GET
-    url: https://api.netlify.com/api/v1/user
-  expect:
-    status: 200
-  on_status:
-    "default": { state: failed }
-  timeout_ms: 3000
-  interval_seconds: 300
-
-tools:
-  - name: list_sites
-    description: "List all sites in the account"
-    category: sites
-  - name: get_site
-    description: "Get details of a specific site"
-    category: sites
-  - name: list_deploys
-    description: "List deploys for a site"
-    category: deploys
-  - name: create_deploy
-    description: "Create a new deploy for a site"
-    category: deploys
-  - name: list_forms
-    description: "List forms for a site"
-    category: forms
-  - name: list_submissions
-    description: "List form submissions"
-    category: forms
-  - name: list_functions
-    description: "List serverless functions for a site"
-    category: functions
-  - name: get_build_log
-    description: "Get the build log for a deploy"
-    category: deploys
+env: []
 ---
 
 # Netlify MCP Server
 
-Provides Netlify API tools for bots that manage sites, deployments, forms, and serverless functions.
+Netlify's official hosted MCP server. Connect with your Netlify account to manage sites and deploys.
 
-## Which Bots Use This
+## How authentication works
 
-- **devops-automator** -- Manages site deployments, monitors build logs, and triggers redeploys
-- **release-manager** -- Coordinates releases, verifies deploy status, and rolls back failed deploys
+1. Click **Connect account** on the Netlify card.
+2. A Netlify sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-## Setup
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-1. Create a personal access token at [app.netlify.com/user/applications](https://app.netlify.com/user/applications)
-2. Add `NETLIFY_AUTH_TOKEN` in the MCP connection setup
-3. The server starts automatically when a bot that references it runs
+## Notes
 
-## Team Usage
-
-Add to your TEAM.md to share a single Netlify server instance across bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/netlify"
-    reason: "Deployment bots need Netlify access for site management and release coordination"
-    config:
-      default_site: "my-production-site"
-```
+- No scopes pin: the client requests the server's advertised default set (which includes the refresh-token scope), so token refresh keeps working.
+- Tools are served by the vendor and discovered at session start (sites, deploys, and environment variables).
+- Replaces the NETLIFY_AUTH_TOKEN API-key entry. An existing connection shows Reconnect once, then uses OAuth.
