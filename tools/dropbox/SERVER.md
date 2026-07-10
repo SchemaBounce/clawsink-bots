@@ -5,114 +5,47 @@ metadata:
   name: dropbox
   displayName: "Dropbox"
   version: "1.0.0"
-  description: "Dropbox file storage, files, folders, sharing, and search"
-  tags: ["dropbox", "storage", "files", "cloud-storage"]
-  category: "files-docs"
-  author: "schemabounce"
-  license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+  description: "Dropbox's official hosted MCP server. Connect with your Dropbox account to work with files and folders."
+  tags: ["files", "storage", "cloud", "documents"]
+  category: "storage"
+  author: "dropbox"
+  license: "Proprietary"
+
+# This entry replaces the DROPBOX_ACCESS_TOKEN API-key entry: remote hosted OAuth is the default so we no
+# longer pay for managed/API-key auth. The serverRef is unchanged; an existing
+# connection shows Reconnect once, then uses OAuth.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  type: http_bearer
-  token_env: DROPBOX_ACCESS_TOKEN
+  type: oauth2_mcp
 
 transport:
-  type: "sse"
-  url: "https://mcp.dropbox.com/sse"
-env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: DROPBOX_ACCESS_TOKEN
-    description: "Dropbox access token from Dropbox App Console"
-    required: false
-    sensitive: true
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://mcp.dropbox.com/mcp"
 
-# /2/users/get_current_account returns the authenticated account.
-# Dropbox requires POST with empty body for this endpoint.
-validation:
-  request:
-    method: POST
-    url: https://api.dropboxapi.com/2/users/get_current_account
-    headers:
-      Content-Type: application/json
-    body: "null"
-  expect:
-    status: 200
-  on_status:
-    "401": { state: needs_setup, message: "Dropbox rejected the access token (401). Generate a new one in Dropbox App Console and update DROPBOX_ACCESS_TOKEN." }
-    "403": { state: needs_setup, message: "Dropbox app lacks required scopes (403)." }
-    "default": { state: failed }
-  timeout_ms: 5000
-
-healthProbe:
-  request:
-    method: POST
-    url: https://api.dropboxapi.com/2/users/get_current_account
-    headers:
-      Content-Type: application/json
-    body: "null"
-  expect:
-    status: 200
-  on_status:
-    "default": { state: failed }
-  timeout_ms: 3000
-  interval_seconds: 300
-
-tools:
-  - name: list_folder
-    description: "List files in a folder"
-    category: files
-  - name: get_file
-    description: "Download file content"
-    category: files
-  - name: upload_file
-    description: "Upload a file"
-    category: files
-  - name: search_files
-    description: "Search for files"
-    category: search
-  - name: create_folder
-    description: "Create a folder"
-    category: folders
-  - name: share_file
-    description: "Create a shared link"
-    category: sharing
-  - name: move_file
-    description: "Move or rename a file"
-    category: files
-  - name: delete_file
-    description: "Delete a file"
-    category: files
+env: []
 ---
 
 # Dropbox MCP Server
 
-Provides Dropbox file storage tools for bots that need to manage files, folders, sharing links, and search across cloud storage.
+Dropbox's official hosted MCP server. Connect with your Dropbox account to work with files and folders.
 
-## Which Bots Use This
+## How authentication works
 
-- **executive-assistant** — File management, document organization, and sharing
-- **documentation-writer** — Document storage, retrieval, and collaboration
+1. Click **Connect account** on the Dropbox card.
+2. A Dropbox sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-**Note:** OAuth-gated -- connect via Composio for managed auth.
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-## Setup
+## Notes
 
-1. Create an app in the Dropbox App Console
-2. Generate an access token
-3. Add `DROPBOX_ACCESS_TOKEN` in the MCP connection setup
-4. The server connects via SSE when a bot that references it runs
-
-## Team Usage
-
-Add to your TEAM.md to share a single Dropbox server instance across bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/dropbox"
-    reason: "Bots need Dropbox access for file management and document sharing"
-    config:
-      root_folder: "/team-workspace"
-```
+- No scopes pin: the client requests the server's advertised default set (including the refresh-token scope), so token refresh keeps working.
+- Tools are served by the vendor and discovered at session start (files, folders, sharing, and file requests).
+- Replaces the DROPBOX_ACCESS_TOKEN API-key entry. An existing connection shows Reconnect once, then uses OAuth.
