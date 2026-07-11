@@ -1,0 +1,37 @@
+{
+  "entityTypes": [
+    {
+      "name": "leads",
+      "displayName": "Leads",
+      "description": "Inbound sales inquiries synced into this workspace for first-touch response. Not yet wired for most workspaces — see the bot's sync-leads setup step.",
+      "domain": "sales",
+      "sampleFields": ["email", "name", "company", "message", "sourceTier", "source", "createdAt", "demoStatus"],
+      "fields": {
+        "email": { "type": "string", "required": true, "description": "Lead's contact email. Never copy into a receipt." },
+        "name": { "type": "string", "description": "Lead's stated name. Never copy into a receipt." },
+        "company": { "type": "string", "description": "Lead's stated company." },
+        "message": { "type": "string", "description": "Free-text inquiry message, if provided." },
+        "sourceTier": { "type": "string", "description": "Plan tier the inquiry was tagged with (e.g. enterprise)." },
+        "source": { "type": "string", "description": "Which page/surface the inquiry came from (e.g. public-pricing, plan-tab, license-page)." },
+        "createdAt": { "type": "string", "required": true, "description": "ISO 8601 timestamp the inquiry arrived. The baseline for every latency receipt." },
+        "demoStatus": { "type": "string", "enum": ["scheduled", "no_show", "completed"], "description": "Set once a demo-scheduling integration exists. Absent today." }
+      }
+    },
+    {
+      "name": "receipt",
+      "displayName": "Receipts",
+      "description": "One record per action this bot takes: a draft submitted, a latency measured, an escalation sent. PII-free by design.",
+      "domain": "sales",
+      "sampleFields": ["kind", "metric", "value", "unit", "subject", "occurredAt", "agentSlug"],
+      "fields": {
+        "kind": { "type": "string", "required": true, "enum": ["receipt"], "description": "Always \"receipt\"." },
+        "metric": { "type": "string", "required": true, "enum": ["first_touch_drafted", "first_touch_latency_seconds", "no_leads_synced"], "description": "What this receipt measures." },
+        "value": { "type": "number", "required": true, "description": "The metric's numeric value." },
+        "unit": { "type": "string", "required": true, "description": "Unit for value, e.g. \"seconds\" or \"count\"." },
+        "subject": { "type": "string", "required": true, "description": "The lead record's entityId. Never an email, name, or company." },
+        "occurredAt": { "type": "string", "required": true, "description": "ISO 8601 timestamp of the action." },
+        "agentSlug": { "type": "string", "required": true, "description": "Which agent wrote this receipt." }
+      }
+    }
+  ]
+}

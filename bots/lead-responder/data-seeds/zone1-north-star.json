@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "response_sla_hours",
+      "value": "4",
+      "description": "Hours an inquiry can wait before an unapproved draft gets escalated to executive-assistant. Adjust in bot setup."
+    },
+    {
+      "key": "demo_booking_url",
+      "value": "",
+      "description": "Optional scheduling link the draft offers instead of asking the lead to propose times. Empty until the workspace sets one in bot setup."
+    }
+  ]
+}
