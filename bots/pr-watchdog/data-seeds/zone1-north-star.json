@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "pr_review_sla_hours",
+      "value": "24",
+      "description": "Hours a pull request can go without human review before PR Watchdog treats it as an SLA breach and escalates to the Inbox. Edit this value to change the threshold."
+    },
+    {
+      "key": "pr_ai_author_patterns",
+      "value": "copilot, devin, cursor, claude, codex, chatgpt, -bot",
+      "description": "Comma-separated login substrings PR Watchdog treats as AI-authored or AI-reviewed (matched case-insensitively against a GitHub login). Add workspace-specific bot account names."
+    },
+    {
+      "key": "pr_watchdog_repos",
+      "value": "",
+      "description": "Comma-separated owner/repo pairs PR Watchdog checks each run (e.g. \"acme/frontend, acme/core-api\"). The GitHub tool set has no \"list my repos\" call, so this must be set explicitly — an empty value means the bot has nothing to watch."
+    }
+  ]
+}

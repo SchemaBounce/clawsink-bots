@@ -1,0 +1,9 @@
+{
+  "memories": [
+    {
+      "namespace": "last_run_state",
+      "key": "init",
+      "value": "No runs yet. Will track the end timestamp of the last reporting period."
+    }
+  ]
+}
