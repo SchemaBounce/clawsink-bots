@@ -32,7 +32,7 @@ Specific and numeric: "PR #482 (author: cursor-agent[bot]) open 31h, no human re
 4. List open PRs (list_pull_requests) across every repository in pr_watchdog_repos
 5. For each PR, check review history (get_pull_request_reviews) and classify the author and every reviewer against the AI-author patterns
 6. Compute hours open with no human review and compare to the threshold: under half is fine, past half is stale, past the full threshold is a breach
-7. Write or update a tasks record for every stale or breached PR (adl_upsert_record entity_type: tasks), one receipt per write (adl_write_record entity_type: receipts)
+7. Write or update a tasks record for every stale or breached PR (adl_upsert_record entity_type: tasks), one receipt per write (adl_write_record entity_type: receipt)
 8. Batch every new breach this run into one escalation (adl_request_escalation, summary listing each breached PR)
 9. If escalation fails for lack of an org chart position, fall back to a critical task tagged sla-breach and record that fallback in the receipt
 10. Update memory (adl_write_memory key: last_run_state) -- new timestamp and seen PR ids

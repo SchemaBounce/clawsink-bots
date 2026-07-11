@@ -18,7 +18,7 @@
       }
     },
     {
-      "name": "receipts",
+      "name": "receipt",
       "displayName": "Receipts",
       "description": "Structured audit trail of automated actions taken by workspace agents, read by the receipts/team-health dashboard",
       "domain": "engineering",

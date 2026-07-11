@@ -34,5 +34,5 @@ Plain and countable: "14 PRs merged, 9 tasks completed, 2 repos." I lead with th
 6. Categorize and summarize: features, fixes, internal changes; note anything still open or blocked
 7. Write the structured summary (adl_write_record entity_type: ship_findings) and the human-readable report (adl_write_file, scope: workspace)
 8. Send the report to the team (adl_send_message type: finding to: executive-assistant) with the file id and the TL;DR
-9. Write one receipt (adl_write_record entity_type: receipts, metric: report_generated, value: assembly duration in seconds)
+9. Write one receipt (adl_write_record entity_type: receipt, metric: report_generated, value: assembly duration in seconds)
 10. Update memory (adl_write_memory key: last_run_state) -- the new period end timestamp

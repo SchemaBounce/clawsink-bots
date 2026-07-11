@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pr-watchdog
   displayName: "PR Watchdog"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Flags stale and unreviewed pull requests, especially AI-authored ones, and routes them to a human before the review SLA is missed."
   category: engineering
   tags: ["github", "pull-requests", "code-review", "sla", "ai-governance"]
@@ -22,7 +22,7 @@ agent:
     - ALWAYS check for an existing open `tasks` record for a PR (entity_id convention below) before creating a new one — update it instead of duplicating.
     - Batch every new SLA breach found in a run into ONE `adl_request_escalation` call — the tool pauses this agent's run until a human responds, so escalating breaches one at a time would silently drop the rest of the run's work. List every breached PR in the escalation summary.
     - If `adl_request_escalation` fails because this agent has no org chart position or supervisor, fall back to writing a `tasks` record with `priority: "critical"` and `"sla-breach"` in `tags`, and note the fallback in that action's receipt.
-    - Write exactly one `receipts` record for every task created, task updated, and escalation sent — a sibling dashboard reads this table as the sole audit trail of what this bot did. Never skip it, never batch multiple actions into one receipt.
+    - Write exactly one `receipt` record for every task created, task updated, and escalation sent — a sibling dashboard reads this table as the sole audit trail of what this bot did. Never skip it, never batch multiple actions into one receipt.
   toolInstructions: |
     ## Tool Usage
     - Target: 4-7 tool calls per run
@@ -31,10 +31,10 @@ agent:
     - Step 3: `list_pull_requests` (state=open) once per repo in `pr_watchdog_repos`
     - Step 4: `get_pull_request_reviews` only for PRs without a cached review verdict in `prw_findings` from a prior run
     - Step 5: `adl_upsert_record` entity_type `tasks` for stale/breached PRs — entity_id convention: `task_pr_{owner}_{repo}_{number}`
-    - Step 6: `adl_write_record` entity_type `prw_findings` (one per PR checked this run) and entity_type `receipts` (one per action taken)
+    - Step 6: `adl_write_record` entity_type `prw_findings` (one per PR checked this run) and entity_type `receipt` (one per action taken)
     - Step 7: `adl_request_escalation` once per run, batching every new breach
 
-    ### Receipt records (entity_type: receipts)
+    ### Receipt records (entity_type: receipt)
     One record per action, written with `adl_write_record`:
     - `entity_id`: `receipt_{metric}_{owner}_{repo}_{pr_number}_{ISO-timestamp-no-colons}`
     - `data.kind`: `"receipt"` (constant)
@@ -66,7 +66,7 @@ messaging:
     - { type: "finding", to: ["release-manager"], when: "an AI-authored or stale PR crosses the SLA threshold and is escalated" }
 data:
   entityTypesRead: ["prw_findings"]
-  entityTypesWrite: ["tasks", "receipts", "prw_findings"]
+  entityTypesWrite: ["tasks", "receipt", "prw_findings"]
   memoryNamespaces: ["last_run_state", "known_ai_authors"]
 zones:
   zone1Read: ["mission", "pr_review_sla_hours", "pr_ai_author_patterns", "pr_watchdog_repos"]
@@ -170,7 +170,7 @@ goals:
     category: primary
     metric:
       type: count
-      entity: receipts
+      entity: receipt
       filter: { metric: "sla_breach_escalated" }
     target:
       operator: ">"

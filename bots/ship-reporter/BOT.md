@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ship-reporter
   displayName: "Ship Reporter"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Weekly \"what shipped\" report assembled from merged pull requests and completed task-board tasks."
   category: engineering
   tags: ["github", "reporting", "changelog", "tasks", "engineering-coordination"]
@@ -29,10 +29,10 @@ agent:
     - Step 3: `adl_query_records` entity_type `tasks`, filter `status=completed` and `completed_at` within the window
     - Step 4: `adl_write_record` entity_type `ship_findings` — the structured summary
     - Step 5: `adl_write_file` — the human-readable report, `scope: "workspace"` so every workspace member can read it in the Files browser
-    - Step 6: `adl_write_record` entity_type `receipts` — one record for the report generation
+    - Step 6: `adl_write_record` entity_type `receipt` — one record for the report generation
     - Step 7: `adl_send_message` type `finding` to `executive-assistant` with the file id and the TL;DR
 
-    ### Receipt records (entity_type: receipts)
+    ### Receipt records (entity_type: receipt)
     Exactly one record per run, written with `adl_write_record`:
     - `entity_id`: `receipt_report_generated_{period_end-ISO-timestamp-no-colons}`
     - `data.kind`: `"receipt"` (constant)
@@ -64,7 +64,7 @@ messaging:
     - { type: "finding", to: ["executive-assistant"], when: "the weekly ship report is generated" }
 data:
   entityTypesRead: ["tasks", "ship_findings"]
-  entityTypesWrite: ["receipts", "ship_findings"]
+  entityTypesWrite: ["receipt", "ship_findings"]
   memoryNamespaces: ["last_run_state"]
 zones:
   zone1Read: ["mission", "ship_report_repos", "ship_report_period_days"]
@@ -151,7 +151,7 @@ goals:
     category: health
     metric:
       type: count
-      entity: receipts
+      entity: receipt
       filter: { metric: "report_generated" }
     target:
       operator: ">"
