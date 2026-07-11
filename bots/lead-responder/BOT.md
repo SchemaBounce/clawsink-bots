@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: lead-responder
   displayName: "Lead Responder"
-  version: "0.1.2"
+  version: "0.1.3"
   description: "Drafts a fast, personal first-touch for every new inbound sales inquiry and tracks how long we take to respond."
   category: sales
   tags: ["sales", "leads", "speed-to-lead", "first-touch", "response-time"]
@@ -29,7 +29,7 @@ agent:
   toolInstructions: |
     ## Tool Usage
     - Query `leads`: `adl_query_records` entity_type=`leads`, sorted oldest first, filtered to records with no matching `receipt` (metric="first_touch_drafted") for that lead's entityId yet.
-    - Write `receipt`: `adl_upsert_record` entity_type=`receipt`, entityId `receipt_{agentSlug}_{unixTimestamp}`, fields `{ kind: "receipt", metric, value, unit, subject, occurredAt, agentSlug }`. `subject` is always the lead record's entityId, never its email or name.
+    - Write `receipt`: `adl_upsert_record` entity_type=`receipt`, entityId `receipt_{agentSlug}_{metric}_{subject}` for lead-scoped receipts (deterministic per lead and metric — an upsert can never overwrite a different receipt), or `receipt_{agentSlug}_{metric}_{occurredAt}` for run-scoped receipts with no lead (for example `no_leads_synced`). Fields `{ kind: "receipt", metric, value, unit, subject, occurredAt, agentSlug }`. `subject` is always the lead record's entityId, never its email or name.
     - Read `external_action`: `adl_query_records` entity_type=`external_action`, filter `id` = an action id captured from a prior gated send call, to check pending / approved / executed / rejected status before deciding whether to escalate or confirm latency.
 
     ### Sending through Composio (Gmail)

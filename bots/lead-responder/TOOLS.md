@@ -1,7 +1,7 @@
 # Data Access
 
 - Query `leads`: `adl_query_records` entity_type=`leads` — sort oldest first, filter to records with no matching `receipt` (metric="first_touch_drafted") for that lead's entityId yet.
-- Write `receipt`: `adl_upsert_record` entity_type=`receipt` — entityId format `receipt_{agentSlug}_{unixTimestamp}`, fields `{ kind: "receipt", metric, value, unit, subject, occurredAt, agentSlug }`. `subject` is always the lead record's entityId, never its email or name.
+- Write `receipt`: `adl_upsert_record` entity_type=`receipt` — entityId format `receipt_{agentSlug}_{metric}_{subject}` for lead-scoped receipts (deterministic per lead and metric, so an upsert can never overwrite a different receipt), or `receipt_{agentSlug}_{metric}_{occurredAt}` for run-scoped receipts with no lead (for example `no_leads_synced`). Fields `{ kind: "receipt", metric, value, unit, subject, occurredAt, agentSlug }`. `subject` is always the lead record's entityId, never its email or name.
 - Read `external_action`: `adl_query_records` entity_type=`external_action` — filter `id` = an action id captured from a prior gated send call, to check `pending_approval` / `approved` / `executed` / `rejected` status before deciding to escalate or confirm latency.
 
 # Memory Usage
