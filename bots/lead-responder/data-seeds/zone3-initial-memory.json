@@ -1,0 +1,9 @@
+{
+  "memories": [
+    {
+      "namespace": "bot:lead-responder:run:state",
+      "key": "last_run_state",
+      "value": "No runs yet. First run will report whether the leads entity type has any data."
+    }
+  ]
+}

@@ -5,110 +5,48 @@ metadata:
   name: supabase
   displayName: "Supabase"
   version: "1.0.0"
-  description: "Supabase, database, auth, storage, and edge functions"
-  tags: ["supabase", "database", "auth", "storage", "postgres"]
-  category: "databases"
-  author: "schemabounce"
-  license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
-# Supabase REST API uses Bearer auth on the service role key + a
-# matching apikey header. Per-tenant URL via {SUPABASE_URL}.
+  description: "Supabase's official hosted MCP server. Connect with your Supabase account to manage projects and databases."
+  tags: ["database", "postgres", "backend", "edge-functions"]
+  category: "developer-tools"
+  author: "supabase"
+  license: "Proprietary"
+
+# This entry replaces the SUPABASE_ACCESS_TOKEN API-key entry: remote hosted OAuth is the default
+# so we no longer pay Composio for managed auth. Existing connections keep
+# their serverRef and reconnect once via the OAuth flow.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  type: http_bearer
-  token_env: SUPABASE_SERVICE_ROLE_KEY
+  type: oauth2_mcp
 
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "supabase-mcp@1.5.0"]
-env:
-  - name: SUPABASE_URL
-    description: "Supabase project URL"
-    required: true
-  - name: SUPABASE_SERVICE_ROLE_KEY
-    description: "Service role key from the Supabase dashboard"
-    required: true
-    sensitive: true
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://mcp.supabase.com/mcp"
 
-# Hit the PostgREST root — returns the OpenAPI schema with HTTP 200
-# when the service key is valid. The apikey header is also required
-# alongside the bearer (Supabase quirk — duplication is intentional).
-validation:
-  request:
-    method: GET
-    url: "{SUPABASE_URL}/rest/v1/"
-    headers:
-      apikey: "{SUPABASE_SERVICE_ROLE_KEY}"
-      Accept: application/json
-  expect:
-    status: 200
-  on_status:
-    "401": { state: needs_setup, message: "Supabase rejected the service role key (401). Check the key under Project Settings > API and update SUPABASE_SERVICE_ROLE_KEY." }
-    "403": { state: needs_setup, message: "Service role key permissions insufficient (403)." }
-    "404": { state: needs_setup, message: "Supabase project URL returned 404 — verify SUPABASE_URL is the full https://...supabase.co project URL." }
-    "default": { state: failed }
-  timeout_ms: 5000
-
-healthProbe:
-  request:
-    method: GET
-    url: "{SUPABASE_URL}/rest/v1/"
-    headers:
-      apikey: "{SUPABASE_SERVICE_ROLE_KEY}"
-  expect:
-    status: 200
-  on_status:
-    "default": { state: failed }
-  timeout_ms: 3000
-  interval_seconds: 300
-
-tools:
-  - name: query
-    description: "Execute a SQL query against the database"
-    category: database
-  - name: list_tables
-    description: "List all tables in the database"
-    category: database
-  - name: get_schema
-    description: "Get the schema of a specific table"
-    category: database
-  - name: list_users
-    description: "List authenticated users"
-    category: auth
-  - name: list_buckets
-    description: "List storage buckets"
-    category: storage
-  - name: list_functions
-    description: "List edge functions"
-    category: functions
-  - name: manage_policies
-    description: "Manage row-level security policies"
-    category: database
+env: []
 ---
 
 # Supabase MCP Server
 
-Provides Supabase tools for bots that manage databases, auth users, storage buckets, and edge functions on the Supabase platform.
+Supabase's official hosted MCP server. Connect with your Supabase account to manage projects and databases.
 
-## Which Bots Use This
+## How authentication works
 
-- **data-analyst** -- Queries databases and inspects schemas for analysis and reporting
-- **software-architect** -- Manages database schemas, RLS policies, and edge function deployments
+1. Click **Connect account** on the Supabase card.
+2. A Supabase sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-## Setup
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-1. Get your Supabase project URL and service role key from the [Supabase dashboard](https://supabase.com/dashboard)
-2. Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in the MCP connection setup
-3. The server starts automatically when a bot that references it runs
+## Notes
 
-## Team Usage
-
-Add to your TEAM.md to share a single Supabase server instance across bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/supabase"
-    reason: "Bots need Supabase access for database queries, auth management, and storage"
-    config:
-      default_schema: "public"
-```
+- No scopes pin: the client requests the server's advertised default set (which includes the refresh-token scope), so token refresh keeps working.
+- Tools are served by the vendor and discovered at session start (organizations, projects, database, and edge functions).
+- The consent screen is broad because Supabase advertises granular per-resource scopes; the client requests its advertised default set.
+- Replaces the SUPABASE_ACCESS_TOKEN API-key entry. An existing connection shows Reconnect once, then uses OAuth.

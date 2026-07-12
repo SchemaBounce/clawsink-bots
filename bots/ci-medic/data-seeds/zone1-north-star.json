@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "ci_medic_repos",
+      "value": "",
+      "description": "Comma-separated owner/repo pairs CI Medic watches for failed GitHub Actions runs (e.g. \"acme/frontend, acme/core-api\"). The GitHub tool set has no \"list my repos\" call, so this must be set explicitly — an empty value means the bot has nothing to check on the schedule fallback, and the trigger workflow's condition needs the same list."
+    },
+    {
+      "key": "ci_medic_auto_fix_confidence",
+      "value": "diagnose_and_draft",
+      "description": "diagnose_and_draft (default) lets CI Medic open an approval-gated pull request for mechanical, high-confidence failures. diagnose_only turns off drafting entirely — every failure becomes a diagnosis and a task, never a PR. Neither setting lets CI Medic merge or approve anything itself."
+    },
+    {
+      "key": "ci_medic_sla_minutes",
+      "value": "30",
+      "description": "Target minutes from a watched run failing to CI Medic writing its diagnosis receipt. Used for the mean-time-to-diagnosis goal. Lower this once the trigger workflow is wired (dispatch becomes event-driven instead of waiting for the next poll)."
+    }
+  ]
+}

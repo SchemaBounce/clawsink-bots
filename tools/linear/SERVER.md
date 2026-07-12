@@ -5,84 +5,48 @@ metadata:
   name: linear
   displayName: "Linear"
   version: "1.0.0"
-  description: "Linear project management tools for issues, projects, and cycles"
-  tags: ["linear", "project-management", "issues", "cycles", "roadmap"]
-  category: "project-issue"
-  author: "schemabounce"
-  license: "MIT"
+  description: "Linear's official hosted MCP server. Connect with your Linear account; no API key or Composio setup."
+  tags: ["issues", "project-management", "engineering", "sprints"]
+  category: "developer-tools"
+  author: "linear"
+  license: "Proprietary"
+
+# This entry replaces the Composio-routed Linear toolkit: remote hosted OAuth is the default
+# so we no longer pay Composio for managed auth. Existing connections keep
+# their serverRef and reconnect once via the OAuth flow.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  method: "composio"
-  composioToolkit: "LINEAR"
-  setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like LINEAR_*."
+  type: oauth2_mcp
+  scopes: ["read", "write"]
+
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "linear-mcp@1.2.0"]
-env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: LINEAR_API_KEY
-    description: "Linear Personal API Key"
-    required: false
-    sensitive: true
-tools:
-  - name: create_issue
-    description: "Create a new Linear issue"
-    category: issues
-  - name: update_issue
-    description: "Update an existing issue"
-    category: issues
-  - name: search_issues
-    description: "Search issues with filters"
-    category: issues
-  - name: list_teams
-    description: "List all teams"
-    category: teams
-  - name: list_projects
-    description: "List projects for a team"
-    category: projects
-  - name: get_issue
-    description: "Get issue details"
-    category: issues
-  - name: list_cycles
-    description: "List cycles for a team"
-    category: cycles
-  - name: add_comment
-    description: "Add a comment to an issue"
-    category: issues
-  - name: list_labels
-    description: "List available labels"
-    category: labels
-  - name: assign_issue
-    description: "Assign an issue to a team member"
-    category: issues
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://mcp.linear.app/mcp"
+
+env: []
 ---
 
 # Linear MCP Server
 
-Provides Linear project management tools for bots that manage issues, projects, cycles, and team workflows.
+Linear's official hosted MCP server. Connect with your Linear account; no API key or Composio setup.
 
-## Which Bots Use This
+## How authentication works
 
-- **sprint-planner** -- Manages cycles, creates and assigns issues, tracks team velocity
-- **product-owner** -- Prioritizes backlog, creates feature requests, manages project roadmap
-- **bug-triage** -- Creates and tracks bugs in Linear
+1. Click **Connect account** on the Linear card.
+2. A Linear sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-## Setup
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-1. Create a Personal API Key in Linear under Settings > API
-2. Add it in the MCP connection setup as `LINEAR_API_KEY`
-3. The server starts automatically when a bot that references it runs
+## Notes
 
-## Team Usage
-
-Add to your TEAM.md to share a single Linear server instance across all project management bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/linear"
-    reason: "Project management bots need Linear access for issue tracking and cycle planning"
-```
+- Requested scopes are pinned to read, write.
+- Tools are served by the vendor and discovered at session start (issues, projects, cycles, and comments).
+- Replaces the Composio-routed Linear toolkit. An existing connection shows Reconnect once, then uses OAuth.

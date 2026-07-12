@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "ship_report_repos",
+      "value": "",
+      "description": "Comma-separated owner/repo pairs Ship Reporter checks each run (e.g. \"acme/frontend, acme/core-api\"). The GitHub tool set has no \"list my repos\" call, so this must be set explicitly — an empty value means the bot has nothing to report on."
+    },
+    {
+      "key": "ship_report_period_days",
+      "value": "7",
+      "description": "Days the first report covers. Later reports use the end of the prior report as the new window start instead of this value."
+    }
+  ]
+}

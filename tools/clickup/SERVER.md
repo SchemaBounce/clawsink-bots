@@ -5,109 +5,48 @@ metadata:
   name: clickup
   displayName: "ClickUp"
   version: "1.0.0"
-  description: "ClickUp project management, tasks, lists, spaces, and goals"
-  tags: ["clickup", "project-management", "tasks", "productivity"]
-  category: "project-issue"
-  author: "schemabounce"
-  license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
-# ClickUp's API expects the raw token (no "Bearer" prefix) in the
-# Authorization header — use the injection template form.
+  description: "ClickUp's official hosted MCP server. Connect with your ClickUp account; no API key or local setup."
+  tags: ["tasks", "project-management", "docs", "work"]
+  category: "productivity"
+  author: "clickup"
+  license: "Proprietary"
+
+# This entry replaces the stdio ClickUp entry: remote hosted OAuth is the default so we no
+# longer pay for managed/API-key auth. The serverRef is unchanged; an existing
+# connection shows Reconnect once, then uses OAuth.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  injection:
-    header_name: Authorization
-    header_template: "{CLICKUP_API_TOKEN}"
+  type: oauth2_mcp
+  scopes: ["read", "write"]
 
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "clickup-mcp@1.0.1"]
-env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: CLICKUP_API_TOKEN
-    description: "ClickUp personal API token from Settings > Apps"
-    required: false
-    sensitive: true
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://mcp.clickup.com/mcp"
 
-# /api/v2/user returns the authenticated user record.
-validation:
-  request:
-    method: GET
-    url: https://api.clickup.com/api/v2/user
-  expect:
-    status: 200
-  on_status:
-    "401": { state: needs_setup, message: "ClickUp rejected the API token (401). Regenerate at Settings > Apps in clickup.com and update CLICKUP_API_TOKEN." }
-    "403": { state: needs_setup, message: "Token lacks required permissions (403)." }
-    "default": { state: failed }
-  timeout_ms: 5000
-
-healthProbe:
-  request:
-    method: GET
-    url: https://api.clickup.com/api/v2/user
-  expect:
-    status: 200
-  on_status:
-    "default": { state: failed }
-  timeout_ms: 3000
-  interval_seconds: 300
-
-tools:
-  - name: list_tasks
-    description: "List tasks in a list"
-    category: tasks
-  - name: create_task
-    description: "Create a new task"
-    category: tasks
-  - name: update_task
-    description: "Update an existing task"
-    category: tasks
-  - name: get_task
-    description: "Get details of a specific task"
-    category: tasks
-  - name: list_spaces
-    description: "List spaces in a workspace"
-    category: spaces
-  - name: list_lists
-    description: "List lists in a folder or space"
-    category: lists
-  - name: list_goals
-    description: "List goals in the workspace"
-    category: goals
-  - name: add_comment
-    description: "Add a comment to a task"
-    category: tasks
+env: []
 ---
 
 # ClickUp MCP Server
 
-Provides ClickUp API tools for managing tasks, organizing spaces and lists, and tracking goals.
+ClickUp's official hosted MCP server. Connect with your ClickUp account; no API key or local setup.
 
-## Which Bots Use This
+## How authentication works
 
-- **project-manager** -- Creates and tracks tasks, monitors sprint progress, and manages project timelines
-- **executive-assistant** -- Creates follow-up tasks from meetings and tracks action items
+1. Click **Connect account** on the ClickUp card.
+2. A ClickUp sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-## Setup
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-1. Log in to [ClickUp](https://app.clickup.com/) and navigate to Settings > Apps
-2. Copy your personal API token
-3. Add `CLICKUP_API_TOKEN` in the MCP connection setup
-4. The server starts automatically when a bot that references it runs
+## Notes
 
-## Team Usage
-
-Add to your TEAM.md to share a single ClickUp server instance across bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/clickup"
-    reason: "Bots need ClickUp access for task management and project tracking"
-    config:
-      default_space_id: "your-space-id"
-```
+- Requested scopes are pinned to read, write.
+- Tools are served by the vendor and discovered at session start (tasks, lists, docs, and spaces).
+- Replaces the stdio ClickUp entry. An existing connection shows Reconnect once, then uses OAuth.

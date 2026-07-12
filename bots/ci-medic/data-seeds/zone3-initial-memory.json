@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "last_run_state",
+      "key": "init",
+      "value": "No runs yet. Will track the last checked timestamp and the set of previously seen workflow run ids, used by the schedule fallback to avoid re-diagnosing the same run."
+    },
+    {
+      "namespace": "ci_incident_patterns",
+      "key": "init",
+      "value": "No learned failure patterns yet. Accumulates repo/workflow/job signatures that recur, so a later run can recognize \"this job has failed the same way 3 times this week\" instead of treating each occurrence as new."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "entityTypes": [
+    {
+      "name": "ci_diagnoses",
+      "displayName": "CI Medic Diagnoses",
+      "description": "One record per failed GitHub Actions run CI Medic has looked at: the failure class, confidence, and what it found in the actual job log",
+      "domain": "engineering",
+      "fields": {
+        "repo": { "type": "string", "required": true, "description": "owner/repo the run belongs to" },
+        "run_id": { "type": "string", "required": true, "description": "GitHub Actions workflow run id" },
+        "run_url": { "type": "string", "required": true, "description": "Full URL of the workflow run" },
+        "workflow_name": { "type": "string", "required": true, "description": "Name of the workflow that ran" },
+        "job_name": { "type": "string", "required": true, "description": "Name of the job that failed" },
+        "conclusion": { "type": "string", "required": true, "description": "GitHub's conclusion for the run, e.g. \"failure\"" },
+        "failure_class": { "type": "string", "required": true, "enum": ["dependency", "lint", "syntax", "flaky_test", "infra", "unknown"], "description": "What kind of failure the job log showed" },
+        "confidence": { "type": "string", "required": true, "enum": ["mechanical_high_confidence", "needs_human"], "description": "mechanical_high_confidence means CI Medic drafted a fix; needs_human means diagnosis-only" },
+        "diagnosis_summary": { "type": "string", "required": true, "description": "Plain-language summary of the log evidence and the conclusion" },
+        "pr_url": { "type": "string", "required": false, "description": "URL of the drafted (parked) pull request, when confidence == mechanical_high_confidence" },
+        "checked_at": { "type": "string", "required": true, "description": "ISO 8601 timestamp this diagnosis was made" }
+      }
+    },
+    {
+      "name": "receipt",
+      "displayName": "Receipts",
+      "description": "Structured audit trail of automated actions taken by workspace agents, read by the receipts/team-health dashboard",
+      "domain": "engineering",
+      "fields": {
+        "kind": { "type": "string", "required": true, "enum": ["receipt"], "description": "Always \"receipt\" — distinguishes this record from any other entity type" },
+        "metric": { "type": "string", "required": true, "enum": ["ci_failure_diagnosed", "fix_pr_drafted", "diagnosis_only", "fix_draft_latency_minutes"], "description": "Machine-readable action identifier" },
+        "value": { "type": "number", "required": true, "description": "Numeric magnitude of the action — see unit" },
+        "unit": { "type": "string", "required": true, "description": "Unit for value, e.g. \"count\", \"minutes\"" },
+        "subject": { "type": "string", "required": true, "description": "What the action was about — a workflow run URL or a drafted PR branch/URL" },
+        "occurredAt": { "type": "string", "required": true, "description": "ISO 8601 UTC timestamp of when the action happened" },
+        "agentSlug": { "type": "string", "required": true, "description": "The bot's marketplace slug that performed the action, e.g. \"ci-medic\"" }
+      }
+    }
+  ]
+}

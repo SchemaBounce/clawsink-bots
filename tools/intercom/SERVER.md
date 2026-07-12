@@ -5,114 +5,47 @@ metadata:
   name: intercom
   displayName: "Intercom"
   version: "1.0.0"
-  description: "Intercom customer messaging -- conversations, contacts, and articles"
-  tags: ["intercom", "messaging", "support", "customer-engagement"]
-  category: "crms-sales"
-  author: "schemabounce"
-  license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+  description: "Intercom's official hosted MCP server. Connect with your Intercom account to read conversations and contacts."
+  tags: ["support", "messaging", "customers", "helpdesk"]
+  category: "support"
+  author: "intercom"
+  license: "Proprietary"
+
+# This entry replaces the INTERCOM_ACCESS_TOKEN API-key entry: remote hosted OAuth is the default
+# so we no longer pay Composio for managed auth. Existing connections keep
+# their serverRef and reconnect once via the OAuth flow.
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# the same generic flow as freee and Notion. No pasted credential: the platform
+# runs the consent flow against the vendor's own authorization server and keeps
+# the access token fresh. The env spec is empty on purpose.
 auth:
-  type: http_bearer
-  token_env: INTERCOM_ACCESS_TOKEN
+  type: oauth2_mcp
 
 transport:
-  type: "sse"
-  url: "https://mcp.intercom.com/sse"
-env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
-  - name: INTERCOM_ACCESS_TOKEN
-    description: "Intercom access token from Developer Hub"
-    required: false
-    sensitive: true
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "streamable-http"
+  url: "https://mcp.intercom.com/mcp"
 
-# /me returns the authenticated app's own admin user. Idempotent.
-validation:
-  request:
-    method: GET
-    url: https://api.intercom.io/me
-    headers:
-      Accept: application/json
-      Intercom-Version: "2.11"
-  expect:
-    status: 200
-  on_status:
-    "401": { state: needs_setup, message: "Intercom rejected the access token (401). Regenerate at https://app.intercom.com/a/apps/_/developer-hub and update INTERCOM_ACCESS_TOKEN." }
-    "403": { state: needs_setup, message: "Token lacks required permissions (403)." }
-    "default": { state: failed }
-  timeout_ms: 5000
-
-healthProbe:
-  request:
-    method: GET
-    url: https://api.intercom.io/me
-    headers:
-      Intercom-Version: "2.11"
-  expect:
-    status: 200
-  on_status:
-    "default": { state: failed }
-  timeout_ms: 3000
-  interval_seconds: 300
-
-tools:
-  - name: list_conversations
-    description: "List conversations"
-    category: conversations
-  - name: get_conversation
-    description: "Get a conversation by ID"
-    category: conversations
-  - name: reply_to_conversation
-    description: "Reply to a conversation"
-    category: conversations
-  - name: list_contacts
-    description: "List contacts"
-    category: contacts
-  - name: create_contact
-    description: "Create a new contact"
-    category: contacts
-  - name: search_contacts
-    description: "Search contacts with filters"
-    category: contacts
-  - name: list_articles
-    description: "List help center articles"
-    category: articles
-  - name: create_article
-    description: "Create a help center article"
-    category: articles
-  - name: list_tags
-    description: "List tags"
-    category: tags
+env: []
 ---
 
 # Intercom MCP Server
 
-Provides Intercom customer messaging tools for bots that manage conversations, track contacts, and maintain help center content.
+Intercom's official hosted MCP server. Connect with your Intercom account to read conversations and contacts.
 
-> **Note:** Intercom's MCP server is OAuth-gated and available for US-hosted workspaces only.
+## How authentication works
 
-## Which Bots Use This
+1. Click **Connect account** on the Intercom card.
+2. A Intercom sign-in window opens. Approve access for the workspace.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
 
-- **customer-support** -- Monitors and responds to customer conversations
-- **sales-pipeline** -- Tracks leads and engages prospects through messaging
+No API key exists for this server. If the connection shows **Reconnect**, the
+grant expired or was revoked on the vendor's side; run the connect flow again.
 
-## Setup
+## Notes
 
-1. Create an Intercom app in the Developer Hub and generate an access token
-2. Add `INTERCOM_ACCESS_TOKEN` in the MCP connection setup
-3. The server connects via SSE to Intercom's hosted MCP endpoint
-
-## Team Usage
-
-Add to your TEAM.md to share a single Intercom server instance across bots:
-
-```yaml
-mcpServers:
-  - ref: "tools/intercom"
-    reason: "Bots need Intercom access for customer messaging and support"
-    config:
-      default_inbox: "main"
-```
+- No scopes pin: the client requests the server's advertised default set (which includes the refresh-token scope), so token refresh keeps working.
+- Tools are served by the vendor and discovered at session start (conversations, contacts, and articles).
+- Replaces the INTERCOM_ACCESS_TOKEN API-key entry. An existing connection shows Reconnect once, then uses OAuth.

@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "last_run_state",
+      "key": "init",
+      "value": "No runs yet. Will track the last checked timestamp and the set of previously seen PR ids."
+    },
+    {
+      "namespace": "known_ai_authors",
+      "key": "init",
+      "value": "No learned AI-author logins yet. Seeded from the pr_ai_author_patterns North Star value; this namespace accumulates specific logins confirmed AI-authored beyond the pattern list."
+    }
+  ]
+}

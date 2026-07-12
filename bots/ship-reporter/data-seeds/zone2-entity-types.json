@@ -1,0 +1,36 @@
+{
+  "entityTypes": [
+    {
+      "name": "ship_findings",
+      "displayName": "Ship Reporter Findings",
+      "description": "Structured summary of one reporting period: merged PRs, completed tasks, categorized sections, and the generated report's file reference",
+      "domain": "engineering",
+      "fields": {
+        "period_start": { "type": "string", "required": true, "description": "ISO 8601 start of the reporting window" },
+        "period_end": { "type": "string", "required": true, "description": "ISO 8601 end of the reporting window" },
+        "pr_count": { "type": "number", "required": true, "description": "Merged PRs in the window" },
+        "task_count": { "type": "number", "required": true, "description": "Completed tasks in the window" },
+        "repos": { "type": "string", "required": true, "description": "Comma-separated owner/repo pairs included" },
+        "sections": { "type": "string", "required": true, "description": "Categorized summary (features, fixes, internal) as structured text" },
+        "summary": { "type": "string", "required": true, "description": "Short TL;DR of the period" },
+        "file_id": { "type": "string", "required": true, "description": "adl_files id of the human-readable report" },
+        "generated_at": { "type": "string", "required": true, "description": "ISO 8601 timestamp the report was generated" }
+      }
+    },
+    {
+      "name": "receipt",
+      "displayName": "Receipts",
+      "description": "Structured audit trail of automated actions taken by workspace agents, read by the receipts/team-health dashboard",
+      "domain": "engineering",
+      "fields": {
+        "kind": { "type": "string", "required": true, "enum": ["receipt"], "description": "Always \"receipt\" — distinguishes this record from any other entity type" },
+        "metric": { "type": "string", "required": true, "description": "Machine-readable action identifier, e.g. \"report_generated\"" },
+        "value": { "type": "number", "required": true, "description": "Numeric magnitude of the action — see unit" },
+        "unit": { "type": "string", "required": true, "description": "Unit for value, e.g. \"count\", \"hours\", \"seconds\"" },
+        "subject": { "type": "string", "required": true, "description": "What the action was about — a file id or other reference" },
+        "occurredAt": { "type": "string", "required": true, "description": "ISO 8601 UTC timestamp of when the action happened" },
+        "agentSlug": { "type": "string", "required": true, "description": "The bot's marketplace slug that performed the action, e.g. \"ship-reporter\"" }
+      }
+    }
+  ]
+}

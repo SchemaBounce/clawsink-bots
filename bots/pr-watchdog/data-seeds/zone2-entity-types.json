@@ -1,0 +1,36 @@
+{
+  "entityTypes": [
+    {
+      "name": "prw_findings",
+      "displayName": "PR Watchdog Findings",
+      "description": "Per-PR review-state snapshot from a single run: author classification, review status, and hours open against the SLA",
+      "domain": "engineering",
+      "fields": {
+        "repo": { "type": "string", "required": true, "description": "owner/repo the PR belongs to" },
+        "pr_number": { "type": "number", "required": true, "description": "Pull request number" },
+        "pr_url": { "type": "string", "required": true, "description": "Full URL of the pull request" },
+        "author_login": { "type": "string", "required": true, "description": "GitHub login of the PR author" },
+        "ai_authored": { "type": "boolean", "required": true, "description": "Whether the author login matched an AI-author pattern" },
+        "has_human_review": { "type": "boolean", "required": true, "description": "Whether at least one review came from a non-AI-pattern login" },
+        "hours_open": { "type": "number", "required": true, "description": "Hours since the PR was opened, no human review" },
+        "sla_status": { "type": "string", "required": true, "enum": ["ok", "stale", "breach"], "description": "ok = under half the SLA window; stale = past half with no human review; breach = past the full window with no human review" },
+        "checked_at": { "type": "string", "required": true, "description": "ISO 8601 timestamp this snapshot was taken" }
+      }
+    },
+    {
+      "name": "receipt",
+      "displayName": "Receipts",
+      "description": "Structured audit trail of automated actions taken by workspace agents, read by the receipts/team-health dashboard",
+      "domain": "engineering",
+      "fields": {
+        "kind": { "type": "string", "required": true, "enum": ["receipt"], "description": "Always \"receipt\" — distinguishes this record from any other entity type" },
+        "metric": { "type": "string", "required": true, "description": "Machine-readable action identifier, e.g. \"stale_pr_detected\", \"sla_breach_escalated\", \"pr_routed\"" },
+        "value": { "type": "number", "required": true, "description": "Numeric magnitude of the action — see unit" },
+        "unit": { "type": "string", "required": true, "description": "Unit for value, e.g. \"count\", \"hours\", \"seconds\"" },
+        "subject": { "type": "string", "required": true, "description": "What the action was about — a PR URL or other reference" },
+        "occurredAt": { "type": "string", "required": true, "description": "ISO 8601 UTC timestamp of when the action happened" },
+        "agentSlug": { "type": "string", "required": true, "description": "The bot's marketplace slug that performed the action, e.g. \"pr-watchdog\"" }
+      }
+    }
+  ]
+}
