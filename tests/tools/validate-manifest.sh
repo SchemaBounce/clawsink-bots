@@ -15,7 +15,8 @@
 #       remote (sse/streamable-http) requires url
 #   8.  env entries: name non-empty; required/sensitive are booleans when present
 #   9.  tools entries: name non-empty; tool names unique within server
-#   10. auth block: type+token_env constraints (mirrors validateMcpAuth)
+#   10. auth block: type+token_env constraints (mirrors validateMcpAuth);
+#       oauth2_mcp (MCP-spec OAuth 2.1) takes no token_env and needs a remote transport
 #   11. validation block: must declare request (HTTP) OR tool (stdio), not both/neither
 #       validation.request.url must be https:// or {template}
 #       validation.request.method must be a standard HTTP verb
@@ -238,7 +239,7 @@ def _validate_parsed(tool_name, fm):
                 )
             elif has_type:
                 atype = auth["type"]
-                valid_auth = {"http_bearer", "http_basic", "api_key_header", "none"}
+                valid_auth = {"http_bearer", "http_basic", "api_key_header", "oauth2_mcp", "none"}
                 if atype not in valid_auth:
                     errors.append(
                         f"auth.type {atype!r} is not one of: "
@@ -258,6 +259,32 @@ def _validate_parsed(tool_name, fm):
                         errors.append(
                             "auth.type=http_basic requires 'token_env' "
                             "or 'username_env'+'password_env'"
+                        )
+                elif atype == "oauth2_mcp":
+                    # MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery
+                    # + RFC 7591 DCR): the platform runs the consent flow against
+                    # the vendor's authorization server. There is no pasted
+                    # credential, and the challenge comes from the remote server,
+                    # so a remote transport is required. core-api surfaces this
+                    # as authMethod "oauth-mcp" (mcp_catalog_snapshot.go).
+                    if auth.get("token_env"):
+                        errors.append(
+                            "auth.type=oauth2_mcp must not set 'token_env' "
+                            "(the platform-run OAuth flow has no static credential)"
+                        )
+                    t_type = transport.get("type") if isinstance(transport, dict) else ""
+                    if t_type not in ("sse", "streamable-http"):
+                        errors.append(
+                            "auth.type=oauth2_mcp requires a remote transport "
+                            "(sse or streamable-http)"
+                        )
+                    scopes = auth.get("scopes")
+                    if scopes is not None and (
+                        not isinstance(scopes, list)
+                        or not all(isinstance(s, str) and s for s in scopes)
+                    ):
+                        errors.append(
+                            "auth.scopes must be a list of non-empty strings"
                         )
             elif has_injection:
                 inj = auth["injection"]
