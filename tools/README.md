@@ -193,8 +193,20 @@ CI. Do not add external binary invocations to this script.
 | `transport.type` + `command`/`url` | Start the server using the declared transport method |
 | `env[].name` | Resolve each variable from the workspace's secrets store (activation fails if required secrets are missing) |
 | `tools[]` | Register the server's tools so bots can call them by name |
+| `rules[]` | Attach each guardrail to any agent granted this server, and render it every turn |
 
 Never put secrets in SERVER.md — only declare variable names. Users configure actual values in their workspace settings.
+
+## Rules Section (optional)
+
+A server can declare always-on guardrails that travel with it. Any agent granted the server carries them, whether or not its bot asked for them:
+
+```yaml
+rules:
+  - ref: "rules/github-safety@1.0.0"
+```
+
+The rule is attached at grant time with `source: mcp` and, when the rule itself declares no `appliesTo`, it is scoped to this server's ref. Revoking the server stops the rule from rendering. This is how a destructive tool ships with its own safety constraints instead of relying on every bot author to remember them. See [rules/README.md](../rules/README.md) for the rule format and severity contract.
 
 ## Short-Term Rental (STR) Integrations
 

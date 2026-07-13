@@ -37,6 +37,10 @@ healthProbe:
     name: blog_list
     args: {}
   interval_seconds: 300
+# Guardrails that travel with this server: any agent granted tools/blog
+# carries them, whether or not its bot declared them. See rules/README.md.
+rules:
+  - ref: "rules/blog-publishing@1.0.0"
 tools:
   - name: blog_create_draft
     description: "Create a new blog post draft. Returns post_id, slug, and status."

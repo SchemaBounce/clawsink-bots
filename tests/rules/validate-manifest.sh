@@ -19,6 +19,10 @@
 #      WARN over 1000 chars (crowds out sibling rules in the 4000-char budget)
 #   8. Cross-references: every rules[].ref in bots/*/BOT.md resolves to a
 #      shared rules/{name}/ or bot-local bots/{bot}/rules/{name}/ body
+#   9. Cross-references: every rules[].ref declared by an MCP server
+#      (tools/*/SERVER.md) or a skill (skills/*/SKILL.md) resolves to a shared
+#      rules/{name}/ body. These attach to any agent granted the artifact, so a
+#      broken ref silently drops a guardrail everywhere the tool is used.
 #
 # Usage:
 #   ./tests/rules/validate-manifest.sh                # validate all rules/** + bot refs
@@ -208,6 +212,52 @@ def validate_rule_dir(rule_name, rule_path):
     _report(rule_name, "RULE.md", errors, warnings)
 
 
+def _check_rule_refs(rules, local_rules_dir, local_hint):
+    """Shared ref resolution for a manifest's rules[] block."""
+    errors = []
+    for i, r in enumerate(rules):
+        if not isinstance(r, dict):
+            errors.append(f"rules[{i}] must be a mapping with ref or inline")
+            continue
+        ref = r.get("ref", "") or r.get("inline", "")
+        if not ref:
+            errors.append(f"rules[{i}] has neither ref nor inline")
+            continue
+        # "rules/{name}@{ver}" or bare "{name}" → trailing segment sans version
+        name = re.sub(r"@.*$", "", ref).rstrip("/").split("/")[-1]
+        candidates = [os.path.join(REPO_ROOT, "rules", name)]
+        if local_rules_dir:
+            candidates.append(os.path.join(local_rules_dir, name))
+        has_body = any(
+            os.path.isfile(os.path.join(d, f))
+            for d in candidates
+            for f in ("prompt.md", "rule.md")
+        )
+        if not has_body:
+            expected = f"rules/{name}/prompt.md"
+            if local_hint:
+                expected += f" or {local_hint}/{name}/prompt.md"
+            errors.append(
+                f"rules[{i}] ref {ref!r} does not resolve — expected {expected}"
+            )
+    return errors
+
+
+def _manifest_frontmatter(path, label):
+    """Parse a manifest's YAML frontmatter, or None when absent/invalid."""
+    if not os.path.isfile(path):
+        return None
+    with open(path, "r", encoding="utf-8") as fh:
+        content = fh.read()
+    fm_text, err = extract_frontmatter(content, label)
+    if err:
+        return None  # manifest structure is validated by its own suite
+    try:
+        return yaml.safe_load(fm_text)
+    except yaml.YAMLError:
+        return None
+
+
 def validate_bot_rule_refs():
     """Every rules[].ref in bots/*/BOT.md must resolve to a rule body."""
     bots_dir = os.path.join(REPO_ROOT, "bots")
@@ -216,46 +266,37 @@ def validate_bot_rule_refs():
     for entry in sorted(os.scandir(bots_dir), key=lambda e: e.name):
         if not entry.is_dir():
             continue
-        bot_md = os.path.join(entry.path, "BOT.md")
-        if not os.path.isfile(bot_md):
-            continue
-        with open(bot_md, "r", encoding="utf-8") as fh:
-            content = fh.read()
-        fm_text, err = extract_frontmatter(content, "BOT.md")
-        if err:
-            continue  # bot manifest structure is validated by tests/bots/
-        try:
-            fm = yaml.safe_load(fm_text)
-        except yaml.YAMLError:
-            continue
+        fm = _manifest_frontmatter(os.path.join(entry.path, "BOT.md"), "BOT.md")
         rules = (fm or {}).get("rules") or []
         if not isinstance(rules, list) or not rules:
             continue
-        errors = []
-        warnings = []
-        for i, r in enumerate(rules):
-            if not isinstance(r, dict):
-                errors.append(f"rules[{i}] must be a mapping with ref or inline")
+        errors = _check_rule_refs(
+            rules,
+            os.path.join(entry.path, "rules"),
+            f"bots/{entry.name}/rules",
+        )
+        _report(entry.name, "BOT.md rules refs", errors, [])
+
+
+def validate_artifact_rule_refs():
+    """rules[].ref declared by an MCP server (tools/) or a skill (skills/) must
+    resolve. These rules attach to any agent granted that artifact, so a broken
+    ref here silently drops a guardrail from every agent that uses the tool."""
+    for kind, manifest_name in (("tools", "SERVER.md"), ("skills", "SKILL.md")):
+        base = os.path.join(REPO_ROOT, kind)
+        if not os.path.isdir(base):
+            continue
+        for entry in sorted(os.scandir(base), key=lambda e: e.name):
+            if not entry.is_dir():
                 continue
-            ref = r.get("ref", "") or r.get("inline", "")
-            if not ref:
-                errors.append(f"rules[{i}] has neither ref nor inline")
-                continue
-            # "rules/{name}@{ver}" or bare "{name}" → trailing segment sans version
-            name = re.sub(r"@.*$", "", ref).rstrip("/").split("/")[-1]
-            shared = os.path.join(REPO_ROOT, "rules", name)
-            local = os.path.join(entry.path, "rules", name)
-            has_body = any(
-                os.path.isfile(os.path.join(d, f))
-                for d in (shared, local)
-                for f in ("prompt.md", "rule.md")
+            fm = _manifest_frontmatter(
+                os.path.join(entry.path, manifest_name), manifest_name
             )
-            if not has_body:
-                errors.append(
-                    f"rules[{i}] ref {ref!r} does not resolve — expected "
-                    f"rules/{name}/prompt.md or bots/{entry.name}/rules/{name}/prompt.md"
-                )
-        _report(entry.name, "BOT.md rules refs", errors, warnings)
+            rules = (fm or {}).get("rules") or []
+            if not isinstance(rules, list) or not rules:
+                continue
+            errors = _check_rule_refs(rules, None, None)
+            _report(entry.name, f"{manifest_name} rules refs", errors, [])
 
 
 # -- Main ---------------------------------------------------------------------
@@ -274,6 +315,7 @@ for entry in rule_entries:
 # Cross-reference pass only runs against the real repo layout.
 if RULES_DIR == os.path.join(REPO_ROOT, "rules"):
     validate_bot_rule_refs()
+    validate_artifact_rule_refs()
 
 print()
 print(f"Results: {PASS_COUNT} passed, {WARN_COUNT} warnings, {FAIL_COUNT} failures")
