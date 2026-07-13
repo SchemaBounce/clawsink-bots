@@ -12,6 +12,16 @@ metadata:
 severity: hard
 appliesTo:
   - tools/github
+# Deterministic half of the rule. The prompt text below asks the agent not to do
+# these things; this block means the platform will not let it, whatever the model
+# decides. Only honoured on severity: hard.
+enforce:
+  denyTools:
+    - "*_delete_repository"
+    - "*_delete_repo"
+    - "*_force_push"
+  askTools:
+    - "*_merge_pull_request"
 ---
 
 # GitHub Safety

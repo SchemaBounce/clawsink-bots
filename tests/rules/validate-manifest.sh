@@ -209,6 +209,48 @@ def validate_rule_dir(rule_name, rule_path):
                         f"tools/{{name}} or skills/{{name}} directory"
                     )
 
+    # -- enforce block (optional; the deterministic half of a rule) -----------
+    enforce = fm.get("enforce")
+    if enforce is not None:
+        if not isinstance(enforce, dict):
+            errors.append("enforce must be a mapping with denyTools and/or askTools")
+        else:
+            # An enforce block on a non-hard rule is silently ignored by the
+            # platform. Failing here is the point: an author who wrote one
+            # believes the rule is enforced, and shipping it as advisory would
+            # be a false guarantee.
+            if severity != "hard":
+                errors.append(
+                    f"enforce is only honoured on severity: hard (this rule is "
+                    f"{severity or 'guardrail'!r}) — either set severity: hard or "
+                    f"drop the enforce block; shipping it as-is is a false guarantee"
+                )
+            unknown = set(enforce) - {"denyTools", "askTools"}
+            if unknown:
+                errors.append(
+                    f"enforce has unknown key(s) {sorted(unknown)} — only denyTools "
+                    f"and askTools are honoured, anything else silently does nothing"
+                )
+            if not enforce.get("denyTools") and not enforce.get("askTools"):
+                errors.append(
+                    "enforce block is empty — declare denyTools and/or askTools"
+                )
+            for key in ("denyTools", "askTools"):
+                patterns = enforce.get(key)
+                if patterns is None:
+                    continue
+                if not isinstance(patterns, list):
+                    errors.append(f"enforce.{key} must be a sequence")
+                    continue
+                for i, p in enumerate(patterns):
+                    if not isinstance(p, str) or not p.strip():
+                        errors.append(f"enforce.{key}[{i}] must be a non-empty string")
+                    elif p.strip() == "*":
+                        errors.append(
+                            f"enforce.{key}[{i}] is '*', which matches EVERY tool — "
+                            f"that bricks the agent; name the tools you mean"
+                        )
+
     _report(rule_name, "RULE.md", errors, warnings)
 
 

@@ -36,12 +36,36 @@ metadata:
   license: string        # License identifier
 severity: string         # guideline | guardrail | hard (default: guardrail)
 appliesTo: [string]      # Optional scoping: ["tools/github", "skills/code-review"]. Empty = agent-wide.
+enforce:                 # Optional. Only honoured on severity: hard. See below.
+  denyTools: [string]    # Tool-name patterns the platform blocks outright
+  askTools: [string]     # Tool-name patterns routed to a human for approval
 ---
 
 # {Display Name}
 
 Extended documentation here. Renders as the rule's marketplace page.
 ```
+
+### enforce: making a rule hold when the model does not
+
+A rule's text is a request. A strong model follows it; a weak, confused, or jailbroken one may not, and no amount of wording closes that gap. An `enforce` block is checked by the platform **before a tool call runs**, so the constraint holds regardless of what the model decided. It is what makes a `hard` rule actually hard, and it makes the guarantee identical across Claude, GPT, and Llama.
+
+```yaml
+severity: hard
+enforce:
+  denyTools:
+    - "*_delete_repository"   # blocked outright; the agent is told which rule stopped it
+    - "*_force_push"
+  askTools:
+    - "*_merge_pull_request"  # allowed, but a human approves it first (via the Inbox)
+```
+
+- Patterns match the **bare tool name**, with `*` as a wildcard. Matching is case-insensitive.
+- **Deny wins over ask** when both match. An enforced rule is a floor: a permissive rule can never relax a restrictive one.
+- `enforce` on a `guideline` or `guardrail` rule is **ignored**. An advisory-looking rule that silently blocked a tool call would make the severity contract meaningless. If you want it enforced, say `severity: hard`.
+- Enforcement respects `appliesTo`: a rule scoped to an artifact the agent does not have is never rendered, so it never blocks either. The gate and the prompt always agree.
+
+Write the prompt text as if there were no enforcement (the agent should understand the constraint, not just hit a wall), and add `enforce` as the backstop.
 
 ### Severity semantics
 
