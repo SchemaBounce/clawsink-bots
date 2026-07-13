@@ -20,6 +20,12 @@ transport:
   repo: "github/github-mcp-server"
   ref: "v1.3.0"
   asset: "github-mcp-server_Linux_x86_64.tar.gz"
+  # The upstream binary is a cobra CLI with multiple subcommands (stdio,
+  # generate-docs, ...). Launched with no args it prints usage and exits
+  # instead of speaking MCP over stdio ("child_exited" at gateway start,
+  # local repro 2026-07-13). "stdio" is the documented subcommand that runs
+  # it as an MCP stdio server — see github/github-mcp-server's own README.
+  args: ["stdio"]
 env:
   # OPTIONAL: the token is bridged from the workspace's connected GitHub
   # (Settings -> Git Connections) by core-api's ResolveConnectionSecret OAuth
@@ -391,14 +397,14 @@ workspace OAuth bridge.
 
 - The pinned asset `github-mcp-server_Linux_x86_64.tar.gz` is a tar.gz
   archive; upstream publishes no bare Linux binary. The gateway's github
-  source (`mcp-gateway/internal/source/github.go`) currently downloads,
-  chmods, and executes the asset directly with no archive extraction, and its
-  checksums lookup only recognizes assets named `checksums.txt`, `checksums`,
-  or `<asset>.sha256`, while this release names it
-  `github-mcp-server_1.3.0_checksums.txt`. Both gaps must be closed in the
-  gateway before this server can start. This manifest ships ahead of that
-  work by design; the pinned repo/ref/asset above are the correct target
-  state.
+  source (`mcp-gateway/internal/source/github.go`) downloads it, verifies its
+  SHA-256 against the release checksums, extracts it, and runs the inner
+  binary — see `resolveArchive`. The archive-extraction and goreleaser
+  checksum-naming gaps this note used to describe are CLOSED; do not treat
+  this server as un-startable.
+- Launch args matter: the binary is a cobra CLI, so it needs the `stdio`
+  subcommand (declared in `transport.args` above). With no args it prints
+  usage and exits, which the gateway reports as `child_exited` at start.
 - To bump the version: update `ref` and re-verify the tool list against the
   README at the new tag (the upstream tool set changes between releases).
   Never relax `ref` to a branch or "latest".

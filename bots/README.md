@@ -86,6 +86,8 @@ zones:
   zone2Domains: [string] # Shared domains this bot accesses
 skills:                  # Skill composition
   - ref: string          # Reference to shared skill: "skills/{name}@{version}"
+rules:                   # Always-on guardrails (optional)
+  - ref: string          # Reference to shared rule: "rules/{name}@{version}"
 toolPacks:               # Native deterministic tools (optional)
   - ref: string          # Reference: "packs/{name}" or "packs/{name}@{version}"
     reason: string       # Why this bot needs this native built-in tool
@@ -225,6 +227,14 @@ The `skills:` section lists capabilities this bot uses:
 - `ref: "skills/{skill-name}@{version}"` — references a shared skill from the `skills/` directory. The skill's `prompt.md` is appended to the bot's SOUL.md at runtime.
 
 Skills are composed in the order listed. SOUL.md always comes first in the final system prompt.
+
+## Rules Section
+
+The `rules:` section lists always-on guardrails composed into every agent deployed from this bot:
+
+- `ref: "rules/{rule-name}@{version}"` — references a shared rule from the `rules/` directory. The rule's `prompt.md` is stored on the agent at activation and rendered under "Operating Rules (Guardrails)" in the system prompt on every turn.
+
+Unlike skills (on-demand capabilities), rules never activate and never touch the tool allowlist; they are persistent constraints with a severity contract (`guideline` | `guardrail` | `hard`). A bot-local rule can live at `bots/{bot-name}/rules/{rule-name}/prompt.md` when the constraint makes no sense outside one bot. See [rules/README.md](../rules/README.md) for the format, severity semantics, and `appliesTo` scoping.
 
 ## Built-in Tools Section
 

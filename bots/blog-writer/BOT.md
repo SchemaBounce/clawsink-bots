@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "1.0.16"
+  version: "1.0.18"
   description: "Weekly technical blog content creation for SchemaBounce and OpenCLAW platforms."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -84,6 +84,8 @@ skills:
   - ref: "skills/report-generation@1.0.0"
   - ref: "skills/trend-analysis@1.0.0"
   - ref: "skills/sentiment-analysis@1.0.0"
+rules:
+  - ref: "rules/blog-publishing@1.0.0"
 plugins: []
 # Publishing now goes through the dedicated tools/blog MCP connector. The bot
 # holds no credentials directly. The workspace operator creates a service

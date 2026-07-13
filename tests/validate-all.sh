@@ -51,6 +51,12 @@ if ! bash "$SCRIPT_DIR/tools/validate-manifest.sh"; then
 fi
 echo ""
 
+echo "=== Validating Rule Manifests (rules/**) ==="
+if ! bash "$SCRIPT_DIR/rules/validate-manifest.sh"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
 if [ $FAILURES -gt 0 ]; then
   echo "❌ $FAILURES validation suite(s) had failures"
   exit 1

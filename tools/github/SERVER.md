@@ -59,6 +59,11 @@ healthProbe:
   timeout_ms: 3000
   interval_seconds: 300
 
+# Guardrails that travel with this server: any agent granted tools/github
+# carries them, whether or not its bot declared them. See rules/README.md.
+rules:
+  - ref: "rules/github-safety@1.0.0"
+
 tools:
   - name: create_or_update_file
     description: "Create or update a file in a repository"
