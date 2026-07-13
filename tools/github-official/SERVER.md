@@ -20,6 +20,12 @@ transport:
   repo: "github/github-mcp-server"
   ref: "v1.3.0"
   asset: "github-mcp-server_Linux_x86_64.tar.gz"
+  # The upstream binary is a cobra CLI with multiple subcommands (stdio,
+  # generate-docs, ...). Launched with no args it prints usage and exits
+  # instead of speaking MCP over stdio ("child_exited" at gateway start,
+  # local repro 2026-07-13). "stdio" is the documented subcommand that runs
+  # it as an MCP stdio server — see github/github-mcp-server's own README.
+  args: ["stdio"]
 env:
   # OPTIONAL: the token is bridged from the workspace's connected GitHub
   # (Settings -> Git Connections) by core-api's ResolveConnectionSecret OAuth
