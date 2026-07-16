@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "crm_hygiene_policy",
+      "value": "Define required fields, stale-record thresholds, correction confidence, approval rules, and excluded record categories.",
+      "description": "Policy used to identify and prioritize CRM cleanup work"
+    },
+    {
+      "key": "pipeline_stage_definitions",
+      "value": "Define allowed stages, stage age limits, and evidence required to move a deal forward.",
+      "description": "Workspace pipeline semantics for CRM validation"
+    },
+    {
+      "key": "forecast_definition",
+      "value": "Describe which CRM records and fields affect your published forecast.",
+      "description": "Definition used to identify forecast-critical hygiene issues"
+    }
+  ]
+}

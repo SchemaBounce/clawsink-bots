@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "revenue_leakage_policy",
+      "key": "defaults",
+      "value": "No leakage policy configured. Mark all findings unverified and do not estimate materiality."
+    },
+    {
+      "namespace": "source_mapping",
+      "key": "init",
+      "value": "No stable source mapping established. First run should document available billing, ledger, and entitlement references."
+    },
+    {
+      "namespace": "bot:revenue-leakage-manager:state",
+      "key": "last_run_state",
+      "value": "First run. Establish cursors, source coverage, and a baseline of open mismatches."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "entityTypes": [
+    {
+      "name": "crm_hygiene_findings",
+      "displayName": "CRM Hygiene Findings",
+      "description": "Reviewable CRM data-quality recommendations",
+      "domain": "operations",
+      "sampleFields": ["severity", "category", "record_ref", "policy_rule", "confidence", "proposed_correction"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Recommendation priority"},
+        "category": {"type": "string", "required": true, "enum": ["policy_violation", "stale_record", "missing_owner", "missing_next_step", "field_conflict"], "description": "Hygiene issue type"},
+        "record_ref": {"type": "string", "required": true, "description": "Stable CRM record reference"},
+        "policy_rule": {"type": "string", "required": true, "description": "Configured rule that was violated"},
+        "confidence": {"type": "string", "required": true, "enum": ["low", "medium", "high"], "description": "Confidence in the proposed correction"},
+        "proposed_correction": {"type": "string", "required": true, "description": "Reviewable proposed CRM correction"}
+      }
+    },
+    {
+      "name": "crm_hygiene_alerts",
+      "displayName": "CRM Hygiene Alerts",
+      "description": "Forecast-critical or ownership conditions requiring immediate review",
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "record_ref", "reason", "action_required"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["high", "critical"], "description": "Alert urgency"},
+        "title": {"type": "string", "required": true, "description": "Short alert title"},
+        "record_ref": {"type": "string", "required": true, "description": "Stable CRM record reference"},
+        "reason": {"type": "string", "required": true, "description": "Why policy requires immediate review"},
+        "action_required": {"type": "string", "required": true, "description": "Required human action"}
+      }
+    }
+  ]
+}

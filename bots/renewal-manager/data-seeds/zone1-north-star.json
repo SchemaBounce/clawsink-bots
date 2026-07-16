@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "renewal_policy",
+      "value": "Define review windows, risk thresholds, escalation timing, permitted actions, and the required human approver.",
+      "description": "Commercial policy used to prioritize and escalate renewals"
+    },
+    {
+      "key": "customer_health_definition",
+      "value": "Define the supported health signals and thresholds for payment, support, usage, relationship, and ownership.",
+      "description": "Workspace definition of customer health"
+    },
+    {
+      "key": "escalation_contacts",
+      "value": "List the customer success, sales, and finance owners for renewal exceptions.",
+      "description": "Human owners for renewal escalations"
+    }
+  ]
+}

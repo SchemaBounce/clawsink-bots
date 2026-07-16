@@ -1,0 +1,33 @@
+{
+  "entityTypes": [
+    {
+      "name": "renewal_findings",
+      "displayName": "Renewal Findings",
+      "description": "Source-backed renewal assessments and recommended account plans",
+      "domain": "operations",
+      "sampleFields": ["severity", "category", "account_ref", "renewal_window", "risk_factors", "recommended_action"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Renewal risk priority"},
+        "category": {"type": "string", "required": true, "enum": ["renewal_assessment", "risk_signal", "data_gap", "account_plan", "owner_gap"], "description": "Finding type"},
+        "account_ref": {"type": "string", "required": true, "description": "Source account reference"},
+        "renewal_window": {"type": "string", "description": "Configured renewal review period"},
+        "risk_factors": {"type": "array", "description": "Evidence-backed risk factors"},
+        "recommended_action": {"type": "string", "required": true, "description": "Safe recommended next action"}
+      }
+    },
+    {
+      "name": "renewal_alerts",
+      "displayName": "Renewal Alerts",
+      "description": "Urgent renewal conditions requiring a human owner",
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "account_ref", "reason", "action_required"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["high", "critical"], "description": "Alert urgency"},
+        "title": {"type": "string", "required": true, "description": "Short alert title"},
+        "account_ref": {"type": "string", "required": true, "description": "Source account reference"},
+        "reason": {"type": "string", "required": true, "description": "Why the account needs attention"},
+        "action_required": {"type": "string", "required": true, "description": "Required human action"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "revenue_leakage_policy",
+      "value": "Define evidence requirements, materiality thresholds, alert thresholds, and the human owner for each correction type.",
+      "description": "Policy used to verify and prioritize suspected revenue gaps"
+    },
+    {
+      "key": "entitlement_source",
+      "value": "Describe the authoritative source for active customer access or subscription entitlements.",
+      "description": "Source used to verify billing-to-access mismatches"
+    }
+  ]
+}

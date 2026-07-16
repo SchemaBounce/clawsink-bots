@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "renewal_policy",
+      "key": "defaults",
+      "value": "No renewal policy configured. Record data gaps and request policy configuration before preparing external actions."
+    },
+    {
+      "namespace": "account_context",
+      "key": "init",
+      "value": "No account context learned. Use connected source records and avoid storing raw customer conversations."
+    },
+    {
+      "namespace": "bot:renewal-manager:state",
+      "key": "last_run_state",
+      "value": "First run. Establish account and billing cursors, then assess only the configured renewal window."
+    }
+  ]
+}
