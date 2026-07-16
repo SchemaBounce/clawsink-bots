@@ -1,0 +1,33 @@
+{
+  "entityTypes": [
+    {
+      "name": "ar_findings",
+      "displayName": "Accounts Receivable Findings",
+      "description": "Evidence-backed invoice priority and collection recommendations",
+      "domain": "finance",
+      "sampleFields": ["severity", "category", "invoice_ref", "age_band", "recommended_action", "status"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Priority of the receivable"},
+        "category": {"type": "string", "required": true, "enum": ["overdue_invoice", "promise_to_pay", "dispute", "collection_ready", "reconciliation_gap"], "description": "Receivable state"},
+        "invoice_ref": {"type": "string", "required": true, "description": "Source invoice reference"},
+        "age_band": {"type": "string", "description": "Configured aging band"},
+        "recommended_action": {"type": "string", "required": true, "description": "Next policy-compliant action"},
+        "status": {"type": "string", "description": "Open, queued, approved, resolved, or excluded"}
+      }
+    },
+    {
+      "name": "ar_alerts",
+      "displayName": "Accounts Receivable Alerts",
+      "description": "Finance exceptions that need a human owner",
+      "domain": "finance",
+      "sampleFields": ["severity", "title", "invoice_ref", "reason", "action_required"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["high", "critical"], "description": "Exception urgency"},
+        "title": {"type": "string", "required": true, "description": "Short exception title"},
+        "invoice_ref": {"type": "string", "required": true, "description": "Source invoice reference"},
+        "reason": {"type": "string", "required": true, "description": "Why automated follow-up is unsafe"},
+        "action_required": {"type": "string", "required": true, "description": "Finance action required"}
+      }
+    }
+  ]
+}

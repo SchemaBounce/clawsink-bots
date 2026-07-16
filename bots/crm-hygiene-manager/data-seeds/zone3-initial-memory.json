@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "crm_hygiene_policy",
+      "key": "defaults",
+      "value": "No hygiene policy configured. Report data gaps and request policy configuration before proposing a CRM action."
+    },
+    {
+      "namespace": "field_mapping",
+      "key": "init",
+      "value": "No approved CRM field mappings learned. Use the source field names returned by the connected CRM."
+    },
+    {
+      "namespace": "bot:crm-hygiene-manager:state",
+      "key": "last_run_state",
+      "value": "First run. Establish scan cursors, policy version, and the initial review queue."
+    }
+  ]
+}

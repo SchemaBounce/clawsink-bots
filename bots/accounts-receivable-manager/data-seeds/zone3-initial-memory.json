@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "collection_policy",
+      "key": "defaults",
+      "value": "No collection policy configured. Do not prepare external follow-ups until policy and escalation contacts are set."
+    },
+    {
+      "namespace": "account_preferences",
+      "key": "init",
+      "value": "No account-level contact preferences learned. Respect source-system exclusions and finance review flags."
+    },
+    {
+      "namespace": "bot:accounts-receivable-manager:state",
+      "key": "last_run_state",
+      "value": "First run. Establish a source cursor and document all open invoice exceptions before preparing any draft."
+    }
+  ]
+}

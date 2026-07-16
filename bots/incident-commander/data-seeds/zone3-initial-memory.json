@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "incident_policy",
+      "key": "defaults",
+      "value": "No severity policy configured. Record evidence and request human review instead of assigning a severity."
+    },
+    {
+      "namespace": "service_ownership",
+      "key": "init",
+      "value": "No service ownership map configured. Create an owner-gap finding for every unowned service."
+    },
+    {
+      "namespace": "bot:incident-commander:state",
+      "key": "last_run_state",
+      "value": "First run. Establish incident IDs, source cursors, and telemetry connection health."
+    }
+  ]
+}

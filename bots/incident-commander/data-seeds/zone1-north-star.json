@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    {
+      "key": "incident_severity_policy",
+      "value": "Define P1 through P4 criteria, escalation timing, and the evidence required before a severity recommendation.",
+      "description": "Workspace severity and escalation policy"
+    },
+    {
+      "key": "service_ownership",
+      "value": "Map each service and environment to its responsible human on-call team.",
+      "description": "Human ownership map used in incident findings"
+    },
+    {
+      "key": "status_update_policy",
+      "value": "Define update cadence, audiences, approved channels, and the human approver for incident communications.",
+      "description": "Policy for approval-gated incident updates"
+    }
+  ]
+}

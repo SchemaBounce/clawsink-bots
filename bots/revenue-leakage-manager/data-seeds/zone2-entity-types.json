@@ -1,0 +1,33 @@
+{
+  "entityTypes": [
+    {
+      "name": "leakage_findings",
+      "displayName": "Revenue Leakage Findings",
+      "description": "Investigations into billing, payment, subscription, and entitlement mismatches",
+      "domain": "finance",
+      "sampleFields": ["severity", "category", "source_refs", "verification_state", "impact_range", "recommended_owner"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Priority of the suspected gap"},
+        "category": {"type": "string", "required": true, "enum": ["verified_gap", "unverified_gap", "payment_failure", "billing_mismatch", "subscription_mismatch", "entitlement_mismatch"], "description": "Gap classification"},
+        "source_refs": {"type": "array", "required": true, "description": "Stable source references used in the investigation"},
+        "verification_state": {"type": "string", "required": true, "enum": ["verified", "unverified", "blocked"], "description": "Evidence state"},
+        "impact_range": {"type": "string", "description": "Policy-defined estimated impact range"},
+        "recommended_owner": {"type": "string", "required": true, "description": "Human team responsible for correction"}
+      }
+    },
+    {
+      "name": "leakage_alerts",
+      "displayName": "Revenue Leakage Alerts",
+      "description": "Verified high-impact or recurring revenue loss conditions",
+      "domain": "finance",
+      "sampleFields": ["severity", "title", "finding_ref", "reason", "action_required"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["high", "critical"], "description": "Alert urgency"},
+        "title": {"type": "string", "required": true, "description": "Short alert title"},
+        "finding_ref": {"type": "string", "required": true, "description": "Related leakage finding"},
+        "reason": {"type": "string", "required": true, "description": "Why policy requires attention"},
+        "action_required": {"type": "string", "required": true, "description": "Required human investigation or correction"}
+      }
+    }
+  ]
+}

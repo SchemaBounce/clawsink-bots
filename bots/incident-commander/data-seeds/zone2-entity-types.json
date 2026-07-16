@@ -1,0 +1,33 @@
+{
+  "entityTypes": [
+    {
+      "name": "incident_findings",
+      "displayName": "Incident Findings",
+      "description": "Timestamped incident evidence, hypotheses, and ownership recommendations",
+      "domain": "operations",
+      "sampleFields": ["severity", "category", "incident_ref", "timestamp", "source", "confidence"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["low", "medium", "high", "critical"], "description": "Finding priority"},
+        "category": {"type": "string", "required": true, "enum": ["timeline", "telemetry", "hypothesis", "owner_gap", "status_draft"], "description": "Finding type"},
+        "incident_ref": {"type": "string", "required": true, "description": "Source incident reference"},
+        "timestamp": {"type": "string", "required": true, "description": "Observed event time with timezone"},
+        "source": {"type": "string", "required": true, "description": "Evidence source"},
+        "confidence": {"type": "string", "enum": ["low", "medium", "high"], "description": "Confidence in the finding"}
+      }
+    },
+    {
+      "name": "incident_alerts",
+      "displayName": "Incident Alerts",
+      "description": "Policy-defined incident conditions requiring immediate human attention",
+      "domain": "operations",
+      "sampleFields": ["severity", "title", "incident_ref", "reason", "action_required"],
+      "fields": {
+        "severity": {"type": "string", "required": true, "enum": ["high", "critical"], "description": "Alert urgency"},
+        "title": {"type": "string", "required": true, "description": "Short alert title"},
+        "incident_ref": {"type": "string", "required": true, "description": "Source incident reference"},
+        "reason": {"type": "string", "required": true, "description": "Why human action is required"},
+        "action_required": {"type": "string", "required": true, "description": "Required human action"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "collection_policy",
+      "value": "Define eligible age bands, excluded account statuses, approved tones, escalation thresholds, and who may approve a follow-up.",
+      "description": "Policy that controls collection prioritization and outbound drafts"
+    },
+    {
+      "key": "escalation_contacts",
+      "value": "List finance owners for disputed, high-value, hardship, and legal-hold receivables.",
+      "description": "Human owners for collection exceptions"
+    }
+  ]
+}
