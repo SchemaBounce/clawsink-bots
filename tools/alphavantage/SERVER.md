@@ -1,0 +1,47 @@
+---
+apiVersion: clawsink.schemabounce.com/v1
+kind: McpServer
+metadata:
+  name: alphavantage
+  displayName: "Alpha Vantage"
+  version: "1.0.0"
+  description: "Alpha Vantage's official hosted MCP server. Query Alpha Vantage market data: stocks, forex, crypto, and fundamentals with your Alpha Vantage account."
+  tags: ["alpha-vantage", "market-data", "stocks", "finance"]
+  category: "finance"
+  author: "alphavantage"
+  license: "Proprietary"
+
+# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
+# live-probed 2026-07-16 (registry sweep; vendor-published entry on
+# registry.modelcontextprotocol.io with a DNS-verified namespace). Scopes
+# omitted: the client requests the AS's advertised default, which keeps
+# offline_access intact for token refresh.
+auth:
+  type: oauth2_mcp
+
+transport:
+  # Official hosted remote MCP endpoint. Nothing runs in our gateway;
+  # sessions connect by URL with the platform-managed bearer token.
+  type: "sse"
+  url: "https://mcp.alphavantage.co/mcp"
+
+env: []
+---
+
+# Alpha Vantage MCP Server
+
+Alpha Vantage's official hosted MCP server. Query Alpha Vantage market data: stocks, forex, crypto, and fundamentals.
+
+## How authentication works
+
+1. Click **Connect account** on the Alpha Vantage card.
+2. A Alpha Vantage sign-in window opens. Approve access.
+3. The platform stores the OAuth grant and keeps the access token fresh. Agents
+   never see the token; it is injected at session start.
+
+If the connection shows **Reconnect**, the grant expired or was revoked on the
+vendor's side; run the connect flow again.
+
+## Notes
+
+- Tools are served by the vendor and discovered at session start.
