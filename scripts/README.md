@@ -34,3 +34,9 @@ No external dependencies — Python 3 stdlib only.
 ## `create-bot.sh`
 
 Existing scaffolder for authoring new bot directories. See its `--help`.
+
+## `probe-remote-mcp.sh` / `remote-mcp-candidates.txt`
+
+Reusable harness for finding and verifying official, hosted, OAuth-based
+remote MCP servers before authoring a new `oauth2_mcp` `SERVER.md` entry.
+See [`README-remote-mcp-sweep.md`](README-remote-mcp-sweep.md).
