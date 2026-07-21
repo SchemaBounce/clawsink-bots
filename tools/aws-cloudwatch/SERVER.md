@@ -18,7 +18,7 @@ metadata:
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["awslabs.cloudwatch-mcp-server==0.1.4"]
+  args: ["awslabs.cloudwatch-mcp-server@0.1.4"]
 env:
   - name: AWS_ACCESS_KEY_ID
     description: "AWS access key ID"

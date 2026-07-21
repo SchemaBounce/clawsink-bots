@@ -1,0 +1,112 @@
+# Remote MCP OAuth candidate tracker
+#
+# One row per vendor probed for an official hosted (streamable-http/SSE)
+# remote MCP server with MCP-spec OAuth (RFC 9728 + RFC 8414 + RFC 7591 DCR).
+# Append to this file every sweep instead of re-researching vendors already
+# checked here — it is the memory of what has and hasn't been tried.
+#
+# Format (pipe-delimited):
+#   vendor|status|url|date|notes
+#
+# status values:
+#   ADDED         - probed OK+dcr=yes, SERVER.md authored at tools/<name>/
+#   OK_NOT_ADDED  - probed OK+dcr=yes but not yet authored (explain why in notes)
+#   NO_DCR        - probed OK but dcr=NO; needs a pinned client (P2-2), not DCR
+#   NO_OFFICIAL   - no vendor-hosted remote MCP server exists (only community/
+#                   third-party servers, or the vendor has no MCP offering at all)
+#   BLOCKED       - a plausible URL exists but returned 403/bot-protection to
+#                   an automated probe; re-verify manually or from a browser
+#                   session before concluding either way
+#   NO_URL        - vendor has announced/shipped an MCP feature but the
+#                   endpoint is not documented anywhere reachable (gated
+#                   behind in-app admin enablement, no public hostname)
+#   NO_CHALLENGE  - a URL was found but never returned a 401/oauth-protected-
+#                   resource document; probably not an MCP-spec OAuth server
+#
+# Re-sweep cadence: monthly. See README-remote-mcp-sweep.md.
+
+## 2026-07-21 sweep (popular business tools)
+launchdarkly|ADDED|https://mcp.launchdarkly.com/mcp/launchdarkly|2026-07-21|AS mcp.launchdarkly.com, dcr=yes, scopes=reader writer observability
+gusto|ADDED|https://mcp.api.gusto.com/|2026-07-21|AS mcp.api.gusto.com, dcr=yes. Root endpoint IS the MCP transport (no /mcp suffix); returns 200 on POST initialize without auth, well-known doc confirms DCR.
+pylon|ADDED|https://mcp.usepylon.com/|2026-07-21|AS o.auth.usepylon.com (AuthKit), dcr=yes, scopes=email offline_access openid profile
+coda|ADDED|https://coda.io/apis/mcp|2026-07-21|AS coda.io, dcr=yes, scopes=mcp:all
+typeform|ADDED|https://api.typeform.com/mcp|2026-07-21|AS api.typeform.com, dcr=yes. Beta: forms read-only, contacts read+write. EU variants exist (api.eu.typeform.com/mcp, api.typeform.eu/mcp) - not probed, use for EU-hosted accounts if needed.
+ashby|ADDED|https://mcp.ashbyhq.com/mcp/v1|2026-07-21|AS mcp-auth.ashbyhq.com/oidc, dcr=yes, scopes=openid mcp offline_access
+make|ADDED|https://mcp.make.com/|2026-07-21|Protected-resource doc at mcp.make.com points to AS issuer www.make.com/mcp (cross-origin from the MCP host itself - unusual but valid RFC 9728). dcr=yes via registration_endpoint. No scopes advertised.
+circleci|NO_OFFICIAL|-|2026-07-21|CircleCI ships mcp-server-circleci as a self-hosted/local package (github.com/CircleCI-Public/mcp-server-circleci) and docs describe a self-managed remote deployment pattern (you host it, e.g. AWS App Runner). No CircleCI-operated hosted endpoint found.
+docusign|BLOCKED|https://mcp.docusign.com/mcp (prod) https://mcp-d.docusign.com/mcp (dev/sandbox)|2026-07-21|Docs (developers.docusign.com/platform/mcp-server/) confirm a beta hosted MCP server exists, OAuth-based, production requires beta enrollment. Both candidate hostnames return 403 to automated curl (Cloudflare/WAF bot protection, "RBAC: access denied" body) - re-verify from a browser or after beta enrollment before authoring.
+segment|NO_OFFICIAL|-|2026-07-21|No Segment-branded (or Twilio-branded, Segment's parent) official hosted MCP server found. Only third-party (Composio, StackOne, Pipedream, SegmentStream, Activepieces) implementations exist. Note: Twilio itself has an official hosted MCP at mcp.twilio.com/docs, but that is Twilio's own API surface, not Segment's CDP product - do not conflate the two if re-probing.
+loom|NO_OFFICIAL|-|2026-07-21|No Loom-operated hosted MCP server found. All results are community/third-party (Cloudflare Workers deployments, Aerostack, viaSocket) built against Loom's internal/public APIs.
+greenhouse|NO_URL|-|2026-07-21|Greenhouse MCP is a real, admin-governed official feature (open beta, Core/Plus/Pro tiers, OAuth 2.1 + PKCE + DCR per support.greenhouse.io/hc/en-us/articles/52090956642075-Greenhouse-MCP) but the article is behind a login wall and no public page discloses the hostname. Likely surfaced only inside the Greenhouse admin UI when an admin enables it. Re-check by having a Greenhouse admin enable MCP and read the connection URL from the app, or ask their support/sales for the documented endpoint.
+lever|NO_OFFICIAL|-|2026-07-21|Confirmed: Lever has not shipped an official MCP server as of this sweep. Only community servers exist (the-sid-dani/lever-mcp-server on Cloudflare Workers, stefanoamorelli/lever-mcp in Go). Do not use community stdio servers per the "official hosted only" instruction.
+
+## Earlier sweeps (see clawsink-bots git history / tools/*/SERVER.md headers for exact dates)
+plain|ADDED|https://mcp.plain.com/mcp|2026-07-21 (popular-tools sweep)|AS signin.auth.plain.com, dcr=yes
+unsora|ADDED|https://mcp.tryunsora.com/mcp|2026-07-16|AS clerk.tryunsora.com, dcr=yes, DCR at /oauth/register
+github-remote|ADDED (pinned, not DCR)|https://api.githubcopilot.com/mcp/|-|GitHub's AS has no RFC 8414 metadata and no RFC 7591 DCR (tier 1.5); uses the pinned-client path (P2-2) against the platform's existing GitHub App credentials instead.
+
+## Backfill: prior sweeps (from commit history + probe logs, recorded 2026-07-21)
+# NOTE: five of the 2026-07-21 additions above (launchdarkly, gusto, typeform,
+# make, ashby) were wrongly recorded as "no endpoint found" in the sweeps ~10h
+# earlier (commit 54c2f5f). Cause: those probes guessed mcp.<vendor>.com URL
+# patterns instead of reading vendor docs. Lesson: a NO_CHALLENGE on a guessed
+# URL is NOT a NO_OFFICIAL verdict; only doc research can conclude that.
+
+## 2026-07-21 sales sweep (661b03b) + popular-tools sweep (54c2f5f) + follow-ups
+salesloft|ADDED|https://mcp.salesloft.com/mcp|2026-07-21|dcr=yes
+zoominfo|ADDED|https://mcp.zoominfo.com/mcp|2026-07-21|dcr=yes
+outreach|ADDED|https://api.outreach.io/mcp/|2026-07-21|dcr=yes, scope prospects.all
+calendly|ADDED|https://mcp.calendly.com/|2026-07-21|dcr=yes, root path
+instantly|ADDED|https://mcp.instantly.ai/mcp|2026-07-21|dcr=yes
+amplemarket|ADDED|https://mcp.amplemarket.com/mcp|2026-07-21|dcr=yes
+lusha|ADDED|https://mcp.lusha.com/mcp|2026-07-21|dcr=yes
+ahrefs|ADDED|https://api.ahrefs.com/mcp/mcp|2026-07-21|dcr=yes, api. host not mcp.
+brex|ADDED|https://api.brex.com/mcp|2026-07-21|dcr=yes, api. host not mcp.
+navan|ADDED|https://mcp.navan.com/mcp|2026-07-21|dcr=yes, AS login.navan.com
+similarweb|ADDED|https://mcp.similarweb.com/mcp|2026-07-21|dcr=yes
+surveymonkey|ADDED|https://mcp.surveymonkey.com/mcp|2026-07-21|dcr=yes
+contentful|ADDED|https://mcp.contentful.com/mcp|2026-07-21|dcr=yes
+plain|ADDED|https://mcp.plain.com/mcp|2026-07-21|dcr=yes, AS signin.auth.plain.com
+gong|NO_DCR|https://mcp.gong.io/mcp|2026-07-21|pinned-client entry authored (tools/gong)
+chargebee|NO_DCR|https://mcp.chargebee.com/mcp|2026-07-21|pinned-client entry authored; PUBLIC client, no secret
+box|NO_DCR|https://mcp.box.com/mcp|2026-07-21|pinned-client entry authored; Enterprise Advanced plan
+front|NO_DCR|https://mcp.frontapp.com/mcp|2026-07-21|pinned-client entry authored; scope feature:mcp
+crunchbase|NO_DCR|https://mcp.crunchbase.com/mcp|2026-07-21|pinned-client entry authored; registration is sales-mediated, not self-service
+meta-ads|OK_NOT_ADDED|https://mcp.facebook.com/ads|2026-07-21|metadata claims DCR but live RFC 7591 registration POST fails; see docs/research/2026-07-21-ads-platforms-mcp.md
+google-ads|NO_OFFICIAL||2026-07-21|official repo is self-hosted only (github.com/googleads/google-ads-mcp)
+linkedin-ads|NO_OFFICIAL||2026-07-21|no official hosted endpoint found
+intercom|ADDED|https://mcp.intercom.com/mcp|2026-07-16|pre-existing entry; bare Bearer challenge, AS metadata at origin (fallback discovery path)
+thoughtspot|ADDED|https://agent.thoughtspot.app/mcp|2026-07-16|AS metadata at origin, no PR metadata (fallback path)
+guru|ADDED|https://mcp.api.getguru.com/mcp|2026-07-16|PR metadata endpoint returns empty body; AS at origin works
+heygen|ADDED|https://mcp.heygen.com/mcp|2026-07-16|307 redirect to /mcp/; Go http client follows fine
+smartlead|NO_OFFICIAL||2026-07-21|stdio/API-key only (third-party npm)
+clay|NO_OFFICIAL||2026-07-21|no official remote endpoint
+copper|NO_CHALLENGE|https://mcp.copper.com/mcp|2026-07-21|guessed URL; re-research docs before concluding NO_OFFICIAL
+dialpad|NO_CHALLENGE|https://mcp.dialpad.com/mcp|2026-07-21|guessed URL only
+grain|NO_CHALLENGE|https://mcp.grain.com/mcp|2026-07-21|guessed URL only
+lemlist|NO_CHALLENGE|https://mcp.lemlist.com/mcp|2026-07-21|guessed URL only
+aircall|NO_CHALLENGE|https://mcp.aircall.io/mcp|2026-07-21|guessed URL only
+reply|NO_CHALLENGE|https://mcp.reply.io/mcp|2026-07-21|guessed URL only
+activecampaign|NO_CHALLENGE|https://mcp.activecampaign.com/mcp|2026-07-21|guessed URL only
+expensify|NO_CHALLENGE|https://mcp.expensify.com/mcp|2026-07-21|guessed URL only
+bill|NO_CHALLENGE|https://mcp.bill.com/mcp|2026-07-21|guessed URL only
+plaid|NO_CHALLENGE|https://mcp.plaid.com/mcp|2026-07-21|guessed URL only
+semrush|NO_CHALLENGE|https://mcp.semrush.com/mcp|2026-07-21|guessed URL only
+databricks|NO_OFFICIAL||2026-07-21|per-workspace URLs (Databricks Apps); see docs/research/2026-07-21-per-tenant-mcp-pattern.md
+dbt|NO_OFFICIAL||2026-07-21|per-account URLs; see per-tenant research doc
+metabase|NO_OFFICIAL||2026-07-21|self-hosted; per-tenant pattern
+paddle|NO_CHALLENGE|https://mcp.paddle.com/mcp|2026-07-21|401 challenge but no discoverable PR/AS metadata
+tally|NO_CHALLENGE|https://mcp.tally.so/mcp|2026-07-21|guessed URL only
+bigcommerce|NO_CHALLENGE|https://mcp.bigcommerce.com/mcp|2026-07-21|guessed URL only
+checkr|NO_CHALLENGE|https://mcp.checkr.com/mcp|2026-07-21|guessed URL only; official server reported to exist, find real docs
+hotjar|NO_CHALLENGE|https://mcp.hotjar.com/mcp|2026-07-21|guessed URL only
+heap|NO_CHALLENGE|https://mcp.heap.io/mcp|2026-07-21|guessed URL only
+fullstory|NO_CHALLENGE|https://mcp.fullstory.com/mcp|2026-07-21|guessed URL only
+onepassword|NO_CHALLENGE|https://mcp.1password.com/mcp|2026-07-21|guessed URL only
+booking|NO_CHALLENGE|https://mcp.booking.com/mcp|2026-07-21|guessed URL only
+perplexity|NO_CHALLENGE|https://mcp.perplexity.ai/mcp|2026-07-21|guessed URL only
+qualified|NO_CHALLENGE|https://mcp.qualified.com/mcp|2026-07-21|guessed URL only
+shipstation|NO_CHALLENGE|https://mcp.shipstation.com/mcp|2026-07-21|guessed URL only
+recharge|NO_CHALLENGE|https://mcp.rechargepayments.com/mcp|2026-07-21|guessed URL only
+microsoft-m365|NO_URL||2026-07-21|two official hosted endpoints exist but need tenant admin consent wiring; see docs/research/2026-07-21-m365-netsuite-mcp.md
+netsuite|NO_OFFICIAL||2026-07-21|see m365-netsuite research doc

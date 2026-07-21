@@ -34,7 +34,7 @@ auth:
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["mcp-google-search-console-crunchtools==0.1.0"]
+  args: ["mcp-google-search-console-crunchtools@0.1.0"]
 env:
   # OPTIONAL: credentials are bridged from the workspace's Google OAuth
   # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
