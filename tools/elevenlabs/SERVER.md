@@ -21,7 +21,7 @@ auth:
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["elevenlabs-mcp==0.9.1"]
+  args: ["elevenlabs-mcp@0.9.1"]
 env:
   - name: ELEVENLABS_API_KEY
     description: "API key from elevenlabs.io"
