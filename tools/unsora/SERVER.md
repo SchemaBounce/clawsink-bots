@@ -11,13 +11,18 @@ metadata:
   author: "unsora"
   license: "Proprietary"
 
-# MCP-spec OAuth 2.1 (RFC 9728 challenge + RFC 8414 discovery + RFC 7591 DCR),
-# live-probed 2026-07-16: AS clerk.tryunsora.com (vendor's own Clerk-hosted
-# authorization server), DCR at /oauth/register. Scopes omitted: the AS
-# advertises identity scopes + offline_access; the client requests the
-# advertised default so token refresh keeps working.
+# API-key auth (switched from oauth2_mcp 2026-07-21): the vendor documents
+# Authorization Bearer with dashboard-issued uns_live_... keys
+# (tryunsora.com/docs/get-started), and the OAuth path is blocked on prod
+# until the core-api DCR scope fix (9abd17fe8) deploys - Clerk rejects the
+# scope-less dynamic client with invalid_scope. The env name MUST contain
+# "token": the runtime derives the Authorization Bearer header from the
+# name (buildRemoteAuthHeaderTemplates); an "api_key" name would derive
+# X-Api-Key and 401. Revisit OAuth after the DCR fix ships.
 auth:
-  type: oauth2_mcp
+  injection:
+    header_name: Authorization
+    header_template: "Bearer {UNSORA_API_TOKEN}"
 
 transport:
   # Official hosted remote MCP endpoint. Nothing runs in our gateway;
@@ -25,7 +30,11 @@ transport:
   type: "streamable-http"
   url: "https://mcp.tryunsora.com/mcp"
 
-env: []
+env:
+  - name: UNSORA_API_TOKEN
+    description: "Unsora API key (uns_live_...) from tryunsora.com, API keys page"
+    required: true
+    sensitive: true
 ---
 
 # Unsora MCP Server
@@ -34,10 +43,11 @@ Unsora's official hosted MCP server. Agents can generate videos, images, and mus
 
 ## How authentication works
 
-1. Click **Connect account** on the Unsora card.
-2. An Unsora sign-in window opens. Approve access.
-3. The platform stores the OAuth grant and keeps the access token fresh. Agents
-   never see the token; it is injected at session start.
+1. In Unsora, open the API keys page and click **New API Key**. Copy the
+   uns_live_... key right away; it is shown once.
+2. Click **Connect** on the Unsora card and paste the key.
+3. The platform stores the key encrypted. Agents never see it; it is
+   injected as the Authorization header at session start.
 
 If the connection shows **Reconnect**, the grant expired or was revoked on the
 vendor's side; run the connect flow again.
