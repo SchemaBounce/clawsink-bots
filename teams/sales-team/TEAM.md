@@ -4,7 +4,7 @@ kind: Team
 metadata:
   name: sales-team
   displayName: "Sales"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Sales automation covering ranked demand acquisition, pipeline management, revenue operations, market intelligence, and growth experiments"
   domain: sales
   category: sales
@@ -17,7 +17,7 @@ bots:
   - ref: "bots/revops@1.0.0"
   - ref: "bots/market-intelligence@1.0.0"
   - ref: "bots/growth-hacker@1.0.0"
-  - ref: "bots/demand-signal-scout@1.0.2"
+  - ref: "bots/demand-signal-scout@1.0.3"
 dataKits:
   - ref: "data-kits/sales@1.0.0"
     required: true
