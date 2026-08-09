@@ -4,11 +4,11 @@ kind: Team
 metadata:
   name: sales-team
   displayName: "Sales"
-  version: "1.0.0"
-  description: "End-to-end sales automation covering pipeline management, revenue operations, market intelligence, and growth hacking"
+  version: "1.0.1"
+  description: "Sales automation covering demand discovery, pipeline management, revenue operations, market intelligence, and growth experiments"
   domain: sales
   category: sales
-  tags: ["sales", "pipeline", "revops", "crm", "market-intelligence", "growth"]
+  tags: ["sales", "lead-generation", "pipeline", "revops", "crm", "market-intelligence", "growth"]
   author: "schemabounce"
   license: "MIT"
   estimatedMonthlyCost: "varies"
@@ -17,13 +17,14 @@ bots:
   - ref: "bots/revops@1.0.0"
   - ref: "bots/market-intelligence@1.0.0"
   - ref: "bots/growth-hacker@1.0.0"
+  - ref: "bots/demand-signal-scout@1.0.1"
 dataKits:
   - ref: "data-kits/sales@1.0.0"
     required: true
     installSampleData: false
 northStar:
   industry: "Sales"
-  context: "Sales team managing pipeline, revenue operations, market and competitive intelligence, and growth experiments"
+  context: "Sales team finding qualified demand and managing pipeline, revenue operations, market intelligence, and growth experiments"
   requiredKeys:
     - quota_targets
     - icp_definition
@@ -45,6 +46,9 @@ orgChart:
     - name: "Growth"
       description: "Outbound experiments, growth playbooks, and new channel development"
       head: growth-hacker
+    - name: "Demand Acquisition"
+      description: "Public buying-intent discovery, qualification, approval-gated engagement, and conversion attribution"
+      head: demand-signal-scout
   roles:
     - bot: sales-pipeline
       role: lead
@@ -62,6 +66,10 @@ orgChart:
       role: specialist
       reportsTo: sales-pipeline
       domain: growth
+    - bot: demand-signal-scout
+      role: specialist
+      reportsTo: sales-pipeline
+      domain: demand-acquisition
   escalation:
     critical: sales-pipeline
     unhandled: sales-pipeline
@@ -78,10 +86,13 @@ orgChart:
       - name: "Growth Experiment Failure"
         trigger: "growth_experiment_negative_result"
         chain: [growth-hacker, sales-pipeline]
+      - name: "Qualified Demand Signal"
+        trigger: "qualified_demand_signal"
+        chain: [demand-signal-scout, sales-pipeline]
 ---
 # Sales
 
-Four bots covering the full sales function: pipeline and deal management, revenue operations, competitive and market intelligence, and growth experiments.
+Five bots covering demand discovery, pipeline and deal management, revenue operations, competitive and market intelligence, and growth experiments.
 
 ## Included Bots
 
@@ -91,10 +102,13 @@ Four bots covering the full sales function: pipeline and deal management, revenu
 | RevOps | Specialist, revenue operations | Process design, tooling, analytics, sales-marketing alignment |
 | Market Intelligence | Specialist, intelligence | Competitive research, market signals, and buyer intent |
 | Growth Hacker | Specialist, growth | Outbound experiments, new channel tests, growth playbooks |
+| Demand Signal Scout | Specialist, demand acquisition | Public buying-intent discovery, qualification, approval-gated engagement, conversion attribution |
 
 ## How They Work Together
 
 Sales Pipeline is the central coordinator, owning the forecast and deal review process. RevOps monitors process adherence, CRM hygiene, and tooling health - surfacing systemic issues rather than deal-level problems. Market Intelligence feeds competitive context into active deals and flags trigger events (funding rounds, job postings, competitor price changes) that indicate buying intent. Growth Hacker runs time-boxed outbound experiments and reports results back to Sales Pipeline for adoption decisions.
+
+Demand Signal Scout monitors configured public sources for direct problem and recommendation conversations. It deduplicates and scores those signals, parks useful public replies for human approval, and attributes people who choose to submit a first-party form. It does not create contact records from public profiles.
 
 **Communication flow:**
 - Market Intelligence detects a funding round at a target account -> alert to Sales Pipeline
@@ -102,6 +116,7 @@ Sales Pipeline is the central coordinator, owning the forecast and deal review p
 - RevOps detects forecast coverage below threshold -> alert to Sales Pipeline
 - RevOps identifies CRM hygiene issues -> finding to Sales Pipeline
 - Growth Hacker completes an experiment -> findings report to Sales Pipeline and RevOps
+- Demand Signal Scout qualifies a public buying signal -> finding to Sales Pipeline and approval-gated reply action
 - Sales Pipeline reviews weekly forecast -> briefing to all bots
 
 ## Getting Started
