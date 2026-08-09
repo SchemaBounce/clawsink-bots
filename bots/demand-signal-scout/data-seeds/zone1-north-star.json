@@ -1,7 +1,7 @@
 {
   "seeds": [
     {
-      "key": "ideal_customer_profile",
+      "key": "icp_definition",
       "value": "",
       "description": "The company, role, stack, and active problems that qualify as useful intent. Required during setup."
     },

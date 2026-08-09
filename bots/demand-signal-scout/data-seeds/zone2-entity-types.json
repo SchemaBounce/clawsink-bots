@@ -5,7 +5,7 @@
       "displayName": "Prospect Signals",
       "description": "Deduplicated public business-intent signals. These are review candidates, not contactable leads.",
       "domain": "sales",
-      "sampleFields": ["platform", "sourceId", "sourceUrl", "intentScore", "scoreEvidence", "problemCategory", "status", "policyStatus", "observedAt", "expiresAt"],
+      "sampleFields": ["platform", "sourceId", "sourceUrl", "intentScore", "scoreEvidence", "problemCategory", "status", "policyStatus", "feedbackStatus", "nextFeedbackAt", "observedAt", "expiresAt"],
       "fields": {
         "platform": { "type": "string", "required": true, "enum": ["reddit", "youtube", "web"] },
         "sourceId": { "type": "string", "required": true, "description": "Opaque immutable source id or canonical URL hash." },
@@ -16,6 +16,10 @@
         "status": { "type": "string", "required": true, "enum": ["qualified", "pending_approval", "replied", "rejected", "expired", "suppressed"] },
         "policyStatus": { "type": "string", "required": true, "enum": ["clear", "blocked", "unknown"] },
         "conversionCampaign": { "type": "string" },
+        "feedbackStatus": { "type": "string", "enum": ["not_due", "due", "partial", "complete", "unavailable"] },
+        "nextFeedbackAt": { "type": "string" },
+        "engagementDelta": { "type": "object", "description": "Bounded supported counter deltas only." },
+        "attributedLeadId": { "type": "string", "description": "Opaque first-party lead id, set only after voluntary attributed form submission." },
         "observedAt": { "type": "string", "required": true },
         "publishedAt": { "type": "string" },
         "expiresAt": { "type": "string", "required": true }
@@ -34,6 +38,63 @@
         "status": { "type": "string", "required": true, "enum": ["pending_approval", "published", "rejected", "expired", "failed"] },
         "actionId": { "type": "string", "required": true, "description": "Opaque external-action id." },
         "approved": { "type": "boolean" },
+        "publishedAt": { "type": "string" },
+        "feedbackWindowsCompleted": { "type": "array", "description": "Completed configured feedback windows in hours." },
+        "createdAt": { "type": "string", "required": true },
+        "updatedAt": { "type": "string", "required": true }
+      }
+    },
+    {
+      "name": "company_buying_signals",
+      "displayName": "Company Buying Signals",
+      "description": "Explicit company-level CRM, form, news, deal, and engagement evidence stored without copied contact fields.",
+      "domain": "sales",
+      "sampleFields": ["sourceSystem", "companyRef", "signalType", "evidenceLabels", "intentScore", "observedAt", "expiresAt"],
+      "fields": {
+        "sourceSystem": { "type": "string", "required": true, "enum": ["hubspot", "first_party_form", "public_news"] },
+        "companyRef": { "type": "string", "required": true, "description": "Opaque CRM company id or canonical domain hash." },
+        "signalType": { "type": "string", "required": true, "enum": ["form_submission", "sales_engagement", "marketing_engagement", "deal_activity", "company_news"] },
+        "evidenceLabels": { "type": "array", "required": true, "description": "Bounded labels, never copied CRM or source text." },
+        "intentScore": { "type": "number", "required": true },
+        "sourceRecordRefs": { "type": "array", "description": "Opaque source-system record ids used for audit and reconciliation." },
+        "observedAt": { "type": "string", "required": true },
+        "expiresAt": { "type": "string", "required": true }
+      }
+    },
+    {
+      "name": "content_opportunities",
+      "displayName": "Content Opportunities",
+      "description": "Reviewable content briefs derived from repeated recent questions without copied source text or author identity.",
+      "domain": "marketing",
+      "sampleFields": ["theme", "sourceSignalIds", "recommendedFormat", "audienceNeed", "status", "observedAt"],
+      "fields": {
+        "theme": { "type": "string", "required": true },
+        "sourceSignalIds": { "type": "array", "required": true },
+        "recommendedFormat": { "type": "string", "required": true, "enum": ["community_post", "short_qa", "video_reply", "long_form"] },
+        "audienceNeed": { "type": "string", "required": true },
+        "draftBrief": { "type": "string", "required": true },
+        "status": { "type": "string", "required": true, "enum": ["proposed", "approved", "rejected", "in_progress", "published", "measured"] },
+        "observedAt": { "type": "string", "required": true },
+        "updatedAt": { "type": "string", "required": true }
+      }
+    },
+    {
+      "name": "acquisition_queue",
+      "displayName": "Daily Acquisition Queue",
+      "description": "A deterministic daily ranking of public, CRM, form, and content opportunities with evidence, next action, and owner.",
+      "domain": "sales",
+      "sampleFields": ["queueDate", "rank", "candidateType", "candidateId", "priorityScore", "recommendedAction", "ownerRole", "status"],
+      "fields": {
+        "queueDate": { "type": "string", "required": true },
+        "rank": { "type": "number", "required": true },
+        "candidateType": { "type": "string", "required": true, "enum": ["public_signal", "company_signal", "attributed_lead", "content_opportunity"] },
+        "candidateId": { "type": "string", "required": true },
+        "priorityScore": { "type": "number", "required": true },
+        "scoreComponents": { "type": "object", "required": true },
+        "evidenceLabels": { "type": "array", "required": true },
+        "recommendedAction": { "type": "string", "required": true, "enum": ["review_reply", "contact_known_lead", "review_content_brief", "investigate_account"] },
+        "ownerRole": { "type": "string", "required": true, "enum": ["sales", "marketing", "revops"] },
+        "status": { "type": "string", "required": true, "enum": ["open", "in_progress", "completed", "dismissed", "expired"] },
         "createdAt": { "type": "string", "required": true },
         "updatedAt": { "type": "string", "required": true }
       }
