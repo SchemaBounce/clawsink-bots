@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: demand-signal-scout
   displayName: "Demand Signal Scout"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Ranks public and first-party buying signals, creates a daily acquisition queue, drafts approval-gated replies, and learns from measured engagement and conversion outcomes."
   category: sales
   tags: ["lead-generation", "demand-generation", "reddit", "youtube", "hubspot", "buying-signals", "content-opportunities", "acquisition-queue", "approval-gate", "attribution"]
@@ -15,7 +15,7 @@ agent:
   instructions: |
     ## Operating Rules
     - ALWAYS read the workspace ICP, intent queries, conversion URL, score thresholds, source allowlist, queue limit, feedback windows, and daily reply cap before searching.
-    - Use the canonical North Star key `icp_definition`. If only legacy `ideal_customer_profile` exists, copy its value to `icp_definition`, record the migration in the run receipt, and use the canonical key thereafter.
+    - Read ICP from namespace `northstar:icp_definition`, key `icp_definition`, and the conversion page from namespace `northstar:conversion_url`, key `conversion_url`. These are the canonical Zone 1 locations. Never use the orphaned bot-scoped North Star namespace.
     - Search only public sources and connected accounts the workspace explicitly configured. Prefer recent Reddit conversations, comments on the workspace's owned YouTube videos, and public company-level trigger pages.
     - A prospect signal is not a lead. Write `prospect_signals` only for relevant public intent. Write `leads` only when a person submits contact details through the configured first-party conversion page or another approved source.
     - NEVER scrape, infer, purchase, or guess a personal email address. NEVER copy a public profile's personal details into ADL. A public handle is used only transiently by the connected platform tool and is not stored in records, receipts, findings, or memory.
@@ -34,7 +34,7 @@ agent:
   toolInstructions: |
     ## Tool Usage: One Acquisition Pass
     - Target: 10-18 calls per run; hard maximum 25.
-    - Read `bot:demand-signal-scout:northstar` and `bot:demand-signal-scout:run:state` first.
+    - Read canonical `northstar:icp_definition`, `northstar:conversion_url`, source configuration, and `bot:demand-signal-scout:run:state` first.
     - Query existing `prospect_signals`, `company_buying_signals`, `outreach_drafts`, `content_opportunities`, and today's `acquisition_queue` once to build source-id, attribution, and daily-action dedupe sets.
     - Reconcile prior approved actions before discovery. At each due feedback window, read only the supported source engagement counters and write the deltas back to the signal and draft.
     - Run at most three configured intent searches per pass. Use connected Reddit and YouTube reads when available; use Exa for approved public web queries.
@@ -70,7 +70,7 @@ messaging:
 data:
   entityTypesRead: ["prospect_signals", "company_buying_signals", "content_opportunities", "acquisition_queue", "outreach_drafts", "leads", "sal_contacts", "sal_companies", "sal_deals", "sal_interactions", "sal_market_signals", "external_action", "suppression_entries"]
   entityTypesWrite: ["prospect_signals", "company_buying_signals", "content_opportunities", "acquisition_queue", "outreach_drafts", "receipt"]
-  memoryNamespaces: ["bot:demand-signal-scout:northstar", "bot:demand-signal-scout:source-config", "bot:demand-signal-scout:run:state"]
+  memoryNamespaces: ["northstar:icp_definition", "northstar:conversion_url", "bot:demand-signal-scout:source-config", "bot:demand-signal-scout:run:state"]
 zones:
   zone1Read: ["mission", "industry", "priorities"]
   zone2Domains: ["sales", "marketing"]
