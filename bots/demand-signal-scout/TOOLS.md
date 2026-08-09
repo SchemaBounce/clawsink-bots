@@ -2,7 +2,7 @@
 
 ## Data Access
 
-- Read `bot:demand-signal-scout:northstar`, source configuration, and run state first.
+- Read `northstar:icp_definition` key `icp_definition`, `northstar:conversion_url` key `conversion_url`, source configuration, and run state first. Do not read the obsolete bot-scoped North Star namespace.
 - Read dedupe and queue state in one bounded query across `prospect_signals`, `company_buying_signals`, `content_opportunities`, `acquisition_queue`, `outreach_drafts`, `suppression_entries`, and `external_action`.
 - Discover configured public intent with Exa and connected Reddit or YouTube read actions. Read subreddit rules before drafting a Reddit response.
 - Read connected CRM and first-party form records once per pass. CRM access is read-only. Use opaque record ids and bounded evidence labels outside the source system.

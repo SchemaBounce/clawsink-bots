@@ -57,10 +57,16 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.2' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.2"
+if grep -q 'bots/demand-signal-scout@1\.0\.3' "$TEAM"; then
+  pass "Sales team references Demand Signal Scout 1.0.3"
 else
-  fail "Sales team must reference Demand Signal Scout 1.0.2"
+  fail "Sales team must reference Demand Signal Scout 1.0.3"
+fi
+
+if grep -q 'northstar:icp_definition' "$BOT" && grep -q 'northstar:conversion_url' "$BOT" && ! grep -q 'bot:demand-signal-scout:northstar' "$BOT"; then
+  pass "North Star reads use canonical Zone 1 namespaces"
+else
+  fail "North Star reads must use canonical northstar:{key} namespaces"
 fi
 
 if grep -q 'The YouTube connector can read comments and post comment replies; it does not publish Community posts, Shorts, or videos\.' "$TOOLS"; then
