@@ -21,13 +21,13 @@ pass() {
   echo "PASS: $1"
 }
 
-if rg -q 'key: icp_definition' "$BOT" && jq -e '.seeds | any(.key == "icp_definition")' "$NORTH_STAR" >/dev/null; then
+if grep -q 'key: icp_definition' "$BOT" && jq -e '.seeds | any(.key == "icp_definition")' "$NORTH_STAR" >/dev/null; then
   pass "canonical ICP key is consistent"
 else
   fail "BOT.md and North Star seed must use icp_definition"
 fi
 
-if rg -q 'key: ideal_customer_profile' "$BOT" || jq -e '.seeds | any(.key == "ideal_customer_profile")' "$NORTH_STAR" >/dev/null; then
+if grep -q 'key: ideal_customer_profile' "$BOT" || jq -e '.seeds | any(.key == "ideal_customer_profile")' "$NORTH_STAR" >/dev/null; then
   fail "legacy ideal_customer_profile remains in active setup or seed"
 else
   pass "legacy ICP key is migration-only"
@@ -42,7 +42,7 @@ for entity in prospect_signals company_buying_signals content_opportunities acqu
 done
 
 for connector in exa reddit youtube hubspot; do
-  if rg -q "ref: tools/$connector" "$BOT"; then
+  if grep -q "ref: tools/$connector" "$BOT"; then
     pass "connector declared: $connector"
   else
     fail "missing connector declaration: $connector"
@@ -50,20 +50,20 @@ for connector in exa reddit youtube hubspot; do
 done
 
 for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'Content Opportunity Contract' 'Daily Acquisition Queue Contract' 'Feedback And Attribution'; do
-  if rg -q "## $contract" "$TOOLS"; then
+  if grep -q "## $contract" "$TOOLS"; then
     pass "tool contract exists: $contract"
   else
     fail "missing tool contract: $contract"
   fi
 done
 
-if rg -q 'bots/demand-signal-scout@1\.0\.2' "$TEAM"; then
+if grep -q 'bots/demand-signal-scout@1\.0\.2' "$TEAM"; then
   pass "Sales team references Demand Signal Scout 1.0.2"
 else
   fail "Sales team must reference Demand Signal Scout 1.0.2"
 fi
 
-if rg -q 'The YouTube connector can read comments and post comment replies; it does not publish Community posts, Shorts, or videos\.' "$TOOLS"; then
+if grep -q 'The YouTube connector can read comments and post comment replies; it does not publish Community posts, Shorts, or videos\.' "$TOOLS"; then
   pass "YouTube capability boundary is explicit"
 else
   fail "YouTube publishing capability boundary is missing"
