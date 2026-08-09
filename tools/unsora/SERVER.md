@@ -11,30 +11,25 @@ metadata:
   author: "unsora"
   license: "Proprietary"
 
-# API-key auth (switched from oauth2_mcp 2026-07-21): the vendor documents
-# Authorization Bearer with dashboard-issued uns_live_... keys
-# (tryunsora.com/docs/get-started), and the OAuth path is blocked on prod
-# until the core-api DCR scope fix (9abd17fe8) deploys - Clerk rejects the
-# scope-less dynamic client with invalid_scope. The env name MUST contain
-# "token": the runtime derives the Authorization Bearer header from the
-# name (buildRemoteAuthHeaderTemplates); an "api_key" name would derive
-# X-Api-Key and 401. Revisit OAuth after the DCR fix ships.
+# OAuth 2.1 auth (reverted from the 2026-07-21 API-key stopgap). Unsora's
+# /mcp endpoint is a Clerk-backed RFC 9728 OAuth protected resource: a live
+# probe (2026-07-27) returns `www-authenticate: Bearer resource_metadata=...`
+# and `x-clerk-auth-reason: session-token-and-uat-missing` — it rejects a
+# static uns_live_... key sent as Authorization Bearer with 401 (Clerk wants
+# a session token from the OAuth flow, not a dashboard API key). The API-key
+# stopgap assumed the vendor's REST-key path worked on the MCP endpoint; it
+# does not. The blocker that justified the stopgap — Clerk rejecting our
+# scope-less DCR client with invalid_scope — is fixed and DEPLOYED
+# (core-api 9abd17fe8 on main), so the generic oauth2_mcp DCR flow works:
+# discovery -> DCR at /oauth/register -> PKCE -> consent -> token.
 auth:
-  injection:
-    header_name: Authorization
-    header_template: "Bearer {UNSORA_API_TOKEN}"
+  type: oauth2_mcp
 
 transport:
   # Official hosted remote MCP endpoint. Nothing runs in our gateway;
-  # sessions connect by URL with the platform-managed bearer token.
+  # sessions connect by URL with the OAuth access token.
   type: "streamable-http"
   url: "https://mcp.tryunsora.com/mcp"
-
-env:
-  - name: UNSORA_API_TOKEN
-    description: "Unsora API key (uns_live_...) from tryunsora.com, API keys page"
-    required: true
-    sensitive: true
 ---
 
 # Unsora MCP Server
@@ -43,14 +38,13 @@ Unsora's official hosted MCP server. Agents can generate videos, images, and mus
 
 ## How authentication works
 
-1. In Unsora, open the API keys page and click **New API Key**. Copy the
-   uns_live_... key right away; it is shown once.
-2. Click **Connect** on the Unsora card and paste the key.
-3. The platform stores the key encrypted. Agents never see it; it is
-   injected as the Authorization header at session start.
+1. Click **Connect** on the Unsora card. A popup opens Unsora's sign-in.
+2. Sign in to your Unsora account and approve the requested access.
+3. The platform stores the resulting OAuth token encrypted and refreshes it
+   automatically. Agents never see it; it is sent at session start.
 
-If the connection shows **Reconnect**, the grant expired or was revoked on the
-vendor's side; run the connect flow again.
+No API key to copy or paste. If the connection shows **Reconnect**, the grant
+expired or was revoked on the vendor's side; run the connect flow again.
 
 ## Notes
 

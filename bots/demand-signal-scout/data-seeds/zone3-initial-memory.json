@@ -1,0 +1,14 @@
+{
+  "memories": [
+    {
+      "namespace": "bot:demand-signal-scout:source-config",
+      "key": "defaults",
+      "value": "minimum_intent_score=70; daily_reply_cap=5; freshness_hours=72; retention_days=30; approval_sla_hours=24"
+    },
+    {
+      "namespace": "bot:demand-signal-scout:run:state",
+      "key": "last_run_state",
+      "value": "No runs yet. Setup must define ICP, intent queries, approved sources, and conversion URL before discovery begins."
+    }
+  ]
+}

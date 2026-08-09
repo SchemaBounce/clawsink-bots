@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: lead-responder
   displayName: "Lead Responder"
-  version: "0.1.3"
+  version: "0.1.5"
   description: "Drafts a fast, personal first-touch for every new inbound sales inquiry and tracks how long we take to respond."
   category: sales
   tags: ["sales", "leads", "speed-to-lead", "first-touch", "response-time"]
@@ -141,16 +141,16 @@ setup:
         placeholder: "https://cal.com/schemabounce/demo"
     - id: sync-leads
       name: "Sync inbound inquiries into this workspace"
-      description: "The bot reads from the `leads` entity type. Until inquiries are synced here, the queue is always empty."
+      description: "The bot reads from the `leads` entity type. Connect a source that validates and writes inbound inquiries there before enabling the schedule."
       type: data_presence
       entityType: leads
       minCount: 1
       group: data
       priority: required
-      reason: "No synced lead data means nothing to respond to. See the platform team's dogfood wiring plan for current sync status — this is a known, tracked gap, not a bot bug."
+      reason: "No synced lead data means there is nothing to respond to. A SchemaBounce public-form source or another buyer-owned pipeline can supply these records."
       ui:
-        actionLabel: "Check sync status"
-        emptyState: "No inquiries synced to this workspace yet. Lead sync from the public site's Contact Sales form is a design-stage dependency, not yet wired."
+        actionLabel: "Configure lead source"
+        emptyState: "No inquiries are available yet. Create a CAPTCHA-protected public-form source or connect another buyer-owned pipeline that writes `leads` records."
 goals:
   - name: first_touch_coverage
     description: "Every untouched inquiry gets a first-touch draft submitted for approval within one run"
@@ -199,7 +199,7 @@ Industry data puts the median B2B SaaS company's first-touch response to a demo 
 
 ## Honest Scope
 
-This bot does the drafting and the measuring. It does not send email itself (the approval gate is not optional), and it does not yet have lead data to work from in most workspaces — the sync from the public site's Contact Sales form into this workspace's `leads` entity type is a separate, tracked design item (see the platform team's speed-to-lead dogfood plan). Until that sync exists, `sync-leads` in setup stays unmet and every run correctly reports an empty queue instead of fabricating activity.
+This bot does the drafting and the measuring. It does not send email itself; the approval gate is required. Lead ingestion is workspace configuration, not a hidden platform feed. A CAPTCHA-protected SchemaBounce public-form source or another buyer-owned pipeline must validate the event and write a `leads` record first. Until that source is connected, `sync-leads` stays unmet and every run correctly reports an empty queue instead of fabricating activity.
 
 ## Escalation Behavior
 
