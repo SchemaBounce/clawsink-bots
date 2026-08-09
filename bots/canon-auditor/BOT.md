@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: canon-auditor
   displayName: "Canon Auditor"
-  version: "0.1.3"
+  version: "0.1.4"
   description: "Audits the workspace's strategy-document corpus and decision plane for contradictions, staleness, missing dates, unverified DONE-claims, stale proposals, and overdue reviews; files findings to the task board."
   category: operations
   tags: ["strategy", "documentation", "audit", "knowledge"]
