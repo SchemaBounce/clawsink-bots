@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    {
+      "key": "ideal_customer_profile",
+      "value": "",
+      "description": "The company, role, stack, and active problems that qualify as useful intent. Required during setup."
+    },
+    {
+      "key": "conversion_url",
+      "value": "",
+      "description": "First-party page where an interested person may choose to submit contact details. Required during setup."
+    }
+  ]
+}

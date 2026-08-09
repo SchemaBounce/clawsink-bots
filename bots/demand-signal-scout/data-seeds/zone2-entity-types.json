@@ -1,0 +1,49 @@
+{
+  "entityTypes": [
+    {
+      "name": "prospect_signals",
+      "displayName": "Prospect Signals",
+      "description": "Deduplicated public business-intent signals. These are review candidates, not contactable leads.",
+      "domain": "sales",
+      "sampleFields": ["platform", "sourceId", "sourceUrl", "intentScore", "scoreEvidence", "problemCategory", "status", "policyStatus", "observedAt", "expiresAt"],
+      "fields": {
+        "platform": { "type": "string", "required": true, "enum": ["reddit", "youtube", "web"] },
+        "sourceId": { "type": "string", "required": true, "description": "Opaque immutable source id or canonical URL hash." },
+        "sourceUrl": { "type": "string", "required": true, "description": "Canonical public evidence URL. No author profile URL." },
+        "intentScore": { "type": "number", "required": true },
+        "scoreEvidence": { "type": "array", "required": true, "description": "Bounded rubric labels, never copied source text." },
+        "problemCategory": { "type": "string", "required": true },
+        "status": { "type": "string", "required": true, "enum": ["qualified", "pending_approval", "replied", "rejected", "expired", "suppressed"] },
+        "policyStatus": { "type": "string", "required": true, "enum": ["clear", "blocked", "unknown"] },
+        "conversionCampaign": { "type": "string" },
+        "observedAt": { "type": "string", "required": true },
+        "publishedAt": { "type": "string" },
+        "expiresAt": { "type": "string", "required": true }
+      }
+    },
+    {
+      "name": "outreach_drafts",
+      "displayName": "Public Reply Drafts",
+      "description": "Approval-gated public reply actions tied to opaque prospect signal ids.",
+      "domain": "sales",
+      "sampleFields": ["signalId", "platform", "status", "actionId", "createdAt", "updatedAt"],
+      "fields": {
+        "signalId": { "type": "string", "required": true },
+        "platform": { "type": "string", "required": true },
+        "replyText": { "type": "string", "required": true, "description": "Exact public reply shown to the Inbox approver." },
+        "status": { "type": "string", "required": true, "enum": ["pending_approval", "published", "rejected", "expired", "failed"] },
+        "actionId": { "type": "string", "required": true, "description": "Opaque external-action id." },
+        "approved": { "type": "boolean" },
+        "createdAt": { "type": "string", "required": true },
+        "updatedAt": { "type": "string", "required": true }
+      }
+    },
+    {
+      "name": "receipt",
+      "displayName": "Receipts",
+      "description": "PII-free run and conversion metrics written by the scout.",
+      "domain": "sales",
+      "sampleFields": ["kind", "metric", "value", "unit", "subject", "occurredAt", "agentSlug"]
+    }
+  ]
+}
