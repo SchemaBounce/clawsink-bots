@@ -4,8 +4,8 @@ kind: Team
 metadata:
   name: sales-team
   displayName: "Sales"
-  version: "1.0.1"
-  description: "Sales automation covering demand discovery, pipeline management, revenue operations, market intelligence, and growth experiments"
+  version: "1.0.3"
+  description: "Sales automation covering ranked demand acquisition, pipeline management, revenue operations, market intelligence, and growth experiments"
   domain: sales
   category: sales
   tags: ["sales", "lead-generation", "pipeline", "revops", "crm", "market-intelligence", "growth"]
@@ -17,7 +17,7 @@ bots:
   - ref: "bots/revops@1.0.0"
   - ref: "bots/market-intelligence@1.0.0"
   - ref: "bots/growth-hacker@1.0.0"
-  - ref: "bots/demand-signal-scout@1.0.1"
+  - ref: "bots/demand-signal-scout@1.0.3"
 dataKits:
   - ref: "data-kits/sales@1.0.0"
     required: true
@@ -31,6 +31,7 @@ northStar:
     - sales_process_stages
     - competitive_landscape
     - crm_hygiene_standards
+    - conversion_url
 orgChart:
   lead: sales-pipeline
   domains:
@@ -108,7 +109,7 @@ Five bots covering demand discovery, pipeline and deal management, revenue opera
 
 Sales Pipeline is the central coordinator, owning the forecast and deal review process. RevOps monitors process adherence, CRM hygiene, and tooling health - surfacing systemic issues rather than deal-level problems. Market Intelligence feeds competitive context into active deals and flags trigger events (funding rounds, job postings, competitor price changes) that indicate buying intent. Growth Hacker runs time-boxed outbound experiments and reports results back to Sales Pipeline for adoption decisions.
 
-Demand Signal Scout monitors configured public sources for direct problem and recommendation conversations. It deduplicates and scores those signals, parks useful public replies for human approval, and attributes people who choose to submit a first-party form. It does not create contact records from public profiles.
+Demand Signal Scout combines configured public sources, owned-channel questions, first-party forms, and read-only CRM activity into one ranked daily acquisition queue. It deduplicates and scores signals, parks useful public replies for human approval, recommends content from repeated questions, and measures explicit engagement and pipeline outcomes. It does not create contact records from public profiles.
 
 **Communication flow:**
 - Market Intelligence detects a funding round at a target account -> alert to Sales Pipeline
@@ -117,11 +118,13 @@ Demand Signal Scout monitors configured public sources for direct problem and re
 - RevOps identifies CRM hygiene issues -> finding to Sales Pipeline
 - Growth Hacker completes an experiment -> findings report to Sales Pipeline and RevOps
 - Demand Signal Scout qualifies a public buying signal -> finding to Sales Pipeline and approval-gated reply action
+- Demand Signal Scout ranks public, CRM, form, and content signals -> daily acquisition queue to Sales Pipeline
+- Demand Signal Scout detects a repeated question -> content opportunity for Marketing Growth
 - Sales Pipeline reviews weekly forecast -> briefing to all bots
 
 ## Getting Started
 
 1. Activate the team via the ADL onboarding wizard
-2. Fill in North Star keys: `quota_targets`, `icp_definition`, `sales_process_stages`, `competitive_landscape`, `crm_hygiene_standards`
+2. Fill in North Star keys: `quota_targets`, `icp_definition`, `sales_process_stages`, `competitive_landscape`, `crm_hygiene_standards`, `conversion_url`
 3. Bots begin running on their default schedules automatically
 4. Check Sales Pipeline's weekly forecast briefing for pipeline health status
