@@ -195,7 +195,7 @@
         "node_name": "Postgres Orders Table",
         "node_type": "source",
         "system": "postgres",
-        "entity_or_table": "schemabounce_core.orders",
+        "entity_or_table": "retail_app.orders",
         "pipeline_id": "postgres-to-bigquery-orders",
         "schema_name": "orders_v2",
         "freshness_sla_minutes": 1,

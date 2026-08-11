@@ -14,26 +14,17 @@ auth:
   method: "composio"
   composioToolkit: "ZENDESK"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like ZENDESK_*."
-# TODO(#1614): Zendesk uses HTTP Basic with "<email>/token" as the
-# username (literal /token suffix appended to the email) and the API
-# token as password. The current engine's http_basic with
-# username_env doesn't support computing a derived username like
-# "{ZENDESK_EMAIL}/token" — it reads the raw env value. Pending
-# engine extension: either a `username_template` field, or a
-# generic credential-derivation step at substitution time. Until
-# then, zendesk stays health_state='unverified' (orange) via the
-# fallback path; do NOT add a partial spec that would lie.
+# Zendesk uses HTTP Basic with "<email>/token" as the username (literal
+# /token suffix appended to the email) and the API token as password. This
+# username format is not yet supported by connection validation, so Zendesk
+# shows health_state='unverified' rather than a false confirmation.
 
 transport:
   type: "stdio"
   command: "npx"
   args: ["-y", "zendesk-mcp@1.0.0"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
+  # Optional. Leave blank to use your connected account.
   - name: ZENDESK_SUBDOMAIN
     description: "Your Zendesk subdomain e.g. mycompany"
     required: false

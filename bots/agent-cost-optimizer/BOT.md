@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: agent-cost-optimizer
   displayName: "Agent Cost Optimizer"
-  version: "0.1.6"
+  version: "0.1.7"
   description: "First-party platform bot. Audits per-agent token usage, model spend, and run patterns to surface concrete cost-saving recommendations, model downgrades, schedule reductions, runaway-agent detection. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["agents", "cost", "ops", "optimization", "platform", "tokens"]
@@ -71,12 +71,6 @@ egress:
 plugins: []
 skills:
   - ref: "skills/platform-awareness@1.0.0"
-# This bot is intentionally first-party only. It uses adl_* runtime built-ins
-# that already live in the OpenCLAW dispatcher, adl_get_agent_metrics
-# specifically queries schemabounce_adl.agent_runs in the workspace's ADL
-# pool. No Composio, no external SaaS. The differentiator: only SchemaBounce
-# can ship this bot because only SchemaBounce hosts the agent runtime that
-# generates the data this bot reads.
 requirements:
   minTier: "starter"
 goals:
@@ -147,7 +141,7 @@ Audits this workspace's agents for token-usage and cost-efficiency anti-patterns
 
 Every workspace's first cost question is "where am I spending tokens?". This bot answers it with concrete dollar figures and actionable downgrade paths. Pairs with pipeline-cost-optimizer to give ops a complete cost surface (pipeline events + agent runs).
 
-Composio cannot ship this, Composio doesn't run the agent runtime; we do. The data this bot reads (schemabounce_adl.agent_runs) is unique to SchemaBounce-hosted agents.
+This bot reads the platform's per-agent run ledger, data only the hosting platform produces.
 
 ## Required North Star Keys
 

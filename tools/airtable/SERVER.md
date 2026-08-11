@@ -10,7 +10,7 @@ metadata:
   category: "databases"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 auth:
   type: http_bearer
   token_env: AIRTABLE_API_KEY

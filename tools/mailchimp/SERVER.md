@@ -15,18 +15,13 @@ auth:
   composioToolkit: "MAILCHIMP"
   setupReason: "Authorized via Composio against your Mailchimp account. The agent calls execute_composio_tool with MAILCHIMP_* action names (e.g. MAILCHIMP_LIST_CAMPAIGNS, MAILCHIMP_SEND_CAMPAIGN, MAILCHIMP_ADD_OR_UPDATE_LIST_MEMBER)."
 transport:
-  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
-  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
-  # on the connection's transport_config, where the gateway reads it. There is no
-  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
-  # tools and exits before the handshake (gateway child_exited / start 500).
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
+  # is resolved automatically at connection time and stored on the
+  # connection's transport_config, where the gateway reads it. There is no
+  # local command; sessions connect by URL.
   type: "streamable-http"
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio connection.
-  # Leaving this blank uses the workspace's Composio integration for this service;
-  # provide a value only to override the managed connection. Do not mark this
-  # required:true, that makes the setup/reconnect modal demand a key the Composio
-  # flow already covers.
+  # Optional. Leave blank to use your connected account.
   - name: COMPOSIO_API_KEY
     description: "Composio API key from composio.dev/settings. Authenticates the Composio MCP gateway. Your Mailchimp account is then connected inside Composio."
     required: false

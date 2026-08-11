@@ -10,7 +10,7 @@ metadata:
   category: "project-issue"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # GitLab uses a custom PRIVATE-TOKEN header (NOT Authorization Bearer).
 # api_key_header with the explicit header_name handles this.
 auth:
@@ -34,12 +34,10 @@ env:
 # /user returns the authenticated user. Same on both gitlab.com and
 # self-hosted instances.
 #
-# NOTE: this spec hard-codes https://gitlab.com — for self-hosted
-# GitLab instances, GITLAB_API_URL is set on the connection but the
-# current engine doesn't support {ENV_VAR} URL substitution + a
-# default fallback in one shape. Self-hosted instances will get
-# health_state='unverified' until Stage D.next adds optional-template
-# resolution.
+# NOTE: this spec hard-codes https://gitlab.com. Self-hosted GitLab
+# instances will show health_state='unverified' until validation supports
+# a per-instance URL; GITLAB_API_URL is still used for the tool calls
+# themselves.
 validation:
   request:
     method: GET

@@ -14,11 +14,10 @@ auth:
   composioToolkit: "FACEBOOK"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with FACEBOOK_* action names (e.g. FACEBOOK_CREATE_POST, FACEBOOK_GET_PAGE_INSIGHTS)."
 transport:
-  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
-  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
-  # on the connection's transport_config, where the gateway reads it. There is no
-  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
-  # tools and exits before the handshake (gateway child_exited / start 500).
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
+  # is resolved automatically at connection time and stored on the
+  # connection's transport_config, where the gateway reads it. There is no
+  # local command; sessions connect by URL.
   type: "streamable-http"
 env:
   - name: COMPOSIO_API_KEY
@@ -26,10 +25,9 @@ env:
     required: true
     sensitive: true
 
-# No MCP read-only canary here: @composio/mcp is a stdio<->HTTP proxy CLI that
-# exposes no per-action MCP tools, so a tools/call canary can never match the
-# live tool list. Composio connections are verified by their Composio account
-# status (ACTIVE), not an MCP tool call — see core-api RecordComposioVerdict.
+# No MCP read-only canary here: this is a remote proxy with no per-action MCP
+# tools, so a tools/call canary can never match the live tool list. Composio
+# connections are verified by the connected account status instead.
 
 tools:
   - name: list_managed_pages

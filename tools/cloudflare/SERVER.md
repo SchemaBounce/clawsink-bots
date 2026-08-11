@@ -10,7 +10,7 @@ metadata:
   category: "cloud-infra"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 auth:
   type: http_bearer
   token_env: CLOUDFLARE_API_TOKEN

@@ -10,7 +10,7 @@ metadata:
   category: "browser-scraping"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation (SchemaBounce #1614).
+# Declarative auth + validation.
 # Brave Search uses the X-Subscription-Token header.
 auth:
   type: api_key_header

@@ -10,7 +10,7 @@ metadata:
   category: "ai-memory"
   author: "elevenlabs"
   license: "MIT"
-# Declarative auth + validation (SchemaBounce #1614).
+# Declarative auth + validation.
 # ElevenLabs uses a custom `xi-api-key` header — api_key_header
 # with the explicit header_name.
 auth:

@@ -18,11 +18,11 @@ transport:
   asset: "sb-workspace-health-mcp-linux-amd64"
 env:
   - name: SCHEMABOUNCE_CLIENT_ID
-    description: "Platform admin service account client ID (must be an admin_sa_ prefixed account). Read-only tools require the platform-admin-readonly role; mutation tools require the platform-admin role."
+    description: "Platform admin service account client ID. Read-only tools require the platform-admin-readonly role; mutation tools require the platform-admin role."
     required: true
     sensitive: true
   - name: SCHEMABOUNCE_CLIENT_SECRET
-    description: "Platform admin service account client secret — shown only once at creation time. MUST belong to a platform admin service account (admin_sa_). Standard workspace service accounts (sa_) will receive 403 on every tool call."
+    description: "Platform admin service account client secret, shown only once at creation time. Standard workspace service accounts do not have access to these cross-workspace tools."
     required: true
     sensitive: true
   - name: SCHEMABOUNCE_API_URL
@@ -91,7 +91,7 @@ tools:
 
 ## Authentication
 
-The credential MUST be a **platform admin service account**. These accounts have the `admin_sa_` prefix (e.g. `admin_sa_cs_agent`) and are created in the internal SchemaBounce admin console, NOT the customer workspace settings UI. Standard workspace service accounts (`sa_` prefix) have no access to cross-workspace endpoints and will receive `403 Forbidden` on every call.
+The credential MUST be a **platform admin service account**, created in the internal SchemaBounce admin console, not the customer workspace settings UI. Standard workspace service accounts have no access to cross-workspace endpoints and will receive `403 Forbidden` on every call.
 
 | Role | Grants |
 |------|--------|
@@ -110,9 +110,9 @@ This server has cross-workspace access. It can read health state and trigger rem
 
 1. **Platform admin SA only** — validated at the API level; customer SAs receive 403.
 2. **Mutation elicitation gate** — all 7 mutation tools call back to the agent with a structured elicitation request before executing. The agent must confirm the target workspace, the action, and the reason.
-3. **Audit trail** — every tool call emits an audit row to `schemabounce_audit.audit_events` with `category=ops`, `actor_type=agent`, `workspace_id` (target), and the full request payload. Mutation rows are `severity=high`.
+3. **Audit trail** — every tool call is recorded to the platform's audit log with the target workspace, the acting agent, and the full request payload. Mutation calls are logged at high severity.
 4. **No customer data access** — tools expose operational state only (health flags, error classes, queue depths). They do not read ADL records, pipeline event payloads, or customer secrets.
-5. **Never listed in the marketplace** — `mcpServerMeta.ts` explicitly excludes this server from the customer connections catalog.
+5. **Never listed in the marketplace** — this server is explicitly excluded from the customer connections catalog.
 
 ## Tool reference
 
@@ -211,4 +211,4 @@ Idempotent — re-applying already-correct roles is a no-op. Safe to run on heal
 
 The runtime starts `sb-workspace-health-mcp` as a child process (stdio transport). It reads JSON-RPC from stdin and writes responses to stdout; stderr carries structured logs. The three env vars are injected from the internal connection store at startup. The server performs an OAuth `client_credentials` exchange on boot, then caches the Bearer token.
 
-The `sb-workspace-health-mcp` binary is built from `core-api/cmd/sb-workspace-health-mcp/` and ships in the internal toolchain image — it is NOT published to any public package registry.
+The `sb-workspace-health-mcp` binary ships in the internal toolchain image — it is NOT published to any public package registry.

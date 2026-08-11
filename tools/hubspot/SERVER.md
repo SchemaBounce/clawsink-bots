@@ -10,32 +10,21 @@ metadata:
   category: "crms-sales"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 auth:
   type: http_bearer
   token_env: PRIVATE_APP_ACCESS_TOKEN
 
-# Transport switched to the official HubSpot stdio MCP package (verified 2026-05-25).
-# The previous remote endpoint `https://mcp.hubspot.com/sse` returned HTTP 404 on the
-# exact path (host root returns 401, but /sse, /mcp, /v1/sse, and POST /mcp all 404),
-# so it was not a usable MCP transport. HubSpot's GA remote server (mcp.hubspot.com)
-# also requires an interactive OAuth 2.0 flow, not the static private-app token in the
-# `env:` block below, so the remote URL cannot be wired up with this auth model anyway.
-#
-# `@hubspot/mcp-server` is HubSpot's official npm package (scope @hubspot), pinned to
-# 0.4.0 (latest dist-tag, verified HTTP 200 at registry.npmjs.org). It runs over stdio
-# via npx and authenticates with a HubSpot private app access token via the
-# PRIVATE_APP_ACCESS_TOKEN env var.
+# `@hubspot/mcp-server` is HubSpot's official npm package. It runs over
+# stdio via npx and authenticates with a HubSpot private app access token
+# via the PRIVATE_APP_ACCESS_TOKEN env var. HubSpot's remote GA server
+# requires an interactive OAuth 2.0 flow, which this entry does not use.
 transport:
   type: "stdio"
   command: "npx"
   args: ["-y", "@hubspot/mcp-server@0.4.0"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
+  # Optional. Leave blank to use your connected account.
   # NOTE: the official package reads PRIVATE_APP_ACCESS_TOKEN (renamed from the old
   # HUBSPOT_ACCESS_TOKEN). Update the MCP connection to use the new key.
   - name: PRIVATE_APP_ACCESS_TOKEN

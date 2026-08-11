@@ -10,12 +10,10 @@ metadata:
   category: "project-issue"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # Jira uses HTTP Basic with the user's email as username and an API
 # token as password — the "two-credential http_basic" shape — plus a
-# per-tenant URL templated via {JIRA_URL}. Both engine extensions
-# (http_basic two-cred + URL templating) ship in the same #1614
-# commit that consumes this spec.
+# per-tenant URL templated via {JIRA_URL}.
 auth:
   type: http_basic
   username_env: JIRA_EMAIL
@@ -26,11 +24,7 @@ transport:
   command: "npx"
   args: ["-y", "@xuandev/atlassian-mcp@1.1.1"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Atlassian OAuth (Jira cloud)
-  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
-  # Leaving these blank uses the workspace's connected OAuth integration;
-  # provide values only to override. Marked required:true previously, which
-  # made the setup/reconnect modal demand credentials the OAuth flow already covers.
+  # Optional. Leave blank to use your connected account.
   - name: JIRA_API_TOKEN
     description: "Jira API Token for authentication"
     required: false
@@ -42,9 +36,8 @@ env:
     description: "Jira instance URL (e.g., https://company.atlassian.net)"
     required: false
 
-# /rest/api/3/myself returns the authenticated user — same endpoint
-# the curated mcp_validation.go path used. {JIRA_URL} substitutes the
-# customer's per-tenant Jira host at request time.
+# /rest/api/3/myself returns the authenticated user. {JIRA_URL} substitutes
+# the customer's per-tenant Jira host at request time.
 validation:
   request:
     method: GET

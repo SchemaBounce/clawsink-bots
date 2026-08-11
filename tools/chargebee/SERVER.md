@@ -11,22 +11,11 @@ metadata:
   author: "chargebee"
   license: "Proprietary"
 
-# MCP-spec OAuth 2.1 challenge + RFC 8414 discovery, live-probed 2026-07-21:
-# AS https://app.chargebee.com/mcp serves metadata (authorization_endpoint
-# app.chargebee.com/oauth2/authorize, token_endpoint
-# app.chargebee.com/oauth2/token) but offers NO RFC 7591 DCR, so this entry
-# uses the pinned-client path (P2-2): client resolved from a
-# SchemaBounce-registered Chargebee OAuth app (CHARGEBEE_MCP_OAUTH_CLIENT_ID).
-# Chargebee's AS advertises token_endpoint_auth_methods_supported: ["none"]
-# only; it is a PUBLIC client (PKCE, no client secret), so no
-# client_secret_env is set here; do not add one. PRECONDITION: register the
-# OAuth app in the Chargebee dashboard (Settings > Configure Chargebee > API
-# & Webhooks > OAuth Apps > Create an OAuth App) with redirect URI
-#   <api-base>/api/v1/oauth/mcp/callback
-# for every environment that serves this tile. See
-# clawsink-bots/docs/PINNED_CLIENT_REGISTRATIONS.md for the full runbook. No
-# scopes are pinned: Chargebee's AS metadata advertises none, and the MCP
-# server's access is scoped to the site the OAuth app was created on.
+# Chargebee's authorization server has no RFC 8414 metadata and no RFC 7591
+# dynamic client registration, so this entry uses the pinned-client path:
+# endpoints pinned below, client supplied by the platform. Chargebee's
+# client is a PUBLIC client (PKCE, no client secret), so no
+# client_secret_env is set here; do not add one.
 auth:
   type: oauth2_mcp
   client_id_env: CHARGEBEE_MCP_OAUTH_CLIENT_ID
@@ -54,5 +43,5 @@ If the connection shows **Reconnect**, the grant expired or was revoked on Charg
 
 ## Notes
 
-- Data access is limited to the single Chargebee site the platform's OAuth app was registered against. A workspace that needs a different site needs its own registered app; see the runbook.
+- Data access is limited to the single Chargebee site the platform's OAuth app was registered against. A workspace that needs a different site needs its own registered app.
 - Tools are served by Chargebee and discovered at session start.

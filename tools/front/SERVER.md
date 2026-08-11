@@ -11,20 +11,11 @@ metadata:
   author: "front"
   license: "Proprietary"
 
-# MCP-spec OAuth 2.1 challenge + RFC 8414 discovery, live-probed 2026-07-21:
-# AS https://app.frontapp.com serves metadata (authorization_endpoint
-# app.frontapp.com/oauth/authorize, token_endpoint
-# app.frontapp.com/oauth/token) but offers NO RFC 7591 DCR, so this entry
-# uses the pinned-client path (P2-2): client resolved from a
-# SchemaBounce-registered Front developer app (FRONT_MCP_OAUTH_CLIENT_ID /
-# FRONT_MCP_OAUTH_CLIENT_SECRET). PRECONDITION: create the app in Front's
-# developer settings, add an OAuth feature scoped to ONLY "MCP Server"
-# feature access (enabling other feature access causes 403s at the MCP
-# endpoint), and set the redirect URI to
-#   <api-base>/api/v1/oauth/mcp/callback
-# for every environment that serves this tile. See
-# clawsink-bots/docs/PINNED_CLIENT_REGISTRATIONS.md for the full runbook.
-# Scope is pinned to the single scope Front's MCP server advertises.
+# Front's authorization server has no RFC 8414 metadata and no RFC 7591
+# dynamic client registration, so this entry uses the pinned-client path:
+# endpoints pinned below, client supplied by the platform. The client is
+# scoped to MCP Server feature access only; the scope below is the single
+# scope Front's MCP server advertises.
 auth:
   type: oauth2_mcp
   client_id_env: FRONT_MCP_OAUTH_CLIENT_ID

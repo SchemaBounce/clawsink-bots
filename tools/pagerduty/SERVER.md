@@ -10,7 +10,7 @@ metadata:
   category: "observability"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # PagerDuty uses the non-standard "Authorization: Token token=<KEY>"
 # scheme — use injection template.
 auth:

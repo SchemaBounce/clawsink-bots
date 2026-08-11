@@ -11,8 +11,6 @@ metadata:
   license: "MIT"
 # Composio toolkit: GOOGLE_ANALYTICS — 67 tools in total.
 # Composio toolkit page: https://composio.dev/toolkits/google_analytics
-# Slug confirmed in core-api schemabounce-api/internal/adl/composio_imported_slugs.go:
-#   {Slug: "google_analytics", DisplayName: "Google Analytics", ToolsCount: 67}
 #
 # Auth model: Composio managed-OAuth. The user connects their Google Analytics
 # account inside Composio once via OAuth. At runtime, the agent calls
@@ -27,11 +25,10 @@ auth:
   composioToolkit: "GOOGLE_ANALYTICS"
   setupReason: "Authorized via Composio's managed-OAuth gateway. Connect your Google Analytics account inside Composio; the agent calls execute_composio_tool with GOOGLEANALYTICS_* action names (e.g. GOOGLEANALYTICS_RUN_REPORT, GOOGLEANALYTICS_LIST_ACCOUNT_SUMMARIES)."
 transport:
-  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
-  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
-  # on the connection's transport_config, where the gateway reads it. There is no
-  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
-  # tools and exits before the handshake (gateway child_exited / start 500).
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
+  # is resolved automatically at connection time and stored on the
+  # connection's transport_config, where the gateway reads it. There is no
+  # local command; sessions connect by URL.
   type: "streamable-http"
 env:
   - name: COMPOSIO_API_KEY

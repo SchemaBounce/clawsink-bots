@@ -10,7 +10,7 @@ metadata:
   category: "ai-memory"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # Pinecone uses Api-Key as the auth header.
 auth:
   type: api_key_header

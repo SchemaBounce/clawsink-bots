@@ -11,17 +11,11 @@ metadata:
   author: "unsora"
   license: "Proprietary"
 
-# OAuth 2.1 auth (reverted from the 2026-07-21 API-key stopgap). Unsora's
-# /mcp endpoint is a Clerk-backed RFC 9728 OAuth protected resource: a live
-# probe (2026-07-27) returns `www-authenticate: Bearer resource_metadata=...`
-# and `x-clerk-auth-reason: session-token-and-uat-missing` — it rejects a
-# static uns_live_... key sent as Authorization Bearer with 401 (Clerk wants
-# a session token from the OAuth flow, not a dashboard API key). The API-key
-# stopgap assumed the vendor's REST-key path worked on the MCP endpoint; it
-# does not. The blocker that justified the stopgap — Clerk rejecting our
-# scope-less DCR client with invalid_scope — is fixed and DEPLOYED
-# (core-api 9abd17fe8 on main), so the generic oauth2_mcp DCR flow works:
-# discovery -> DCR at /oauth/register -> PKCE -> consent -> token.
+# OAuth 2.1 auth. Unsora's /mcp endpoint is a Clerk-backed OAuth protected
+# resource: it rejects a static API key sent as an Authorization Bearer
+# header and requires a session token from the OAuth flow instead. The
+# generic oauth2_mcp dynamic-client-registration flow is deployed and
+# working: discovery -> DCR at /oauth/register -> PKCE -> consent -> token.
 auth:
   type: oauth2_mcp
 

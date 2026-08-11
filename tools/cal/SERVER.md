@@ -10,7 +10,7 @@ metadata:
   category: "communication"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 auth:
   type: http_bearer
   token_env: CAL_API_KEY
@@ -20,11 +20,7 @@ transport:
   command: "npx"
   args: ["-y", "cal-mcp@1.0.6"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
+  # Optional. Leave blank to use your connected account.
   - name: CAL_API_KEY
     description: "Cal.com API key from cal.com/settings/developer"
     required: false

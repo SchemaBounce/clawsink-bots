@@ -11,14 +11,12 @@ metadata:
   author: "databricks"
   license: "Proprietary"
 
-# Per-tenant URL template (first catalog entry using the mechanism; design in
-# docs/research/2026-07-21-per-tenant-mcp-pattern.md). Every Databricks
-# customer has a unique workspace host, so the transport URL carries a
-# {DATABRICKS_WORKSPACE_URL} placeholder declared as a plain env entry below.
-# The connect form collects it, the connection stores it as a non-secret
-# Variable, and core-api substitutes it where the URL becomes launchable
-# (config publish + validation transport). Auth is a workspace personal
-# access token sent as a standard Bearer header via the injection template.
+# Per-tenant URL template. Every Databricks customer has a unique workspace
+# host, so the transport URL carries a {DATABRICKS_WORKSPACE_URL} placeholder
+# declared as a plain env entry below. The connect form collects it and the
+# platform substitutes it wherever the URL is used. Auth is a workspace
+# personal access token sent as a standard Bearer header via the injection
+# template.
 auth:
   injection:
     header_name: Authorization

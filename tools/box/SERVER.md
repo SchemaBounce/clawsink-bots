@@ -11,24 +11,11 @@ metadata:
   author: "box"
   license: "Proprietary"
 
-# MCP-spec OAuth 2.1 challenge + RFC 8414 discovery, live-probed 2026-07-21:
-# AS https://api.box.com/ serves metadata (authorization_endpoint
-# account.box.com/api/oauth2/authorize, token_endpoint
-# api.box.com/oauth2/token) but offers NO RFC 7591 DCR, so this entry uses
-# the pinned-client path (P2-2): client resolved from Box-issued Integration
-# Credentials (BOX_MCP_OAUTH_CLIENT_ID / BOX_MCP_OAUTH_CLIENT_SECRET).
-# PRECONDITION: an org admin generates these from the Box Admin Console
-# (Integrations > Custom Box MCP Server > Configure > Additional
-# Configuration > Add Integration Credentials), which auto-generates the
-# client id/secret. Box gates access by application scopes (root_readwrite,
-# ai.readwrite, docgen.readwrite per developer.box.com/guides/box-mcp/setup;
-# Enterprise Advanced plan required). Enter our redirect
-# URI there:
-#   <api-base>/api/v1/oauth/mcp/callback
-# for every environment that serves this tile. See
-# clawsink-bots/docs/PINNED_CLIENT_REGISTRATIONS.md for the full runbook. No
-# scopes are pinned: Box's AS advertises none via OAuth scope strings;
-# access is governed by the application scopes granted on the Box app instead.
+# Box's authorization server has no RFC 8414 metadata and no RFC 7591
+# dynamic client registration, so this entry uses the pinned-client path:
+# endpoints pinned below, client supplied by the platform (generated from
+# Box-issued Integration Credentials). Box gates access by application
+# scopes rather than OAuth scope strings, so none are pinned here.
 auth:
   type: oauth2_mcp
   client_id_env: BOX_MCP_OAUTH_CLIENT_ID
