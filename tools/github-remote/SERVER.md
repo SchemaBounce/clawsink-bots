@@ -11,21 +11,11 @@ metadata:
   author: "github"
   license: "Proprietary"
 
-# GitHub's AS has NO RFC 8414 metadata and NO RFC 7591 DCR (tier 1.5), so this
-# entry uses the pinned-client path (P2-2): endpoints pinned below, client
-# resolved from the DEDICATED MCP GitHub App (GH_MCP_CLIENT_ID /
-# GH_MCP_CLIENT_SECRET, projected from the consolidated core-api secret keys
-# github_mcp_client_id / github_mcp_client_secret; chart flag
-# githubApp.mcpEnabled). Do NOT point this back at GH_CLIENT_ID: that client
-# is the Git Management OAuth App, which allows only ONE callback URL (taken
-# by /api/v1/github/oauth/callback, so the authorize page hard-fails with
-# "redirect_uri is not associated with this application") and treats an empty
-# scope parameter as public-read-only.
-# PRECONDITION: the MCP GitHub App's callback URL list must include
-#   <api-base>/api/v1/oauth/mcp/callback
-# for every environment that serves this tile. Scopes are omitted on purpose:
-# a GitHub App's permissions come from the app configuration, and GitHub
-# ignores the scope parameter for App authorizations.
+# GitHub's authorization server has no RFC 8414 metadata and no RFC 7591
+# dynamic client registration, so this entry uses the pinned-client path:
+# endpoints pinned below, client supplied by the platform. Scopes are omitted
+# on purpose: a GitHub App's permissions come from the app configuration, and
+# GitHub ignores the scope parameter for App authorizations.
 auth:
   type: oauth2_mcp
   client_id_env: GH_MCP_CLIENT_ID
