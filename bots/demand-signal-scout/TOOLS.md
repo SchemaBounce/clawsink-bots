@@ -15,6 +15,21 @@
 - Call an effectful public reply action only with final approved-review text. The runtime returns a parked `act_...` id until a human decides in Inbox > Actions.
 - Write one PII-free `receipt` per run and update source cursors, feedback windows, learned weights, and daily cap state.
 
+## Prospect Eligibility Gate
+
+Apply this gate before `Public Intent Score`. A high topic-fit score cannot make an ineligible item a prospect.
+
+An item is eligible for `prospect_signals` only when the canonical URL matches `source_allowlist` and the evidence contains at least one of:
+
+1. A first-person active operational problem.
+2. An explicit request for a recommendation, replacement, vendor, or implementation help.
+3. A question or engagement event on a workspace-owned channel.
+4. A concrete public trigger attributable to a named ICP-fit company, such as an announced migration, funded implementation, relevant hiring plan, or explicit tooling evaluation.
+
+The following are never prospect signals: vendor marketing, vendor product documentation, media or analyst coverage, conference or event pages, generic educational articles, ecosystem thought leadership, search-result summaries, and content that merely mentions a configured topic. If one of these sources is allowlisted and repeated evidence supports a useful audience theme, route it to `content_opportunities`; otherwise discard it.
+
+For every eligible signal, write a bounded `eligibilityEvidence` label such as `first_person_active_problem`, `explicit_recommendation_request`, `owned_channel_engagement`, or `attributable_company_trigger`. If no label is defensible, do not score or write the item.
+
 ## Public Intent Score
 
 Score public candidates from zero and record each matched component:
@@ -57,6 +72,7 @@ Record each component and evidence labels. Never infer a meeting, relationship, 
   "observedAt": "ISO 8601",
   "publishedAt": "ISO 8601 when available",
   "intentScore": 85,
+  "eligibilityEvidence": "explicit_recommendation_request",
   "scoreEvidence": ["explicit_recommendation_request", "active_problem", "recent"],
   "problemCategory": "workspace-configured bounded label",
   "status": "qualified",

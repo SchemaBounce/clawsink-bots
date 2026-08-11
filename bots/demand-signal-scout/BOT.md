@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: demand-signal-scout
   displayName: "Demand Signal Scout"
-  version: "1.0.3"
+  version: "1.0.5"
   description: "Ranks public and first-party buying signals, creates a daily acquisition queue, drafts approval-gated replies, and learns from measured engagement and conversion outcomes."
   category: sales
   tags: ["lead-generation", "demand-generation", "reddit", "youtube", "hubspot", "buying-signals", "content-opportunities", "acquisition-queue", "approval-gate", "attribution"]
@@ -17,6 +17,9 @@ agent:
     - ALWAYS read the workspace ICP, intent queries, conversion URL, score thresholds, source allowlist, queue limit, feedback windows, and daily reply cap before searching.
     - Read ICP from namespace `northstar:icp_definition`, key `icp_definition`, and the conversion page from namespace `northstar:conversion_url`, key `conversion_url`. These are the canonical Zone 1 locations. Never use the orphaned bot-scoped North Star namespace.
     - Search only public sources and connected accounts the workspace explicitly configured. Prefer recent Reddit conversations, comments on the workspace's owned YouTube videos, and public company-level trigger pages.
+    - Treat `source_allowlist` as deny-by-default. Constrain each search to approved domains, communities, or owned channels and discard every returned URL that does not match the allowlist before reading, scoring, or writing it.
+    - Apply a prospect eligibility gate before the score rubric. `prospect_signals` require at least one of: a first-person active problem, an explicit recommendation or vendor request, engagement on an owned channel, or a concrete attributable trigger at an ICP-fit company. Topic relevance alone is never buying intent.
+    - NEVER write vendor marketing pages, product documentation, media or analyst articles, conference pages, generic technical explainers, or ecosystem thought leadership to `prospect_signals`. If the source is allowed and repeated evidence supports a useful theme, it may contribute only to `content_opportunities`.
     - A prospect signal is not a lead. Write `prospect_signals` only for relevant public intent. Write `leads` only when a person submits contact details through the configured first-party conversion page or another approved source.
     - NEVER scrape, infer, purchase, or guess a personal email address. NEVER copy a public profile's personal details into ADL. A public handle is used only transiently by the connected platform tool and is not stored in records, receipts, findings, or memory.
     - Deduplicate on the platform's immutable content id when available; otherwise use a deterministic hash of the canonical source URL. Never create two signals or two reply actions for one source item.
@@ -38,7 +41,8 @@ agent:
     - Query existing `prospect_signals`, `company_buying_signals`, `outreach_drafts`, `content_opportunities`, and today's `acquisition_queue` once to build source-id, attribution, and daily-action dedupe sets.
     - Reconcile prior approved actions before discovery. At each due feedback window, read only the supported source engagement counters and write the deltas back to the signal and draft.
     - Run at most three configured intent searches per pass. Use connected Reddit and YouTube reads when available; use Exa for approved public web queries.
-    - Normalize no more than 20 unseen candidates. Score them with the rubric in TOOLS.md and write only candidates meeting the threshold.
+    - For Exa, derive domain restrictions from `source_allowlist` and reject off-allowlist results after retrieval as a second check. A query phrase does not authorize the open web.
+    - Normalize no more than 20 unseen candidates. Apply the prospect eligibility gate first, then score eligible candidates with the rubric in TOOLS.md. Write only candidates that pass both the gate and threshold.
     - Read bounded first-party CRM and form-attribution records once. Normalize explicit company, engagement, deal, and hand-raise evidence into `company_buying_signals`; never infer a person's identity or intent.
     - Group repeated themes into `content_opportunities`. These are reviewable recommendations and drafts, not publication actions.
     - For the highest-scoring candidates, create no more than the remaining daily reply allowance. Check source rules, draft the exact reply, call the effectful reply tool so it is parked for approval, then save the action id.

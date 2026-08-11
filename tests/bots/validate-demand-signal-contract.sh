@@ -57,10 +57,18 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.3' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.3"
+if grep -q 'bots/demand-signal-scout@1\.0\.5' "$TEAM"; then
+  pass "Sales team references Demand Signal Scout 1.0.5"
 else
-  fail "Sales team must reference Demand Signal Scout 1.0.3"
+  fail "Sales team must reference Demand Signal Scout 1.0.5"
+fi
+
+if grep -q '## Prospect Eligibility Gate' "$TOOLS" && \
+   grep -q 'Treat `source_allowlist` as deny-by-default' "$BOT" && \
+   jq -e '.entityTypes[] | select(.name == "prospect_signals") | .fields.eligibilityEvidence.required == true' "$ENTITY_TYPES" >/dev/null; then
+  pass "prospect eligibility and allowlist gates are enforced"
+else
+  fail "prospect signals must require eligibility evidence and deny off-allowlist results"
 fi
 
 if grep -q 'northstar:icp_definition' "$BOT" && grep -q 'northstar:conversion_url' "$BOT" && ! grep -q 'bot:demand-signal-scout:northstar' "$BOT"; then

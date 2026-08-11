@@ -72,3 +72,27 @@ Breaking the YAML format will break the marketplace. Validate before committing.
 - All YAML strings with special characters must be quoted
 - Use kebab-case for names, snake_case for entity types, camelCase for YAML fields
 - Maximum line length: none enforced, but keep YAML readable
+
+## Declaring Authentication
+
+A server's `auth` (or `env`) block declares WHAT a connection needs, never how
+the platform wires it internally.
+
+- **Customer-supplied credential** (API key, token): declare it in `env` with
+  `name`, `description`, `required`, `sensitive`. The description should tell
+  the customer where to create the key on the provider's site.
+- **Sign in with the provider** (OAuth): declare `auth.type: oauth2_mcp`. If
+  the provider supports standard OAuth discovery and dynamic client
+  registration, that is all you declare. If it does not, the platform supplies
+  a registered client; pin only the provider's public `authorization_endpoint`
+  and `token_endpoint`.
+- **Bridged from a connected account** (the customer already connected this
+  provider elsewhere in their workspace): mark the env entry `required: false`
+  and say in the description that a connected account covers it.
+
+Never put platform wiring in a manifest: no secret storage locations, no
+deployment or configuration flags, no internal source references, no
+operator instructions. If a server needs platform-side setup, that lives in
+the platform's private documentation, and this repo carries only the
+customer-facing entry. This repo is public; see
+`.claude/rules/public-repo-no-internal-content.md` for the full contract.
