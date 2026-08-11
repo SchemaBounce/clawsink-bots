@@ -57,10 +57,10 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.4' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.4"
+if grep -q 'bots/demand-signal-scout@1\.0\.5' "$TEAM"; then
+  pass "Sales team references Demand Signal Scout 1.0.5"
 else
-  fail "Sales team must reference Demand Signal Scout 1.0.4"
+  fail "Sales team must reference Demand Signal Scout 1.0.5"
 fi
 
 if grep -q '## Prospect Eligibility Gate' "$TOOLS" && \
