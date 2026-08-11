@@ -11,21 +11,11 @@ metadata:
   author: "gong"
   license: "Proprietary"
 
-# MCP-spec OAuth 2.1 challenge + RFC 8414 discovery, live-probed 2026-07-21:
-# AS https://mcp.gong.io serves metadata (authorization_endpoint
-# app.gong.io/oauth2/authorize, token_endpoint
-# app.gong.io/oauth2/generate-mcp-token) but offers NO RFC 7591 DCR, so this
-# entry uses the pinned-client path (P2-2): client resolved from a
-# SchemaBounce-registered Gong integration (GONG_MCP_OAUTH_CLIENT_ID /
-# GONG_MCP_OAUTH_CLIENT_SECRET). PRECONDITION: register the integration in
-# Gong Admin Center (Settings > Ecosystem > API > Integrations > Create
-# Integration) with redirect URI
-#   <api-base>/api/v1/oauth/mcp/callback
-# for every environment that serves this tile. See
-# clawsink-bots/docs/PINNED_CLIENT_REGISTRATIONS.md for the full runbook.
-# Scopes are pinned to the three read-only tool scopes Gong's MCP server
-# advertises; requesting less than the full set drops the matching tool from
-# the session.
+# Gong's authorization server has no RFC 8414 metadata and no RFC 7591
+# dynamic client registration, so this entry uses the pinned-client path:
+# endpoints pinned below, client supplied by the platform. Scopes are
+# pinned to the three read-only tool scopes Gong's MCP server advertises;
+# requesting less than the full set drops the matching tool from the session.
 auth:
   type: oauth2_mcp
   client_id_env: GONG_MCP_OAUTH_CLIENT_ID

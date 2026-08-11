@@ -25,19 +25,17 @@ auth:
 # start. No customer data leaves the pod except to googleapis.com.
 #
 # AUTH: env-var only, no credentials file. The package reads GSC_CLIENT_ID,
-# GSC_CLIENT_SECRET, and GSC_REFRESH_TOKEN straight from the environment. Our
-# native-OAuth flow stores the user's refresh token on the connection and serves
-# the platform client id/secret via the gated platform fallback; core-api aliases
-# GSC_* to the canonical GOOGLE_* names in ResolveConnectionSecret, so all three
-# are injected at pod start with no credentials-file shim. (Replaces the earlier
-# AminForou `mcp-search-console` package, which needed a file shim never built.)
+# GSC_CLIENT_SECRET, and GSC_REFRESH_TOKEN straight from the environment.
+# These are bridged automatically from the workspace's connected Google
+# account, so all three are injected at pod start with no credentials-file
+# shim.
 transport:
   type: "stdio"
   command: "uvx"
   args: ["mcp-google-search-console-crunchtools@0.1.0"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Google OAuth
-  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
+  # OPTIONAL: credentials are bridged automatically from the workspace's
+  # connected Google account.
   # Leaving these blank uses the workspace's connected OAuth integration;
   # provide values only to override. Marked required:true previously, which
   # made the setup/reconnect modal demand credentials the OAuth flow already covers.
@@ -97,12 +95,4 @@ The refresh token never leaves our infrastructure. The data path at runtime is *
 
 ## Why native (vs Composio)
 
-We previously routed this through Composio's GSC toolkit. That works, but every API call passed through Composio's hosted backend — they saw the request and response payloads, and at scale the per-action billing eats real margin. The native path costs us a one-time Google OAuth handler in core-api (`mcp_oauth_google_handler.go`) and a stdio MCP server vendored in the workspace pod. After that, every Google service we add (GA4, Drive, Sheets, Gmail, Calendar) reuses the exact same OAuth client and handler — only the scopes change in `mcpServerMeta.ts`.
-
-## Platform configuration (one-time per environment)
-
-- Create a Google Cloud project, enable the **Google Search Console API**.
-- Create an OAuth 2.0 **Web application** client.
-- Authorised redirect URIs: `https://api.schemabounce.com/api/v1/oauth/google/callback` (and `http://localhost:8080/api/v1/oauth/google/callback` for local dev).
-- Set core-api env: `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REDIRECT_BASE`.
-- Same client ID + secret serves every Google service the platform supports — one consent screen, many `webmasters.*`, `analytics.*`, `drive.*`, `gmail.*` scopes available depending on which bots a workspace deploys.
+We previously routed this through Composio's GSC toolkit. That works, but every API call passed through Composio's hosted backend — they saw the request and response payloads, and at scale the per-action billing eats real margin. The native path uses a single platform Google OAuth client and a stdio MCP server vendored in the workspace pod. After that, every Google service we add (GA4, Drive, Sheets, Gmail, Calendar) reuses the exact same OAuth client and consent screen; only the scopes change.

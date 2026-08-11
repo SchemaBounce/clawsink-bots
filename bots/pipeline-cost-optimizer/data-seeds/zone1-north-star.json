@@ -36,9 +36,9 @@
       "_default": 0.0000005
     },
     "company_glossary": {
-      "route": "A configured pipeline path from a source to one or more sinks. Defined in pipeline_routes table.",
-      "sink": "A delivery destination (database, lake, queue, webhook). Defined in environment_sinks table.",
-      "source": "An ingest origin (CDC bridge, SaaS connector, webhook receiver, direct push). Defined in workspace_sources table.",
+      "route": "A configured pipeline path from a source to one or more sinks.",
+      "sink": "A delivery destination (database, lake, queue, webhook).",
+      "source": "An ingest origin (CDC bridge, SaaS connector, webhook receiver, direct push).",
       "fan-out": "Number of sinks attached to a single route. Multiplies per-event cost.",
       "lifetime_volume_bucket": "Quartile-style bucket (none/low/med/high) the analyzer assigns each route based on events_processed_lifetime relative to the workspace distribution. Used in place of a per-window run-rate until the runtime exposes window-based event counts."
     }

@@ -25,7 +25,8 @@
         "do_not_publish": [
           "Vendor comparisons that name competitors directly (use 'traditional ETL tools', 'batch-oriented platforms')",
           "Roadmap commitments without product approval",
-          "Performance claims without benchmark methodology"
+          "Performance claims without benchmark methodology",
+          "Refer to competitor categories generically (batch ETL platforms, transformation tools); never name competitors"
         ]
       }
     },
@@ -46,7 +47,7 @@
         "sinks_count": "50+",
         "agent_data_layer": {
           "description": "Per-workspace PostgreSQL + pgvector + AGE for agent records, memory, graph, semantic search.",
-          "agents": "Hosted via OpenCLAW runtime; Anthropic and OpenAI via virtual key proxy (ClawShell).",
+          "agents": "Hosted via the OpenCLAW runtime, with access to Anthropic and OpenAI models.",
           "use_cases": ["customer support agents", "ops monitors", "SEO crawlers", "internal blog writers"]
         },
         "kolumn": {
@@ -61,41 +62,25 @@
       "key": "company_glossary",
       "value": {
         "ADL": "Agent Data Layer. Per-workspace PostgreSQL with pgvector and AGE extensions for agent state, memory, semantic search, and graph relationships.",
-        "Asynq": "Redis-backed Go task queue used for all async work. Tasks live in asynq:{queue}:pending, never raw Redis lists.",
+        "Asynq": "Async work is queued internally.",
         "CDC": "Change Data Capture. Streaming row-level changes from a source database in near-real-time.",
-        "ClawShell": "Rust sidecar that proxies LLM calls. Resolves virtual keys (vk_anthropic_ws_*) to real API keys.",
         "Crystallization": "OpenCLAW pattern detection that promotes repeated tool sequences into zero-token skills.",
         "Direct Connect": "Pull-based ingestion mode. SchemaBounce queries the source on a schedule.",
         "Egress mode": "Bot-level setting controlling outbound network calls: 'none', 'allowlist', or 'unrestricted'.",
-        "Environment": "A logical pipeline isolation boundary inside a workspace. Each environment has its own Redis and worker.",
-        "ingest API": "Public HTTPS endpoint that receives external events (webhooks, agents) and forwards to the per-environment Redis.",
+        "Environment": "A logical pipeline isolation boundary inside a workspace, such as staging versus production.",
+        "ingest API": "Public HTTPS endpoint that receives external events (webhooks, agents) and forwards them into the workspace's pipeline.",
         "Kolumn": "SchemaBounce's IaC tool. Free. HCL syntax. Manages databases, schemas, indexes, transforms, pipelines.",
         "MCP": "Model Context Protocol. SchemaBounce exposes a public MCP for read-only data tools.",
         "North Star": "A bot's read-only seed memory: brand voice, product catalog, glossary, off-limits. Loaded into ADL Zone1.",
         "OpenCLAW": "The agent runtime. Hosts bots, executes their run protocols, manages crystallization.",
         "Outbox pattern": "Transactional event capture via an app-managed outbox table; bridge tails it.",
         "pgvector": "PostgreSQL extension for vector similarity search; backs ADL semantic_search.",
-        "Pipeline worker": "Unified per-environment binary that handles both CDC ingestion and sink delivery.",
         "Route": "A SchemaBounce pipeline route maps one source's events to one or more sinks with optional transforms.",
         "SaaS connector": "JSON-defined source connector for SaaS APIs (Stripe, HubSpot, etc.). 100+ connectors built in.",
-        "schemabounce-api": "The control-plane HTTP API. Lives at /api/v1/*. Handles workspaces, routes, sinks, billing, ADL.",
         "Sink": "A destination for CDC events. 50+ types: Snowflake, BigQuery, Redshift, Kafka, S3, etc.",
         "Skill (ADL)": "A reusable prompt + tool-requirements bundle baked into a bot at deploy time.",
         "Source": "A producer of CDC events: a database, an outbox table, a webhook, or a SaaS API.",
         "Workspace": "Top-level tenancy boundary. Each workspace has its own ADL, environments, billing."
-      }
-    },
-    {
-      "namespace": "bot:blog-writer:northstar",
-      "key": "competitive_anchors",
-      "value": {
-        "framing": "Use generic categories, not vendor names, in published copy.",
-        "categories": [
-          {"name": "batch ETL platforms", "examples_internal_only": ["Fivetran", "Airbyte"], "framing": "Batch-oriented loaders with 5 to 15 minute latency."},
-          {"name": "transform-only tools", "examples_internal_only": ["dbt"], "framing": "SQL transformations that run after data already arrived."},
-          {"name": "streaming ETL", "examples_internal_only": ["Hevo"], "framing": "Faster than batch but bounded by their connector roadmap."}
-        ],
-        "our_position": "Sub-second CDC with full IaC. Kolumn is free. Most pipelines that take 15 minutes elsewhere take under a second here."
       }
     },
     {

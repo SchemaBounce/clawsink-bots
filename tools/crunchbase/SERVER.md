@@ -11,24 +11,10 @@ metadata:
   author: "crunchbase"
   license: "Proprietary"
 
-# MCP-spec OAuth 2.1 challenge + RFC 8414 discovery, live-probed 2026-07-21:
-# AS https://www.crunchbase.com serves metadata (authorization_endpoint
-# www.crunchbase.com/oauth/authorize, token_endpoint
-# oauth.crunchbase.com/token) but offers NO RFC 7591 DCR, so this entry uses
-# the pinned-client path (P2-2): client resolved from a
-# SchemaBounce-registered Crunchbase OAuth client
-# (CRUNCHBASE_MCP_OAUTH_CLIENT_ID / CRUNCHBASE_MCP_OAUTH_CLIENT_SECRET).
-# UNLIKE the other pinned entries in this catalog, Crunchbase has no public
-# self-serve developer portal for this: full API/MCP access requires an
-# Enterprise or Applications license, and the OAuth client is issued by
-# Crunchbase's team on request. PRECONDITION: contact Crunchbase (via the
-# workspace's Crunchbase account rep, or the API sales form at
-# about.crunchbase.com/products/crunchbase-api) and request an OAuth client
-# for the hosted MCP server with redirect URI
-#   <api-base>/api/v1/oauth/mcp/callback
-# for every environment that serves this tile. See
-# clawsink-bots/docs/PINNED_CLIENT_REGISTRATIONS.md for the full runbook.
-# Scopes are pinned to the two scopes Crunchbase's AS advertises.
+# Crunchbase's authorization server has no RFC 8414 metadata and no RFC 7591
+# dynamic client registration, so this entry uses the pinned-client path:
+# endpoints pinned below, client supplied by the platform. Scopes are pinned
+# to the two scopes Crunchbase's authorization server advertises.
 auth:
   type: oauth2_mcp
   client_id_env: CRUNCHBASE_MCP_OAUTH_CLIENT_ID
@@ -60,5 +46,5 @@ If the connection shows **Reconnect**, the grant expired or was revoked on Crunc
 
 ## Notes
 
-- This tile only works once the platform's Crunchbase OAuth client is provisioned. Crunchbase issues that client through its Enterprise/API sales process, not a self-serve developer console; see the operator runbook.
+- This tile only works once the platform's Crunchbase OAuth client is provisioned. Crunchbase issues that client through its Enterprise/API sales process, not a self-serve developer console.
 - Tools are served by Crunchbase and discovered at session start.

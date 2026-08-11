@@ -27,11 +27,9 @@ transport:
   # it as an MCP stdio server — see github/github-mcp-server's own README.
   args: ["stdio"]
 env:
-  # OPTIONAL: the token is bridged from the workspace's connected GitHub
-  # (Settings -> Git Connections) by core-api's ResolveConnectionSecret OAuth
-  # bridge, so leaving this blank uses that connection. Provide a PAT only to
-  # override it. Same pattern as tools/github; required:true here would make
-  # the setup/reconnect modal demand a PAT the workspace OAuth already covers.
+  # Optional. Leave blank to use your connected GitHub account (Settings ->
+  # Git Connections). Provide a PAT only to override it. Same pattern as
+  # tools/github.
   - name: GITHUB_PERSONAL_ACCESS_TOKEN
     description: "Optional GitHub PAT with repo, workflow, and read:org scope. Leave blank to use your connected GitHub (Settings -> Git Connections); provide one only to override."
     required: false
@@ -41,7 +39,7 @@ env:
     required: false
     sensitive: false
 
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # Identical to tools/github: both servers authenticate against the same
 # GitHub REST API with the same bearer token, so the generic validation
 # engine can test credentials and probe upstream reachability without
@@ -396,12 +394,9 @@ workspace OAuth bridge.
 ## Hosting Notes (maintainers)
 
 - The pinned asset `github-mcp-server_Linux_x86_64.tar.gz` is a tar.gz
-  archive; upstream publishes no bare Linux binary. The gateway's github
-  source (`mcp-gateway/internal/source/github.go`) downloads it, verifies its
-  SHA-256 against the release checksums, extracts it, and runs the inner
-  binary — see `resolveArchive`. The archive-extraction and goreleaser
-  checksum-naming gaps this note used to describe are CLOSED; do not treat
-  this server as un-startable.
+  archive; upstream publishes no bare Linux binary. The gateway downloads it,
+  verifies its SHA-256 against the release checksums, extracts it, and runs
+  the inner binary.
 - Launch args matter: the binary is a cobra CLI, so it needs the `stdio`
   subcommand (declared in `transport.args` above). With no args it prints
   usage and exits, which the gateway reports as `child_exited` at start.

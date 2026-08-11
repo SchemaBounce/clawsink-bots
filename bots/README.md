@@ -351,7 +351,7 @@ Web capabilities (`web.browsing`, `web.search`, `web.crawling`) don't provision 
 
 The `egress:` section declares which external HTTPS endpoints the bot needs to reach via the proxy token system (`request_proxy_token` → `execute_proxy_call`). When a bot is deployed to a seat, the `egress` section auto-populates the seat's `manifest.egressPolicy`. The admin can override it per-seat.
 
-- `mode` defaults to `llm-only` (no proxy calls allowed, LLM calls via ClawShell still work)
+- `mode` defaults to `llm-only` (no proxy calls allowed; the agent's own LLM calls still work)
 - `open` allows the agent to reach any public HTTPS endpoint
 - `restricted` limits the agent to only the domains listed in `allowedDomains`
 - `none` blocks all external access (both proxy calls and direct HTTP)
@@ -841,9 +841,9 @@ Bootstrap private memory entries.
 ## Model Aliases (auto-updating)
 
 Use these alias names in `model.preferred` / `model.fallback` instead of pinned dated
-model IDs. An alias resolves to a concrete model **at run time** from the platform catalog
-(`core-api/internal/llm/catalog.json`). When the platform adopts a newer model, every bot
-using the alias upgrades automatically — no manifest edit required.
+model IDs. An alias resolves to a concrete model **at run time** from the platform's model
+catalog. When the platform adopts a newer model, every bot using the alias upgrades
+automatically — no manifest edit required.
 
 | Alias | Provider | Resolves to (today) | Use for |
 |-------|----------|---------------------|---------|

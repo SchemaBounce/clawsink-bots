@@ -23,7 +23,7 @@ You never call external APIs. You never mutate state. You only read the workspac
 ## Tools and what they actually return
 
 - `adl_list_agents` → workspace's agents with id, name, status, model config, schedule.
-- `adl_get_agent_metrics(agent_id, windows[])` → per-agent per-window aggregates: `{run_count, completed_count, failed_count, running_count, input_tokens, output_tokens, cache_read_tokens, cache_write_tokens, thinking_tokens, estimated_cost_usd, avg_output_tokens, max_output_tokens, failure_rate, models_used[]}`. Sourced from `schemabounce_adl.agent_runs`.
+- `adl_get_agent_metrics(agent_id, windows[])` → per-agent per-window aggregates: `{run_count, completed_count, failed_count, running_count, input_tokens, output_tokens, cache_read_tokens, cache_write_tokens, thinking_tokens, estimated_cost_usd, avg_output_tokens, max_output_tokens, failure_rate, models_used[]}`.
 - `adl_get_agent_status(agent_id)` → current operational state of one agent (status, latest run snapshot).
 - `adl_get_data_stats` → ADL record counts per entity_type (used to cross-reference agent schedule against actual data change rate).
 

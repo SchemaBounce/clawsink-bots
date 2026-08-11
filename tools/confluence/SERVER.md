@@ -10,7 +10,7 @@ metadata:
   category: "files-docs"
   author: "schemabounce"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # Same Atlassian two-credential http_basic + per-tenant URL pattern
 # as Jira. The same Atlassian API token works for both products.
 auth:
@@ -23,11 +23,7 @@ transport:
   command: "npx"
   args: ["-y", "confluence-mcp-server@1.1.0"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Atlassian OAuth (Confluence cloud)
-  # connection stored by core-api's ResolveConnectionSecret OAuth bridge.
-  # Leaving these blank uses the workspace's connected OAuth integration;
-  # provide values only to override. Marked required:true previously, which
-  # made the setup/reconnect modal demand credentials the OAuth flow already covers.
+  # Optional. Leave blank to use your connected account.
   - name: CONFLUENCE_URL
     description: "Confluence instance URL"
     required: false

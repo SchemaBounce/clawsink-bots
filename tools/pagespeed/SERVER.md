@@ -21,10 +21,9 @@ metadata:
 # Create at: https://console.cloud.google.com/apis/credentials
 # Enable API: https://console.cloud.google.com/apis/library/pagespeedonline.googleapis.com
 #
-# NO validation block: a real PSI call triggers a full Lighthouse run (5-15 s, 1 quota
-# unit). We do not burn quota on automated health probes. User-initiated "Test
-# Connection" is the correct gate; between checks, the agent-runtime callback supplies
-# connection status through the AgentStatus side channel.
+# NO validation block: a real PSI call triggers a full Lighthouse run (5-15 s, 1
+# quota unit), so we do not burn quota on automated health probes. Use "Test
+# Connection" to verify credentials on demand.
 transport:
   type: "stdio"
   command: "npx"

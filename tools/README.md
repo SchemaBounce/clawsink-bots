@@ -403,7 +403,7 @@ ElevenLabs is the only **Python-based** MCP server. It requires `uvx` (from the 
 
 ---
 
-# Credential Validation Specs (SchemaBounce #1614)
+# Credential Validation Specs
 
 Each `SERVER.md` may optionally declare three additional YAML blocks that let SchemaBounce's generic validation engine in `core-api` verify the user's credentials against the upstream service and probe the upstream's reachability — without per-server Go code.
 

@@ -23,11 +23,10 @@ env:
     description: "Slack workspace/team ID"
     required: true
 
-# Declarative auth + validation (SchemaBounce MCP_CONNECTION_VALIDATION_SPEC).
-# Replaces the hardcoded Go slackValidator. NOTE: Slack's auth.test returns HTTP
-# 200 even for an INVALID token (body {"ok":false,"error":"invalid_auth"}), so a
-# status-only check would be a false-green — body_contains '"ok":true' is the
-# real auth discriminator.
+# Declarative auth + validation.
+# NOTE: Slack's auth.test returns HTTP 200 even for an INVALID token (body
+# {"ok":false,"error":"invalid_auth"}), so a status-only check would be a
+# false-green — body_contains '"ok":true' is the real auth discriminator.
 auth:
   type: http_bearer
   token_env: SLACK_BOT_TOKEN

@@ -4,8 +4,8 @@
 #
 # Why: @composio/mcp is the Composio CLI, not an MCP server. Declaring it as a
 # stdio transport made the mcp-gateway spawn a child that printed usage and
-# exited before the MCP handshake (gateway child_exited / start 500 —
-# SchemaBounce #1929, e.g. facebook publishing). Composio-managed servers are
+# exited before the MCP handshake (gateway child_exited / start 500,
+# e.g. facebook publishing). Composio-managed servers are
 # reached over a remote streamable-http transport whose per-connected-account
 # URL is resolved at connect time (ComposioOAuthClient.EnsureMcpInstanceURL) and
 # stored on the connection's transport_config. The manifest must declare

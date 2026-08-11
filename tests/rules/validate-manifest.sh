@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 # Rule Manifest Validator for rules/**
 #
-# Mirrors the contract enforced by core-api's clawsink.ParseRuleDef and the
-# activation-time composer composeRulePromptEntries
-# (schemabounce-api/internal/clawsink/{parsing.go,types.go} and
-# internal/handlers/adl_bot_activation_handler.go).
+# Mirrors the rule-definition contract the platform enforces at parse and
+# activation time.
 #
 # Checks:
 #   1. Every rules/{name}/ directory has RULE.md AND prompt.md

@@ -19,11 +19,7 @@ transport:
   command: "npx"
   args: ["-y", "shopify-mcp@1.0.8"]
 env:
-  # OPTIONAL: credentials are bridged from the workspace's Composio-managed OAuth
-  # connection. Leaving these blank uses the workspace's Composio integration for
-  # this service; provide values only to override the managed connection. Marked
-  # required:true previously, which made the setup/reconnect modal demand
-  # credentials the managed flow already covers.
+  # Optional. Leave blank to use your connected account.
   - name: SHOPIFY_ACCESS_TOKEN
     description: "Shopify Admin API access token"
     required: false

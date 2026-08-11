@@ -10,7 +10,7 @@ metadata:
   category: "automation"
   author: "composio"
   license: "MIT"
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # Composio uses a custom x-api-key header.
 auth:
   type: api_key_header
@@ -18,11 +18,10 @@ auth:
   header_name: x-api-key
 
 transport:
-  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL is
-  # resolved at connection time (ComposioOAuthClient.EnsureMcpInstanceURL) and stored
-  # on the connection's transport_config, where the gateway reads it. There is no
-  # local command: the former `npx @composio/mcp` recipe was a CLI that serves no MCP
-  # tools and exits before the handshake (gateway child_exited / start 500).
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
+  # is resolved automatically at connection time and stored on the
+  # connection's transport_config, where the gateway reads it. There is no
+  # local command; sessions connect by URL.
   type: "streamable-http"
 env:
   - name: COMPOSIO_API_KEY

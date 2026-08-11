@@ -107,7 +107,7 @@ Both ship today. Both are pure platform-internal: zero third-party MCP servers, 
 }
 ```
 
-**Why Composio cannot replicate this:** `agent_runs` is the SchemaBounce per-workspace ADL pool's record of every LLM call the runtime made on the customer's behalf. It includes input tokens, output tokens, cache-read tokens, cache-write tokens, thinking tokens, model id, status, latency, and an `estimated_cost_usd` reconciled against the `model_cost_table`. No third-party API exposes this. It is data SchemaBounce produces by running the customer's agents.
+**Why Composio cannot replicate this:** `agent_runs` is the SchemaBounce per-workspace ADL pool's record of every LLM call the runtime made on the customer's behalf. It includes input tokens, output tokens, cache-read tokens, cache-write tokens, thinking tokens, model id, status, latency, and an `estimated_cost_usd` reconciled against current model pricing. No third-party API exposes this. It is data SchemaBounce produces by running the customer's agents.
 
 ## 3. The Runtime Tools That Power Them
 
@@ -115,15 +115,15 @@ These are the SchemaBounce-platform built-ins available to every first-party bot
 
 | Tool | Source | What it returns |
 |------|--------|-----------------|
-| `adl_list_pipeline_routes` | `schemabounce_core.pipeline_routes` | All configured routes for the workspace. |
-| `adl_get_route_status(route_id)` | `pipeline_routes` + `pipeline_event_rollups` last-row | Current state, last event timestamp, error count. |
-| `adl_get_route_metrics(route_id, windows[])` | `pipeline_event_rollups` (hourly aggregates) | Per-window event counts. Indexed on `(workspace_id, hour_bucket DESC)`. |
-| `adl_list_workspace_sources` | `schemabounce_core.workspace_sources` | All ingest sources (CDC, SaaS, webhook, direct push). |
-| `adl_list_workspace_sinks(env?, status?)` | `schemabounce_core.environment_sinks` | All sinks with operational config (DLQ presence, retry policy, batching). Credentials and KMS key IDs are stripped. |
+| `adl_list_pipeline_routes` | platform route configuration | All configured routes for the workspace. |
+| `adl_get_route_status(route_id)` | platform route state and event rollups | Current state, last event timestamp, error count. |
+| `adl_get_route_metrics(route_id, windows[])` | platform event rollups (hourly aggregates) | Per-window event counts. |
+| `adl_list_workspace_sources` | platform source configuration | All ingest sources (CDC, SaaS, webhook, direct push). |
+| `adl_list_workspace_sinks(env?, status?)` | platform sink configuration | All sinks with operational config (DLQ presence, retry policy, batching). Credentials and KMS key IDs are stripped. |
 | `adl_list_sink_types` | embedded sink-type catalog | Catalog of supported sink types and their capability flags. |
-| `adl_list_agents` | `schemabounce_adl.agents` | All agents in the workspace ADL. |
-| `adl_get_agent_status(agent_id)` | `agents` + `agent_runs` last-row | Current state, last run timestamp, recent error. |
-| `adl_get_agent_metrics(agent_id?, windows[])` | `agent_runs` (per-workspace ADL pool) | Aggregated tokens (input/output/cache/thinking), estimated cost, status counts, model-id distribution. |
+| `adl_list_agents` | the workspace ADL agent registry | All agents in the workspace ADL. |
+| `adl_get_agent_status(agent_id)` | the ADL agent registry and run ledger | Current state, last run timestamp, recent error. |
+| `adl_get_agent_metrics(agent_id?, windows[])` | the per-workspace ADL run ledger | Aggregated tokens (input/output/cache/thinking), estimated cost, status counts, model-id distribution. |
 | `adl_query_records` | per-workspace ADL pool | SQL-shaped reads against the workspace's record store. |
 | `adl_query_duckdb` | per-workspace ADL DuckDB attachment | Analytical queries against ADL records, useful for windowed aggregations and joins. |
 | `adl_read_memory`, `adl_write_memory` | `agent_memory` | Per-bot, per-namespace key-value state. Used for thresholds, run history, override tables. |
@@ -178,6 +178,4 @@ No third-party API is involved. No Composio hop is involved. The data the bot re
 
 - Bot manifests: `bots/pipeline-cost-optimizer/BOT.md`, `bots/agent-cost-optimizer/BOT.md`
 - Threshold seeds: `bots/pipeline-cost-optimizer/data-seeds/zone1-north-star.json`, `bots/agent-cost-optimizer/data-seeds/zone1-north-star.json`
-- Runtime built-ins: `core-api/openclaw-runtime/internal/executor/tools.go`, `core-api/openclaw-runtime/internal/executor/tools_pipeline_metrics.go`
 - Audit harness: `scripts/audit-bot-tooling.sh`
-- Engineering handoff: `docs/AGENT_MCP_TOOLING_HANDOFF.md`

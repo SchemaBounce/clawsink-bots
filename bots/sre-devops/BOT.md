@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -76,13 +76,6 @@ skills:
   - ref: "skills/incident-triage@1.0.0"
   - ref: "skills/pipeline-monitoring@1.0.0"
   - ref: "skills/sla-compliance@1.0.0"
-# tools/firebase, tools/datadog, tools/aws-cloudwatch, tools/grafana,
-# tools/pagerduty, tools/sentry were declared here previously but are not
-# yet wired in the runtime registry, clicking Connect on them produced
-# silent no-ops. Stripped 2026-04-27 per the no-vaporware sweep. Many of
-# these are reachable through Composio today (it has Datadog + PagerDuty
-# toolkits); use composio.execute_composio_tool instead. Re-add direct
-# refs once we vet npm MCP packages and add embeddedEnvSpecs entries.
 presence:
   web:
     browsing: true

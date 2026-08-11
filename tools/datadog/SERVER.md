@@ -20,12 +20,9 @@ transport:
   type: "streamable-http"
   url: "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"
 env:
-  # AUTH-MODEL GAP: Datadog's MCP server uses OAuth 2.0 as the primary auth method;
-  # API + Application key headers are an alternative for when OAuth is not feasible.
-  # The key-header path sends DD-API-KEY and DD-APPLICATION-KEY HTTP headers. If this
-  # catalog/gateway only supports OAuth-less remote MCPs via env-injected key headers,
-  # confirm the gateway maps DD_API_KEY -> DD-API-KEY and DD_APPLICATION_KEY -> DD-APPLICATION-KEY.
-  # OAuth 2.0 login flow is NOT representable in this env: block and is unsupported here.
+  # Datadog's MCP server supports OAuth 2.0 as its primary auth method. This
+  # entry uses the API key + Application key fallback instead: the keys are
+  # sent as the DD-API-KEY and DD-APPLICATION-KEY HTTP headers.
   - name: DD_API_KEY
     description: "Datadog API key (sent as DD-API-KEY header)"
     required: true
@@ -39,7 +36,7 @@ env:
     description: "Datadog site e.g. datadoghq.com or datadoghq.eu (must match the transport host)"
     required: false
 
-# Declarative auth + validation + healthProbe (SchemaBounce #1614).
+# Declarative auth + validation + healthProbe.
 # Datadog uses a custom DD-API-KEY header (not Bearer/Basic), so the injection
 # block is used instead of auth.type. The validation endpoint is the official
 # Datadog API key validation route: GET /api/v1/validate returns 200 for a valid

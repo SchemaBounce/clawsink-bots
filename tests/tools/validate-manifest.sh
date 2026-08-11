@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # SERVER.md / server.json Manifest Validator for tools/**
 #
-# Mirrors the contract enforced by core-api's clawsink.ParseMcpServerDef
-# (schemabounce-api/internal/clawsink/parsing.go + types.go).
+# Mirrors the server-definition contract the platform enforces when it
+# parses this catalog.
 #
 # Checks:
 #   1.  Manifest exists (SERVER.md with YAML frontmatter, or server.json as JSON)
@@ -302,7 +302,7 @@ def _validate_parsed(tool_name, fm):
                 errs.append(
                     f"{block}.request.url must start with https:// or "
                     f"{{{{template}}}} (got {url!r}) — credentials over plain "
-                    f"http violate RULE 13 TLS-in-transit"
+                    f"http are not allowed"
                 )
             elif url.startswith("{") and "}" not in url:
                 errs.append(

@@ -18,8 +18,7 @@ but through the pinned-client path (P2-2: `client_id_env`,
 `client_secret_env`, `authorization_endpoint`, `token_endpoint` in the
 `auth:` block) instead — that requires registering an app with the vendor
 first, so it's slower and out of scope for a routine sweep. See
-`tools/github-remote/SERVER.md` for the pattern and
-`core-api/.claude/rules/mcp-server-hosting.md` for the architecture.
+`tools/github-remote/SERVER.md` for the pattern.
 
 ## Before researching a vendor: check `remote-mcp-candidates.txt`
 

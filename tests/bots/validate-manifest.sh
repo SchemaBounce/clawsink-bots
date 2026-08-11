@@ -87,8 +87,7 @@ validate_manifest() {
     errors=$((errors + 1))
   fi
 
-  # model.provider validation — must match the platform catalog
-  # (core-api/internal/llm/catalog.json chatProviders).
+  # model.provider validation — must match the platform model catalog.
   local provider
   provider=$(echo "$frontmatter" | grep "provider:" | head -1 | awk '{print $2}' | tr -d '"')
   if [ -n "$provider" ]; then
