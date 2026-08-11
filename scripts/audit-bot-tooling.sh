@@ -21,10 +21,9 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 BOTS_DIR="$REPO_ROOT/bots"
 TOOLS_DIR="$REPO_ROOT/tools"
 
-# Runtime-known servers — must mirror core-api/.../adl/mcp_connection_service.go
-# embeddedEnvSpecs map. If you add a SERVER.md here without a matching entry
-# there, activation silently no-ops (auto-grant succeeds, tool never wires).
-# Keep this list in sync with that file (line 25-71 as of 2026-04-25).
+# Runtime-known servers — must stay in sync with the platform's embedded
+# server registry; a SERVER.md added here without a matching platform entry
+# silently no-ops at activation.
 RUNTIME_KNOWN="github slack stripe jira linear notion firecrawl agentmail hyperbrowser exa elevenlabs composio agentphone claude-code confluence"
 
 # A server has a SERVER.md (manifest known)
