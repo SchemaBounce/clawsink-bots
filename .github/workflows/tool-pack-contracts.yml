@@ -124,6 +124,30 @@ jobs:
       - name: Validate MCP server manifests (tools/**/SERVER.md)
         run: bash tests/tools/validate-manifest.sh
 
+      # Structure and runnability are different failures. A manifest can be
+      # perfectly valid and still name a package that has no executable, was
+      # deprecated by its publisher, or is a shim around a runtime the gateway
+      # cannot provide dependencies for. Offline rules run on every manifest;
+      # the registry lookups run only for the manifests this PR touched, so the
+      # job stays fast and does not hammer npm on unrelated changes.
+      - name: Audit MCP server runnability (offline rules, all manifests)
+        run: python3 tests/tools/audit-runnability.py
+
+      - name: Audit MCP server runnability (registry lookups, changed manifests)
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD \
+            -- 'tools/*/SERVER.md' 'tools/*/server.json' || true)"
+          if [ -z "$changed" ]; then
+            echo "No tools/ manifests changed; skipping registry lookups."
+            exit 0
+          fi
+          echo "$changed"
+          # shellcheck disable=SC2086
+          python3 tests/tools/audit-runnability.py --network $changed
+
   runtime-integration:
     name: Runtime Integration
     runs-on: ubuntu-latest

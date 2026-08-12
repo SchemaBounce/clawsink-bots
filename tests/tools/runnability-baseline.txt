@@ -1,0 +1,35 @@
+# Known runnability failures, accepted for now so the gate blocks NEW ones.
+# Shrink this list; never grow it without saying why in the PR.
+# Regenerate: tests/tools/audit-runnability.py --network --write-baseline
+#
+# Every entry below is the same finding: a Composio-managed server that still
+# declares a local stdio (or sse) transport left over from before these moved to
+# Composio's remote gateway. core-api resolves a per-account instance URL at
+# connect time and overwrites transport_config, so these normally never run --
+# but it "leaves transport_config untouched" when that resolution fails, which
+# makes each of these blocks the command the gateway would try to spawn instead.
+# pipedrive was the 21st and was converted on 2026-08-12 (its npm pin published
+# no bin, so that fallback could not have started at all). The rest need the
+# same conversion; they are baselined rather than fixed in one sweep because
+# each one's tools: list and setup prose has to be checked against what the
+# Composio toolkit actually exposes.
+basecamp:composio-not-remote
+freshdesk:composio-not-remote
+gmail:composio-not-remote
+google-calendar:composio-not-remote
+google-docs:composio-not-remote
+google-drive:composio-not-remote
+google-meet:composio-not-remote
+google-sheets:composio-not-remote
+microsoft-teams:composio-not-remote
+mixpanel:composio-not-remote
+n8n:composio-not-remote
+quickbooks:composio-not-remote
+salesforce:composio-not-remote
+shopify:composio-not-remote
+spotify:composio-not-remote
+trello:composio-not-remote
+twilio:composio-not-remote
+xero:composio-not-remote
+zendesk:composio-not-remote
+zoom:composio-not-remote
