@@ -89,7 +89,6 @@ The team works with one required connection per bot and adds depth as you connec
 - **PageSpeed Insights** (SEO Expert). Core Web Vitals (LCP, INP, CLS) and Lighthouse SEO score for the home page and top URLs. Needs a Google API key.
 - **Google Analytics** (SEO Expert). GA4 sessions, engagement, and conversion verification through Composio managed OAuth.
 - **DataForSEO** (SEO Expert). Keyword difficulty, SERP gap analysis, backlink context, and the SERP rank snapshots that drive rank tracking. Needs a paid DataForSEO account.
-- **Bing Webmaster Tools** (SEO Expert). Bing and Microsoft Copilot search performance, crawl health, and indexation. Bing indexation is the eligibility gate for Copilot answers.
 - **AI Citation Tracker** (SEO Expert). Brand citation share-of-voice across ChatGPT, Claude, and Perplexity through the CitationBench hosted MCP.
 - **llms.txt Generator** (SEO Expert). Drafts `llms.txt` and `llms-full.txt` for human review. Needs an OpenAI API key.
 

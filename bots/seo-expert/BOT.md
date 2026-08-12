@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.7"
+  version: "0.3.8"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -270,17 +270,6 @@ setup:
       ui:
         icon: search
         actionLabel: "Connect DataForSEO"
-    - id: connect-bing-webmaster
-      name: "Connect Bing Webmaster Tools"
-      description: "Bing and Microsoft Copilot search performance, crawl diagnostics, keyword analytics, and URL submission via the Bing Webmaster Tools API."
-      type: mcp_connection
-      ref: tools/bing-webmaster
-      group: connections
-      priority: optional
-      reason: "Without it the auditor skips Bing/Copilot-specific keyword CTR, crawl health, and indexation data. Required for sites targeting Copilot AI answers — Bing indexation is the eligibility gate for Copilot responses. Requires BING_WEBMASTER_API_KEY from bing.com/webmasters → Settings → API Access."
-      ui:
-        icon: search
-        actionLabel: "Connect Bing Webmaster"
 ---
 
 # SEO Expert

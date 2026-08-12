@@ -81,12 +81,6 @@ What you get: keyword difficulty and volume, SERP gap analysis, backlink context
 
 Where to get the credential: sign up for a paid DataForSEO account. This is metered and customer-supplied. In the SEO Expert agent, open Connections, click Connect DataForSEO, and enter `DATAFORSEO_USERNAME` and `DATAFORSEO_PASSWORD` (HTTP basic auth).
 
-### Bing Webmaster Tools (SEO Expert)
-
-What you get: Bing and Microsoft Copilot search performance, crawl diagnostics, keyword analytics, and indexation health. Bing indexation is the eligibility gate for Copilot answers, so this matters for sites targeting Copilot. Without it, the auditor skips Bing and Copilot signals.
-
-Where to get the credential: go to bing.com/webmasters, then Settings, then API Access, and copy your API key. In the SEO Expert agent, click Connect Bing Webmaster and add it as `BING_WEBMASTER_API_KEY`.
-
 ### AI Citation Tracker (SEO Expert)
 
 What you get: brand citation share-of-voice across ChatGPT, Claude, and Perplexity for your `brand_queries`, tracked run over run. Without a key, the server returns shape-complete demo data, so the GEO workflow runs but the numbers are synthetic.
