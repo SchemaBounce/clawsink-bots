@@ -191,7 +191,7 @@ Use the deterministic id `queue_{YYYYMMDD}_{candidateType}_{candidateId}`. `reco
   "metric": "demand_scout_run",
   "value": 3,
   "unit": "qualified_signals",
-  "subject": "run_opaque_id",
+  "subject": "<run_context>.runId",
   "occurredAt": "ISO 8601",
   "agentSlug": "demand-signal-scout",
   "candidatesSeen": 18,
@@ -203,7 +203,7 @@ Use the deterministic id `queue_{YYYYMMDD}_{candidateType}_{candidateId}`. `reco
 }
 ```
 
-The receipt is the final required write for every pass. Use entity type exactly `receipt` and deterministic id `receipt_demand_signal_scout_{runId}` when a run id is available, otherwise `receipt_demand_signal_scout_{occurredAtHash}`. Set every numeric count explicitly, including zeros. A source failure changes the receipt status and counts; it does not remove the receipt requirement.
+The receipt is the final required write for every pass. Read the canonical run id from the platform-generated `<run_context>` block. Use it as `subject`. Use entity type exactly `receipt` with deterministic id `receipt_demand_signal_scout_{runId}`. Never substitute a timestamp, task id, hash, or invented identifier. If `<run_context>.runId` is absent, stop before the receipt write and report a runtime contract error instead of fabricating identity. Set every numeric count explicitly, including zeros. A source failure changes the receipt status and counts; it does not remove the receipt requirement.
 
 ## Sub-Agent Orchestration
 

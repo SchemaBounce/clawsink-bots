@@ -57,10 +57,19 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.8' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.8"
+if grep -q 'bots/demand-signal-scout@1\.0\.9' "$TEAM"; then
+  pass "Sales team references Demand Signal Scout 1.0.9"
 else
-  fail "Sales team must reference Demand Signal Scout 1.0.7"
+  fail "Sales team must reference Demand Signal Scout 1.0.9"
+fi
+
+if grep -q '<run_context>.runId' "$BOT" && \
+   grep -q '<run_context>.runId' "$TOOLS" && \
+   grep -q 'Never substitute a timestamp, task id, hash, or invented identifier' "$TOOLS" && \
+   ! grep -q 'occurredAtHash' "$TOOLS"; then
+  pass "receipts require the canonical platform run id without fabricated fallback"
+else
+  fail "receipt identity must come only from <run_context>.runId"
 fi
 
 if grep -q '## Prospect Eligibility Gate' "$TOOLS" && \
