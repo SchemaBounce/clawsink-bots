@@ -4,7 +4,7 @@ kind: McpServer
 metadata:
   name: pipedrive
   displayName: "Pipedrive"
-  version: "1.0.0"
+  version: "2.0.0"
   description: "Pipedrive CRM, deals, contacts, activities, and sales pipeline"
   tags: ["pipedrive", "crm", "sales", "deals", "pipeline"]
   category: "crms-sales"
@@ -15,13 +15,22 @@ auth:
   composioToolkit: "PIPEDRIVE"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent reaches this service through composio.execute_composio_tool with action names like PIPEDRIVE_*."
 transport:
-  type: "stdio"
-  command: "npx"
-  args: ["-y", "pipedrive-mcp-server@1.0.2"]
+  # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
+  # is resolved automatically at connection time and stored on the
+  # connection's transport_config, where the gateway reads it. There is no
+  # local command; sessions connect by URL.
+  #
+  # Was `npx -y pipedrive-mcp-server@1.0.2` until 2026-08-12. That pin publishes
+  # no bin, so npx could not determine an executable and the child exited before
+  # the MCP handshake. It was also the wrong shape: core-api resolves a Composio
+  # instance URL at connect time and only "leaves transport_config untouched"
+  # when that fails, which made this stdio block the fallback the gateway would
+  # try to spawn.
+  type: "streamable-http"
 env:
   # Optional. Leave blank to use your connected account.
-  - name: PIPEDRIVE_API_TOKEN
-    description: "Pipedrive API token from Settings > Personal preferences"
+  - name: COMPOSIO_API_KEY
+    description: "Composio API key from composio.dev/settings. Authenticates the Composio MCP gateway. Your Pipedrive account is then connected inside Composio."
     required: false
     sensitive: true
 tools:
@@ -67,9 +76,9 @@ Provides Pipedrive CRM tools for bots that manage deals, contacts, activities, a
 
 ## Setup
 
-1. Get your Pipedrive API token from Settings > Personal preferences > API in your Pipedrive account
-2. Add `PIPEDRIVE_API_TOKEN` in the MCP connection setup
-3. The server starts automatically when a bot that references it runs
+1. Sign up at [composio.dev](https://composio.dev) and get your API key.
+2. In Composio, connect your Pipedrive account under the Pipedrive toolkit.
+3. The server starts automatically when a bot that references it runs.
 
 ## Team Usage
 
