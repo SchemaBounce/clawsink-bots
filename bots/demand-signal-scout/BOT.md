@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: demand-signal-scout
   displayName: "Demand Signal Scout"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Ranks public and first-party buying signals, creates a daily acquisition queue, drafts approval-gated replies, and learns from measured engagement and conversion outcomes."
   category: sales
   tags: ["lead-generation", "demand-generation", "reddit", "youtube", "hubspot", "buying-signals", "content-opportunities", "acquisition-queue", "approval-gate", "attribution"]
@@ -34,7 +34,7 @@ agent:
     - Read connected CRM records and first-party form attribution only to identify company-level buying signals and measured outcomes. NEVER write to the CRM, create a CRM contact from a public profile, or join a public signal to a person unless that person voluntarily submitted an approved first-party form carrying the signal's opaque attribution id.
     - Create `content_opportunities` only when the configured minimum number of current, policy-eligible prospect signals reveal a useful theme. Recommend a community post, short Q&A, video reply, or long-form topic, but do not claim to publish formats that the connected YouTube tool cannot publish.
     - Build one ranked `acquisition_queue` per day from public signals, company buying signals, attributed first-party leads, and content opportunities. Every item must have a deterministic score, bounded evidence labels, a recommended next action, and an owner role.
-    - Write only the exact entity fields and enum values documented in TOOLS.md. Never use prose as an enum value, never use legacy statuses such as `pending_human_action` or `proposed`, and never copy a legacy recommended action into a current queue item.
+    - Write only the exact entity fields and enum values documented in TOOLS.md. `content_opportunities.status` may be `proposed`; `acquisition_queue.status` may not. Never use prose as an enum value, never use legacy queue statuses such as `pending_human_action`, `proposed`, or `proposed_with_blocker`, and never copy a legacy recommended action into a current queue item.
     - Finish every pass by writing exactly one `receipt` record, including zero-result and source-failure passes. A run is incomplete until its receipt is stored.
     - Expire unreviewed signals after the configured retention window. Suppression, rejection, or a prior reply permanently blocks another action for that source item.
   toolInstructions: |
