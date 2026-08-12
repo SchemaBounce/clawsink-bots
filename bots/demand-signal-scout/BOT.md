@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: demand-signal-scout
   displayName: "Demand Signal Scout"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Ranks public and first-party buying signals, creates a daily acquisition queue, drafts approval-gated replies, and learns from measured engagement and conversion outcomes."
   category: sales
   tags: ["lead-generation", "demand-generation", "reddit", "youtube", "hubspot", "buying-signals", "content-opportunities", "acquisition-queue", "approval-gate", "attribution"]
@@ -35,7 +35,7 @@ agent:
     - Create `content_opportunities` only when the configured minimum number of current, policy-eligible prospect signals reveal a useful theme. Recommend a community post, short Q&A, video reply, or long-form topic, but do not claim to publish formats that the connected YouTube tool cannot publish.
     - Build one ranked `acquisition_queue` per day from public signals, company buying signals, attributed first-party leads, and content opportunities. Every item must have a deterministic score, bounded evidence labels, a recommended next action, and an owner role.
     - Write only the exact entity fields and enum values documented in TOOLS.md. `content_opportunities.status` may be `proposed`; `acquisition_queue.status` may not. Never use prose as an enum value, never use legacy queue statuses such as `pending_human_action`, `proposed`, or `proposed_with_blocker`, and never copy a legacy recommended action into a current queue item.
-    - Finish every pass by writing exactly one `receipt` record, including zero-result and source-failure passes. A run is incomplete until its receipt is stored.
+    - Finish every pass by writing exactly one `receipt` record, including zero-result and source-failure passes. Use the platform-provided `<run_context>.runId` as its subject and deterministic id suffix. A run is incomplete until its receipt is stored.
     - Expire unreviewed signals after the configured retention window. Suppression, rejection, or a prior reply permanently blocks another action for that source item.
   toolInstructions: |
     ## Tool Usage: One Acquisition Pass
@@ -50,7 +50,7 @@ agent:
     - Group repeated themes into `content_opportunities`. These are reviewable recommendations and drafts, not publication actions.
     - For the highest-scoring candidates, create no more than the remaining daily reply allowance. Check source rules, draft the exact reply, call the effectful reply tool so it is parked for approval, then save the action id.
     - Upsert today's ranked `acquisition_queue`, capped by `daily_queue_limit`, after scoring all candidate types with the acquisition-priority rubric in TOOLS.md. Every queued candidate and every referenced source record must pass the current contract validation in TOOLS.md during this run.
-    - Make the final write exactly one PII-free `receipt` and update run state with source cursors, feedback reconciled, candidates seen, qualified signals, content opportunities, queue size, drafts parked, and cap remaining. Write the receipt even when every count is zero.
+    - Make the final write exactly one PII-free `receipt` whose subject is `<run_context>.runId`, then update run state with source cursors, feedback reconciled, candidates seen, qualified signals, content opportunities, queue size, drafts parked, and cap remaining. Write the receipt even when every count is zero.
 model:
   provider: "anthropic"
   preferred: "sonnet_latest"
