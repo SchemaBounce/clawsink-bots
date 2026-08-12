@@ -57,8 +57,8 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.7' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.7"
+if grep -q 'bots/demand-signal-scout@1\.0\.8' "$TEAM"; then
+  pass "Sales team references Demand Signal Scout 1.0.8"
 else
   fail "Sales team must reference Demand Signal Scout 1.0.7"
 fi
@@ -85,7 +85,8 @@ fi
 
 if grep -q 'The current `contractVersion` is `2`' "$TOOLS" && \
    grep -q 'final required write for every pass' "$TOOLS" && \
-   grep -q 'legacy statuses such as `pending_human_action`' "$BOT" && \
+   grep -q '`content_opportunities.status` may be `proposed`; `acquisition_queue.status` may not' "$BOT" && \
+   grep -q 'legacy queue statuses such as `pending_human_action`, `proposed`, or `proposed_with_blocker`' "$BOT" && \
    jq -e '[.entityTypes[] | select(.name == "prospect_signals" or .name == "company_buying_signals" or .name == "content_opportunities" or .name == "acquisition_queue" or .name == "outreach_drafts" or .name == "receipt") | .fields.contractVersion.enum == [2]] | all' "$ENTITY_TYPES" >/dev/null; then
   pass "legacy records are quarantined and current writes are versioned"
 else
