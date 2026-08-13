@@ -51,6 +51,12 @@ if ! bash "$SCRIPT_DIR/bots/validate-demand-signal-contract.sh"; then
 fi
 echo ""
 
+echo "=== Validating Sales Pipeline Contract ==="
+if ! bash "$SCRIPT_DIR/bots/validate-sales-pipeline-contract.sh"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
 echo "=== Validating MCP Server Manifests (tools/**) ==="
 if ! bash "$SCRIPT_DIR/tools/validate-manifest.sh"; then
   FAILURES=$((FAILURES + 1))

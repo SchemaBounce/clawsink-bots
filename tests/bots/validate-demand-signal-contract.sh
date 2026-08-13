@@ -57,10 +57,19 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.5' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.5"
+if grep -q 'bots/demand-signal-scout@1\.0\.9' "$TEAM"; then
+  pass "Sales team references Demand Signal Scout 1.0.9"
 else
-  fail "Sales team must reference Demand Signal Scout 1.0.5"
+  fail "Sales team must reference Demand Signal Scout 1.0.9"
+fi
+
+if grep -q '<run_context>.runId' "$BOT" && \
+   grep -q '<run_context>.runId' "$TOOLS" && \
+   grep -q 'Never substitute a timestamp, task id, hash, or invented identifier' "$TOOLS" && \
+   ! grep -q 'occurredAtHash' "$TOOLS"; then
+  pass "receipts require the canonical platform run id without fabricated fallback"
+else
+  fail "receipt identity must come only from <run_context>.runId"
 fi
 
 if grep -q '## Prospect Eligibility Gate' "$TOOLS" && \
@@ -81,6 +90,31 @@ if grep -q 'The YouTube connector can read comments and post comment replies; it
   pass "YouTube capability boundary is explicit"
 else
   fail "YouTube publishing capability boundary is missing"
+fi
+
+if grep -q 'The current `contractVersion` is `2`' "$TOOLS" && \
+   grep -q 'final required write for every pass' "$TOOLS" && \
+   grep -q '`content_opportunities.status` may be `proposed`; `acquisition_queue.status` may not' "$BOT" && \
+   grep -q 'legacy queue statuses such as `pending_human_action`, `proposed`, or `proposed_with_blocker`' "$BOT" && \
+   jq -e '[.entityTypes[] | select(.name == "prospect_signals" or .name == "company_buying_signals" or .name == "content_opportunities" or .name == "acquisition_queue" or .name == "outreach_drafts" or .name == "receipt") | .fields.contractVersion.enum == [2]] | all' "$ENTITY_TYPES" >/dev/null; then
+  pass "legacy records are quarantined and current writes are versioned"
+else
+  fail "current records must be versioned and legacy records must not enter new queues"
+fi
+
+if grep -q 'Use the deterministic id `queue_{YYYYMMDD}_{candidateType}_{candidateId}`' "$TOOLS" && \
+   grep -q 'recommendedAction.*exactly one of' "$TOOLS" && \
+   grep -q 'Use entity type exactly `receipt`' "$TOOLS"; then
+  pass "queue writes and run receipts use exact contracts"
+else
+  fail "queue writes and run receipts must use exact deterministic contracts"
+fi
+
+if grep -q 'They cannot become prospect signals, support content opportunities, or enter the acquisition queue\.' "$TOOLS" && \
+   grep -q 'Create `content_opportunities` only when the configured minimum number of current, policy-eligible prospect signals' "$BOT"; then
+  pass "generic content cannot seed acquisition candidates"
+else
+  fail "generic content must be excluded from signals, opportunities, and queues"
 fi
 
 if [ "$FAILURES" -gt 0 ]; then

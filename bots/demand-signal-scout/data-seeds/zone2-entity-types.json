@@ -5,8 +5,9 @@
       "displayName": "Prospect Signals",
       "description": "Deduplicated public business-intent signals. These are review candidates, not contactable leads.",
       "domain": "sales",
-      "sampleFields": ["platform", "sourceId", "sourceUrl", "intentScore", "eligibilityEvidence", "scoreEvidence", "problemCategory", "status", "policyStatus", "feedbackStatus", "nextFeedbackAt", "observedAt", "expiresAt"],
+      "sampleFields": ["contractVersion", "platform", "sourceId", "sourceUrl", "intentScore", "eligibilityEvidence", "scoreEvidence", "problemCategory", "status", "policyStatus", "feedbackStatus", "nextFeedbackAt", "observedAt", "expiresAt"],
       "fields": {
+        "contractVersion": { "type": "number", "required": true, "enum": [2], "description": "Current demand-scout record contract. Records without version 2 are legacy and cannot be ranked or referenced." },
         "platform": { "type": "string", "required": true, "enum": ["reddit", "youtube", "web"] },
         "sourceId": { "type": "string", "required": true, "description": "Opaque immutable source id or canonical URL hash." },
         "sourceUrl": { "type": "string", "required": true, "description": "Canonical public evidence URL. No author profile URL." },
@@ -31,8 +32,9 @@
       "displayName": "Public Reply Drafts",
       "description": "Approval-gated public reply actions tied to opaque prospect signal ids.",
       "domain": "sales",
-      "sampleFields": ["signalId", "platform", "status", "actionId", "createdAt", "updatedAt"],
+      "sampleFields": ["contractVersion", "signalId", "platform", "status", "actionId", "createdAt", "updatedAt"],
       "fields": {
+        "contractVersion": { "type": "number", "required": true, "enum": [2] },
         "signalId": { "type": "string", "required": true },
         "platform": { "type": "string", "required": true },
         "replyText": { "type": "string", "required": true, "description": "Exact public reply shown to the Inbox approver." },
@@ -50,8 +52,9 @@
       "displayName": "Company Buying Signals",
       "description": "Explicit company-level CRM, form, news, deal, and engagement evidence stored without copied contact fields.",
       "domain": "sales",
-      "sampleFields": ["sourceSystem", "companyRef", "signalType", "evidenceLabels", "intentScore", "observedAt", "expiresAt"],
+      "sampleFields": ["contractVersion", "sourceSystem", "companyRef", "signalType", "evidenceLabels", "intentScore", "observedAt", "expiresAt"],
       "fields": {
+        "contractVersion": { "type": "number", "required": true, "enum": [2] },
         "sourceSystem": { "type": "string", "required": true, "enum": ["hubspot", "first_party_form", "public_news"] },
         "companyRef": { "type": "string", "required": true, "description": "Opaque CRM company id or canonical domain hash." },
         "signalType": { "type": "string", "required": true, "enum": ["form_submission", "sales_engagement", "marketing_engagement", "deal_activity", "company_news"] },
@@ -67,8 +70,9 @@
       "displayName": "Content Opportunities",
       "description": "Reviewable content briefs derived from repeated recent questions without copied source text or author identity.",
       "domain": "marketing",
-      "sampleFields": ["theme", "sourceSignalIds", "recommendedFormat", "audienceNeed", "status", "observedAt"],
+      "sampleFields": ["contractVersion", "theme", "sourceSignalIds", "recommendedFormat", "audienceNeed", "status", "observedAt"],
       "fields": {
+        "contractVersion": { "type": "number", "required": true, "enum": [2] },
         "theme": { "type": "string", "required": true },
         "sourceSignalIds": { "type": "array", "required": true },
         "recommendedFormat": { "type": "string", "required": true, "enum": ["community_post", "short_qa", "video_reply", "long_form"] },
@@ -84,8 +88,9 @@
       "displayName": "Daily Acquisition Queue",
       "description": "A deterministic daily ranking of public, CRM, form, and content opportunities with evidence, next action, and owner.",
       "domain": "sales",
-      "sampleFields": ["queueDate", "rank", "candidateType", "candidateId", "priorityScore", "recommendedAction", "ownerRole", "status"],
+      "sampleFields": ["contractVersion", "queueDate", "rank", "candidateType", "candidateId", "priorityScore", "recommendedAction", "ownerRole", "status"],
       "fields": {
+        "contractVersion": { "type": "number", "required": true, "enum": [2] },
         "queueDate": { "type": "string", "required": true },
         "rank": { "type": "number", "required": true },
         "candidateType": { "type": "string", "required": true, "enum": ["public_signal", "company_signal", "attributed_lead", "content_opportunity"] },
@@ -105,7 +110,10 @@
       "displayName": "Receipts",
       "description": "PII-free run and conversion metrics written by the scout.",
       "domain": "sales",
-      "sampleFields": ["kind", "metric", "value", "unit", "subject", "occurredAt", "agentSlug"]
+      "sampleFields": ["contractVersion", "kind", "metric", "value", "unit", "subject", "occurredAt", "agentSlug"],
+      "fields": {
+        "contractVersion": { "type": "number", "required": true, "enum": [2] }
+      }
     }
   ]
 }

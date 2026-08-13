@@ -14,7 +14,7 @@ transport:
   type: "stdio"
   packageType: "github"
   repo: "SchemaBounce/Internal-mcp"
-  ref: "v2.0.0-alpha.1"
+  ref: "v2.0.0"
   asset: "sb-workspace-health-mcp-linux-amd64"
 env:
   - name: SCHEMABOUNCE_CLIENT_ID

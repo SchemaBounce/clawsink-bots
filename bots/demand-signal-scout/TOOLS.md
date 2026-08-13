@@ -15,6 +15,20 @@
 - Call an effectful public reply action only with final approved-review text. The runtime returns a parked `act_...` id until a human decides in Inbox > Actions.
 - Write one PII-free `receipt` per run and update source cursors, feedback windows, learned weights, and daily cap state.
 
+## Current Record Contract
+
+The current `contractVersion` is `2`. Set `contractVersion: 2` on every new or updated `prospect_signals`, `company_buying_signals`, `content_opportunities`, `acquisition_queue`, `outreach_drafts`, and `receipt` record.
+
+Before an existing record can be scored, ranked, refreshed, or referenced by another current record, validate all of the following during the current run:
+
+1. `contractVersion` equals `2`.
+2. Every required field exists and every enum value matches the contracts below.
+3. Public source URLs still match the current `source_allowlist`.
+4. Prospect evidence still passes the eligibility gate, `policyStatus` is `clear`, and the record is not expired, suppressed, or rejected.
+5. Every referenced record exists and independently passes this validation.
+
+A record that fails any check is legacy or invalid. Use its immutable source id only for duplicate prevention. Do not rank it, refresh it, rewrite it as current, use it as evidence for a content opportunity, include it in an acquisition queue, draft a reply from it, or mention it in cross-agent messages. Never repair a legacy record by copying its old fields; only a newly observed and independently validated source may create a current record.
+
 ## Prospect Eligibility Gate
 
 Apply this gate before `Public Intent Score`. A high topic-fit score cannot make an ineligible item a prospect.
@@ -26,7 +40,7 @@ An item is eligible for `prospect_signals` only when the canonical URL matches `
 3. A question or engagement event on a workspace-owned channel.
 4. A concrete public trigger attributable to a named ICP-fit company, such as an announced migration, funded implementation, relevant hiring plan, or explicit tooling evaluation.
 
-The following are never prospect signals: vendor marketing, vendor product documentation, media or analyst coverage, conference or event pages, generic educational articles, ecosystem thought leadership, search-result summaries, and content that merely mentions a configured topic. If one of these sources is allowlisted and repeated evidence supports a useful audience theme, route it to `content_opportunities`; otherwise discard it.
+The following are never acquisition evidence: vendor marketing, vendor product documentation, media or analyst coverage, conference or event pages, generic educational articles, ecosystem thought leadership, search-result summaries, and content that merely mentions a configured topic. Discard them. They cannot become prospect signals, support content opportunities, or enter the acquisition queue.
 
 For every eligible signal, write a bounded `eligibilityEvidence` label such as `first_person_active_problem`, `explicit_recommendation_request`, `owned_channel_engagement`, or `attributable_company_trigger`. If no label is defensible, do not score or write the item.
 
@@ -66,6 +80,7 @@ Record each component and evidence labels. Never infer a meeting, relationship, 
 
 ```json
 {
+  "contractVersion": 2,
   "platform": "reddit | youtube | web",
   "sourceId": "opaque immutable platform id or canonical URL hash",
   "sourceUrl": "canonical public URL",
@@ -94,6 +109,7 @@ Use only explicit connected CRM, form, news, deal, and engagement evidence:
 
 ```json
 {
+  "contractVersion": 2,
   "sourceSystem": "hubspot | first_party_form | public_news",
   "companyRef": "opaque CRM company id or canonical domain hash",
   "signalType": "form_submission | sales_engagement | marketing_engagement | deal_activity | company_news",
@@ -112,6 +128,7 @@ Create an opportunity after the configured minimum number of related, recent que
 
 ```json
 {
+  "contractVersion": 2,
   "theme": "bounded workspace taxonomy label",
   "sourceSignalIds": ["signal_opaque_1", "signal_opaque_2", "signal_opaque_3"],
   "recommendedFormat": "community_post | short_qa | video_reply | long_form",
@@ -122,12 +139,15 @@ Create an opportunity after the configured minimum number of related, recent que
 }
 ```
 
+Every `sourceSignalIds` entry must refer to a current, independently validated `prospect_signals` record. If fewer than the configured minimum remain after validation, do not create, refresh, or queue the opportunity.
+
 These are planning records. The YouTube connector can read comments and post comment replies; it does not publish Community posts, Shorts, or videos.
 
 ## Daily Acquisition Queue Contract
 
 ```json
 {
+  "contractVersion": 2,
   "queueDate": "YYYY-MM-DD",
   "rank": 1,
   "candidateType": "public_signal | company_signal | attributed_lead | content_opportunity",
@@ -142,6 +162,8 @@ These are planning records. The YouTube connector can read comments and post com
 ```
 
 Upsert one queue per UTC day, cap it at `daily_queue_limit`, and rerank deterministically after reconciliation. An item recommends work; it never bypasses CRM ownership rules or Inbox approval.
+
+Use the deterministic id `queue_{YYYYMMDD}_{candidateType}_{candidateId}`. `recommendedAction` must be exactly one of `review_reply`, `contact_known_lead`, `review_content_brief`, or `investigate_account`; put no prose in that field. `status` must be exactly one of `open`, `in_progress`, `completed`, `dismissed`, or `expired`. Do not emit legacy values such as `pending_human_action`, `proposed`, or `proposed_with_blocker`.
 
 ## Feedback And Attribution
 
@@ -164,11 +186,12 @@ Upsert one queue per UTC day, cap it at `daily_queue_limit`, and rerank determin
 
 ```json
 {
+  "contractVersion": 2,
   "kind": "receipt",
   "metric": "demand_scout_run",
   "value": 3,
   "unit": "qualified_signals",
-  "subject": "run_opaque_id",
+  "subject": "<run_context>.runId",
   "occurredAt": "ISO 8601",
   "agentSlug": "demand-signal-scout",
   "candidatesSeen": 18,
@@ -179,6 +202,8 @@ Upsert one queue per UTC day, cap it at `daily_queue_limit`, and rerank determin
   "dailyCapRemaining": 3
 }
 ```
+
+The receipt is the final required write for every pass. Read the canonical run id from the platform-generated `<run_context>` block. Use it as `subject`. Use entity type exactly `receipt` with deterministic id `receipt_demand_signal_scout_{runId}`. Never substitute a timestamp, task id, hash, or invented identifier. If `<run_context>.runId` is absent, stop before the receipt write and report a runtime contract error instead of fabricating identity. Set every numeric count explicitly, including zeros. A source failure changes the receipt status and counts; it does not remove the receipt requirement.
 
 ## Sub-Agent Orchestration
 
