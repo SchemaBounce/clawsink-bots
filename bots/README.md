@@ -285,10 +285,10 @@ Plugins with a `slot` are exclusive — only one plugin per slot loads at a time
 plugins:
   - ref: "composio@latest"
     slot: "oauth"
-    reason: "Managed OAuth for blog API — handles token refresh and scoping"
+    reason: "Managed OAuth for the CMS API — handles token refresh and scoping"
     config:
-      apps: ["blog"]
-      scopes: ["blog:write"]
+      apps: ["webflow"]
+      scopes: ["cms:write"]
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"
     reason: "Vector recall for editorial history and topic research across runs"

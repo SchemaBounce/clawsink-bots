@@ -1,25 +1,29 @@
 # Data Access
 
-- Query `blog_topics`: `adl_query_records` — filter by status or section (schemabounce/openclaw) to find pending topics
+- Query `blog_topics`: `adl_query_records` — filter by status or category to find pending topics
 - Query `product_docs`: `adl_query_records` — filter by feature area for research source material
-- Write `blog_drafts`: `adl_upsert_record` — ID format `draft_{section}_{date}`, required fields: title, body, section, status="draft", target_publish_date
+- Write `blog_drafts`: `adl_upsert_record` — ID format `draft_{category}_{date}`, required fields: title, body, category, status="draft", target_publish_date
 - Write `editorial_notes`: `adl_upsert_record` — ID format `note_{topic_slug}`, attach research gaps or revision feedback
 
 # Memory Usage
 
-- `editorial_calendar`: scheduled topics, in-progress markers, last section written — use `adl_write_memory` to update after each run
+- `editorial_calendar`: scheduled topics, in-progress markers, last category written — use `adl_write_memory` to update after each run
 - `writing_notes`: research outlines, draft state, revision history — use `adl_write_memory` to save progress
 - `topic_research`: validated source material gathered during the research phase — use `adl_add_memory` to append findings
 
 # MCP Server Tools
 
-## tools/blog (required connection)
+## Your blog/CMS connector (recommended connection)
 
-The bot publishes via the dedicated blog connector. A workspace service account with the `blog:write` scope must be connected at activation time (see `connect-blog` setup step).
+The bot publishes through whichever CMS connector you attach at activation: tools/webflow, tools/contentful, tools/sanity, or tools/notion for hosted CMSs, or tools/github for git-backed sites. Credentials live on the connection, not the agent.
 
-- `blog_create_draft`: create a new blog post draft — params: `title`, `description`, `content`, `section` (schemabounce|openclaw), `category`, `tags[]`. Returns `{ post_id, slug, status, section }`.
-- `blog_submit_review`: move a draft to `status=review` for human approval — params: `post_id`. Never call any approve tool; there is none.
-- `blog_list`: list existing posts for the workspace — useful for duplicate-topic checks before drafting.
+The typical CMS tool shape:
+
+- a create-draft tool: create a new post — returns a post id; save it
+- a publish tool: make the post live. Publishing is a public-content mutation, so the call pauses for the operator's Inbox approval; request it and wait
+- an update tool: correct a live post — read the current content first, send the complete replacement. Also Inbox-approved
+- a delete tool: only for a specific post the operator explicitly asked to remove. Also Inbox-approved
+- a list tool: check existing posts for duplicate-topic overlap before drafting
 
 ## tools/github (recommended connection)
 
@@ -32,4 +36,4 @@ You produce each post yourself in three sequential phases. There are no sub-agen
 
 1. **Research** — validate topic feasibility, gather source material from product docs and the knowledge graph (`adl_query_records`, `adl_search_memory`). Append findings to `topic_research` memory.
 2. **Draft** — write the full blog post from your research notes, following the editorial guidelines. Save progress to `writing_notes` memory.
-3. **Self-edit** — review your own draft for voice, accuracy, and style guide adherence. Revise until it passes, up to 2 revision cycles, then call `blog_create_draft`.
+3. **Self-edit** — review your own draft for voice, accuracy, and style guide adherence. Revise until it passes, up to 2 revision cycles, then create the draft in your connected CMS and request publish approval.

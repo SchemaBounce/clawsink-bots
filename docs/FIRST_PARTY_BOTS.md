@@ -141,16 +141,15 @@ These are what give first-party bots their range. New platform features add new 
 
 **Bots stay dry-run.** No first-party bot disables a route, changes a sink config, modifies a model selection, or modifies infrastructure. They write structured records that ops or `release-manager` review and act on. The decision stays human (or, on a future iteration, stays in a bot whose explicit job is to apply approved recommendations). The auditing bots never touch the things they audit.
 
-## 5. The 12 Internal-Only-By-Design Bots
+## 5. The 11 Self-Contained-By-Design Bots
 
-These all share the same shape as the two showcase bots: zero third-party MCP servers, all reads through runtime built-ins, all writes as structured ADL records. The `# Internal-only by design` marker in each `BOT.md` is what flips them from `none` (vaporware) to `internal-only` in the audit script.
+These all share the same shape as the two showcase bots: zero third-party MCP servers, all reads through runtime built-ins, all writes as structured ADL records. The `# Internal-only by design` marker in each `BOT.md` is what flips them from `none` (vaporware) to `internal-only` in the audit script. ("Internal-only" describes the integration shape — the bot reads only state the platform owns — not who the bot is for; every bot in this repo is a template anyone can deploy.)
 
 | Bot | Reads | Writes |
 |-----|-------|--------|
 | **agent-cost-optimizer** | `agent_runs`, `agents` | `agent_cost_audit`, `agent_cost_recommendation` |
 | **anomaly-detector** | ADL records, ADL memory | anomaly findings against workspace data |
 | **atlas** | ADL graph + records | workspace-scoped mapping records |
-| **blog-writer** | ADL records (drafts, schedule, owned content state) | blog drafts, publishing schedule |
 | **data-quality-monitor** | ADL records | data-quality findings |
 | **experiment-tracker** | ADL records (experiment state) | experiment lifecycle records |
 | **infrastructure-reporter** | runtime built-ins (cross-cutting) | infra summary reports |
@@ -160,7 +159,9 @@ These all share the same shape as the two showcase bots: zero third-party MCP se
 | **platform-optimizer** | runtime built-ins (cross-cutting) | platform optimization suggestions |
 | **workflow-designer** | ADL records (workflow definitions) | workflow drafts, deploy hints |
 
-These are the canonical pattern for what SchemaBounce ships that Composio cannot. None of them have an external integration, and none of them need one. Their job is to read state the platform owns, do arithmetic against thresholds, and write actionable records back into the workspace.
+(`blog-writer` used to sit in this table; it now connects to an external blog/CMS MCP connector, so it belongs with the integration-backed bots.)
+
+These are the canonical pattern for self-contained bots. None of them have an external integration, and none of them need one. Their job is to read state the platform owns, do arithmetic against thresholds, and write actionable records back into the workspace.
 
 ## 6. How to Verify
 

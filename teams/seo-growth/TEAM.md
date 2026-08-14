@@ -14,7 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/seo-expert@0.3.6"
-  - ref: "bots/blog-writer@1.0.15"
+  - ref: "bots/blog-writer@2.0.0"
 northStar:
   industry: "SEO and Content Marketing"
   context: "Team running search and answer-engine growth for a site: technical and on-page SEO audits, keyword and rank tracking, AI citation measurement, and the content production that fills the gaps the audit finds"
@@ -83,7 +83,7 @@ The team works with one required connection per bot and adds depth as you connec
 
 **Required to get value:**
 - **Google Search Console** (SEO Expert). Real keyword data, impressions, click-through, position, and indexation. Without it the auditor still runs but only emits on-page meta and structured-data findings.
-- **Blog drafts connector** (Blog Writer). A workspace service account with the `blog:write` scope. The bot holds no credentials directly; the runtime injects the service account at execution time.
+- **Blog/CMS connector** (Blog Writer). The CMS your blog runs on (Webflow, Contentful, Sanity, Notion) or GitHub for git-backed sites. The bot holds no credentials directly; the runtime injects the connection's credentials at execution time, and every publish pauses for your Inbox approval.
 
 **Optional, each adds a signal:**
 - **PageSpeed Insights** (SEO Expert). Core Web Vitals (LCP, INP, CLS) and Lighthouse SEO score for the home page and top URLs. Needs a Google API key.
