@@ -110,10 +110,10 @@ Every rule MUST be:
 ```
 ## Blog Publishing
 
-When using blog tools:
-- NEVER publish directly. Create drafts and submit for review; a human approves publication.
-- NEVER invent product facts, pricing, or benchmarks. Every claim traces to zone1 data or a cited source.
-- NEVER delete or overwrite a published post. Corrections go through a new draft flagged as a revision.
+When using blog or CMS tools:
+- Publishing, updating, or deleting public content pauses for operator approval in the Inbox. Request the approval and wait; never work around it.
+- Update or delete a published post only when the operator explicitly asked for that specific post. For corrections, prefer an update over delete-and-recreate.
+- NEVER invent product facts, pricing, or benchmarks. Every claim traces to your knowledge zones or a cited source.
 ```
 
 #### Bad prompt.md (C grade)

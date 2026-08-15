@@ -7,46 +7,33 @@
         "topics": [
           {
             "id": "t001",
-            "section": "schemabounce",
             "category": "Tutorials",
-            "title": "Getting Started with CDC Streaming",
-            "description": "Beginner-friendly guide to setting up your first CDC pipeline from database to destination.",
-            "tags": ["cdc", "tutorial", "getting-started"],
+            "title": "Getting Started with [Your Product]",
+            "description": "Beginner-friendly guide to the first end-to-end setup. REPLACE these example topics with your own backlog during setup.",
+            "tags": ["tutorial", "getting-started"],
             "priority": "high",
             "status": "backlog"
           },
           {
             "id": "t002",
-            "section": "openclaw",
-            "category": "Agent Insights",
-            "title": "Building Your First Multi-Agent Team",
-            "description": "Step-by-step guide to deploying a multi-agent team using SOUL.md mandates, domain zones, and inter-agent messaging.",
-            "tags": ["agents", "tutorial", "getting-started"],
-            "priority": "high",
-            "status": "backlog"
-          },
-          {
-            "id": "t003",
-            "section": "schemabounce",
             "category": "Fundamentals",
-            "title": "The Outbox Pattern Explained: Reliable Event Publishing for Microservices",
-            "description": "Why the transactional outbox pattern solves dual-write problems and how to capture outbox events in real-time.",
-            "tags": ["outbox", "microservices", "patterns", "reliability"],
+            "title": "The Core Concept Behind [Your Product], Explained",
+            "description": "A plain-language explanation of the problem your product solves and the pattern it uses.",
+            "tags": ["fundamentals", "patterns"],
             "priority": "medium",
             "status": "backlog"
           },
           {
-            "id": "t004",
-            "section": "openclaw",
+            "id": "t003",
             "category": "Guides",
-            "title": "Writing Effective SOUL.md Files: The Agent Mandate Pattern",
-            "description": "How to write SOUL.md files that give agents clear missions, run protocols, and escalation paths.",
-            "tags": ["soul-md", "patterns", "best-practices"],
+            "title": "Best Practices for [A Common Workflow]",
+            "description": "How experienced users structure the workflow, with real configuration examples.",
+            "tags": ["best-practices", "guide"],
             "priority": "high",
             "status": "backlog"
           }
         ],
-        "lastUpdated": "2026-03-05",
+        "lastUpdated": "2026-08-14",
         "publishedSlugs": []
       }
     }

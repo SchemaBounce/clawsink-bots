@@ -45,17 +45,17 @@ How to connect:
 
 There is no API key to paste. Authorization is native Google OAuth. Make sure the Google account you authorize has access to the property you set in `site_url`.
 
-### Blog drafts connector (Blog Writer)
+### Blog/CMS connector (Blog Writer)
 
-What you get: Blog Writer creates and submits drafts through a dedicated connector rather than holding credentials itself.
+What you get: Blog Writer creates and publishes posts through your CMS connector rather than holding credentials itself.
 
 How to connect:
 
-1. In Workspace Settings, go to Service Accounts and create one with the `blog:write` scope.
-2. Open the Blog Writer agent, go to Connections, and enter the service account `client_id`, `client_secret`, and `SCHEMABOUNCE_API_URL` in the blog connection step.
-3. The runtime injects those credentials into the connector at execution time. Human approval of drafts is never agent-callable, so nothing publishes without a person.
+1. Open the Blog Writer agent, go to Connections, and connect the CMS your blog runs on (Webflow, Contentful, Sanity, or Notion), or connect GitHub to publish by pull request for a git-backed site.
+2. Enter the CMS credentials in the connection step. The runtime injects them into the connector at execution time; the agent never sees them.
+3. Every publish, update, or delete of public content pauses for your approval in the Inbox before it runs, so nothing changes on your site without a person signing off.
 
-Once both are connected, SEO Expert audits the site weekly, sends topic suggestions to Blog Writer, and Blog Writer turns them into drafts for your review.
+Once both are connected, SEO Expert audits the site weekly, sends topic suggestions to Blog Writer, and Blog Writer turns them into published posts with your Inbox approval on each one.
 
 ---
 

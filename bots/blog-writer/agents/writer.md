@@ -33,6 +33,6 @@ Return the complete post as markdown:
 
 ---
 **Tags**: {comma-separated tags}
-**Section**: {schemabounce or openclaw}
+**Category**: {content category from the editorial calendar}
 **Estimated read time**: {X} min
 ```

@@ -27,4 +27,4 @@ Return a structured topic brief:
 - **Key Points**: 4-6 bullet points to cover
 - **Sources Found**: List of docs, features, or concepts discovered
 - **Suggested Angle**: The unique perspective or hook for the post
-- **Target Section**: schemabounce or openclaw
+- **Target Category**: the content category for this post (from the editorial calendar rotation)
