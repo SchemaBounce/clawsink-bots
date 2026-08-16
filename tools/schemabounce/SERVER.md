@@ -10,6 +10,19 @@ metadata:
   category: "platform"
   author: "schemabounce"
   license: "MIT"
+# Machine-to-machine OAuth 2.0 client_credentials grant (RFC 6749 §4.4): the
+# gateway exchanges KOLUMN_CLIENT_ID/KOLUMN_CLIENT_SECRET at the platform's
+# own token endpoint for a bearer access token, caches it, and re-exchanges
+# once on a mid-session 401. This is the SAME generic oauth2_client_credentials
+# mechanism any MCP server (curated or a customer's own custom/BYO definition)
+# can declare — nothing below is specific to this server beyond the token URL
+# and credential env names.
+auth:
+  type: oauth2_client_credentials
+  token_url: "${SCHEMABOUNCE_MCP_URL}/api/v1/oauth/token"
+  client_id_env: KOLUMN_CLIENT_ID
+  client_secret_env: KOLUMN_CLIENT_SECRET
+
 transport:
   type: "streamable-http"
   url: "${SCHEMABOUNCE_MCP_URL}/mcp"
@@ -95,6 +108,10 @@ For external access (CI/CD, scripts), create a Service Account in Workspace Sett
 1. Navigate to Workspace Settings > Service Accounts
 2. Create a service account with appropriate permissions
 3. Use the client ID and secret as `KOLUMN_CLIENT_ID` and `KOLUMN_CLIENT_SECRET`
+
+The platform exchanges those credentials for a short-lived access token
+automatically (OAuth 2.0 client_credentials) and refreshes it as needed — the
+client ID and secret are the only values to paste; nothing else to configure.
 
 ## Team Usage
 
