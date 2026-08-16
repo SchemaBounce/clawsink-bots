@@ -17,6 +17,7 @@ env:
   - name: SCHEMABOUNCE_MCP_URL
     description: "SchemaBounce MCP service URL (managed by platform)"
     required: true
+    sensitive: false
   - name: KOLUMN_CLIENT_ID
     description: "SchemaBounce service account client ID"
     required: true
