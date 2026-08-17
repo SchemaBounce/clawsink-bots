@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: meeting-summarizer
   displayName: "Meeting Summarizer"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Summarizes meeting notes and creates action items."
   category: productivity
   tags: ["meetings", "notes", "actions"]
@@ -66,6 +66,7 @@ skills:
   - ref: "skills/platform-awareness@1.0.0"
   - ref: "skills/inter-agent-comms@1.0.0"
   - ref: "skills/report-generation@1.0.0"
+  - ref: "skills/ticket-writing@1.0.0"
   - ref: "skills/task-management@1.0.0"
   - ref: "skills/follow-up-tracking@1.0.0"
 plugins:
