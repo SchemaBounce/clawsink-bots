@@ -151,6 +151,11 @@ jobs:
   runtime-integration:
     name: Runtime Integration
     runs-on: ubuntu-latest
+    # SCHEMABOUNCE_CI_REPO_TOKEN is a prod ENVIRONMENT secret (the convention for
+    # every non-builtin secret in this org). An environment secret is only
+    # injected into a job that names its environment, so without this the token
+    # resolves to an empty string and the guard step below fails.
+    environment: prod
     if: github.event_name == 'workflow_dispatch' && inputs.run_runtime_tests
     timeout-minutes: 30
 
