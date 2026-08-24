@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: demand-signal-scout
   displayName: "Demand Signal Scout"
-  version: "1.0.9"
+  version: "1.0.11"
   description: "Ranks public and first-party buying signals, creates a daily acquisition queue, drafts approval-gated replies, and learns from measured engagement and conversion outcomes."
   category: sales
   tags: ["lead-generation", "demand-generation", "reddit", "youtube", "hubspot", "buying-signals", "content-opportunities", "acquisition-queue", "approval-gate", "attribution"]
@@ -212,7 +212,7 @@ setup:
         min: 0
         max: 25
         step: 1
-        default: 5
+        default: 2
     - id: set-daily-queue-limit
       name: "Set daily queue size"
       description: "Maximum ranked acquisition items shown each day across public, CRM, form, and content signals."
