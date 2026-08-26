@@ -19,8 +19,8 @@ Before implementing custom data transformations, merges, or deduplication logic,
 - `adl_query_neighbors` — multi-hop traversal (1-3 hops)
 
 ### Analytics
-- `adl_query_duckdb` — SQL analytics across all records (aggregations, trends)
 - `adl_semantic_search` — find records by meaning (vector similarity)
+- `adl_query_duckdb` — read-only SQL over pipeline CDC events, NOT over records. One table: `cdc_events` (route_id, source_type, schema_name, table_name, event_type, operation, payload JSON, produced_at, received_at). Absent unless the workspace runs a DuckDB sidecar.
 
 ### Maintenance
 - `adl_get_data_stats` — storage stats per entity type
@@ -29,4 +29,5 @@ Before implementing custom data transformations, merges, or deduplication logic,
 Anti-patterns:
 - NEVER query all records then filter in reasoning — use the `filters` parameter on `adl_query_records` to filter at the database level.
 - NEVER write to `northstar:` memory namespace — it is read-only workspace configuration; use `shared:` for cross-agent data.
+- NEVER aggregate records, memory, graph edges, or agent runs with `adl_query_duckdb` — that database holds only `cdc_events`. Use `adl_query_records`, or `adl_get_data_stats` for counts.
 - NEVER call `adl_purge_stale_records` without `dry_run: true` first — verify the impact before any destructive operation.

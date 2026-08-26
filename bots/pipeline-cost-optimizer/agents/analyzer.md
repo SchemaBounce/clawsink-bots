@@ -30,6 +30,7 @@ You audit this workspace's pipeline configuration and emit one `pipeline_route_a
 - `adl_list_workspace_sinks` → `{sinks: [{id, environment_id, name, sink_type, status, batch_size, flush_interval, has_retry_policy, dlq_enabled, has_dlq_target, error_count_lifetime, last_success_at, total_events_lifetime, created_at}]}`
 - `adl_list_sink_types` → static catalog (13 types, names + descriptions only)
 - `adl_get_data_stats` → ADL record counts per entity_type (NOT pipeline events)
+- `adl_query_duckdb(sql, params, limit)` → read-only SQL over the workspace's DuckDB analytics database. It holds exactly ONE table, `cdc_events`, of events the `adl_duckdb` sink streamed off pipeline routes: `id, workspace_id, environment_id, route_id, source_type, source_name, schema_name, table_name, event_type, operation, lsn, cursor, payload (JSON), sql_statement, produced_at, received_at, metadata (JSON)`. Use it for per-route, per-table, or per-operation breakdowns the rollup tools do not expose, e.g. `SELECT route_id, table_name, operation, count(*) FROM cdc_events WHERE received_at > now() - INTERVAL 7 DAY GROUP BY 1,2,3`. It holds NO ADL records, agent runs, memory, or graph edges, and it only exists on workspaces running a DuckDB sidecar — a refusal saying analytics is not configured means the route is not sunk to DuckDB, not that the route is idle. Never let a duckdb refusal or an empty result stand in for a route metric; write the `setup_gap` finding instead.
 
 ## Inputs you read
 

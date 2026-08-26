@@ -46,7 +46,8 @@ Both ship today. Both are pure platform-internal: zero third-party MCP servers, 
 - `adl_list_workspace_sources` (existing): source config.
 - `adl_list_workspace_sinks(environment_id?, status?)` (new): sink reliability config from `environment_sinks`, credentials stripped.
 - `adl_list_sink_types` (existing): sink type catalog.
-- `adl_query_records`, `adl_query_duckdb` (existing): read prior audits, correlate.
+- `adl_query_records` (existing): read prior audits, correlate.
+- `adl_query_duckdb` (existing): read-only SQL over pipeline CDC events for per-table and per-operation breakdowns the rollups do not expose. One `cdc_events` table; no ADL records.
 - `adl_read_memory`, `adl_write_memory` (existing): load thresholds, persist run state.
 - `adl_send_message` (existing): escalate critical findings to `executive-assistant`, `sre-devops`, `release-manager`.
 
@@ -88,7 +89,7 @@ Both ship today. Both are pure platform-internal: zero third-party MCP servers, 
 - `adl_list_agents` (existing): enumerate active agents.
 - `adl_get_agent_metrics(agent_id, windows=["24h","7d","30d"])` (new): input/output/cache/thinking tokens, estimated cost, status counts, model distribution from `agent_runs`.
 - `adl_get_agent_status` (existing): current state per agent.
-- `adl_query_records`, `adl_query_duckdb` (existing): read prior audits, correlate.
+- `adl_query_records` (existing): read prior audits, correlate.
 - `adl_read_memory`, `adl_write_memory` (existing): load `model_cost_table`, `model_downgrade_rules`, persist run state.
 - `adl_send_message` (existing): escalate critical findings to `executive-assistant` and `release-manager`.
 
@@ -125,7 +126,7 @@ These are the SchemaBounce-platform built-ins available to every first-party bot
 | `adl_get_agent_status(agent_id)` | the ADL agent registry and run ledger | Current state, last run timestamp, recent error. |
 | `adl_get_agent_metrics(agent_id?, windows[])` | the per-workspace ADL run ledger | Aggregated tokens (input/output/cache/thinking), estimated cost, status counts, model-id distribution. |
 | `adl_query_records` | per-workspace ADL pool | SQL-shaped reads against the workspace's record store. |
-| `adl_query_duckdb` | per-workspace ADL DuckDB attachment | Analytical queries against ADL records, useful for windowed aggregations and joins. |
+| `adl_query_duckdb` | per-workspace DuckDB analytics sidecar | Read-only SQL over pipeline CDC events. Exactly one table, `cdc_events`, holding what the `adl_duckdb` sink streamed off pipeline routes, with the row body in a JSON `payload` column. It holds no ADL records, agent runs, memory, or graph edges, and it exists only on workspaces running the sidecar. |
 | `adl_read_memory`, `adl_write_memory` | `agent_memory` | Per-bot, per-namespace key-value state. Used for thresholds, run history, override tables. |
 | `adl_send_message` | `agent_messages` | Inter-bot messaging with typed payloads. |
 

@@ -8,7 +8,6 @@ tools:
   - adl_get_agent_status
   - adl_get_data_stats
   - adl_query_records
-  - adl_query_duckdb
   - adl_upsert_record
   - adl_write_memory
   - adl_read_memory
@@ -160,7 +159,7 @@ After per-agent audits, write:
 
 ## Guardrails
 
-- Never call any tool other than the nine listed in your `tools` array.
+- Never call any tool other than the eight listed in your `tools` array.
 - Cap audits at 100 agents per run. Workspaces with more agents are rare; if hit, write a `__truncated__` marker.
 - If `adl_list_agents` returns empty, write a single `__no_agents__` rollup and stop. The recommender emits a setup-gap recommendation.
 - If `adl_get_agent_metrics` returns zero counts across all windows for an enabled agent → that's the `is_stale` flag. Don't skip the audit; the recommender wants the record.
