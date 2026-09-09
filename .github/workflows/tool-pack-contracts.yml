@@ -148,6 +148,28 @@ jobs:
           # shellcheck disable=SC2086
           python3 tests/tools/audit-runnability.py --network $changed
 
+      # The registry rules reason about the package. They cannot see a package
+      # that installs, publishes a bin, and still refuses to serve because its
+      # CLI wants a subcommand the manifest never passes -- tools/prometheus
+      # shipped that way from the day it was added and never started once. So
+      # for the manifests this PR touched, install the server and make it
+      # answer an MCP initialize. Changed manifests only: this installs
+      # packages and is far too slow for the whole catalog.
+      - name: Start changed MCP servers and handshake (spawn rules)
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD \
+            -- 'tools/*/SERVER.md' 'tools/*/server.json' || true)"
+          if [ -z "$changed" ]; then
+            echo "No tools/ manifests changed; skipping spawn rules."
+            exit 0
+          fi
+          echo "$changed"
+          # shellcheck disable=SC2086
+          python3 tests/tools/audit-runnability.py --spawn $changed
+
   runtime-integration:
     name: Runtime Integration
     runs-on: ubuntu-latest

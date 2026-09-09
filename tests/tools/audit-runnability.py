@@ -19,6 +19,7 @@ Usage
   audit-runnability.py                     # every manifest, offline rules only
   audit-runnability.py --network           # add registry lookups (slow)
   audit-runnability.py --network FILES...  # only these manifests (PR path)
+  audit-runnability.py --spawn FILES...    # also START each one and handshake
 
 Exit 1 on any unbaselined failure. Warnings never fail the run.
 """
@@ -251,6 +252,247 @@ def network_rules(name: str, man: dict) -> list[Finding]:
 
 
 # ---------------------------------------------------------------------------
+# Spawn rule — start the thing and speak to it
+# ---------------------------------------------------------------------------
+#
+# Every rule above reasons ABOUT the package. None of them can see the one
+# failure that is invisible from metadata: the package installs fine, publishes
+# a bin, bundles an SDK, and still refuses to serve because its CLI wants a
+# subcommand the manifest does not pass. tools/prometheus pinned
+# `prometheus-mcp@1.1.3` with no subcommand for its whole life; the binary
+# printed its usage text and exited 1, so the gateway reported `child_exited`
+# and told the customer it was "usually a packaging or configuration problem".
+# tools/azure (`azmcp`, wants `server start`) and tools/cloudflare
+# (`mcp-server-cloudflare`, wants `run <account_id>`) were the same shape.
+#
+# So this rule installs the package and runs it exactly as the gateway would,
+# with the manifest's own args, then sends an MCP `initialize`. A server that
+# answers is fine. A server that exits with usage text FAILS. Anything else --
+# a missing credential, a hang, a network error -- is a WARN, because this
+# script has no credentials and must never fail a build for not having them.
+
+# Exit text that means "you invoked me wrong", across the CLI frameworks MCP
+# servers actually use (yargs, commander, click, argparse, System.CommandLine)
+# plus the hand-rolled dispatch in @cloudflare/mcp-server-cloudflare.
+USAGE_MARKERS = (
+    "not enough non-option arguments",
+    "required command was not provided",
+    "expected 'init' or 'run'",
+    "unknown command",
+    "missing command",
+    "no such command",
+    "the following arguments are required",
+    "usage:",
+    "<command>",
+)
+
+INITIALIZE = json.dumps(
+    {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "initialize",
+        "params": {
+            "protocolVersion": "2024-11-05",
+            "capabilities": {},
+            "clientInfo": {"name": "clawsink-runnability-audit", "version": "1.0"},
+        },
+    }
+)
+
+
+def _placeholder_env(man: dict) -> dict:
+    """Shape-correct junk for every declared env var. The point is to get past a
+    startup that only checks presence, not to authenticate -- a server that
+    rejects the junk is a WARN either way."""
+    env = dict(os.environ)
+    for spec in man.get("env") or []:
+        upper = str(spec.get("name") or "").upper()
+        if not upper:
+            continue
+        if any(k in upper for k in ("URL", "URI", "ENDPOINT", "HOST")):
+            value = "http://127.0.0.1:19999"
+        elif "PORT" in upper:
+            value = "19999"
+        elif "EMAIL" in upper:
+            value = "audit@example.com"
+        elif "REGION" in upper:
+            value = "us-west-2"
+        elif any(k in upper for k in ("PATH", "FILE", "DIR")):
+            value = "/tmp"
+        else:
+            value = "runnability-audit-placeholder"
+        env[upper] = value
+    return env
+
+
+def _handshake(argv: list[str], env: dict, timeout: int) -> tuple[bool, str, int | None]:
+    """Run argv, send one initialize, return (answered, captured output, exit code)."""
+    import subprocess
+    import threading
+    import time
+
+    try:
+        proc = subprocess.Popen(
+            argv,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=env,
+            text=True,
+            bufsize=1,
+        )
+    except OSError as exc:
+        return False, f"spawn failed: {exc}", None
+
+    captured: list[str] = []
+    answered: list[bool] = []
+
+    def drain(stream, watch_for_result: bool) -> None:
+        for line in stream:
+            captured.append(line.rstrip("\n"))
+            if watch_for_result and '"result"' in line and '"jsonrpc"' in line:
+                answered.append(True)
+
+    threading.Thread(target=drain, args=(proc.stdout, True), daemon=True).start()
+    threading.Thread(target=drain, args=(proc.stderr, False), daemon=True).start()
+    try:
+        proc.stdin.write(INITIALIZE + "\n")
+        proc.stdin.flush()
+    except OSError:
+        pass
+
+    deadline = time.time() + timeout
+    while time.time() < deadline and not answered and proc.poll() is None:
+        time.sleep(0.25)
+    code = proc.poll()
+    if code is None:
+        proc.kill()
+        try:
+            proc.wait(timeout=5)
+        except Exception:
+            pass
+    return bool(answered), "\n".join(captured), code
+
+
+def _npm_launch(name: str, transport: dict, workdir: str) -> tuple[list[str] | None, Finding | None]:
+    """Install the manifest's npm spec and return the argv the gateway would run."""
+    import shutil
+    import subprocess
+
+    if not shutil.which("npm"):
+        return None, Finding(name, "spawn-unavailable", "WARN", "npm is not on PATH")
+
+    args = [str(a) for a in (transport.get("args") or [])]
+    args = [a for a in args if a != "-y"]
+    binary = None
+    if args and args[0].startswith("--package="):
+        spec = args[0].split("=", 1)[1]
+        args = args[1:]
+        if args:
+            binary, args = args[0], args[1:]
+    elif args:
+        spec, args = args[0], args[1:]
+    else:
+        return None, Finding(name, "spawn-unavailable", "WARN", "no package spec in args")
+
+    proc = subprocess.run(
+        ["npm", "install", "--no-audit", "--no-fund", "--prefix", workdir, spec],
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    if proc.returncode != 0:
+        # npm's last stderr line is always the debug-log path. The reason is the
+        # first `npm error` line that carries text of its own.
+        candidates = []
+        for line in (proc.stderr or "").splitlines():
+            line = line.strip()
+            if not line.startswith("npm error") or "log of this run" in line:
+                continue
+            rest = line[len("npm error") :].strip()
+            if rest:
+                candidates.append(rest)
+        # Prefer a sentence ("No matching version found for x@^0.1.0.") over the
+        # bare error code npm prints first.
+        reason = next((c for c in candidates if len(c.split()) >= 4), candidates[0] if candidates else "")
+        return None, Finding(
+            name, "install-failed", "FAIL", f"{spec} will not install: {(reason or 'see npm output')[:160]}"
+        )
+
+    pkg, _ = split_spec(spec)
+    manifest_path = os.path.join(workdir, "node_modules", *pkg.split("/"), "package.json")
+    bins: dict = {}
+    if os.path.isfile(manifest_path):
+        declared = (json.load(open(manifest_path, encoding="utf-8")) or {}).get("bin")
+        if isinstance(declared, str):
+            bins = {pkg.split("/")[-1]: declared}
+        elif isinstance(declared, dict):
+            bins = declared
+    if binary is None:
+        short = pkg.split("/")[-1]
+        binary = short if short in bins else (sorted(bins)[0] if bins else None)
+    if not binary:
+        return None, Finding(name, "no-bin", "FAIL", f"{spec} publishes no bin entry")
+    entry = os.path.join(workdir, "node_modules", ".bin", binary)
+    if not os.path.exists(entry):
+        return None, Finding(name, "no-bin", "FAIL", f"{spec} does not install a {binary!r} bin")
+    # Through `node` rather than the shim: some published bins ship without an
+    # executable bit or a shebang, which is npx's problem to solve, not a
+    # catalog bug.
+    return ["node", entry] + args, None
+
+
+def spawn_rules(name: str, man: dict) -> list[Finding]:
+    import shutil
+    import tempfile
+
+    transport = man.get("transport") or {}
+    if transport.get("type") != "stdio":
+        return []
+    command = transport.get("command", "")
+    if command == "uvx":
+        # PyPI servers need a resolver this script does not ship. The registry
+        # rules still cover them; skip rather than guess.
+        return [Finding(name, "spawn-skipped", "WARN", "uvx launch not exercised by --spawn")]
+    if command != "npx":
+        return []
+
+    workdir = tempfile.mkdtemp(prefix=f"runnability-{name}-")
+    try:
+        argv, failure = _npm_launch(name, transport, workdir)
+        if failure is not None:
+            return [failure]
+        answered, output, code = _handshake(argv, _placeholder_env(man), timeout=45)
+        if answered:
+            return []
+        haystack = output.lower()
+        if any(marker in haystack for marker in USAGE_MARKERS):
+            first = next((line for line in output.splitlines() if line.strip()), "")
+            return [
+                Finding(
+                    name,
+                    "requires-subcommand",
+                    "FAIL",
+                    f"started with args {list(transport.get('args') or [])} and printed usage "
+                    f"instead of serving: {first.strip()[:140]}",
+                )
+            ]
+        first = next((line for line in output.splitlines() if line.strip()), "")
+        return [
+            Finding(
+                name,
+                "no-handshake",
+                "WARN",
+                f"no initialize response (exit={code}); likely needs real credentials: {first.strip()[:120]}",
+            )
+        ]
+    except Exception as exc:  # a harness failure is never a manifest verdict
+        return [Finding(name, "spawn-error", "WARN", f"{type(exc).__name__}: {exc}")]
+    finally:
+        shutil.rmtree(workdir, ignore_errors=True)
+
+
+# ---------------------------------------------------------------------------
 
 
 def read_baseline() -> set[str]:
@@ -267,6 +509,12 @@ def read_baseline() -> set[str]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--network", action="store_true", help="also query npm/PyPI (slow)")
+    ap.add_argument(
+        "--spawn",
+        action="store_true",
+        help="also install each npm server and check it answers an MCP initialize (slowest; "
+        "pass explicit FILES -- this installs packages)",
+    )
     ap.add_argument("--write-baseline", action="store_true", help="record current failures as accepted")
     ap.add_argument("files", nargs="*", help="manifest paths to audit; default is all")
     args = ap.parse_args()
@@ -290,6 +538,8 @@ def main() -> int:
         findings.extend(offline_rules(name, man))
         if args.network:
             findings.extend(network_rules(name, man))
+        if args.spawn:
+            findings.extend(spawn_rules(name, man))
 
     if args.write_baseline:
         fails = sorted({f.key for f in findings if f.level == "FAIL"})

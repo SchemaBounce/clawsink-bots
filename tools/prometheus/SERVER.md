@@ -13,7 +13,12 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "prometheus-mcp@1.1.3"]
+  # prometheus-mcp is a subcommand CLI: with no subcommand it prints its usage
+  # and exits 1, so the gateway handshake died with child_exited on every
+  # start. Verified against prometheus-mcp@1.1.3 itself: `stdio` is the only
+  # subcommand that serves MCP over stdin/stdout (`http` serves Streamable
+  # HTTP instead).
+  args: ["-y", "prometheus-mcp@1.1.3", "stdio"]
 env:
   - name: PROMETHEUS_URL
     description: "Prometheus server URL e.g. http://localhost:9090"

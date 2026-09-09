@@ -33,3 +33,20 @@ twilio:composio-not-remote
 xero:composio-not-remote
 zendesk:composio-not-remote
 zoom:composio-not-remote
+
+# --- Found 2026-09-09 by the new --spawn rule, left as known failures because
+# --- fixing either needs a change this sweep was not scoped to make.
+#
+# cloudflare: @cloudflare/mcp-server-cloudflare@0.2.0 wants `run <account_id>`.
+# Adding `run` alone is not enough -- `run` overwrites the env-supplied account
+# id with its (absent) positional, so the server still exits with "Missing
+# account ID". Fixing it needs a new CLOUDFLARE_ACCOUNT_ID env entry plus
+# `["run", "${CLOUDFLARE_ACCOUNT_ID}"]`, i.e. an env-spec change and a
+# re-setup for every existing connection. Decide that deliberately.
+cloudflare:requires-subcommand
+#
+# pinecone: pinecone-mcp@1.0.0 cannot install at all -- it depends on
+# @modelcontextprotocol/sdk@^0.1.0, which is no longer published, so npm exits
+# ETARGET before anything runs. The only fix is a different pin, and no later
+# version of this package has been vetted.
+pinecone:install-failed

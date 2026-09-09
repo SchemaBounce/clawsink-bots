@@ -13,7 +13,11 @@ metadata:
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "@azure/mcp@2.0.0-beta.39"]
+  # azmcp is a subcommand CLI: with no subcommand it exits 1 with "Required
+  # command was not provided." `server start` is the documented MCP stdio
+  # entry point (it is the example azmcp --help prints) and is the only form
+  # that completes an MCP initialize handshake.
+  args: ["-y", "@azure/mcp@2.0.0-beta.39", "server", "start"]
 env:
   - name: AZURE_CLIENT_ID
     description: "Azure service principal client ID"
