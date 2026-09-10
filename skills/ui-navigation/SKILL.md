@@ -10,7 +10,7 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_find_ui_path", "adl_get_ui_map", "adl_search_docs"]
+  required: ["adl_tool_search"]
 data:
   producesEntityTypes: []
   consumesEntityTypes: []

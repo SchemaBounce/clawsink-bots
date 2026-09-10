@@ -239,7 +239,15 @@ def _validate_parsed(tool_name, fm):
                 )
             elif has_type:
                 atype = auth["type"]
-                valid_auth = {"http_bearer", "http_basic", "api_key_header", "oauth2_mcp", "none"}
+                # oauth2_client_credentials: the client-credentials token
+                # exchange the platform MCP uses (service-account client id +
+                # secret against POST /api/v1/oauth/token). It is accepted by
+                # core-api, not aspirational: see config_publisher.go:3335 and
+                # mcp_connection_service.go:655, which branch on this exact
+                # string. It was missing here only because this set is a
+                # hand-maintained copy of the backend's accepted types, so a
+                # correct SERVER.md failed the gate rather than the reverse.
+                valid_auth = {"http_bearer", "http_basic", "api_key_header", "oauth2_mcp", "oauth2_client_credentials", "none"}
                 if atype not in valid_auth:
                     errors.append(
                         f"auth.type {atype!r} is not one of: "
