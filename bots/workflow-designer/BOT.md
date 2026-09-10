@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.14"
+  version: "1.0.15"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -413,7 +413,7 @@ messaging:
   listensTo: []
   sendsTo: []
 data:
-  entityTypesRead: ["workflows", "workflow_runs"]
+  entityTypesRead: ["workflows", "workflow_runs", "workflow", "workflow_version", "workflow_trigger", "wd_findings"]
   entityTypesWrite: ["workflows", "wd_findings"]
   memoryNamespaces: ["workflow_patterns", "design_notes"]
 zones:

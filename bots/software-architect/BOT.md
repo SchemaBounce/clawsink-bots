@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.17"
+  version: "1.0.18"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -54,7 +54,7 @@ messaging:
     - { type: "finding", to: ["documentation-writer"], when: "docs need updating" }
     - { type: "alert", to: ["executive-assistant"], when: "high-risk implementation requires approval" }
 data:
-  entityTypesRead: ["gh_issues", "review_findings", "architecture_decisions"]
+  entityTypesRead: ["gh_issues", "review_findings", "architecture_decisions", "tasks", "decision", "implementation_plans", "code_sessions"]
   entityTypesWrite: ["implementation_plans", "code_sessions", "architecture_decisions"]
   memoryNamespaces: ["working_notes", "architecture_patterns", "codebase_map"]
 zones:

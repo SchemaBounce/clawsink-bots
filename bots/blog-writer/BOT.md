@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "2.0.1"
+  version: "2.0.2"
   description: "Scheduled technical blog content creation for your company blog: research, draft, publish with operator approval."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -63,7 +63,7 @@ messaging:
     - { type: "finding", to: ["marketing-growth"], when: "blog post published. Ready for promotion" }
     - { type: "finding", to: ["social-media-strategist"], when: "new blog content available for social distribution" }
 data:
-  entityTypesRead: ["blog_topics", "product_docs"]
+  entityTypesRead: ["blog_topics", "product_docs", "blog_drafts", "editorial_notes"]
   entityTypesWrite: ["blog_drafts", "editorial_notes"]
   memoryNamespaces: ["editorial_calendar", "writing_notes", "topic_research"]
 zones:

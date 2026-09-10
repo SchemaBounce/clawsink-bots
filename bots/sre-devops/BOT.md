@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -60,7 +60,7 @@ messaging:
     - { type: "finding", to: ["devops-automator"], when: "deployment-related infrastructure issue" }
     - { type: "finding", to: ["security-agent"], when: "suspicious infrastructure activity or misconfiguration" }
 data:
-  entityTypesRead: ["pipeline_status", "incidents", "infrastructure_metrics", "de_findings", "tasks", "decision", "architecture_findings"]
+  entityTypesRead: ["pipeline_status", "incidents", "infrastructure_metrics", "de_findings", "tasks", "decision", "architecture_findings", "sre_findings", "sre_alerts"]
   entityTypesWrite: ["sre_findings", "sre_alerts", "incidents"]
   memoryNamespaces: ["working_notes", "learned_patterns", "thresholds"]
 zones:
