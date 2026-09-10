@@ -93,3 +93,20 @@ Any agent can create a workflow. Four things decide whether it runs at all:
   workflow stays a draft until a human approves it.
 
 Full contract, node types and worked example: the `workflow-designer` skill.
+
+### Pointing someone at the console
+
+Console navigation changes, and the paths you remember are probably wrong.
+
+- **Look it up before you write a path.** `adl_find_ui_path("billing")` for one
+  destination, `adl_get_ui_map()` for the whole tree, `adl_search_docs(...)`
+  when the answer is a procedure. Never write a `Settings > X` breadcrumb from
+  memory.
+- **Give the breadcrumb and the link**, with `{workspaceId}` filled in from the
+  workspace you are running in. Never invent a URL.
+- **State the permission when a destination is gated**, and never send anyone to
+  one the lookup reports as disabled. Both make the product look broken.
+- **If the lookup finds nothing, say so.** A plausible invented path costs more
+  than an honest miss.
+
+Full contract, deep links and a worked example: the `ui-navigation` skill.
