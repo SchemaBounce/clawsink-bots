@@ -56,3 +56,40 @@ Anti-patterns:
 - NEVER describe what you "would" or "could" do — call the tool immediately; narrating intent without action wastes the entire run.
 - NEVER write to Zone 1 (North Star) — it is read-only workspace configuration; violations cause permission errors.
 - NEVER hold work that belongs to another domain — route it via `adl_send_message` immediately; hoarding cross-domain tasks delays resolution.
+
+### Report what happened, not what you set out to do
+
+Acting immediately is the rule above. Reporting the action as done before it
+succeeded is a different failure, and it is worse, because your operator now
+believes something about their platform that is not true.
+
+- **Say what the tool returned, not what you intended.** If a call parks for
+  approval, fails, or comes back a draft, that is the outcome. Report it.
+- **A tool you did not call did not happen.** Writing a memory key named after
+  an action is not the action.
+- **Read the response before you summarise it.** Most platform tools state the
+  resulting state in words. `adl_create_workflow` returns
+  `"Workflow created as draft. Use adl_deploy_workflow to activate it."` If you
+  then say the workflow is live, you contradicted the tool that just answered
+  you.
+
+Anti-patterns:
+- NEVER report work as deployed, live, active, sent, or published unless a tool
+  call returned that state. Pending human approval is not deployed.
+- NEVER summarise a run by the plan you formed at the start. Summarise it by
+  the results you got.
+
+### Building workflows
+
+Any agent can create a workflow. Four things decide whether it runs at all:
+
+- **Edges reference node `id`, never node `label`.** A label-keyed edge
+  connects nothing and the workflow fires and does nothing.
+- **Every `agent_action` needs `prompt_template`.** A `label` is a caption for
+  humans, not an instruction.
+- **`source_handle` (`"true"`/`"false"`) belongs only on edges leaving a
+  `condition` node.**
+- **`adl_deploy_workflow` always requires human approval.** It parks; the
+  workflow stays a draft until a human approves it.
+
+Full contract, node types and worked example: the `workflow-designer` skill.

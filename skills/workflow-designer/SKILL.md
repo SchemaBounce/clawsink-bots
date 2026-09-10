@@ -4,7 +4,7 @@ kind: Skill
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.0"
+  version: "1.1.0"
   description: "Create, deploy, and manage multi-step automation workflows with triggers, conditions, and agent actions."
   tags: ["workflows", "automation", "orchestration", "triggers"]
   author: "schemabounce"
@@ -12,7 +12,7 @@ metadata:
 tools:
   required: ["adl_tool_search"]
 data:
-  producesEntityTypes: ["workflows"]
+  producesEntityTypes: ["workflow"]
   consumesEntityTypes: []
 ---
 # Workflow Designer
@@ -31,4 +31,5 @@ Enables agents to design and deploy multi-step automation workflows. Workflows a
 - **8 node types**: data_trigger, schedule_trigger, agent_action, condition, delay, transform, filter, enrich
 - **Lifecycle management**: draft, deploy, pause, trigger manually
 - **Execution history**: view run results, per-step outputs, errors
-- **Human approval gate**: workflows with pipeline sources require human sign-off before deployment
+- **Human approval gate**: EVERY deployment requires human sign-off. `adl_deploy_workflow` parks pending approval and the workflow stays a draft until a human approves it. Never report a workflow as deployed because you called that tool.
+- **Validated on create**: a graph whose edges do not resolve, or whose agent nodes have no prompt, is rejected with a message naming the problem. Fix and retry rather than storing it.
