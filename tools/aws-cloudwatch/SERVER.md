@@ -15,10 +15,16 @@ metadata:
 # Updated to the successor package awslabs.cloudwatch-mcp-server==0.1.4 (latest stable,
 # confirmed via pypi.org/pypi/awslabs.cloudwatch-mcp-server/json on 2026-06-10).
 # The new package provides unified CloudWatch telemetry covering logs, metrics, and alarms.
+# VERSION FIX (2026-09-09): 0.1.4 never started. It declared mcp[cli]>=1.23.0 with
+# no upper bound, so the resolver installed mcp 2.x, where FastMCP was renamed and
+# `from mcp.server.fastmcp import Context` raises ModuleNotFoundError at import.
+# 0.2.1 pins mcp[cli]>=2.0.0,<3.0.0 and is written against that SDK. Verified by
+# running it: 0.1.4 dies on the ModuleNotFoundError, 0.2.1 answers a real MCP
+# initialize (serverInfo awslabs.cloudwatch-mcp-server).
 transport:
   type: "stdio"
   command: "uvx"
-  args: ["awslabs.cloudwatch-mcp-server@0.1.4"]
+  args: ["awslabs.cloudwatch-mcp-server@0.2.1"]
 env:
   - name: AWS_ACCESS_KEY_ID
     description: "AWS access key ID"
@@ -32,29 +38,62 @@ env:
     description: "AWS region for CloudWatch e.g. us-east-1"
     required: false
 tools:
-  - name: query_logs
-    description: "Query CloudWatch Logs Insights"
+  - name: describe_log_groups
+    description: "List and describe CloudWatch log groups"
     category: logs
-  - name: list_log_groups
-    description: "List log groups"
+  - name: analyze_log_group
+    description: "Summarize anomalies and error patterns in a log group"
     category: logs
-  - name: get_log_events
-    description: "Get log events from a log stream"
+  - name: execute_log_insights_query
+    description: "Start a CloudWatch Logs Insights query"
+    category: logs
+  - name: get_logs_insight_query_results
+    description: "Fetch the results of a Logs Insights query"
+    category: logs
+  - name: cancel_logs_insight_query
+    description: "Cancel a running Logs Insights query"
+    category: logs
+  - name: execute_cwl_insights_batch
+    description: "Run a batch of Logs Insights queries"
+    category: logs
+  - name: recommend_indexes_loggroup
+    description: "Recommend log field indexes for a log group"
+    category: logs
+  - name: recommend_indexes_account
+    description: "Recommend log field indexes across the account"
     category: logs
   - name: get_metric_data
     description: "Get CloudWatch metric data points"
     category: metrics
-  - name: list_metrics
-    description: "List available metrics"
+  - name: get_metric_metadata
+    description: "Get metadata for a CloudWatch metric"
     category: metrics
-  - name: describe_alarms
-    description: "List CloudWatch alarms"
+  - name: analyze_metric
+    description: "Analyze a metric for anomalies and trends"
+    category: metrics
+  - name: get_recommended_metric_alarms
+    description: "Get recommended alarm settings for a metric"
+    category: metrics
+  - name: execute_promql_query
+    description: "Run a PromQL instant query"
+    category: metrics
+  - name: execute_promql_range_query
+    description: "Run a PromQL range query"
+    category: metrics
+  - name: get_promql_label_values
+    description: "List values for a PromQL label"
+    category: metrics
+  - name: get_promql_series
+    description: "List PromQL series matching a selector"
+    category: metrics
+  - name: get_promql_labels
+    description: "List available PromQL labels"
+    category: metrics
+  - name: get_active_alarms
+    description: "List currently active CloudWatch alarms"
     category: alarms
-  - name: get_dashboard
-    description: "Get dashboard definition"
-    category: dashboards
-  - name: put_metric_alarm
-    description: "Create or update an alarm"
+  - name: get_alarm_history
+    description: "Get the state history for an alarm"
     category: alarms
 ---
 
