@@ -4,11 +4,23 @@
 # Auto-increments patch version for changed bots.
 #
 # Install: ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+#          ln -sf ../../hooks/post-commit .git/hooks/post-commit
+#          Both are required: during a by-path commit (git commit -- path) this
+#          hook runs against git's temporary index while the real index is
+#          locked, so the version bump below cannot reach the real index from
+#          here; hooks/post-commit repairs it once the lock is released (#82).
 # Skip:    git commit --no-verify
 
 set -euo pipefail
 
 BOTS_DIR="bots"
+
+# Paths this hook rewrote and staged, consumed by hooks/post-commit to bring the
+# real index up to date after a by-path commit. Cleared here so a marker left by
+# an aborted commit can never be replayed.
+GIT_DIR_PATH="$(git rev-parse --git-dir)"
+BUMP_MARKER="$GIT_DIR_PATH/clawsink-bumped-paths"
+rm -f "$BUMP_MARKER"
 
 # --- Phase 1: Version bump (existing behavior) ---
 
@@ -64,6 +76,7 @@ for bot in "${changed_bots[@]}"; do
 
   sed -i "s/version: \"${current_version}\"/version: \"${new_version}\"/" "$bot_md"
   git add "$bot_md"
+  echo "$bot_md" >> "$BUMP_MARKER"
 
   bumped=$((bumped + 1))
 done

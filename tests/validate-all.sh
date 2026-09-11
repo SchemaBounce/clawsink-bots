@@ -75,6 +75,12 @@ if ! bash "$SCRIPT_DIR/rules/validate-manifest.sh"; then
 fi
 echo ""
 
+echo "=== Validating Git Hooks (version bump keeps HEAD, index, and worktree in sync) ==="
+if ! bash "$SCRIPT_DIR/hooks/test-version-bump.sh"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
 if [ $FAILURES -gt 0 ]; then
   echo "❌ $FAILURES validation suite(s) had failures"
   exit 1
