@@ -12,6 +12,7 @@ adl_create_workflow
 adl_decision_propose
 adl_decision_search
 adl_delegate_task
+adl_delete_file
 adl_delete_memory
 adl_delete_record
 adl_delete_trigger
@@ -70,6 +71,7 @@ adl_read_file
 adl_read_memory
 adl_read_messages
 adl_read_tool_artifact
+adl_render_file
 adl_request_agent_route
 adl_request_escalation
 adl_request_file_access
