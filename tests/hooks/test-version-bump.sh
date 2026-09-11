@@ -10,6 +10,11 @@
 # to agree afterwards, then makes an unrelated plain commit and requires it not
 # to touch the bot at all.
 #
+# The same bump must rewrite every teams/*/TEAM.md pin of the bot (4ebd6c9
+# bumped sales-pipeline to 1.0.13 and teams/sales-team still pinned 1.0.12,
+# which failed the sales-pipeline contract in CI), and must NOT touch a TEAM.md
+# that already carries uncommitted changes.
+#
 # It tests the hooks as they are in THIS working tree (copied into the clone),
 # so a hook fix is verified before it is committed. Override with
 # HOOKS_SRC=<dir> to test another set of hooks.
@@ -95,6 +100,30 @@ fi
 status="$(git status --porcelain -- "$BOT")"
 [ -z "$status" ] && pass "git status is clean for $BOT" || fail "git status not clean for $BOT: '$status'"
 
+# Every team that pins the bot must now pin the bumped version, in the commit
+# and in a clean index.
+pinned_teams="$(grep -lE "bots/$BOT_NAME@[0-9]+\.[0-9]+\.[0-9]+" teams/*/TEAM.md 2>/dev/null || true)"
+if [ -z "$pinned_teams" ]; then
+  fail "no teams/*/TEAM.md pins bots/$BOT_NAME; pick a pinned bot with TEST_BOT"
+fi
+for team_md in $pinned_teams; do
+  if git show "HEAD:$team_md" | grep -q "bots/$BOT_NAME@$expected"; then
+    pass "$team_md pins bots/$BOT_NAME@$expected in HEAD"
+  else
+    fail "$team_md does not pin bots/$BOT_NAME@$expected in HEAD (got: $(git show "HEAD:$team_md" | grep -oE "bots/$BOT_NAME@[0-9.]+" | head -1))"
+  fi
+  if git show --name-only --format= HEAD | grep -qx "$team_md"; then
+    pass "$team_md was part of the by-path commit"
+  else
+    fail "$team_md was not included in the by-path commit"
+  fi
+  if [ -z "$(git status --porcelain -- "$team_md")" ]; then
+    pass "git status is clean for $team_md"
+  else
+    fail "git status not clean for $team_md: '$(git status --porcelain -- "$team_md")'"
+  fi
+done
+
 # An unrelated plain commit must not carry the bot along (phantom bump or revert).
 printf '\nhook test\n' >> README.md
 git add -- README.md
@@ -112,6 +141,39 @@ else
 fi
 after_v="$(git show "HEAD:$BOT" | version_in)"
 [ "$after_v" = "$expected" ] && pass "bot version still $expected after the unrelated commit" || fail "bot version changed to $after_v by an unrelated commit"
+
+# A TEAM.md with uncommitted changes belongs to someone else: the bump must
+# warn and leave it alone rather than sweep it into the commit.
+dirty_team="$(echo "$pinned_teams" | head -1)"
+if [ -n "$dirty_team" ]; then
+  printf '\n<!-- someone else is editing this file -->\n' >> "$dirty_team"
+  printf '\n<!-- hook test second edit -->\n' >> "$BOT"
+  echo "test: by-path commit with a dirty team manifest" > "$TMP/msg"
+  expected2="${major}.${minor}.$((patch + 2))"
+  if git commit -q -F "$TMP/msg" -- "$BOT" >"$TMP/commit3.out" 2>&1; then
+    pass "by-path commit with a dirty $dirty_team succeeded"
+  else
+    fail "by-path commit with a dirty $dirty_team failed:"
+    sed 's/^/    /' "$TMP/commit3.out"
+  fi
+  if grep -q "pin not rewritten" "$TMP/commit3.out"; then
+    pass "hook warned that the dirty $dirty_team pin was not rewritten"
+  else
+    fail "hook did not warn about the dirty $dirty_team"
+  fi
+  if git show --name-only --format= HEAD | grep -qx "$dirty_team"; then
+    fail "dirty $dirty_team was swept into the commit"
+  else
+    pass "dirty $dirty_team was left out of the commit"
+  fi
+  if grep -q "someone else is editing" "$dirty_team" && grep -q "bots/$BOT_NAME@$expected" "$dirty_team"; then
+    pass "dirty $dirty_team keeps its edit and its old pin ($expected) for the owner to update"
+  else
+    fail "dirty $dirty_team was modified by the hook"
+  fi
+  head_v3="$(git show "HEAD:$BOT" | version_in)"
+  [ "$head_v3" = "$expected2" ] && pass "bot still bumped to $expected2 with the team skipped" || fail "bot version is $head_v3, expected $expected2"
+fi
 
 echo ""
 if [ "$FAILURES" -gt 0 ]; then

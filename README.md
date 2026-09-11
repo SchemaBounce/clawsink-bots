@@ -76,6 +76,30 @@ clawsink-bots/
     └── README.md                   # Installation guide, slot system
 ```
 
+## Git Hooks
+
+Install both hooks once per clone; they are symlinks to the tracked scripts:
+
+```bash
+ln -sf ../../hooks/pre-commit  .git/hooks/pre-commit
+ln -sf ../../hooks/post-commit .git/hooks/post-commit
+```
+
+`hooks/pre-commit` bumps the patch version of every bot whose files are in the
+commit, rewrites the `bots/<name>@x.y.z` pins in `teams/*/TEAM.md` to match
+(a TEAM.md with its own uncommitted changes is skipped with a warning), validates
+changed SOUL.md files and skill prompts, and refuses a skill commit when
+`tests/skills/known-tools.txt` is stale against the runtime.
+
+`hooks/post-commit` exists because of by-path commits (`git commit -F msg --
+bots/x/BOT.md`): git runs pre-commit against a temporary index while the real
+one is locked, so the bump reaches the commit but not the index. post-commit
+brings the index up to date once the lock is released. Without it the next
+plain commit from any session carries a phantom bump or reverts the version.
+
+`tests/hooks/test-version-bump.sh` proves both in a throwaway clone and runs
+from `tests/validate-all.sh`, which is what CI runs.
+
 ## How the Marketplace Parser Works
 
 The marketplace reads manifest files (`BOT.md`, `TEAM.md`, `SKILL.md`, `PACK.md`, `SERVER.md`, and `KIT.md`) and extracts YAML frontmatter to populate UI. Every field in the frontmatter has a specific rendering target.
