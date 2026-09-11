@@ -13,8 +13,8 @@
 # 7. Skills refs match pattern skills/{name}@{version}
 # 8. Tool pack refs match pattern packs/{name}@{version?}
 # 9. MCP server refs match pattern tools/{name}
-# 10. data.entityTypesWrite is a subset of data.entityTypesRead (WARN only, with
-#     a count). Issue #81: a bot that writes a type it cannot read never sees
+# 10. data.entityTypesWrite is a subset of data.entityTypesRead, or the bot
+#     reads ["*"] (WARN only, with a count). Issue #81: a bot that writes a type it cannot read never sees
 #     its own records back (adl_query_records filters on entityTypesRead), so
 #     every "check what I wrote last run" step silently returns nothing. Most
 #     of the catalog fails this today; making it a failure would block every
@@ -22,7 +22,7 @@
 #     forces a full catalog re-sync, which is a release decision. The sweep,
 #     when it is decided, is this one line (then commit bots/*/BOT.md; the
 #     pre-commit hook bumps the versions and repins the teams):
-#       python3 -c 'import re,json,glob; [open(f,"w",encoding="utf-8",newline="").write(re.sub(r"(entityTypesRead:\s*)(\[[^\]]*\])", lambda m: m.group(1)+json.dumps(json.loads(m.group(2))+[w for w in json.loads(re.search(r"entityTypesWrite:\s*(\[[^\]]*\])",t).group(1)) if w not in json.loads(m.group(2))]), t, count=1)) for f in sorted(glob.glob("bots/*/BOT.md")) for t in [open(f,encoding="utf-8",newline="").read()] if re.search(r"entityTypesWrite:\s*(\[[^\]]*\])",t)]'
+#       python3 -c 'import re,json,glob; [open(f,"w",encoding="utf-8",newline="").write(re.sub(r"(entityTypesRead:\s*)(\[[^\]]*\])", lambda m: m.group(0) if "*" in json.loads(m.group(2)) else m.group(1)+json.dumps(json.loads(m.group(2))+[w for w in json.loads(re.search(r"entityTypesWrite:\s*(\[[^\]]*\])",t).group(1)) if w not in json.loads(m.group(2))]), t, count=1)) for f in sorted(glob.glob("bots/*/BOT.md")) for t in [open(f,encoding="utf-8",newline="").read()] if re.search(r"entityTypesWrite:\s*(\[[^\]]*\])",t)]'
 #     After the sweep, promote this check from WARN to FAIL.
 #
 # Usage: ./validate-manifest.sh [bot-name]
@@ -197,6 +197,7 @@ validate_manifest() {
     while IFS= read -r wtype; do
       [ -n "$wtype" ] || continue
       case "$read_types" in
+        *" * "*) ;;  # reads ["*"], the runtime wildcard (a quoted * is literal here)
         *" $wtype "*) ;;
         *) unreadable="${unreadable:+$unreadable }$wtype" ;;
       esac
