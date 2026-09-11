@@ -17,10 +17,18 @@ auth:
   token_env: PINECONE_API_KEY
   header_name: Api-Key
 
+# PACKAGE MIGRATION (2026-09-09): pinecone-mcp@1.0.0 could not be installed at
+# all. It depends on @modelcontextprotocol/sdk@^0.1.0, which is no longer
+# published, so npm exits ETARGET ("No matching version found for
+# @modelcontextprotocol/sdk@^0.1.0") before anything runs. That package has only
+# ever published 1.0.0, so no pin of it can work. Replaced with Pinecone's own
+# MCP server, @pinecone-database/mcp (bin: pinecone-mcp), which uses the same
+# PINECONE_API_KEY env var. Verified by running it: installed 0.3.0 and got a
+# real MCP initialize result back (serverInfo pinecone-mcp 0.3.0).
 transport:
   type: "stdio"
   command: "npx"
-  args: ["-y", "pinecone-mcp@1.0.0"]
+  args: ["-y", "@pinecone-database/mcp@0.3.0"]
 env:
   - name: PINECONE_API_KEY
     description: "Pinecone API key from app.pinecone.io"
@@ -56,27 +64,33 @@ healthProbe:
   interval_seconds: 300
 
 tools:
-  - name: list_indexes
+  - name: search-docs
+    description: "Search the Pinecone documentation"
+    category: docs
+  - name: list-indexes
     description: "List all indexes in the account"
     category: indexes
-  - name: create_index
-    description: "Create a new vector index"
+  - name: describe-index
+    description: "Get the configuration of an index"
     category: indexes
-  - name: upsert_vectors
-    description: "Upsert vectors into an index"
-    category: vectors
-  - name: query_vectors
-    description: "Query vectors by similarity"
-    category: vectors
-  - name: delete_vectors
-    description: "Delete vectors from an index"
-    category: vectors
-  - name: describe_index
-    description: "Get details and stats for an index"
+  - name: describe-index-stats
+    description: "Get record counts and namespace stats for an index"
     category: indexes
-  - name: list_namespaces
-    description: "List namespaces within an index"
-    category: namespaces
+  - name: create-index-for-model
+    description: "Create an index that embeds text with a hosted model"
+    category: indexes
+  - name: upsert-records
+    description: "Upsert records into an index namespace"
+    category: records
+  - name: search-records
+    description: "Search an index namespace for similar records"
+    category: records
+  - name: rerank-documents
+    description: "Rerank documents against a query with a hosted model"
+    category: records
+  - name: cascading-search
+    description: "Search several indexes and merge the ranked results"
+    category: records
 ---
 
 # Pinecone MCP Server

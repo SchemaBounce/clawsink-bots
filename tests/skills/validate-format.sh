@@ -6,7 +6,7 @@
 # 2. prompt.md exists and is under 200 tokens (~800 chars)
 # 3. Required YAML fields present (apiVersion, kind, metadata.name, metadata.description)
 # 4. metadata.name matches directory name
-# 5. tools.required contains only known ADL tool names
+# 5. tools.required contains only tools the runtime serves (tests/skills/known-tools.txt)
 # 6. kind is "Skill"
 #
 # Usage: ./validate-format.sh [skill-name]
@@ -28,9 +28,16 @@ PASS=0
 FAIL=0
 WARN=0
 
-# Known valid tool names (from OpenCLAW runtime tools.go)
-# Tools from both MCP server (adl_upsert_record) AND OpenCLAW runtime (adl_write_record)
-KNOWN_TOOLS="adl_tool_search adl_send_message adl_read_messages adl_list_agents adl_run_agent adl_run_agents adl_query_records adl_upsert_record adl_write_record adl_get_record adl_bulk_upsert adl_delete_record adl_list_entity_types adl_get_schema adl_read_memory adl_write_memory adl_delete_memory adl_list_memory adl_add_memory adl_search_memory adl_search_graph adl_graph_query adl_query_neighbors adl_semantic_search adl_query_duckdb adl_get_workflow adl_update_workflow adl_deploy_workflow adl_list_workflows adl_list_workflow_runs adl_get_workflow_run adl_create_workflow adl_trigger_workflow adl_create_trigger adl_list_triggers adl_update_trigger adl_delete_trigger adl_propose_pipeline_route adl_propose_crystallization adl_list_connectors adl_list_sink_types adl_list_pipeline_routes adl_list_workspace_sources adl_get_route_status adl_request_escalation adl_invoke_skill adl_execute_skill adl_discover_skills adl_get_context adl_store_secret adl_get_secret adl_proxy_call adl_get_data_stats adl_purge_stale_records adl_purge_memory_namespace adl_get_namespace_stats adl_consolidate_memory adl_set_memory_ttl adl_get_graph_stats adl_purge_orphan_edges adl_scratch_write adl_scratch_read adl_list_crystallization_candidates adl_list_query_patterns"
+# Known valid tool names: GENERATED snapshot of the OpenCLAW runtime registry
+# (ADLTools() in core-api/openclaw-runtime/internal/executor). Never hand-edit
+# the list; refresh it with tests/skills/sync-known-tools.sh --write, and
+# tests/validate-all.sh fails when it is stale against a core-api checkout.
+KNOWN_TOOLS_FILE="$SCRIPT_DIR/known-tools.txt"
+if [ ! -f "$KNOWN_TOOLS_FILE" ]; then
+  echo "FAIL: $KNOWN_TOOLS_FILE missing; run tests/skills/sync-known-tools.sh --write" >&2
+  exit 1
+fi
+KNOWN_TOOLS="$(grep -E '^adl_' "$KNOWN_TOOLS_FILE" | tr '\n' ' ')"
 
 # Approximate token count (~4 chars per token for English)
 estimate_tokens() {

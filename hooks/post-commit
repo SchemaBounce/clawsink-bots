@@ -1,0 +1,53 @@
+#!/bin/bash
+# ClawSink Bots Post-Commit Hook
+# Repairs the real index after hooks/pre-commit auto-bumped a bot version inside
+# a by-path commit (git commit -F msg -- bots/x/BOT.md).
+#
+# Why this exists (issue #82): for a by-path commit git builds a temporary index
+# (.git/next-index-<pid>.lock) from HEAD plus the named paths and runs
+# pre-commit against THAT, while the real .git/index is already written with the
+# pre-bump content and held under .git/index.lock. The hook's sed + git add
+# therefore reach the commit but never the real index, and the commit leaves
+# HEAD and the working tree bumped with the index one patch behind: status
+# `MM`, `git diff HEAD` empty. A later plain commit from any session then either
+# lands a phantom second bump (hook running) or commits the pre-bump entry back
+# over HEAD (hook bypassed, or a fresh clone where the hook is not executable).
+# The real index is unlocked by the time post-commit runs, so this is the first
+# hook that can bring it up to date.
+#
+# Install: ln -sf ../../hooks/post-commit .git/hooks/post-commit
+#          (alongside ../../hooks/pre-commit; both are required)
+
+set -euo pipefail
+
+GIT_DIR_PATH="$(git rev-parse --git-dir)"
+BUMP_MARKER="$GIT_DIR_PATH/clawsink-bumped-paths"
+
+[ -f "$BUMP_MARKER" ] || exit 0
+
+# Another session's git process holds the index: warn rather than touch it,
+# and say exactly what to run once it is free.
+if [ -e "$GIT_DIR_PATH/index.lock" ]; then
+  echo -e "\033[33mWARN\033[0m index.lock is held; index not refreshed for: $(tr '\n' ' ' < "$BUMP_MARKER")"
+  echo "      when it is free run: git add -- $(tr '\n' ' ' < "$BUMP_MARKER")"
+  rm -f "$BUMP_MARKER"
+  exit 0
+fi
+
+repaired=0
+while IFS= read -r path; do
+  [ -n "$path" ] || continue
+  [ -f "$path" ] || continue
+  # Repair only the exact signature the bump leaves behind: working tree equals
+  # HEAD, index does not. Anything else is someone's uncommitted work (for
+  # example a commit that aborted after pre-commit ran); leave it alone.
+  if git diff --quiet HEAD -- "$path" && ! git diff --cached --quiet HEAD -- "$path"; then
+    git add -- "$path"
+    repaired=$((repaired + 1))
+  fi
+done < "$BUMP_MARKER"
+rm -f "$BUMP_MARKER"
+
+if [ "$repaired" -gt 0 ]; then
+  echo "Refreshed $repaired index entry(ies) to match the committed version bump"
+fi

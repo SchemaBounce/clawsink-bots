@@ -82,6 +82,15 @@ tools:
 
 Provides Cloudflare API tools for bots that manage DNS records, Workers, Pages deployments, and CDN caching.
 
+## Status: not startable right now
+
+`@cloudflare/mcp-server-cloudflare` dispatches on its command line and needs
+`run <account_id>` as a positional argument. A catalog manifest can only pass
+fixed arguments, and an account id is per customer, so this entry cannot start
+until stdio arguments can carry a customer-supplied value. Connecting it will
+fail at startup. Tracked in `tests/tools/runnability-baseline.txt` as
+`cloudflare:requires-subcommand`, where the full evidence is recorded.
+
 ## Which Bots Use This
 
 - **devops-automator** -- Manages DNS records, deploys Workers, and purges caches

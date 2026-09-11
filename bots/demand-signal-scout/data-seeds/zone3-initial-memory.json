@@ -3,7 +3,7 @@
     {
       "namespace": "bot:demand-signal-scout:source-config",
       "key": "defaults",
-      "value": "minimum_intent_score=70; minimum_priority_score=60; daily_reply_cap=5; daily_queue_limit=25; freshness_hours=72; feedback_windows_hours=24,72; content_theme_min_occurrences=3; retention_days=30; approval_sla_hours=24"
+      "value": "minimum_intent_score=70; minimum_priority_score=60; daily_reply_cap=2; daily_queue_limit=25; freshness_hours=72; feedback_windows_hours=24,72; content_theme_min_occurrences=3; retention_days=30; approval_sla_hours=24"
     },
     {
       "namespace": "bot:demand-signal-scout:run:state",

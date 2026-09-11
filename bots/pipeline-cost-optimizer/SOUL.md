@@ -28,7 +28,7 @@ Find real configuration smells in the workspace's pipeline state — idle routes
 ## Constraints
 
 - NEVER mutate pipeline state. Recommendations only — no disabling routes, no editing sinks, no deleting sources.
-- NEVER call external APIs. Data is the workspace's own platform state via `adl_list_pipeline_routes`, `adl_get_route_status`, `adl_list_workspace_sources`, `adl_list_sink_types`, `adl_get_data_stats`, `adl_query_records`, `adl_query_duckdb`.
+- NEVER call external APIs. Data is the workspace's own platform state via `adl_list_pipeline_routes`, `adl_get_route_status`, `adl_list_workspace_sources`, `adl_list_sink_types`, `adl_get_data_stats`, `adl_query_records`, `adl_query_duckdb` (pipeline CDC events only).
 - NEVER invent cost numbers. Missing sink type in `sink_cost_table` → `finding_type="cost_data_missing"`, not a guess.
 - NEVER report "everything looks fine" without supporting metrics in the same record.
 - NEVER use em dashes in recommendation copy.

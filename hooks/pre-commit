@@ -1,14 +1,27 @@
 #!/bin/bash
 # ClawSink Bots Pre-Commit Hook
 # Validates changed bot SOUL.md files and skill prompts before commit.
-# Auto-increments patch version for changed bots.
+# Auto-increments patch version for changed bots and rewrites the team
+# manifests (teams/*/TEAM.md) that pin them.
 #
 # Install: ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+#          ln -sf ../../hooks/post-commit .git/hooks/post-commit
+#          Both are required: during a by-path commit (git commit -- path) this
+#          hook runs against git's temporary index while the real index is
+#          locked, so the version bump below cannot reach the real index from
+#          here; hooks/post-commit repairs it once the lock is released (#82).
 # Skip:    git commit --no-verify
 
 set -euo pipefail
 
 BOTS_DIR="bots"
+
+# Paths this hook rewrote and staged, consumed by hooks/post-commit to bring the
+# real index up to date after a by-path commit. Cleared here so a marker left by
+# an aborted commit can never be replayed.
+GIT_DIR_PATH="$(git rev-parse --git-dir)"
+BUMP_MARKER="$GIT_DIR_PATH/clawsink-bumped-paths"
+rm -f "$BUMP_MARKER"
 
 # --- Phase 1: Version bump (existing behavior) ---
 
@@ -64,6 +77,25 @@ for bot in "${changed_bots[@]}"; do
 
   sed -i "s/version: \"${current_version}\"/version: \"${new_version}\"/" "$bot_md"
   git add "$bot_md"
+  echo "$bot_md" >> "$BUMP_MARKER"
+
+  # Team manifests pin bots by exact version (bots/<name>@x.y.z) and the
+  # contract validators require the pin to be the current version. Rewrite
+  # every pin that references this bot so the commit stays self-consistent.
+  # A TEAM.md that already differs from HEAD is another session's uncommitted
+  # work: warn and leave it, never sweep it into this commit.
+  for team_md in teams/*/TEAM.md; do
+    [ -f "$team_md" ] || continue
+    grep -qE "bots/${bot}@[0-9]+\.[0-9]+\.[0-9]+" "$team_md" || continue
+    if ! git diff --quiet HEAD -- "$team_md"; then
+      echo -e "\033[33mWARN\033[0m [$bot] $team_md has uncommitted changes; pin not rewritten to $new_version, update it by hand"
+      continue
+    fi
+    sed -i -E "s#bots/${bot}@[0-9]+\.[0-9]+\.[0-9]+#bots/${bot}@${new_version}#g" "$team_md"
+    git add "$team_md"
+    echo "$team_md" >> "$BUMP_MARKER"
+    echo "Repinned $team_md to bots/${bot}@${new_version}"
+  done
 
   bumped=$((bumped + 1))
 done
@@ -140,6 +172,17 @@ for bot in "${changed_bots[@]}"; do
 done
 
 # --- Phase 3: Validate changed skill prompts ---
+
+# A skill may only declare tools the runtime serves, and the allowlist it is
+# checked against is generated (tests/skills/known-tools.txt). Refuse to commit
+# a skill against a stale snapshot; the sync script skips when no core-api
+# checkout is reachable.
+if echo "$staged_files" | grep -qE "^(skills/|tests/skills/)"; then
+  if ! bash tests/skills/sync-known-tools.sh --check; then
+    echo -e "\033[31m✗ tests/skills/known-tools.txt is stale; run tests/skills/sync-known-tools.sh --write and stage it\033[0m"
+    exit 1
+  fi
+fi
 
 while IFS= read -r file; do
   if [[ "$file" == skills/*/prompt.md ]] && [ -f "$file" ]; then

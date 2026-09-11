@@ -33,3 +33,31 @@ twilio:composio-not-remote
 xero:composio-not-remote
 zendesk:composio-not-remote
 zoom:composio-not-remote
+
+# --- Found 2026-09-09 by the --spawn rule. Four of the six were fixed on
+# --- 2026-09-09 (pinecone, docker, aws, aws-cloudwatch). cloudflare is the one
+# --- that cannot be fixed from a manifest.
+#
+# cloudflare: @cloudflare/mcp-server-cloudflare@0.2.0 dispatches on argv and
+# wants `run <account_id>`. Verified by running it: with the manifest's args it
+# throws "Unknown command: undefined. Expected 'init' or 'run'."; with
+# `run <account_id>` and a placeholder token it answers a real MCP initialize
+# (serverInfo cloudflare 1.0.0). Every published version back to 0.1.0 has the
+# same dispatch, so no pin avoids it.
+#
+# The obvious fix, `args: ["run", "${CLOUDFLARE_ACCOUNT_ID}"]` plus a new
+# CLOUDFLARE_ACCOUNT_ID env entry, does NOT work: `${VAR}` in stdio args is
+# never substituted. The platform substitutes `${VAR}` only into a remote
+# transport's url and into auth headers, and the child's argv is POSIX
+# single-quoted before exec, so the placeholder reaches the server as the
+# literal string. The server would then start (a non-empty account id passes
+# its check) and every account-scoped call would go to
+# /client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/... and fail. A connection that
+# reports healthy and fails every tool is worse than one that fails to start,
+# so this stays failing until stdio args carry env substitution. The same dead
+# placeholder is already in tools/bigquery's args.
+#
+# Cloudflare's own replacement is its remote MCP servers (*.mcp.cloudflare.com),
+# which answer 401 "Access token appears malformed" for an API token and need
+# OAuth. That is an auth-model change for this entry, not a package pin.
+cloudflare:requires-subcommand

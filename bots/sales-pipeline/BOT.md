@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -78,7 +78,7 @@ messaging:
     - { type: "finding", to: ["revops"], when: "pipeline stage data or deal velocity metrics" }
     - { type: "finding", to: ["market-intelligence"], when: "deal loss reason or feature gap from prospect feedback" }
 data:
-  entityTypesRead: ["deals", "pipeline_stages"]
+  entityTypesRead: ["deals", "pipeline_stages", "pipeline_reports", "deal_insights", "prospect_signals", "acquisition_queue"]
   entityTypesWrite: ["pipeline_reports", "deal_insights"]
   memoryNamespaces: ["conversion_rates", "stage_durations"]
 zones:

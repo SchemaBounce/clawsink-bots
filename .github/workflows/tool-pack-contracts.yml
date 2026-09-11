@@ -148,9 +148,36 @@ jobs:
           # shellcheck disable=SC2086
           python3 tests/tools/audit-runnability.py --network $changed
 
+      # The registry rules reason about the package. They cannot see a package
+      # that installs, publishes a bin, and still refuses to serve because its
+      # CLI wants a subcommand the manifest never passes -- tools/prometheus
+      # shipped that way from the day it was added and never started once. So
+      # for the manifests this PR touched, install the server and make it
+      # answer an MCP initialize. Changed manifests only: this installs
+      # packages and is far too slow for the whole catalog.
+      - name: Start changed MCP servers and handshake (spawn rules)
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD \
+            -- 'tools/*/SERVER.md' 'tools/*/server.json' || true)"
+          if [ -z "$changed" ]; then
+            echo "No tools/ manifests changed; skipping spawn rules."
+            exit 0
+          fi
+          echo "$changed"
+          # shellcheck disable=SC2086
+          python3 tests/tools/audit-runnability.py --spawn $changed
+
   runtime-integration:
     name: Runtime Integration
     runs-on: ubuntu-latest
+    # SCHEMABOUNCE_CI_REPO_TOKEN is a prod ENVIRONMENT secret (the convention for
+    # every non-builtin secret in this org). An environment secret is only
+    # injected into a job that names its environment, so without this the token
+    # resolves to an empty string and the guard step below fails.
+    environment: prod
     if: github.event_name == 'workflow_dispatch' && inputs.run_runtime_tests
     timeout-minutes: 30
 
@@ -183,6 +210,14 @@ jobs:
           cache-dependency-path: |
             core-api/schemabounce-api/go.sum
             core-api/openclaw-runtime/go.sum
+
+      - name: Check skills known-tools snapshot against the runtime registry
+        working-directory: clawsink-bots
+        env:
+          CORE_API_DIR: ${{ github.workspace }}/core-api
+          CORE_API_REF: worktree
+          SB_REQUIRE_CORE_API: "1"
+        run: bash tests/skills/sync-known-tools.sh --check
 
       - name: Run pack-related marketplace tests
         working-directory: core-api/schemabounce-api
