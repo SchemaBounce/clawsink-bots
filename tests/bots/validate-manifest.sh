@@ -13,6 +13,17 @@
 # 7. Skills refs match pattern skills/{name}@{version}
 # 8. Tool pack refs match pattern packs/{name}@{version?}
 # 9. MCP server refs match pattern tools/{name}
+# 10. data.entityTypesWrite is a subset of data.entityTypesRead (WARN only, with
+#     a count). Issue #81: a bot that writes a type it cannot read never sees
+#     its own records back (adl_query_records filters on entityTypesRead), so
+#     every "check what I wrote last run" step silently returns nothing. Most
+#     of the catalog fails this today; making it a failure would block every
+#     commit until the sweep lands, and the sweep bumps every affected bot and
+#     forces a full catalog re-sync, which is a release decision. The sweep,
+#     when it is decided, is this one line (then commit bots/*/BOT.md; the
+#     pre-commit hook bumps the versions and repins the teams):
+#       python3 -c 'import re,json,glob; [open(f,"w",encoding="utf-8",newline="").write(re.sub(r"(entityTypesRead:\s*)(\[[^\]]*\])", lambda m: m.group(1)+json.dumps(json.loads(m.group(2))+[w for w in json.loads(re.search(r"entityTypesWrite:\s*(\[[^\]]*\])",t).group(1)) if w not in json.loads(m.group(2))]), t, count=1)) for f in sorted(glob.glob("bots/*/BOT.md")) for t in [open(f,encoding="utf-8",newline="").read()] if re.search(r"entityTypesWrite:\s*(\[[^\]]*\])",t)]'
+#     After the sweep, promote this check from WARN to FAIL.
 #
 # Usage: ./validate-manifest.sh [bot-name]
 
@@ -30,6 +41,24 @@ NC='\033[0m'
 PASS=0
 FAIL=0
 WARN=0
+TOTAL=0
+UNREADABLE_WRITES=0
+
+# Print the items of a frontmatter list field, one per line. Accepts an inline
+# JSON-style array (["a", "b"], the form every manifest uses today) or a
+# bracketed array spread over several lines.
+list_field() {
+  local key="$1" block line
+  block="$(cat)"
+  line="$(grep -m1 "^  ${key}:" <<< "$block")"
+  # sed never tests the end pattern on a range's first line, so an inline
+  # array must be taken from its own line or the range swallows the next key.
+  if [[ "$line" == *"]"* ]]; then
+    echo "$line"
+  else
+    sed -n "/^  ${key}:/,/\]/p" <<< "$block"
+  fi | tr '\n' ' ' | sed "s/.*${key}: *//" | tr -d '[]",' | tr ' ' '\n' | grep -v '^$'
+}
 
 validate_manifest() {
   local bot_name="$1"
@@ -159,6 +188,26 @@ validate_manifest() {
     fi
   done < <(echo "$frontmatter" | grep "ref:" | grep "tools/" | sed 's/.*ref: *//')
 
+  # entityTypesWrite must be a subset of entityTypesRead (issue #81), else the
+  # bot cannot read back what it writes. WARN until the sweep lands; see header.
+  if grep -q "^  entityTypesWrite:" <<< "$frontmatter"; then
+    local read_types unreadable
+    read_types=" $(list_field entityTypesRead <<< "$frontmatter" | tr '\n' ' ') "
+    unreadable=""
+    while IFS= read -r wtype; do
+      [ -n "$wtype" ] || continue
+      case "$read_types" in
+        *" $wtype "*) ;;
+        *) unreadable="${unreadable:+$unreadable }$wtype" ;;
+      esac
+    done < <(list_field entityTypesWrite <<< "$frontmatter")
+    if [ -n "$unreadable" ]; then
+      echo -e "  ${YELLOW}WARN${NC} writes entity types it cannot read back (add to entityTypesRead): $unreadable"
+      warnings=$((warnings + 1))
+      UNREADABLE_WRITES=$((UNREADABLE_WRITES + 1))
+    fi
+  fi
+
   # entityTypesWrite should follow _findings convention
   while IFS= read -r etype; do
     etype=$(echo "$etype" | tr -d '"' | tr -d ' ' | tr -d '-')
@@ -169,6 +218,7 @@ validate_manifest() {
   done < <(echo "$frontmatter" | sed -n '/entityTypesWrite/,/]/p' | grep -E "^\s*-" | sed 's/.*- *//')
 
   # Report
+  TOTAL=$((TOTAL + 1))
   if [ $errors -gt 0 ]; then
     echo -e "${RED}FAIL${NC} [$bot_name] $errors error(s), $warnings warning(s)"
     FAIL=$((FAIL + 1))
@@ -192,6 +242,7 @@ else
 fi
 
 echo ""
+echo "Read-back: $UNREADABLE_WRITES of $TOTAL manifests write entity types they cannot read (issue #81; warning until the sweep lands, see the header of this script)"
 echo "Results: $PASS passed, $WARN warnings, $FAIL failures"
 
 if [ $FAIL -gt 0 ]; then
