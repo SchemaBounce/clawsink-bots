@@ -25,6 +25,15 @@ BUMP_MARKER="$GIT_DIR_PATH/clawsink-bumped-paths"
 
 [ -f "$BUMP_MARKER" ] || exit 0
 
+# Another session's git process holds the index: warn rather than touch it,
+# and say exactly what to run once it is free.
+if [ -e "$GIT_DIR_PATH/index.lock" ]; then
+  echo -e "\033[33mWARN\033[0m index.lock is held; index not refreshed for: $(tr '\n' ' ' < "$BUMP_MARKER")"
+  echo "      when it is free run: git add -- $(tr '\n' ' ' < "$BUMP_MARKER")"
+  rm -f "$BUMP_MARKER"
+  exit 0
+fi
+
 repaired=0
 while IFS= read -r path; do
   [ -n "$path" ] || continue
