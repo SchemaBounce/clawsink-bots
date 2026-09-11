@@ -4,7 +4,7 @@ kind: Skill
 metadata:
   name: platform-awareness
   displayName: "Platform Awareness"
-  version: "1.6.0"
+  version: "1.7.1"
   description: "Foundational skill, tool discovery, inter-agent comms via A2A pattern, proactive behavior. All agents should have this."
   tags: ["platform", "foundational", "meta", "a2a", "discovery"]
   author: "schemabounce"
@@ -31,3 +31,4 @@ This skill is always active, it's baked into every agent's system prompt at acti
 - **Proactive behavior**: Act first, report after, don't ask for permission on obvious fixes
 - **Zone awareness**: Understand Zone 1 (read-only North Star), Zone 2 (shared domains), Zone 3 (private state)
 - **Console navigation**: look up real paths, deep links, and permission gates with `adl_find_ui_path` / `adl_get_ui_map` instead of recalling a breadcrumb that has moved
+- **Object links**: a tool result's `url` is a ready-made link to the file, workflow, task, or memory entry you just touched — hand it to the operator as a markdown link instead of an id
