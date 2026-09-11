@@ -108,5 +108,9 @@ Console navigation changes, and the paths you remember are probably wrong.
   one the lookup reports as disabled. Both make the product look broken.
 - **If the lookup finds nothing, say so.** A plausible invented path costs more
   than an honest miss.
+- **When a tool result includes `url`, show it to the operator as a markdown
+  link to the object you created** (the file, workflow, task, or memory entry
+  itself), instead of naming it by id. The link is already resolved for you;
+  do not rebuild one from a path plus an id.
 
 Full contract, deep links and a worked example: the `ui-navigation` skill.
