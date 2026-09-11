@@ -141,6 +141,17 @@ done
 
 # --- Phase 3: Validate changed skill prompts ---
 
+# A skill may only declare tools the runtime serves, and the allowlist it is
+# checked against is generated (tests/skills/known-tools.txt). Refuse to commit
+# a skill against a stale snapshot; the sync script skips when no core-api
+# checkout is reachable.
+if echo "$staged_files" | grep -qE "^(skills/|tests/skills/)"; then
+  if ! bash tests/skills/sync-known-tools.sh --check; then
+    echo -e "\033[31m✗ tests/skills/known-tools.txt is stale; run tests/skills/sync-known-tools.sh --write and stage it\033[0m"
+    exit 1
+  fi
+fi
+
 while IFS= read -r file; do
   if [[ "$file" == skills/*/prompt.md ]] && [ -f "$file" ]; then
     skill_name=$(echo "$file" | cut -d'/' -f2)

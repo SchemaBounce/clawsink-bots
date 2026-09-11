@@ -9,6 +9,12 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FAILURES=0
 
+echo "=== Validating Known Tools Snapshot (tests/skills/known-tools.txt) ==="
+if ! bash "$SCRIPT_DIR/skills/sync-known-tools.sh" --check; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
 echo "=== Validating Skills ==="
 if ! bash "$SCRIPT_DIR/skills/validate-format.sh"; then
   FAILURES=$((FAILURES + 1))

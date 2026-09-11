@@ -211,6 +211,14 @@ jobs:
             core-api/schemabounce-api/go.sum
             core-api/openclaw-runtime/go.sum
 
+      - name: Check skills known-tools snapshot against the runtime registry
+        working-directory: clawsink-bots
+        env:
+          CORE_API_DIR: ${{ github.workspace }}/core-api
+          CORE_API_REF: worktree
+          SB_REQUIRE_CORE_API: "1"
+        run: bash tests/skills/sync-known-tools.sh --check
+
       - name: Run pack-related marketplace tests
         working-directory: core-api/schemabounce-api
         run: go test ./internal/clawsink/... ./internal/mcp/...

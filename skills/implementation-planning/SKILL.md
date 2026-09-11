@@ -8,7 +8,7 @@ metadata:
   description: "Breaks tasks into file-level implementation plans with risk assessment and test strategy."
   tags: ["planning", "implementation", "risk-assessment", "engineering"]
 tools:
-  required: ["adl_query_records", "adl_read_memory", "adl_graph_query"]
+  required: ["adl_query_records", "adl_read_memory", "adl_search_graph"]
 data:
   consumesEntityTypes: ["gh_issues", "architecture_decisions"]
   producesEntityTypes: ["implementation_plans"]
