@@ -219,7 +219,7 @@ The rule is attached at grant time with `source: mcp` and, when the rule itself 
 
 > **VRBO and Airbnb account management are not available as direct API integrations.** Neither platform exposes a public host-management API. STR hosts who need to manage availability, pricing, and bookings across Airbnb, VRBO, and Booking.com should use `tools/lodgify`, which distributes to all three channels through Lodgify's built-in channel manager. The `tools/airbnb` server is limited to public listing search (competitor research, pricing benchmarks) and cannot touch host account data.
 
-## Available Servers (70 total)
+## Available Servers (71 total)
 
 ### Engineering & DevOps
 
@@ -275,6 +275,7 @@ The rule is attached at grant time with `source: mcp` and, when the rule itself 
 |--------|-------------|-----------|
 | [jira](jira/) | Jira project management and issue tracking | stdio |
 | [linear](linear/) | Linear issue tracking and project management | stdio |
+| [paperclip](paperclip/) | Paperclip agent company orchestration and issue tracking | stdio |
 | [asana](asana/) | Asana — tasks, projects, teams, portfolios | sse |
 | [todoist](todoist/) | Todoist — tasks, projects, labels | stdio (uvx) |
 

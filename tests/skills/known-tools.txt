@@ -5,7 +5,10 @@
 adl_add_edge
 adl_add_memory
 adl_bulk_upsert
+adl_call_remote_agent
+adl_checkout_task
 adl_consolidate_memory
+adl_create_goal
 adl_create_tasks
 adl_create_trigger
 adl_create_workflow
@@ -26,6 +29,7 @@ adl_get_agent_status
 adl_get_catalog_detail
 adl_get_context
 adl_get_data_stats
+adl_get_goal_context
 adl_get_graph_stats
 adl_get_namespace_stats
 adl_get_org_chart
@@ -45,6 +49,7 @@ adl_list_connectors
 adl_list_crystallization_candidates
 adl_list_entity_types
 adl_list_files
+adl_list_goals
 adl_list_mcp_connections
 adl_list_memory
 adl_list_pipeline_routes
@@ -58,6 +63,7 @@ adl_list_workflows
 adl_list_workspace_sinks
 adl_list_workspace_sources
 adl_pause_workflow
+adl_propose_agent
 adl_propose_crystallization
 adl_propose_pipeline_route
 adl_proxy_call
@@ -71,6 +77,7 @@ adl_read_file
 adl_read_memory
 adl_read_messages
 adl_read_tool_artifact
+adl_release_task
 adl_render_file
 adl_request_agent_route
 adl_request_escalation
