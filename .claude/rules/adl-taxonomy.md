@@ -66,7 +66,7 @@ The ADL system uses the word "skill" in three distinct ways. Each operates indep
 |---------|---------|-------------------|-------------------|--------------|-------------|
 | **Marketplace Skills** | `agent.skill_prompts` JSONB array | Embedded in SOUL.md at activation | `adl_invoke_skill` tool call | Marketplace authors (BOT.md) | Bot definition pages (Marketplace tab) |
 | **Crystallized Skills** | `adl_skills` + `adl_crystallization_candidates` tables | `adl_discover_skills` tool call | `adl_execute_skill` tool call (Tier 0/1 only) | Workspace users via approval flow | Automations > Functions tab |
-| **Tool Pack Tools** | Hardcoded Go functions in `tools_packs.go` + allowlist per agent | `adl_tool_search` tool call | `callPackTool` dispatch in provider tools | Platform team; per-agent allowlist | Marketplace > Tool Packs tab |
+| **Tool Pack Tools** | Hardcoded Go functions in `tools_packs.go`, available to every agent | `adl_tool_search` tool call promotes a match into the provider tool list | `callPackTool` dispatch in provider tools | Platform team; no per-agent access control | Marketplace > Tool Packs tab |
 
 ### Critical Rules
 
@@ -77,7 +77,7 @@ The ADL system uses the word "skill" in three distinct ways. Each operates indep
 - `adl_invoke_skill` activates a marketplace skill by loading its prompt and restricting available tools to those declared in its requirements.
 - `adl_execute_skill` runs a crystallized skill by calling its underlying PostgreSQL function or materialized view.
 - `adl_discover_skills` lists all crystallized skills available to the agent.
-- `adl_tool_search` discovers tool pack tools available to the agent via its hardcoded allowlist.
+- `adl_tool_search` discovers tool pack tools. All 133 pack tools are available to every agent; the ones not yet surfaced ship `SearchOnly` (discoverable, but absent from the provider tool list to save tokens). A search match promotes its tool into the tool list with its real schema starting at the next turn boundary.
 - Marketplace skills are inherited from the bot at activation; they can be added/removed/reordered post-deploy on the Agent's Skills tab.
 - Crystallized skills are auto-discovered patterns detected by the platform, never manually authored by users.
-- Tool pack tools are hardcoded platform capabilities, configured per-agent via an allowlist maintained by the workspace admin.
+- Tool pack tools are hardcoded platform capabilities available to every agent, always. There is no per-agent allowlist and `toolPacks[]` on a bot manifest is catalog/display metadata, not an access-control decision. Delivery is just in time: a pack tool is `SearchOnly` until `adl_tool_search` surfaces it, then it is promoted into the model's tool list.

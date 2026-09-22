@@ -24,6 +24,12 @@ This directory catalogs the 133 built-in deterministic tools available to all ag
 
 All 133 built-in tools are automatically available to every agent. No declaration, installation, or activation is required. Agents discover tools at runtime via `adl_tool_search` with domain keywords.
 
+Delivery is just in time to keep the per-turn cost near zero: a pack tool starts out
+discoverable through `adl_tool_search` but not listed in the model's per-turn tool set. When a
+search matches it, the runtime promotes that tool into the tool list, with its real parameter
+schema, starting at the next turn. This is why a bot's first turn on a topic is a search, then a
+call, rather than a call straight away.
+
 Bots may optionally list `toolPacks[]` in their `BOT.md` manifest for documentation purposes -- indicating which tool categories the bot is designed to use:
 
 ```yaml

@@ -74,7 +74,7 @@ When a user activates a bot from the marketplace, the platform uses the manifest
 |-------------|-------------------|
 | `SOUL.md` | Use it as the bot's identity on every run |
 | `skills[].ref` | Append each skill's `prompt.md` to the bot's instructions |
-| `toolPacks[].ref` | Make the declared native deterministic functions available to the bot |
+| `toolPacks[].ref` | Documents which tool categories the bot is designed to use. All 133 built-in tools are already available to every bot; this field has no effect on availability. |
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data — North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |
@@ -85,8 +85,8 @@ When a user activates a bot from the marketplace, the platform uses the manifest
 | `model.preferred` / `fallback` | Select the LLM the bot uses |
 
 **What this means for authors:**
-- Every field you declare gets acted on. Don't declare plugins, built-in tools, or MCP servers the bot doesn't actually use.
-- Tool packs are native platform functions, not external services. Declare only the packs the bot genuinely needs.
+- Every field you declare gets acted on, except `toolPacks[]`, which is documentation only. Don't declare plugins or MCP servers the bot doesn't actually use.
+- Tool packs are native platform functions, not external services. Every agent already has all 133 tools; list only the packs relevant to the bot's job so the "native functions" section on the marketplace page describes it accurately.
 - Data seeds are merged non-destructively — they won't overwrite existing workspace data.
 - Skills are composed in the order listed. SOUL.md always comes first.
 - MCP server `env` variables are resolved from workspace secrets — the manifest only declares the names, never the values.
@@ -99,7 +99,7 @@ When a user activates a team, the platform sets up all member bots as a coordina
 |-------------|-------------------|
 | `bots[].ref` | Activate each bot (full bot activation above) |
 | `plugins[]` (team-level) | Install shared plugins available to all bots in the team |
-| `toolPacks[]` (team-level) | Make shared native deterministic functions available to all bots in the team |
+| `toolPacks[]` (team-level) | Documents shared tool categories for all bots in the team. Has no effect on availability; all bots already have all 133 built-in tools. |
 | `mcpServers[]` (team-level) | Make shared MCP server tools available to all bots in the team |
 | `northStar.requiredKeys` | Prompt the user to fill in required business context before bots run |
 | `orgChart.roles` | Create the team's reporting hierarchy, visible in the org chart view |
@@ -107,7 +107,7 @@ When a user activates a team, the platform sets up all member bots as a coordina
 | `orgChart.escalation` | Set up escalation routing that overrides the global defaults |
 
 **What this means for authors:**
-- Team-level plugins, built-in tools, and MCP servers are shared — you don't need to redeclare them on every bot.
+- Team-level plugins and MCP servers are shared — you don't need to redeclare them on every bot. Built-in tools need no declaration at all: every bot already has all 133 of them.
 - Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
 - The org chart appears in the workspace console. Users can view reporting lines and escalation paths visually.
 - `northStar.requiredKeys` creates a setup checklist — the user must provide business context (mission, industry, etc.) before the team starts operating.
@@ -115,17 +115,24 @@ When a user activates a team, the platform sets up all member bots as a coordina
 
 ### Built-in Tools Availability
 
-When a bot or team references a built-in tool:
+All 133 built-in tools are available to every bot in every workspace, always. There is no
+per-bot allowlist and no activation step. `toolPacks[]` is catalog metadata, not an access grant:
 
 | You Provide | The Platform Will |
 |-------------|-------------------|
-| `toolPacks[].ref` | Register the declared pack's native deterministic functions for the bot or team |
+| `toolPacks[].ref` | Render the referenced pack's "native functions" section on the bot or team marketplace page. Does not change which tools the bot can call. |
 | `PACK.md` `tools[]` | Render the pack's available function catalog in marketplace surfaces |
+
+Delivery is just in time, independent of what a manifest declares: a tool starts out
+discoverable through `adl_tool_search` but absent from the model's per-turn tool list (this
+keeps idle token cost near zero). A search match promotes that tool into the tool list, with
+its real parameter schema, starting at the next turn.
 
 **What this means for authors:**
 - Tool packs are native runtime functions. They do not provision credentials, open sockets, or start external processes.
 - Use built-in tools for deterministic computation and data shaping. Use MCP servers for external APIs and connected systems.
 - Tool packs complement skills and MCP servers. They do not replace either surface.
+- Declaring `toolPacks[]` is about accuracy on the marketplace page, not about unlocking tools. Leaving it empty does not remove any tool from the bot.
 
 ### MCP Server Deployment
 
