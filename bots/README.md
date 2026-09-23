@@ -405,7 +405,7 @@ The platform derives a readiness level from step completion:
 
 ### ADL Integration
 
-Setup status is stored as a `bot_setup_status` entity in the ADL. Bots can read their own setup status on each run to adjust behavior (skip actions that require missing connections, report setup issues in their run report). The platform-optimizer bot reads setup status across all bots to identify systematic gaps and recommend fixes.
+Setup status is stored as a `bot_setup_status` entity in the ADL. Bots can read their own setup status on each run to adjust behavior (skip actions that require missing connections, leave blockers and setup gaps on the `bot_setup_status` record). The platform-optimizer bot reads setup status across all bots to identify systematic gaps and recommend fixes.
 
 ### UI Contract
 
@@ -464,7 +464,7 @@ setup:
 
 ## Goals Section
 
-The `goals:` section declares what success looks like for this bot. Goals are named, measurable, and the bot self-reports progress against them in a structured `run_report` each execution.
+The `goals:` section declares what success looks like for this bot. Goals are named, measurable, and at deploy the platform offers each one as a standing goal that the new agent stewards.
 
 ### Goal Categories
 
@@ -487,9 +487,14 @@ The `goals:` section declares what success looks like for this bot. Goals are na
 
 Goals with `feedback.enabled: true` render action buttons on entity records in the UI. Users can confirm or reject bot output (e.g., "Confirmed fraud" / "Not fraud"). Feedback is stored on the entity record and read by the bot on subsequent runs to improve `rate`-type metrics.
 
-### Run Reports
+### How the Platform Tracks Goals
 
-Every bot writes a `run_report` entity as its last action each run. The run report includes goal status, setup issues, blockers, and an overall productivity assessment. See [shared/output-format.md](../shared/output-format.md) for the full schema.
+At deploy, the platform offers each `goals:` entry as a standing goal stewarded by the new agent. What happens next depends on the metric shape:
+
+- **Tracked automatically:** a `count` metric with an `entity` and a `target.period` of `daily`, `weekly`, `monthly`, or `per_run`. The platform declares an outcome metric over that entity type and reads it on every run boundary and again every hour, so progress updates even between scheduled runs.
+- **Listed, not tracked yet:** `rate`, `threshold`, and `boolean` metrics, and any goal with `target.period: quarterly`. These still render on the bot's marketplace page, but the platform does not compute a live verdict for them.
+
+The agent gets a goal brief on each scheduled run summarizing standing-goal status, and the platform wakes the agent outside its schedule when a tracked goal goes off track. See [shared/output-format.md](../shared/output-format.md) for how a bot's own output relates to its goals.
 
 ### ADL Integration
 
@@ -910,6 +915,8 @@ The `provider` field must match the alias's provider (e.g. `sonnet_latest` requi
 45. `goals[]` with `feedback.enabled: true` must have at least 2 `feedback.actions`
 46. At least one `goals[]` entry with `category: primary` is required if `goals:` is present
 
+Of the shapes rules 40-46 allow, only `count` metrics with `target.period` of `daily`, `weekly`, `monthly`, or `per_run` are tracked automatically today (see "How the Platform Tracks Goals" above); every other shape still passes validation and lists on the bot page.
+
 ## What the Platform Does
 
 | You Provide | The Platform Will |
@@ -930,7 +937,7 @@ The `provider` field must match the alias's provider (e.g. `sonnet_latest` requi
 | `agents/*.md` | Make sub-agents available for the bot to spawn during its runs |
 | `model.preferred` / `fallback` | Select the LLM the bot uses |
 | `setup.steps` | Render a setup modal with typed validation; derive readiness level; write `bot_setup_status` to ADL |
-| `goals` | Track goal achievement from run reports; compute `bot_goal_health`; render success dashboard |
+| `goals` | Offer each goal as a standing goal at deploy; track `count`-shaped goals automatically via outcome metric snapshots; compute `bot_goal_health`; render success dashboard |
 
 Every field you declare gets acted on. Don't declare plugins or MCP servers the bot doesn't actually use. Data seeds are merged non-destructively. Skills are composed in the order listed.
 

@@ -40,63 +40,13 @@ All bots write structured findings using this JSON schema. The OpenClaw runtime 
 }
 ```
 
-## Run Report Schema
+## How Bots Report Progress
 
-Every bot writes a `run_report` entity as its last action each run. This structured self-assessment enables goal tracking, setup issue reporting, and productivity measurement. The platform aggregates run reports into `bot_goal_health` entity records.
+Bots do not write a separate end-of-run report record. Instead, a bot's last action each run should make sure its work products exist as the entity types its own goals count. If a goal's metric is `{ type: count, entity: blog_drafts }`, the bot's job each run is to produce `blog_drafts` records when there is work to do, not to separately narrate that it did.
 
-```json
-{
-  "entity_type": "run_report",
-  "data": {
-    "run_id": "string (matches agent_runs primary key)",
-    "agent_id": "string",
-    "timestamp": "ISO-8601",
-    "duration_ms": 45000,
-    "goals": [
-      {
-        "name": "string (matches goals[].name from BOT.md)",
-        "status": "achieved | partial | missed | blocked | not_applicable",
-        "value": "number (measured value, optional)",
-        "target": "string (human-readable target, e.g. '>0')",
-        "context": "string (<200 chars, what happened)",
-        "reason": "string (<200 chars, why blocked/missed, optional)"
-      }
-    ],
-    "setup_issues": [
-      {
-        "step_id": "string (matches setup.steps[].id from BOT.md)",
-        "impact": "string (<200 chars, what this missing step prevented)"
-      }
-    ],
-    "blockers": [
-      {
-        "type": "missing_data | dependency_down | config_error | permission_denied",
-        "description": "string (<200 chars)"
-      }
-    ],
-    "overall": "productive | limited | idle | blocked"
-  }
-}
-```
+The platform reads goal progress from those entity records directly. For a `count` metric with a `target.period` of `daily`, `weekly`, `monthly`, or `per_run`, the platform declares an outcome metric over the entity type and reads it on every run boundary and again every hour, storing the result as an `outcome_metric_snapshot`. `rate`, `threshold`, `boolean`, and `quarterly`-period goals are listed on the bot's marketplace page but are not tracked this way yet. See [bots/README.md](../bots/README.md) "How the Platform Tracks Goals" for the full picture.
 
-### Overall Status Definitions
-
-| Status | Meaning | Indicates |
-|--------|---------|-----------|
-| `productive` | Achieved at least one primary goal | Bot is working as intended |
-| `limited` | Ran but couldn't achieve primary goals | Setup or data issues need attention |
-| `idle` | No work to do (no new events/data since last run) | Normal, but track frequency |
-| `blocked` | Couldn't run meaningfully | Action needed — check setup issues and blockers |
-
-### Goal Status Values
-
-| Status | Meaning |
-|--------|---------|
-| `achieved` | Goal target was met or exceeded |
-| `partial` | Some progress toward goal but target not met |
-| `missed` | Had the opportunity but didn't meet the target |
-| `blocked` | Could not attempt due to missing setup or dependency |
-| `not_applicable` | Goal doesn't apply this run (e.g., no feedback data yet for rate metrics) |
+Blockers and incomplete setup steps still need somewhere to land. Write them to the existing `bot_setup_status` entity (see [bots/README.md](../bots/README.md) "Setup Instructions") rather than to a dedicated report record. Monitoring bots such as `platform-optimizer` read `bot_setup_status` and `outcome_metric_snapshot` to find bots that are blocked or off track.
 
 ## Memory Update Schema
 

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -36,8 +36,8 @@ agent:
     - Cross-reference dq_findings from data-quality-monitor with entity type growth rates to identify schema drift
     - ALWAYS read bot_setup_status records to identify bots with incomplete setup, recommend specific setup steps that would improve bot effectiveness
     - ALWAYS read bot_goal_health records to identify underperforming bots, correlate poor goal achievement with missing setup steps or configuration issues
-    - ALWAYS read run_report records to detect bots reporting "blocked" or "limited" overall status. These need immediate attention
-    - When a bot consistently reports setup_issues in run_reports, write an opt_recommendation with the specific step_id and estimated impact of completing that step
+    - ALWAYS read outcome_metric_snapshot records to detect bots whose tracked goals are off track or stalled. These need immediate attention
+    - When a bot's outcome metric snapshots show a goal stalled or in reverse, cross-check its bot_setup_status record for an incomplete step, and write an opt_recommendation with the specific step_id and estimated impact of completing that step
     - Cap your own token usage: quick health checks under 15,000 tokens; daily analysis under 45,000 tokens
   toolInstructions: |
     ## Tool Usage: Minimal Calls
@@ -90,7 +90,7 @@ messaging:
     - { type: "finding", to: ["mentor-coach"], when: "agent efficiency recommendation that affects team coaching priorities" }
     - { type: "finding", to: ["data-engineer"], when: "pipeline optimization recommendation or data freshness concern" }
 data:
-  entityTypesRead: ["agent_runs", "dq_findings", "dq_scores", "pipeline_status", "health_reports", "infra_metrics", "team_health_reports", "mentor_findings", "bot_setup_status", "bot_goal_health", "run_report"]
+  entityTypesRead: ["agent_runs", "dq_findings", "dq_scores", "pipeline_status", "health_reports", "infra_metrics", "team_health_reports", "mentor_findings", "bot_setup_status", "bot_goal_health", "outcome_metric_snapshot"]
   entityTypesWrite: ["opt_findings", "opt_alerts", "opt_recommendations", "platform_health_reports"]
   memoryNamespaces: ["performance_baselines", "crystallization_tracker", "cost_metrics", "improvement_log"]
 zones:
