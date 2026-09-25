@@ -48,6 +48,13 @@ while IFS= read -r file; do
   fi
 done <<< "$staged_files"
 
+# Prompt instructions are executable contracts too. Existing known drift is
+# pinned by exact-content fingerprint; any changed or new unsupported
+# adl_query_records shape must be reviewed before commit.
+if echo "$staged_files" | grep -qE "^(bots/|skills/|shared/platform-prompts/|tests/bots/)"; then
+  python3 tests/bots/audit-prompt-tool-contracts.py
+fi
+
 if [ ${#changed_bots[@]} -eq 0 ] && ! echo "$staged_files" | grep -q "^skills/"; then
   exit 0
 fi

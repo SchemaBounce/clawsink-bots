@@ -1,0 +1,834 @@
+{
+  "schemaVersion": 1,
+  "contract": {
+    "tool": "adl_query_records",
+    "supported": "one entity_type, exact data-field equality filters, bounded limit"
+  },
+  "findings": [
+    {
+      "fingerprint": "cf632d94eac6b7f82ee5ee28919441f281d4b646cce925890c5e46c282a7c7aa",
+      "path": "bots/accountant/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f1ae513fd253c2e1a6fecd9654ca6177bb9e1c5c8bc34dca8717285edabb58e7",
+      "path": "bots/accountant/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7fa443e1e89fbc10cc5b181e79d98727e649ff0c9507e79583e4b0657f065f84",
+      "path": "bots/anomaly-detector/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d508f6a5c66144c50b75ac9cf4ae898e0ca91eb87f07732996c5e64f18a5d074",
+      "path": "bots/anomaly-detector/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7d46bde01898cf0641fba6ba06a4f8227684952ff9c2f7a54097741bfa45c447",
+      "path": "bots/anomaly-detector/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f64d90563e00e7bad72b700de2a11edfd8708a4d4a9ef259de1fcf82bbe55363",
+      "path": "bots/api-tester/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "bcc15ba6932bad0b7d1e13353e55829a968d498f50d67402934f05cff1e7aa3f",
+      "path": "bots/brand-guardian/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7b7aae87a4c8381f9aab2968df151010e09c00cbb9785f9ea9eec5bd8a3b1d2e",
+      "path": "bots/brand-guardian/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "b0c2f98c8e35a4e000992edf72f377b94ff584d34e270610d1a9944134769d79",
+      "path": "bots/bug-triage/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "b5d2c57e77564779154552bd175efa8941064ba59f6135d3a7d8188b92663d77",
+      "path": "bots/bug-triage/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "bae9eff2c96eb7812a922f54c5dbc9d9dce125093d67dcc8a01450ea302ddc30",
+      "path": "bots/bug-triage/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "17770de2d6e32d8901c648323e644be5357f3a9190a6a86e50fe22e214beceb4",
+      "path": "bots/business-analyst/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "2c7b24f98d670f84aa5fc61073f68bd06e07f85defc1bd22595f24c6e962ccb0",
+      "path": "bots/business-analyst/SOUL.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "15a1ccbd51028bf76ba01b4ba54ef5907ebfabf7784fb96c52de3c4e2e805ab2",
+      "path": "bots/business-analyst/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "980250b37240dbd8d24aa091724eb3426ce75ac797a4687f4daaff9feb165530",
+      "path": "bots/canon-auditor/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "42a41e681aeb6304fcbe1a8f540601c467472bba280b306a36a6c290070dcd47",
+      "path": "bots/churn-predictor/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "9e518fee53cd2b334dcc9905ac618b0238972ff4c2ee9dca08690ff38d341ce2",
+      "path": "bots/churn-predictor/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "dd34c525f63537e4d221c7fd9e6409b1a06cabe7c53943d5b778425973dfb06d",
+      "path": "bots/code-reviewer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "8216d805e2f3a17009ec283f424b04695c95f7d212e5901b2176a2cb9cc2eceb",
+      "path": "bots/code-reviewer/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "098a1d9050ae8f9b590005052a2b50c2184f925e08414167daac82d0e2d7ae38",
+      "path": "bots/coding-agent/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "1514be25cd78dbfcb8b216fc6a1222aaa977a520dcb93ad9ae1f64eb76f5340e",
+      "path": "bots/coding-agent/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "29cdd2966bd79164fbfdb18ee64ece27f392e374f7d2c88c0e3f560fd5f013e2",
+      "path": "bots/compliance-auditor/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "6ff47ff3f11807d310e2a8f8188bb26e246801099c3203c1803a07a92d4224a7",
+      "path": "bots/compliance-auditor/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "254b8651cb467974db62ca32643d930d36e050831bdc7d73b618dbef1fe12d37",
+      "path": "bots/compliance-auditor/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "718ba5e748fd0f2575ab18928bf326d81e22317af66f2ed01fe127835a37f9b9",
+      "path": "bots/content-scheduler/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "889753ad8e05b5f8cccd7e198568acb50f1222e81037a440db2fe774c2b01aad",
+      "path": "bots/content-scheduler/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "177a36b1dad569ee40aa5473dd48e3a0f8cdcd8c2a6af67e28afb7bad21382fe",
+      "path": "bots/content-scheduler/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "04afc96c5405b685a4962e908547a60fe8826393677acbc10cd32d54cd013c7d",
+      "path": "bots/customer-onboarding/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "b3d3d8d52e6f212c374382374fe698c9b2feceaa1927e6e3707b4ff55890e36d",
+      "path": "bots/customer-onboarding/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "6bf1efcc34d2e69243898c1892ab088d6cae2b81e968f629a024a75060802322",
+      "path": "bots/customer-onboarding/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "722fc5544449d28e949c4bc3c5ec4a1a6df99010bd4efb0c4029a78fdfcfe6eb",
+      "path": "bots/customer-support/BOT.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "a3f2054dcf9c2c2d2c2caccc07eb8882194c60be93282dfd8ee87811ffca9d7a",
+      "path": "bots/customer-support/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "29348c449baf084de4bb5943816144fcb3297130fbd7798bafa8ae662e655762",
+      "path": "bots/customer-support/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d221fdf33a442bc5af935428aae5d0946552404248053f4dd42cfb203b6e2c1b",
+      "path": "bots/customer-support/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7a4124ce8f828ae15bef5803f27f1c4fe0ba8d0b487c0fa409dfe2567d8a8aca",
+      "path": "bots/data-engineer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "97eed7320ce979fd90b956001520f971ab6789f185ad78b01799044c73c22c75",
+      "path": "bots/data-engineer/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "883e727775751d80b56fa4c9c9af794d10619976469e0d41678635262fd02f15",
+      "path": "bots/data-engineer/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ec7289ea5b256f8c793618478e073e076be7bf2e383eb167b668211053eb1830",
+      "path": "bots/data-quality-monitor/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "50b9e1cb141be6f6b3ab7db375965175a35a4ea6d8bbe693eda44a26ce6195fe",
+      "path": "bots/data-quality-monitor/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "c7fd70718ab374f447c880a4611045333d37373361f22d3c0215a6f9904d5e48",
+      "path": "bots/data-quality-monitor/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "da63c0c269ab3ef20e1bed71721cbd50786623bd2c5a87cc8cd393fa4630b239",
+      "path": "bots/devops-automator/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "dd836f4c84bbfda8237492abe824ee27ef9a87424ccfa01e7f4dfe0a4b92dc7d",
+      "path": "bots/devops-automator/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "03121e93211f081e8950c9ab110cf114ec81d617f2b151a93c750346b343aee3",
+      "path": "bots/devrel/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "591c37022d44284fad5a50816b06e2e4d712a1c9b2c1a15de5dad9b6884fa410",
+      "path": "bots/devrel/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ade72f108791ca03073b6193e172f41a193b1f376a7988b7c9b77444b64f8552",
+      "path": "bots/devrel/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "c93b3672f875dcd88a6f1b8339464fb1ad473d5832a0e43daef7d693c5177e9d",
+      "path": "bots/documentation-writer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "79ce42ab117f239d03840f27b7bd76148b5fba7ebe4a897d968a1d684e642b12",
+      "path": "bots/executive-assistant/BOT.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "9ebc62cc4b2b4bd0a6944d09eb079834bd6a3eec992cdfdffaa6e4bc18cbe3d8",
+      "path": "bots/executive-assistant/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "faaa7ba20ec9d726dc7997637614e065697c31185cc89dbdc18680b00845c04f",
+      "path": "bots/executive-assistant/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "4cec7540e6b8519dbe8900d623c132961131e4acce9044ee047ff156379062a2",
+      "path": "bots/executive-assistant/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7f7a2dcea32e43d2f7c7ee531530325b04e1d02ab46740f318f726f2527c0aa5",
+      "path": "bots/executive-reporter/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f009bbee8b6b880c5d19ccc856a75dff543e554727ca15d2a5b0a358ef65dbb6",
+      "path": "bots/experiment-tracker/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "29c6949003793db1cacd7b91ee2cae952d41e5797004a5acfc14a58aa4830535",
+      "path": "bots/experiment-tracker/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "6cd8083b1616325e7ba882a047e118a58ca1c2cef9e99d659e4eb9585b48fd75",
+      "path": "bots/fraud-detector/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "311af324bb1fa38c335509dbe0a8da7fc6a2a266992037d012ff96085553d919",
+      "path": "bots/fraud-detector/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ded907db23a757515aeacfb46a931dbe30c252b078cfe32d38f24b399762d09e",
+      "path": "bots/growth-hacker/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "92b7d45d773024e61a3175aaeeef646789aecd02b6d18191eeec1f708386b590",
+      "path": "bots/growth-hacker/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d53a1dbacef9b3bc9ccf0d80365b6b864f0b4f3340f92f8f3dff344e2268fcd0",
+      "path": "bots/growth-hacker/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "b0d1e4abe7b7286595a85530126c239f97759c4b4cbaa8eb415c53d627ea81f6",
+      "path": "bots/hr-onboarding/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "e5045a2f44783041a0f14dd0d1a79e2bbdf6673585f2e6edf5501542f9627818",
+      "path": "bots/hr-onboarding/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "cec62306ff75cd41b4064b750371f39462c42f91ddd279ddb615498bc072f001",
+      "path": "bots/hr-onboarding/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "3ab04bf09dd6c1ad83bf875769d93bdd1e64e4bc517e71d20a98116bfdc5eb20",
+      "path": "bots/infrastructure-reporter/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "68e92ac8c883879c15412e047b745028dc2ee984e4964f5b57919443533b05df",
+      "path": "bots/infrastructure-reporter/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ee6f8b826250232d99239d3908625ee33d3802478f2addaffc38885db720c77c",
+      "path": "bots/inventory-alert/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "62a54227df7113fa1d5d54f6d8221c8c1dda69c15b6640902340d45330b10d8a",
+      "path": "bots/inventory-alert/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "57026cec13f547d88ad1406780304c1fc9ffd9af5c51550597b72399cc5de877",
+      "path": "bots/inventory-manager/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "74c8cd163068bbdf814d55f16d7ccda26c21e58546e2d57b0d88a1d59aa8167e",
+      "path": "bots/inventory-manager/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "1abe6225cf29c8ac419f4352b4f881992a034738d6c0de9a163a9b7cb589bc18",
+      "path": "bots/inventory-manager/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "792e8f366da1c7fd9d45dc7b75ad0a1bd7f35f4bf2bb08d57617d7b9cc1709d5",
+      "path": "bots/knowledge-base-curator/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "0ec866afc2e1de75b3231c2ffd0ea62d1dc7b77838cae25858021be21ce525ad",
+      "path": "bots/knowledge-base-curator/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "da897520369e26b7d4a181e8cd0b19ca3c7027b3ed15468f429cd48d65669ad6",
+      "path": "bots/knowledge-base-curator/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "5f96b8013bde0be912f8646d49cb949533c6bdce4379363b5df22b51df64b562",
+      "path": "bots/lead-responder/BOT.md",
+      "rule": "query_records_query_option"
+    },
+    {
+      "fingerprint": "70d20ada73eb12934ecce7b488e2e99388adc3d995d53f6b7946a6d3f9de335c",
+      "path": "bots/lead-responder/BOT.md",
+      "rule": "query_records_query_option"
+    },
+    {
+      "fingerprint": "e730411adca21e2d8ab7019e4a3b51cb32d79a6d43e081e2bbcfcbd21c8a203e",
+      "path": "bots/lead-responder/SOUL.md",
+      "rule": "query_records_query_option"
+    },
+    {
+      "fingerprint": "e2b0355b392f85a1136ffe7a4e66a73fc728d0f8876894e0afcaaea719b41af4",
+      "path": "bots/lead-responder/TOOLS.md",
+      "rule": "query_records_query_option"
+    },
+    {
+      "fingerprint": "1ec6bf599514ce382b1c44a224be44999e066f326d32cde8c4e92e8a4a231b3c",
+      "path": "bots/lead-responder/TOOLS.md",
+      "rule": "query_records_query_option"
+    },
+    {
+      "fingerprint": "d6333e751d98e3c90db6d8129710a2c2f4d96b6d5dd48640e5919e18227909e4",
+      "path": "bots/legal-compliance/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ca54a616ccf0da968b49831e2ac6c8183d61673adf8408f9bb83d7f2dd7b3742",
+      "path": "bots/legal-compliance/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "965c7ebecedbf9de8916a8415302d8c1392c55cfc71cb1048b5975b88ed79c54",
+      "path": "bots/market-intelligence/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "cf7cbae29b6f0747b49b535b117706e3e6d81ac0e69defc913560c893b0e6401",
+      "path": "bots/market-intelligence/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "a25cdecf67c922c66db119875fa495e3c0aa048bd692d65ec1493e24b8cd1e1a",
+      "path": "bots/marketing-growth/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "74af1811cb5c42c3ab5e0a6a250acef4805ee06c988c07d7465036b412e89788",
+      "path": "bots/marketing-growth/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "b38cabefee7cd25425308618ff53f1b09eb33c5955db17dc1be32c5d50a0d3ca",
+      "path": "bots/marketing-growth/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f1fba7be4f3bef726322d85fce1247996818c4c502befd54a69e6a397efd9158",
+      "path": "bots/marketing-growth/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "8ba10592016fd149785892a8ef78659b0e43d027f736859b0263cd4bb81b1067",
+      "path": "bots/meeting-summarizer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "622fb0a3428367aa2d067ab60abd2e1fe0bdb347689ed0f30bef1dcf18f0a838",
+      "path": "bots/meeting-summarizer/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7c25f9faf7615b938dbf3308753f1e70dbd9b51eb5b4970a9a4f95108ed1313b",
+      "path": "bots/meeting-summarizer/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "8dbf74218a961bc0b0cb20876d6c93825eeba20b407ac29940cf7eb643479c85",
+      "path": "bots/mentor-coach/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "a0c4274864fb1aa388a3b0e1e50c2563afd2d4035fbb0994d7140351a3f9ea6b",
+      "path": "bots/mentor-coach/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "2377f1b43b51168432ee7c084012d9d03640f5af846cf89d03581998a99782a7",
+      "path": "bots/mentor-coach/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "c69d08aaef3d015cc348f232689946e8a1af44a6f3afc6ebfc50dd53dd31c016",
+      "path": "bots/order-fulfillment/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "682129181439f9ce9b22b8159fd97829cf8b27643830a29cab4fece4c876a871",
+      "path": "bots/order-fulfillment/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "22502742e3fbae178c266d6677b8ccc4f4201db47f2947ddc039dd26d049589a",
+      "path": "bots/platform-optimizer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ac31bd21b0ce0690c3acb3bcea2df016dbccedb3f6edd840fbf1e62c2bbce831",
+      "path": "bots/platform-optimizer/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "80b4d8cc6cde3da4f6c0e2ed0050991408f9e67a23fadf9a2d357e5b440c3dcb",
+      "path": "bots/platform-optimizer/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d4eec686df67825e875e99b70db017d12ab77b9bf8085ec28a5d6fb854fa15df",
+      "path": "bots/price-optimizer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "1bb95182cd711038f34cf35c19249bcb474bd6c9c69252765cc0f9c4d823d91b",
+      "path": "bots/price-optimizer/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "eeaf480c1f1c41501a41dd8cfd3e217b0e294268f59b9f11c6ca585ae3eea1d5",
+      "path": "bots/product-owner/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "8f0a702cbbb1df72b94e8bc78f6202c7e5a79e421e9a85ba6b49a253563857e4",
+      "path": "bots/product-owner/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d4302ae7abbac78d85fc17a2758f1ca7708ee8e23ab5c7e825eeacc0f07e2743",
+      "path": "bots/product-owner/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "a7135979a22e4631ea9614419bbbee76972fad52860cd89925f9f92300a06d36",
+      "path": "bots/release-manager/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f4e4aa7edb0be4f1313e6233788265c227c9b62fc7c63c208199aade574bd169",
+      "path": "bots/release-manager/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "0304231c687400073f389c6c1f545b9f1beae901604df64ff133a457637d5c4b",
+      "path": "bots/release-manager/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7e58d0c3128b4aca925890d680f5c9ab01247fd1e5a8a1c7d9a896bf8c7720c9",
+      "path": "bots/release-notes-writer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d27a33abe8c79582b1173fed54236a514f26d6c16c39c9c4b46d5765703f743c",
+      "path": "bots/release-notes-writer/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "6a43ed1023457b95112be4bdf5930ebc019d67ab66788f49414391188d17dcc2",
+      "path": "bots/revenue-analyst/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "92488aa29d95f57dc5e8f087b0d1daf4ed982eff66974fd9ae6054a66d526876",
+      "path": "bots/revenue-analyst/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "34b5f4dde7770545c85f6098d6afed089a02afa6a1577772cc8805cc6bcbb4ef",
+      "path": "bots/revops/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "62f18ddc0c93a0b2cc163ea01da7097a9e0746002882fd0d92f8da279508d331",
+      "path": "bots/revops/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "09144e2d9bbab4bba604de53b03829a9c15a521ce049f20ea37422d1f79e6460",
+      "path": "bots/revops/SOUL.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "3f3687be83e00472be0b2fbd6d860af0c3b0ff171b47d021d33a16bdbc540ac7",
+      "path": "bots/sales-pipeline/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "879e05d6d0e089fef642d8ae9d1fa26cb17005f2397242a1d7e4f70457320f83",
+      "path": "bots/security-agent/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "fc03ef1735dd96ec08d2814f739ab436b338240880b205f7fd4ca4978584c14d",
+      "path": "bots/security-agent/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ed260bd52acbef30a842b403cedc5feb6597cdb07655486dbd38e95509b4ded1",
+      "path": "bots/security-agent/SOUL.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "fa8c15a3ae5ba216d766efd9426b54dc3660d8e6e5e31d1abc987e51e0decae3",
+      "path": "bots/ship-reporter/SOUL.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "f1aaecb6d99583b3f7c015d57671fa8303414c639c9e80287382b5e337204180",
+      "path": "bots/shipping-tracker/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "90fc0f5dd76b653f36b9ad073e40460ee25734086a91d0eae6c0f03510bf5812",
+      "path": "bots/shipping-tracker/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "8a293cfd5f6ee35f1681c933e7f18906e38d1b708276f40bee326b4ec165cb55",
+      "path": "bots/shipping-tracker/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d4eacde6b25d0d10e7067ac0c6132333e36cf8c51aea7acddaab6498218f647f",
+      "path": "bots/social-media-manager/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d5d568998650b679bf5717d3cec3000ed582de4a6838c33cdc1fa08b35d3920d",
+      "path": "bots/social-media-monitor/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f1278ccc47ea6aa965d9d05bdc985d6194abe0da63f86654f9d64678540559aa",
+      "path": "bots/social-media-monitor/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "88838b9dd34bf2df2c2cca1b245352a2e0e61f16b49ec5ffe5e4a52f13a51b1e",
+      "path": "bots/social-media-monitor/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "083d4536defb4ee2ddca962d59e4ad54a837452d3c0c42b0c7f69f2b259957db",
+      "path": "bots/social-media-strategist/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7c1c93a4c960f4a47ed7ad6a84b0c6d985c2d935e7cd67bb85401c2ab3d1deac",
+      "path": "bots/social-media-strategist/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "5fd255f6165ec9b3e76fd1bf50bc887c4d130648d9d62f3a6b202b6707b5a691",
+      "path": "bots/social-media-strategist/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "fb79c7e216b42a1e82d6edc8e81daf5abbd5c524aac477a00410b9eb02b3aade",
+      "path": "bots/social-media-strategist/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "467c6a787bb9aa120c47d6b79668f82c62d74a71e1f8c1fc6f90ddeabb3246ef",
+      "path": "bots/software-architect/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "30fbd3039da5186a695b6d238898646c441d9e51a641d246d7f47269088f3a0e",
+      "path": "bots/software-architect/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "cc6bf556229d7fd5c92e4ca5dfc99c523af33db13a0afbb98079e6318de1e25a",
+      "path": "bots/sprint-planner/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "45c18731c5cd229a91335117641fa9a816588cec68d22927f5bb1f1fcf2d3637",
+      "path": "bots/sprint-planner/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "06f7a375ced23ffcf5bb4dfdc78ac9e3f98ad42e935ac7d6c0ec4637c761d538",
+      "path": "bots/sprint-planner/SOUL.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "86c757a0117e37e1a32255b42f495b898b3421d82e1a9db6a6c1182940a716d8",
+      "path": "bots/sre-devops/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f9ad99e3f02851144e14fa381f7a29a0faa15fb1f384e2b5d5f55b976b2d13c2",
+      "path": "bots/sre-devops/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "d1e887f24581399fdb7d4ceb6087040fa592e2ff88c23a00ef328588939433d9",
+      "path": "bots/sre-devops/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "2fb0e2a5ea952559415a7dc67bb42452a6a5f27174a7cc96e891813cf3015405",
+      "path": "bots/str-channel-manager/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "8c2f4118b32e23eed992161d86a6307a7e27299bf697ecc2b039638fd0f196e4",
+      "path": "bots/str-channel-manager/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "018feb8590869512b59b5749d3f2efb909abcddaca02f99bb90002f9aa51eda8",
+      "path": "bots/str-guest-communicator/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "57c57c1b2622f9a3634fa9506f38c26f8d4717334610fe8d0c6f1e76ab675722",
+      "path": "bots/str-guest-communicator/TOOLS.md",
+      "rule": "query_records_query_option"
+    },
+    {
+      "fingerprint": "32526b30d9b8561f2bafa68d2fba1ee6a01de895296e0010002ea2ce508f4b26",
+      "path": "bots/str-pricing-optimizer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "b7703e30956895302eaf6336e2f3acca479fa59ab291f49c2878db6f32c2d74f",
+      "path": "bots/str-pricing-optimizer/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "f48efb02ce4144b13bcf190394d0e5dbbb9b2c83a8e850680cfde3da6788c55f",
+      "path": "bots/str-pricing-optimizer/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "140c9b2e9b50c181d88daa2489e91fd3324394e47842529d2f8759495126f2b3",
+      "path": "bots/str-property-manager/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "389adac2d72815e401490d2d746b85f8225da037c4beaad43a956fcb55b22934",
+      "path": "bots/str-property-manager/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "cd750698c2b52f226d6b6d251b9263fd0546c3d5691cb8b95d79858a121cbeca",
+      "path": "bots/str-property-marketer/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "b502e43ea9ddd42218674cb843a0ff73d62a46f10efb5c435438ab3c6dbfedc1",
+      "path": "bots/str-property-marketer/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "7fb8f6f26661d21665e34454ef758f5ef64ec83587e9c982e49c0c7e829b4994",
+      "path": "bots/str-review-manager/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "0d87a51ec173a2d99a86f3af9d30ff956c59c2ff429ee7ef80b52b8123521bb2",
+      "path": "bots/str-turnover-coordinator/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "22caae83ceef473935347e998d1a950475a7f6f3f829a9271b395cdef92d4f27",
+      "path": "bots/tech-debt-tracker/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ef3b6cb27b49c4d5b9a2062f2d39f93b3649e2479e7ed010bbab1051ab97919e",
+      "path": "bots/tech-debt-tracker/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "88113b03e4d6e7b4427b7bba8b7ac61b6d7a6db50afda0c52eb5b495b838c019",
+      "path": "bots/tech-debt-tracker/SOUL.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "e9527ae62ce8703d6dbec6dd369a5cc0f3d66a411f664121271d8a29adccc0fe",
+      "path": "bots/tech-debt-tracker/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "fedb5dbd214d6ab89aa5b6e33dda8e7a0103193a2118d87ac18d1ed314636686",
+      "path": "bots/uptime-manager/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "873033d13e763a575e3eca720305d00bfad3ddcaf9b9e434ae13c4cd9c5e1962",
+      "path": "bots/uptime-manager/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "032eb3e594395fa30295d14346f30b4528eccf883cd77f0e9e8ccad91eaa66e7",
+      "path": "bots/uptime-manager/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "fd3bbb098e14de122d423dc2286344eebb297f1dea387c6069527551d0ee90d8",
+      "path": "bots/ux-researcher/BOT.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "91eb229457f60c478c6e943b891c95018ef8d115b0d8bbf0d461095e38fa6cac",
+      "path": "bots/ux-researcher/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "535c45b49d3289c695ea7e11ec2dc623f10a284c45aae9ba6eeff4c40354c745",
+      "path": "bots/ux-researcher/SOUL.md",
+      "rule": "query_records_multi_entity"
+    },
+    {
+      "fingerprint": "24164b953659b9d7e9f23b2bfb63bc948f38f8fb5f8affbaecb10ad0d71ba1de",
+      "path": "bots/ux-researcher/TOOLS.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "72e9035b8a282cbdc56a3003b4d77a26347cb67dbfd5e6ca0ae8e1a1626ed54e",
+      "path": "bots/workflow-designer/SOUL.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "190c4d9779dac5a96d0d3e03eefd8bcca4b771e3a668e3156ecab3f1baba868c",
+      "path": "shared/platform-prompts/delta-run-protocol.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "bcfad97a0110fae98ed11c189fa49bc76410ef9913883db8254cd6a96fdae6e7",
+      "path": "skills/daily-briefing/prompt.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "ba04a82e9072b55ebfbf5261dfb136594e01773cc6af7260e6b2bfb49dbb7eb4",
+      "path": "skills/data-validation/prompt.md",
+      "rule": "query_records_null_filter"
+    },
+    {
+      "fingerprint": "b2e4eef457c2797cc447cd5374177fafcd5374f4c1ebd2ae8742945b0554b7d4",
+      "path": "skills/rank-tracking/prompt.md",
+      "rule": "query_records_query_option"
+    },
+    {
+      "fingerprint": "de2e7e2d5714e1a572aaf2b877f32d9fcd5279ee219ddc1dd73359c27205f7c5",
+      "path": "skills/report-generation/prompt.md",
+      "rule": "query_records_range_filter"
+    },
+    {
+      "fingerprint": "9b33a0e5354e7a925c8d41f55fb5e7587b88e156979355bd9fd645943c119a12",
+      "path": "skills/sentiment-analysis/prompt.md",
+      "rule": "query_records_null_filter"
+    }
+  ]
+}

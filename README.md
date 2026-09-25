@@ -89,7 +89,13 @@ ln -sf ../../hooks/post-commit .git/hooks/post-commit
 commit, rewrites the `bots/<name>@x.y.z` pins in `teams/*/TEAM.md` to match
 (a TEAM.md with its own uncommitted changes is skipped with a warning), validates
 changed SOUL.md files and skill prompts, and refuses a skill commit when
-`tests/skills/known-tools.txt` is stale against the runtime.
+`tests/skills/known-tools.txt` is stale against the runtime. It also runs the
+baseline-aware prompt/tool contract audit. That audit rejects new instructions
+that ask `adl_query_records` for metadata ranges, null predicates, ordering or
+pagination, wildcard/multiple entity types, or other shapes the runtime cannot
+execute. Existing debt is pinned by exact-content fingerprints in
+`tests/bots/prompt-tool-contract-baseline.json`; changing an instruction or its
+exception requires an explicit baseline review.
 
 `hooks/post-commit` exists because of by-path commits (`git commit -F msg --
 bots/x/BOT.md`): git runs pre-commit against a temporary index while the real

@@ -45,6 +45,15 @@ if ! bash "$SCRIPT_DIR/bots/validate-manifest.sh"; then
 fi
 echo ""
 
+echo "=== Auditing Bot Prompt / Runtime Tool Contracts ==="
+if ! python3 "$SCRIPT_DIR/bots/audit-prompt-tool-contracts.py"; then
+  FAILURES=$((FAILURES + 1))
+fi
+if ! python3 "$SCRIPT_DIR/bots/test-prompt-tool-contracts.py"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
 echo "=== Validating Cross-References ==="
 if ! bash "$SCRIPT_DIR/bots/validate-integrity.sh"; then
   FAILURES=$((FAILURES + 1))

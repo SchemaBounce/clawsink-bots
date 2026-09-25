@@ -26,6 +26,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 HOOKS_SRC="${HOOKS_SRC:-$REPO_ROOT/hooks}"
+PROMPT_AUDIT_SRC="${PROMPT_AUDIT_SRC:-$REPO_ROOT/tests/bots}"
 BOT_NAME="${TEST_BOT:-sales-pipeline}"
 BOT="bots/$BOT_NAME/BOT.md"
 
@@ -63,6 +64,12 @@ for h in pre-commit post-commit; do
   if [ -f "$HOOKS_SRC/$h" ]; then
     cp "$HOOKS_SRC/$h" ".git/hooks/$h"
     chmod +x ".git/hooks/$h"
+  fi
+done
+mkdir -p tests/bots
+for dependency in audit-prompt-tool-contracts.py prompt-tool-contract-baseline.json; do
+  if [ -f "$PROMPT_AUDIT_SRC/$dependency" ]; then
+    cp "$PROMPT_AUDIT_SRC/$dependency" "tests/bots/$dependency"
   fi
 done
 
