@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.18"
+  version: "1.0.19"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -79,12 +79,12 @@ setup:
   steps:
     - id: connect-github
       name: "Connect GitHub"
-      description: "Links your GitHub repository for issue reading, branch creation, and PR management"
+      description: "Lets the agent read issues and pull request state from a conversation. Code changes do not need it: code sessions reach repositories through the workspace's GitHub App."
       type: mcp_connection
       ref: tools/github
       group: connections
-      priority: required
-      reason: "Primary interface for reading issues, creating branches, and submitting pull requests"
+      priority: recommended
+      reason: "Reads issues and pull request state. Branches and pull requests come from code sessions, which use the GitHub App, not this connection"
       ui:
         icon: github
         actionLabel: "Connect GitHub"
@@ -218,7 +218,11 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 ## MCP Servers
 
 - **code-sandbox** (optional) -- Hosted Claude Code sessions in per-workspace sandboxes, billed via workspace credits (or a user's personal Claude subscription token). Provides `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/code-sandbox/SERVER.md`. Most implementation work goes through the dedicated coding-agent bot; this grant lets the architect run a session directly when a plan calls for it.
-- **github** (required) -- Creates branches, pull requests, and manages issues. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools.
+- **github** (recommended) -- Reads issues and pull request state and manages labels from a conversation. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools. Code work does not depend on it: a code session clones, commits, pushes, and opens the pull request through the workspace's GitHub App, so this connection's health never blocks a code session.
+
+## Code Mode
+
+Code changes run in code sessions. Start one per task with `adl_start_code_session` (available to every agent), passing `task_id` and a prompt that stands alone; the platform writes the session's status, pull request link, and any failure back onto the task. Follow it with `adl_code_session_status`. With the code-sandbox grant, the `code_session_*` tools drive the same session step by step. A written plan is an input to a session, not a deliverable: when the plan is ready, start the session.
 
 ## Recommended North Star Keys
 

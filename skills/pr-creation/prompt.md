@@ -5,7 +5,7 @@
 3. Write a PR body: summary of changes, linked issue, test results, risk level.
 4. Suggest labels based on change type (bug, feature, docs, refactor).
 5. Identify reviewers based on affected code areas.
-6. Output a structured PR spec ready for the GitHub MCP `create_pull_request` tool.
+6. Output a structured PR spec. Pass its title and body to the code session's push, which opens the pull request; use the GitHub MCP `create_pull_request` tool only when that server is connected.
 
 Anti-patterns:
 - NEVER create a PR without linking it to the originating issue or task — orphaned PRs lack context for reviewers.

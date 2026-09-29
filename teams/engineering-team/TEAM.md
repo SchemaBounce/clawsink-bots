@@ -13,7 +13,7 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/software-architect@1.0.0"
+  - ref: "bots/software-architect@1.0.19"
   - ref: "bots/coding-agent@1.0.0"
   - ref: "bots/sre-devops@1.0.0"
   - ref: "bots/code-reviewer@1.0.0"
