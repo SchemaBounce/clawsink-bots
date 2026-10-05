@@ -1,0 +1,20 @@
+{
+  "entityTypes": [
+    {
+      "name": "cos_scorecards",
+      "displayName": "Chief of Staff Scorecards",
+      "description": "One record per Chief of Staff run: throughput, stalled work, actions taken, and what is waiting on a person",
+      "domain": "management",
+      "sampleFields": ["completed_since_last_run", "created_since_last_run", "open_by_status", "stalled_found", "actions", "person_list"],
+      "fields": {
+        "completed_since_last_run": {"type": "number", "required": true, "description": "Tasks completed since the previous run"},
+        "created_since_last_run": {"type": "number", "required": true, "description": "Tasks created since the previous run"},
+        "open_by_status": {"type": "object", "required": true, "description": "Open task counts keyed by status"},
+        "stalled_found": {"type": "number", "required": true, "description": "Tasks with no update for 24 hours"},
+        "stalled_without_action": {"type": "number", "required": true, "description": "Stalled tasks this run did not act on"},
+        "actions": {"type": "array", "required": true, "description": "Each assignment, reassignment, new task and direct start, with the task key and reason"},
+        "person_list": {"type": "array", "required": true, "description": "What only a person can do, ordered by how much work it blocks"}
+      }
+    }
+  ]
+}

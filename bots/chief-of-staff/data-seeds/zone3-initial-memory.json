@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "namespace": "working_notes",
+      "key": "first_run",
+      "value": "First run. Read the roster and the whole open board, give every unowned task an owner, and write the first scorecard as the baseline."
+    },
+    {
+      "namespace": "stall_history",
+      "key": "init",
+      "value": "No restarts yet. Record each restarted task key with a count and time so a second stall moves the task."
+    },
+    {
+      "namespace": "learned_patterns",
+      "key": "init",
+      "value": "No owner patterns yet. Learn which agents finish which kinds of work."
+    }
+  ]
+}
