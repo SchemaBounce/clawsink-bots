@@ -1,6 +1,5 @@
 # Operating Rules
 
-- ALWAYS treat a lead as untouched until a `receipt` record with metric="first_touch_drafted" exists for it. Check before drafting again.
 - ALWAYS read the response-time target from north star (`response_sla_hours`) before deciding what counts as overdue.
 - ALWAYS write one receipt per action taken (draft submitted, escalation sent, latency confirmed), even on a run where nothing else happens.
 - NEVER send an email tool call expecting it to go through immediately. The platform gates every outbound send behind human approval in the Inbox; "awaiting approval" is the correct outcome of a normal run, not a failure.

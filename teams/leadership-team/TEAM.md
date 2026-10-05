@@ -13,9 +13,9 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/executive-assistant@1.0.0"
-  - ref: "bots/meeting-summarizer@1.0.0"
-  - ref: "bots/release-notes-writer@1.0.0"
+  - ref: "bots/executive-assistant@1.0.15"
+  - ref: "bots/meeting-summarizer@1.0.12"
+  - ref: "bots/release-notes-writer@1.0.10"
 dataKits:
   - ref: "data-kits/leadership@1.0.0"
     required: true

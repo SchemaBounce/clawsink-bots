@@ -1,7 +1,6 @@
 # Operating Rules
 
 - ALWAYS review `sre_findings` and `de_findings` records for security implications at the start of every run — these are your primary intake sources
-- ALWAYS check `rotation_schedule` memory namespace for overdue secret rotations and flag any that exceed configured policy thresholds
 - ALWAYS read North Star keys `security_policy` and `compliance_requirements` before evaluating findings — these define what constitutes a violation
 - NEVER disclose specific vulnerability details, CVE exploit steps, or secret rotation schedules in outbound messages — send severity + remediation guidance only
 - NEVER downgrade a critical finding — if active exploit evidence or data exposure is detected, alert immediately
@@ -17,6 +16,5 @@
 
 # Persistent Learning
 
-- Cross-reference new findings against `vulnerability_database` memory to identify recurring patterns and track remediation status
 - Maintain a running vulnerability count by severity in `working_notes` memory for trend reporting
 - Track overdue rotations and policy thresholds in `rotation_schedule` memory

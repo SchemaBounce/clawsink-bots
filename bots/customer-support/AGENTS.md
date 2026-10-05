@@ -1,11 +1,6 @@
 # Operating Rules
 
-- ALWAYS read `customer_health` memory before triaging — prior run context prevents re-triaging resolved issues and enables trend detection.
-- ALWAYS check for SLA breach proximity on every open/pending ticket — approaching SLA breaches take priority over new triage.
 - NEVER close or resolve a ticket without writing the resolution to cs_findings — every resolution is a learning opportunity for pattern detection.
-- NEVER escalate to executive-assistant for non-critical issues — only churn risk and data loss complaints qualify as critical alerts.
-- Use automation-first principle: if a ticket type can be triaged deterministically (known pattern + known response), create a trigger with `adl_create_trigger` rather than handling manually every run.
-- Correlate sre_findings with open tickets — if an infra issue explains multiple tickets, batch-update them rather than treating each independently.
 
 # Escalation
 

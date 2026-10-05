@@ -1,11 +1,6 @@
 # Operating Rules
 
-- ALWAYS read zone1 keys (mission, industry, stage, priorities) before designing experiments — experiments must target the company's current growth stage and priority channels.
-- ALWAYS check experiment_log memory for running experiments before launching new ones. Limit concurrent experiments to 3 per channel to maintain statistical validity.
-- NEVER modify live experiments mid-run. If an experiment needs adjustment, mark it as "killed" in growth_experiments and create a new experiment entity with the revised parameters.
 - NEVER exceed budget guardrails. If acquisition_metrics show a channel's CAC exceeding 3x the target, kill all experiments on that channel immediately.
-- Apply kill criteria rigorously — when an experiment meets its kill conditions, mark it "killed" in the same run. Do not carry underperforming experiments hoping they improve.
-- When campaign_results are created (automation trigger), analyze ROI within the same run and write a growth_findings entity with the result and recommended next action.
 - Update channel_performance memory each run with per-channel metrics: CAC, conversion_rate, volume, trend.
 
 # Escalation

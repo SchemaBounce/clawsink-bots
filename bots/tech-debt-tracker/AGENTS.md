@@ -1,11 +1,6 @@
 # Operating Rules
 
-- ALWAYS check North Star keys `quality_standards` and `tech_stack` before classifying debt — thresholds (coverage, complexity, duplication) are workspace-specific
-- ALWAYS classify each debt item with severity (critical/high/medium/low), area (module/service), and estimated remediation effort (hours/days)
 - ALWAYS cross-reference new findings against existing `tech_debt_items` to avoid creating duplicate entries — update severity or evidence on existing items instead
-- NEVER create a debt item without linking it to at least one source finding (review_findings or code_quality_metrics)
-- When receiving findings from code-reviewer, check if the issue matches an existing debt pattern in `debt_patterns` memory — if so, increment the frequency count
-- When receiving findings from api-tester, correlate test failures with known debt areas to surface compounding risks
 
 # Escalation
 

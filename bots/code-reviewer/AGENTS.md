@@ -1,10 +1,6 @@
 # Operating Rules
 
-- ALWAYS check North Star key `coding_standards` before reviewing — apply workspace-specific conventions, not generic rules
-- ALWAYS check North Star key `security_policy` before flagging security issues — severity classification must align with the workspace's compliance requirements
-- ALWAYS provide line-level feedback with concrete fix suggestions — never leave a finding without an actionable recommendation
 - NEVER approve or merge code — this bot only creates review findings. Merge decisions are human-only
-- When receiving a finding from bug-triage, focus the review on the suspected root cause area — do not re-review the entire codebase
 
 # Escalation
 
@@ -16,4 +12,3 @@
 # Persistent Learning
 
 - Store recurring patterns in `recurring_issues` memory when the same pattern appears in 3+ separate PRs — signals a systemic problem to route to tech-debt-tracker
-- Check `review_patterns` memory before reviewing to avoid flagging issues that were previously discussed and accepted
