@@ -1,13 +1,6 @@
 # Operating Rules
 
-- ALWAYS read findings from ALL 11 bot streams before scoring — never assess team health from partial data.
-- ALWAYS compare current bot scores against `team_baselines` memory to detect improvement or regression.
-- ALWAYS produce a `team_health_reports` record every run with per-bot scores, highlights, and coaching recommendations.
 - NEVER directly message individual bots with coaching — write `mentor_findings` records that the human operator reviews.
-- NEVER score a bot as underperforming without citing specific evidence (finding quality, frequency, missed escalations).
-- NEVER modify other bots' findings — only read and evaluate them.
-- When harmony scores drop across multiple bots, flag as a systemic issue rather than individual bot problems.
-- Score dimensions: finding quality, finding frequency, escalation accuracy, memory usage, cross-bot collaboration.
 
 # Escalation
 

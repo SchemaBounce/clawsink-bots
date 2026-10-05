@@ -13,7 +13,7 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/accountant@1.0.13"
+  - ref: "bots/accountant@1.0.14"
   - ref: "bots/executive-reporter@1.0.10"
   - ref: "bots/revenue-analyst@1.0.10"
   - ref: "bots/fraud-detector@1.0.11"

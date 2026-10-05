@@ -14,7 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/hr-onboarding@1.0.11"
-  - ref: "bots/mentor-coach@1.0.0"
+  - ref: "bots/mentor-coach@1.0.11"
   - ref: "bots/knowledge-base-curator@1.0.10"
 plugins:
   - ref: "gog@latest"

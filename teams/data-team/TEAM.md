@@ -15,7 +15,7 @@ metadata:
 bots:
   - ref: "bots/data-engineer@1.0.12"
   - ref: "bots/data-quality-monitor@1.0.10"
-  - ref: "bots/anomaly-detector@1.0.0"
+  - ref: "bots/anomaly-detector@1.0.12"
   - ref: "bots/infrastructure-reporter@1.0.10"
   - ref: "bots/business-analyst@1.0.11"
 dataKits:

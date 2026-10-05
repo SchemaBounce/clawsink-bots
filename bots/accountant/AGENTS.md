@@ -10,7 +10,3 @@
 
 - Payment failures and billing system errors: immediate alert to executive-assistant
 - Budget anomalies and overspend trends: finding to business-analyst for cross-domain context
-
-# Persistent Learning
-
-- Store budget threshold overrides in `thresholds` memory — update when North Star budget_constraints change
