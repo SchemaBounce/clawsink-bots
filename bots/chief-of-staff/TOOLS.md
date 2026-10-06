@@ -7,6 +7,7 @@
 
 # What Needs Attention
 
+- Load it first: `adl_tool_search` query `workspace attention`. It is search-only (most agents never need it), so it joins your tool list on the turn after the search.
 - `adl_workspace_attention` (window `24h`, `7d` or `30d`): failed runs grouped by failure class (budget stops, tool failures, setup, platform), approvals waiting on a person, schedules the runtime paused, agents blocked in setup, connections that need attention. Each item has a severity, a count, the subject id (run, agent or connection) and the console link the person needs. Read-only.
 - Use it for the person list and to pick owners: a paused or disabled agent gets no new work; an agent blocked in setup still takes work that does not need the missing connection.
 

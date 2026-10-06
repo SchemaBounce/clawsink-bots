@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: chief-of-staff
   displayName: "Chief of Staff"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Keeps the agent team moving: gives every open task an owner, restarts stalled work, starts agents when work is urgent, and reports throughput and blockers."
   category: management
   tags: ["management", "delegation", "execution", "accountability", "tasks", "coordination"]
@@ -34,7 +34,7 @@ agent:
     1. `adl_read_memory` key `last_run_state`: the last run time and the stall history for tasks you restarted.
     2. `adl_read_messages`: requests and alerts sent to you.
     3. `adl_list_agents`: the live roster. Note which agents are paused or disabled.
-       `adl_workspace_attention` window `24h` (`7d` on the first run): failed runs by class, paused schedules, setup gaps, unhealthy connections, approvals waiting.
+       `adl_tool_search` query `workspace attention`, then on the next turn `adl_workspace_attention` window `24h` (`7d` on the first run): failed runs by class, paused schedules, setup gaps, unhealthy connections, approvals waiting. The tool is not in your list until the search loads it.
     4. `adl_query_records` entity_type `tasks`, one call per open status you need (`pending`, `assigned`, `in_progress`, `blocked`), sorted by `updated_at`.
     5. `adl_list_goals` for standing goals you steward; `adl_get_goal_context` only for a goal that is off track.
     6. Act (rules above), then write the scorecard and update `last_run_state`.
