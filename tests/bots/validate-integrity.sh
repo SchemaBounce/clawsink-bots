@@ -62,14 +62,18 @@ for bot_dir in "$BOTS_DIR"/*/; do
     fi
   done < <(echo "$frontmatter" | grep "ref:" | grep "tools/" | sed 's/.*ref: *//')
 
-  # Check messaging.sendsTo/listensTo agent refs exist
+  # Check messaging.sendsTo/listensTo agent refs exist. Globbing is off for the
+  # loop: an unquoted "*" (any agent) used to expand to the repo's file names
+  # and warn once per file (ARCHITECTURE.md, LICENSE, bots, ...).
+  set -f
   for agent_ref in $(echo "$frontmatter" | grep -E "from:|to:" | grep -oE '\[.*\]' | tr -d '[]"' | tr ',' '\n' | tr -d ' '); do
-    if [ -z "$agent_ref" ]; then continue; fi
+    if [ -z "$agent_ref" ] || [ "$agent_ref" = "*" ]; then continue; fi
     if [ ! -d "$BOTS_DIR/$agent_ref" ]; then
       echo -e "  ${YELLOW}WARN${NC} [$bot_name] Messaging ref '$agent_ref' not found in bots/"
       warnings=$((warnings + 1))
     fi
   done
+  set +f
 
   # Check sub-agents directory
   if [ -d "$bot_dir/agents" ]; then

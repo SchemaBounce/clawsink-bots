@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: brand-guardian
   displayName: "Brand Guardian"
-  version: "1.0.8"
+  version: "1.0.9"
   description: "Brand consistency monitoring, guideline enforcement, and asset review."
   category: design
   tags: ["brand", "consistency", "guidelines", "design", "content-review", "brand-audit"]

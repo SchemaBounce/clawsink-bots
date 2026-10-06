@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "2.0.2"
+  version: "2.0.3"
   description: "Scheduled technical blog content creation for your company blog: research, draft, publish with operator approval."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]

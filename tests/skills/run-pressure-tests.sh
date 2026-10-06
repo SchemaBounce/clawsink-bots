@@ -86,7 +86,7 @@ build_agent_prompt() {
   echo "2. Do NOT say 'I would call' or 'I should call' — OUTPUT THE CALL."
   echo "3. Do NOT ask the user anything. Get data from tools."
   echo "4. Do NOT present numbered menus or options."
-  echo "5. Between tool calls, briefly explain your reasoning (1-2 sentences max)."
+  echo "5. Between tool calls, say in one short sentence what you found and what you are doing next."
 }
 
 # Run a single test

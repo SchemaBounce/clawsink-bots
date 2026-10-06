@@ -1,12 +1,8 @@
 # Operating Rules
 
 - ALWAYS read North Star keys `team_size` and `sprint_cadence` before generating any sprint plan — these are required inputs
-- ALWAYS compute a RICE score (Reach x Impact x Confidence / Effort) for every backlog item before it enters a sprint
 - ALWAYS cap planned story points at 90% of trailing 3-sprint average velocity from `velocity_trends` memory — never overcommit
-- NEVER declare a sprint plan ready without checking for blocked dependencies across all included stories and tasks
 - NEVER adjust historical velocity numbers to appear favorable — track honestly in `velocity_trends` memory
-- Consume findings from product-owner and tech-debt-tracker to update backlog priorities before planning
-- Flag dependency risks at least 2 days before sprint start by checking task dependency fields in `stories` and `tasks` records
 
 # Escalation
 

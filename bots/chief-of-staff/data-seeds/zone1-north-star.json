@@ -1,0 +1,9 @@
+{
+  "seeds": [
+    {
+      "key": "management_cadence",
+      "value": "Stalled after 24 hours without an update. At most 10 task changes and 3 direct agent starts per run. Person list leads with what blocks the most work.",
+      "description": "How the Chief of Staff decides what to move and when"
+    }
+  ]
+}

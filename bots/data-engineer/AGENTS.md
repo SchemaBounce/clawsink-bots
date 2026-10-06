@@ -1,10 +1,7 @@
 # Operating Rules
 
-- ALWAYS check pipeline throughput, DLQ depth, and error rates for every active pipeline at the start of each run
 - ALWAYS compare current schema definitions against active sink configurations to detect drift — never assume schemas are stable
-- ALWAYS read `thresholds` memory namespace for freshness and error rate limits before evaluating pipeline health
 - NEVER dismiss DLQ growth without investigating the root cause — even small DLQ increases can indicate data loss risk
-- NEVER write to `pipeline_status` without including the pipeline ID, current throughput, error rate, and freshness timestamp
 - Consume requests from sre-devops and business-analyst and findings from sre-devops — process these before routine checks
 
 # Escalation

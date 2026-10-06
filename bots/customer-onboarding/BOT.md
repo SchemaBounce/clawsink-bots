@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-onboarding
   displayName: "Customer Onboarding"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Triggers and manages onboarding workflows for new customers."
   category: saas
   tags: ["onboarding", "customers", "workflow", "cdc"]

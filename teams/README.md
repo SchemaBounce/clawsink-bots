@@ -6,7 +6,7 @@ A Team is a coordinated group of bots that work together under a shared North St
 
 **Relationship to Plugins**: Teams can declare shared plugins available to all member bots. See [plugins/README.md](../plugins/README.md) for the plugin ecosystem.
 
-**Relationship to Tool Packs**: Teams can declare shared native deterministic tool packs for all member bots via `toolPacks[].ref`. See [packs/README.md](../packs/README.md) for the tool pack format.
+**Relationship to Tool Packs**: Teams may list `toolPacks[].ref` in TEAM.md for documentation purposes. All 133 built-in tools are already available to every bot on the team; this field has no effect on tool availability. See [packs/README.md](../packs/README.md) for the tool pack format.
 
 **Relationship to MCP Servers**: Teams can declare shared MCP server instances. See [tools/README.md](../tools/README.md) for the MCP server format.
 
@@ -127,7 +127,7 @@ Teams are domain-specific functions, not whole companies. The `metadata.category
 - `estimatedMonthlyCost` is calculated from model costs at default schedules
 - Teams do NOT override individual bot schedules or models — those are bot-level concerns
 - Team-level `plugins` provide shared defaults; individual bot `plugins` can override `config`
-- Team-level `toolPacks` are shared native functions available to all member bots
+- Team-level `toolPacks` are documentation only; every member bot already has all 133 built-in tools regardless of what is declared
 
 ## Org Chart
 
@@ -184,12 +184,12 @@ Team-level `plugins[]` install shared plugins available to all bots in the team.
 
 ## Team-Level Tool Packs
 
-Team-level `toolPacks[]` make shared native deterministic functions available to every bot in the team. Unlike MCP servers, tool packs do not create external connections or require credential setup. Use them when multiple bots need the same structured computation or data-shaping helpers.
+Team-level `toolPacks[]` is documentation only: it does not grant access. Every bot on every team already has all 133 built-in tools, with no per-bot or per-team allowlist. Unlike MCP servers, tool packs do not create external connections or require credential setup. List the packs relevant to the team's job so the marketplace page describes it accurately.
 
 - `ref` must point to a valid `packs/` directory containing a `PACK.md`
 - Version suffix is optional; if present, it must be SemVer (`@1.0.0`)
 - `reason` is required and non-empty
-- Team-level and bot-level tool packs compose as a union; there is no config merge layer
+- Team-level and bot-level `toolPacks[]` entries are both display-only and simply combine for the marketplace listing; there is no access to merge
 
 ## Team-Level MCP Servers
 
@@ -298,7 +298,7 @@ teamGoals:
 |-------------|-------------------|
 | `bots[].ref` | Activate each bot (full bot activation) |
 | `plugins[]` (team-level) | Install shared plugins available to all bots in the team |
-| `toolPacks[]` (team-level) | Make shared native deterministic functions available to all bots in the team |
+| `toolPacks[]` (team-level) | Documents shared tool categories on the marketplace page. Has no effect on availability; all bots already have all 133 built-in tools. |
 | `mcpServers[]` (team-level) | Make shared MCP server tools available to all bots in the team |
 | `northStar.requiredKeys` | Prompt the user to fill in required business context before bots run |
 | `orgChart.roles` | Create the team's reporting hierarchy, visible in the org chart view |
@@ -308,7 +308,7 @@ teamGoals:
 | `dataKits[].installSampleData` | Optionally seed sample data from the kit |
 | `teamGoals` | Aggregate member bot goal health into team-level metrics; render team health dashboard |
 
-Team-level plugins, tool packs, and MCP servers are shared — you don't need to redeclare them on every bot. Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
+Team-level plugins and MCP servers are shared — you don't need to redeclare them on every bot. Tool packs need no declaration at all, at team or bot level: every bot already has all 133 built-in tools. Bot-level `config` overrides team-level `config` for the same plugin or MCP server.
 
 ## Canonical Example
 

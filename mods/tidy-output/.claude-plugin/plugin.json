@@ -1,0 +1,8 @@
+{
+  "name": "tidy-output",
+  "version": "1.0.1",
+  "description": "Sample mod for hosted code sessions: protects .env files from being created or edited and shows a status line.",
+  "author": {
+    "name": "SchemaBounce"
+  }
+}

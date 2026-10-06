@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]

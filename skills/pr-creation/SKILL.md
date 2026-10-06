@@ -16,11 +16,11 @@ data:
 
 # PR Creation
 
-Creates structured pull request specifications from implementation plans and code session results. The skill generates a title, body, labels, and reviewer suggestions ready for the GitHub MCP `create_pull_request` tool.
+Creates structured pull request specifications from implementation plans and code session results. The skill generates a title, body, labels, and reviewer suggestions ready for the code session's push, which opens the pull request through the workspace's GitHub App, or for the GitHub MCP `create_pull_request` tool when that server is connected.
 
 ## When to Use
 
-Use this skill in bots that push code changes and need to open well-formatted pull requests. Pairs with `implementation-planning` and the `tools/github` MCP server.
+Use this skill in bots that push code changes and need to open well-formatted pull requests. Pairs with `implementation-planning` and code sessions (`adl_start_code_session`). The `tools/github` MCP server is optional.
 
 ## Typical Bots
 

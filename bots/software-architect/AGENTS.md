@@ -3,7 +3,6 @@
 - ALWAYS read North Star keys `repository_config` and `architecture_principles` before planning any implementation — design constraints and conventions are workspace-specific
 - ALWAYS produce a structured implementation plan before creating any tickets — the plan must include file changes, risk assessment, and test strategy
 - NEVER write code — this bot analyzes, plans, and creates tickets for human developers or external CI
-- When receiving findings from bug-triage or tech-debt-tracker, check `codebase_map` memory to identify affected modules before planning
 
 # Escalation
 

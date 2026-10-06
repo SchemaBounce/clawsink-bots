@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: lead-responder
   displayName: "Lead Responder"
-  version: "0.1.5"
+  version: "0.1.6"
   description: "Drafts a fast, personal first-touch for every new inbound sales inquiry and tracks how long we take to respond."
   category: sales
   tags: ["sales", "leads", "speed-to-lead", "first-touch", "response-time"]

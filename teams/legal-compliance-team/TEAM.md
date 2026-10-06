@@ -13,9 +13,9 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/legal-compliance@1.0.0"
-  - ref: "bots/compliance-auditor@1.0.0"
-  - ref: "bots/security-agent@1.0.0"
+  - ref: "bots/legal-compliance@1.0.11"
+  - ref: "bots/compliance-auditor@1.0.11"
+  - ref: "bots/security-agent@1.0.10"
 dataKits:
   - ref: "data-kits/legal-compliance@1.0.0"
     required: true

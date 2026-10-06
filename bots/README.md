@@ -238,11 +238,11 @@ Unlike skills (on-demand capabilities), rules never activate and never touch the
 
 ## Built-in Tools Section
 
-The `toolPacks:` section declares native deterministic function bundles that run inside the ADL runtime. Use built-in tools when the bot needs structured computation, parsing, formatting, or domain-specific helpers without making external network calls.
+The `toolPacks:` section documents which native deterministic function bundles the bot is designed to use. It does not grant access: all 133 built-in tools are already available to every bot, with no per-bot allowlist. Declaring a pack here only makes the marketplace page describe the bot accurately.
 
 - `ref` must point to a valid `packs/` directory containing a `PACK.md`
 - Version suffix is optional; if present, it must be SemVer (`@1.0.0`)
-- `reason` is required and non-empty — explain why the bot needs the pack
+- `reason` is required and non-empty — explain why the bot is designed to use the pack
 - Tool packs are native platform functions, not external integrations
 
 ### Example
@@ -918,7 +918,7 @@ The `provider` field must match the alias's provider (e.g. `sonnet_latest` requi
 | `agent.instructions` | Inject as `# AGENTS.md` section -- operating rules and guardrails |
 | `agent.toolInstructions` | Inject as `# TOOLS.md` section -- tool usage conventions |
 | `skills[].ref` | Append each skill's `prompt.md` to the bot's instructions |
-| `toolPacks[].ref` | Make the declared native deterministic functions available to the bot |
+| `toolPacks[].ref` | Documents which tool categories the bot is designed to use, rendered on the marketplace page. All 133 built-in tools are already available to every bot; this field has no effect on availability. |
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data -- North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |
 | `mcpServers[].ref` | Make the declared MCP server tools available to the bot |
