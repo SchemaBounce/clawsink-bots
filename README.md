@@ -295,8 +295,8 @@ agent:
   defaultDomain: "your-domain"
 model:
   provider: "anthropic"
-  preferred: "claude-sonnet-4-6"
-  fallback: "claude-haiku-4-5-20251001"
+  preferred: "sonnet_latest"       # alias; resolves at run time (see bots/README.md)
+  fallback: "haiku_latest"
   thinkLevel: null
 cost:
   estimatedTokensPerRun: 10000
