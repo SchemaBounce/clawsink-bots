@@ -121,7 +121,7 @@ validate_manifest() {
   provider=$(echo "$frontmatter" | grep "provider:" | head -1 | awk '{print $2}' | tr -d '"')
   if [ -n "$provider" ]; then
     case "$provider" in
-      anthropic|openai|google|meta|qwen|cerebras) ;;
+      anthropic|openai|google|meta|qwen|cerebras|meta_ai|xai|moonshot) ;;
       *) echo -e "  ${YELLOW}WARN${NC} Unknown model.provider: $provider"
          warnings=$((warnings + 1)) ;;
     esac
@@ -131,7 +131,7 @@ validate_manifest() {
   # auto-updating alias (resolves to a concrete model at run time). Pinned
   # dated IDs (claude-*, gpt-*, gemini-*, llama-*, qwen-*) are still accepted
   # but discouraged. KEEP THIS ALIAS LIST IN SYNC with catalog.json `aliases`.
-  local known_aliases="opus_latest sonnet_latest haiku_latest gpt_latest gpt_mini_latest gemini_pro_latest gemini_flash_latest llama_latest llama_fast_latest cerebras_fast_latest qwen_latest"
+  local known_aliases="opus_latest sonnet_latest haiku_latest gpt_latest gpt_mini_latest gemini_pro_latest gemini_flash_latest llama_latest llama_fast_latest cerebras_fast_latest qwen_latest muse_spark_latest grok_latest kimi_latest"
   local model_field model_val
   for model_field in preferred fallback; do
     model_val=$(echo "$frontmatter" | grep "${model_field}:" | head -1 | awk '{print $2}' | tr -d '"')

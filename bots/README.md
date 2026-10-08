@@ -842,24 +842,34 @@ Bootstrap private memory entries.
 
 Use these alias names in `model.preferred` / `model.fallback` instead of pinned dated
 model IDs. An alias resolves to a concrete model **at run time** from the platform's model
-catalog. When the platform adopts a newer model, every bot using the alias upgrades
-automatically — no manifest edit required.
+catalog, and the catalog learns which model is current from each provider's own models API
+every day. When a provider ships a newer model in that line, the platform records it and a
+person promotes the alias; every bot using the alias follows, with no manifest edit.
 
-| Alias | Provider | Resolves to (today) | Use for |
-|-------|----------|---------------------|---------|
-| `haiku_latest` | anthropic | Claude Haiku | Routine/high-volume tasks — cheapest, fast |
-| `sonnet_latest` | anthropic | Claude Sonnet | Analytical/creative tasks — balanced |
-| `opus_latest` | anthropic | Claude Opus | Heavy reasoning — most capable, costly |
-| `gpt_latest` / `gpt_mini_latest` | openai | GPT-4.1 / GPT-4o-mini | OpenAI alternative |
-| `gemini_pro_latest` / `gemini_flash_latest` | google | Gemini 2.5 Pro / Flash | Long-context / cheap-fast |
-| `llama_latest` / `llama_fast_latest` | meta | Llama 4 Maverick / Scout | Open-weight |
-| `cerebras_fast_latest` | cerebras | Llama on Cerebras | Ultra-low-latency |
-| `qwen_latest` | qwen | Qwen Max | Qwen alternative |
+This file never states what an alias resolves to. That is live data: read it from
+`GET https://api.schemabounce.com/api/v1/llm/catalog` (no auth; the `aliases` block carries
+the current target and any proposed newer one) or, from an agent, the platform MCP
+`sb_automation` action `llm_models`. A manifest, a README, or a seed file that names a dated
+model id goes stale the day the vendor ships the next one.
+
+| Alias | Provider | Use for |
+|-------|----------|---------|
+| `haiku_latest` | anthropic | Routine/high-volume tasks, cheapest, fast |
+| `sonnet_latest` | anthropic | Analytical/creative tasks, balanced |
+| `opus_latest` | anthropic | Heavy reasoning, most capable, costly |
+| `gpt_latest` / `gpt_mini_latest` | openai | OpenAI alternative, full / small |
+| `gemini_pro_latest` / `gemini_flash_latest` | google | Long-context / cheap-fast |
+| `llama_latest` / `llama_fast_latest` | meta | Open-weight, full / small |
+| `cerebras_fast_latest` | cerebras | Ultra-low-latency |
+| `qwen_latest` | qwen | Qwen alternative |
+| `muse_spark_latest` | meta_ai | Meta AI alternative |
+| `grok_latest` | xai | xAI alternative |
+| `kimi_latest` | moonshot | Moonshot alternative, long-context agentic work |
 
 The `provider` field must match the alias's provider (e.g. `sonnet_latest` requires
-`provider: anthropic`). Pinned IDs (e.g. `claude-sonnet-4-6`) are still accepted but discouraged.
-**Sub-agent** `model:` fields use the bare tier words `haiku` / `sonnet` / `opus` / `inherit`
-(a separate convention — not these aliases).
+`provider: anthropic`). Pinned IDs are still accepted but discouraged.
+**Sub-agent** `model:` fields use the bare tier words `haiku` / `sonnet` /
+`opus` / `inherit` (a separate convention, not these aliases).
 
 ## Validation
 

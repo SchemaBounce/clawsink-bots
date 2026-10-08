@@ -70,6 +70,9 @@ tools:
   - name: sb_marketplace
     description: "Marketplace browse + activation. Actions: list_bots, list_teams, list_tools, activate_bot, activate_team, hot_swap_skills"
     category: agents
+  - name: sb_builder
+    description: "Builder Hub (the builder side of the marketplace), acting as the signed-in person. Actions: home, automations_list, automation_get, automation_update, results_list, results_add, results_update, results_delete, version_publish, version_withdraw, offer_update, workspace_exportable, workspace_import, repull, drafts_list, draft_publish, customers_list, health, team_list, invite_create, invite_revoke, member_role_set, member_remove, payouts, refund, profit_share_get, profit_share_set"
+    category: agents
   - name: sb_access
     description: "Agent permissions end-to-end. Actions: connection_create, connection_list, connection_get, connection_delete, connection_validate, grant, revoke, list_grants, set_tool_allowlist, policy_get, policy_set, policy_check, list_policy_actions, store_secret, secret_status"
     category: agents

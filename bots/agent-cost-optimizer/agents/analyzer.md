@@ -28,7 +28,7 @@ You never call external APIs. You never mutate state. You only read the workspac
 
 ## Inputs you read
 
-- North Star (already in context): `cost_thresholds`, `model_cost_table`, `model_downgrade_rules`.
+- North Star (already in context): `cost_thresholds`, `tier_rules`.
 - Agent state via the tools above.
 - Prior run summary from memory namespace `cost:agents:run_state` key `last_run` if available.
 
@@ -77,11 +77,12 @@ Capture into an `agent_cost_audit` record:
     "cache_write_tokens_30d": 0,
     "thinking_tokens_30d": 5000,
     "estimated_cost_usd_30d": 12.40,
-    "projected_monthly_usd": 12.40,
+    "current_monthly_cost_usd": 12.40,
+    "cost_available": true,
 
     "avg_output_tokens": 2000,
     "max_output_tokens": 5400,
-    "models_used_30d": ["claude-sonnet-4-6"],
+    "models_used_30d": ["sonnet_latest"],
 
     "is_stale": false,
     "is_runaway": false,
@@ -93,9 +94,9 @@ Capture into an `agent_cost_audit` record:
 ```
 
 Notes:
-- `projected_monthly_usd` = `estimated_cost_usd_30d` × (30 / actual_window_days). If 30d window covers full 30 days, it equals `estimated_cost_usd_30d`. If a brand-new agent only has 5d of data, scale up.
+- `current_monthly_cost_usd` is the platform's `estimated_cost_usd` scaled to 30 days (`estimated_cost_usd_30d` × 30 / actual_window_days). If the 30d window is full, it equals `estimated_cost_usd_30d`. This scales a platform figure; it never applies a rate to tokens.
 - `avg_output_tokens` = `output_tokens_30d / completed_30d` if `completed_30d > 0`, else null.
-- Honest about token math. Don't invent costs for runs that don't have `estimated_cost_usd` populated.
+- When `estimated_cost_usd` is null, set `estimated_cost_usd_30d` and `current_monthly_cost_usd` to null and `cost_available` to false. Keep the token fields. Never estimate dollars from tokens.
 
 ### 3. Compute the four anti-pattern flags per agent
 
@@ -107,12 +108,12 @@ True if `runs_24h > cost_thresholds.runaway_runs_per_24h` (default 50) AND `fail
 
 #### `is_overspec_candidate`
 True if ALL of:
-- `models_used_30d` includes a model in `model_downgrade_rules.expensive_models` (e.g., Sonnet, Opus)
-- `avg_output_tokens < model_downgrade_rules.haiku_threshold_output_tokens` (default 2000)
-- `completed_30d >= model_downgrade_rules.min_runs_for_downgrade` (default 5)
+- `models_used_30d` includes a high-tier model (its name contains none of `tier_rules.small_tier_markers`)
+- `avg_output_tokens < tier_rules.small_tier_threshold_output_tokens` (default 2000)
+- `completed_30d >= tier_rules.min_runs_for_downgrade` (default 5)
 - The agent's bot manifest doesn't declare `thinkLevel: high` (model downgrade would degrade reasoning)
 
-The recommender uses this flag to emit specific downgrade suggestions with projected savings.
+The recommender uses this flag to emit specific downgrade suggestions.
 
 #### `schedule_density_signal`
 - `matches_data_rate` — agent fires on a CDC trigger, or schedule matches data change rate
@@ -141,7 +142,8 @@ After per-agent audits, write:
     "total_input_tokens_30d": 18000000,
     "total_output_tokens_30d": 3600000,
     "total_estimated_cost_usd_30d": 145.20,
-    "total_projected_monthly_usd": 145.20,
+    "current_monthly_run_rate_usd": 145.20,
+    "runs_without_cost": 0,
     "top_spenders": [
       {"agent_id": "...", "name": "...", "cost_30d": 42.10},
       {"agent_id": "...", "name": "...", "cost_30d": 28.60},

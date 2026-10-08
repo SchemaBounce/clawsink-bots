@@ -90,7 +90,7 @@ Both ship today. Both are pure platform-internal: zero third-party MCP servers, 
 - `adl_get_agent_metrics(agent_id, windows=["24h","7d","30d"])` (new): input/output/cache/thinking tokens, estimated cost, status counts, model distribution from `agent_runs`.
 - `adl_get_agent_status` (existing): current state per agent.
 - `adl_query_records` (existing): read prior audits, correlate.
-- `adl_read_memory`, `adl_write_memory` (existing): load `model_cost_table`, `model_downgrade_rules`, persist run state.
+- `adl_read_memory`, `adl_write_memory` (existing): load `cost_thresholds`, `tier_rules`, persist run state.
 - `adl_send_message` (existing): escalate critical findings to `executive-assistant` and `release-manager`.
 
 **Sample output (one record):**
@@ -101,9 +101,12 @@ Both ship today. Both are pure platform-internal: zero third-party MCP servers, 
   "agent_id": "ag_blog_writer_001",
   "finding_type": "overspec_model",
   "severity": "warn",
-  "current_metric": "model=claude-sonnet-4-6 runs_30d=46 avg_output_tokens=812 monthly_cost_usd=63.40",
-  "projected_monthly_savings_usd": 50.72,
-  "suggested_action": "Downgrade model to claude-haiku-4-5-20251001. Output tokens are well below the 2000-token Haiku threshold and the bot manifest declares thinkLevel: medium (not high).",
+  "current_metric": "model=sonnet_latest runs_30d=46 avg_output_tokens=812 tokens_30d=910000",
+  "tokens_30d": 910000,
+  "avg_output_tokens": 812,
+  "current_monthly_cost_usd": 63.40,
+  "suggested_model": "haiku_latest",
+  "suggested_action": "Downgrade model to haiku_latest. Output tokens are well below the 2000-token small-tier threshold and the bot manifest declares thinkLevel: medium (not high). The per-token difference is on the workspace rate card (Billing, Rates).",
   "suggested_owner": "release-manager"
 }
 ```
