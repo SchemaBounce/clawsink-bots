@@ -83,7 +83,7 @@ tools:
     description: "Workspace audit log. Actions: search, export"
     category: audit
   - name: sb_billing
-    description: "Billing. Actions: inspect, change_plan, add_addon, remove_addon, checkout_url, portal_url"
+    description: "Billing. Actions: inspect, plans, change_plan, add_addon, remove_addon, checkout_url, portal_url, spend_limits_get, spend_limits_set, credits_ledger, credits_usage, rate_card (what each model costs and what each *_latest alias resolves to right now, from the platform rate table)"
     category: billing
   - name: sb_ops
     description: "Ops: ADL files, SSO config, and A2A dispatch. Actions: files_list, files_get, files_get_content, files_upload, files_delete, sso_status, sso_connection_create, sso_connection_update, sso_connection_delete, sso_mappings_list, sso_mapping_upsert, sso_mapping_delete, a2a_agent_card, a2a_rpc"
