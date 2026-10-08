@@ -8,44 +8,28 @@
       "runaway_runs_per_24h": 50,
       "runaway_failure_rate": 0.30,
       "stale_days": 30,
-      "_comment": "Tune per-workspace. Defaults err on the side of surfacing. Lower thresholds = more findings per run."
+      "_comment": "Thresholds applied to the platform's own estimated_cost_usd from adl_get_agent_metrics. Tune per-workspace. Lower thresholds = more findings per run."
     },
-    "model_cost_table": {
-      "_comment": "Cost per million tokens (input + output blended). Used to project savings on model-downgrade recommendations. Override with your contracted rates if different. Sources: published Anthropic + OpenAI pricing pages as of 2026.",
-      "_units": "USD per million tokens, blended input/output (rough; the recommender's projections are approximate by design — operators should not treat them as billing-grade)",
-      "claude-opus-4-7": 25.00,
-      "claude-opus-4-7-20251001": 25.00,
-      "claude-sonnet-4-6": 5.00,
-      "claude-sonnet-4-6-20250929": 5.00,
-      "claude-sonnet-4-5-20250929": 5.00,
-      "claude-haiku-4-5-20251001": 1.00,
-      "gpt-5": 8.00,
-      "gpt-5-mini": 1.50,
-      "gpt-4o": 5.00,
-      "gpt-4o-mini": 0.50,
-      "_default": 3.00
-    },
-    "model_downgrade_rules": {
-      "expensive_models": [
-        "claude-opus-4-7",
-        "claude-opus-4-7-20251001",
-        "claude-sonnet-4-6",
-        "claude-sonnet-4-6-20250929",
-        "claude-sonnet-4-5-20250929",
-        "gpt-5"
-      ],
-      "haiku_threshold_output_tokens": 2000,
+    "tier_rules": {
+      "small_tier_markers": ["haiku", "mini", "nano", "flash", "scout", "fast", "lite"],
+      "downgrade_alias_by_provider": {
+        "anthropic": "haiku_latest",
+        "openai": "gpt_mini_latest",
+        "google": "gemini_flash_latest",
+        "meta": "llama_fast_latest",
+        "cerebras": "cerebras_fast_latest"
+      },
+      "small_tier_threshold_output_tokens": 2000,
       "min_runs_for_downgrade": 5,
-      "preferred_haiku_model": "claude-haiku-4-5-20251001",
-      "preferred_mini_model": "gpt-5-mini",
-      "_comment": "If an agent uses a model in expensive_models AND has avg_output_tokens < haiku_threshold AND has at least min_runs_for_downgrade completed runs in 30d AND its bot manifest doesn't declare thinkLevel: high, recommend a downgrade to preferred_haiku_model (Anthropic) or preferred_mini_model (OpenAI). Tune haiku_threshold up if quality regresses on simple tasks."
+      "_comment": "A model or alias is high-tier when its name contains none of the small_tier_markers. If an agent uses a high-tier model AND has avg_output_tokens < small_tier_threshold_output_tokens AND has at least min_runs_for_downgrade completed runs in 30d AND its bot manifest doesn't declare thinkLevel: high, recommend the alias in downgrade_alias_by_provider for that agent's own provider. The bot reasons in tokens; per-token prices live on the workspace rate card, never here."
     },
     "company_glossary": {
-      "model_cost_table": "Per-million-token cost estimates by model. Used by the recommender to project monthly savings on downgrade recommendations.",
-      "overspec_candidate": "Agent using an expensive model (Sonnet, Opus, GPT-5) with consistently low output tokens — Haiku-tier would suffice without quality regression.",
+      "tier_rules": "Substring markers that identify a small tier within a provider's own model line, plus the alias to suggest per provider. No model ids and no prices.",
+      "overspec_candidate": "Agent using a high-tier model (no small-tier marker in its name) with consistently low output tokens. A small-tier alias would likely suffice without quality regression.",
       "runaway_agent": "Agent with high run rate AND high failure rate. Likely retry-looping; pausing prevents the loop from amplifying cost.",
       "stale_agent": "Agent enabled but with zero runs in 30 days. Either disable or investigate why its trigger isn't firing.",
-      "schedule_mismatch": "Agent firing more frequently than the data change rate of its entityTypesRead — wasted runs that produce 'no new records' findings."
+      "schedule_mismatch": "Agent firing more frequently than the data change rate of its entityTypesRead, wasted runs that produce 'no new records' findings.",
+      "estimated_cost_usd": "The platform's own cost figure for a run window, computed from its rate table. The only dollar figure this bot uses."
     }
   }
 }

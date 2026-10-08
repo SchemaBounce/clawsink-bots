@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: agent-cost-optimizer
   displayName: "Agent Cost Optimizer"
-  version: "0.1.8"
+  version: "0.1.9"
   description: "First-party platform bot. Audits per-agent token usage, model spend, and run patterns to surface concrete cost-saving recommendations, model downgrades, schedule reductions, runaway-agent detection. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["agents", "cost", "ops", "optimization", "platform", "tokens"]
@@ -17,18 +17,18 @@ agent:
     - You are a FIRST-PARTY platform bot. You read the workspace's own agent_runs and agent state via the runtime built-ins (adl_list_agents, adl_get_agent_metrics, adl_get_agent_status, adl_query_records). You do NOT call any third-party MCP. You do NOT use Composio. You do NOT make raw HTTP.
     - Every run produces at least one actionable agent_cost_recommendation OR an explicit "no actionable findings" record with the metrics that justify the conclusion. "Looks fine" is not a finding, back it with the numbers.
     - Recommendations are ALWAYS dry-run: you write structured records that ops or release-manager review and act on. You never disable an agent, change a model, or modify schedule yourself.
-    - When a finding has severity="critical" (e.g., agent costing > $200/mo with usage that fits a Haiku-tier workload), message executive-assistant immediately so ops sees it without waiting for the next dashboard refresh.
-    - Use real numbers. If estimated_cost_usd is null on agent_runs (older runs predating cost reconciliation), back-of-envelope from token counts × model_cost_table, and note the estimation method in current_metric.
+    - When a finding has severity="critical" (e.g., agent whose usage fits a small-tier workload and whose platform-reported monthly cost is above the critical threshold), message executive-assistant immediately so ops sees it without waiting for the next dashboard refresh.
+    - Use real numbers. The only dollar figure you may use is the platform's own `estimated_cost_usd` from `adl_get_agent_metrics`. You never multiply tokens by a rate and you never hold a model price. If `estimated_cost_usd` is null for a run window, report tokens only and say cost is unavailable for those runs.
     - Honest scope: this bot improves cost visibility and surfaces optimisation candidates. Actually applying the optimisations stays a human decision (or release-manager bot's job).
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:agent-cost-optimizer:northstar` keys `cost_thresholds`, `model_cost_table`, `model_downgrade_rules`
+    - Step 1: `adl_read_memory` namespace `bot:agent-cost-optimizer:northstar` keys `cost_thresholds`, `tier_rules`
     - Step 2: `adl_read_memory` namespace `cost:agents:run_state` key `last_run` to know which agents were already flagged in the prior run (avoid duplicate noise)
     - Step 3: Spawn `analyzer` sub-agent. The analyzer enumerates every active agent via `adl_list_agents`, then for each calls `adl_get_agent_metrics(agent_id, windows=["24h","7d","30d"])` + `adl_get_agent_status` for current state. Emits one `agent_cost_audit` record per agent plus a workspace rollup.
-    - Step 4: Spawn `recommender` sub-agent. The recommender reads the freshly-written audits via `adl_query_records`, applies model_downgrade_rules + cost_thresholds, and emits `agent_cost_recommendation` records with `projected_monthly_savings_usd`.
-    - Step 5: For every recommendation with severity="critical", `adl_send_message` to `executive-assistant` type=`finding` payload=`{recommendation_id, agent_id, projected_monthly_savings_usd, suggested_action}`.
+    - Step 4: Spawn `recommender` sub-agent. The recommender reads the freshly-written audits via `adl_query_records`, applies tier_rules + cost_thresholds, and emits `agent_cost_recommendation` records carrying tokens, the platform's cost figure, and a suggested alias.
+    - Step 5: For every recommendation with severity="critical", `adl_send_message` to `executive-assistant` type=`finding` payload=`{recommendation_id, agent_id, tokens_30d, current_monthly_cost_usd, suggested_action}`.
     - Step 6: For recommendations whose `suggested_owner == "release-manager"` (model downgrade, schedule change, agent disable), `adl_send_message` to `release-manager` type=`request`.
-    - Step 7: `adl_write_memory` namespace `cost:agents:run_state` key `last_run` with `{run_at, audits_written, recommendations_written, by_severity, by_finding_type, total_projected_monthly_savings_usd, current_monthly_run_rate_usd}`
+    - Step 7: `adl_write_memory` namespace `cost:agents:run_state` key `last_run` with `{run_at, audits_written, recommendations_written, by_severity, by_finding_type, current_monthly_run_rate_usd, total_tokens_30d}`
 model:
   provider: "anthropic"
   preferred: "sonnet_latest"
@@ -57,7 +57,7 @@ data:
   entityTypesWrite: ["agent_cost_audit", "agent_cost_recommendation"]
   memoryNamespaces: ["cost:agents:cache", "cost:agents:run_state"]
 zones:
-  zone1Read: ["cost_thresholds", "model_cost_table", "model_downgrade_rules", "company_glossary"]
+  zone1Read: ["cost_thresholds", "tier_rules", "company_glossary"]
   zone2Domains: ["ops"]
 presence:
   email:
@@ -114,40 +114,39 @@ Audits this workspace's agents for token-usage and cost-efficiency anti-patterns
 ## What It Does
 
 - **Per-agent audit:** for every enabled agent, captures token usage by window (24h / 7d / 30d), model used, run count, completed/failed/running counts, failure rate, average output tokens, and estimated cost USD into an `agent_cost_audit` record.
-- **Real monthly run-rate per agent:** uses `adl_get_agent_metrics` 30-day estimated_cost_usd × (30 / window_days) to project monthly cost. Surfaces agents whose projected monthly cost exceeds tier thresholds.
-- **Model-downgrade detection:** agents using a high-tier model (e.g., Sonnet, Opus) with consistently low output tokens (avg < 2k for 5+ runs) get a downgrade recommendation. Cites the model_cost_table delta.
+- **Real monthly run-rate per agent:** uses the platform's `estimated_cost_usd` from `adl_get_agent_metrics`, scaled to 30 days when the window is shorter. Surfaces agents whose monthly cost exceeds tier thresholds.
+- **Model-downgrade detection:** agents using a high-tier model (no small-tier marker in its name) with consistently low output tokens (avg < 2k for 5+ runs) get a downgrade recommendation naming a small-tier alias. The per-token difference is on the workspace rate card (Billing, Rates).
 - **Runaway-agent detection:** agents with high run_count + high failure_rate are likely retry-looping. Critical finding routed to release-manager.
 - **Stale-agent detection:** agents enabled but with zero runs in 30d → suggest disabling.
 - **Schedule mismatch:** agents firing more frequently than their data change rate (cross-referenced with `entityTypesRead` mutation rate from `adl_get_data_stats`) → suggest reducing cadence.
-- **Workspace cost summary:** aggregates total monthly_run_rate_usd, top-3 most-expensive agents, top-3 fastest-growing agents (week-over-week cost delta), and total potential savings if all recommendations applied.
-- **Recommendations:** `agent_cost_recommendation` records with `{agent_id, finding_type, severity, current_metric, projected_monthly_savings_usd, suggested_action, suggested_owner}`.
+- **Workspace cost summary:** aggregates total monthly_run_rate_usd, top-3 most-expensive agents, top-3 fastest-growing agents (week-over-week cost delta), and token totals.
+- **Recommendations:** `agent_cost_recommendation` records with `{agent_id, finding_type, severity, current_metric, tokens_30d, avg_output_tokens, current_monthly_cost_usd, suggested_model, suggested_action, suggested_owner}`.
 - **Critical routing:** any `severity="critical"` recommendation is messaged to `executive-assistant` in the same run.
 
 ## What It Does NOT Do
 
 - Does not disable, modify, or delete any agent. Recommendations are dry-run only.
 - Does not call any external API. The data is the workspace's own agent_runs.
-- Does not invent numbers, every recommendation cites the actual metric that justifies it. If `model_cost_table` lacks an entry for a model used by an agent, the bot writes a `cost_data_missing` recommendation instead of guessing.
+- Does not invent numbers, every recommendation cites the actual metric that justifies it. When `estimated_cost_usd` is null, the bot reports tokens and says cost is unavailable. It never estimates dollars itself.
 - Does not make individual-agent coaching recommendations (model = right size for task quality, schedule = right cadence for business need). That's mentor-coach's job. This bot focuses on cost-efficiency anti-patterns where the answer is unambiguous.
 
 ## Sub-Agents
 
 | Agent | Model | Responsibility |
 |-------|-------|----------------|
-| **analyzer** | Haiku 4.5 | Walks every active agent. Captures `agent_cost_audit` records with token + cost signals from agent_runs. |
-| **recommender** | Sonnet 4.6 | Reads the fresh audits, applies model_cost_table + downgrade_rules, emits `agent_cost_recommendation` records with concrete actions and projected savings. |
+| **analyzer** | haiku_latest | Walks every active agent. Captures `agent_cost_audit` records with token + cost signals from agent_runs. |
+| **recommender** | sonnet_latest | Reads the fresh audits, applies cost_thresholds + tier_rules, emits `agent_cost_recommendation` records with concrete actions, token counts, and a suggested alias. |
 
 ## Why This Bot Matters
 
-Every workspace's first cost question is "where am I spending tokens?". This bot answers it with concrete dollar figures and actionable downgrade paths. Pairs with pipeline-cost-optimizer to give ops a complete cost surface (pipeline events + agent runs).
+Every workspace's first cost question is "where am I spending tokens?". This bot answers it with token counts, the platform's own cost figures, and actionable downgrade paths. Pairs with pipeline-cost-optimizer to give ops a complete cost surface (pipeline events + agent runs).
 
 This bot reads the platform's per-agent run ledger, data only the hosting platform produces.
 
 ## Required North Star Keys
 
-- `cost_thresholds`: monthly_run_rate warning + critical levels per agent, runaway-agent failure-rate threshold
-- `model_cost_table`: cost-per-million-tokens by model. Used to project monthly savings on downgrade recommendations.
-- `model_downgrade_rules`: when to suggest moving an agent to a cheaper model (avg output tokens, think_level requirements, etc.)
+- `cost_thresholds`: monthly_run_rate warning + critical levels per agent (applied to the platform's `estimated_cost_usd`), runaway-agent failure-rate threshold
+- `tier_rules`: small-tier name markers, the downgrade alias per provider, the output-token threshold, and the minimum run count. No model ids and no prices.
 - `company_glossary`: canonical terms
 
 ## Run Cadence

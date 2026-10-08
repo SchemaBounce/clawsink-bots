@@ -862,6 +862,9 @@ model id goes stale the day the vendor ships the next one.
 | `llama_latest` / `llama_fast_latest` | meta | Open-weight, full / small |
 | `cerebras_fast_latest` | cerebras | Ultra-low-latency |
 | `qwen_latest` | qwen | Qwen alternative |
+| `muse_spark_latest` | meta_ai | Meta AI alternative |
+| `grok_latest` | xai | xAI alternative |
+| `kimi_latest` | moonshot | Moonshot alternative, long-context agentic work |
 
 The `provider` field must match the alias's provider (e.g. `sonnet_latest` requires
 `provider: anthropic`). Pinned IDs are still accepted but discouraged.
