@@ -31,6 +31,7 @@
 
 ## squarespace (no connection: Squarespace has no page or content API)
 
+- The pack is written into the `design_deliverables` record (fields `site_styles`, `custom_css`, `code_blocks`, `placement_guide`) with `adl_upsert_record`. `adl_write_file` may add a downloadable copy to Files; a failed file write never replaces the record.
 - The deliverable is a pack: Site Styles values (fonts, colors, spacing) mapped from the tokens, a Custom CSS block, Code Block HTML for sections the editor cannot express, and a numbered placement guide (Design -> Site Styles, Pages -> Section -> Code).
 - A person applies it. Afterwards, `adl_proxy_call` the live page and file findings on anything that did not land.
 
