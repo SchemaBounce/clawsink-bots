@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: web-designer
   displayName: "Web Designer"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Designs and ships web pages from a design system: tokens with measured contrast, phone-first accessible layouts, and conversion-focused page structure and copy. Publishes to Wix and WordPress through their MCP servers, prepares Squarespace-ready sections and site styles, and opens code sessions for sites kept in a repository."
   category: design
   tags: ["design", "frontend", "web", "landing-page", "design-system", "accessibility", "wix", "wordpress", "squarespace", "conversion"]
@@ -137,3 +137,19 @@ setup:
         inputType: select
         options: ["true"]
         default: "true"
+---
+
+# Web Designer
+
+Designs and ships web pages from a design system: tokens with measured
+contrast, phone-first accessible layouts, and conversion-focused structure and
+copy. Publishes to Wix and WordPress through their MCP connections behind the
+Inbox approval, prepares Squarespace-ready sections and site styles (Squarespace
+has no page API), and opens a code session on a branch for a site kept in a
+repository.
+
+## Skills
+
+- `design-systems`: tokens, type scale, spacing, components, light and dark
+- `accessible-responsive-ui`: 390 px first, WCAG 2.2 AA, Core Web Vitals, measured audits
+- `conversion-page-design`: one outcome per page, one call to action per view, copy in the brand voice
