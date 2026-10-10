@@ -6,10 +6,12 @@ adl_add_edge
 adl_add_memory
 adl_bulk_upsert
 adl_call_remote_agent
+adl_cancel_wait
 adl_checkout_task
 adl_code_session_events
 adl_code_session_status
 adl_consolidate_memory
+adl_continue_code_session
 adl_create_goal
 adl_create_tasks
 adl_create_trigger
@@ -60,6 +62,7 @@ adl_list_repos
 adl_list_sink_types
 adl_list_triggers
 adl_list_vpn_connections
+adl_list_waits
 adl_list_workflow_runs
 adl_list_workflows
 adl_list_workspace_sinks
@@ -107,6 +110,7 @@ adl_update_trigger
 adl_update_workflow
 adl_upsert_record
 adl_view_image_file
+adl_wait_for
 adl_workspace_attention
 adl_write_file
 adl_write_memory
