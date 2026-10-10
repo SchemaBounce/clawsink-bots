@@ -10,7 +10,7 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_upsert_record", "adl_query_records", "adl_read_memory", "adl_write_memory"]
+  required: ["adl_upsert_record", "adl_query_records", "adl_read_memory", "adl_write_memory", "adl_tool_search"]
 data:
   producesEntityTypes: ["design_tokens", "design_deliverables"]
   consumesEntityTypes: ["design_briefs", "design_tokens"]
@@ -42,7 +42,7 @@ only ever use those tokens.
 ## Rules
 
 - One source of truth: every color, size and space in a deliverable traces to a token.
-- Contrast is measured, not eyeballed: body text 4.5:1 or better, large text and UI 3:1 or better, in both modes.
+- Contrast is measured, not eyeballed: body text 4.5:1 or better, large text and UI 3:1 or better, in both modes. Every ratio comes from the `calculate` tool (found with `adl_tool_search`) using the WCAG relative-luminance formula; a model's own arithmetic on hex colors is not a measurement.
 - The type scale is a ratio (1.2 to 1.333) from one base size; headings come from the scale, never from taste.
 - Dark mode is a token swap, not a second design.
 - Reuse the brand's existing tokens when it has them; propose changes as a diff, not a replacement.

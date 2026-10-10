@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: web-designer
   displayName: "Web Designer"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Designs and ships web pages from a design system: tokens with measured contrast, phone-first accessible layouts, and conversion-focused page structure and copy. Publishes to Wix and WordPress through their MCP servers, prepares Squarespace-ready sections and site styles, and opens code sessions for sites kept in a repository."
   category: design
   tags: ["design", "frontend", "web", "landing-page", "design-system", "accessibility", "wix", "wordpress", "squarespace", "conversion"]

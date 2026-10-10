@@ -13,6 +13,10 @@
 - `design_state`: `last_run`, `active_tokens`, `pending_approvals`; `adl_read_memory` at start, `adl_write_memory` at the end of every run
 - `platform_quirks`: per-platform limits and failed patterns; read before publishing, write after any platform error
 
+# Contrast measurement
+
+- Every contrast ratio comes from the `calculate` pack tool: `adl_tool_search("calculate")` once per run, then one `calculate` call per color pair with the WCAG formula and the six channel values as `variables` (design-systems skill, step 2a). A ratio not returned by the tool is never written.
+
 # Live page audit
 
 - `adl_proxy_call` GET on the page named in the brief (read-only, bounded); the markup feeds the accessibility and vitals audit. Never POST.
