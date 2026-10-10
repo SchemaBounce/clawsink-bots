@@ -2,7 +2,8 @@
 
 - Query `design_briefs`: `adl_query_records`, filter by status (open, in_progress) and platform; a brief carries outcome, audience, platform, pages in scope, brand assets
 - Query `design_tokens`: `adl_query_records`, filter by brand; reuse the active set before proposing changes
-- Query `brand_voice`, `product_catalog`, `mkt_content`: `adl_query_records`, read before writing copy; never write them
+- Read the brand voice from memory, not records: `adl_read_memory` namespace `northstar:brand_voice` key `brand_voice` (required for copy); `northstar:product_catalog` key `product_catalog` (optional, never a blocker)
+- Query `mkt_content`: `adl_query_records`, prior approved copy to stay consistent with; never write it
 - Write `design_tokens`: `adl_upsert_record`, ID format `tokens_{brand}_{version}`, fields brand, mode_light, mode_dark, type_scale, spacing, contrast_report, renders
 - Write `design_deliverables`: `adl_upsert_record`, ID format `design_{brief_id}_{page}`, fields page, outcome, sections, copy, forms, variants, tokens_ref, platform_targets, checklist, publish_status, published_url
 - Write `design_findings`: `adl_upsert_record`, ID format `finding_{url_hash}_{criterion}`, fields url, criterion, severity, location, measured, fix
