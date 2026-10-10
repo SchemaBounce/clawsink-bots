@@ -1,33 +1,19 @@
 {
   "seeds": [
     {
-      "namespace": "northstar:brand_voice",
       "key": "brand_voice",
-      "value": {
-        "source": "default",
-        "note": "Default voice until the workspace sets its own in setup. Say so in every deliverable written with it.",
-        "tone": "Plain, direct and concrete. Talk to the visitor as 'you'.",
-        "style_rules": [
-          "Short sentences. Active voice. Contractions are fine.",
-          "Numbers beat adjectives.",
-          "No hype verbs: seamless, unlock, supercharge, empower, revolutionize, leverage, elevate, streamline.",
-          "No em dashes. No hedging. No 'not just X, Y'."
-        ]
-      }
+      "value": "DEFAULT (the workspace has not set its own voice; say so in every deliverable written with it). Plain, direct and concrete; talk to the visitor as 'you'. Short sentences, active voice, contractions are fine. Numbers beat adjectives. No hype verbs (seamless, unlock, supercharge, empower, revolutionize, leverage, elevate, streamline). No em dashes, no hedging, no 'not just X, Y'.",
+      "description": "How the brand sounds. Every headline, label and line of copy is written in it."
     },
     {
-      "namespace": "northstar:product_catalog",
       "key": "product_catalog",
-      "value": {
-        "source": "default",
-        "products": [],
-        "note": "Optional. Empty means: write from the brief and mark any product claim it does not source as [needs source]."
-      }
+      "value": "",
+      "description": "Optional. Empty means: write from the brief and mark any product claim it does not source as [needs source]."
     },
     {
-      "namespace": "northstar:require_publish_approval",
       "key": "require_publish_approval",
-      "value": "true"
+      "value": "true",
+      "description": "Every live change (Wix, WordPress, a branch push) waits for a human approval in the Inbox."
     }
   ]
 }
