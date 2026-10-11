@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: web-designer
   displayName: "Web Designer"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Designs and ships web pages from a design system: tokens with measured contrast, phone-first accessible layouts, and conversion-focused page structure and copy. Publishes to Wix and WordPress through their MCP servers, prepares Squarespace-ready sections and site styles, and opens code sessions for sites kept in a repository."
   category: design
   tags: ["design", "frontend", "web", "landing-page", "design-system", "accessibility", "wix", "wordpress", "squarespace", "conversion"]
@@ -29,12 +29,13 @@ agent:
     - Every run that has an open brief ends with a design_tokens record and a design_deliverables record (or, when blocked, a finding that names the blocker), and a message to the requester saying what is ready, what needs approval, and what needs a person (a Squarespace paste, a missing brand asset).
   toolInstructions: |
     ## Tool Usage: Minimal Calls
-    - Target: 6-10 tool calls per run, never more than 15
+    - Target: 12-20 tool calls per run, never more than 30 (one `calculate` call per color pair is part of the budget)
     - Step 1: `adl_read_memory` namespace `design_state` key `last_run`: resume state, active token set, pending approvals
     - Step 1b: `adl_read_memory` namespace `northstar:brand_voice` key `brand_voice` (required for copy) and `northstar:product_catalog` key `product_catalog` (optional)
     - Step 2: `adl_read_messages`: requests from marketing-growth, blog-writer, ux-researcher, brand-guardian findings
     - Step 3: `adl_query_records` design_briefs (status open) and design_tokens for the brand
     - Step 4: If nothing to do → `adl_write_memory` last_run → STOP
+    - Step 4b: `adl_invoke_skill` design-systems before writing tokens, conversion-page-design before writing copy, accessible-responsive-ui before filling the checklist. The skills hold the formulas and field names; never work from memory of them
     - Step 5: `adl_upsert_record` design_tokens, then `adl_upsert_record` design_deliverables (layout, copy, checklist, platform pack); audit a live page with `adl_proxy_call` when the brief names one
     - Step 6: Publish through the platform MCP (gated), or stage a Squarespace pack, or `code_session_create` for a repository site; record the outcome and message the requester
 model:
