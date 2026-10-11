@@ -37,7 +37,9 @@ if [ ! -f "$KNOWN_TOOLS_FILE" ]; then
   echo "FAIL: $KNOWN_TOOLS_FILE missing; run tests/skills/sync-known-tools.sh --write" >&2
   exit 1
 fi
-KNOWN_TOOLS="$(grep -E '^adl_' "$KNOWN_TOOLS_FILE" | tr '\n' ' ')"
+# Core adl_ tools and pack tools (a skill lists every tool it calls, pack tools
+# included: adl_invoke_skill restricts dispatch to that list).
+KNOWN_TOOLS="$(grep -vE '^(#|$)' "$KNOWN_TOOLS_FILE" | tr '\n' ' ')"
 
 # Approximate token count (~4 chars per token for English)
 estimate_tokens() {

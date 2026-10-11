@@ -1,0 +1,24 @@
+{
+  "entityTypes": [
+    {
+      "name": "design_briefs",
+      "description": "What a page or site must achieve: outcome, audience, platform, pages in scope, brand assets",
+      "fields": ["status", "brand", "platform", "outcome", "audience", "pages", "brand_assets", "live_url", "notes"]
+    },
+    {
+      "name": "design_tokens",
+      "description": "A brand's design system: semantic colors for light and dark with measured contrast, type scale, spacing, radii, and per-platform renders",
+      "fields": ["brand", "mode_light", "mode_dark", "type_scale", "spacing", "contrast_report", "renders"]
+    },
+    {
+      "name": "design_deliverables",
+      "description": "One page ready to ship: outline, copy, forms, variants, the accessibility checklist, and the platform pack or publish status",
+      "fields": ["page", "outcome", "sections", "copy", "forms", "variants", "tokens_ref", "platform_targets", "checklist", "site_styles", "custom_css", "code_blocks", "placement_guide", "publish_status", "published_url"]
+    },
+    {
+      "name": "design_findings",
+      "description": "One measured defect on a live page: the WCAG 2.2 criterion or Web Vital it fails, where, the value, and the fix",
+      "fields": ["url", "criterion", "severity", "location", "measured", "fix"]
+    }
+  ]
+}
