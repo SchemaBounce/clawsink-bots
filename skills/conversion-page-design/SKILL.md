@@ -10,7 +10,7 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_upsert_record", "adl_query_records", "adl_read_memory"]
+  required: ["adl_query_records", "adl_get_record", "adl_upsert_record", "adl_read_memory", "adl_write_memory"]
 data:
   producesEntityTypes: ["design_deliverables"]
   consumesEntityTypes: ["design_briefs", "design_tokens", "brand_voice", "product_catalog"]
