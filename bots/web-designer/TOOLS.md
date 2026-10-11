@@ -15,7 +15,7 @@
 
 # Contrast measurement
 
-- Every contrast ratio comes from the `calculate` pack tool: `adl_tool_search("calculate")` once per run, then one `calculate` call per color pair with the WCAG formula and the six channel values as `variables` (design-systems skill, step 2a). A ratio not returned by the tool is never written.
+- Every contrast ratio and WCAG verdict comes from the `contrast_ratio` pack tool: `adl_tool_search("contrast_ratio")` once per run, then one call with every `{foreground, background}` hex pair. Never convert hex to channels or compute luminance by hand.
 
 # Live page audit
 

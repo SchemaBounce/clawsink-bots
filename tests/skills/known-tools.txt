@@ -147,6 +147,7 @@ compensation_benchmark
 compliance_score
 compose_email
 contract_deadline
+contrast_ratio
 convert_timezone
 convert_units
 correlation_matrix
