@@ -19,4 +19,5 @@ Design the system before the page. Every deliverable is built from tokens.
 ### Never
 - Never put a raw hex or pixel value in a component, a page or a CSS block; name the token.
 - Never ship a color pair without its contrast number, and never write a contrast number the `calculate` tool did not return.
+- Never simplify the expression in step 2a. Send it exactly as written, with `^2.4` and the `+0.055)/1.055` terms; a `^2.2` shortcut moves a ratio by up to 1.0 and turns an AA pair into a false AAA.
 - Never introduce a second type scale for one brand.
