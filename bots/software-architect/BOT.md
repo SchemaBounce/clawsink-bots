@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.22"
+  version: "1.0.24"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -92,12 +92,12 @@ setup:
         helpUrl: "https://docs.schemabounce.com/integrations/github"
     - id: enable-code-sandbox
       name: "Enable Code Sandbox"
-      description: "Hosted Claude Code sessions in per-workspace sandboxes, metered on workspace credits. Optional here; the coding-agent bot is the primary implementer."
+      description: "Hosted Claude Code sessions in per-workspace sandboxes, metered on workspace credits. Optional: the built-in adl_start_code_session and adl_push_code_session tools already start, push and open pull requests without this server; it adds execute, diff and cancel from a conversation."
       type: mcp_connection
       ref: tools/code-sandbox
       group: connections
-      priority: recommended
-      reason: "Lets the architect run code sessions directly when a plan calls for it"
+      priority: optional
+      reason: "Adds execute, diff and cancel for sessions the architect runs directly; starting and pushing need no connection"
       ui:
         icon: code
         actionLabel: "Enable Code Sandbox"
