@@ -78,6 +78,7 @@ adl_proxy_call
 adl_purge_memory_namespace
 adl_purge_orphan_edges
 adl_purge_stale_records
+adl_push_code_session
 adl_query_duckdb
 adl_query_neighbors
 adl_query_records
