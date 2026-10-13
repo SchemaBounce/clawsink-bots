@@ -1,0 +1,86 @@
+apiVersion: schemabounce.com/v1
+kind: RepoContext
+
+# An INDEX over instruction files that already exist. Nothing moved here:
+# the rules and READMEs stay where they are and stay authoritative. This
+# repository has no CLAUDE.md, so the two rule files that apply to every change
+# plus CONTRIBUTING.md are the core contract.
+#
+# Each manifest directory (bots, skills, tools, teams, rules, packs) carries a
+# README that is the format spec for that manifest kind. They are entries, not
+# always-loaded files, so a session editing a skill is not handed the bot format.
+
+always:
+  - path: .claude/rules/public-repo-no-internal-content.md
+    kind: rule
+    summary: 'This repo is PUBLIC: no secrets, internal hosts, infra layout or ops runbooks in any file or commit message.'
+  - path: .claude/rules/adl-taxonomy.md
+    kind: rule
+    summary: 'Skill, Bot, Agent, Team vocabulary. Bots are blueprints, skills are baked in, the word seat is dead.'
+  - path: CONTRIBUTING.md
+    kind: instructions
+    summary: 'How to add a bot, team, skill or MCP server manifest, with the canonical example for each.'
+
+entries:
+  - id: bots-format
+    path: bots/README.md
+    kind: docs
+    summary: 'BOT.md frontmatter, SOUL.md rules, data-seeds and sub-agent format for bot blueprints.'
+    trigger:
+      pathGlobs: ['bots/**']
+      keywords: ['bot', 'BOT.md', 'SOUL.md', 'data-seeds']
+    priority: required
+
+  - id: skills-format
+    path: skills/README.md
+    kind: docs
+    summary: 'SKILL.md frontmatter and prompt.md rules for skills; declared tools must be ones the runtime serves.'
+    trigger:
+      pathGlobs: ['skills/**']
+      keywords: ['skill', 'SKILL.md', 'prompt.md']
+    priority: required
+
+  - id: tools-format
+    path: tools/README.md
+    kind: docs
+    summary: 'SERVER.md format for MCP server manifests: transport, env spec names, tool list.'
+    trigger:
+      pathGlobs: ['tools/**']
+      keywords: ['mcp', 'SERVER.md', 'transport']
+    priority: required
+
+  - id: teams-format
+    path: teams/README.md
+    kind: docs
+    summary: 'TEAM.md format: member bots pinned by version, org chart, exactly one lead.'
+    trigger:
+      pathGlobs: ['teams/**']
+      keywords: ['team', 'TEAM.md', 'orgChart']
+
+  - id: rules-format
+    path: rules/README.md
+    kind: docs
+    summary: 'RULE.md format for always-on guardrails composed into bots.'
+    trigger:
+      pathGlobs: ['rules/**']
+      keywords: ['rule', 'RULE.md', 'guardrail']
+
+  - id: packs-format
+    path: packs/README.md
+    kind: docs
+    summary: 'Tool pack manifest format and the references bots make to packs.'
+    trigger:
+      pathGlobs: ['packs/**']
+      keywords: ['pack', 'tool pack']
+
+  - id: architecture
+    path: ARCHITECTURE.md
+    kind: docs
+    summary: 'How the catalog resolves into deployed agents; read before changing manifest semantics.'
+    trigger:
+      keywords: ['architecture', 'manifest resolution', 'activation']
+
+exclude:
+  - node_modules/**
+  - tests/skills/results/**
+  - tests/skills/results-full/**

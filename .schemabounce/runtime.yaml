@@ -1,0 +1,29 @@
+apiVersion: schemabounce.com/v1
+kind: RepoRuntime
+
+toolchain:
+  # bash runs the validators; python3 runs the manifest checks that parse YAML.
+  required: [git, python3, pip3]
+  pythonVersion: '3'
+
+# Requests, not grants. The platform clamps each one to the workspace's tier.
+sandbox:
+  # Shell validators over markdown manifests: light on memory and CPU.
+  size: small
+  timeout: 45m
+  # An ecosystem name, never a hostname. pypi is only for PyYAML, which the
+  # tool and rule manifest validators import.
+  ecosystems: [pypi]
+
+defaults:
+  engine: claude_code
+  # An alias the platform resolves to the newest model in the line (dec-104),
+  # never a pinned id that goes stale.
+  model: sonnet_latest
+
+handoff:
+  # Agent sessions branch from development and their PRs target it. Promotion
+  # to main stays a separate human decision.
+  baseBranch: development
+  branchPrefix: sb-code/
+  commitConvention: conventional
