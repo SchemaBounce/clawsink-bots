@@ -116,7 +116,8 @@ validate_manifest() {
     errors=$((errors + 1))
   fi
 
-  # model.provider validation — must match the platform model catalog.
+  # model.provider validation — the platform's chat provider list (served by
+  # GET /api/v1/llm/catalog). A new provider is a WARN here, never a FAIL.
   local provider
   provider=$(echo "$frontmatter" | grep "provider:" | head -1 | awk '{print $2}' | tr -d '"')
   if [ -n "$provider" ]; then
@@ -128,17 +129,20 @@ validate_manifest() {
   fi
 
   # model.preferred / model.fallback validation. Recommended form is an
-  # auto-updating alias (resolves to a concrete model at run time). Pinned
-  # dated IDs (claude-*, gpt-*, gemini-*, llama-*, qwen-*) are still accepted
-  # but discouraged. KEEP THIS ALIAS LIST IN SYNC with catalog.json `aliases`.
-  local known_aliases="opus_latest sonnet_latest haiku_latest gpt_latest gpt_mini_latest gemini_pro_latest gemini_flash_latest llama_latest llama_fast_latest cerebras_fast_latest qwen_latest muse_spark_latest grok_latest kimi_latest"
+  # auto-updating alias (<family>_latest, resolved to a concrete model at run
+  # time by the platform). The set of aliases and what each resolves to lives
+  # in ONE place, the platform's llm_model_aliases table, served by
+  # GET /api/v1/llm/catalog; this script checks the SHAPE only and never keeps
+  # its own list (a hand-kept copy rejected new aliases until someone edited
+  # it, 2026-10-13). Pinned dated IDs (claude-*, gpt-*, gemini-*, llama-*,
+  # qwen-*) are still accepted but discouraged.
   local model_field model_val
   for model_field in preferred fallback; do
     model_val=$(echo "$frontmatter" | grep "${model_field}:" | head -1 | awk '{print $2}' | tr -d '"')
     [ -z "$model_val" ] && continue
-    if echo " $known_aliases " | grep -q " $model_val "; then
-      continue  # known alias — good
-    fi
+    case "$model_val" in
+      *_latest) continue ;;  # alias shape — the platform resolves it
+    esac
     # Accept a pinned concrete id (has a provider prefix), but warn it's stale-prone.
     case "$model_val" in
       claude-*|gpt-*|o[0-9]*|gemini-*|llama-*|qwen*)

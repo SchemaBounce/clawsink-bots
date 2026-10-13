@@ -56,9 +56,9 @@ agent:
     - Write findings with adl_upsert_record to entity_type="x_findings"
     - Store unstructured analysis with adl_add_memory
 model:
-  provider: string       # anthropic | openai | google | meta | qwen | cerebras
-  preferred: string      # Model alias (recommended) or pinned ID for normal runs
-  fallback: string       # Model alias or pinned ID if preferred unavailable
+  provider: string       # A platform chat provider (GET /api/v1/llm/catalog lists them)
+  preferred: string      # <family>_latest alias (recommended) or pinned ID for normal runs
+  fallback: string       # <family>_latest alias or pinned ID if preferred unavailable
   thinkLevel: null | string  # null, "low", "medium", "high"
 cost:
   estimatedTokensPerRun: int    # Typical token consumption per run
@@ -852,19 +852,13 @@ the current target and any proposed newer one) or, from an agent, the platform M
 `sb_automation` action `llm_models`. A manifest, a README, or a seed file that names a dated
 model id goes stale the day the vendor ships the next one.
 
-| Alias | Provider | Use for |
-|-------|----------|---------|
-| `haiku_latest` | anthropic | Routine/high-volume tasks, cheapest, fast |
-| `sonnet_latest` | anthropic | Analytical/creative tasks, balanced |
-| `opus_latest` | anthropic | Heavy reasoning, most capable, costly |
-| `gpt_latest` / `gpt_mini_latest` | openai | OpenAI alternative, full / small |
-| `gemini_pro_latest` / `gemini_flash_latest` | google | Long-context / cheap-fast |
-| `llama_latest` / `llama_fast_latest` | meta | Open-weight, full / small |
-| `cerebras_fast_latest` | cerebras | Ultra-low-latency |
-| `qwen_latest` | qwen | Qwen alternative |
-| `muse_spark_latest` | meta_ai | Meta AI alternative |
-| `grok_latest` | xai | xAI alternative |
-| `kimi_latest` | moonshot | Moonshot alternative, long-context agentic work |
+Alias names follow `<family>_latest` (for example `haiku_latest`, `sonnet_latest`,
+`opus_latest`, `gpt_latest`, `gemini_flash_latest`). The full set, each alias's provider
+and the model it resolves to right now come from that catalog endpoint; this README keeps
+no copy, because a copy here was the one place that went stale. Pick the family by cost:
+the small tier of a family (`haiku_latest`, `gpt_mini_latest`, `gemini_flash_latest`,
+`llama_fast_latest`) for routine high-volume work, the full tier for analysis, and
+`opus_latest` only for heavy reasoning.
 
 The `provider` field must match the alias's provider (e.g. `sonnet_latest` requires
 `provider: anthropic`). Pinned IDs are still accepted but discouraged.
