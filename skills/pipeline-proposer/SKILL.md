@@ -30,5 +30,5 @@ Enables agents to propose new data pipeline routes when they identify missing da
 
 - **Proposal creation**: Describe the pipeline and why it's needed
 - **Source types**: CDC (database changes), webhook (HTTP), SaaS (third-party APIs)
-- **Human approval gate**: All proposals require sign-off via the Automations dashboard
+- **Human approval gate**: All proposals require sign-off via the workspace Inbox
 - **Connector discovery**: Find available SaaS connectors and sink types

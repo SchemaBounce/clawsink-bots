@@ -7,7 +7,7 @@ You can propose new data pipelines. Use `adl_tool_search("pipeline")` to discove
 2. Check available sources: `adl_list_connectors` (SaaS), `adl_list_workspace_sources` (existing)
 3. Check destinations: `adl_list_sink_types`
 4. Create proposal: `adl_propose_pipeline_route`
-5. Human reviews and approves via the Automations dashboard
+5. Human reviews and approves via the workspace Inbox
 
 ### Source Types
 - `cdc` — database change data capture (real-time row changes)
@@ -23,5 +23,5 @@ You can propose new data pipelines. Use `adl_tool_search("pipeline")` to discove
 
 Anti-patterns:
 - NEVER propose a pipeline without checking `adl_list_pipeline_routes` for existing routes — duplicate pipelines cause data conflicts and wasted resources.
-- NEVER auto-create pipelines — all proposals require human approval; use `adl_propose_pipeline_route` which routes to the Automations dashboard.
+- NEVER auto-create pipelines — all proposals require human approval; use `adl_propose_pipeline_route` which routes the proposal to the workspace Inbox for a person to approve.
 - NEVER omit the `reason` field or use generic justifications like "data sync" — approvers need specific business value to approve.

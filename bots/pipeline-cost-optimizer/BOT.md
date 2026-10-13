@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.11"
+  version: "0.1.12"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -136,8 +136,8 @@ Audits this workspace's pipeline routes, sources, sinks, and event throughput pa
 
 | Agent | Model | Responsibility |
 |-------|-------|----------------|
-| **analyzer** | Haiku 4.5 | Walks routes, sources, sinks. Captures `pipeline_route_audit` records with health + cost signals. |
-| **recommender** | Sonnet 4.6 | Reads the fresh audits, applies cost-threshold rules from north star, emits `pipeline_cost_recommendation` records with concrete actions and projected savings. |
+| **analyzer** | `haiku_latest` | Walks routes, sources, sinks. Captures `pipeline_route_audit` records with health + cost signals. |
+| **recommender** | `sonnet_latest` | Reads the fresh audits, applies cost-threshold rules from north star, emits `pipeline_cost_recommendation` records with concrete actions and projected savings. |
 
 ## Why This Bot Matters
 

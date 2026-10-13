@@ -73,7 +73,7 @@ The ADL system uses the word "skill" in three distinct ways. Each operates indep
 - When writing code that references "skills," always qualify: *marketplace skills*, *crystallized skills*, or *tool pack tools*. Unqualified "skill" leads to ambiguity.
 - The `adl_skills` table holds **only crystallized skills**. It is not related to `agent.skill_prompts`.
 - The `agent.skill_prompts` JSONB column holds **only marketplace skill prompts**. It is not related to `adl_skills`.
-- The frontend "Functions" tab at `/agent-data-layer/automations?tab=functions` operates on crystallized skills only. It is NOT a tool pack browser and NOT a marketplace skill editor.
+- The frontend "Functions" page at `/context/functions` (Context Engine, beside Data Explorer) operates on crystallized skills only. It is NOT a tool pack browser and NOT a marketplace skill editor.
 - `adl_invoke_skill` activates a marketplace skill by loading its prompt and restricting available tools to those declared in its requirements.
 - `adl_execute_skill` runs a crystallized skill by calling its underlying PostgreSQL function or materialized view.
 - `adl_discover_skills` lists all crystallized skills available to the agent.

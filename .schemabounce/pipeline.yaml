@@ -1,0 +1,180 @@
+apiVersion: schemabounce.com/v1
+kind: RepoPipeline
+
+# How a ticket becomes finished work in clawsink-bots (dec-110). This repo is
+# manifests and prompts (BOT.md, SOUL.md, SKILL.md, SERVER.md, TEAM.md), not
+# application code, so the gates are the repository's own manifest validators
+# plus a scan that nothing internal lands in a PUBLIC repository.
+#
+# Only a check, a fresh review or an approval can gate the push. A fresh review
+# runs in the isolated reviewer Job (dec-105, dec-111) and never sees the
+# coder's conversation.
+
+setup:
+  # The tool and rule manifest validators import yaml and exit 1 without it.
+  - name: pyyaml
+    run: pip3 install --user pyyaml || pip3 install --user --break-system-packages pyyaml
+    timeout: 5m
+
+pipeline:
+  - name: plan
+    uses: plan
+    maxUnits: 6
+    guidance: |
+      Split by manifest, not by file type. A bot change is BOT.md, SOUL.md and
+      its data-seeds together, because the validators check them against each
+      other. A skill that a bot references changes with the bot that bakes it in.
+
+      A change to a bot version pin in a team manifest is part of the bot unit,
+      never its own unit: the contract validators require the pin to equal the
+      bot's current version.
+
+      Never plan a unit whose acceptance is "validators pass". Say what the
+      deployed agent or the catalog listing does differently.
+
+  - name: implement
+    uses: implement
+
+  # A failure goes back to a fix turn, up to two times.
+  - name: validate
+    uses: check
+    onFail:
+      retry: { maxAttempts: 2 }
+      then: fail
+    commands:
+      # Each validator is the one tests/validate-all.sh runs, split so a failure
+      # names its suite and a change only pays for the suites it can break.
+      # validate-all.sh itself is not used: it also runs the demand-signal
+      # contract (needs jq, which the sandbox lacks) and the git-hook test
+      # (needs a configured git identity). Both still run in CI.
+      - name: skills
+        run: bash tests/skills/validate-format.sh
+        severity: blocking
+        timeout: 10m
+        when:
+          paths: ['skills/**', 'tests/skills/**']
+
+      - name: packs
+        run: bash tests/packs/validate-manifest.sh && bash tests/packs/validate-references.sh
+        severity: blocking
+        timeout: 10m
+        when:
+          paths: ['packs/**', 'bots/**', 'tests/packs/**']
+
+      - name: bots
+        run: |
+          bash tests/bots/validate-soul.sh \
+            && bash tests/bots/validate-manifest.sh \
+            && bash tests/bots/validate-integrity.sh \
+            && bash tests/bots/validate-sales-pipeline-contract.sh
+        severity: blocking
+        timeout: 15m
+        when:
+          paths: ['bots/**', 'skills/**', 'teams/**', 'tools/**', 'rules/**', 'tests/bots/**']
+
+      - name: tools
+        run: bash tests/tools/validate-manifest.sh
+        severity: blocking
+        timeout: 10m
+        when:
+          paths: ['tools/**', 'bots/**', 'teams/**', 'tests/tools/**']
+
+      - name: rules
+        run: bash tests/rules/validate-manifest.sh
+        severity: blocking
+        timeout: 10m
+        when:
+          paths: ['rules/**', 'bots/**', 'tools/**', 'tests/rules/**']
+
+      - name: teams
+        run: python3 scripts/validate-team-manifests.py
+        severity: advisory
+        timeout: 5m
+        when:
+          paths: ['teams/**', 'bots/**']
+
+      # This repo is PUBLIC and world-readable the moment it is pushed
+      # (.claude/rules/public-repo-no-internal-content.md). Scans only the files
+      # this session changed, read from the working tree so it needs no base
+      # sha. Patterns are credentials and internal-only wiring; hostnames of
+      # customer-facing providers are fine, so the list stays narrow on purpose.
+      - name: no-internal-content
+        run: |
+          CHANGED=$(git status --porcelain --untracked-files=all \
+            | grep -v -E '^ ?D|^D ' \
+            | sed 's/^...//' | sed 's/.* -> //' \
+            | grep -v -E '^\.schemabounce/' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "no files changed, nothing to scan"
+            exit 0
+          fi
+          # grep, not rg: a missing binary must fail the check, never pass it.
+          # Exit 0 means a match, 1 means clean, anything else is an error.
+          # shellcheck disable=SC2086
+          grep -n -I -E \
+            -e 'AKIA[0-9A-Z]{16}' \
+            -e '-----BEGIN [A-Z ]*PRIVATE KEY-----' \
+            -e 'gh[pousr]_[A-Za-z0-9]{30,}' \
+            -e 'sk_live_[A-Za-z0-9]+' \
+            -e 'xox[abp]-[0-9A-Za-z-]{10,}' \
+            -e '\.svc\.cluster\.local' \
+            -e '/mnt/c/git' \
+            -e 'sb-ws-[a-z0-9]' \
+            -e 'schemabounce-system' \
+            -- $CHANGED
+          case $? in
+            1) ;;
+            0) echo "internal or credential-shaped content found in a PUBLIC repo (see above)"; exit 1 ;;
+            *) echo "scan failed to run"; exit 1 ;;
+          esac
+          echo "no internal content in changed files"
+        severity: blocking
+        timeout: 5m
+
+  - name: evaluate
+    uses: review
+    context: fresh
+    onFail:
+      retry: { maxAttempts: 2 }
+      then: fail
+    guidance: |
+      Judge the work against the plan's acceptance criteria, not against the
+      code you would have written. This repository is the public marketplace
+      catalog, so read every changed line as something a stranger will see.
+    criteria:
+      - name: acceptance-met
+        threshold: 0.9
+        guidance: |
+          Every acceptance criterion in the plan is demonstrably met. Point at
+          the file and line, or the command whose output shows it.
+      - name: nothing-internal
+        threshold: 1.0
+        guidance: |
+          Nothing in any changed file, comment or commit message is internal:
+          no secrets-store key names, chart flags, cluster namespaces or
+          service names, internal hostnames, private repository paths, incident
+          references or operator runbook notes. Env specs may name the
+          variables a customer supplies, never values. Score below 1.0 for a
+          single instance.
+      - name: repo-conventions
+        threshold: 0.7
+        guidance: |
+          Taxonomy holds: a Bot is a blueprint with skills baked in, deploying
+          creates an Agent, a Team deploys member bots. The word seat appears
+          nowhere. Manifests follow the format in the README of their
+          directory, a bot change keeps team version pins consistent, and
+          SOUL.md stays under its token budget in first person.
+      - name: test-coverage
+        threshold: 0.6
+        # Advisory. The blocking bar is the validate check, which actually
+        # runs the validators. This scores whether a new manifest is worth
+        # having, and a model's opinion should not fail a run on its own.
+        blocking: false
+
+complete:
+  # A pull request into development (runtime.yaml handoff.baseBranch). A hosted
+  # session cannot commit to development directly the way a local session does,
+  # so its branch arrives as a PR a person merges (founder's choice,
+  # 2026-10-12: agent pushes go to a PR). Promotion to main stays a separate,
+  # human decision.
+  endpoint: pr

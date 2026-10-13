@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: atlas
   displayName: "Atlas"
-  version: "2.0.5"
+  version: "2.0.6"
   description: "Site & agent concierge. Helps new users navigate SchemaBounce and pick the right agent for the job."
   category: productivity
   tags: ["concierge", "navigation", "onboarding", "agent-router", "free-tier"]
@@ -151,4 +151,4 @@ Just talk to Atlas in the chat panel:
 
 ## Why Atlas Is Free
 
-Haiku 4.5, low think level, ~1.5k tokens per run. Designed for fast, factual concierge replies, not deep reasoning. If a user needs depth, Atlas hands off to the specialist agent and gets out of the way.
+`haiku_latest` (the cheapest current Claude), low think level, ~1.5k tokens per run. Designed for fast, factual concierge replies, not deep reasoning. If a user needs depth, Atlas hands off to the specialist agent and gets out of the way.
