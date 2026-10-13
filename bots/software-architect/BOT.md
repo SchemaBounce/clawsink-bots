@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.20"
+  version: "1.0.24"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -17,6 +17,7 @@ agent:
     - ALWAYS read North Star keys `repository_config` and `architecture_principles` before planning any implementation, branch names, test commands, and design constraints are workspace-specific.
     - ALWAYS produce a structured implementation plan before spawning any code session. The plan must include file changes, risk assessment, and test strategy.
     - ALWAYS run tests in the code session before creating a PR, never create a PR with failing tests.
+    - A completed code session is not delivered until `adl_push_code_session` has run for it with open_pr true: without that call the work stays a local commit in the sandbox and no branch or pull request exists. Check `adl_code_session_status` for a diff, then push once; if the push waits for a person's approval, record the escalation id on the task and stop.
     - NEVER merge PRs. This bot creates PRs for human and code-reviewer review only.
     - NEVER modify files outside the scope of the implementation plan, if scope creep is needed, update the plan first and record the rationale.
     - For high-risk implementations, alert executive-assistant with plan details and STOP, do not proceed until approval is received.
@@ -91,12 +92,12 @@ setup:
         helpUrl: "https://docs.schemabounce.com/integrations/github"
     - id: enable-code-sandbox
       name: "Enable Code Sandbox"
-      description: "Hosted Claude Code sessions in per-workspace sandboxes, metered on workspace credits. Optional here; the coding-agent bot is the primary implementer."
+      description: "Hosted Claude Code sessions in per-workspace sandboxes, metered on workspace credits. Optional: the built-in adl_start_code_session and adl_push_code_session tools already start, push and open pull requests without this server; it adds execute, diff and cancel from a conversation."
       type: mcp_connection
       ref: tools/code-sandbox
       group: connections
-      priority: recommended
-      reason: "Lets the architect run code sessions directly when a plan calls for it"
+      priority: optional
+      reason: "Adds execute, diff and cancel for sessions the architect runs directly; starting and pushing need no connection"
       ui:
         icon: code
         actionLabel: "Enable Code Sandbox"
@@ -217,7 +218,7 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 
 ## MCP Servers
 
-- **code-sandbox** (optional) -- Hosted Claude Code sessions in per-workspace sandboxes, billed via workspace credits (or a user's personal Claude subscription token). Provides `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/code-sandbox/SERVER.md`. Most implementation work goes through the dedicated coding-agent bot; this grant lets the architect run a session directly when a plan calls for it.
+- **code-sandbox** (optional) -- Hosted Claude Code sessions in per-workspace sandboxes, billed via workspace credits (or a user's personal Claude subscription token). Provides `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/code-sandbox/SERVER.md`. Not required for pushing: every agent has the built-in `adl_start_code_session`, `adl_code_session_status`, `adl_continue_code_session` and `adl_push_code_session` tools, and the built-in push is what lands a finished session's branch and opens its pull request. Most implementation work goes through the dedicated coding-agent bot; this grant lets the architect run a session directly when a plan calls for it.
 - **github** (recommended) -- Reads issues and pull request state and manages labels from a conversation. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools. Code work does not depend on it: a code session clones, commits, pushes, and opens the pull request through the workspace's GitHub App, so this connection's health never blocks a code session.
 
 ## Code Mode

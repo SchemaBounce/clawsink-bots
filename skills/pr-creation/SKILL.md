@@ -4,7 +4,7 @@ kind: Skill
 metadata:
   name: pr-creation
   displayName: "PR Creation"
-  version: "1.0.0"
+  version: "1.0.1"
   description: "Creates structured pull requests with descriptions, linked issues, labels, and review assignments."
   tags: ["pull-request", "github", "code-review", "engineering"]
 tools:
@@ -16,11 +16,11 @@ data:
 
 # PR Creation
 
-Creates structured pull request specifications from implementation plans and code session results. The skill generates a title, body, labels, and reviewer suggestions ready for the code session's push, which opens the pull request through the workspace's GitHub App, or for the GitHub MCP `create_pull_request` tool when that server is connected.
+Creates structured pull request specifications from implementation plans and code session results. The skill generates a title, body, labels, and reviewer suggestions ready for `adl_push_code_session`, the built-in tool that pushes the session's work branch and opens the pull request through the workspace's GitHub App (behind the workspace's push approval when one is required), or for the GitHub MCP `create_pull_request` tool when that server is connected.
 
 ## When to Use
 
-Use this skill in bots that push code changes and need to open well-formatted pull requests. Pairs with `implementation-planning` and code sessions (`adl_start_code_session`). The `tools/github` MCP server is optional.
+Use this skill in bots that push code changes and need to open well-formatted pull requests. Pairs with `implementation-planning` and code sessions (`adl_start_code_session`, then `adl_push_code_session` once the session completes). The `tools/github` MCP server is optional.
 
 ## Typical Bots
 
