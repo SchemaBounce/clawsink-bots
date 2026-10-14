@@ -17,7 +17,7 @@
 1. **Bots are blueprints, not deployed agents.** BOT.md defines defaults (model, schedule, skills). Users customize after deployment. Write defaults that make sense as starting points.
 2. **Skills are baked into bots.** A bot's `skills: [ref]` list is final. Users cannot add/remove skills post-deploy. Design bots with the right skill mix from the start.
 3. **Teams are deploy bundles with org structure.** TEAM.md defines which bots deploy together, their org chart, and escalation paths. These persist as visual groupings in the workspace.
-4. **"Seat" does not exist.** Never reference seats in manifests, README files, or documentation. Bots deploy directly to become Agents.
+4. **"Seat" never names a SchemaBounce concept** (dec-121, accepted 2026-10-14, supersedes dec-031). Never call an agent, its capacity, workspace membership or a plan a seat in manifests, README files, or documentation. Bots deploy directly to become Agents. Single exception: a third-party provider's own license unit, in the provider's own term (for example a Claude Team seat), in the code, types and copy that handle those licenses (dec-077, dec-112, dec-113). Bot (marketplace blueprint) and Agent (deployed instance) are never interchanged. Agent slots are a visual capacity representation with no data model. `scripts/check-seat-copy.sh` (pre-commit) enforces this.
 
 ## Terminology in Manifests and Docs
 
@@ -54,7 +54,7 @@ When writing README files or documentation in this repo:
 - Describe bots as "blueprints" or "templates" — not as running agents
 - Explain that skills are part of the bot definition, not standalone deployable units
 - Clarify that teams create multiple agents from their member bots
-- Never mention "seats" — use "agent slots" for tier capacity if needed
+- Never use "seat" for an agent, capacity or a plan. Use "agent slots" for tier capacity if needed. Only a provider's own license unit may be called a seat, in the provider's term (dec-121)
 
 ## Three Concepts Sharing the Word 'Skill'
 

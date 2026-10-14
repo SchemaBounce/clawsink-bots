@@ -349,7 +349,7 @@ Web capabilities (`web.browsing`, `web.search`, `web.crawling`) don't provision 
 
 ## Egress Section
 
-The `egress:` section declares which external HTTPS endpoints the bot needs to reach via the proxy token system (`request_proxy_token` → `execute_proxy_call`). When a bot is deployed to a seat, the `egress` section auto-populates the seat's `manifest.egressPolicy`. The admin can override it per-seat.
+The `egress:` section declares which external HTTPS endpoints the bot needs to reach via the proxy token system (`request_proxy_token` → `execute_proxy_call`). When a bot is deployed, the `egress` section auto-populates the new agent's `manifest.egressPolicy`. The admin can override it per agent.
 
 - `mode` defaults to `llm-only` (no proxy calls allowed; the agent's own LLM calls still work)
 - `open` allows the agent to reach any public HTTPS endpoint

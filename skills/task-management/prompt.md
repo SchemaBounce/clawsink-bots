@@ -9,7 +9,7 @@ Tasks are stored as ADL records and visible on the workspace kanban board at `/a
 **Platform features (automatic, no action needed):**
 - When you run, your `<pending_tasks>` context block shows all tasks assigned to you — you don't need to query for them.
 - Setting `assignee_agent_id` on a task auto-wakes the assigned agent within 60 seconds.
-- Agent names work as IDs — you can assign to `"workflow-designer"` instead of `"seat_5022a23e"`.
+- Agent names work as IDs — you can assign to `"workflow-designer"` instead of its agent ID.
 
 ### Creating a Task
 

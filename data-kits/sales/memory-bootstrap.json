@@ -51,7 +51,7 @@
     },
     {
       "key": "best-practice:competitive_positioning",
-      "value": "When Fivetran is in the deal: lead with latency (15-min batch vs sub-second CDC), pricing transparency (event-based vs connector-seat model), and Kolumn IaC bundling. When Airbyte is in the deal: lead with managed reliability, enterprise support SLAs, and the full streaming-to-sink pipeline as a single product. Always ask what the prospect is currently using before assuming the primary competitor.",
+      "value": "When Fivetran is in the deal: lead with latency (15-min batch vs sub-second CDC), pricing transparency (event-based vs per-connector model), and Kolumn IaC bundling. When Airbyte is in the deal: lead with managed reliability, enterprise support SLAs, and the full streaming-to-sink pipeline as a single product. Always ask what the prospect is currently using before assuming the primary competitor.",
       "category": "best-practice",
       "tags": ["competitive", "fivetran", "airbyte", "positioning"]
     },

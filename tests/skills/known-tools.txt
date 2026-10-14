@@ -32,6 +32,7 @@ adl_execute_skill
 adl_export_records
 adl_find_ui_path
 adl_get_agent_metrics
+adl_get_agent_model
 adl_get_agent_status
 adl_get_catalog_detail
 adl_get_context
@@ -72,6 +73,7 @@ adl_list_workspace_sinks
 adl_list_workspace_sources
 adl_pause_workflow
 adl_propose_agent
+adl_propose_agent_model
 adl_propose_crystallization
 adl_propose_pipeline_route
 adl_proxy_call
@@ -91,6 +93,7 @@ adl_render_file
 adl_repo_list_files
 adl_repo_read_file
 adl_repo_search_code
+adl_report_schemabounce_bug
 adl_request_agent_route
 adl_request_escalation
 adl_request_file_access
@@ -104,6 +107,7 @@ adl_search_graph
 adl_search_memory
 adl_semantic_search
 adl_send_message
+adl_send_schemabounce_bug_details
 adl_set_memory_ttl
 adl_share_file
 adl_start_code_session
