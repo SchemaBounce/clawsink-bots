@@ -27,11 +27,10 @@ transport:
   # it as an MCP stdio server — see github/github-mcp-server's own README.
   args: ["stdio"]
 env:
-  # Optional. Leave blank to use your connected GitHub account (Settings ->
-  # Git Connections). Provide a PAT only to override it. Same pattern as
-  # tools/github.
+  # Optional. Left blank on a workspace or team connection, the workspace's
+  # SchemaBounce GitHub App installation supplies the token.
   - name: GITHUB_PERSONAL_ACCESS_TOKEN
-    description: "Optional GitHub PAT with repo, workflow, and read:org scope. Leave blank to use your connected GitHub (Settings -> Git Connections); provide one only to override."
+    description: "Optional GitHub token with repo, workflow, and read:org scope. Left blank on a workspace or team connection, this uses your workspace's SchemaBounce GitHub App installation (only the repositories granted to the app). A token acts as that specific GitHub account."
     required: false
     sensitive: true
   - name: GITHUB_TOOLSETS
@@ -379,15 +378,17 @@ None yet. New bots that need GitHub Actions, security scanning, notifications,
 discussions, or Projects should reference this server. Bots that only need
 basic repo/issue/PR operations can keep using `tools/github`; the two servers
 accept the same `GITHUB_PERSONAL_ACCESS_TOKEN` credential and the same
-workspace OAuth bridge.
+SchemaBounce GitHub App fallback on a workspace or team connection.
 
 ## Setup
 
-1. Connect GitHub in Workspace Settings -> Git Connections (recommended), or
-   create a Personal Access Token with `repo`, `workflow`, and `read:org`
-   scopes.
-2. Leave `GITHUB_PERSONAL_ACCESS_TOKEN` blank to use the workspace connection;
-   paste a PAT only to override it.
+1. Install the SchemaBounce GitHub App on your account or organization and
+   grant it the repositories the agents should reach, or create a Personal
+   Access Token with `repo`, `workflow`, and `read:org` scopes.
+2. Leave `GITHUB_PERSONAL_ACCESS_TOKEN` blank on a workspace or team connection
+   to use the workspace's SchemaBounce GitHub App installation (only the
+   repositories granted to the app). Paste a token to act as that specific
+   GitHub account instead. A personal connection always uses its own token.
 3. Optionally set `GITHUB_TOOLSETS` (see Toolsets above). Blank means the
    default toolsets only.
 

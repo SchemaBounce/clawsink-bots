@@ -15,9 +15,10 @@ transport:
   command: "npx"
   args: ["-y", "@modelcontextprotocol/server-github@2025.4.8"]
 env:
-  # Optional. Leave blank to use your connected account.
+  # Optional. Left blank on a workspace or team connection, the workspace's
+  # SchemaBounce GitHub App installation supplies the token.
   - name: GITHUB_PERSONAL_ACCESS_TOKEN
-    description: "Optional GitHub PAT with repo + issues scope. Leave blank to use your connected GitHub (Settings -> Git Connections); provide one only to override."
+    description: "Optional GitHub token with repo + issues scope. Left blank on a workspace or team connection, this uses your workspace's SchemaBounce GitHub App installation (only the repositories granted to the app). A token acts as that specific GitHub account."
     required: false
     sensitive: true
 
@@ -162,7 +163,7 @@ Provides comprehensive GitHub API tools for bots that manage code, issues, pull 
 2. Add it in the MCP connection setup as `GITHUB_PERSONAL_ACCESS_TOKEN`
 3. The server starts automatically when a bot that references it runs
 
-> If your workspace already has a GitHub OAuth connection, `GITHUB_PERSONAL_ACCESS_TOKEN` is optional and you can leave it blank. When set, it lives on the MCP connection (encrypted) and is injected by the gateway when a tool runs. The agent is granted the server's tools, not the raw credential, so it cannot read or echo the token. There is nothing else to store.
+> On a workspace or team connection, `GITHUB_PERSONAL_ACCESS_TOKEN` is optional: leave it blank to use your workspace's SchemaBounce GitHub App installation (only the repositories granted to the app). A token acts as that specific GitHub account. When set, it lives on the MCP connection (encrypted) and is injected by the gateway when a tool runs. The agent is granted the server's tools, not the raw credential, so it cannot read or echo the token. There is nothing else to store.
 
 ## Team Usage
 
