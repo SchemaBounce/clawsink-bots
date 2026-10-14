@@ -10,7 +10,7 @@ metadata:
   author: "schemabounce"
   license: "MIT"
 tools:
-  required: ["adl_list_workflows", "adl_get_workflow", "adl_update_workflow", "adl_deploy_workflow", "adl_list_workflow_runs", "adl_get_workflow_run"]
+  required: ["adl_list_workflows", "adl_get_workflow", "adl_update_workflow", "adl_deploy_workflow", "adl_list_workflow_runs", "adl_get_workflow_run", "adl_get_agent_model", "adl_propose_agent_model"]
 data:
   producesEntityTypes: []
   consumesEntityTypes: []
