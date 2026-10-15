@@ -33,6 +33,7 @@
 - Tools come from the site's adapter: posts, pages, media, taxonomies, settings, and whatever abilities its plugins register.
 - Flow: upload media, create the page or post with status draft, write theme.json values or the Customizer CSS the theme supports, show the result, then the gated publish (status publish). The approval releases it.
 - One dedicated WordPress user per connection, so the site's revision history says which changes the designer made.
+- Page builder data (Elementor `_elementor_data`, the block markup of a long page) is one large field that a write resends whole. Never retype it in a tool call: read the page, copy the field with `adl_payload_from_result` (path `meta._elementor_data`; `adl_tool_search("payload")` finds the tools), change the text with `adl_payload_edit` (write find and replace as the text reads, not escaped), then pass `{"$payload": "page"}` as the field's value in the update call. The edit costs a few hundred tokens whatever the page size, and every other byte of the page stays as it was.
 
 ## squarespace (no connection: Squarespace has no page or content API)
 
