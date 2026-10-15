@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copied from SchemaBounce/schemabounce-agent-kit scripts/agents_md.py (kit 0.3.0).
+# Copied from SchemaBounce/schemabounce-agent-kit scripts/agents_md.py (kit 0.4.2).
 # Do not edit here: change the kit, then copy the file again. Only check and
 # check-settings run in this repository; render needs the kit checkout.
 """Render the kit's decisions text into a repository's instruction file, and
@@ -8,7 +8,7 @@ check that it is still there and unchanged.
 The block lives between two HTML comments, so it survives next to hand-written
 text and a regenerated mirror alike:
 
-    <!-- schemabounce-agent-kit:decisions start kit=0.3.0 sha256=... -->
+    <!-- schemabounce-agent-kit:decisions start kit=<version> sha256=... -->
     ## SchemaBounce decisions
     ...
     <!-- schemabounce-agent-kit:decisions end -->
