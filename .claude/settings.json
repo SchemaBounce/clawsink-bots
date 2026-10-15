@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "schemabounce": {
+      "source": {
+        "source": "github",
+        "repo": "SchemaBounce/claude-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "schemabounce@schemabounce": true
+  }
+}
