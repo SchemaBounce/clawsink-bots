@@ -19,7 +19,10 @@
 
 # Live page audit
 
-- `adl_proxy_call` GET on the page named in the brief (read-only, bounded); the markup feeds the accessibility and vitals audit. Never POST.
+- **See it:** use a connected browser tool to open the page and take a screenshot (its tool list says which call does that; `adl_tool_search("screenshot")` finds one). The platform saves the image to Files under `/captures` and the result names its `file_id`. Then `adl_view_image_file` with that `file_id` and a prompt that names what to check, for example "Read every line of text in the hero. For each, say its colour, what is behind it, and whether it is easy to read." Close the browser session when the tool has one.
+- The screenshot is the evidence. A tool's text description of a page is a model's reading, never a measurement of its colours. Contrast of text on a flat colour comes from `contrast_ratio` with the hex values from the CSS; text over a photo has no single ratio, so judge it from the screenshot and fix it with a solid or scrim panel.
+- Say which width you saw. When no phone-width view was available, say the phone view was not seen.
+- **Read it:** `adl_proxy_call` GET on the page (read-only, bounded); the markup feeds the accessibility and vitals audit. Never POST.
 
 # MCP Server Tools
 
