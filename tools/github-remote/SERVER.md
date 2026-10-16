@@ -50,7 +50,7 @@ GitHub's side; run the connect flow again.
 
 The existing `github` tool runs GitHub's MCP server inside the platform gateway
 and authenticates with a personal access token (or your connected GitHub from
-Settings, Git Connections). This entry connects to GitHub's own hosted server
+Code, Repositories). This entry connects to GitHub's own hosted server
 at `api.githubcopilot.com` instead: GitHub operates the server, tools update as
 GitHub ships them, and auth is a one-click account connection.
 

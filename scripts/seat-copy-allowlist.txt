@@ -1,0 +1,3 @@
+# path<TAB>substring of the line. Customer-account wording about the customer own product, not a SchemaBounce concept.
+bots/churn-predictor/agents/risk-assessor.md	multi-seat account
+bots/customer-onboarding/agents/milestone-tracker.md	multi-seat plan

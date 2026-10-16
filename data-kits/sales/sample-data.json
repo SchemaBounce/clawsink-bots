@@ -257,7 +257,7 @@
       {
         "signal_type": "competitor_news",
         "title": "Fivetran raises connector fees by 30% starting Q3",
-        "description": "Fivetran announced a 30% connector seat price increase effective July 1, 2026. Multiple user posts on LinkedIn and Reddit expressing frustration with the lack of notice.",
+        "description": "Fivetran announced a 30% connector price increase effective July 1, 2026. Multiple user posts on LinkedIn and Reddit expressing frustration with the lack of notice.",
         "company_id": null,
         "source_url": "https://fivetran.com/blog/pricing-update-2026",
         "relevance_score": 88,

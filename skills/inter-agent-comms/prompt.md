@@ -4,7 +4,7 @@ Agents coordinate through the database using the A2A pattern — async messages 
 
 ### Agent Discovery
 
-Call `adl_list_agents` FIRST — it returns only active agents by default. You can use agent names (e.g. `"workflow-designer"`) instead of seat IDs everywhere — names resolve automatically.
+Call `adl_list_agents` FIRST — it returns only active agents by default. You can use agent names (e.g. `"workflow-designer"`) instead of agent IDs everywhere — names resolve automatically.
 
 ### Message Types (via adl_send_message)
 - `request` — ask another agent to do something (expects `response` reply)

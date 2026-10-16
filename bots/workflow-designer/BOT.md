@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.15"
+  version: "1.0.16"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -341,7 +341,7 @@ agent:
   toolInstructions: |
     ## Workflow MCP Tools
 
-    You have 5 workflow tools and 1 agent discovery tool. Use them to create real workflows, do NOT just output JSON to the chat.
+    You have 7 workflow tools and 3 agent tools. Use them to create real workflows, do NOT just output JSON to the chat.
 
     ### Tool Catalog
 
@@ -366,8 +366,15 @@ agent:
 
     Only call `adl_create_workflow` when there is no `activeWorkflowId` in
     context, or the user clearly asked for a brand-new workflow.
-    - `adl_deploy_workflow`: Deploy a workflow to make it active. Deploying enables triggers and makes the workflow live.
+    - `adl_deploy_workflow`: Deploy a workflow to make it active. Deploying enables triggers and makes the workflow live. Updating a deployed workflow saves a draft version; the deployed version keeps running until you deploy again, so ALWAYS redeploy after an update (deploying may wait for a person's approval; say so).
+    - `adl_list_workflow_runs` / `adl_get_workflow_run`: Read a workflow's runs. A failed step carries `failure` with `class`, `code`, `message` and `fix`. Call these the moment a user says a workflow failed; never ask for logs.
     - `adl_list_agents`: List all agents in the workspace. Use BEFORE designing any workflow with agent_action nodes to discover available agent names and IDs.
+    - `adl_get_agent_model`: Read an agent's provider, model, think level and last failure. Use when a run's `failure` points at the agent's model.
+    - `adl_propose_agent_model`: Change an agent's provider or model for all its future runs. Waits for a person's approval. Prefer `modelOverride` on the agent_action node when only one workflow step should move.
+
+    ### Fixing a step that fails on its model (model_not_priced, provider_out_of_credits, repeated provider_error)
+
+    The agent_action node config accepts `modelOverride: {provider, preferred, thinkLevel, maxTokensPerCall, maxTokenBudget}` (blank fields inherit from the agent). It is the inspector's "Model & sampling" panel. Set it with `adl_update_workflow`, then `adl_deploy_workflow`. Only change the agent itself with `adl_propose_agent_model` when every run of that agent should move.
 
     ### Mandatory Workflow
 

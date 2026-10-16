@@ -88,6 +88,9 @@ tools:
   - name: sb_ops
     description: "Ops: ADL files, SSO config, and A2A dispatch. Actions: files_list, files_get, files_get_content, files_upload, files_delete, sso_status, sso_connection_create, sso_connection_update, sso_connection_delete, sso_mappings_list, sso_mapping_upsert, sso_mapping_delete, a2a_agent_card, a2a_rpc"
     category: ops
+  - name: sb_decision
+    description: "Decision records. Actions: propose (create a decision proposal; the server assigns the next dec-NNN id and records the proposer, it never overwrites a record, and only a person with decide permission accepts or rejects it)"
+    category: decisions
 ---
 
 # SchemaBounce MCP Server

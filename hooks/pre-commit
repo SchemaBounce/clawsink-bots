@@ -31,6 +31,14 @@ if [ -z "$staged_files" ]; then
   exit 0
 fi
 
+# --- Phase 0: the word "seat" (dec-121) ---
+# Shipped text must not call an agent, its capacity or a plan a seat. A
+# provider's own license unit (a Claude Team seat) may keep the word.
+if ! bash scripts/check-seat-copy.sh --staged; then
+  echo -e "\033[31m✗ seat wording (dec-121) — commit blocked\033[0m"
+  exit 1
+fi
+
 # Find unique bot names that have staged changes
 changed_bots=()
 while IFS= read -r file; do
