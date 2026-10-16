@@ -18,7 +18,7 @@ env:
     description: "SchemaBounce-managed code-session service URL. Injected by the platform; never customer-provided."
     required: true
   - name: REPO_CLONE_TOKEN
-    description: "Optional Git PAT override. Leave blank to use your connected GitHub (Settings -> Git Connections)."
+    description: "Optional Git PAT override. Leave blank to use your connected GitHub (Code > Repositories)."
     required: false
     sensitive: true
 tools:
@@ -86,7 +86,7 @@ Two ways to pay for the model tokens a session burns:
 - **Platform credits (default).** Sessions are metered against the workspace credit balance, the same ledger as every other managed-inference feature. Cost shows up per-agent in the Usage and Cost tab. `max_budget_usd` caps a single session's spend.
 - **Personal Claude subscription token (optional).** A user can paste a subscription token into their user settings. They generate it themselves by running `claude setup-token` on their own machine; SchemaBounce never runs a Claude OAuth flow and never sees the user's Anthropic password. Claude subscriptions include a monthly Agent SDK allowance of roughly $20 to $200 depending on plan. When the allowance is exhausted mid-month, sessions continue on workspace credits.
 
-`REPO_CLONE_TOKEN` is separate from billing auth: it is an optional Git PAT override for cloning. Most workspaces leave it blank and the platform bridges the token from the connected GitHub in Settings -> Git Connections.
+`REPO_CLONE_TOKEN` is separate from billing auth: it is an optional Git PAT override for cloning. Most workspaces leave it blank and the platform bridges the token from the connected GitHub in Code > Repositories.
 
 ## Approval Gates
 
@@ -95,7 +95,7 @@ Two ways to pay for the model tokens a session burns:
 ## Setup
 
 1. Requires **Starter tier or above**.
-2. Connect GitHub under Settings -> Git Connections (or set `REPO_CLONE_TOKEN` to override with a PAT).
+2. Connect GitHub under Code > Repositories (or set `REPO_CLONE_TOKEN` to override with a PAT).
 3. Ensure the workspace has a positive credit balance, or paste a personal Claude subscription token in user settings.
 4. `CODE_SANDBOX_MCP_URL` is injected by the platform. Customers never set it.
 
