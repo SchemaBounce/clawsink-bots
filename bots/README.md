@@ -4,7 +4,7 @@ A Bot is a complete agent definition with identity, model, schedule, messaging, 
 
 **Relationship to Teams**: Bots are grouped into teams via `bots[].ref: "bots/{name}@{version}"` in TEAM.md. See [teams/README.md](../teams/README.md) for team composition.
 
-**Relationship to Skills**: Bots compose skills via `skills[].ref: "skills/{name}@{version}"`. Each skill's `prompt.md` is appended to the bot's system prompt. See [skills/README.md](../skills/README.md) for the skill format.
+**Relationship to Skills**: Bots compose skills via `skills[].ref: "skills/{name}@{version}"` (a skill in this repository) or `skills[].ref: "registry:{owner}/{repo}/{skill}[@{commit}]"` (a public Agent Skills registry skill). Each skill's prompt is loaded by the agent on demand. See [skills/README.md](../skills/README.md) for both formats.
 
 **Relationship to Built-in Tools**: All 133 built-in deterministic tools are available to every agent automatically. Bots may list `toolPacks[]` in their manifest for documentation purposes — indicating which tool categories the bot is designed to use. See [packs/README.md](../packs/README.md) for the tool catalog.
 
@@ -86,6 +86,7 @@ zones:
   zone2Domains: [string] # Shared domains this bot accesses
 skills:                  # Skill composition
   - ref: string          # Reference to shared skill: "skills/{name}@{version}"
+                         # or a public registry skill: "registry:{owner}/{repo}/{skill}[@{commit}]"
 rules:                   # Always-on guardrails (optional)
   - ref: string          # Reference to shared rule: "rules/{name}@{version}"
 toolPacks:               # Native deterministic tools (optional)
