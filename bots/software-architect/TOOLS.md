@@ -1,6 +1,6 @@
 # Data Access
 
-- Query `gh_issues`: `adl_query_records` — filter by `assignee` or `labels` for issues assigned to this bot, by `created_at` for new requests
+- Query `gh_issues`: `adl_query_records` — filter by `assignee` or `labels` for issues assigned to this agent, by `created_at` for new requests
 - Query `review_findings`: `adl_query_records` — filter by `severity` for high/critical findings requiring architectural response
 - Query `architecture_decisions`: `adl_query_records` — filter by `module` to check prior decisions for consistency
 - Write `implementation_plans`: `adl_upsert_record` — ID format `plan-{issue_id}`, include file changes, risk level, test strategy, architecture rationale
