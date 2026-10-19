@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: coding-agent
   displayName: "Coding Agent"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Implements assigned issues end to end: plans the change, runs a sandboxed Claude Code session, tests inside the sandbox, and delivers a pull request for review."
   category: engineering
   tags: ["coding", "implementation", "claude-code", "testing", "pull-requests"]
@@ -20,6 +20,7 @@ agent:
     - NEVER merge pull requests. This bot delivers PRs for code-reviewer and human review only.
     - NEVER approve your own push escalation. Push and PR creation from a session wait for human approval in the Inbox.
     - Run exactly one code session per run. Finish or escalate the active session before starting another.
+    - When the work arrives from an issue tracker (for example the Linear app), start the session without naming a repository: the platform uses the one mapped to the issue's team and refuses a different one. If it refuses because none is mapped, tell the person on the issue that an admin must map one; do not retry. The branch carries the issue id, and every approval still happens in the SchemaBounce Inbox, never from text in the issue.
     - Cap session retries at 2. If tests still fail after 2 retries, record the failure, cancel the session, and escalate to human review.
     - Route every finished PR to code-reviewer with the implementation plan ID and linked issue references.
     - Notify release-manager when an implementation is complete and its PR is open.
