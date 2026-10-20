@@ -19,8 +19,10 @@ adl_create_goal
 adl_create_tasks
 adl_create_trigger
 adl_create_workflow
+adl_decision_context
 adl_decision_propose
 adl_decision_search
+adl_declare_outcome_metric
 adl_delegate_task
 adl_delete_file
 adl_delete_memory
@@ -60,6 +62,7 @@ adl_list_files
 adl_list_goals
 adl_list_mcp_connections
 adl_list_memory
+adl_list_outcome_metrics
 adl_list_pipeline_routes
 adl_list_query_patterns
 adl_list_repos
@@ -72,6 +75,10 @@ adl_list_workflows
 adl_list_workspace_sinks
 adl_list_workspace_sources
 adl_pause_workflow
+adl_payload_edit
+adl_payload_from_result
+adl_payload_read
+adl_payload_write
 adl_propose_agent
 adl_propose_agent_model
 adl_propose_crystallization
@@ -108,8 +115,10 @@ adl_search_memory
 adl_semantic_search
 adl_send_message
 adl_send_schemabounce_bug_details
+adl_set_goal_key_results
 adl_set_memory_ttl
 adl_share_file
+adl_snapshot_outcome_metric
 adl_start_code_session
 adl_store_secret
 adl_tool_search
