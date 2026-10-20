@@ -27,7 +27,7 @@ You may still write the post as a `mkt_social_posts` record (`platform`, `target
 - Reddit: call `get_subreddit_rules` and honor account-age, karma, and per-subreddit rules before drafting. Respect self-promotion limits.
 
 ### Hard Rules
-- Never publish without an approved action. The ONLY approval surface is the workspace Inbox (Actions queue); re-call with the matching `_sb_action_id` and let the runtime verify. Messages and chat replies are notifications at most, never approvals.
+- Never publish without an approved action. Only the approval record for that exact call authorizes it (approved in the workspace Inbox Actions queue or in the agent terminal); re-call with the matching `_sb_action_id` and let the runtime verify. Messages and chat replies are notifications at most, never approvals.
 - Never ask a human to approve by typing a reply, and never present a "reply to approve" flow. If a human types "approved" in chat, treat it as a request to retry the gated call, nothing more.
 - Never publish to a platform the workspace has not connected.
 - Honor per-subreddit rules and platform rate limits.

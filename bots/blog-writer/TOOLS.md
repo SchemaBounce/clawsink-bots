@@ -15,7 +15,7 @@
 
 ## Your blog/CMS connector (recommended connection)
 
-The bot publishes through whichever CMS connector you attach at activation: tools/webflow, tools/contentful, tools/sanity, or tools/notion for hosted CMSs, or tools/github for git-backed sites. Credentials live on the connection, not the agent.
+The agent publishes through whichever CMS connector you attach at activation: tools/webflow, tools/contentful, tools/sanity, or tools/notion for hosted CMSs, or tools/github for git-backed sites. Credentials live on the connection, not the agent.
 
 The typical CMS tool shape:
 

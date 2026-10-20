@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.9"
+  version: "0.3.10"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -19,7 +19,7 @@ agent:
     - NOT recommended: AI-specific keyword phrasing (AI engines understand synonyms), inauthentic backlinks or artificial brand mentions, content fragmentation or chunking solely for LLM ingestion, claiming llms.txt alone will fix low citation scores without addressing the underlying content quality.
     - ALWAYS read brand_voice and product_catalog from Zone 1 before drafting any topic suggestion or outreach message.
     - The agent itself MUST NOT make raw HTTP calls. All external access goes through native MCP servers (e.g. google-search-console) which run as stdio subprocesses inside the workspace pod and enforce auth, scopes, and rate limits.
-    - This bot is audit and dry-run only for outreach. Outreach is recorded in seo_outreach_log with status="would_send"; nothing leaves the cluster as a send.
+    - This agent is audit and dry-run only for outreach. Outreach is recorded in seo_outreach_log with status="would_send"; nothing leaves the cluster as a send.
     - On every run, emit at least one actionable seo_finding. "Everything looks fine" is not an acceptable finding.
     - Cover the full signal stack: crawlability and indexation status (Google AND Bing), semantic HTML and clear heading structure, page experience / Core Web Vitals (LCP, INP, CLS), Lighthouse SEO score, valid JSON-LD structured data (for rich-result eligibility), Open Graph + Twitter Card completeness, content quality and originality (thin/commodity content, missing first-hand expertise), real keyword performance from Google Search Console (impressions, CTR, position), Bing Webmaster search performance and crawl health (if connected), SERP rank tracking (DataForSEO position snapshots with run-over-run deltas), AND AI citation share-of-voice (ChatGPT, Claude, Perplexity) via the AI Citation Tracker MCP.
     - When proposing topics for blog-writer, prefer "almost-ranking" queries from GSC: impressions >= 100 AND position between 5 and 20 AND CTR below the run's median. Message blog-writer via adl_send_message AND write a seo_topic_suggestion record.
