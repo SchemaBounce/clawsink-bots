@@ -10,13 +10,13 @@
 | **Skill** | Reusable prompt + tool requirements | `skills/{name}/SKILL.md` — defines the skill |
 | **Bot** | Complete agent blueprint with baked-in skills | `bots/{name}/BOT.md` — defines the bot |
 | **Agent** | Deployed, running instance of a bot | NOT in this repo — created in workspace when bot is deployed |
-| **Team** | Group of bots with org chart | `teams/{name}/TEAM.md` — defines the team blueprint |
+| **Domain template** | Bundle of bots with an org chart; using it creates domains and their agents | `teams/{name}/TEAM.md` — defines the template (file layout keeps its old name for now) |
 
 ## Key Rules for Manifest Authors
 
 1. **Bots are blueprints, not deployed agents.** BOT.md defines defaults (model, schedule, skills). Users customize after deployment. Write defaults that make sense as starting points.
 2. **Skills are baked into bots.** A bot's `skills: [ref]` list is final. Users cannot add/remove skills post-deploy. Design bots with the right skill mix from the start.
-3. **Teams are deploy bundles with org structure.** TEAM.md defines which bots deploy together, their org chart, and escalation paths. These persist as visual groupings in the workspace.
+3. **Domain templates are deploy bundles with org structure** (dec-185, accepted 2026-10-22). A TEAM.md defines which bots deploy together, the domains they land in (`orgChart.domains`) and escalation paths. In the workspace the groupings are **Domains**; "team" no longer names a SchemaBounce concept. Exceptions that keep the word: the Team plan, Microsoft Teams, a provider's Team seat, Linear teams. Say "domain template" in new prose. Do NOT rename the `teams/` directory, the `TEAM.md` file name, `kind: Team` or any `metadata.name` (`engineering-team` and the rest are activation keys stored in customer workspaces); the platform accepts new names for those later and keeps the old ones working.
 4. **"Seat" never names a SchemaBounce concept** (dec-121, accepted 2026-10-14, supersedes dec-031). Never call an agent, its capacity, workspace membership or a plan a seat in manifests, README files, or documentation. Bots deploy directly to become Agents. Single exception: a third-party provider's own license unit, in the provider's own term (for example a Claude Team seat), in the code, types and copy that handle those licenses (dec-077, dec-112, dec-113). Bot (marketplace blueprint) and Agent (deployed instance) are never interchanged. Agent slots are a visual capacity representation with no data model. `scripts/check-seat-copy.sh` (pre-commit) enforces this.
 
 ## Terminology in Manifests and Docs
@@ -26,7 +26,9 @@
 | This repo's listings | "Bot" | "Agent", "Seat" |
 | What happens at deploy | "Creates an agent" | "Activates to a seat" |
 | Bot capabilities | "Skills (baked in)" | "Attachable skills", "Seat skills" |
-| Team activation | "Deploys member bots as agents" | "Fills seats" |
+| Using a domain template | "Creates its domains and deploys its bots as agents" | "Fills seats", "Activates a team" |
+| A group of agents in a workspace | "Domain" | "Team" |
+| A TEAM.md bundle | "Domain template" | "Team", "Team pack" |
 | Capacity limits | "Agent slots" | "Seats" |
 
 ## Manifest Hierarchy
@@ -40,9 +42,9 @@ Bot (blueprint)
   ├── SOUL.md (identity)
   ├── model defaults
   ├── schedule defaults
-  └── referenced by Team via bots: [ref]
+  └── referenced by a domain template via bots: [ref]
 
-Team (bundle)
+Domain template (bundle, TEAM.md)
   ├── bots: [ref to bots/]
   ├── orgChart (roles, escalation)
   └── northStar (workspace context)
@@ -53,7 +55,7 @@ Team (bundle)
 When writing README files or documentation in this repo:
 - Describe bots as "blueprints" or "templates" — not as running agents
 - Explain that skills are part of the bot definition, not standalone deployable units
-- Clarify that teams create multiple agents from their member bots
+- Clarify that a domain template creates its domains and multiple agents from its member bots
 - Never use "seat" for an agent, capacity or a plan. Use "agent slots" for tier capacity if needed. Only a provider's own license unit may be called a seat, in the provider's term (dec-121)
 
 ## Three Concepts Sharing the Word 'Skill'
