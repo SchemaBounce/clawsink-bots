@@ -52,7 +52,7 @@ pipeline:
         severity: blocking
         timeout: 10m
         when:
-          paths: ['skills/**', 'tests/skills/**']
+          paths: ['skills/**', 'tests/skills/**', 'bots/**/BOT.md', 'templates/**', 'rules/**']
 
       - name: packs
         run: bash tests/packs/validate-manifest.sh && bash tests/packs/validate-references.sh

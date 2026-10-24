@@ -1,181 +1,79 @@
 #!/usr/bin/env bash
-# Layer 3: Skill Format Validation
-# Validates all skills in the repo without running any agents.
-# Checks:
-# 1. SKILL.md exists and has valid YAML frontmatter
-# 2. prompt.md exists and is under 200 tokens (~800 chars)
-# 3. Required YAML fields present (apiVersion, kind, metadata.name, metadata.description)
-# 4. metadata.name matches directory name
-# 5. tools.required contains only tools the runtime serves (tests/skills/known-tools.txt)
-# 6. kind is "Skill"
+# Skill reference validation (dec-202).
 #
-# Usage: ./validate-format.sh [skill-name]
-#   No args = validate all skills
-#   skill-name = validate specific skill
+# clawsink-bots authors no skills. SchemaBounce's one skill, `schemabounce`, lives in
+# SchemaBounce/schemabounce-agent-kit (skills/schemabounce) and is referenced as
+# `skills/schemabounce` with no local directory. Domain know-how comes from public
+# registry skills (`registry:<owner>/<repo>/<skill>[@<40-hex commit>]`).
+#
+# Checks:
+# 1. skills/ holds README.md only: no skill directory, SKILL.md or prompt.md can creep back in
+# 2. every `ref: "skills/..."` / `ref: "registry:..."` in a manifest is skills/schemabounce
+#    (optionally @x.y.z) or a well-formed registry ref; any other skills/<name> fails
+# 3. every rule `appliesTo` entry that names a skill is skills/schemabounce
+# 4. every bot lists skills/schemabounce as its first skill
+#
+# Usage: ./validate-format.sh
 
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/skills"
+cd "$REPO_ROOT" || exit 1
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 NC='\033[0m'
 
-PASS=0
 FAIL=0
-WARN=0
+fail() { echo -e "  ${RED}FAIL${NC} $1"; FAIL=$((FAIL + 1)); }
 
-# Known valid tool names: GENERATED snapshot of the OpenCLAW runtime registry
-# (ADLTools() in core-api/openclaw-runtime/internal/executor). Never hand-edit
-# the list; refresh it with tests/skills/sync-known-tools.sh --write, and
-# tests/validate-all.sh fails when it is stale against a core-api checkout.
-KNOWN_TOOLS_FILE="$SCRIPT_DIR/known-tools.txt"
-if [ ! -f "$KNOWN_TOOLS_FILE" ]; then
-  echo "FAIL: $KNOWN_TOOLS_FILE missing; run tests/skills/sync-known-tools.sh --write" >&2
-  exit 1
-fi
-# Core adl_ tools and pack tools (a skill lists every tool it calls, pack tools
-# included: adl_invoke_skill restricts dispatch to that list).
-KNOWN_TOOLS="$(grep -vE '^(#|$)' "$KNOWN_TOOLS_FILE" | tr '\n' ' ')"
+SB_RE='^skills/schemabounce(@[0-9]+\.[0-9]+\.[0-9]+)?$'
+REG_RE='^registry:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/[a-z0-9][a-z0-9-]*(@[0-9a-f]{40})?$'
 
-# Approximate token count (~4 chars per token for English)
-estimate_tokens() {
-  local file="$1"
-  local chars
-  chars=$(wc -c < "$file")
-  echo $(( chars / 4 ))
-}
+echo "  skills/ directory:"
+while IFS= read -r entry; do
+  [ "$(basename "$entry")" = "README.md" ] && continue
+  fail "skills/$(basename "$entry") must not exist: this repository authors no skills (dec-202)"
+done < <(find skills -mindepth 1 -maxdepth 1 2>/dev/null)
+while IFS= read -r f; do
+  fail "$f must not exist (dec-202)"
+done < <(find skills -mindepth 2 \( -name SKILL.md -o -name prompt.md \) 2>/dev/null)
 
-validate_skill() {
-  local skill_dir="$1"
-  local skill_name
-  skill_name=$(basename "$skill_dir")
-  local errors=0
-
-  echo "  $skill_name:"
-
-  # Check SKILL.md exists
-  if [ ! -f "$skill_dir/SKILL.md" ]; then
-    echo -e "    ${RED}FAIL${NC} SKILL.md missing"
-    ((FAIL++))
-    return
-  fi
-
-  # Check prompt.md exists
-  if [ ! -f "$skill_dir/prompt.md" ]; then
-    echo -e "    ${RED}FAIL${NC} prompt.md missing"
-    ((FAIL++))
-    return
-  fi
-
-  # Extract YAML frontmatter from SKILL.md
-  local frontmatter
-  frontmatter=$(sed -n '/^---$/,/^---$/p' "$skill_dir/SKILL.md" | sed '1d;$d')
-
-  if [ -z "$frontmatter" ]; then
-    echo -e "    ${RED}FAIL${NC} No YAML frontmatter in SKILL.md"
-    ((FAIL++))
-    return
-  fi
-
-  # Check kind: Skill
-  if ! echo "$frontmatter" | grep -q "^kind: Skill"; then
-    echo -e "    ${RED}FAIL${NC} kind must be 'Skill'"
-    ((errors++))
-  fi
-
-  # Check apiVersion
-  if ! echo "$frontmatter" | grep -q "^apiVersion:"; then
-    echo -e "    ${RED}FAIL${NC} Missing apiVersion"
-    ((errors++))
-  fi
-
-  # Check metadata.name exists
-  local yaml_name
-  yaml_name=$(echo "$frontmatter" | grep "^  name:" | head -1 | sed 's/.*name: *//' | tr -d '"')
-  if [ -z "$yaml_name" ]; then
-    echo -e "    ${RED}FAIL${NC} Missing metadata.name"
-    ((errors++))
-  elif [ "$yaml_name" != "$skill_name" ]; then
-    echo -e "    ${RED}FAIL${NC} metadata.name '$yaml_name' != directory name '$skill_name'"
-    ((errors++))
-  fi
-
-  # Check metadata.description
-  if ! echo "$frontmatter" | grep -q "description:"; then
-    echo -e "    ${RED}FAIL${NC} Missing metadata.description"
-    ((errors++))
-  fi
-
-  # Check metadata.version
-  if ! echo "$frontmatter" | grep -q "version:"; then
-    echo -e "    ${YELLOW}WARN${NC} Missing metadata.version"
-    ((WARN++))
-  fi
-
-  # Validate tools.required against known tools
-  local tools_line
-  tools_line=$(echo "$frontmatter" | grep "required:" | head -1)
-  if [ -n "$tools_line" ]; then
-    # Extract tool names from the YAML array
-    local tools
-    tools=$(echo "$tools_line" | grep -oE '"[a-z_]+"' | tr -d '"')
-    for tool in $tools; do
-      if ! echo "$KNOWN_TOOLS" | grep -qw "$tool"; then
-        echo -e "    ${RED}FAIL${NC} Unknown tool in tools.required: $tool"
-        ((errors++))
-      fi
-    done
-  fi
-
-  # Check prompt.md token count
-  local tokens
-  tokens=$(estimate_tokens "$skill_dir/prompt.md")
-  if [ "$tokens" -gt 200 ]; then
-    echo -e "    ${YELLOW}WARN${NC} prompt.md ~${tokens} tokens (limit: 200)"
-    ((WARN++))
-  fi
-
-  # Check prompt.md isn't empty
-  local lines
-  lines=$(wc -l < "$skill_dir/prompt.md")
-  if [ "$lines" -lt 3 ]; then
-    echo -e "    ${RED}FAIL${NC} prompt.md too short ($lines lines)"
-    ((errors++))
-  fi
-
-  if [ "$errors" -eq 0 ]; then
-    echo -e "    ${GREEN}PASS${NC} valid (${tokens} tokens)"
-    ((PASS++))
-  else
-    ((FAIL++))
-  fi
-}
-
-echo "============================================"
-echo "  Layer 3: Skill Format Validation"
-echo "============================================"
-echo ""
-
-FILTER="${1:-all}"
-
-for skill_dir in "$SKILLS_DIR"/*/; do
-  [ -d "$skill_dir" ] || continue
-  skill_name=$(basename "$skill_dir")
-
-  if [ "$FILTER" != "all" ] && [ "$FILTER" != "$skill_name" ]; then
+echo "  skill refs in manifests:"
+checked=0
+while IFS= read -r hit; do
+  file="${hit%%:*}"
+  rest="${hit#*:}"
+  ref=$(echo "$rest" | sed -E 's/^[[:space:]]*-?[[:space:]]*ref:[[:space:]]*//; s/[[:space:]]+#.*$//' | tr -d '"'"'" | tr -d ' ')
+  checked=$((checked + 1))
+  if [[ "$ref" =~ $SB_RE ]] || [[ "$ref" =~ $REG_RE ]]; then
     continue
   fi
+  fail "$file: skill ref '$ref' is not skills/schemabounce or registry:<owner>/<repo>/<skill>[@<40-hex>]"
+done < <(grep -rInH --include=BOT.md --include=TEMPLATE.md --include=TEAM.md --include=PLUGIN.md --include=PACK.md \
+           --include=KIT.md --include=RULE.md --include=SERVER.md --include=MOD.md \
+           -E '^[[:space:]]*-?[[:space:]]*ref:[[:space:]]*"?(skills/|registry:)' bots templates plugins packs data-kits rules tools mods 2>/dev/null \
+         | sed -E 's/^([^:]+):[0-9]+:/\1:/')
+echo "    $checked skill ref(s) checked"
 
-  validate_skill "$skill_dir"
+echo "  rule appliesTo skill entries:"
+while IFS= read -r hit; do
+  file="${hit%%:*}"
+  ref=$(echo "${hit#*:}" | sed -E 's/^[[:space:]]*-[[:space:]]*//' | tr -d '"'"'" | tr -d ' ')
+  [[ "$ref" =~ $SB_RE ]] || fail "$file: appliesTo '$ref' must be skills/schemabounce"
+done < <(grep -rInH --include=RULE.md -E '^[[:space:]]*-[[:space:]]*"?skills/' rules 2>/dev/null | sed -E 's/^([^:]+):[0-9]+:/\1:/')
+
+echo "  every bot lists skills/schemabounce first:"
+for bot_md in bots/*/BOT.md; do
+  first=$(awk '/^skills:/{f=1;next} f&&/ref:/{print;exit} f&&/^[^ ]/{exit}' "$bot_md" | sed -E 's/.*ref:[[:space:]]*//' | tr -d '"'"'" | tr -d ' ')
+  [[ "$first" =~ $SB_RE ]] || fail "$bot_md: first skill is '${first:-none}', expected skills/schemabounce"
 done
 
 echo ""
-echo "============================================"
-echo -e "  Results: ${GREEN}${PASS} PASS${NC}  ${YELLOW}${WARN} WARN${NC}  ${RED}${FAIL} FAIL${NC}"
-echo "============================================"
-
-exit $FAIL
+if [ $FAIL -gt 0 ]; then
+  echo "Results: $FAIL failure(s)"
+  exit 1
+fi
+echo -e "${GREEN}PASS${NC} skill references (dec-202)"
+exit 0

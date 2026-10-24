@@ -34,10 +34,10 @@ entries:
   - id: skills-format
     path: skills/README.md
     kind: docs
-    summary: 'SKILL.md frontmatter and prompt.md rules for skills; declared tools must be ones the runtime serves.'
+    summary: 'No skills are authored here (dec-202): skills/schemabounce from the agent kit plus public registry: refs.'
     trigger:
       pathGlobs: ['skills/**']
-      keywords: ['skill', 'SKILL.md', 'prompt.md']
+      keywords: ['skill', 'SKILL.md', 'registry:']
     priority: required
 
   - id: tools-format

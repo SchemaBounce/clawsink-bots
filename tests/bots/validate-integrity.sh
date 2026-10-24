@@ -3,7 +3,8 @@
 # Validates that all references between bots, skills, teams, and tools resolve.
 #
 # Checks:
-# 1. Skill refs in BOT.md point to existing skills/ directories
+# 1. Skill refs in BOT.md are skills/schemabounce (resolved from the agent kit, no local
+#    directory) or a well-formed registry: ref (dec-202); any other skills/<name> fails
 # 2. MCP server refs point to existing tools/ directories
 # 3. messaging.sendsTo agent names exist as bot directories
 # 4. messaging.listensTo agent names exist as bot directories
@@ -40,16 +41,18 @@ for bot_dir in "$BOTS_DIR"/*/; do
 
   frontmatter=$(sed -n '/^---$/,/^---$/p' "$bot_md" | tail -n +2 | head -n -1)
 
-  # Check skill refs exist
+  # Skill refs: skills/schemabounce or registry:<owner>/<repo>/<skill>[@<40-hex>] only (dec-202)
   while IFS= read -r ref; do
     ref=$(echo "$ref" | tr -d '"' | tr -d ' ')
     if [ -z "$ref" ]; then continue; fi
-    skill_name=$(echo "$ref" | sed 's|skills/||' | sed 's|@.*||')
-    if [ ! -d "$SKILLS_DIR/$skill_name" ]; then
-      echo -e "  ${YELLOW}WARN${NC} [$bot_name] Skill ref '$skill_name' not found in skills/"
-      warnings=$((warnings + 1))
+    if [[ "$ref" =~ ^skills/schemabounce(@[0-9]+\.[0-9]+\.[0-9]+)?$ ]] || \
+       [[ "$ref" =~ ^registry:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/[a-z0-9][a-z0-9-]*(@[0-9a-f]{40})?$ ]]; then
+      :
+    else
+      echo -e "  ${RED}FAIL${NC} [$bot_name] Skill ref '$ref' is not skills/schemabounce or a registry:<owner>/<repo>/<skill> ref (dec-202: this repo authors no skills)"
+      errors=$((errors + 1))
     fi
-  done < <(echo "$frontmatter" | grep "ref:" | grep "skills/" | sed 's/.*ref: *//')
+  done < <(echo "$frontmatter" | grep -E 'ref: *"?(skills/|registry:)' | sed 's/.*ref: *//')
 
   # Check MCP server refs exist
   while IFS= read -r ref; do
