@@ -10,13 +10,13 @@
 | **Skill** | Reusable prompt + tool requirements | `skills/{name}/SKILL.md` — defines the skill |
 | **Bot** | Complete agent blueprint with baked-in skills | `bots/{name}/BOT.md` — defines the bot |
 | **Agent** | Deployed, running instance of a bot | NOT in this repo — created in workspace when bot is deployed |
-| **Domain template** | Bundle of bots with an org chart; using it creates domains and their agents | `teams/{name}/TEAM.md` — defines the template (file layout keeps its old name for now) |
+| **Domain template** | Bundle of bots with an org chart; using it creates domains and their agents | `templates/{name}/TEMPLATE.md` — defines the template (file layout keeps its old name for now) |
 
 ## Key Rules for Manifest Authors
 
 1. **Bots are blueprints, not deployed agents.** BOT.md defines defaults (model, schedule, skills). Users customize after deployment. Write defaults that make sense as starting points.
 2. **Skills are baked into bots.** A bot's `skills: [ref]` list is final. Users cannot add/remove skills post-deploy. Design bots with the right skill mix from the start.
-3. **Domain templates are deploy bundles with org structure** (dec-185, accepted 2026-10-22). A TEAM.md defines which bots deploy together, the domains they land in (`orgChart.domains`) and escalation paths. In the workspace the groupings are **Domains**; "team" no longer names a SchemaBounce concept. Exceptions that keep the word: the Team plan, Microsoft Teams, a provider's Team seat, Linear teams. Say "domain template" in new prose. Do NOT rename the `teams/` directory, the `TEAM.md` file name, `kind: Team` or any `metadata.name` (`engineering-team` and the rest are activation keys stored in customer workspaces); the platform accepts new names for those later and keeps the old ones working.
+3. **Domain templates are deploy bundles with org structure** (dec-185, accepted 2026-10-22). A TEMPLATE.md defines which bots deploy together, the domains they land in (`orgChart.domains`) and escalation paths. In the workspace the groupings are **Domains**; "team" no longer names a SchemaBounce concept. Exceptions that keep the word: the Team plan, Microsoft Teams, a provider's Team seat, Linear teams. Say "domain template" in new prose. Do NOT rename the `templates/` directory, the `TEMPLATE.md` file name, `kind: DomainTemplate` or any `metadata.name` (`engineering-team` and the rest are activation keys stored in customer workspaces); the platform accepts new names for those later and keeps the old ones working.
 4. **"Seat" never names a SchemaBounce concept** (dec-121, accepted 2026-10-14, supersedes dec-031). Never call an agent, its capacity, workspace membership or a plan a seat in manifests, README files, or documentation. Bots deploy directly to become Agents. Single exception: a third-party provider's own license unit, in the provider's own term (for example a Claude Team seat), in the code, types and copy that handle those licenses (dec-077, dec-112, dec-113). Bot (marketplace blueprint) and Agent (deployed instance) are never interchanged. Agent slots are a visual capacity representation with no data model. `scripts/check-seat-copy.sh` (pre-commit) enforces this.
 
 ## Terminology in Manifests and Docs
@@ -28,7 +28,7 @@
 | Bot capabilities | "Skills (baked in)" | "Attachable skills", "Seat skills" |
 | Using a domain template | "Creates its domains and deploys its bots as agents" | "Fills seats", "Activates a team" |
 | A group of agents in a workspace | "Domain" | "Team" |
-| A TEAM.md bundle | "Domain template" | "Team", "Team pack" |
+| A TEMPLATE.md bundle | "Domain template" | "Team", "Team pack" |
 | Capacity limits | "Agent slots" | "Seats" |
 
 ## Manifest Hierarchy
@@ -44,7 +44,7 @@ Bot (blueprint)
   ├── schedule defaults
   └── referenced by a domain template via bots: [ref]
 
-Domain template (bundle, TEAM.md)
+Domain template (bundle, TEMPLATE.md)
   ├── bots: [ref to bots/]
   ├── orgChart (roles, escalation)
   └── northStar (workspace context)

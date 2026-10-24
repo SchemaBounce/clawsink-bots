@@ -1,12 +1,14 @@
-# Teams
+# Domain Templates
 
-A Team is a coordinated group of bots that work together under a shared North Star context, org chart, and escalation routing. Teams are **domain-specific** — each team covers one business function (Customer Service, Marketing, Engineering, Finance, and so on), not a whole company or industry. A business composes the domain teams it needs.
+A domain template (called a team before dec-185 and dec-186) is a coordinated group of bots with a shared North Star, org chart and escalation routing. Marketplace readers still accept the old layout (`teams/<name>/TEAM.md`, `kind: Team`) until the alias window ends (dec-189), so existing forks keep working. The directory names and `metadata.name` ids did not change.
+
+Templates are **domain-specific** — each team covers one business function (Customer Service, Marketing, Engineering, Finance, and so on), not a whole company or industry. A business composes the domain teams it needs.
 
 **Relationship to Bots**: Teams compose bots via `bots[].ref: "bots/{name}@{version}"`. See [bots/README.md](../bots/README.md) for the bot format.
 
 **Relationship to Plugins**: Teams can declare shared plugins available to all member bots. See [plugins/README.md](../plugins/README.md) for the plugin ecosystem.
 
-**Relationship to Tool Packs**: Teams may list `toolPacks[].ref` in TEAM.md for documentation purposes. All 133 built-in tools are already available to every bot on the team; this field has no effect on tool availability. See [packs/README.md](../packs/README.md) for the tool pack format.
+**Relationship to Tool Packs**: Teams may list `toolPacks[].ref` in TEMPLATE.md for documentation purposes. All 133 built-in tools are already available to every bot on the team; this field has no effect on tool availability. See [packs/README.md](../packs/README.md) for the tool pack format.
 
 **Relationship to MCP Servers**: Teams can declare shared MCP server instances. See [tools/README.md](../tools/README.md) for the MCP server format.
 
@@ -15,16 +17,16 @@ A Team is a coordinated group of bots that work together under a shared North St
 ## Directory Structure
 
 ```
-teams/{team-name}/
-└── TEAM.md           # Manifest (kind: Team) — YAML frontmatter parsed by marketplace
+templates/{team-name}/
+└── TEMPLATE.md           # Manifest (kind: DomainTemplate) — YAML frontmatter parsed by marketplace
 ```
 
-## TEAM.md Format
+## TEMPLATE.md Format
 
 ```yaml
 ---
 apiVersion: clawsink.schemabounce.com/v1
-kind: Team
+kind: DomainTemplate
 metadata:
   name: string           # Kebab-case identifier
   displayName: string    # Human-readable name
@@ -119,7 +121,7 @@ Teams are domain-specific functions, not whole companies. The `metadata.category
 
 ## Field Rules
 
-- `metadata.name` must match the directory name under `teams/`
+- `metadata.name` must match the directory name under `templates/`
 - `metadata.domain` must be one of the 11 canonical domain slugs above
 - `metadata.category` should be set equal to `metadata.domain`
 - `bots[].ref` must reference valid bot directories using the `"bots/{name}@{version}"` format (bare-string refs are not allowed)
@@ -265,7 +267,7 @@ teamGoals:
 
 ## Validation
 
-1. `TEAM.md` has valid YAML frontmatter with `kind: Team`
+1. `TEMPLATE.md` has valid YAML frontmatter with `kind: DomainTemplate`
 2. All `bots[].ref` reference existing bot directories with matching versions
 3. `northStar.requiredKeys` is the union of all `zones.zone1Read` keys from member bots
 4. `estimatedMonthlyCost` matches calculated cost from model/schedule combinations

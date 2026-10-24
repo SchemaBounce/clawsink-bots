@@ -1,6 +1,6 @@
 ---
 apiVersion: clawsink.schemabounce.com/v1
-kind: Team
+kind: DomainTemplate
 metadata:
   name: operations-team
   displayName: "Operations"

@@ -12,13 +12,13 @@
 
 ## Adding a Team
 
-1. Create `teams/{team-name}/` directory (kebab-case)
-2. Create `TEAM.md` with YAML frontmatter including `orgChart` -- see [teams/README.md](teams/README.md) for the full format
+1. Create `templates/{team-name}/` directory (kebab-case)
+2. Create `TEMPLATE.md` with YAML frontmatter including `orgChart` -- see [templates/README.md](templates/README.md) for the full format
 3. All bots referenced in `bots[].ref` must exist in the `bots/` directory
 4. Every bot must appear in `orgChart.roles` with a role, reportsTo, and domain
 5. Exactly one bot must have `role: lead` with `reportsTo: null`
 
-**Canonical example**: `teams/restaurant-group/` (has orgChart, escalation paths, industry-specific domains)
+**Canonical example**: `templates/sales-team/` (has orgChart, escalation paths, pinned bots)
 
 ## Adding a Skill
 
@@ -34,7 +34,7 @@
 4. List required `env` variables (names only -- never include actual values)
 5. List all `tools` the server provides with descriptions and categories
 6. Reference from bots via `mcpServers[].ref: "tools/{server-name}"`
-7. For team-wide servers, add to TEAM.md `mcpServers` section
+7. For team-wide servers, add to TEMPLATE.md `mcpServers` section
 
 **Canonical example**: `tools/github/SERVER.md` (stdio transport, 25 tools across 3 categories)
 
@@ -48,7 +48,7 @@ Before submitting a PR:
 - [ ] BOT.md has all required YAML fields (see spec)
 - [ ] SOUL.md exists and is under 800 tokens
 - [ ] data-seeds/ has all 3 JSON files with valid content
-- [ ] TEAM.md orgChart has exactly 1 lead with `reportsTo: null`
+- [ ] TEMPLATE.md orgChart has exactly 1 lead with `reportsTo: null`
 - [ ] Every bot in team appears exactly once in orgChart.roles
 - [ ] Escalation paths only reference bots in the team
 - [ ] No secrets, credentials, or API keys in any file

@@ -6,6 +6,7 @@ on:
       - 'packs/**'
       - 'bots/**'
       - 'teams/**'
+      - 'templates/**'
       - 'tools/**'
       - 'tests/**'
       - 'README.md'
@@ -78,10 +79,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          refs=$(grep -roh 'ref: "packs/[^"@]*' bots teams 2>/dev/null | sed -E 's#.*ref: "packs/##' || true)
+          refs=$(grep -roh 'ref: "packs/[^"@]*' bots teams templates 2>/dev/null | sed -E 's#.*ref: "packs/##' || true)
 
           if [ -z "$refs" ]; then
-            echo "No pack references found in bots/ or teams/."
+            echo "No pack references found in bots/, teams/ or templates/."
             exit 0
           fi
 
