@@ -7,7 +7,7 @@
 
 | Concept | Definition | This repo's role |
 |---------|-----------|-----------------|
-| **Skill** | Reusable prompt + tool requirements | `skills/{name}/SKILL.md` — defines the skill |
+| **Skill** | Reusable prompt + tool requirements | Not authored here (dec-202): `skills/schemabounce` comes from the agent kit, domain skills are public `registry:` refs |
 | **Bot** | Complete agent blueprint with baked-in skills | `bots/{name}/BOT.md` — defines the bot |
 | **Agent** | Deployed, running instance of a bot | NOT in this repo — created in workspace when bot is deployed |
 | **Domain template** | Bundle of bots with an org chart; using it creates domains and their agents | `templates/{name}/TEMPLATE.md` — defines the template (file layout keeps its old name for now) |
@@ -38,7 +38,7 @@ Skill (capability)
   └── referenced by Bot via skills: [ref]
 
 Bot (blueprint)
-  ├── skills: [ref to skills/]
+  ├── skills: [skills/schemabounce, registry: refs]
   ├── SOUL.md (identity)
   ├── model defaults
   ├── schedule defaults

@@ -9,7 +9,8 @@ Publish approved content to connected platforms (LinkedIn, Reddit, Instagram, Fa
 ## Expertise
 
 - Per-platform format limits, posting flows, and rule checks (LinkedIn post limits, Reddit subreddit rules, the Instagram two-step container flow, Facebook Page posting)
-- The Inbox approval protocol from the social-publishing skill, applied to every public action
+- The Inbox approval protocol, applied to every public action
+- Platform format limits: Instagram captions up to 2,200 characters, at most 30 hashtags, the hook inside the first 125 characters; Facebook in a casual tone; LinkedIn posts up to about 3,000 characters in a professional tone, with company-page posting needing admin scope; never post exact nightly rates for a short-term rental
 - Engagement handling, replying to comments and messages with the same approval discipline
 - Honest reporting of publishing outcomes and engagement, never fabricated metrics
 

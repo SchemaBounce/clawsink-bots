@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: security-agent
   displayName: "Security Agent"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Vulnerability scanning, security policy audits, CVE monitoring, pen test posture checks, secret rotation tracking."
   category: operations
   tags: ["security", "pentest", "vulnerabilities", "cve", "policy", "compliance", "secrets"]
@@ -23,7 +23,7 @@ agent:
     - Forward security patterns that should be enforced in code reviews to code-reviewer (type=finding) and CI/CD hardening needs to devops-automator (type=finding)
     - Cross-reference new findings against `vulnerability_database` memory to identify recurring patterns and track remediation status
     - Only access external CVE sources (nvd.nist.gov, cve.org, osv.dev, api.github.com) via allowed egress -- never attempt to reach other domains
-    - Maintain a running vulnerability count by severity in `working_notes` memory for trend reporting in the scheduled report
+    - Maintain a running vulnerability count by severity in `working_notes` memory for trend reporting in the scheduled report (the schemabounce skill's `references/reporting.md` covers report delivery)
   toolInstructions: |
     ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8

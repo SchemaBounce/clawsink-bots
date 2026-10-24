@@ -19,7 +19,7 @@ bots:
   - ref: "bots/content-scheduler@1.0.10"
   - ref: "bots/seo-expert@1.0.0"
   - ref: "bots/social-media-strategist@1.0.13"
-  - ref: "bots/social-media-manager@1.0.0"
+  - ref: "bots/social-media-manager@1.0.14"
   - ref: "bots/social-media-monitor@1.0.14"
   - ref: "bots/devrel@1.0.9"
 dataKits:
