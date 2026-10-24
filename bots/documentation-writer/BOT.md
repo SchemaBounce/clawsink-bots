@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.18"
+  version: "1.0.19"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -70,10 +70,8 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/pr-creation@1.0.0"
-  - ref: "skills/ui-navigation@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:addyosmani/agent-skills/git-workflow-and-versioning"
 toolPacks:
   - ref: "packs/text-processing@1.0.0"
     reason: "Extract keywords, detect language, chunk text for processing"

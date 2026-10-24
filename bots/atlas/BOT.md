@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: atlas
   displayName: "Atlas"
-  version: "2.0.6"
+  version: "2.0.7"
   description: "Site & agent concierge. Helps new users navigate SchemaBounce and pick the right agent for the job."
   category: productivity
   tags: ["concierge", "navigation", "onboarding", "agent-router", "free-tier"]
@@ -80,8 +80,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/schemabounce"
 # Internal-only by design, first-party platform concierge. Atlas reads
 # the workspace's own agent list, marketplace catalog, and onboarding
 # state via adl_* runtime built-ins. No third-party MCP, no external SaaS.

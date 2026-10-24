@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ship-reporter
   displayName: "Ship Reporter"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Weekly \"what shipped\" report assembled from merged pull requests and completed task-board tasks."
   category: engineering
   tags: ["github", "reporting", "changelog", "tasks", "engineering-coordination"]
@@ -70,10 +70,7 @@ zones:
   zone1Read: ["mission", "ship_report_repos", "ship_report_period_days"]
   zone2Domains: ["engineering"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/task-management@1.0.0"
-  - ref: "skills/report-generation@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/datetime-toolkit@1.0.0"
     reason: "Deterministic reporting-window boundaries and precise assembly-duration timing for the receipt record — avoids LLM date arithmetic errors."

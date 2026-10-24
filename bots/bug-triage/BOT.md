@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: bug-triage
   displayName: "Bug Triage"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Triages bug reports by severity and assigns owners."
   category: engineering
   tags: ["bugs", "triage", "severity"]
@@ -63,11 +63,8 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/incident-triage@1.0.0"
-  - ref: "skills/notification-dispatch@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:anthropics/knowledge-work-plugins/incident-response"
 presence:
   web:
     search: true

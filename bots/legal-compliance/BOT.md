@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: legal-compliance
   displayName: "Legal & Compliance"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Contract review queue, GDPR/SOC2 compliance tracking, regulatory change monitoring."
   category: legal
   tags: ["legal", "compliance", "gdpr", "soc2", "contracts", "regulatory"]
@@ -67,9 +67,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/legal-toolkit@1.0.0"
     reason: "Contract deadlines, GDPR data mapping, and retention policies"

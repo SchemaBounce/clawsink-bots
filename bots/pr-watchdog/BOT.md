@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pr-watchdog
   displayName: "PR Watchdog"
-  version: "1.0.2"
+  version: "1.0.3"
   description: "Flags stale and unreviewed pull requests, especially AI-authored ones, and routes them to a human before the review SLA is missed."
   category: engineering
   tags: ["github", "pull-requests", "code-review", "sla", "ai-governance"]
@@ -72,10 +72,7 @@ zones:
   zone1Read: ["mission", "pr_review_sla_hours", "pr_ai_author_patterns", "pr_watchdog_repos"]
   zone2Domains: ["engineering"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/task-management@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/datetime-toolkit@1.0.0"
     reason: "Deterministic hour math for SLA and staleness thresholds, and a reliable current-time source for receipt timestamps — avoids LLM date arithmetic errors."

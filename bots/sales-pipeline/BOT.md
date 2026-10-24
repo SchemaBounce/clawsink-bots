@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.14"
+  version: "1.0.15"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -88,9 +88,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.hubspot.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "composio@latest"
     slot: "oauth"

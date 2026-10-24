@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-pricing-optimizer
   displayName: "Dynamic Pricing"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Analyzes market conditions, competitor rates, and demand patterns to optimize nightly rates and maximize revenue."
   category: finance
   tags: ["str", "dynamic-pricing", "revenue-management", "rate-optimization", "hospitality"]
@@ -67,9 +67,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.airdna.co", "api.alltherooms.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/dynamic-pricing@1.0.0"
+  - ref: "skills/schemabounce"
 presence:
   email:
     required: true

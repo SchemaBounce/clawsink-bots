@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.12"
+  version: "0.1.13"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -71,7 +71,7 @@ egress:
   mode: "none"
 plugins: []
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/schemabounce"
 requirements:
   minTier: "starter"
 goals:

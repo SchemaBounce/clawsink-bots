@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ci-medic
   displayName: "CI Medic"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "Reads the actual failing job log for a broken GitHub Actions run, diagnoses the failure class, and drafts a mechanical fix as an approval-gated pull request. Diagnosis-only when the fix isn't mechanical."
   category: engineering
   tags: ["github", "ci-cd", "github-actions", "incident-response", "pull-requests"]
@@ -80,11 +80,8 @@ zones:
   zone1Read: ["mission", "ci_medic_repos", "ci_medic_auto_fix_confidence", "ci_medic_sla_minutes"]
   zone2Domains: ["engineering"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/task-management@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
-  - ref: "skills/incident-triage@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:anthropics/knowledge-work-plugins/incident-response"
 toolPacks:
   - ref: "packs/datetime-toolkit@1.0.0"
     reason: "Deterministic minute math for the diagnosis-to-draft SLA, and a reliable current-time source for receipt timestamps — avoids LLM date arithmetic errors."

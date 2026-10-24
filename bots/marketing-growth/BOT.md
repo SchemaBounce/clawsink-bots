@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: marketing-growth
   displayName: "Marketing & Growth"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Content calendar management, SEO tracking, campaign metric analysis, social scheduling."
   category: marketing
   tags: ["marketing", "growth", "seo", "campaigns", "content", "social"]
@@ -76,9 +76,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com", "analyticsdata.googleapis.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "composio@latest"
     slot: "oauth"

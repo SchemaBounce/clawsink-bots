@@ -15,7 +15,7 @@ metadata:
 bots:
   - ref: "bots/order-fulfillment@1.0.10"
   - ref: "bots/inventory-manager@1.0.11"
-  - ref: "bots/inventory-alert@1.0.10"
+  - ref: "bots/inventory-alert@1.0.11"
   - ref: "bots/shipping-tracker@1.0.9"
   - ref: "bots/price-optimizer@1.0.10"
   - ref: "bots/workflow-designer@1.0.0"

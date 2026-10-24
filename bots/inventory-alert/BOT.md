@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-alert
   displayName: "Inventory Alert"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Detects low stock levels and triggers reorder alerts when inventory falls below thresholds."
   category: ecommerce
   tags: ["inventory", "stock", "alerts", "cdc"]
@@ -64,10 +64,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/cdc-event-analysis@1.0.0"
-  - ref: "skills/notification-dispatch@1.0.0"
+  - ref: "skills/schemabounce"
 plugins: []
 # Internal-only by design, first-party platform bot. Reads inventory
 # records via adl_query_records, dispatches alerts via adl_send_message

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-assistant
   displayName: "Executive Assistant"
-  version: "1.0.15"
+  version: "1.0.16"
   description: "Synthesizes all bot outputs, prioritizes across domains, delivers daily briefings."
   category: management
   tags: ["synthesis", "briefings", "prioritization", "follow-ups", "coordination"]
@@ -136,12 +136,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/workflow-ops@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/daily-briefing@1.0.0"
-  - ref: "skills/cross-domain-synthesis@1.0.0"
-  - ref: "skills/follow-up-tracking@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"

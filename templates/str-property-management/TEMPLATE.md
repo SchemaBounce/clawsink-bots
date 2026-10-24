@@ -14,7 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/str-property-manager@1.0.9"
-  - ref: "bots/str-channel-manager@1.0.13"
+  - ref: "bots/str-channel-manager@1.0.14"
   - ref: "bots/str-guest-communicator@1.0.9"
   - ref: "bots/str-pricing-optimizer@1.0.9"
   - ref: "bots/str-property-marketer@1.0.12"

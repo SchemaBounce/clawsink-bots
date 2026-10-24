@@ -15,7 +15,7 @@ metadata:
 bots:
   - ref: "bots/product-owner@1.0.10"
   - ref: "bots/sprint-planner@1.0.9"
-  - ref: "bots/experiment-tracker@1.0.10"
+  - ref: "bots/experiment-tracker@1.0.11"
   - ref: "bots/ux-researcher@1.0.10"
 dataKits:
   - ref: "data-kits/product@1.0.0"

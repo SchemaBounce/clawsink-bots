@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-engineer
   displayName: "Data Engineer"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Monitors Kolumn schemas, CDC pipeline health, DLQ depth, and sink configuration drift."
   category: engineering
   tags: ["data", "schemas", "cdc", "pipelines", "kolumn", "drift"]
@@ -72,10 +72,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/data-transform@1.0.0"
     reason: "Parse CSV/JSON/XML, validate schemas, merge and transform datasets"

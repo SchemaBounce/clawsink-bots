@@ -14,7 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/legal-compliance@1.0.11"
-  - ref: "bots/compliance-auditor@1.0.11"
+  - ref: "bots/compliance-auditor@1.0.12"
   - ref: "bots/security-agent@1.0.10"
 dataKits:
   - ref: "data-kits/legal-compliance@1.0.0"

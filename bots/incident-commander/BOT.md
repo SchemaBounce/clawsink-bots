@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: incident-commander
   displayName: "Incident Commander"
-  version: "0.1.1"
+  version: "0.1.2"
   description: "Builds an evidence-backed incident timeline and prepares approval-gated updates."
   category: operations
   tags: ["incident-response", "on-call", "pagerduty", "reliability", "operations"]
@@ -61,11 +61,8 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/incident-triage@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
-  - ref: "skills/anomaly-detection@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:anthropics/knowledge-work-plugins/incident-response"
 mcpServers:
   - ref: "tools/pagerduty"
     required: true

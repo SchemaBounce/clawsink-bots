@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revenue-leakage-manager
   displayName: "Revenue Leakage Manager"
-  version: "0.1.1"
+  version: "0.1.2"
   description: "Finds payment, billing, and entitlement gaps before they become recurring revenue loss."
   category: finance
   tags: ["revenue-leakage", "billing", "payments", "subscriptions", "finance"]
@@ -61,11 +61,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/data-validation@1.0.0"
-  - ref: "skills/anomaly-detection@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 mcpServers:
   - ref: "tools/stripe"
     required: true

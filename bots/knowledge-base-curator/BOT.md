@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: knowledge-base-curator
   displayName: "Knowledge Base Curator"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Organizes and updates knowledge base articles."
   category: productivity
   tags: ["knowledge", "documentation", "organization"]
@@ -64,9 +64,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"
