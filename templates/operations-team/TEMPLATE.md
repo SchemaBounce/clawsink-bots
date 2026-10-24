@@ -13,12 +13,12 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/order-fulfillment@1.0.10"
-  - ref: "bots/inventory-manager@1.0.11"
+  - ref: "bots/order-fulfillment@1.0.11"
+  - ref: "bots/inventory-manager@1.0.12"
   - ref: "bots/inventory-alert@1.0.11"
-  - ref: "bots/shipping-tracker@1.0.9"
-  - ref: "bots/price-optimizer@1.0.10"
-  - ref: "bots/workflow-designer@1.0.0"
+  - ref: "bots/shipping-tracker@1.0.10"
+  - ref: "bots/price-optimizer@1.0.11"
+  - ref: "bots/workflow-designer@1.0.17"
 dataKits:
   - ref: "data-kits/operations@1.0.0"
     required: true

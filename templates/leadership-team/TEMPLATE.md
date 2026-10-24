@@ -14,8 +14,8 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/executive-assistant@1.0.16"
-  - ref: "bots/meeting-summarizer@1.0.12"
-  - ref: "bots/release-notes-writer@1.0.10"
+  - ref: "bots/meeting-summarizer@1.0.13"
+  - ref: "bots/release-notes-writer@1.0.11"
 dataKits:
   - ref: "data-kits/leadership@1.0.0"
     required: true

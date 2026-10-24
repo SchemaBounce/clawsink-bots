@@ -58,10 +58,11 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.10' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.10"
+SCOUT_VERSION="$(awk '/^  version: / { gsub(/"/, "", $2); print $2; exit }' "$ROOT_DIR/bots/demand-signal-scout/BOT.md")"
+if grep -q "bots/demand-signal-scout@$SCOUT_VERSION" "$TEAM"; then
+  pass "Sales team pins the current Demand Signal Scout ($SCOUT_VERSION)"
 else
-  fail "Sales team must reference Demand Signal Scout 1.0.10"
+  fail "Sales team must pin demand-signal-scout@$SCOUT_VERSION"
 fi
 
 if grep -q '<run_context>.runId' "$BOT" && \

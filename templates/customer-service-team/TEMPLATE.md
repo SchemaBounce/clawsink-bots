@@ -13,10 +13,10 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/customer-support@1.0.13"
-  - ref: "bots/customer-onboarding@1.0.10"
+  - ref: "bots/customer-support@1.0.14"
+  - ref: "bots/customer-onboarding@1.0.11"
   - ref: "bots/churn-predictor@1.0.12"
-  - ref: "bots/social-media-monitor@1.0.14"
+  - ref: "bots/social-media-monitor@1.0.15"
 dataKits:
   - ref: "data-kits/customer-service@1.0.0"
     required: true
