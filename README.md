@@ -12,7 +12,7 @@ This repository is **parsed programmatically** to populate the marketplace, agen
 |-------|------|
 | Skills | [skills/README.md](skills/README.md) |
 | Bots | [bots/README.md](bots/README.md) |
-| Teams | [teams/README.md](teams/README.md) |
+| Domain templates | [templates/README.md](templates/README.md) |
 | Data Kits | [data-kits/README.md](data-kits/README.md) |
 | Built-in Tools | [packs/README.md](packs/README.md) |
 | MCP Servers | [tools/README.md](tools/README.md) |
@@ -42,9 +42,9 @@ clawsink-bots/
 │           ├── zone2-entity-types.json
 │           └── zone3-initial-memory.json
 │
-├── teams/                          # 11 domain-specific bot teams (one per business function)
+├── templates/                          # 13 domain templates (one per business function)
 │   └── {team-name}/
-│       └── TEAM.md                 # Manifest (kind: Team) -- PARSED FOR MARKETPLACE
+│       └── TEMPLATE.md                 # Manifest (kind: DomainTemplate) -- PARSED FOR MARKETPLACE
 │
 ├── data-kits/                      # 11 domain data packages (one per domain team)
 │   └── {kit-name}/
@@ -86,8 +86,8 @@ ln -sf ../../hooks/post-commit .git/hooks/post-commit
 ```
 
 `hooks/pre-commit` bumps the patch version of every bot whose files are in the
-commit, rewrites the `bots/<name>@x.y.z` pins in `teams/*/TEAM.md` to match
-(a TEAM.md with its own uncommitted changes is skipped with a warning), validates
+commit, rewrites the `bots/<name>@x.y.z` pins in `templates/*/TEMPLATE.md` to match
+(a TEMPLATE.md with its own uncommitted changes is skipped with a warning), validates
 changed SOUL.md files and skill prompts, and refuses a skill commit when
 `tests/skills/known-tools.txt` is stale against the runtime.
 
@@ -102,7 +102,7 @@ from `tests/validate-all.sh`, which is what CI runs.
 
 ## How the Marketplace Parser Works
 
-The marketplace reads manifest files (`BOT.md`, `TEAM.md`, `SKILL.md`, `PACK.md`, `SERVER.md`, and `KIT.md`) and extracts YAML frontmatter to populate UI. Every field in the frontmatter has a specific rendering target.
+The marketplace reads manifest files (`BOT.md`, `TEMPLATE.md`, `SKILL.md`, `PACK.md`, `SERVER.md`, and `KIT.md`) and extracts YAML frontmatter to populate UI. Every field in the frontmatter has a specific rendering target.
 
 ### Bot Page (`/marketplace/bots/{name}`)
 
@@ -259,9 +259,9 @@ your-org-bots/
 │           ├── zone1-north-star.json
 │           ├── zone2-entity-types.json
 │           └── zone3-initial-memory.json
-├── teams/
+├── templates/
 │   └── your-team/
-│       └── TEAM.md
+│       └── TEMPLATE.md
 ├── skills/               # Optional
 │   └── your-skill/
 │       ├── SKILL.md
@@ -364,12 +364,12 @@ You are Your Bot, a persistent AI team member for this business.
 - Critical: message executive-assistant type=alert
 ```
 
-### 4. Write your TEAM.md
+### 4. Write your TEMPLATE.md
 
 ```yaml
 ---
 apiVersion: clawsink.schemabounce.com/v1
-kind: Team
+kind: DomainTemplate
 metadata:
   name: your-team
   displayName: "Your Team"
@@ -440,7 +440,7 @@ Checklist:
 [ ] All toolPacks[].ref point to existing packs/ directories
 [ ] Every referenced pack has a PACK.md with kind: ToolPack
 [ ] All messaging.sendsTo[].to reference valid bot names
-[ ] Every TEAM.md has orgChart with exactly one lead
+[ ] Every TEMPLATE.md has orgChart with exactly one lead
 [ ] Every bot in the team appears exactly once in orgChart.roles
 [ ] Every escalation path only references bots in the team
 [ ] No secrets, API keys, or credentials in any file

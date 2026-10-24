@@ -6,7 +6,7 @@ This directory catalogs the 133 built-in deterministic tools available to all ag
 
 **Relationship to Bots**: Bots may list `toolPacks[]` in BOT.md as informational documentation indicating which tool categories the bot is designed to use. This field has no effect on tool availability -- it exists for documentation purposes only.
 
-**Relationship to Teams**: Teams may list `toolPacks[]` in TEAM.md for documentation purposes. All tools are available to all team bots regardless of what is declared.
+**Relationship to Teams**: Teams may list `toolPacks[]` in TEMPLATE.md for documentation purposes. All tools are available to all team bots regardless of what is declared.
 
 ## Built-in Tools vs MCP Servers vs Skills
 

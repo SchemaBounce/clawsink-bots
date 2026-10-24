@@ -11,7 +11,7 @@ The architecture uses five manifest kinds that compose hierarchically. ClawSink 
 | `Skill` | `skills/` | Reusable capability (single responsibility) | `SKILL.md` |
 | `ToolPack` | `packs/` | Native deterministic function bundle | `PACK.md` |
 | `Bot` | `bots/` | Top-level agent definition (identity + skills + sub-agents) | `BOT.md` |
-| `Team` | `teams/` | Coordinated bot group (shared North Star) | `TEAM.md` |
+| `Team` | `templates/` | Coordinated bot group (shared North Star) | `TEMPLATE.md` |
 | `McpServer` | `tools/` | Custom MCP tool server (shared across bots) | `SERVER.md` |
 
 **Bots are always top-level agents.** Teams are groupings of bots. Sub-agents exist *within* a bot for internal workflow orchestration — they are never exposed outside the bot's scope.
@@ -55,7 +55,7 @@ Each directory contains its own README.md with the complete manifest format, fie
 | Skills | [skills/README.md](skills/README.md) | `SKILL.md` manifest + `prompt.md` format |
 | Built-in Tools | [packs/README.md](packs/README.md) | `PACK.md` manifest + native function catalog |
 | Bots | [bots/README.md](bots/README.md) | `BOT.md` manifest + `SOUL.md` + sub-agents + data seeds + plugins + MCP refs |
-| Teams | [teams/README.md](teams/README.md) | `TEAM.md` manifest + org chart + escalation + shared plugins/built-in tools/MCP |
+| Teams | [templates/README.md](templates/README.md) | `TEMPLATE.md` manifest + org chart + escalation + shared plugins/built-in tools/MCP |
 | MCP Servers | [tools/README.md](tools/README.md) | `SERVER.md` manifest + transport + env + tools listing |
 | Plugins | [plugins/README.md](plugins/README.md) | Plugin ecosystem + slot system + installation |
 | Shared Resources | [shared/README.md](shared/README.md) | Escalation chains, message protocol, entity schemas, Toon Card format |

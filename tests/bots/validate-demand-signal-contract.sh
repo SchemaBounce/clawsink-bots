@@ -9,7 +9,8 @@ BOT="$BOT_DIR/BOT.md"
 TOOLS="$BOT_DIR/TOOLS.md"
 NORTH_STAR="$BOT_DIR/data-seeds/zone1-north-star.json"
 ENTITY_TYPES="$BOT_DIR/data-seeds/zone2-entity-types.json"
-TEAM="$ROOT_DIR/teams/sales-team/TEAM.md"
+TEAM="$ROOT_DIR/templates/sales-team/TEMPLATE.md"
+[ -f "$TEAM" ] || TEAM="$ROOT_DIR/teams/sales-team/TEAM.md"  # alias window (dec-189)
 FAILURES=0
 
 fail() {

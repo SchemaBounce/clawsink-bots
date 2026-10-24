@@ -2,7 +2,7 @@
 # ClawSink Bots Pre-Commit Hook
 # Validates changed bot SOUL.md files and skill prompts before commit.
 # Auto-increments patch version for changed bots and rewrites the team
-# manifests (teams/*/TEAM.md) that pin them.
+# manifests (templates/*/TEMPLATE.md, or the old teams/*/TEAM.md) that pin them.
 #
 # Install: ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
 #          ln -sf ../../hooks/post-commit .git/hooks/post-commit
@@ -36,6 +36,14 @@ fi
 # provider's own license unit (a Claude Team seat) may keep the word.
 if ! bash scripts/check-seat-copy.sh --staged; then
   echo -e "\033[31m✗ seat wording (dec-121) — commit blocked\033[0m"
+  exit 1
+fi
+
+# --- Phase 0b: the word "team" (dec-185, dec-186) ---
+# A Team is a Domain and a marketplace team is a domain template. Counts are
+# baselined per file; a staged file may not gain lines.
+if ! bash scripts/check-team-copy.sh --staged; then
+  echo -e "\033[31m✗ team wording (dec-185, dec-186) — commit blocked\033[0m"
   exit 1
 fi
 
@@ -90,9 +98,9 @@ for bot in "${changed_bots[@]}"; do
   # Team manifests pin bots by exact version (bots/<name>@x.y.z) and the
   # contract validators require the pin to be the current version. Rewrite
   # every pin that references this bot so the commit stays self-consistent.
-  # A TEAM.md that already differs from HEAD is another session's uncommitted
+  # A template manifest that already differs from HEAD is another session's uncommitted
   # work: warn and leave it, never sweep it into this commit.
-  for team_md in teams/*/TEAM.md; do
+  for team_md in templates/*/TEMPLATE.md teams/*/TEAM.md; do
     [ -f "$team_md" ] || continue
     grep -qE "bots/${bot}@[0-9]+\.[0-9]+\.[0-9]+" "$team_md" || continue
     if ! git diff --quiet HEAD -- "$team_md"; then

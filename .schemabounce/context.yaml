@@ -6,7 +6,7 @@ kind: RepoContext
 # repository has no CLAUDE.md, so the two rule files that apply to every change
 # plus CONTRIBUTING.md are the core contract.
 #
-# Each manifest directory (bots, skills, tools, teams, rules, packs) carries a
+# Each manifest directory (bots, skills, tools, templates, rules, packs) carries a
 # README that is the format spec for that manifest kind. They are entries, not
 # always-loaded files, so a session editing a skill is not handed the bot format.
 
@@ -49,13 +49,13 @@ entries:
       keywords: ['mcp', 'SERVER.md', 'transport']
     priority: required
 
-  - id: teams-format
-    path: teams/README.md
+  - id: templates-format
+    path: templates/README.md
     kind: docs
-    summary: 'TEAM.md format: member bots pinned by version, org chart, exactly one lead.'
+    summary: 'TEMPLATE.md format: member bots pinned by version, org chart, exactly one lead.'
     trigger:
-      pathGlobs: ['teams/**']
-      keywords: ['team', 'TEAM.md', 'orgChart']
+      pathGlobs: ['templates/**', 'teams/**']
+      keywords: ['template', 'TEMPLATE.md', 'orgChart']
 
   - id: rules-format
     path: rules/README.md
