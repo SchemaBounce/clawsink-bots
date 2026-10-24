@@ -1,6 +1,6 @@
 # Skills moved to the public registry (dec-202)
 
-Decision dec-202 (proposed 2026-10-24, supersedes dec-200): SchemaBounce authors exactly one skill,
+Decision dec-202 (accepted 2026-10-24, supersedes dec-200): SchemaBounce authors exactly one skill,
 `schemabounce`, which lives in SchemaBounce/schemabounce-agent-kit (`skills/schemabounce`) and is
 referenced here as `skills/schemabounce`. This repository authors no skills. Domain know-how comes from
 public registry skills (`registry:<owner>/<repo>/<skill>`, see [skills/README.md](../skills/README.md)),

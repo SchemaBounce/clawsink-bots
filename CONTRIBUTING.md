@@ -22,9 +22,7 @@
 
 ## Adding a Skill
 
-1. Create `skills/{skill-name}/` directory (kebab-case)
-2. Create `SKILL.md` with YAML frontmatter -- see [skills/README.md](skills/README.md) for the full format
-3. Create `prompt.md` -- skill instructions, under 200 tokens
+Do not add one here (dec-202). This repository authors no skills. Reference `skills/schemabounce` and, where a credible public skill exists, a `registry:<owner>/<repo>/<skill>` ref. Where none exists, put the instructions in the bot's own `SOUL.md` or `AGENTS.md`. See [skills/README.md](skills/README.md) and [docs/skills-to-public-registry.md](docs/skills-to-public-registry.md).
 
 ## Adding an MCP Server
 

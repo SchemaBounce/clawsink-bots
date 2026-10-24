@@ -8,7 +8,7 @@ The architecture uses five manifest kinds that compose hierarchically. ClawSink 
 
 | Kind | Directory | Purpose | Manifest File |
 |------|-----------|---------|---------------|
-| `Skill` | `skills/` | Reusable capability (single responsibility) | `SKILL.md` |
+| `Skill` | none here (dec-202) | `skills/schemabounce` from the agent kit, plus public `registry:` skills | referenced from `BOT.md` |
 | `ToolPack` | `packs/` | Native deterministic function bundle | `PACK.md` |
 | `Bot` | `bots/` | Top-level agent definition (identity + skills + sub-agents) | `BOT.md` |
 | `Team` | `templates/` | Coordinated bot group (shared North Star) | `TEMPLATE.md` |
@@ -19,20 +19,17 @@ The architecture uses five manifest kinds that compose hierarchically. ClawSink 
 ```
 Team (saas-growth)
  ├── Bot (executive-assistant)          ← top-level agent
- │    ├── Skill (daily-briefing)
- │    ├── Skill (cross-domain-synthesis)
- │    └── Skill (follow-up-tracking)
+ │    └── Skill (schemabounce)           ← the one SchemaBounce skill, from the agent kit
  ├── Bot (blog-writer)                  ← top-level agent
- │    ├── Skill (editorial-planning)    ← composed into SOUL.md
+ │    ├── Skill (schemabounce)
  │    ├── Sub-Agent (researcher)        ← isolated session, task string only
  │    ├── Sub-Agent (writer)            ← isolated session, task string only
  │    └── Sub-Agent (editor)            ← isolated session, task string only
  ├── Bot (accountant)                   ← top-level agent
  │    ├── Built-in Tools (financial-toolkit) ← native deterministic finance functions
  │    ├── Built-in Tools (data-transform)    ← native deterministic data helpers
- │    ├── Skill (invoice-categorization)
- │    ├── Skill (expense-tracking)
- │    └── Skill (budget-monitoring)
+ │    ├── Skill (schemabounce)
+ │    └── Skill (registry:anthropics/knowledge-work-plugins/variance-analysis)
  └── ...
 ```
 
@@ -40,7 +37,7 @@ Team (saas-growth)
 
 1. **Bots own their sub-agents.** Sub-agents are internal implementation details — other bots and teams never interact with them directly. All inter-bot communication goes through the parent bot.
 2. **Sub-agents have their own identity.** Each sub-agent is defined as a markdown file with YAML frontmatter and a system prompt body — the same format as Claude Code's `.claude/agents/`. They run in isolated sessions with their own context.
-3. **Skills belong to the parent bot only.** Skills are composed into the parent bot's SOUL.md at runtime. Sub-agents get their identity from their own agent file, not from skills.
+3. **Skills belong to the parent bot only.** Skills (the `schemabounce` skill and public registry skills) are loaded for the parent bot at runtime. Sub-agents get their identity from their own agent file, not from skills.
 4. **Sub-agents validate each other's work.** The pattern enables quality gates within a single bot's workflow (e.g., a writer drafts, an editor reviews) without requiring cross-bot messaging.
 5. **ClawSink sits above, not between.** The manifest layer defines agent identity, composition, and communication. The runtime (OpenCLAW) handles execution. ClawSink never intercepts agent-to-runtime calls.
 
@@ -73,7 +70,7 @@ When a user activates a bot from the marketplace, the platform uses the manifest
 | You Provide | The Platform Will |
 |-------------|-------------------|
 | `SOUL.md` | Use it as the bot's identity on every run |
-| `skills[].ref` | Append each skill's `prompt.md` to the bot's instructions |
+| `skills[].ref` | Load the `schemabounce` skill (from the agent kit) and each public registry skill for the bot |
 | `toolPacks[].ref` | Documents which tool categories the bot is designed to use. All 133 built-in tools are already available to every bot; this field has no effect on availability. |
 | `data-seeds/` (3 zone files) | Bootstrap the bot's data — North Star keys, entity schemas, and initial memory |
 | `plugins[].ref` | Install and configure each plugin in the bot's runtime environment |

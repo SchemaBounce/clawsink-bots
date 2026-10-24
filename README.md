@@ -26,10 +26,8 @@ clawsink-bots/
 ├── README.md                       # This file
 ├── LICENSE                         # Apache 2.0
 │
-├── skills/                         # 42 reusable skill definitions
-│   └── {skill-name}/
-│       ├── SKILL.md                # Manifest (kind: Skill)
-│       └── prompt.md               # Skill instructions (<200 tokens)
+├── skills/                         # No skills are authored here (dec-202); README only
+│   └── README.md                   # `skills/schemabounce` + public `registry:` refs
 │
 ├── bots/                           # 60 complete agent definitions
 │   └── {bot-name}/
@@ -88,8 +86,7 @@ ln -sf ../../hooks/post-commit .git/hooks/post-commit
 `hooks/pre-commit` bumps the patch version of every bot whose files are in the
 commit, rewrites the `bots/<name>@x.y.z` pins in `templates/*/TEMPLATE.md` to match
 (a TEMPLATE.md with its own uncommitted changes is skipped with a warning), validates
-changed SOUL.md files and skill prompts, and refuses a skill commit when
-`tests/skills/known-tools.txt` is stale against the runtime.
+changed SOUL.md files, and refuses a commit that adds a `skills/<name>/` directory (dec-202).
 
 `hooks/post-commit` exists because of by-path commits (`git commit -F msg --
 bots/x/BOT.md`): git runs pre-commit against a temporary index while the real
@@ -119,7 +116,7 @@ The marketplace reads manifest files (`BOT.md`, `TEMPLATE.md`, `SKILL.md`, `PACK
 | `schedule.recommendations` | Schedule picker options |
 | `messaging.sendsTo` | Communication diagram edges |
 | `messaging.listensTo` | Communication diagram edges |
-| `skills[].ref` | "Capabilities" section |
+| `skills[].ref` | "Capabilities" section (the `schemabounce` skill and any public registry skills) |
 | `toolPacks[].ref` | "Native functions" section |
 | `plugins[].ref` | "Required plugins" section |
 | `agents/*.md` (directory listing) | "Sub-agents" section |
@@ -199,17 +196,6 @@ The org chart view renders the team's `orgChart` as an interactive tree:
 | `compatibility.composableWith` | "Composes with" kit badges |
 | Markdown body after `---` | Long description / documentation tab |
 
-### Skill Page (`/marketplace/skills/{name}`)
-
-| YAML Field | Renders As |
-|---|---|
-| `metadata.displayName` | Page title |
-| `metadata.description` | Card subtitle |
-| `tools.required` | "Uses tools" badges |
-| `data.producesEntityTypes` | "Produces" section |
-| `data.consumesEntityTypes` | "Consumes" section |
-| `prompt.md` content | Skill instructions display |
-
 ## What Happens When You Activate
 
 Every field in a manifest maps to a platform action. When a bot is activated, the platform uses the manifest to compose its identity, install its plugins, make native built-in tools available, connect MCP servers, seed its data, register its schedule, and wire its messaging. For teams, the platform also creates the org chart, sets up escalation routing, and deploys shared resources across all member bots.
@@ -262,10 +248,6 @@ your-org-bots/
 ├── templates/
 │   └── your-team/
 │       └── TEMPLATE.md
-├── skills/               # Optional
-│   └── your-skill/
-│       ├── SKILL.md
-│       └── prompt.md
 ├── packs/                # Optional -- native deterministic built-in tools
 │   └── your-pack/
 │       └── PACK.md
@@ -320,7 +302,8 @@ zones:
   zone1Read: ["mission", "industry"]
   zone2Domains: ["your-domain"]
 skills:
-  - ref: "skills/your-skill@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:owner/repo/skill-name"   # optional public skill
 toolPacks:                          # Optional -- native deterministic functions
   - ref: "packs/data-transform@1.0.0"
     reason: "Parses uploaded CSV files and normalizes inbound records"
@@ -436,7 +419,7 @@ Checklist:
 [ ] Every SOUL.md is under 800 tokens
 [ ] Every bot has data-seeds/ with all 3 zone files (valid JSON)
 [ ] metadata.name matches directory name for every manifest
-[ ] All skills[].ref point to existing skill directories
+[ ] Every skills[].ref is `skills/schemabounce` or a `registry:<owner>/<repo>/<skill>[@<40-hex>]` ref
 [ ] All toolPacks[].ref point to existing packs/ directories
 [ ] Every referenced pack has a PACK.md with kind: ToolPack
 [ ] All messaging.sendsTo[].to reference valid bot names
