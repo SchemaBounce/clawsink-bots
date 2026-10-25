@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: business-analyst
   displayName: "Business Analyst"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Cross-domain analysis, trend detection, and strategic recommendations from all bot findings."
   category: management
   tags: ["analysis", "trends", "strategy", "cross-domain", "insights"]
@@ -72,10 +72,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/data-transform@1.0.0"
     reason: "Parse and transform datasets for cross-domain analysis"

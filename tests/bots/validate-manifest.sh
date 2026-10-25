@@ -10,7 +10,7 @@
 # 4. kind is "Bot"
 # 5. model.provider is valid
 # 6. cost.estimatedCostTier is valid
-# 7. Skills refs match pattern skills/{name}@{version}
+# 7. Skills refs are skills/schemabounce or registry:<owner>/<repo>/<skill>[@<40-hex>] (dec-202)
 # 8. Tool pack refs match pattern packs/{name}@{version?}
 # 9. MCP server refs match pattern tools/{name}
 # 10. data.entityTypesWrite is a subset of data.entityTypesRead, or the bot
@@ -168,11 +168,12 @@ validate_manifest() {
   # Skill refs format
   while IFS= read -r ref; do
     ref=$(echo "$ref" | tr -d '"' | tr -d ' ')
-    if [ -n "$ref" ] && [[ ! "$ref" =~ ^skills/[a-z0-9-]+@[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-      echo -e "  ${YELLOW}WARN${NC} Skill ref '$ref' doesn't match pattern skills/{name}@{version}"
-      warnings=$((warnings + 1))
+    if [ -n "$ref" ] && [[ ! "$ref" =~ ^skills/schemabounce(@[0-9]+\.[0-9]+\.[0-9]+)?$ ]] && \
+       [[ ! "$ref" =~ ^registry:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/[a-z0-9][a-z0-9-]*(@[0-9a-f]{40})?$ ]]; then
+      echo -e "  ${RED}FAIL${NC} Skill ref '$ref' must be skills/schemabounce or registry:<owner>/<repo>/<skill>[@<40-hex>] (dec-202)"
+      errors=$((errors + 1))
     fi
-  done < <(echo "$frontmatter" | grep "ref:" | grep "skills/" | sed 's/.*ref: *//')
+  done < <(echo "$frontmatter" | grep -E 'ref: *"?(skills/|registry:)' | sed 's/.*ref: *//')
 
   # Tool pack refs format
   while IFS= read -r ref; do

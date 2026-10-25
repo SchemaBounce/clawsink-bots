@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: crm-hygiene-manager
   displayName: "CRM Hygiene Manager"
-  version: "0.1.1"
+  version: "0.1.2"
   description: "Finds stale pipeline records and prepares approval-gated CRM cleanup recommendations."
   category: operations
   tags: ["crm", "sales-operations", "forecasting", "pipeline", "data-quality"]
@@ -61,11 +61,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/data-maintenance@1.0.0"
-  - ref: "skills/data-validation@1.0.0"
-  - ref: "skills/follow-up-tracking@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 mcpServers:
   - ref: "tools/composio"
     required: true

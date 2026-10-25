@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: chief-of-staff
   displayName: "Chief of Staff"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Keeps the agent team moving: gives every open task an owner, restarts stalled work, starts agents when work is urgent, and reports throughput and blockers."
   category: management
   tags: ["management", "delegation", "execution", "accountability", "tasks", "coordination"]
@@ -83,10 +83,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.7.1"
-  - ref: "skills/task-management@2.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/follow-up-tracking@1.0.0"
+  - ref: "skills/schemabounce"
 requirements:
   minTier: "starter"
 setup:

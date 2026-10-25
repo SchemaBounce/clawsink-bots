@@ -4,7 +4,7 @@
 block below is rendered by the SchemaBounce agent kit (`schemabounce@schemabounce`)
 and checked by `scripts/check-agent-kit.py`; it is never edited by hand.
 
-<!-- schemabounce-agent-kit:decisions start kit=0.4.2 sha256=1ef8bae21c26f91ebe47412932918dc0aacec921a8aed89c97ecf4ad7fc28bcc -->
+<!-- schemabounce-agent-kit:decisions start kit=0.5.0 sha256=afce3b36440e2106a576a16b7acc61670a8bd1fb348b0ad208a94564d45f7924 -->
 ## SchemaBounce decisions
 
 SchemaBounce records its rulings as decision records (`dec-NNN`) in its
@@ -24,7 +24,7 @@ any other text disagrees with it, the decision wins.
 - Propose, never ratify. Corrections and merges are new proposals whose
   `supersedes` lists the old ids.
 
-Full procedure: `skills/schemabounce-decisions/SKILL.md` from
+Full procedure: `skills/schemabounce/references/decisions.md` (the `schemabounce` skill) from
 https://github.com/SchemaBounce/schemabounce-agent-kit.
 
 ### Getting the kit
@@ -34,7 +34,7 @@ This repository enables the SchemaBounce agent kit for everyone in
 dialog, run `claude plugin install schemabounce@schemabounce --scope project`
 (Claude Code prompts for it), then sign in to the SchemaBounce MCP with `/mcp`.
 No GitHub SSH key is needed. Codex and other agents: copy
-`skills/schemabounce-decisions/` from the kit and add the hosted MCP
+`skills/schemabounce/` from the kit and add the hosted MCP
 (https://mcp.schemabounce.com/mcp) to their configuration.
 <!-- schemabounce-agent-kit:decisions end -->
 

@@ -74,7 +74,7 @@ This is not zero-setup managed OAuth. As of February 2026, Composio removed mana
 
 ## Posting Is Approval-Gated
 
-`create_post` and `reply` publish publicly. The `social-publishing` skill holds every post behind explicit human approval before it goes live. Deletes, lookups, search, and user reads are not gated.
+`create_post` and `reply` publish publicly. Every publish is held behind explicit human approval in the workspace Inbox before it goes live. Deletes, lookups, search, and user reads are not gated.
 
 ## External Requirements
 

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: product-owner
   displayName: "Product Owner"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Customer feedback aggregation, market analysis, feature prioritization, backlog management via structured GitHub issue specs."
   category: management
   tags: ["product", "backlog", "feedback", "market-analysis", "prioritization", "github-issues"]
@@ -72,9 +72,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 requirements:
   minTier: "starter"
 setup:

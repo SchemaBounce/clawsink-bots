@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: compliance-auditor
   displayName: "Compliance Auditor"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Checks regulatory compliance on new financial records."
   category: fintech
   tags: ["compliance", "audit", "regulatory", "cdc"]
@@ -67,9 +67,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/cdc-event-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/legal-toolkit@1.0.0"
     reason: "SLA calculations, regulatory checklists, and compliance scoring"

@@ -4,7 +4,7 @@ A Bot is a complete agent definition with identity, model, schedule, messaging, 
 
 **Relationship to Teams**: Bots are grouped into teams via `bots[].ref: "bots/{name}@{version}"` in TEAM.md. See [teams/README.md](../teams/README.md) for team composition.
 
-**Relationship to Skills**: Bots compose skills via `skills[].ref: "skills/{name}@{version}"` (a skill in this repository) or `skills[].ref: "registry:{owner}/{repo}/{skill}[@{commit}]"` (a public Agent Skills registry skill). Each skill's prompt is loaded by the agent on demand. See [skills/README.md](../skills/README.md) for both formats.
+**Relationship to Skills**: Bots compose skills via `skills[].ref: "skills/schemabounce"` (the one SchemaBounce skill, kept in the agent kit) or `skills[].ref: "registry:{owner}/{repo}/{skill}[@{commit}]"` (a public Agent Skills registry skill). Each skill's prompt is loaded by the agent on demand. See [skills/README.md](../skills/README.md) for both formats.
 
 **Relationship to Built-in Tools**: All 133 built-in deterministic tools are available to every agent automatically. Bots may list `toolPacks[]` in their manifest for documentation purposes — indicating which tool categories the bot is designed to use. See [packs/README.md](../packs/README.md) for the tool catalog.
 
@@ -85,7 +85,7 @@ zones:
   zone1Read: [string]    # North Star keys this bot reads
   zone2Domains: [string] # Shared domains this bot accesses
 skills:                  # Skill composition
-  - ref: string          # Reference to shared skill: "skills/{name}@{version}"
+  - ref: string          # "skills/schemabounce" (first entry)
                          # or a public registry skill: "registry:{owner}/{repo}/{skill}[@{commit}]"
 rules:                   # Always-on guardrails (optional)
   - ref: string          # Reference to shared rule: "rules/{name}@{version}"
@@ -225,7 +225,8 @@ Both are YAML multiline strings (`|`) nested inside the `agent:` block. They are
 
 The `skills:` section lists capabilities this bot uses:
 
-- `ref: "skills/{skill-name}@{version}"` — references a shared skill from the `skills/` directory. The skill's `prompt.md` is appended to the bot's SOUL.md at runtime.
+- `ref: "skills/schemabounce"` — the one SchemaBounce skill, published from SchemaBounce/schemabounce-agent-kit (`skills/schemabounce`). It has no directory in this repository and is always the first entry.
+- `ref: "registry:{owner}/{repo}/{skill}[@{commit}]"` — a public registry skill that supplies domain know-how. See [docs/skills-to-public-registry.md](../docs/skills-to-public-registry.md).
 
 Skills are composed in the order listed. SOUL.md always comes first in the final system prompt.
 
@@ -878,7 +879,7 @@ The `provider` field must match the alias's provider (e.g. `sonnet_latest` requi
 8. `data-seeds/` contains all three zone files with valid JSON
 9. `data-seeds/zone3-initial-memory.json` uses plain namespaces (NOT `northstar:` or `domain:` prefixed)
 10. `metadata.name` matches the directory name under `bots/`
-11. All `skills[].ref` reference existing skill directories with matching versions
+11. Every `skills[].ref` is `skills/schemabounce` or a well-formed `registry:` ref
 12. All `messaging.sendsTo[].to` reference valid bot names or system targets
 13. `data.entityTypesWrite` includes a `{abbrev}_findings` entry
 14. `agent.instructions` is present and contains domain-specific operating rules (not generic boilerplate)

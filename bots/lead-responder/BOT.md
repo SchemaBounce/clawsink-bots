@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: lead-responder
   displayName: "Lead Responder"
-  version: "0.1.6"
+  version: "0.1.7"
   description: "Drafts a fast, personal first-touch for every new inbound sales inquiry and tracks how long we take to respond."
   category: sales
   tags: ["sales", "leads", "speed-to-lead", "first-touch", "response-time"]
@@ -90,8 +90,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "composio@latest"
     slot: "oauth"

@@ -3,7 +3,7 @@
 ## Loaded when
 
 Writing or editing any `bots/*/BOT.md`, `SOUL.md`, `TOOLS.md`, `AGENTS.md`,
-`IDENTITY.md`, or `skills/*/SKILL.md`, or any bot or skill instruction text.
+`IDENTITY.md`, or any bot or skill instruction text.
 
 ## Rule (owner ruling, repeated; recorded 2026-10-16)
 

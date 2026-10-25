@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: price-optimizer
   displayName: "Price Optimizer"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Adjusts pricing recommendations based on market price changes."
   category: ecommerce
   tags: ["pricing", "optimization", "market-analysis", "cdc"]
@@ -66,9 +66,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/cdc-event-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 requirements:
   minTier: "starter"
 setup:

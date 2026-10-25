@@ -132,8 +132,7 @@ zones:
   zone2Domains: ["$DOMAIN"]
 
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/schemabounce"
 
 goals:
   - name: run_productivity

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accounts-receivable-manager
   displayName: "Accounts Receivable Manager"
-  version: "0.1.1"
+  version: "0.1.2"
   description: "Prioritizes overdue invoices and prepares approval-gated collection follow-ups."
   category: finance
   tags: ["accounts-receivable", "collections", "invoices", "cash-flow", "finance"]
@@ -70,11 +70,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/invoice-categorization@1.0.0"
-  - ref: "skills/follow-up-tracking@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/schemabounce"
 mcpServers:
   - ref: "tools/stripe"
     required: true

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: brand-guardian
   displayName: "Brand Guardian"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Brand consistency monitoring, guideline enforcement, and asset review."
   category: design
   tags: ["brand", "consistency", "guidelines", "design", "content-review", "brand-audit"]
@@ -71,9 +71,8 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/brand-audit@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:anthropics/knowledge-work-plugins/brand-review"
 automations:
   triggers:
     - entityType: "content_items"

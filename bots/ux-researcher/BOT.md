@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ux-researcher
   displayName: "UX Researcher"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "User research synthesis, feedback analysis, and usability insight generation."
   category: design
   tags: ["ux", "research", "usability", "feedback", "user-experience", "design"]
@@ -64,9 +64,8 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/brand-audit@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:anthropics/knowledge-work-plugins/brand-review"
 presence:
   web:
     browsing: true

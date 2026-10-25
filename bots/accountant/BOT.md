@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.14"
+  version: "1.0.15"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -24,6 +24,8 @@ agent:
     - Budget anomalies and overspend trends go to business-analyst as type=finding for cross-domain context
     - Store learned categorization rules in `learned_patterns` memory to improve accuracy over time
     - Store budget threshold overrides in `thresholds` memory. Update when North Star budget_constraints change
+    - Budget checks: warn at 80% of a category limit and mark critical at 100%; always state the runway (days to the limit at the current burn rate), never a bare percentage. Reload thresholds from memory every run
+    - Duplicate and anomaly checks: flag the same vendor, amount and date within 7 days for invoices and 48 hours for charges; flag a charge above 2x its category average or a new vendor with a large amount. Overdue invoices are severity high regardless of amount
   toolInstructions: |
     ## Tool Usage
 
@@ -151,12 +153,8 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/invoice-categorization@1.0.0"
-  - ref: "skills/expense-tracking@1.0.0"
-  - ref: "skills/budget-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:anthropics/knowledge-work-plugins/variance-analysis"
 toolPacks:
   - ref: "packs/financial-toolkit@1.0.0"
     reason: "Calculate budget variance, financial ratios, and amortization for expense analysis"

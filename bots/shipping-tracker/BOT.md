@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: shipping-tracker
   displayName: "Shipping Tracker"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Monitors shipment status changes and detects delivery issues."
   category: ecommerce
   tags: ["shipping", "logistics", "tracking", "cdc"]
@@ -63,9 +63,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["onlinetools.ups.com", "apis.fedex.com", "api.usps.com", "api-eu.dhl.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/cdc-event-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 plugins: []
 requirements:
   minTier: "starter"

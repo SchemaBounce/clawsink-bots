@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: renewal-manager
   displayName: "Renewal Manager"
-  version: "0.1.1"
+  version: "0.1.2"
   description: "Finds renewal risk and prepares approval-gated account plans from CRM and billing signals."
   category: operations
   tags: ["renewals", "customer-success", "retention", "crm", "revenue"]
@@ -70,12 +70,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
-  - ref: "skills/follow-up-tracking@1.0.0"
-  - ref: "skills/sentiment-analysis@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
+  - ref: "skills/schemabounce"
 mcpServers:
   - ref: "tools/composio"
     required: true

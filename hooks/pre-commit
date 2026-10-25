@@ -2,7 +2,7 @@
 # ClawSink Bots Pre-Commit Hook
 # Validates changed bot SOUL.md files and skill prompts before commit.
 # Auto-increments patch version for changed bots and rewrites the team
-# manifests (teams/*/TEAM.md) that pin them.
+# manifests (templates/*/TEMPLATE.md, or the old teams/*/TEAM.md) that pin them.
 #
 # Install: ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
 #          ln -sf ../../hooks/post-commit .git/hooks/post-commit
@@ -39,6 +39,14 @@ if ! bash scripts/check-seat-copy.sh --staged; then
   exit 1
 fi
 
+# --- Phase 0b: the word "team" (dec-185, dec-186) ---
+# A Team is a Domain and a marketplace team is a domain template. Counts are
+# baselined per file; a staged file may not gain lines.
+if ! bash scripts/check-team-copy.sh --staged; then
+  echo -e "\033[31m✗ team wording (dec-185, dec-186) — commit blocked\033[0m"
+  exit 1
+fi
+
 # Find unique bot names that have staged changes
 changed_bots=()
 while IFS= read -r file; do
@@ -55,6 +63,12 @@ while IFS= read -r file; do
     fi
   fi
 done <<< "$staged_files"
+
+# dec-202: this repository authors no skills. A new file under skills/<name>/ is refused.
+if echo "$staged_files" | grep -qE "^skills/[^/]+/"; then
+  echo -e "\033[31m✗ skills/<name>/ is not allowed (dec-202): reference skills/schemabounce or a registry:<owner>/<repo>/<skill> ref instead\033[0m"
+  exit 1
+fi
 
 if [ ${#changed_bots[@]} -eq 0 ] && ! echo "$staged_files" | grep -q "^skills/"; then
   exit 0
@@ -90,9 +104,9 @@ for bot in "${changed_bots[@]}"; do
   # Team manifests pin bots by exact version (bots/<name>@x.y.z) and the
   # contract validators require the pin to be the current version. Rewrite
   # every pin that references this bot so the commit stays self-consistent.
-  # A TEAM.md that already differs from HEAD is another session's uncommitted
+  # A template manifest that already differs from HEAD is another session's uncommitted
   # work: warn and leave it, never sweep it into this commit.
-  for team_md in teams/*/TEAM.md; do
+  for team_md in templates/*/TEMPLATE.md teams/*/TEAM.md; do
     [ -f "$team_md" ] || continue
     grep -qE "bots/${bot}@[0-9]+\.[0-9]+\.[0-9]+" "$team_md" || continue
     if ! git diff --quiet HEAD -- "$team_md"; then
@@ -178,33 +192,3 @@ for bot in "${changed_bots[@]}"; do
     exit 1
   fi
 done
-
-# --- Phase 3: Validate changed skill prompts ---
-
-# A skill may only declare tools the runtime serves, and the allowlist it is
-# checked against is generated (tests/skills/known-tools.txt). Refuse to commit
-# a skill against a stale snapshot; the sync script skips when no core-api
-# checkout is reachable.
-if echo "$staged_files" | grep -qE "^(skills/|tests/skills/)"; then
-  if ! bash tests/skills/sync-known-tools.sh --check; then
-    echo -e "\033[31m✗ tests/skills/known-tools.txt is stale; run tests/skills/sync-known-tools.sh --write and stage it\033[0m"
-    exit 1
-  fi
-fi
-
-while IFS= read -r file; do
-  if [[ "$file" == skills/*/prompt.md ]] && [ -f "$file" ]; then
-    skill_name=$(echo "$file" | cut -d'/' -f2)
-
-    lines=$(wc -l < "$file")
-    if [ "$lines" -lt 6 ]; then
-      echo -e "\033[33mWARN\033[0m [$skill_name] prompt.md has only $lines lines"
-    fi
-    if ! grep -q "adl_" "$file"; then
-      echo -e "\033[33mWARN\033[0m [$skill_name] prompt.md has no adl_ tool references"
-    fi
-    if ! grep -qiE "NEVER|Anti-pattern|Do not" "$file"; then
-      echo -e "\033[33mWARN\033[0m [$skill_name] prompt.md has no anti-patterns"
-    fi
-  fi
-done <<< "$staged_files"

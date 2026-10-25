@@ -11,14 +11,14 @@ metadata:
   license: "MIT"
 severity: guardrail
 appliesTo:
-  - skills/task-management
+  - skills/schemabounce
 ---
 
 # Task Board Hygiene
 
 Guardrails for agents that manage tasks. The task board is the coordination surface humans trust to reflect reality; the moment an agent marks unfinished work Done or deletes a task with its history, that trust is gone and every status on the board becomes suspect.
 
-This rule attaches automatically wherever the `skills/task-management` skill is composed.
+This rule attaches automatically wherever the `skills/schemabounce` skill is composed (its `references/agents-and-tasks.md` covers the task board).
 
 ## What it enforces
 

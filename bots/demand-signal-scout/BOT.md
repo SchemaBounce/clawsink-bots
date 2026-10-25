@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: demand-signal-scout
   displayName: "Demand Signal Scout"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Ranks public and first-party buying signals, creates a daily acquisition queue, drafts approval-gated replies, and learns from measured engagement and conversion outcomes."
   category: sales
   tags: ["lead-generation", "demand-generation", "reddit", "youtube", "hubspot", "buying-signals", "content-opportunities", "acquisition-queue", "approval-gate", "attribution"]
@@ -85,9 +85,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["oauth.reddit.com", "www.reddit.com", "www.youtube.com", "youtube.googleapis.com", "api.hubapi.com", "api.exa.ai", "backend.composio.dev"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/social-publishing@2.1.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:coreyhaines31/marketingskills/social"
 presence:
   web:
     search: true

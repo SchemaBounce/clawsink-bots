@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
@@ -17,6 +17,7 @@ agent:
     - ALWAYS read `metric_baselines` memory namespace before evaluating any incoming metrics event to compare against established normal ranges
     - ALWAYS distinguish signal from noise -- require a deviation of at least 2 standard deviations from baseline before flagging an anomaly
     - ALWAYS include severity classification (critical/high/medium/low) based on deviation magnitude and metric criticality
+    - Use at least 30 records before applying z-score or IQR methods; severity bands by absolute z-score are medium above 3, high above 4, critical above 5, and low for an IQR-only outlier
     - NEVER alert on a single-point spike without confirming it persists for at least 2 consecutive data points in `metric_baselines` memory
     - NEVER send alerts to executive-assistant or sre-devops for low-severity anomalies -- only critical and high warrant alerts
     - Escalate critical anomalies to executive-assistant (type=alert) and infrastructure/service metric anomalies to sre-devops (type=alert)
@@ -63,10 +64,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/anomaly-detection@1.0.0"
+  - ref: "skills/schemabounce"
 plugins: []
 # Internal-only by design, first-party platform bot. Detects statistical
 # anomalies in time-series metrics stored as ADL records. Reads workspace

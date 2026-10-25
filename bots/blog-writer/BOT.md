@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "2.0.3"
+  version: "2.0.4"
   description: "Scheduled technical blog content creation for your company blog: research, draft, publish with operator approval."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -80,11 +80,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/report-generation@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
-  - ref: "skills/sentiment-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 rules:
   - ref: "rules/blog-publishing@2.0.0"
 plugins: []

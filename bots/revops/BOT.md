@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revops
   displayName: "Revenue Operations"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "CAC/LTV analysis, pipeline-to-revenue attribution, conversion funnel optimization, and revenue forecasting."
   category: finance
   tags: ["revenue-operations", "attribution", "cac-ltv", "forecasting", "conversion"]
@@ -63,11 +63,7 @@ zones:
   zone1Read: ["mission", "industry", "stage", "priorities", "growth_targets", "revenue_targets"]
   zone2Domains: ["finance", "sales", "marketing"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "composio@latest"
     slot: "oauth"

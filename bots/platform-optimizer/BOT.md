@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -99,13 +99,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/workflow-ops@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
-  - ref: "skills/cross-domain-synthesis@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "memory-lancedb@^2.0.0"
     slot: "memory"

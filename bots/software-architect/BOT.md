@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.24"
+  version: "1.0.25"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -64,12 +64,11 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/ticket-writing@1.0.0"
-  - ref: "skills/implementation-planning@1.0.0"
-  - ref: "skills/test-generation@1.0.0"
-  - ref: "skills/pr-creation@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:mattpocock/skills/to-tickets"
+  - ref: "registry:obra/superpowers/writing-plans"
+  - ref: "registry:obra/superpowers/test-driven-development"
+  - ref: "registry:addyosmani/agent-skills/git-workflow-and-versioning"
 presence:
   web:
     browsing: true

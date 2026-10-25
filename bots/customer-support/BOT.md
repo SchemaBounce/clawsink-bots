@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: customer-support
   displayName: "Customer Support"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Ticket triage, workspace health monitoring, onboarding progress tracking."
   category: support
   tags: ["support", "tickets", "onboarding", "customer-health", "triage"]
@@ -149,10 +149,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/notification-dispatch@1.0.0"
-  - ref: "skills/ui-navigation@1.0.0"
+  - ref: "skills/schemabounce"
 automations:
   triggers:
     - name: "Triage new ticket"
