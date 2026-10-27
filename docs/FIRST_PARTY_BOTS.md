@@ -47,7 +47,7 @@ Both ship today. Both are pure platform-internal: zero third-party MCP servers, 
 - `adl_list_workspace_sinks(environment_id?, status?)` (new): sink reliability config from `environment_sinks`, credentials stripped.
 - `adl_list_sink_types` (existing): sink type catalog.
 - `adl_query_records` (existing): read prior audits, correlate.
-- `adl_query_duckdb` (existing): read-only SQL over pipeline CDC events for per-table and per-operation breakdowns the rollups do not expose. One `cdc_events` table; no ADL records.
+- `adl_query_duckdb` (existing): SQL over the workspace warehouse (pipeline tables in `sb_pipelines`, run and usage metadata in `sb_platform`) for per-table and per-operation breakdowns the rollups do not expose. This bot only reads; no ADL records.
 - `adl_read_memory`, `adl_write_memory` (existing): load thresholds, persist run state.
 - `adl_send_message` (existing): escalate critical findings to `executive-assistant`, `sre-devops`, `release-manager`.
 
@@ -129,7 +129,7 @@ These are the SchemaBounce-platform built-ins available to every first-party bot
 | `adl_get_agent_status(agent_id)` | the ADL agent registry and run ledger | Current state, last run timestamp, recent error. |
 | `adl_get_agent_metrics(agent_id?, windows[])` | the per-workspace ADL run ledger | Aggregated tokens (input/output/cache/thinking), estimated cost, status counts, model-id distribution. |
 | `adl_query_records` | per-workspace ADL pool | SQL-shaped reads against the workspace's record store. |
-| `adl_query_duckdb` | per-workspace DuckDB analytics sidecar | Read-only SQL over pipeline CDC events. Exactly one table, `cdc_events`, holding what the `adl_duckdb` sink streamed off pipeline routes, with the row body in a JSON `payload` column. It holds no ADL records, agent runs, memory, or graph edges, and it exists only on workspaces running the sidecar. |
+| `adl_query_duckdb` | the workspace warehouse (DuckDB), paid plans only | Full SQL: reads and ordinary writes run, a destructive statement waits for a person's approval. Schemas: `sb_pipelines` (typed pipeline tables, read-only), the workspace's own tables, and `sb_platform` (run and usage metadata, read-only). It holds no ADL records, memory, or graph edges. A refusal can mean no warehouse on the plan, a frozen one, or one still starting. |
 | `adl_read_memory`, `adl_write_memory` | `agent_memory` | Per-bot, per-namespace key-value state. Used for thresholds, run history, override tables. |
 | `adl_send_message` | `agent_messages` | Inter-bot messaging with typed payloads. |
 
