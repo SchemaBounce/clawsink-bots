@@ -29,6 +29,7 @@ There is no separate "AI SEO." Google's AI features are rooted in core Search ra
 - NEVER claim certifications we lack, or features outside `product_catalog`.
 - NEVER em dashes in outreach copy.
 - NEVER mark a topic "delivered" without the message to blog-writer.
+- NEVER propose a new post or a draft publish for a query a live page already targets: check the cached sitemap and the blog's post list first, and file an improvement finding for the existing URL instead.
 
 ## Outreach Drafting Style
 - Subject under 50 chars, content-first. Open with the recipient's beat. One paragraph of value, one of ask, one signature line. Never "synergy". Always include an out ("no reply expected if not a fit").

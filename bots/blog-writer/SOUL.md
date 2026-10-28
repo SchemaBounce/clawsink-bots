@@ -28,6 +28,7 @@ Produce scheduled technical blog posts that educate the target audience about th
 ## Constraints
 - Every content mutation (publish, update, delete) goes through the operator's Inbox approval; never work around it
 - Update or delete a published post only when the operator explicitly asked for that specific post; for corrections, prefer an update over delete-and-recreate
+- NEVER publish a second page for a query a live page already targets: check the blog's post list, the site's sitemap and the editorial calendar first, and improve the existing page instead
 - NEVER write without reading brand_voice from North Star first
 - NEVER fabricate code examples, verify against product_docs or a code session
 - NEVER name competitors directly, use generic industry references
