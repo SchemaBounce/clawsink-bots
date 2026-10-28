@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.10"
+  version: "0.3.11"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -29,7 +29,7 @@ agent:
     ## Tool Usage
     - Step 1: `adl_read_memory` namespace `bot:seo-expert:northstar` keys `brand_voice`, `product_catalog`, `competitive_anchors`
     - Step 2: `adl_read_memory` namespace `seo:audit:cache` key `sitemap_xml` (seeded by the bootstrap script before each run); list URLs.
-    - Step 3: Spawn `auditor` sub-agent. Use the `seo-audit` skill for the technical, on-page and content checks. The auditor uses the Google Search Console MCP (`query_search_analytics`, `inspect_url`, `list_sitemaps`) for keyword data and indexation; `adl_proxy_call` for on-page meta audits (Open Graph, JSON-LD, canonical, H1; 10 calls/run, 32 KB cap); the pagespeed MCP (`analyze_page_speed`, `get_full_audit`, `crux_summary`) for Core Web Vitals and Lighthouse scores on the home page and top-3 URLs; the DataForSEO MCP (`serp_google_organic_live`) for keyword rank snapshots (persist each position as a `seo_rank_snapshot`, compare with the previous run, and file a finding on a move of 3 or more positions); and if the Bing Webmaster MCP is connected, `get_query_stats`, `get_keyword_data`, `get_crawl_issues`, and `get_url_info` for Bing/Copilot search performance and indexation health.
+    - Step 3: Spawn `auditor` sub-agent. Use the `seo-audit` skill for the technical, on-page and content checks. The auditor uses the connected search console server for keyword data, indexation and sitemaps; `adl_proxy_call` for on-page meta audits (Open Graph, JSON-LD, canonical, H1; 10 calls/run, 32 KB cap); a connected page speed server for Core Web Vitals and Lighthouse scores on the home page and top-3 URLs; a connected SERP data server's live organic results tool for keyword rank snapshots (persist each position as a `seo_rank_snapshot`, compare with the previous run, and file a finding on a move of 3 or more positions); and, when a second search engine's webmaster server is connected, its query, keyword, crawl-issue and URL tools for that engine's search performance and indexation health. Take each tool's exact name from the server's tool list or `adl_tool_search`, never from memory.
     - Step 4: Spawn `geo-auditor` sub-agent. Use the `ai-seo` skill for answer-engine and citation guidance. The geo-auditor uses the AI Citation Tracker MCP (`research.ai_citation.check`, `research.ai_citation.share_of_voice`, `research.ai_citation.history`) to measure brand citation share-of-voice across ChatGPT, Claude, and Perplexity for the brand_queries from cache; uses the llms.txt Generator MCP (`generate-llms`) to produce a draft llms.txt for human review; and files GEO content recommendations (entity clarity, Q&A formatting) for almost-ranking pages. If either MCP is absent, the sub-agent emits an info-level finding and continues.
     - Step 5: For each finding, `adl_upsert_record` entity_type=`seo_findings` with severity, metric_name, metric_value, provider.
     - Step 6: For each almost-ranking GSC query, `adl_upsert_record` entity_type=`seo_keyword_opportunity`.
@@ -265,7 +265,7 @@ setup:
       ref: tools/dataforseo
       group: connections
       priority: optional
-      reason: "Without it the auditor relies on GSC signals alone for opportunity scoring, and rank tracking is skipped entirely. With it: keyword difficulty + volume from DataForSEO Labs, backlink context for outreach simulation, structured on-page crawl data, and daily SERP rank snapshots via serp_google_organic_live. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD."
+      reason: "Without it the auditor relies on GSC signals alone for opportunity scoring, and rank tracking is skipped entirely. With it: keyword difficulty + volume from DataForSEO Labs, backlink context for outreach simulation, structured on-page crawl data, and daily SERP rank snapshots from its live organic results tool. Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD."
       ui:
         icon: search
         actionLabel: "Connect DataForSEO"
@@ -280,8 +280,8 @@ Audits the workspace's connected site footprint, generates topic suggestions for
 - **Modern on-page audit:** for every URL in the sitemap, validates Open Graph + Twitter Card completeness, JSON-LD/structured-data presence and validity, canonical and hreflang, meta description, H1 count, image alt-coverage. (Replaces orcascan.com's open-graph-validator concept in-process.)
 - **Core Web Vitals + Lighthouse:** uses the pagespeed MCP to run Google PageSpeed Insights for the home page and top-3 URLs. Files findings on LCP > 2.5s, CLS > 0.1, INP > 200ms, Lighthouse SEO score < 90. Requires the `tools/pagespeed` MCP connection with a valid `GOOGLE_API_KEY`.
 - **Real keyword data:** pulls Google Search Console Search Analytics over the last 28 days. Identifies "almost-ranking" queries (impressions ≥ 100, position 5-20, CTR below run-median) and writes them as `seo_keyword_opportunity` records.
-- **Bing/Copilot search signals:** if the Bing Webmaster MCP is connected, pulls `get_query_stats` and `get_keyword_data` for Bing-side CTR, and `get_crawl_issues` + `get_url_info` for Bing indexation health. Files `seo_findings` for pages indexed in Google but blocked in Bing. Requires `BING_WEBMASTER_API_KEY`.
-- **SERP rank tracking:** snapshots SERP positions for the workspace's target keywords via `serp_google_organic_live` (DataForSEO MCP). Persists positions as `seo_rank_snapshot` records, computes run-over-run deltas, and files `seo_findings` on movements of 3+ positions. Alerts the executive-assistant on 10+ position swings. Requires DataForSEO MCP connection.
+- **Bing/Copilot search signals:** if a Bing webmaster server is connected, pulls its query and keyword statistics for Bing-side CTR, and its crawl-issue and URL inspection data for Bing indexation health. Files `seo_findings` for pages indexed in Google but blocked in Bing. Requires `BING_WEBMASTER_API_KEY`.
+- **SERP rank tracking:** snapshots SERP positions for the workspace's target keywords with a connected SERP data server's live organic results tool. Persists positions as `seo_rank_snapshot` records, computes run-over-run deltas, and files `seo_findings` on movements of 3+ positions. Alerts the executive-assistant on 10+ position swings. Requires DataForSEO MCP connection.
 - **AI citation share-of-voice (GEO measurement):** uses the `tools/ai-citation-tracker` MCP (CitationBench hosted MCP at `mcp.citationbench.com/mcp`) to check whether the workspace's brand is cited, mentioned, or absent for brand and category queries across ChatGPT, Claude, and Perplexity. Requires `CITATIONBENCH_API_KEY`. Without a key the server returns demo data; the workflow still runs. Results are written as `seo_geo_citation` records and compared run-over-run via `research.ai_citation.history`.
 - **llms.txt drafting (GEO tactic):** uses the `tools/llms-txt-generator` MCP (npm `llms-txt-generator@0.0.3`, `generate-llms` tool) to draft `llms.txt` and `llms-full.txt` for the connected site. Requires `OPENAI_API_KEY`. The draft is stored as `seo_llms_txt_draft` with `requires_human_review=true` and never auto-published. The executive-assistant is messaged when a new draft is ready.
 - **GEO content recommendations:** for almost-ranking pages identified by the auditor, the geo-auditor checks entity clarity, Q&A formatting, and answer-engine-friendly structure. Files `seo_findings` (severity=low) with specific content edit suggestions.
@@ -305,13 +305,13 @@ The audit, GSC pulls, PageSpeed, and AI-search citation checks are real and prod
 
 The agent makes no raw HTTP calls. External access goes through MCP subprocesses and the ADL proxy:
 
-- `searchconsole.googleapis.com` — reached by the Google Search Console MCP subprocess (`query_search_analytics`, `inspect_url`, `list_sitemaps`).
-- `pagespeedonline.googleapis.com` — reached by the pagespeed MCP subprocess (`analyze_page_speed`, `get_full_audit`, `crux_summary`). Requires `GOOGLE_API_KEY`.
+- `searchconsole.googleapis.com` — reached by the Google Search Console MCP subprocess.
+- `pagespeedonline.googleapis.com` — reached by the pagespeed MCP subprocess. Requires `GOOGLE_API_KEY`.
 - Audited domain HTML — one-shot fetch via `adl_proxy_call` (32 KB body cap, 10 s timeout, HTTPS only, private-IP blocked). Used for Open Graph, JSON-LD, canonical, and H1 checks.
 - `mcp.citationbench.com` — reached by the AI Citation Tracker MCP (streamable-http transport). Requires `CITATIONBENCH_API_KEY`. Used by the geo-auditor for `research.ai_citation.check`, `research.ai_citation.share_of_voice`, and `research.ai_citation.history`.
 - `api.openai.com` — reached by the llms-txt-generator MCP subprocess (`generate-llms`). Requires `OPENAI_API_KEY`. Used by the geo-auditor to draft llms.txt.
-- `api.dataforseo.com` — reached by the DataForSEO MCP subprocess. Also the engine for rank tracking via `serp_google_organic_live` for rank tracking. Requires `DATAFORSEO_USERNAME` + `DATAFORSEO_PASSWORD`.
-- `ssl.bing.com` — reached by the Bing Webmaster Tools MCP subprocess (`get_query_stats`, `get_keyword_data`, `get_crawl_issues`, `get_url_info`). Requires `BING_WEBMASTER_API_KEY`. Optional.
+- `api.dataforseo.com` — reached by the DataForSEO MCP subprocess. Also the engine for rank tracking. Requires `DATAFORSEO_USERNAME` + `DATAFORSEO_PASSWORD`.
+- `ssl.bing.com` — reached by the Bing Webmaster Tools MCP subprocess. Requires `BING_WEBMASTER_API_KEY`. Optional.
 - `api.anthropic.com`, `api.perplexity.ai` — in the egress allowlist for any future direct AI-engine probing needs.
 
 ## Required North Star Keys
