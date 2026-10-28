@@ -13,7 +13,7 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/seo-expert@0.3.11"
+  - ref: "bots/seo-expert@0.3.12"
   - ref: "bots/blog-writer@2.0.5"
 northStar:
   industry: "SEO and Content Marketing"

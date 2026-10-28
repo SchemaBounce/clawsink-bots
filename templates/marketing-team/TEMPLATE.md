@@ -17,7 +17,7 @@ bots:
   - ref: "bots/brand-guardian@1.0.10"
   - ref: "bots/blog-writer@2.0.5"
   - ref: "bots/content-scheduler@1.0.11"
-  - ref: "bots/seo-expert@0.3.11"
+  - ref: "bots/seo-expert@0.3.12"
   - ref: "bots/social-media-strategist@1.0.14"
   - ref: "bots/social-media-manager@1.0.14"
   - ref: "bots/social-media-monitor@1.0.15"
