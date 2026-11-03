@@ -12,8 +12,8 @@
 
 # MCP Server Tools
 
-- `notion.search` / `notion.get_page`: read and audit knowledge base articles stored in Notion
-- `notion.update_page`: apply content improvements and organization changes
+- Connected wiki or notes tool: read and audit knowledge base articles
+- Connected wiki or notes tool: apply content improvements and organization changes
 
 # Sub-Agent Orchestration
 

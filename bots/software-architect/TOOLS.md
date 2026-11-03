@@ -15,9 +15,9 @@
 
 # MCP Server Tools
 
-- `github.issues`: read issue details, comments, and linked PRs for context when creating implementation plans
-- `github.code_search`: search codebase to understand module structure and find affected files
-- `github.pull_requests`: review recent PRs to understand current development patterns
+- Connected code-hosting tool: read issue details, comments, and linked pull requests for context when creating implementation plans
+- Connected code-hosting tool: search the codebase to understand module structure and find affected files
+- Connected code-hosting tool: review recent pull requests to understand current development patterns
 
 # Sub-Agent Orchestration
 

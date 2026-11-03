@@ -13,7 +13,7 @@
 
 # Publishing Tools (per platform)
 
-- LinkedIn: `create_post`, `create_article_share`, `create_comment`, `get_org_page_stats`, single-call publish, gate before the call
-- Reddit: `get_subreddit_rules` (always before drafting), `create_post`, `create_comment`, honor account-age, karma, and self-promotion limits
-- Instagram: `post_ig_user_media` (container, allowed before approval), then `publish_ig_user_media` (only after approval), `get_ig_media_insights`
-- Facebook Pages: `create_post`, `create_photo_post`, `get_post_insights`, single-call publish, gate before the call
+- LinkedIn: publish a post, share an article, comment, and read organization page stats. Publishing is a single call, so gate before the call
+- Reddit: read the subreddit rules before drafting (always), then post or comment; honor account-age, karma, and self-promotion limits
+- Instagram: creating the media container is allowed before approval; publishing it only after approval; then read media insights
+- Facebook Pages: publish a post or photo post and read post insights. Publishing is a single call, so gate before the call

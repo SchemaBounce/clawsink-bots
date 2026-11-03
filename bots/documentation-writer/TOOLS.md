@@ -12,6 +12,6 @@
 
 # MCP Server Tools
 
-- `github.get_file_contents`: read existing documentation files to understand current state and structure
-- `github.search_code`: find documentation files affected by an implementation change
-- `notion.get_page`: read documentation pages in Notion workspace for gap analysis
+- Connected code-hosting tool: read existing documentation files to understand current state and structure
+- Connected code-hosting tool: find documentation files affected by an implementation change
+- Connected wiki or notes tool: read documentation pages for gap analysis

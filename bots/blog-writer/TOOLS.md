@@ -27,8 +27,8 @@ The typical CMS tool shape:
 
 ## tools/github (recommended connection)
 
-- `github.create_pull_request`: publish blog post drafts as PRs to the content repository
-- `github.get_file_contents`: read existing blog posts to check for topic overlap
+- Connected code-hosting tool: publish blog post drafts as pull requests to the content repository
+- Connected code-hosting tool: read existing blog posts to check for topic overlap
 
 # Work Phases (single agent, no spawning)
 

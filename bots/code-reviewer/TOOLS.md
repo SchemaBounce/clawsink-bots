@@ -12,9 +12,9 @@
 
 # MCP Server Tools
 
-- `github.pull_requests`: fetch PR metadata, diff content, and review comments
-- `github.issues`: search for related issues when a code review finding maps to a known bug
-- `github.code_search`: search codebase for pattern prevalence when evaluating severity
+- Connected code-hosting tool: fetch pull request metadata, diff content, and review comments
+- Connected code-hosting tool: search for related issues when a code review finding maps to a known bug
+- Connected code-hosting tool: search the codebase for pattern prevalence when evaluating severity
 
 # Sub-Agent Orchestration
 

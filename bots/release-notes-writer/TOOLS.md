@@ -12,5 +12,5 @@
 
 # MCP Server Tools
 
-- `github.list_commits`: List commits in a version range for release note generation
-- `github.list_pull_requests`: List merged PRs to correlate with changelog entries
+- Connected code-hosting tool: list commits in a version range for release note generation
+- Connected code-hosting tool: list merged pull requests to correlate with changelog entries

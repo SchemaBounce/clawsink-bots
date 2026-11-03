@@ -20,7 +20,7 @@ bots:
   - ref: "bots/api-tester@1.0.10"
   - ref: "bots/devops-automator@1.0.14"
   - ref: "bots/release-manager@1.0.12"
-  - ref: "bots/bug-triage@1.0.11"
+  - ref: "bots/bug-triage@1.0.12"
   - ref: "bots/tech-debt-tracker@1.0.10"
   - ref: "bots/documentation-writer@1.0.19"
   - ref: "bots/uptime-manager@1.0.11"

@@ -14,7 +14,7 @@
 
 # MCP Server Tools
 
-- `github.create_release`: Create GitHub releases with tags and release notes
-- `github.list_pull_requests`: List merged PRs for changelog aggregation
-- `github.create_branch`: Create release branches for version preparation
-- `slack.post_message`: Announce releases to engineering channels
+- Connected code-hosting tool: create releases with tags and release notes
+- Connected code-hosting tool: list merged pull requests for changelog aggregation
+- Connected code-hosting tool: create release branches for version preparation
+- Connected chat tool: announce releases to engineering channels

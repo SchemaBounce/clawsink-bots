@@ -21,8 +21,8 @@
 
 # MCP Server Tools
 
-- `stripe.list_charges`: pull payment data for revenue reconciliation and CAC calculation
-- `stripe.list_subscriptions`: track MRR/ARR and subscription lifecycle for LTV computation
+- Connected billing tool: pull payment data for revenue reconciliation and CAC calculation
+- Connected billing tool: track MRR/ARR and subscription lifecycle for LTV computation
 
 # Sub-Agent Orchestration
 

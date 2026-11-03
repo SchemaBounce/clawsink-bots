@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.25"
+  version: "1.0.26"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -218,7 +218,7 @@ Orchestrates the full implementation lifecycle from GitHub issue to pull request
 ## MCP Servers
 
 - **code-sandbox** (optional) -- Hosted Claude Code sessions in per-workspace sandboxes, billed via workspace credits (or a user's personal Claude subscription token). Provides `code_session_create`, `code_session_execute`, `code_session_status`, `code_session_result`, `code_session_diff`, `code_session_push`, and `code_session_cancel` tools. See `tools/code-sandbox/SERVER.md`. Not required for pushing: every agent has the built-in `adl_start_code_session`, `adl_code_session_status`, `adl_continue_code_session` and `adl_push_code_session` tools, and the built-in push is what lands a finished session's branch and opens its pull request. Most implementation work goes through the dedicated coding-agent bot; this grant lets the architect run a session directly when a plan calls for it.
-- **github** (recommended) -- Reads issues and pull request state and manages labels from a conversation. Provides `create_pull_request`, `list_issues`, `add_labels`, and `link_issue` tools. Code work does not depend on it: a code session clones, commits, pushes, and opens the pull request through the workspace's GitHub App, so this connection's health never blocks a code session.
+- **github** (recommended) -- Reads issues and pull request state and manages labels from a conversation. Its tools create pull requests, list issues, add labels, and link issues. Code work does not depend on it: a code session clones, commits, pushes, and opens the pull request through the workspace's GitHub App, so this connection's health never blocks a code session.
 
 ## Code Mode
 
