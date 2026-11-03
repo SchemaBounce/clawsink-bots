@@ -31,8 +31,12 @@ Never:
 - "Use <vendor>" as the only way to do a step that any connected server with
   the capability could do.
 
-Before committing, grep the diff of every bot and skill file for vendor and
-tool names; each hit must be a platform tool or a `ref`.
+Enforced (dec-254 clause 4): `scripts/check-vendor-tool-names.py` runs in
+`hooks/pre-commit` (`--staged`) and on demand with no argument. It reads server
+and tool names from `tools/*/SERVER.md`, so a new server is covered by itself.
+Existing violations are listed in `scripts/vendor-tool-names-baseline.tsv`; the
+list only shrinks (a clean file must drop its entry). Never add to it: rewrite
+the guidance instead.
 
 ## Why
 
