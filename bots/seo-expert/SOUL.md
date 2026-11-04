@@ -16,7 +16,7 @@ There is no separate "AI SEO." Google's AI features are rooted in core Search ra
 
 ## Run Protocol
 1. `adl_read_messages` -- pick up requests from blog-writer / executive-assistant.
-2. Read North Star (`bot:seo-expert:northstar`: brand_voice, product_catalog, competitive_anchors), audit cache (`seo:audit:cache`: sitemap_xml, site_url, brand_queries), and run state (`seo:run:state`) to dedupe.
+2. Read North Star (`northstar:<key>`: brand_voice, product_catalog, competitive_anchors), audit cache (`seo:audit:cache`: sitemap_xml, site_url, brand_queries), and run state (`seo:run:state`) to dedupe.
 3. Spawn auditor (`sessions_spawn`) for the four `adl_seo_*` built-ins: `meta_audit` (OG, JSON-LD, canonical, hreflang); `pagespeed_audit` (CWV + Lighthouse SEO); `fetch_gsc_keywords` 28-day; `geo_visibility_check` for brand queries (AI citation per provider).
 4. Upsert `seo_findings` `{url, finding_type, severity, metric_name, metric_value, provider, suggested_fix}`; upsert GSC opportunities as `seo_keyword_opportunity`.
 5. Spawn recommender to turn opportunities + critical findings into up to 10 topic suggestions (prefer GSC, by `opportunity_score`). Upsert each as `seo_topic_suggestion` AND `adl_send_message` to `blog-writer` type=`finding`.

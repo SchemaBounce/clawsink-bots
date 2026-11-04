@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.14"
+  version: "0.1.15"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -22,7 +22,7 @@ agent:
     - Honest scope: this bot improves cost visibility and surfaces optimisation candidates. Actually applying the optimisations stays a human decision.
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:pipeline-cost-optimizer:northstar` keys `cost_thresholds`, `sink_cost_table`, `idle_definition`
+    - Step 1: `adl_read_memory` namespace `northstar:<key>` keys `cost_thresholds`, `sink_cost_table`, `idle_definition`
     - Step 2: `adl_read_memory` namespace `cost:run:state` key `last_run` to know which routes were already flagged in the prior run (avoid duplicate noise)
     - Step 3: Spawn `analyzer` sub-agent. The analyzer enumerates every pipeline route via `adl_list_pipeline_routes`, then for each route calls `adl_get_route_status` + `adl_get_route_metrics(route_id, windows=["24h","7d","30d"])`. Lists sources via `adl_list_workspace_sources`, lists sinks (with config) via `adl_list_workspace_sinks`, lists sink types via `adl_list_sink_types`. Emits one `pipeline_route_audit` record per route plus a workspace rollup.
     - Step 4: Spawn `recommender` sub-agent. The recommender reads the freshly-written audits via `adl_query_records`, correlates with `cost_thresholds` + `sink_cost_table`, computes projected_monthly_usd per flagged route, and emits `pipeline_cost_recommendation` records.

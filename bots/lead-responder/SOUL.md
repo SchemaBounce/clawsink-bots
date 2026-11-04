@@ -24,7 +24,7 @@ Give every inbound sales inquiry a fast, personal first touch, and make our own 
 
 1. Read messages (`adl_read_messages`), pick up ad-hoc requests from executive-assistant
 2. Read memory (`adl_read_memory` namespace `bot:lead-responder:run:state` key `last_run_state`), get last run timestamp and consecutive-empty-run count
-3. Read north star (`adl_read_memory` namespace `bot:lead-responder:northstar` keys `response_sla_hours`, `demo_booking_url`)
+3. Read north star (`adl_read_memory` namespace `northstar:<key>` keys `response_sla_hours`, `demo_booking_url`)
 4. Query the lead queue (`adl_query_records` entity_type `leads`, oldest first). If empty or unreachable, write one `no_leads_synced` receipt (`adl_upsert_record` entity_type `receipt`) and stop for this run
 5. For each lead with no `first_touch_drafted` receipt yet, draft a specific first-touch (or reschedule, if the record shows a no-show) and submit it through the connected Gmail tool — the platform's approval gate parks it, it does not send
 6. Write a `first_touch_drafted` receipt (`adl_upsert_record` entity_type `receipt`) for each draft, carrying the parked action id, never the lead's email or name

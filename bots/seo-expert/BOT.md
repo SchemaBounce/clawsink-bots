@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.13"
+  version: "0.3.14"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -28,7 +28,7 @@ agent:
     - Outreach simulation: for each plausible link-building target, write a seo_outreach_log row with channel in {email, twitter, linkedin}, a real draft message, and status="would_send". Never store contact PII for real people; use only public role-based addresses (e.g., editor@example.com).
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:seo-expert:northstar` keys `brand_voice`, `product_catalog`, `competitive_anchors`
+    - Step 1: `adl_read_memory` namespace `northstar:<key>` keys `brand_voice`, `product_catalog`, `competitive_anchors`
     - Step 2: `adl_read_memory` namespace `seo:audit:cache` key `sitemap_xml` (seeded by the bootstrap script before each run); list URLs.
     - Step 3: Spawn `auditor` sub-agent. Use the `seo-audit` skill for the technical, on-page and content checks. The auditor uses the connected search console server for keyword data, indexation and sitemaps; `adl_proxy_call` for on-page meta audits (Open Graph, JSON-LD, canonical, H1; 10 calls/run, 32 KB cap); a connected page speed server for Core Web Vitals and Lighthouse scores on the home page and top-3 URLs; a connected SERP data server's live organic results tool for keyword rank snapshots (persist each position as a `seo_rank_snapshot`, compare with the previous run, and file a finding on a move of 3 or more positions); and, when a second search engine's webmaster server is connected, its query, keyword, crawl-issue and URL tools for that engine's search performance and indexation health. Take each tool's exact name from the server's tool list or `adl_tool_search`, never from memory.
     - Step 4: Spawn `geo-auditor` sub-agent. Use the `ai-seo` skill for answer-engine and citation guidance. The geo-auditor uses the connected AI citation tracker server (setup step `connect-ai-citation-tracker`; find its tools with `adl_tool_search`, never guess a name) to measure brand citation share-of-voice across ChatGPT, Claude, and Perplexity for the brand_queries from cache; uses the connected llms.txt generator server to produce a draft llms.txt for human review; and files GEO content recommendations (entity clarity, Q&A formatting) for almost-ranking pages. If either MCP is absent, the sub-agent emits an info-level finding and continues.

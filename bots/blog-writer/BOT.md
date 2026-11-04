@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "2.0.6"
+  version: "2.0.7"
   description: "Scheduled technical blog content creation for your company blog: research, draft, publish with operator approval."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -28,7 +28,7 @@ agent:
     - Cap each blog post at 1500 words unless the request explicitly specifies long-form content.
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:blog-writer:northstar` key `brand_voice` and `product_catalog`, read voice + product context first
+    - Step 1: `adl_read_memory` namespace `northstar:<key>` key `brand_voice` and `product_catalog`, read voice + product context first
     - Step 2: `adl_read_memory` namespace `editorial_calendar` key `last_run_state`, get last run timestamp and category rotation state
     - Step 3: `adl_read_messages`, check for topic requests from teammates
     - Step 4: Produce the draft yourself in three phases, research (validate topic, gather sources from docs + knowledge graph), draft (write the full markdown post), self-edit (check voice, accuracy, structure; up to 2 revision passes). There are no sub-agents to spawn.

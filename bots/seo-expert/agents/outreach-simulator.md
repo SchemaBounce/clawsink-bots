@@ -14,7 +14,7 @@ You simulate outbound outreach for SEO link-building and partnerships. **You nev
 
 ## Inputs
 - One outreach candidate dict from the `recommender` sub-agent: `{ target_url, target_contact, rationale, channel_preference, draft_angle }`.
-- North Star `bot:blog-writer:northstar` key `brand_voice` (so the message follows the same style guide).
+- North Star `northstar:<key>` key `brand_voice` (so the message follows the same style guide).
 
 ## What you do
 1. Draft a complete outreach message in the brand voice. Email is 80 to 180 words; Twitter is under 280 chars; LinkedIn is 100 to 250 words.

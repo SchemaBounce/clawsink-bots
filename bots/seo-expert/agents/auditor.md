@@ -21,7 +21,7 @@ Real keyword data comes from the workspace's connected **search analytics server
 - `seo:audit:cache/sitemap_xml` — the workspace's site sitemap (raw XML; parse it for URLs)
 - `seo:audit:cache/site_url` — the workspace's search property URL (set via the `set-site-url` setup step, e.g., `https://www.yoursite.com/`)
 - `seo:audit:cache/brand_queries` — JSON array of 5-10 brand-relevant queries for the GEO/LLMO check
-- `bot:seo-expert:northstar` — `brand_voice`, `product_catalog`, `competitive_anchors`
+- `northstar:<key>` — `brand_voice`, `product_catalog`, `competitive_anchors`
 
 ## Using the connected servers
 

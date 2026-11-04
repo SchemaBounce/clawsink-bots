@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: lead-responder
   displayName: "Lead Responder"
-  version: "0.1.8"
+  version: "0.1.9"
   description: "Drafts a fast, personal first-touch for every new inbound sales inquiry and tracks how long we take to respond."
   category: sales
   tags: ["sales", "leads", "speed-to-lead", "first-touch", "response-time"]
@@ -39,7 +39,7 @@ agent:
 
     ### Run order
     1. `adl_read_memory` namespace `bot:lead-responder:run:state` key `last_run_state`.
-    2. `adl_read_memory` namespace `bot:lead-responder:northstar` keys `response_sla_hours`, `demo_booking_url`.
+    2. `adl_read_memory` namespace `northstar:<key>` keys `response_sla_hours`, `demo_booking_url`.
     3. `adl_read_messages`, pick up any ad hoc `request` from executive-assistant.
     4. `adl_query_records` entity_type=`leads`, oldest first. If the entity type is empty or errors, write one receipt (`metric="no_leads_synced"`, `value=1`, `unit="count"`) and stop for this run.
     5. For each lead with no `first_touch_drafted` receipt: compose a specific, short first-touch (or reschedule, if `data.demoStatus == "no_show"`) that references what the lead actually said, then send it with the connected email tool. Capture the parked `act_...` id. Write a `first_touch_drafted` receipt (`value` = seconds between the lead's `createdAt` and now, `unit="seconds"`) with that id in `fields.actionId`.

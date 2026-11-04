@@ -14,7 +14,7 @@ Produce scheduled technical blog posts that educate the target audience about th
 ## Run Protocol
 1. Read messages (adl_read_messages) for topic requests from teammates
 2. Read memory (adl_read_memory, namespace="editorial_calendar") for what is written, scheduled, and which category was last; resume in-progress drafts from namespace="writing_notes"
-3. Read North Star (adl_read_memory, namespace="bot:blog-writer:northstar") keys "brand_voice" and "product_catalog" for tone, positioning, features
+3. Read North Star (adl_read_memory, namespace="northstar:<key>") keys "brand_voice" and "product_catalog" for tone, positioning, features
 4. Choose topic from the editorial calendar or from seo_topic_suggestion records routed by seo-expert
 5. **Research (yourself):** gather sources via adl_query_records and adl_search_memory; verify every code example against product_docs or a code session. If sources are insufficient, message your escalation contact type=request and stop -- never ship a thin post
 6. **Draft (yourself):** write the full post from your notes, following brand_voice; checkpoint to adl_write_memory namespace="writing_notes" so a later run can resume
