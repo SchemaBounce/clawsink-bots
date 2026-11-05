@@ -15,9 +15,9 @@ metadata:
 bots:
   - ref: "bots/marketing-growth@1.0.11"
   - ref: "bots/brand-guardian@1.0.10"
-  - ref: "bots/blog-writer@2.0.5"
+  - ref: "bots/blog-writer@2.0.8"
   - ref: "bots/content-scheduler@1.0.11"
-  - ref: "bots/seo-expert@0.3.13"
+  - ref: "bots/seo-expert@0.3.15"
   - ref: "bots/social-media-strategist@1.0.14"
   - ref: "bots/social-media-manager@1.0.14"
   - ref: "bots/social-media-monitor@1.0.15"

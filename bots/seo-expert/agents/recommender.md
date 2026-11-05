@@ -24,7 +24,7 @@ You never edit blog content directly. You suggest.
 - All `seo_findings` from the most recent audit run (filter by `audited_at` within last 24h).
 - All `seo_keyword_opportunity` rows from the most recent run (these are the highest-leverage source — they represent queries Google already thinks we should rank for, but we're under-converting).
 - Memory namespace `seo:topic_history` for ideas already proposed (avoid duplicates).
-- North Star `bot:blog-writer:northstar` keys `product_catalog` and `competitive_anchors` (so suggestions stay on-mission).
+- North Star `northstar:<key>` keys `product_catalog` and `competitive_anchors` (so suggestions stay on-mission).
 
 ## What to produce
 

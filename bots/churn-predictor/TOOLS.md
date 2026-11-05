@@ -12,8 +12,8 @@
 
 # MCP Server Tools
 
-- `stripe.list_subscriptions`: check subscription status and billing signals that correlate with churn
-- `stripe.list_charges`: detect payment failures or downgrades as churn indicators
+- Connected billing tool: check subscription status and billing signals that correlate with churn
+- Connected billing tool: detect payment failures or downgrades as churn indicators
 
 # Sub-Agent Orchestration
 

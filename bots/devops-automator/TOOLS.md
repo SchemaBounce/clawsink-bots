@@ -13,7 +13,7 @@
 
 # MCP Server Tools
 
-- `github.actions`: monitor CI/CD pipeline runs, check workflow status, identify failures
+- Connected code-hosting tool: monitor CI/CD pipeline runs, check workflow status, identify failures
 
 # Sub-Agent Orchestration
 

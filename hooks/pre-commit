@@ -47,6 +47,15 @@ if ! bash scripts/check-team-copy.sh --staged; then
   exit 1
 fi
 
+# --- Phase 0c: vendor MCP tool names in bot and skill guidance (dec-254 clause 4) ---
+# Bot and skill text never names a third-party server's tools. Counts are baselined per
+# file (scripts/vendor-tool-names-baseline.tsv); a staged file may not gain a reference,
+# and a baselined file that is now clean must drop its entry.
+if ! python3 scripts/check-vendor-tool-names.py --staged; then
+  echo -e "\033[31m✗ vendor tool names in bot/skill guidance (dec-254, .claude/rules/bot-guidance-stays-generic.md) — commit blocked\033[0m"
+  exit 1
+fi
+
 # Find unique bot names that have staged changes
 changed_bots=()
 while IFS= read -r file; do

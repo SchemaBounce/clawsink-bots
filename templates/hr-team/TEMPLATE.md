@@ -15,7 +15,7 @@ metadata:
 bots:
   - ref: "bots/hr-onboarding@1.0.12"
   - ref: "bots/mentor-coach@1.0.12"
-  - ref: "bots/knowledge-base-curator@1.0.11"
+  - ref: "bots/knowledge-base-curator@1.0.12"
 plugins:
   - ref: "gog@latest"
     slot: "google"

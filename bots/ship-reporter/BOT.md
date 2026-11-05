@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ship-reporter
   displayName: "Ship Reporter"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Weekly \"what shipped\" report assembled from merged pull requests and completed task-board tasks."
   category: engineering
   tags: ["github", "reporting", "changelog", "tasks", "engineering-coordination"]
@@ -25,7 +25,7 @@ agent:
     ## Tool Usage
     - Target: 5-8 tool calls per run
     - Step 1: `adl_read_memory` key `last_run_state` — the end of the last reporting period
-    - Step 2: `list_pull_requests` (state=closed) or `search_issues` with a merged-date query, once per repo in `ship_report_repos`, filtered to merged_at within the window
+    - Step 2: list closed pull requests (or search issues with a merged-date query) with the connected code-hosting tool, once per repo in `ship_report_repos`, filtered to merged_at within the window
     - Step 3: `adl_query_records` entity_type `tasks`, filter `status=completed` and `completed_at` within the window
     - Step 4: `adl_write_record` entity_type `ship_findings` — the structured summary
     - Step 5: `adl_write_file` — the human-readable report, `scope: "workspace"` so every workspace member can read it in the Files browser

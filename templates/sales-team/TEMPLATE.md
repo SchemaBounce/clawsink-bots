@@ -13,8 +13,8 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/sales-pipeline@1.0.15"
-  - ref: "bots/revops@1.0.11"
+  - ref: "bots/sales-pipeline@1.0.16"
+  - ref: "bots/revops@1.0.12"
   - ref: "bots/market-intelligence@1.0.11"
   - ref: "bots/growth-hacker@1.0.11"
   - ref: "bots/demand-signal-scout@1.0.12"

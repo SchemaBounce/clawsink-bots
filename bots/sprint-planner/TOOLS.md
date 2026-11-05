@@ -15,8 +15,8 @@
 
 # MCP Server Tools
 
-- `jira.sprints`: manage sprints, create and assign issues, track velocity in Jira
-- `linear.cycles`: manage cycles, create and assign issues in Linear
+- Connected sprint-capable issue tracker: manage sprints, create and assign issues, track velocity
+- Any other connected issue tracker with cycles: manage cycles, create and assign issues
 
 # Sub-Agent Orchestration
 

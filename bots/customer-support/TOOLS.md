@@ -16,7 +16,7 @@
 
 # MCP Server Tools
 
-- `slack.list_channels` / `slack.post_message`: monitor support channels for customer issues and post escalation notifications
+- Connected chat tool: monitor support channels for customer issues and post escalation notifications
 
 # Sub-Agent Orchestration
 

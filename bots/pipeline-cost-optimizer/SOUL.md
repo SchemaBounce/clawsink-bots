@@ -17,7 +17,7 @@ Find real configuration smells in the workspace's pipeline state — idle routes
 ## Run Protocol
 
 1. Read messages (`adl_read_messages`), pick up ad-hoc requests from executive-assistant or release-manager.
-2. Read North Star (`adl_read_memory` namespace=`bot:pipeline-cost-optimizer:northstar` keys=`cost_thresholds, sink_cost_table, idle_definition`).
+2. Read North Star (`adl_read_memory` namespace=`northstar:<key>` keys=`cost_thresholds, sink_cost_table, idle_definition`).
 3. Read prior run state (`adl_read_memory` namespace=`cost:run:state` key=`last_run`) to dedupe findings and detect new issues.
 4. Spawn analyzer (`sessions_spawn`): enumerate every pipeline route, source, sink type. Capture one `pipeline_route_audit` record per route with health + cost-relevant signals.
 5. Spawn recommender (`sessions_spawn`): apply cost-threshold rules to fresh audits, emit `pipeline_cost_recommendation` with `{route_id, finding_type, severity, current_metric, projected_savings, suggested_action, suggested_owner}`.

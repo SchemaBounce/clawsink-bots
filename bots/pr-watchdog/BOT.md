@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pr-watchdog
   displayName: "PR Watchdog"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Flags stale and unreviewed pull requests, especially AI-authored ones, and routes them to a human before the review SLA is missed."
   category: engineering
   tags: ["github", "pull-requests", "code-review", "sla", "ai-governance"]
@@ -28,8 +28,8 @@ agent:
     - Target: 4-7 tool calls per run
     - Step 1: `adl_read_memory` key `last_run_state` — last run timestamp and previously seen PR ids
     - Step 2: `adl_read_messages` — check for requests from other agents
-    - Step 3: `list_pull_requests` (state=open) once per repo in `pr_watchdog_repos`
-    - Step 4: `get_pull_request_reviews` only for PRs without a cached review verdict in `prw_findings` from a prior run
+    - Step 3: list open pull requests with the connected code-hosting tool once per repo in `pr_watchdog_repos`
+    - Step 4: read pull request reviews only for PRs without a cached review verdict in `prw_findings` from a prior run
     - Step 5: `adl_upsert_record` entity_type `tasks` for stale/breached PRs — entity_id convention: `task_pr_{owner}_{repo}_{number}`
     - Step 6: `adl_write_record` entity_type `prw_findings` (one per PR checked this run) and entity_type `receipt` (one per action taken)
     - Step 7: `adl_request_escalation` once per run, batching every new breach

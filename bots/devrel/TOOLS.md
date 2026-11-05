@@ -17,9 +17,9 @@
 
 # MCP Server Tools
 
-- `github.list_issues`: monitor open issues for friction patterns, response times, and recurring themes
-- `github.get_repo`: pull repo-level metrics (stars, forks, watchers) for community health tracking
-- `github.list_pull_requests`: track contributor activity and community engagement velocity
+- Connected code-hosting tool: monitor open issues for friction patterns, response times, and recurring themes
+- Connected code-hosting tool: pull repository-level metrics (stars, forks, watchers) for community health tracking
+- Connected code-hosting tool: track contributor activity and community engagement velocity
 
 # Sub-Agent Orchestration
 

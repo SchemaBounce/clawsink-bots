@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]

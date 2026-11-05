@@ -17,4 +17,4 @@
 
 # MCP Server Tools
 
-- `github.search_code`: Scan repository code for security vulnerabilities, hardcoded secrets, or insecure patterns
+- Connected code-hosting tool: scan repository code for security vulnerabilities, hardcoded secrets, or insecure patterns

@@ -31,6 +31,6 @@ For each item in the briefing:
 Output a structured briefing sorted by priority. Group related items. Cap at 15 items -- if more exist, summarize lower-priority items as a count.
 
 You produce the briefing only. You do NOT write records or send messages. The parent executive-assistant bot will dispatch the briefing via:
-- AgentMail (`agentmail.send_message`) for the executive email delivery.
-- Slack (`slack.slack_post_message`) for the leadership channel post.
-- Composio discover-then-execute for any scheduling actions surfaced in the briefing (Google Calendar, Zoom, Google Docs). The parent calls `composio.search_composio_tools` first to resolve the canonical action name before `composio.execute_composio_tool`, so do not include presumed action names in your output. Describe the action in plain English (e.g. "schedule 30 min review with CFO Tuesday 2pm PT") and let the parent translate.
+- The connected email tool for the executive email delivery.
+- The connected chat tool for the leadership channel post.
+- Any connected calendar, video meeting or document tool for scheduling actions surfaced in the briefing. The parent finds the right tool from the server's tool list or `adl_tool_search`, so do not include presumed tool names in your output. Describe the action in plain English (e.g. "schedule 30 min review with CFO Tuesday 2pm PT") and let the parent translate.

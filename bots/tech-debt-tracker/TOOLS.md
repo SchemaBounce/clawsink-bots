@@ -13,4 +13,4 @@
 
 # MCP Server Tools
 
-- `github.issues`: track technical debt issues across repositories, search for related open issues
+- Connected code-hosting tool: track technical debt issues across repositories, search for related open issues

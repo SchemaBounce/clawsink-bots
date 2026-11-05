@@ -24,5 +24,5 @@
 
 ## github
 
-- `github.issues`: read issue details and comments for context when planning
-- `github.pull_requests`: confirm the PR opened after an approved push, add labels and link issues
+- Connected code-hosting tool: read issue details and comments for context when planning
+- Connected code-hosting tool: confirm the pull request opened after an approved push, add labels and link issues
