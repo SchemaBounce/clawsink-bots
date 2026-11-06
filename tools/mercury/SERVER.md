@@ -5,17 +5,17 @@ metadata:
   name: mercury
   displayName: "Mercury"
   version: "1.0.0"
-  description: "Mercury's official hosted MCP server. Read business banking accounts, transactions, and statements with your Mercury account."
+  description: "Mercury's official hosted MCP server. Work with business banking accounts, transactions, transfer requests, categories, budgets, and receipts through your Mercury account."
   tags: ["mercury", "banking", "finance", "transactions", "treasury"]
   category: "finance"
   author: "mercury"
   license: "Proprietary"
 
-# MCP-spec OAuth 2.1 (RFC 9728 + RFC 8414 + RFC 7591 DCR), live-probed
-# 2026-07-16: AS mcp.mercury.com, DCR at /register. The AS advertises only
-# read + offline_access (read-only banking data by design); scopes omitted so
-# the client requests that advertised default, including offline_access for
-# refresh tokens.
+# MCP-spec OAuth 2.1 (RFC 9728 + RFC 8414 + RFC 7591 DCR): AS mcp.mercury.com,
+# DCR at /register. Scopes are omitted so the client requests what the vendor
+# advertises. A sign-in on 2026-11-05 granted read, transactions:request,
+# transactions:update, categories:create, categories:edit, transfers:request,
+# budgets:manage, receipts:manage and offline_access.
 auth:
   type: oauth2_mcp
 
@@ -28,7 +28,7 @@ env: []
 
 # Mercury MCP Server
 
-Mercury's official hosted MCP server. Agents can read business bank account balances, transactions, and statements for reporting and reconciliation. The vendor's OAuth surface is read-only.
+Mercury's official hosted MCP server. Agents can read business bank account balances, transactions, and statements, and can make the changes your sign-in allows, including requesting transfers.
 
 ## How authentication works
 
@@ -42,5 +42,5 @@ vendor's side; run the connect flow again.
 
 ## Notes
 
-- The vendor advertises read-only scopes; agents cannot move money through this server.
+- This connection can write. Use the connection's tool list and the approval policy to choose which tools each agent may use and which ones wait for a person.
 - Tools are served by the vendor and discovered at session start.
