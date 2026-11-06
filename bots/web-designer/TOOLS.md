@@ -44,7 +44,7 @@
 - The deliverable is a pack: Site Styles values (fonts, colors, spacing) mapped from the tokens, a Custom CSS block, Code Block HTML for sections the editor cannot express, and a numbered placement guide (Design -> Site Styles, Pages -> Section -> Code).
 - A person applies it. Afterwards, `adl_proxy_call` the live page and file findings on anything that did not land.
 
-## code-sandbox (tools/code-sandbox, repository sites)
+## SchemaBounce Code Sessions (tools/code-sandbox, repository sites, built into SchemaBounce)
 
 1. `code_session_create`: repo, base branch, the deliverable as the prompt (tokens, layout, copy, checklist), `engine` claude-code
 2. `code_session_status`: poll until the session leaves running

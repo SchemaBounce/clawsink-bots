@@ -4,7 +4,7 @@ kind: DomainTemplate
 metadata:
   name: engineering-team
   displayName: "Engineering"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "End-to-end engineering automation from architecture oversight to production reliability, covering the full software development lifecycle"
   domain: engineering
   category: engineering
@@ -13,8 +13,8 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/software-architect@1.0.25"
-  - ref: "bots/coding-agent@1.0.4"
+  - ref: "bots/software-architect@1.0.27"
+  - ref: "bots/coding-agent@1.0.6"
   - ref: "bots/sre-devops@1.0.15"
   - ref: "bots/code-reviewer@1.0.12"
   - ref: "bots/api-tester@1.0.10"
@@ -22,7 +22,7 @@ bots:
   - ref: "bots/release-manager@1.0.12"
   - ref: "bots/bug-triage@1.0.12"
   - ref: "bots/tech-debt-tracker@1.0.10"
-  - ref: "bots/documentation-writer@1.0.19"
+  - ref: "bots/documentation-writer@1.0.21"
   - ref: "bots/uptime-manager@1.0.11"
 plugins:
   - ref: "n8n-workflow@latest"
@@ -40,7 +40,7 @@ plugins:
         releases: "release-updates"
 mcpServers:
   - ref: "tools/code-sandbox"
-    reason: "Shared sandboxed Claude Code sessions for the coding-agent, software-architect, and documentation-writer bots"
+    reason: "SchemaBounce Code Sessions, built into SchemaBounce: shared Claude Code sessions for the coding-agent, software-architect, and documentation-writer bots"
     config:
       default_branch: "development"
   - ref: "tools/github"

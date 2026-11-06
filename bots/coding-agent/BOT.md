@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: coding-agent
   displayName: "Coding Agent"
-  version: "1.0.5"
+  version: "1.0.7"
   description: "Implements assigned issues end to end: plans the change, runs a sandboxed Claude Code session, tests inside the sandbox, and delivers a pull request for review."
   category: engineering
   tags: ["coding", "implementation", "claude-code", "testing", "pull-requests"]
@@ -28,7 +28,7 @@ agent:
     - Check `codebase_map` memory before planning to identify affected modules; update it with what the session learned.
   toolInstructions: |
     ## Tool Usage: Minimal Calls
-    - Target: 3-5 tool calls per run, never more than 8 (plus the code-sandbox session calls)
+    - Target: 3-5 tool calls per run, never more than 8 (plus the code session calls)
     - Step 1: `adl_read_memory` key `last_run_state`: get last run timestamp and any active session ID
     - Step 2: `adl_read_messages`: check for new implementation requests
     - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
@@ -93,16 +93,16 @@ setup:
         actionLabel: "Connect GitHub"
         helpUrl: "https://docs.schemabounce.com/integrations/github"
     - id: enable-code-sandbox
-      name: "Enable Code Sandbox"
-      description: "Hosted Claude Code sessions in per-workspace sandboxes. Metered on workspace credits by default; users can attach a personal Claude subscription token in user settings."
+      name: "Enable SchemaBounce Code Sessions"
+      description: "Built into SchemaBounce: hosted Claude Code sessions in per-workspace sandboxes. Metered on workspace credits by default; users can attach a personal Claude subscription token in user settings."
       type: mcp_connection
       ref: tools/code-sandbox
       group: connections
       priority: required
-      reason: "Every implementation runs inside a sandboxed code session"
+      reason: "Every implementation runs in a code session hosted by SchemaBounce itself. No third-party service is involved"
       ui:
         icon: code
-        actionLabel: "Enable Code Sandbox"
+        actionLabel: "Enable SchemaBounce Code Sessions"
         helpUrl: "https://docs.schemabounce.com/integrations/code-sandbox"
     - id: set-repo-config
       name: "Set repository configuration"

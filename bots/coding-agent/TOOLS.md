@@ -12,7 +12,7 @@
 
 # MCP Server Tools
 
-## code-sandbox (the session loop)
+## SchemaBounce Code Sessions (the session loop, built into SchemaBounce)
 
 1. `code_session_create`: pass `repo`, `base_branch`, `prompt` (the plan), and optionally `engine` (default `claude-code`), `model`, `max_budget_usd`
 2. `code_session_status`: poll until the session leaves `running`. States: pending, provisioning, cloning, running, awaiting_approval, awaiting_resume, completed, failed, cancelled
