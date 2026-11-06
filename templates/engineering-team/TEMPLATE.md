@@ -13,8 +13,8 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/software-architect@1.0.27"
-  - ref: "bots/coding-agent@1.0.6"
+  - ref: "bots/software-architect@1.0.28"
+  - ref: "bots/coding-agent@1.0.7"
   - ref: "bots/sre-devops@1.0.15"
   - ref: "bots/code-reviewer@1.0.12"
   - ref: "bots/api-tester@1.0.10"
@@ -22,7 +22,7 @@ bots:
   - ref: "bots/release-manager@1.0.12"
   - ref: "bots/bug-triage@1.0.12"
   - ref: "bots/tech-debt-tracker@1.0.10"
-  - ref: "bots/documentation-writer@1.0.21"
+  - ref: "bots/documentation-writer@1.0.22"
   - ref: "bots/uptime-manager@1.0.11"
 plugins:
   - ref: "n8n-workflow@latest"
