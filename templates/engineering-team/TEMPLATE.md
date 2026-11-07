@@ -4,7 +4,7 @@ kind: DomainTemplate
 metadata:
   name: engineering-team
   displayName: "Engineering"
-  version: "1.0.1"
+  version: "1.0.2"
   description: "End-to-end engineering automation from architecture oversight to production reliability, covering the full software development lifecycle"
   domain: engineering
   category: engineering
@@ -13,24 +13,18 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/software-architect@1.0.25"
-  - ref: "bots/coding-agent@1.0.4"
+  - ref: "bots/software-architect@1.0.28"
+  - ref: "bots/coding-agent@1.0.8"
   - ref: "bots/sre-devops@1.0.15"
   - ref: "bots/code-reviewer@1.0.12"
   - ref: "bots/api-tester@1.0.10"
-  - ref: "bots/devops-automator@1.0.14"
-  - ref: "bots/release-manager@1.0.12"
+  - ref: "bots/devops-automator@1.0.16"
+  - ref: "bots/release-manager@1.0.14"
   - ref: "bots/bug-triage@1.0.12"
   - ref: "bots/tech-debt-tracker@1.0.10"
-  - ref: "bots/documentation-writer@1.0.19"
+  - ref: "bots/documentation-writer@1.0.22"
   - ref: "bots/uptime-manager@1.0.11"
 plugins:
-  - ref: "n8n-workflow@latest"
-    slot: "workflow"
-    reason: "CI/CD and release automation for devops-automator, release-manager, and sre-devops"
-    config:
-      webhook_triggers: true
-      workflow_templates: ["ci-cd", "release", "incident"]
   - ref: "microsoft-teams@latest"
     slot: "notifications"
     reason: "Team notifications for build failures, release status, and incident alerts"
@@ -40,7 +34,7 @@ plugins:
         releases: "release-updates"
 mcpServers:
   - ref: "tools/code-sandbox"
-    reason: "Shared sandboxed Claude Code sessions for the coding-agent, software-architect, and documentation-writer bots"
+    reason: "SchemaBounce Code Sessions, built into SchemaBounce: shared Claude Code sessions for the coding-agent, software-architect, and documentation-writer bots"
     config:
       default_branch: "development"
   - ref: "tools/github"

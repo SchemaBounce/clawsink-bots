@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: order-fulfillment
   displayName: "Order Fulfillment"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Orchestrates order processing workflows from receipt through delivery."
   category: ecommerce
   tags: ["orders", "fulfillment", "workflow", "cdc"]
@@ -23,7 +23,7 @@ agent:
     - Escalate to executive-assistant (alert) only for systemic fulfillment failures (e.g., warehouse system down, carrier rejection affecting multiple orders).
     - When inventory-alert or inventory-manager sends stock-level alerts, evaluate impact on pending orders, hold or reroute orders for out-of-stock SKUs.
     - When shipping-tracker sends delivery status findings (delay, exception), update the corresponding order_status record and escalate if SLA is breached.
-    - Use the n8n-workflow plugin to trigger external fulfillment workflows (warehouse routing, shipping labels, carrier dispatch), do not attempt to replicate external system logic.
+    - Use a deployed workspace workflow to reach external fulfillment systems (warehouse routing, shipping labels, carrier dispatch): find it with `adl_list_workflows` and request the run with `adl_trigger_workflow`, which waits for a person to approve it. If no workflow fits, say so in a finding. Do not attempt to replicate external system logic.
     - Process orders FIFO by default, but priority orders (expedited shipping, VIP accounts) jump the queue.
   toolInstructions: |
     ## Tool Usage: Minimal Calls
@@ -71,10 +71,6 @@ egress:
   mode: "none"
 skills:
   - ref: "skills/schemabounce"
-plugins:
-  - ref: "n8n-workflow@latest"
-    required: true
-    reason: "Triggers fulfillment workflows in external systems (warehouse routing, shipping labels, carrier dispatch)"
 requirements:
   minTier: "starter"
 setup:

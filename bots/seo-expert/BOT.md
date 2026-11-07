@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.15"
+  version: "0.3.17"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -98,7 +98,7 @@ plugins: []
 skills:
   - ref: "skills/schemabounce"
   - ref: "registry:coreyhaines31/marketingskills/seo-audit"
-  - ref: "registry:coreyhaines31/marketingskills/ai-seo"
+  - ref: "registry:coreyhaines31/marketingskills/ai-seo@ac69fe6c8b7377047c859aded6759162192a1582"
 requirements:
   minTier: "starter"
 goals:

@@ -13,7 +13,7 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/order-fulfillment@1.0.11"
+  - ref: "bots/order-fulfillment@1.0.12"
   - ref: "bots/inventory-manager@1.0.12"
   - ref: "bots/inventory-alert@1.0.11"
   - ref: "bots/shipping-tracker@1.0.10"

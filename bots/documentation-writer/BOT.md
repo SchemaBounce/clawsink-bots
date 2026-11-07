@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.20"
+  version: "1.0.22"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
@@ -123,16 +123,16 @@ setup:
         icon: github
         actionLabel: "Connect GitHub"
     - id: enable-code-sandbox
-      name: "Enable Code Sandbox"
-      description: "Hosted Claude Code sessions in per-workspace sandboxes for documentation file edits, metered on workspace credits."
+      name: "Enable SchemaBounce Code Sessions"
+      description: "Built into SchemaBounce: hosted Claude Code sessions in per-workspace sandboxes for documentation file edits, metered on workspace credits."
       type: mcp_connection
       ref: tools/code-sandbox
       group: connections
       priority: recommended
-      reason: "Doc file edits run inside sandboxed code sessions that produce reviewable doc PRs"
+      reason: "Doc file edits run in code sessions hosted by SchemaBounce itself and produce reviewable doc PRs. No third-party service is involved"
       ui:
         icon: code
-        actionLabel: "Enable Code Sandbox"
+        actionLabel: "Enable SchemaBounce Code Sessions"
         helpUrl: "https://docs.schemabounce.com/integrations/code-sandbox"
     - id: import-implementation-plans
       name: "Connect implementation plan data"

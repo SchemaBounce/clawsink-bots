@@ -3,9 +3,9 @@ apiVersion: clawsink.schemabounce.com/v1
 kind: McpServer
 metadata:
   name: code-sandbox
-  displayName: "Code Sandbox"
-  version: "1.0.0"
-  description: "Sandboxed coding sessions running Claude Code in per-workspace Kubernetes Job sandboxes. Create a session against a repo, execute a prompt, review the diff, and push behind an approval gate."
+  displayName: "SchemaBounce Code Sessions"
+  version: "1.0.1"
+  description: "Built into SchemaBounce and hosted by SchemaBounce itself, with no third-party service. Coding sessions running Claude Code in per-workspace Kubernetes Job sandboxes. Create a session against a repo, execute a prompt, review the diff, and push behind an approval gate."
   tags: ["coding", "implementation", "claude-code", "sandbox", "pull-requests", "managed"]
   category: "ai-memory"
   author: "schemabounce"
@@ -45,9 +45,9 @@ tools:
     category: session
 ---
 
-# Code Sandbox
+# SchemaBounce Code Sessions
 
-SchemaBounce's hosted coding agent. The platform runs the genuine Claude Code CLI inside a per-workspace Kubernetes Job sandbox and exposes it as a remote MCP service. Bots (and humans, through agents) create a session against a Git repository, describe the work, watch progress, review the diff, and push the result to a feature branch.
+SchemaBounce's own hosted coding agent, not a third-party service. The platform runs the genuine Claude Code CLI inside a per-workspace Kubernetes Job sandbox and exposes it as a remote MCP service. Bots (and humans, through agents) create a session against a Git repository, describe the work, watch progress, review the diff, and push the result to a feature branch.
 
 This server supersedes the retired `tools/codex` preview manifest. The 7-tool adapter surface is carried forward unchanged; the backing service is live infrastructure, not a preview shape.
 

@@ -268,7 +268,6 @@ The `plugins:` section declares OpenCLAW plugin dependencies — npm-based TypeS
 | **Channel** | `channel` | `microsoft-teams`, `voice-call`, `wacli` | Messaging channels (Teams, phone, WhatsApp) |
 | **Memory** | `memory` | `memory-lancedb`, `memos-cloud` | Vector recall, cross-agent memory |
 | **OAuth** | `oauth` | `composio` | Managed OAuth for 860+ apps |
-| **Workflow** | — | `n8n-workflow` | External workflow orchestration |
 | **Workspace** | — | `gog` | Google Workspace (Gmail, Calendar, Drive, Docs) |
 
 Plugins with a `slot` are exclusive — only one plugin per slot loads at a time.

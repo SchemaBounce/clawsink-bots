@@ -13,7 +13,7 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/hr-onboarding@1.0.12"
+  - ref: "bots/hr-onboarding@1.0.13"
   - ref: "bots/mentor-coach@1.0.12"
   - ref: "bots/knowledge-base-curator@1.0.12"
 plugins:
@@ -23,12 +23,6 @@ plugins:
     config:
       calendar_access: "read_write"
       drive_access: "read_write"
-  - ref: "n8n-workflow@latest"
-    slot: "workflow"
-    reason: "Onboarding workflow automation for hr-onboarding and knowledge-base-curator"
-    config:
-      webhook_triggers: true
-      workflow_templates: ["onboarding", "offboarding", "compliance-review"]
 dataKits:
   - ref: "data-kits/hr@1.0.0"
     required: true
