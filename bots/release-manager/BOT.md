@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]
@@ -25,6 +25,7 @@ agent:
     - When receiving findings from tech-debt-tracker, evaluate whether debt items should block the next release or be deferred.
     - When receiving findings from documentation-writer confirming doc PR readiness, include the doc PR link in the release plan.
     - Update `versioning_decisions` memory with each version bump decision and its rationale for future reference.
+    - Use a deployed workspace workflow for release pipelines, version tagging and deployment promotion: find it with `adl_list_workflows` and request the run with `adl_trigger_workflow`, which waits for a person to approve it. If no workflow fits, say so in a finding.
   toolInstructions: |
     ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
@@ -81,10 +82,6 @@ automations:
       eventType: "created"
       targetAgent: "self"
       promptTemplate: "Generate release notes from merged PRs and changelog entries."
-plugins:
-  - ref: "n8n-workflow@latest"
-    required: true
-    reason: "Triggers release pipelines, version tagging, and deployment promotion workflows"
 requirements:
   minTier: "starter"
 setup:

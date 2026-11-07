@@ -25,12 +25,6 @@ bots:
   - ref: "bots/documentation-writer@1.0.22"
   - ref: "bots/uptime-manager@1.0.11"
 plugins:
-  - ref: "n8n-workflow@latest"
-    slot: "workflow"
-    reason: "CI/CD and release automation for devops-automator, release-manager, and sre-devops"
-    config:
-      webhook_triggers: true
-      workflow_templates: ["ci-cd", "release", "incident"]
   - ref: "microsoft-teams@latest"
     slot: "notifications"
     reason: "Team notifications for build failures, release status, and incident alerts"

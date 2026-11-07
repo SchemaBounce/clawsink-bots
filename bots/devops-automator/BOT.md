@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devops-automator
   displayName: "DevOps Automator"
-  version: "1.0.15"
+  version: "1.0.16"
   description: "CI/CD pipeline monitoring, deployment verification, and infrastructure automation."
   category: engineering
   tags: ["devops", "ci-cd", "deployments", "automation", "infrastructure"]
@@ -24,6 +24,7 @@ agent:
     - Store deployment-to-incident correlations in `incident_correlations` memory namespace for cross-run pattern analysis
     - Write automation proposals as `automation_proposals` entity type only after confirming the same manual pattern has occurred 3+ times in `deployment_patterns` memory
     - Respect `deployment_environments` North Star key to weight criticality -- production failures always escalate, staging failures are logged as findings
+    - Use a deployed workspace workflow for CI/CD pipelines, deployment rollbacks and infrastructure automation: find it with `adl_list_workflows` and request the run with `adl_trigger_workflow`, which waits for a person to approve it. If no workflow fits, say so in a finding
   toolInstructions: |
     ## Tool Usage: Minimal Calls
     - Target: 3-5 tool calls per run, never more than 8
@@ -81,10 +82,6 @@ automations:
       eventType: "created"
       targetAgent: "self"
       promptTemplate: "Verify deployment health and rollback if error rate exceeds threshold."
-plugins:
-  - ref: "n8n-workflow@latest"
-    required: true
-    reason: "Triggers CI/CD pipelines, deployment rollbacks, and infrastructure automation workflows in external systems"
 presence:
   web:
     search: true
