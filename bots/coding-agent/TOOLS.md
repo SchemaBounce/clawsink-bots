@@ -12,15 +12,16 @@
 
 # MCP Server Tools
 
-## SchemaBounce Code Sessions (the session loop, built into SchemaBounce)
+## Code sessions (built into SchemaBounce, no connection needed)
 
-1. `code_session_create`: pass `repo`, `base_branch`, `prompt` (the plan), and optionally `engine` (default `claude-code`), `model`, `max_budget_usd`
-2. `code_session_status`: poll until the session leaves `running`. States: pending, provisioning, cloning, running, awaiting_approval, awaiting_resume, completed, failed, cancelled
-3. `code_session_execute`: send a follow-up prompt when the session is `awaiting_resume` (test failures, clarification)
-4. `code_session_diff`: review the full diff before requesting a push, confirm it matches the plan scope
-5. `code_session_push`: request the push to a feature branch. Agent-initiated pushes escalate to the Inbox; wait for approval, do not retry the push
-6. `code_session_result`: collect summary, files changed, and test output for the `code_sessions` record
-7. `code_session_cancel`: tear down a session after 2 failed retries or when scope is invalidated
+1. `adl_start_code_session`: pass `task_id` and a prompt that stands alone (the plan). The platform writes the session's status, pull request link and any failure back onto the task
+2. `adl_code_session_status`: follow the session until its work and checks are done
+3. `adl_continue_code_session`: continue a failed, cancelled or expired session from its last checkpoint, for test failures or clarification
+4. `adl_push_code_session`: with `open_pr`, while the session is still open. Agent pushes wait for a person in the Inbox unless the workspace turned that off; wait for approval, do not retry the push
+
+## SchemaBounce Code Sessions connection (optional)
+
+With this grant the `code_session_*` tools drive the same session step by step: `code_session_execute` sends a follow-up prompt, `code_session_diff` shows the full diff before a push, and `code_session_cancel` ends a session after 2 failed retries or when scope is invalidated.
 
 ## github
 

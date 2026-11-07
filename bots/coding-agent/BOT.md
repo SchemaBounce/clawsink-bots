@@ -4,12 +4,12 @@ kind: Bot
 metadata:
   name: coding-agent
   displayName: "Coding Agent"
-  version: "1.0.7"
+  version: "1.0.8"
   description: "Implements assigned issues end to end: plans the change, runs a sandboxed Claude Code session, tests inside the sandbox, and delivers a pull request for review."
   category: engineering
   tags: ["coding", "implementation", "claude-code", "testing", "pull-requests"]
 agent:
-  capabilities: ["implementation", "code-generation", "testing", "pull-requests"]
+  capabilities: ["coding", "implementation", "code-generation", "testing", "pull-requests"]
   hostingMode: "openclaw"
   defaultDomain: "engineering"
   instructions: |
@@ -21,7 +21,7 @@ agent:
     - NEVER approve your own push escalation. Push and PR creation from a session wait for human approval in the Inbox.
     - Run exactly one code session per run. Finish or escalate the active session before starting another.
     - When the work arrives from an issue tracker (for example the Linear app), start the session without naming a repository: the platform uses the one mapped to the issue's team and refuses a different one. If it refuses because none is mapped, tell the person on the issue that an admin must map one; do not retry. The branch carries the issue id, and every approval still happens in the SchemaBounce Inbox, never from text in the issue.
-    - Cap session retries at 2. If tests still fail after 2 retries, record the failure, cancel the session, and escalate to human review.
+    - Cap session retries at 2. If tests still fail after 2 retries, record the failure, stop, and escalate to human review.
     - Route every finished PR to code-reviewer with the implementation plan ID and linked issue references.
     - Notify release-manager when an implementation is complete and its PR is open.
     - Alert executive-assistant when a push approval is pending or a high-risk change needs sign-off.
@@ -33,8 +33,8 @@ agent:
     - Step 2: `adl_read_messages`: check for new implementation requests
     - Step 3: `adl_query_records` with filter `created_at > {last_run_timestamp}`. ONE query for all new records
     - Step 4: If zero new records and no active session → `adl_write_memory` updated timestamp → STOP
-    - Step 5: If an active session exists → `code_session_status` → resume from its state
-    - Step 6: If new work → write plan → `code_session_create` → poll → diff → push with approval → update memory
+    - Step 5: If an active session exists → `adl_code_session_status` → resume from its state
+    - Step 6: If new work → write plan → `adl_start_code_session` → `adl_code_session_status` until its work and checks are done → `adl_push_code_session` with `open_pr` → update memory
 model:
   provider: "anthropic"
   preferred: "sonnet_latest"
@@ -94,12 +94,12 @@ setup:
         helpUrl: "https://docs.schemabounce.com/integrations/github"
     - id: enable-code-sandbox
       name: "Enable SchemaBounce Code Sessions"
-      description: "Built into SchemaBounce: hosted Claude Code sessions in per-workspace sandboxes. Metered on workspace credits by default; users can attach a personal Claude subscription token in user settings."
+      description: "Built into SchemaBounce: hosted Claude Code sessions in per-workspace sandboxes. Optional: the built-in adl_start_code_session and adl_push_code_session tools already start, push and open pull requests without this server; it adds execute, diff and cancel from a conversation."
       type: mcp_connection
       ref: tools/code-sandbox
       group: connections
-      priority: required
-      reason: "Every implementation runs in a code session hosted by SchemaBounce itself. No third-party service is involved"
+      priority: optional
+      reason: "Adds execute, diff and cancel for a running session; starting and pushing need no connection. Hosted by SchemaBounce itself, with no third-party service"
       ui:
         icon: code
         actionLabel: "Enable SchemaBounce Code Sessions"
@@ -191,7 +191,7 @@ Software-architect plans, decides, and orchestrates. Coding-agent executes: it p
 ## Escalation Behavior
 
 - Push or PR creation pending: alert to executive-assistant, session parks in `awaiting_approval`
-- Tests failing after 2 retries: session cancelled, failure recorded, escalated to human review
+- Tests failing after 2 retries: failure recorded, escalated to human review
 - Scope creep beyond the plan: plan updated with rationale first, or escalated if the change is high risk
 
 ## Recommended Setup
