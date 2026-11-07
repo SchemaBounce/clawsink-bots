@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.17"
+  version: "0.3.18"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -166,7 +166,7 @@ setup:
       reason: "Almost-ranking queries often include comparison terms; accurate framing prevents misleading suggestions"
       ui:
         inputType: text
-        placeholder: "e.g., vs Fivetran: real-time vs batch; vs Airbyte: hosted vs self-managed"
+        placeholder: "e.g., vs Competitor A: real-time vs batch; vs Competitor B: hosted vs self-managed"
     - id: set-site-url
       name: "Set the site URL to audit"
       description: "The Google Search Console property URL for the site this bot audits (must match your verified GSC property exactly)"
