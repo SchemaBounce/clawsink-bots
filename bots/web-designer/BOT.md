@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: web-designer
   displayName: "Web Designer"
-  version: "1.0.15"
+  version: "1.0.16"
   description: "Designs and ships web pages from a design system: tokens with measured contrast, phone-first accessible layouts, and conversion-focused page structure and copy. Publishes to Wix and WordPress through their MCP servers, prepares Squarespace-ready sections and site styles, and opens code sessions for sites kept in a repository."
   category: design
   tags: ["design", "frontend", "web", "landing-page", "design-system", "accessibility", "wix", "wordpress", "squarespace", "conversion"]
@@ -39,7 +39,7 @@ agent:
     - Step 4b: Load the `frontend-design` skill before writing tokens, the `cro` skill before writing copy, and the `accessibility` skill before filling the checklist. They give general guidance; the token fields, the contrast ratio on every color pair and the checklist fields are this bot's own rules above and never come from memory of a skill
     - Step 4c: When the brief names a live page: open it with a connected browser tool, take a screenshot, and view the saved file with `adl_view_image_file`. Its Files link goes in the deliverable as the "before"
     - Step 5: `adl_upsert_record` design_tokens, then `adl_upsert_record` design_deliverables (layout, copy, checklist, platform pack); read the page markup with `adl_proxy_call` for the accessibility audit
-    - Step 6: Publish through the platform MCP (gated), or stage a Squarespace pack, or `code_session_create` for a repository site; after a publish, screenshot the live page again and view it before saying it landed; record the outcome and message the requester
+    - Step 6: Publish through the platform MCP (gated), or stage a Squarespace pack, or `adl_start_code_session` for a repository site; after a publish, screenshot the live page again and view it before saying it landed; record the outcome and message the requester
 model:
   provider: "anthropic"
   preferred: "sonnet_latest"
@@ -120,7 +120,6 @@ setup:
       ui:
         icon: code
         actionLabel: "Enable SchemaBounce Code Sessions"
-        helpUrl: "https://docs.schemabounce.com/integrations/code-sandbox"
     - id: set-brand-voice
       name: "Brand voice"
       description: "How the brand sounds: tone, words it uses, words it never uses. Every headline and label is written in it."

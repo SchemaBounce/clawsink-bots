@@ -14,7 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/software-architect@1.0.28"
-  - ref: "bots/coding-agent@1.0.8"
+  - ref: "bots/coding-agent@1.0.9"
   - ref: "bots/sre-devops@1.0.15"
   - ref: "bots/code-reviewer@1.0.12"
   - ref: "bots/api-tester@1.0.10"

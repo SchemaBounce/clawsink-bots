@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.28"
+  version: "1.0.29"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -100,7 +100,6 @@ setup:
       ui:
         icon: code
         actionLabel: "Enable SchemaBounce Code Sessions"
-        helpUrl: "https://docs.schemabounce.com/integrations/code-sandbox"
     - id: set-repo-config
       name: "Set repository configuration"
       description: "Repository URL, main branch, test commands, and build commands"
