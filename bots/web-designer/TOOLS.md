@@ -50,5 +50,3 @@
 2. `adl_code_session_status`: follow the session until its work and checks are done, and confirm the change matches the deliverable and the token set
 3. `adl_push_code_session`: with `open_pr`, while the session is still open. Agent pushes wait for a person in the Inbox; wait for the approval, do not retry the push
 4. Record files changed and the check results on the deliverable
-
-With the optional SchemaBounce Code Sessions connection, the `code_session_*` tools drive the same session step by step, including its full diff.

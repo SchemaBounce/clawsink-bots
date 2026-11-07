@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: web-designer
   displayName: "Web Designer"
-  version: "1.0.16"
+  version: "1.0.17"
   description: "Designs and ships web pages from a design system: tokens with measured contrast, phone-first accessible layouts, and conversion-focused page structure and copy. Publishes to Wix and WordPress through their MCP servers, prepares Squarespace-ready sections and site styles, and opens code sessions for sites kept in a repository."
   category: design
   tags: ["design", "frontend", "web", "landing-page", "design-system", "accessibility", "wix", "wordpress", "squarespace", "conversion"]
@@ -109,17 +109,6 @@ setup:
         icon: web
         actionLabel: "Connect WordPress"
         helpUrl: "https://docs.schemabounce.com/integrations/wordpress"
-    - id: enable-code-sandbox
-      name: "Enable SchemaBounce Code Sessions"
-      description: "Built into SchemaBounce. For a site kept in a repository (React, Next.js, Astro, plain HTML): the designer implements the page on a feature branch inside a hosted code session"
-      type: mcp_connection
-      ref: tools/code-sandbox
-      group: connections
-      priority: optional
-      reason: "Repository sites are changed through a reviewed branch, never a direct push. Hosted by SchemaBounce itself, with no third-party service"
-      ui:
-        icon: code
-        actionLabel: "Enable SchemaBounce Code Sessions"
     - id: set-brand-voice
       name: "Brand voice"
       description: "How the brand sounds: tone, words it uses, words it never uses. Every headline and label is written in it."

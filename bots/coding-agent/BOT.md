@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: coding-agent
   displayName: "Coding Agent"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Implements assigned issues end to end: plans the change, runs a sandboxed Claude Code session, tests inside the sandbox, and delivers a pull request for review."
   category: engineering
   tags: ["coding", "implementation", "claude-code", "testing", "pull-requests"]
@@ -92,17 +92,6 @@ setup:
         icon: github
         actionLabel: "Connect GitHub"
         helpUrl: "https://docs.schemabounce.com/integrations/github"
-    - id: enable-code-sandbox
-      name: "Enable SchemaBounce Code Sessions"
-      description: "Built into SchemaBounce: hosted Claude Code sessions in per-workspace sandboxes. Optional: the built-in adl_start_code_session and adl_push_code_session tools already start, push and open pull requests without this server; it adds execute, diff and cancel from a conversation."
-      type: mcp_connection
-      ref: tools/code-sandbox
-      group: connections
-      priority: optional
-      reason: "Adds execute, diff and cancel for a running session; starting and pushing need no connection. Hosted by SchemaBounce itself, with no third-party service"
-      ui:
-        icon: code
-        actionLabel: "Enable SchemaBounce Code Sessions"
     - id: set-repo-config
       name: "Set repository configuration"
       description: "Repository URL, main branch, test commands, and build commands"

@@ -33,10 +33,6 @@ plugins:
         alerts: "engineering-alerts"
         releases: "release-updates"
 mcpServers:
-  - ref: "tools/code-sandbox"
-    reason: "SchemaBounce Code Sessions, built into SchemaBounce: shared Claude Code sessions for the coding-agent, software-architect, and documentation-writer bots"
-    config:
-      default_branch: "development"
   - ref: "tools/github"
     reason: "Shared GitHub access for all engineering bots"
 dataKits:
