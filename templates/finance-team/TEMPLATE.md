@@ -14,7 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/accountant@1.0.17"
-  - ref: "bots/executive-reporter@1.0.11"
+  - ref: "bots/executive-reporter@1.0.12"
   - ref: "bots/revenue-analyst@1.0.11"
   - ref: "bots/fraud-detector@1.0.12"
 dataKits:

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: experiment-tracker
   displayName: "Experiment Tracker"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "A/B experiment monitoring, statistical analysis, and ship/kill recommendations."
   category: analytics
   tags: ["experiments", "ab-testing", "statistics", "conversion", "growth"]
@@ -141,7 +141,7 @@ goals:
     description: "Number of active experiments with up-to-date significance calculations."
     metricType: count
     target: "> 0 per run"
-    category: primary
+    category: secondary
     feedback:
       question: "Are the ship/kill recommendations aligned with your business judgment?"
       options: ["yes", "mostly", "too conservative", "too aggressive"]

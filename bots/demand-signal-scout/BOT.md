@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: demand-signal-scout
   displayName: "Demand Signal Scout"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Ranks public and first-party buying signals, creates a daily acquisition queue, drafts approval-gated replies, and learns from measured engagement and conversion outcomes."
   category: sales
   tags: ["lead-generation", "demand-generation", "reddit", "youtube", "hubspot", "buying-signals", "content-opportunities", "acquisition-queue", "approval-gate", "attribution"]
@@ -229,7 +229,7 @@ setup:
 goals:
   - name: qualified_signals_created
     description: "Create reviewable, source-backed opportunities that match the configured ICP and intent threshold."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: prospect_signals
@@ -252,7 +252,7 @@ goals:
       period: monthly
   - name: ranked_acquisition_queue
     description: "Produce one bounded, evidence-backed acquisition queue for the sales team each day."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: acquisition_queue
@@ -295,6 +295,23 @@ goals:
       operator: "=="
       value: 0
       period: weekly
+  - name: signal_accuracy
+    description: "Prospect signals are confirmed as real buying intent by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: prospect_signals, filter: { feedback: confirmed } }
+      denominator: { entity: prospect_signals, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: prospect_signals
+      actions:
+        - { value: confirmed, label: "Real intent" }
+        - { value: not_relevant, label: "Not relevant" }
 ---
 
 # Demand Signal Scout

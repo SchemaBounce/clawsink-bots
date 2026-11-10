@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: knowledge-base-curator
   displayName: "Knowledge Base Curator"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Organizes and updates knowledge base articles."
   category: productivity
   tags: ["knowledge", "documentation", "organization"]
@@ -134,7 +134,7 @@ setup:
 goals:
   - name: content_quality_audit
     description: "Audit KB articles for accuracy, freshness, and completeness each run"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: kb_updates

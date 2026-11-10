@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: crm-hygiene-manager
   displayName: "CRM Hygiene Manager"
-  version: "0.1.2"
+  version: "0.1.3"
   description: "Finds stale pipeline records and prepares approval-gated CRM cleanup recommendations."
   category: operations
   tags: ["crm", "sales-operations", "forecasting", "pipeline", "data-quality"]
@@ -117,7 +117,7 @@ setup:
 goals:
   - name: actionable_hygiene_coverage
     description: "Every policy-violating record receives a deduplicated, reviewable recommendation."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: crm_hygiene_findings
@@ -126,6 +126,23 @@ goals:
       operator: ">="
       value: 1
       period: daily
+  - name: hygiene_finding_accuracy
+    description: "Hygiene findings are confirmed as real problems by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: crm_hygiene_findings, filter: { feedback: valid } }
+      denominator: { entity: crm_hygiene_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: crm_hygiene_findings
+      actions:
+        - { value: valid, label: "Real problem" }
+        - { value: invalid, label: "Not a problem" }
 ---
 
 # CRM Hygiene Manager

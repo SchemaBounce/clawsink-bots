@@ -17,7 +17,7 @@ bots:
   - ref: "bots/data-quality-monitor@1.0.11"
   - ref: "bots/anomaly-detector@1.0.14"
   - ref: "bots/infrastructure-reporter@1.0.11"
-  - ref: "bots/business-analyst@1.0.12"
+  - ref: "bots/business-analyst@1.0.13"
 dataKits:
   - ref: "data-kits/data@1.0.0"
     required: true

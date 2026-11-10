@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: market-intelligence
   displayName: "Market Intelligence"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Track industry landscape, product announcements, feature parity gaps, and positioning shifts."
   category: management
   tags: ["market-analysis", "industry", "landscape", "positioning", "feature-parity"]
@@ -162,7 +162,7 @@ setup:
 goals:
   - name: weekly_landscape_report
     description: "Produce a market landscape briefing every run cycle"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: mi_landscape_reports
@@ -173,7 +173,7 @@ goals:
       condition: "one landscape report per weekly run"
   - name: feature_gap_tracking
     description: "Maintain current feature parity analysis with gap status"
-    category: primary
+    category: health
     metric:
       type: count
       source: memory
@@ -207,6 +207,23 @@ goals:
       value: 0
       period: weekly
       condition: "cumulative growth"
+  - name: landscape_report_usefulness
+    description: "People mark the landscape reports as useful"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: mi_landscape_reports, filter: { feedback: useful } }
+      denominator: { entity: mi_landscape_reports, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: mi_landscape_reports
+      actions:
+        - { value: useful, label: "Useful" }
+        - { value: not_useful, label: "Not useful" }
 ---
 
 # Market Intelligence

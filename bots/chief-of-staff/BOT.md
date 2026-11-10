@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: chief-of-staff
   displayName: "Chief of Staff"
-  version: "1.0.6"
+  version: "1.0.7"
   description: "Keeps the agent team moving: gives every open task an owner, restarts stalled work, starts agents when work is urgent, and reports throughput and blockers."
   category: management
   tags: ["management", "delegation", "execution", "accountability", "tasks", "coordination"]
@@ -113,20 +113,20 @@ setup:
         inputType: text
         placeholder: "e.g., Real-time data infrastructure for every business"
 goals:
-  - name: team_throughput
-    description: "Tasks the team completes each week"
+  - name: task_completion_rate
+    description: "Share of the team's tasks that reach completed"
     category: primary
     metric:
-      type: count
-      entity: tasks
-      filter: { status: "completed" }
+      type: rate
+      numerator: { entity: tasks, filter: { status: completed } }
+      denominator: { entity: tasks }
     target:
       operator: ">"
-      value: 0
+      value: 0.7
       period: weekly
   - name: stalled_work_restarted
     description: "Every stalled task gets an action in the run that finds it"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: cos_scorecards

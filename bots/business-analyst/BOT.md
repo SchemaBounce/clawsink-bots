@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: business-analyst
   displayName: "Business Analyst"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Cross-domain analysis, trend detection, and strategic recommendations from all bot findings."
   category: management
   tags: ["analysis", "trends", "strategy", "cross-domain", "insights"]
@@ -167,7 +167,7 @@ setup:
 goals:
   - name: cross_domain_correlation
     description: "Produce cross-domain insights that correlate findings from 2+ bot domains"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: ba_findings
@@ -179,7 +179,7 @@ goals:
       condition: "when new findings exist from multiple domains"
   - name: actionable_recommendations
     description: "Every finding includes a concrete, actionable recommendation"
-    category: primary
+    category: secondary
     metric:
       type: rate
       numerator: { entity: ba_findings, filter: { recommendation: { "$exists": true } } }
@@ -190,7 +190,7 @@ goals:
       period: weekly
   - name: recommendation_quality
     description: "Strategic recommendations rated useful by leadership"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: ba_findings, filter: { feedback: "useful" } }

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.15"
+  version: "1.0.16"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
   tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "tiktok", "marketing", "approval-gate", "composio"]
@@ -166,7 +166,7 @@ setup:
 goals:
   - name: approved_posts_published
     description: "Publish content to connected platforms after it is approved"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: mkt_social_posts
@@ -185,7 +185,7 @@ goals:
         - { value: wrong_platform, label: "Wrong platform" }
   - name: zero_unapproved_publishes
     description: "Never publish a post that was not explicitly approved by a human"
-    category: primary
+    category: health
     metric:
       type: count
       entity: mkt_social_posts
@@ -219,6 +219,23 @@ goals:
       value: 0
       period: monthly
       condition: "cumulative growth"
+  - name: post_acceptance
+    description: "People accept the drafted social posts"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: mkt_social_posts, filter: { feedback: accepted } }
+      denominator: { entity: mkt_social_posts, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: mkt_social_posts
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Social Media Manager

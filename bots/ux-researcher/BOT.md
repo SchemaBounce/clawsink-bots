@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ux-researcher
   displayName: "UX Researcher"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "User research synthesis, feedback analysis, and usability insight generation."
   category: design
   tags: ["ux", "research", "usability", "feedback", "user-experience", "design"]
@@ -159,7 +159,7 @@ setup:
 goals:
   - name: pain_point_identification
     description: "Cluster user feedback into themed pain points with actionable recommendations"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: ux_findings
@@ -170,7 +170,7 @@ goals:
       condition: "when user_feedback records exist with sufficient volume"
   - name: recommendation_quality
     description: "Every UX finding includes a concrete improvement recommendation, no pain points without solutions"
-    category: primary
+    category: secondary
     metric:
       type: rate
       numerator: { entity: ux_findings, filter: { has_recommendation: true } }
@@ -200,6 +200,23 @@ goals:
       value: true
       period: per_run
       condition: "when churn-causing or data-loss UX issues are detected"
+  - name: ux_finding_usefulness
+    description: "People mark UX findings as worth acting on"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: ux_findings, filter: { feedback: useful } }
+      denominator: { entity: ux_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: ux_findings
+      actions:
+        - { value: useful, label: "Worth acting on" }
+        - { value: not_useful, label: "Not useful" }
 ---
 
 # UX Researcher

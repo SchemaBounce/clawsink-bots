@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: churn-predictor
   displayName: "Churn Predictor"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Analyzes user activity patterns to predict and flag churn risk."
   category: saas
   tags: ["churn", "retention", "analytics", "cdc"]
@@ -136,7 +136,7 @@ setup:
 goals:
   - name: churn_risk_scoring
     description: "Score every active account for churn risk on each run"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: churn_scores
@@ -147,7 +147,7 @@ goals:
       condition: "when user activity data exists"
   - name: multi_signal_accuracy
     description: "Every churn score backed by at least two corroborating signals"
-    category: primary
+    category: secondary
     metric:
       type: rate
       numerator: { entity: churn_scores, filter: { signal_count: { "$gte": 2 } } }
@@ -158,7 +158,7 @@ goals:
       period: weekly
   - name: prediction_quality
     description: "High-risk predictions confirmed by actual churn or save actions"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: churn_scores, filter: { feedback: "confirmed" } }

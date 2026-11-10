@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "2.0.8"
+  version: "2.0.9"
   description: "Scheduled technical blog content creation for your company blog: research, draft, publish with operator approval."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -176,7 +176,7 @@ setup:
 goals:
   - name: publish_cadence
     description: "Produce one blog post per scheduled run"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: blog_drafts
