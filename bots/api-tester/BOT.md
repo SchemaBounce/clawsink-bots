@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: api-tester
   displayName: "API Tester"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "API endpoint testing, performance benchmarking, and health monitoring."
   category: engineering
   tags: ["api-testing", "performance", "health-monitoring", "regression", "benchmarks"]
@@ -141,7 +141,7 @@ setup:
 goals:
   - name: endpoints_tested
     description: "Test all registered endpoints on each scheduled run"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: test_results
@@ -159,7 +159,7 @@ goals:
         - { value: missed, label: "Missed a real issue" }
   - name: regression_detection
     description: "Detect latency regressions exceeding defined thresholds"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: api_health_reports
@@ -190,6 +190,23 @@ goals:
       operator: "=="
       value: true
       period: per_run
+  - name: regression_report_accuracy
+    description: "Reported regressions are confirmed as real by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: api_health_reports, filter: { feedback: confirmed } }
+      denominator: { entity: api_health_reports, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: api_health_reports
+      actions:
+        - { value: confirmed, label: "Real regression" }
+        - { value: false_alarm, label: "False alarm" }
 ---
 
 # API Tester

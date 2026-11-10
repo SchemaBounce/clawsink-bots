@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: platform-optimizer
   displayName: "Platform Optimizer"
-  version: "1.0.14"
+  version: "1.0.15"
   description: "SchemaBounce-recommended bot, maximizes crystallization, agent efficiency, data health, and platform ROI across the entire workspace."
   category: operations
   tags: ["platform", "optimization", "crystallization", "cost", "performance", "schemabounce-recommended"]
@@ -170,7 +170,7 @@ setup:
 goals:
   - name: crystallization_acceleration
     description: "Identify and propose crystallization candidates from repeating patterns"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: opt_recommendations
@@ -182,7 +182,7 @@ goals:
       condition: "when qualifying patterns exist (3+ occurrences in 7 days)"
   - name: cost_optimization
     description: "Reduce workspace LLM costs through model and schedule recommendations"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: opt_recommendations
@@ -211,7 +211,7 @@ goals:
       period: daily
   - name: recommendation_quality
     description: "Recommendations accepted by operators over time"
-    category: health
+    category: primary
     metric:
       type: rate
       numerator: { entity: opt_recommendations, filter: { feedback: "accepted" } }

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: tech-debt-tracker
   displayName: "Tech Debt Tracker"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Analyzes code review findings and quality metrics to identify technical debt patterns, track debt over time, and suggest refactoring priorities."
   category: engineering
   tags: ["tech-debt", "code-quality", "refactoring", "engineering"]
@@ -130,7 +130,7 @@ setup:
 goals:
   - name: debt_items_identified
     description: "Identify and classify technical debt items from review findings and quality metrics"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: tech_debt_items
@@ -149,7 +149,7 @@ goals:
         - { value: duplicate, label: "Already tracked elsewhere" }
   - name: trend_reporting
     description: "Produce quality trend data showing debt trajectory over time"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: quality_trends
@@ -180,6 +180,23 @@ goals:
       operator: ">"
       value: 0
       period: monthly
+  - name: debt_item_accuracy
+    description: "Tech debt items are confirmed as real by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: tech_debt_items, filter: { feedback: confirmed } }
+      denominator: { entity: tech_debt_items, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: tech_debt_items
+      actions:
+        - { value: confirmed, label: "Real debt" }
+        - { value: not_debt, label: "Not debt" }
 ---
 
 # Tech Debt Tracker

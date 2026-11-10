@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pr-watchdog
   displayName: "PR Watchdog"
-  version: "1.0.4"
+  version: "1.0.5"
   description: "Flags stale and unreviewed pull requests, especially AI-authored ones, and routes them to a human before the review SLA is missed."
   category: engineering
   tags: ["github", "pull-requests", "code-review", "sla", "ai-governance"]
@@ -164,7 +164,7 @@ setup:
 goals:
   - name: breaches_escalated
     description: "Every SLA breach reaches a human before the window closes"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: receipt

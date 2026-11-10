@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-manager
   displayName: "Release Manager"
-  version: "1.0.14"
+  version: "1.0.15"
   description: "Release planning, changelog generation, and version management."
   category: engineering
   tags: ["releases", "changelog", "versioning", "release-notes", "planning"]
@@ -167,7 +167,7 @@ setup:
 goals:
   - name: generate_release_plans
     description: "Produce complete release plans with categorized changes and version recommendations"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: release_plans

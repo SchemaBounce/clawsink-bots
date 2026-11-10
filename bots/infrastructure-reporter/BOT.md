@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: infrastructure-reporter
   displayName: "Infrastructure Reporter"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Periodic infrastructure health summary reports."
   category: engineering
   tags: ["infrastructure", "health", "monitoring"]
@@ -133,7 +133,7 @@ goals:
     description: "Health reports produced on schedule (every 6 hours by default)."
     metricType: count
     target: ">= 4 per day"
-    category: primary
+    category: secondary
     feedback:
       question: "Are the infrastructure health reports actionable and useful?"
       options: ["yes", "mostly", "too verbose", "missing key metrics"]

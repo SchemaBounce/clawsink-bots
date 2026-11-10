@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: coding-agent
   displayName: "Coding Agent"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Implements assigned issues end to end: plans the change, runs a sandboxed Claude Code session, tests inside the sandbox, and delivers a pull request for review."
   category: engineering
   tags: ["coding", "implementation", "claude-code", "testing", "pull-requests"]
@@ -118,7 +118,7 @@ setup:
 goals:
   - name: pr_delivery
     description: "Deliver working pull requests from assigned issues and requests"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: code_sessions
@@ -156,6 +156,17 @@ goals:
     target:
       operator: "=="
       value: 1.0
+      period: monthly
+  - name: pr_merge_rate
+    description: "Share of finished pull requests that people merge rather than close"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: pull_requests, filter: { status: merged } }
+      denominator: { entity: pull_requests, filter: { status: ["merged", "closed"] } }
+    target:
+      operator: ">"
+      value: 0.7
       period: monthly
 ---
 

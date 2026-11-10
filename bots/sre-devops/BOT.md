@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sre-devops
   displayName: "SRE / DevOps Bot"
-  version: "1.0.16"
+  version: "1.0.17"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -165,7 +165,7 @@ setup:
 goals:
   - name: detect_incidents
     description: "Identify infrastructure incidents from metric anomalies"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: incidents
@@ -188,7 +188,7 @@ goals:
       period: weekly
   - name: false_alert_reduction
     description: "Reduce noise by learning from false positive alerts"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: sre_findings, filter: { feedback: "confirmed" } }

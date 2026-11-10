@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: security-agent
   displayName: "Security Agent"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Vulnerability scanning, security policy audits, CVE monitoring, pen test posture checks, secret rotation tracking."
   category: operations
   tags: ["security", "pentest", "vulnerabilities", "cve", "policy", "compliance", "secrets"]
@@ -163,7 +163,7 @@ setup:
 goals:
   - name: vulnerability_detection
     description: "Identify and classify security vulnerabilities from infrastructure and code findings"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: sec_findings
@@ -206,6 +206,23 @@ goals:
       value: 0
       period: weekly
       condition: "updated each run"
+  - name: security_finding_accuracy
+    description: "Security findings are confirmed as real by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: sec_findings, filter: { feedback: confirmed } }
+      denominator: { entity: sec_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: sec_findings
+      actions:
+        - { value: confirmed, label: "Real issue" }
+        - { value: false_positive, label: "False positive" }
 ---
 
 # Security Agent

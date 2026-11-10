@@ -15,7 +15,7 @@ metadata:
 bots:
   - ref: "bots/executive-assistant@1.0.17"
   - ref: "bots/meeting-summarizer@1.0.13"
-  - ref: "bots/release-notes-writer@1.0.11"
+  - ref: "bots/release-notes-writer@1.0.13"
 dataKits:
   - ref: "data-kits/leadership@1.0.0"
     required: true

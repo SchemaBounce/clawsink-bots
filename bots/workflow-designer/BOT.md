@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.17"
+  version: "1.0.18"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -438,7 +438,7 @@ setup:
 goals:
   - name: workflows_created
     description: "Create workflows that solve real business automation needs"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: workflows
@@ -446,6 +446,23 @@ goals:
       operator: ">"
       value: 0
       period: per_run
+  - name: workflow_acceptance
+    description: "People keep the workflows the agent designs"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: workflows, filter: { feedback: kept } }
+      denominator: { entity: workflows, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: workflows
+      actions:
+        - { value: kept, label: "Keep" }
+        - { value: discarded, label: "Discard" }
 ---
 
 # Workflow Designer

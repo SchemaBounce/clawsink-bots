@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sprint-planner
   displayName: "Sprint Planner"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Sprint planning, backlog prioritization, and velocity tracking."
   category: project-management
   tags: ["sprints", "backlog", "velocity", "prioritization", "agile", "RICE"]
@@ -149,7 +149,7 @@ setup:
 goals:
   - name: sprint_plans_delivered
     description: "Generate actionable sprint plans on each planning cycle"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: sprint_plans

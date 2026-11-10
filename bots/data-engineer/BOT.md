@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-engineer
   displayName: "Data Engineer"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Monitors Kolumn schemas, CDC pipeline health, DLQ depth, and sink configuration drift."
   category: engineering
   tags: ["data", "schemas", "cdc", "pipelines", "kolumn", "drift"]
@@ -150,7 +150,7 @@ setup:
 goals:
   - name: detect_schema_drift
     description: "Detect schema mismatches between source and sink configurations"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: de_findings
@@ -183,7 +183,7 @@ goals:
       period: per_run
   - name: data_freshness_compliance
     description: "Maintain data freshness within configured thresholds"
-    category: health
+    category: primary
     metric:
       type: rate
       numerator: { entity: pipeline_status, filter: { freshness_ok: true } }

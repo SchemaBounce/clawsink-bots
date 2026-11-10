@@ -17,7 +17,7 @@ bots:
   - ref: "bots/coding-agent@1.0.10"
   - ref: "bots/sre-devops@1.0.15"
   - ref: "bots/code-reviewer@1.0.12"
-  - ref: "bots/api-tester@1.0.10"
+  - ref: "bots/api-tester@1.0.11"
   - ref: "bots/devops-automator@1.0.16"
   - ref: "bots/release-manager@1.0.14"
   - ref: "bots/bug-triage@1.0.12"
