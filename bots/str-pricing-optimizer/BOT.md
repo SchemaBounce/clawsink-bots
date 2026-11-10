@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-pricing-optimizer
   displayName: "Dynamic Pricing"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Analyzes market conditions, competitor rates, and demand patterns to optimize nightly rates and maximize revenue."
   category: finance
   tags: ["str", "dynamic-pricing", "revenue-management", "rate-optimization", "hospitality"]
@@ -167,7 +167,7 @@ setup:
 goals:
   - name: rate_optimization_output
     description: "Produce actionable rate recommendations for the portfolio"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: str_pricing_calendar
@@ -186,7 +186,7 @@ goals:
         - { value: too_low, label: "Rate too low" }
   - name: gap_night_detection
     description: "Identify and price orphan nights between bookings to maximize occupancy"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: str_findings
@@ -220,6 +220,23 @@ goals:
       value: 0
       period: monthly
       condition: "cumulative growth"
+  - name: rate_recommendation_acceptance
+    description: "People accept the nightly rate recommendations"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: str_pricing_calendar, filter: { feedback: accepted } }
+      denominator: { entity: str_pricing_calendar, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: str_pricing_calendar
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Dynamic Pricing
