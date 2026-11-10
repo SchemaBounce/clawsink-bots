@@ -1,0 +1,3 @@
+# Bots whose declared entities offer no honest outcome metric (dec-292). One bot per line; this list may only shrink.
+atlas  # answers navigation and agent questions; declares no outcome entity, only read-side records
+ship-reporter  # writes receipts and a report; declared entities carry no outcome to rate

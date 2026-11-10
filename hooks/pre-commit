@@ -56,6 +56,12 @@ if ! python3 scripts/check-vendor-tool-names.py --staged; then
   exit 1
 fi
 
+# --- Phase 0c2: goal templates measure outcomes, not output volume (dec-292) ---
+if ! python3 scripts/check-goal-templates.py --staged; then
+  echo -e "\033[31m✗ goal templates (dec-292) — commit blocked\033[0m"
+  exit 1
+fi
+
 # --- Phase 0d: no bot or template depends on a tool the platform replaces (dec-010) ---
 if ! bash scripts/check-no-replaced-tool-dependency.sh; then
   exit 1
