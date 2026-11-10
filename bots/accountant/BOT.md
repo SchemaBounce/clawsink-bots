@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: accountant
   displayName: "Accountant"
-  version: "1.0.16"
+  version: "1.0.17"
   description: "Invoice categorization, expense tracking, budget monitoring, billing anomaly detection."
   category: finance
   tags: ["finance", "invoices", "expenses", "budget", "billing"]
@@ -218,7 +218,7 @@ goals:
       condition: "no transaction remains uncategorized overnight"
   - name: detect_anomalies
     description: "Flag billing anomalies and duplicate invoices"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: acct_findings
@@ -230,7 +230,7 @@ goals:
       condition: "when anomalies exist in financial data"
   - name: categorization_accuracy
     description: "Transactions correctly categorized based on user feedback"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: acct_findings, filter: { feedback: "correct" } }

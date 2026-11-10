@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: renewal-manager
   displayName: "Renewal Manager"
-  version: "0.1.2"
+  version: "0.1.3"
   description: "Finds renewal risk and prepares approval-gated account plans from CRM and billing signals."
   category: operations
   tags: ["renewals", "customer-success", "retention", "crm", "revenue"]
@@ -143,7 +143,7 @@ setup:
 goals:
   - name: renewal_review_coverage
     description: "Every renewal in the configured review window receives a documented assessment."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: renewal_findings
@@ -152,6 +152,23 @@ goals:
       operator: ">="
       value: 1
       period: daily
+  - name: renewal_assessment_accuracy
+    description: "Renewal assessments are confirmed as right by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: renewal_findings, filter: { feedback: correct } }
+      denominator: { entity: renewal_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: renewal_findings
+      actions:
+        - { value: correct, label: "Right call" }
+        - { value: wrong, label: "Wrong call" }
 ---
 
 # Renewal Manager

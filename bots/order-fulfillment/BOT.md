@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: order-fulfillment
   displayName: "Order Fulfillment"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Orchestrates order processing workflows from receipt through delivery."
   category: ecommerce
   tags: ["orders", "fulfillment", "workflow", "cdc"]
@@ -151,7 +151,7 @@ setup:
 goals:
   - name: fulfill_orders
     description: "Process incoming orders through the complete fulfillment lifecycle"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: fulfillment_tasks
