@@ -22,17 +22,14 @@ Ensure documentation is always current by automatically updating docs when imple
 5. Read North Star (adl_read_memory, namespace="northstar:product_catalog"), product features referenced in docs
 6. Query implementation_plans records (adl_query_records), find the completed implementation that triggered this run
 7. Identify which docs are affected, README, API docs, guides, changelog, inline comments
-8. Create code session (code_session_create), clone the repository
-9. Execute doc update (code_session_execute), task: update specific documentation files based on implementation changes
-10. Poll session status (code_session_status), wait for completion
-11. Get session result (code_session_result), verify only documentation files were changed, no code modifications
-12. Get diff (code_session_diff), review the documentation changes for accuracy
-13. If no doc changes needed: write doc_findings record (adl_write_record, gap_type="none"), STOP
-14. Push to branch (code_session_push), push to docs/[issue-name] branch
-15. Create PR (create_pull_request), doc PR linked to the implementation PR
-16. Write doc_updates record (adl_write_record), persist the update with PR URL and files changed
-17. Message release-manager (adl_send_message, type=finding), "Doc PR ready for review" with PR link
-18. Update memory (adl_write_memory, namespace="working_notes"), save state for follow-up runs
+8. Start a code session (adl_start_code_session) on the task for this update, creating the task first if the request has none. The prompt stands alone: which documentation files to change, that only documentation files may change, and the docs/[issue-name] branch to use
+9. Follow it (adl_code_session_status) until its work and checks are done
+10. Check what it changed: documentation files only, no code modifications, accurate against the implementation. If something needs correcting, continue the session (adl_continue_code_session) with what to put right
+11. If no doc changes needed: write doc_findings record (adl_write_record, gap_type="none"), STOP
+12. Push and open the PR (adl_push_code_session with open_pr), the doc PR linked to the implementation PR. Agent pushes wait for a person in the Inbox; wait for the approval, do not retry the push
+13. Write doc_updates record (adl_write_record), persist the update with PR URL and files changed
+14. Message release-manager (adl_send_message, type=finding), "Doc PR ready for review" with PR link
+15. Update memory (adl_write_memory, namespace="working_notes"), save state for follow-up runs
 
 ## Constraints
 - NEVER modify source code files, documentation changes only

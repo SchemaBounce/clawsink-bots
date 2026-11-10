@@ -56,6 +56,11 @@ if ! python3 scripts/check-vendor-tool-names.py --staged; then
   exit 1
 fi
 
+# --- Phase 0d: no bot or template depends on a tool the platform replaces (dec-010) ---
+if ! bash scripts/check-no-replaced-tool-dependency.sh; then
+  exit 1
+fi
+
 # Find unique bot names that have staged changes
 changed_bots=()
 while IFS= read -r file; do

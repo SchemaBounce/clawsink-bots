@@ -44,10 +44,9 @@
 - The deliverable is a pack: Site Styles values (fonts, colors, spacing) mapped from the tokens, a Custom CSS block, Code Block HTML for sections the editor cannot express, and a numbered placement guide (Design -> Site Styles, Pages -> Section -> Code).
 - A person applies it. Afterwards, `adl_proxy_call` the live page and file findings on anything that did not land.
 
-## SchemaBounce Code Sessions (tools/code-sandbox, repository sites, built into SchemaBounce)
+## Code sessions (repository sites, built into SchemaBounce, no connection needed)
 
-1. `code_session_create`: repo, base branch, the deliverable as the prompt (tokens, layout, copy, checklist), `engine` claude-code
-2. `code_session_status`: poll until the session leaves running
-3. `code_session_diff`: confirm the change matches the deliverable and the token set
-4. `code_session_push`: push to a feature branch; the push escalates to the Inbox and waits for the approval
-5. `code_session_result`: record files changed and test output on the deliverable
+1. `adl_start_code_session`: pass `task_id` and a prompt that stands alone: repo, base branch, the deliverable (tokens, layout, copy, checklist)
+2. `adl_code_session_status`: follow the session until its work and checks are done, and confirm the change matches the deliverable and the token set
+3. `adl_push_code_session`: with `open_pr`, while the session is still open. Agent pushes wait for a person in the Inbox; wait for the approval, do not retry the push
+4. Record files changed and the check results on the deliverable

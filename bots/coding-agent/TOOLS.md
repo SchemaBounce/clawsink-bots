@@ -19,10 +19,6 @@
 3. `adl_continue_code_session`: continue a failed, cancelled or expired session from its last checkpoint, for test failures or clarification
 4. `adl_push_code_session`: with `open_pr`, while the session is still open. Agent pushes wait for a person in the Inbox unless the workspace turned that off; wait for approval, do not retry the push
 
-## SchemaBounce Code Sessions connection (optional)
-
-With this grant the `code_session_*` tools drive the same session step by step: `code_session_execute` sends a follow-up prompt, `code_session_diff` shows the full diff before a push, and `code_session_cancel` ends a session after 2 failed retries or when scope is invalidated.
-
 ## github
 
 - Connected code-hosting tool: read issue details and comments for context when planning
