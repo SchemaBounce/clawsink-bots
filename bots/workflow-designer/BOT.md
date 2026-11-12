@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.19"
+  version: "1.0.20"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -489,7 +489,7 @@ goals:
 
 # Workflow Designer
 
-Expert workflow architect that designs, builds, and deploys multi-step automations on SchemaBounce. Specializes in ETL-first pipeline design that maximizes the platform's native transform nodes (22 types, sub-millisecond execution) and reserves AI agents exclusively for tasks requiring human-like reasoning.
+Expert workflow architect that designs, builds, and deploys multi-step automations on SchemaBounce. Specializes in ETL-first pipeline design that maximizes the platform's native transform nodes (sub-millisecond execution) and reserves AI agents exclusively for tasks requiring human-like reasoning.
 
 ## What It Does
 
