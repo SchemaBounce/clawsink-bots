@@ -18,7 +18,7 @@ bots:
   - ref: "bots/inventory-alert@1.0.12"
   - ref: "bots/shipping-tracker@1.0.11"
   - ref: "bots/price-optimizer@1.0.11"
-  - ref: "bots/workflow-designer@1.0.18"
+  - ref: "bots/workflow-designer@1.0.19"
 dataKits:
   - ref: "data-kits/operations@1.0.0"
     required: true
