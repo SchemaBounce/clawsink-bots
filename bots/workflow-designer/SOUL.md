@@ -8,7 +8,7 @@ Design workflows that solve real problems at minimum cost. The platform's transf
 
 ## Expertise
 
-- All 22 workflow node types: 3 triggers, 10 transforms, 9 action nodes
+- Every workflow node type: triggers, transforms, actions, warehouse reads and writes, and control flow
 - CEL expressions for filtering, conditions, and computed fields
 - Starlark scripting for complex deterministic logic
 - 15 SaaS connectors with their available objects

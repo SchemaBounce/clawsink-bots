@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]
@@ -170,7 +170,7 @@ goals:
       condition: "90% of onboarding checklists completed on time"
   - name: task_creation
     description: "Every new hire gets a personalized checklist with all required tasks"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: hr_tasks

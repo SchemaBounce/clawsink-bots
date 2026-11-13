@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]
@@ -139,7 +139,7 @@ setup:
 goals:
   - name: generate_release_notes
     description: "Produce complete release notes for each requested version range"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: release_notes

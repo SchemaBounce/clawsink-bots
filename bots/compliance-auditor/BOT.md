@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: compliance-auditor
   displayName: "Compliance Auditor"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Checks regulatory compliance on new financial records."
   category: fintech
   tags: ["compliance", "audit", "regulatory", "cdc"]
@@ -164,7 +164,7 @@ goals:
       condition: "no financial record remains unaudited"
   - name: violation_detection
     description: "Flag compliance violations with specific regulation citations"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: audit_findings
@@ -176,7 +176,7 @@ goals:
       condition: "when violations exist in financial data"
   - name: audit_accuracy
     description: "Audit findings confirmed as valid by compliance team"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: audit_findings, filter: { feedback: "confirmed" } }

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: fraud-detector
   displayName: "Fraud Detector"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Scores new transactions for fraud risk using pattern analysis and anomaly detection."
   category: fintech
   tags: ["fraud", "transactions", "risk", "cdc"]
@@ -166,7 +166,7 @@ setup:
 goals:
   - name: flag_suspicious_transactions
     description: "Identify and flag potentially fraudulent transactions"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: fraud_scores

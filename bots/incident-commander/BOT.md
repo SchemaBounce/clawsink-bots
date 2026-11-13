@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: incident-commander
   displayName: "Incident Commander"
-  version: "0.1.2"
+  version: "0.1.3"
   description: "Builds an evidence-backed incident timeline and prepares approval-gated updates."
   category: operations
   tags: ["incident-response", "on-call", "pagerduty", "reliability", "operations"]
@@ -144,7 +144,7 @@ setup:
 goals:
   - name: active_incident_timelines
     description: "Every active incident has an evidence-backed timeline."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: incident_findings
@@ -153,6 +153,23 @@ goals:
       operator: ">="
       value: 1
       period: per_run
+  - name: timeline_accuracy
+    description: "Incident timelines are confirmed as accurate by the responders"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: incident_findings, filter: { feedback: accurate } }
+      denominator: { entity: incident_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: incident_findings
+      actions:
+        - { value: accurate, label: "Accurate" }
+        - { value: inaccurate, label: "Inaccurate" }
 ---
 
 # Incident Commander

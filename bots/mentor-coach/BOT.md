@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: mentor-coach
   displayName: "Mentor / Coach"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Bot team performance analysis, process improvement, harmony monitoring, weekly team health reports."
   category: management
   tags: ["mentor", "coaching", "team-health", "performance", "harmony", "process-improvement"]
@@ -131,7 +131,7 @@ goals:
     description: "Weekly team health reports produced on schedule with per-bot scores and coaching recommendations."
     metricType: count
     target: ">= 1 per week"
-    category: primary
+    category: secondary
     feedback:
       question: "Are the team health reports insightful and the coaching recommendations actionable?"
       options: ["yes", "insightful but not actionable", "too generic", "missing key issues"]

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sales-pipeline
   displayName: "Sales Pipeline"
-  version: "1.0.16"
+  version: "1.0.17"
   description: "Analyzes sales funnel and identifies bottlenecks."
   category: sales
   tags: ["sales", "funnel", "pipeline"]
@@ -177,7 +177,7 @@ setup:
 goals:
   - name: pipeline_health_monitoring
     description: "Produce daily pipeline health reports with conversion and velocity metrics"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: pipeline_reports
@@ -187,7 +187,7 @@ goals:
       period: daily
   - name: stalled_deal_detection
     description: "Identify deals stalled beyond 2x average stage duration"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: deal_insights
@@ -220,6 +220,23 @@ goals:
       value: true
       period: per_run
       condition: "when deals close"
+  - name: deal_insight_accuracy
+    description: "Deal insights are confirmed as right by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: deal_insights, filter: { feedback: correct } }
+      denominator: { entity: deal_insights, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: deal_insights
+      actions:
+        - { value: correct, label: "Right call" }
+        - { value: wrong, label: "Wrong call" }
 ---
 
 # Sales Pipeline

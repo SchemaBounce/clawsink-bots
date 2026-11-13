@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: anomaly-detector
   displayName: "Anomaly Detector"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Detects statistical anomalies in time-series metrics data."
   category: engineering
   tags: ["anomaly", "metrics", "monitoring", "cdc"]
@@ -135,7 +135,7 @@ setup:
 goals:
   - name: detect_anomalies
     description: "Identify statistical anomalies in incoming metrics data"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: anomaly_findings

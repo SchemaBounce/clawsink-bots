@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: agent-cost-optimizer
   displayName: "Agent Cost Optimizer"
-  version: "0.1.11"
+  version: "0.1.12"
   description: "First-party platform bot. Audits per-agent token usage, model spend, and run patterns to surface concrete cost-saving recommendations, model downgrades, schedule reductions, runaway-agent detection. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["agents", "cost", "ops", "optimization", "platform", "tokens"]
@@ -76,7 +76,7 @@ requirements:
 goals:
   - name: recommendations_per_run
     description: "Each run produces at least one actionable agent cost recommendation, or an explicit 'no findings' record with metrics."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: agent_cost_recommendation
@@ -105,6 +105,23 @@ goals:
       operator: "=="
       value: 1
       period: per_run
+  - name: recommendation_acceptance
+    description: "People accept the cost recommendations the agent makes"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: agent_cost_recommendation, filter: { feedback: accepted } }
+      denominator: { entity: agent_cost_recommendation, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: agent_cost_recommendation
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Agent Cost Optimizer

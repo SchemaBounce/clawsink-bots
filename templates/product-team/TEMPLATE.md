@@ -14,8 +14,8 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/product-owner@1.0.12"
-  - ref: "bots/sprint-planner@1.0.10"
-  - ref: "bots/experiment-tracker@1.0.11"
+  - ref: "bots/sprint-planner@1.0.12"
+  - ref: "bots/experiment-tracker@1.0.12"
   - ref: "bots/ux-researcher@1.0.11"
 dataKits:
   - ref: "data-kits/product@1.0.0"

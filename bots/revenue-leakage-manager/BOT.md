@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revenue-leakage-manager
   displayName: "Revenue Leakage Manager"
-  version: "0.1.2"
+  version: "0.1.3"
   description: "Finds payment, billing, and entitlement gaps before they become recurring revenue loss."
   category: finance
   tags: ["revenue-leakage", "billing", "payments", "subscriptions", "finance"]
@@ -120,7 +120,7 @@ setup:
 goals:
   - name: verified_leakage_coverage
     description: "Every suspected material gap is marked verified or unverified with source evidence."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: leakage_findings
@@ -129,6 +129,23 @@ goals:
       operator: ">="
       value: 1
       period: weekly
+  - name: leakage_finding_accuracy
+    description: "Leakage findings are confirmed as real gaps by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: leakage_findings, filter: { feedback: confirmed } }
+      denominator: { entity: leakage_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: leakage_findings
+      actions:
+        - { value: confirmed, label: "Real gap" }
+        - { value: not_a_gap, label: "Not a gap" }
 ---
 
 # Revenue Leakage Manager

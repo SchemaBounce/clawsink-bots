@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: price-optimizer
   displayName: "Price Optimizer"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Adjusts pricing recommendations based on market price changes."
   category: ecommerce
   tags: ["pricing", "optimization", "market-analysis", "cdc"]
@@ -147,7 +147,7 @@ setup:
 goals:
   - name: generate_price_recommendations
     description: "Produce actionable price recommendations when market prices change"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: price_recommendations
@@ -158,7 +158,7 @@ goals:
       condition: "when market_prices events exist"
   - name: recommendation_quality
     description: "Recommendations include margin and volume impact estimates"
-    category: primary
+    category: secondary
     metric:
       type: rate
       numerator: { entity: price_recommendations, filter: { expected_margin_impact: { "$exists": true } } }
@@ -190,6 +190,23 @@ goals:
       operator: "=="
       value: 1.0
       period: weekly
+  - name: price_recommendation_acceptance
+    description: "People accept the price recommendations"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: price_recommendations, filter: { feedback: accepted } }
+      denominator: { entity: price_recommendations, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: price_recommendations
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Price Optimizer

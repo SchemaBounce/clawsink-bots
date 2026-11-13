@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: seo-expert
   displayName: "SEO Expert"
-  version: "0.3.18"
+  version: "0.3.19"
   description: "Audits the workspace's connected site for SEO and GEO/AEO: Google Search Console and Bing Webmaster keyword data, Core Web Vitals, on-page meta, SERP rank tracking, AI citation share-of-voice (ChatGPT/Claude/Perplexity via CitationBench), llms.txt drafting, and GEO content recommendations. Surfaces topic opportunities for the blog writer and drafts simulated outreach for human review."
   category: content
   tags: ["seo", "audit", "content", "marketing", "research"]
@@ -104,7 +104,7 @@ requirements:
 goals:
   - name: findings_per_run
     description: "Each run produces at least one actionable seo_finding"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: seo_findings
@@ -114,7 +114,7 @@ goals:
       period: per_run
   - name: topic_suggestions_per_month
     description: "Feed blog-writer at least four high-quality topic suggestions per month"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: seo_topic_suggestion
@@ -132,6 +132,23 @@ goals:
       operator: "=="
       value: 1
       period: per_run
+  - name: seo_finding_usefulness
+    description: "People mark SEO findings as worth acting on"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: seo_findings, filter: { feedback: useful } }
+      denominator: { entity: seo_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: seo_findings
+      actions:
+        - { value: useful, label: "Worth acting on" }
+        - { value: not_useful, label: "Not useful" }
 setup:
   steps:
     - id: set-brand-voice

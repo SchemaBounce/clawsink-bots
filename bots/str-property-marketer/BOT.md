@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-marketer
   displayName: "Property Marketer"
-  version: "1.0.13"
+  version: "1.0.14"
   description: "Creates listing descriptions, manages social media, generates seasonal promotions, and optimizes property visibility across platforms."
   category: marketing
   tags: ["str", "listing-optimization", "social-media", "property-marketing", "seo", "hospitality"]
@@ -162,7 +162,7 @@ setup:
 goals:
   - name: listing_content_produced
     description: "Generate platform-optimized listing descriptions for properties"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: mkt_content
@@ -174,7 +174,7 @@ goals:
       condition: "when properties exist without optimized listings"
   - name: social_media_engagement
     description: "Create social media posts that showcase properties and drive booking interest"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: mkt_social_posts
@@ -204,6 +204,23 @@ goals:
       operator: ">="
       value: 0.8
       period: quarterly
+  - name: listing_content_acceptance
+    description: "People accept the listing content the agent drafts"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: mkt_content, filter: { feedback: accepted } }
+      denominator: { entity: mkt_content, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: mkt_content
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Property Marketer

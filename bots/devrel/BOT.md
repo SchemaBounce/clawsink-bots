@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: devrel
   displayName: "Developer Relations"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Monitors developer community health, GitHub activity, friction points, and developer advocacy."
   category: marketing
   tags: ["developer-relations", "community", "github", "open-source", "advocacy"]
@@ -158,7 +158,7 @@ setup:
 goals:
   - name: friction_point_detection
     description: "Identify recurring developer friction points before they become churn risks"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: devrel_findings
@@ -180,7 +180,7 @@ goals:
       period: per_run
   - name: sentiment_accuracy
     description: "Improve sentiment analysis accuracy through correlation with support data"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: devrel_findings, filter: { corroborated_by_support: true } }

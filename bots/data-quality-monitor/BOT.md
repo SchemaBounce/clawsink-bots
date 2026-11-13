@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-quality-monitor
   displayName: "Data Quality Monitor"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Validates data quality rules on incoming records across all entity types."
   category: engineering
   tags: ["data-quality", "validation", "cdc"]
@@ -129,7 +129,7 @@ goals:
     description: "Total records processed through quality validation rules."
     metricType: count
     target: "> 0 per day"
-    category: primary
+    category: secondary
     feedback:
       question: "Are the quality checks catching real data issues?"
       options: ["yes", "mostly", "too many false positives", "missing real problems"]

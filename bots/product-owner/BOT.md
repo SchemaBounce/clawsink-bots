@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: product-owner
   displayName: "Product Owner"
-  version: "1.0.12"
+  version: "1.0.13"
   description: "Customer feedback aggregation, market analysis, feature prioritization, backlog management via structured GitHub issue specs."
   category: management
   tags: ["product", "backlog", "feedback", "market-analysis", "prioritization", "github-issues"]
@@ -148,7 +148,7 @@ setup:
 goals:
   - name: produce_feature_specs
     description: "Generate structured GitHub issue specs from aggregated customer signals"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: gh_issues
@@ -191,6 +191,23 @@ goals:
       operator: ">="
       value: 0.9
       period: monthly
+  - name: feature_spec_usefulness
+    description: "People mark feature specs as worth building"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: gh_issues, filter: { feedback: useful } }
+      denominator: { entity: gh_issues, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: gh_issues
+      actions:
+        - { value: useful, label: "Worth building" }
+        - { value: not_useful, label: "Not useful" }
 ---
 
 # Product Owner

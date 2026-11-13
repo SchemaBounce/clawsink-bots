@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: meeting-summarizer
   displayName: "Meeting Summarizer"
-  version: "1.0.14"
+  version: "1.0.15"
   description: "Summarizes meeting notes and creates action items."
   category: productivity
   tags: ["meetings", "notes", "actions"]
@@ -136,7 +136,7 @@ setup:
 goals:
   - name: extract_action_items
     description: "Extract clear, attributed action items from every meeting"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: action_items

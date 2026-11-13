@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-alert
   displayName: "Inventory Alert"
-  version: "1.0.11"
+  version: "1.0.12"
   description: "Detects low stock levels and triggers reorder alerts when inventory falls below thresholds."
   category: ecommerce
   tags: ["inventory", "stock", "alerts", "cdc"]
@@ -139,7 +139,7 @@ goals:
     description: "Total inventory alerts produced when stock drops below configured thresholds."
     metricType: count
     target: "> 0 per week"
-    category: primary
+    category: secondary
     feedback:
       question: "Are the low-stock alerts timely and for the right SKUs?"
       options: ["yes", "mostly", "too many false alerts", "missing real stock-outs"]

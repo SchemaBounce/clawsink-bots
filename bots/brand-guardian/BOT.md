@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: brand-guardian
   displayName: "Brand Guardian"
-  version: "1.0.10"
+  version: "1.0.11"
   description: "Brand consistency monitoring, guideline enforcement, and asset review."
   category: design
   tags: ["brand", "consistency", "guidelines", "design", "content-review", "brand-audit"]
@@ -160,7 +160,7 @@ setup:
 goals:
   - name: content_scored
     description: "Score every new content item against brand guidelines"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: brand_scores
@@ -200,7 +200,7 @@ goals:
       condition: "cumulative growth"
   - name: violation_resolution
     description: "Brand findings acknowledged and addressed by content creators"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: brand_findings, filter: { status: "resolved" } }

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.15"
+  version: "0.1.16"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -77,7 +77,7 @@ requirements:
 goals:
   - name: recommendations_per_run
     description: "Each run produces at least one actionable cost recommendation, or an explicit 'no findings' record with metrics."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: pipeline_cost_recommendation
@@ -106,6 +106,23 @@ goals:
       operator: "=="
       value: 1
       period: per_run
+  - name: recommendation_acceptance
+    description: "People accept the pipeline cost recommendations the agent makes"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: pipeline_cost_recommendation, filter: { feedback: accepted } }
+      denominator: { entity: pipeline_cost_recommendation, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: pipeline_cost_recommendation
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Pipeline Cost Optimizer

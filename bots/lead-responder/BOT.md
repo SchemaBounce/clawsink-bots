@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: lead-responder
   displayName: "Lead Responder"
-  version: "0.1.9"
+  version: "0.1.10"
   description: "Drafts a fast, personal first-touch for every new inbound sales inquiry and tracks how long we take to respond."
   category: sales
   tags: ["sales", "leads", "speed-to-lead", "first-touch", "response-time"]
@@ -139,17 +139,16 @@ setup:
         emptyState: "No inquiries are available yet. Create a CAPTCHA-protected public-form source or connect another buyer-owned pipeline that writes `leads` records."
 goals:
   - name: first_touch_coverage
-    description: "Every untouched inquiry gets a first-touch draft submitted for approval within one run"
+    description: "Share of leads that get a first-touch draft"
     category: primary
     metric:
-      type: count
-      entity: receipt
-      filter: { metric: "first_touch_drafted" }
+      type: rate
+      numerator: { entity: receipt, filter: { metric: first_touch_drafted } }
+      denominator: { entity: leads }
     target:
       operator: ">="
-      value: 1
+      value: 0.95
       period: daily
-      condition: "when new leads exist"
   - name: response_latency_visibility
     description: "First-touch latency is measured from real approval timestamps, not assumed"
     category: secondary

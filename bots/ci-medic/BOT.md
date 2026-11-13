@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: ci-medic
   displayName: "CI Medic"
-  version: "1.0.3"
+  version: "1.0.4"
   description: "Reads the actual failing job log for a broken GitHub Actions run, diagnoses the failure class, and drafts a mechanical fix as an approval-gated pull request. Diagnosis-only when the fix isn't mechanical."
   category: engineering
   tags: ["github", "ci-cd", "github-actions", "incident-response", "pull-requests"]
@@ -200,7 +200,7 @@ setup:
 goals:
   - name: every_failure_diagnosed
     description: "Every failing run this bot sees this run gets a diagnosis receipt, whether or not a fix is drafted"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: receipt

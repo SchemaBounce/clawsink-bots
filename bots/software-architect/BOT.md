@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: software-architect
   displayName: "Software Architect"
-  version: "1.0.33"
+  version: "1.0.34"
   description: "Receives tasks and GitHub issues, plans implementations, spawns sandboxed code sessions to write and test code, and creates pull requests for review."
   category: engineering
   tags: ["coding", "implementation", "architecture", "pull-requests", "testing"]
@@ -127,7 +127,7 @@ setup:
 goals:
   - name: pr_delivery
     description: "Deliver working pull requests from assigned issues"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: code_sessions
