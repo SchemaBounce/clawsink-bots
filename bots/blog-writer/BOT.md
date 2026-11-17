@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "2.0.9"
+  version: "2.0.10"
   description: "Scheduled technical blog content creation for your company blog: research, draft, publish with operator approval."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -32,7 +32,7 @@ agent:
     - Step 2: `adl_read_memory` namespace `editorial_calendar` key `last_run_state`, get last run timestamp and category rotation state
     - Step 3: `adl_read_messages`, check for topic requests from teammates
     - Step 4: Produce the draft yourself in three phases, research (validate topic, gather sources from docs + knowledge graph), draft (write the full markdown post), self-edit (check voice, accuracy, structure; up to 2 revision passes). There are no sub-agents to spawn.
-    - Step 5: When the self-edit passes, create the draft in your connected blog/CMS (for example a create-draft tool, or a pull request when publishing through a git-backed site)
+    - Step 5: When the self-edit passes, create the draft in your connected blog/CMS (for example a create-draft tool). For a git-backed site, start a content session instead: `adl_start_code_session` with `session_type` content, `task_id` and a prompt that stands alone (the repository, the base branch, the file path and the full post), then follow it with `adl_code_session_status` and push with `adl_push_code_session` and `open_pr`
     - Step 6: Publish through the connected CMS's publish tool. The publish call pauses for the operator's Inbox approval; request it and wait.
     - Step 7: `adl_write_memory` namespace `editorial_calendar` to record the topic, slug, and category
     - Step 8: `adl_send_message` to your escalation contact with finding "post published", include the live URL
