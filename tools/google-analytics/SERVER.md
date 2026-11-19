@@ -24,6 +24,7 @@ auth:
   method: "composio"
   composioToolkit: "GOOGLE_ANALYTICS"
   setupReason: "Authorized via Composio's managed-OAuth gateway. Connect your Google Analytics account inside Composio; the agent calls execute_composio_tool with GOOGLEANALYTICS_* action names (e.g. GOOGLEANALYTICS_RUN_REPORT, GOOGLEANALYTICS_LIST_ACCOUNT_SUMMARIES)."
+  sign_in_verified: "2026-10-27"
 transport:
   # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
   # is resolved automatically at connection time and stored on the

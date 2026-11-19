@@ -13,6 +13,7 @@ auth:
   method: "composio"
   composioToolkit: "TWITTER"
   setupReason: "Authorized via Composio against your own Twitter/X Developer app. The agent calls execute_composio_tool with TWITTER_* action names (e.g. TWITTER_CREATION_OF_A_POST, TWITTER_RECENT_SEARCH, TWITTER_GET_USER_BY_ID)."
+  sign_in_unavailable: "X sign-in needs an X developer app that is not set up for this tool yet, so it cannot be connected right now. To post to your own X account, add a custom MCP server with your own X app."
 transport:
   # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
   # is resolved automatically at connection time and stored on the

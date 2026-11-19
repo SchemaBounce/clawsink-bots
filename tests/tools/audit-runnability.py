@@ -154,7 +154,35 @@ def offline_rules(name: str, man: dict) -> list[Finding]:
             out.append(
                 Finding(name, "validation-tool-unknown", "FAIL", f"validation tool {vtool!r} is not in tools:")
             )
+
+    out.extend(composio_sign_in_rules(name, auth))
     return out
+
+
+# A server whose sign-in goes through a shared OAuth app can be listed while no
+# one can finish signing in: the app was withdrawn, or the provider rejects it in
+# the browser. Checking that the actions exist does not catch that; only a
+# finished sign-in does. So every such manifest records one of:
+#   sign_in_verified: YYYY-MM-DD   a real sign-in finished on that date
+#   sign_in_unavailable: "..."     a customer-safe sentence saying it cannot
+# The platform refuses Connect and marks the tool unavailable for the second.
+SIGN_IN_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def composio_sign_in_rules(name: str, auth: dict) -> list[Finding]:
+    if str(auth.get("method", "")).lower() != "composio":
+        return []
+    verified = str(auth.get("sign_in_verified") or "").strip()
+    unavailable = str(auth.get("sign_in_unavailable") or "").strip()
+    if verified and unavailable:
+        return [Finding(name, "sign-in-contradicts", "FAIL", "set sign_in_verified or sign_in_unavailable, not both")]
+    if unavailable:
+        return []
+    if verified:
+        if not SIGN_IN_DATE.match(verified):
+            return [Finding(name, "sign-in-verified-date", "FAIL", f"sign_in_verified {verified!r} is not YYYY-MM-DD")]
+        return []
+    return [Finding(name, "sign-in-unverified", "FAIL", "no sign_in_verified date: no one has recorded a finished sign-in")]
 
 
 # ---------------------------------------------------------------------------
