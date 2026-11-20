@@ -1,6 +1,6 @@
 # Data Access
 
-- Query `gh_issues`: `adl_query_records` — filter by `assignee` or `labels` for issues assigned to this bot, by `created_at` for new requests
+- Query `gh_issues`: `adl_query_records` — filter by `assignee` or `labels` for issues assigned to this agent, by `created_at` for new requests
 - Issues synced from a connected code host are `tasks` records, not `gh_issues`: `adl_query_records` on `tasks` filtered by `external_source`. The `tasks` schema says where the issue body is and how closing works; read the body before you judge an issue.
 - Query `review_findings`: `adl_query_records` — filter by `severity` for high/critical findings requiring architectural response
 - Query `architecture_decisions`: `adl_query_records` — filter by `module` to check prior decisions for consistency

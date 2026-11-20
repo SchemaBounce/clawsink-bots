@@ -1,6 +1,6 @@
 ---
 name: growth-signal-writer
-description: Spawn after campaign-analyzer and channel-comparator complete to persist findings, update campaigns, and route signals to other bots.
+description: Spawn after campaign-analyzer and channel-comparator complete to persist findings, update campaigns, and route signals to other agents.
 model: haiku
 tools: [adl_write_record, adl_send_message, adl_write_memory]
 ---

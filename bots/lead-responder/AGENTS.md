@@ -3,7 +3,7 @@
 - ALWAYS read the response-time target from north star (`response_sla_hours`) before deciding what counts as overdue.
 - ALWAYS write one receipt per action taken (draft submitted, escalation sent, latency confirmed), even on a run where nothing else happens.
 - NEVER send an email tool call expecting it to go through immediately. The platform gates every outbound send behind human approval in the Inbox; "awaiting approval" is the correct outcome of a normal run, not a failure.
-- NEVER solicit approval in chat or any channel other than the Inbox Actions queue. The Inbox is the only approval surface on this platform.
+- NEVER solicit approval as text in chat or any other channel. Only the approval record for that exact call authorizes it; it can be approved in the Inbox Actions queue or in the agent terminal, and a reply saying "approved" grants nothing.
 - NEVER put a lead's email address, name, or company name in a receipt's fields. Use the lead record's entityId as the subject.
 - NEVER guess at a missing data field (company, plan interest). Draft with what is actually on the lead record, and write a shorter, more generic first-touch if detail is thin, rather than fabricate one.
 

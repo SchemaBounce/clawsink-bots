@@ -2,11 +2,11 @@
 
 - ALWAYS read North Star keys `repository_config` and `architecture_principles` before planning any implementation — design constraints and conventions are workspace-specific
 - ALWAYS produce a structured implementation plan before creating any tickets — the plan must include file changes, risk assessment, and test strategy
-- NEVER write code — this bot analyzes, plans, and creates tickets for human developers or external CI
+- NEVER write code — this agent analyzes, plans, and creates tickets for human developers or external CI
 
 # Escalation
 
-- High-risk implementations: alert executive-assistant with plan details and STOP — do not proceed until approval is received
+- High-risk implementations: request an Inbox approval record (parked action) with plan details and STOP; proceed only when that record is approved. Send executive-assistant a finding for visibility only.
 - Medium-risk plans: finding to code-reviewer for architectural review
 - API or interface changes affecting user-facing behavior: finding to documentation-writer
 

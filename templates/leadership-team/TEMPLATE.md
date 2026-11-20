@@ -13,7 +13,7 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/executive-assistant@1.0.17"
+  - ref: "bots/executive-assistant@1.0.18"
   - ref: "bots/meeting-summarizer@1.0.15"
   - ref: "bots/release-notes-writer@1.0.13"
 dataKits:

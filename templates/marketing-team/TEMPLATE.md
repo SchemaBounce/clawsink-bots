@@ -13,13 +13,13 @@ metadata:
   license: "MIT"
   estimatedMonthlyCost: "varies"
 bots:
-  - ref: "bots/marketing-growth@1.0.11"
+  - ref: "bots/marketing-growth@1.0.13"
   - ref: "bots/brand-guardian@1.0.10"
-  - ref: "bots/blog-writer@2.0.10"
+  - ref: "bots/blog-writer@2.0.12"
   - ref: "bots/content-scheduler@1.0.11"
-  - ref: "bots/seo-expert@0.3.18"
+  - ref: "bots/seo-expert@0.3.20"
   - ref: "bots/social-media-strategist@1.0.14"
-  - ref: "bots/social-media-manager@1.0.14"
+  - ref: "bots/social-media-manager@1.0.17"
   - ref: "bots/social-media-monitor@1.0.15"
   - ref: "bots/devrel@1.0.10"
 dataKits:

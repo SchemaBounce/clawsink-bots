@@ -4,7 +4,7 @@
 - Query `*_alerts` (sre, de, acct, cs, inv, legal, mktg, sec, po, mentor, opt): `adl_query_records` — every alert must be triaged, never skipped
 - Query `tasks`: `adl_query_records` — filter by `status` for open/pending action items
 - Query `platform_health_reports`: `adl_query_records` — infrastructure health context for briefings
-- Query `team_health_reports`: `adl_query_records` — bot team performance from mentor-coach
+- Query `team_health_reports`: `adl_query_records` — agent team performance from mentor-coach
 - Write `ea_findings`: `adl_upsert_record` — ID format `eaf_{topic}_{date}`, required: priority, source_bots, summary, recommendation
 - Write `ea_alerts`: `adl_upsert_record` — ID format `eaa_{topic}_{date}`, required: severity, action_required, source
 - Write `tasks`: `adl_upsert_record` — ID format `task_{short_description}`, required: title, assignee_agent_id, description, status, priority
@@ -34,4 +34,4 @@
 
 - `cross-domain-synthesizer`: merges findings from all domains into prioritized briefing items
 - `followup-tracker`: monitors action items across runs and flags overdue tasks
-- `request-router`: routes cross-domain requests to the appropriate specialist bot
+- `request-router`: routes cross-domain requests to the appropriate specialist agent

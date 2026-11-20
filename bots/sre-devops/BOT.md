@@ -3,8 +3,8 @@ apiVersion: clawsink.schemabounce.com/v1
 kind: Bot
 metadata:
   name: sre-devops
-  displayName: "SRE / DevOps Bot"
-  version: "1.0.17"
+  displayName: "SRE / DevOps"
+  version: "1.0.18"
   description: "Monitors infrastructure health, pipeline status, incident patterns, and SLA compliance."
   category: operations
   tags: ["infrastructure", "monitoring", "incidents", "pipelines", "sla"]
@@ -227,7 +227,7 @@ goals:
       condition: "cumulative growth"
 ---
 
-# SRE / DevOps Bot
+# SRE / DevOps
 
 Monitors infrastructure health across pipelines, services, and environments. Detects incidents, tracks SLA compliance, and identifies reliability patterns over time.
 

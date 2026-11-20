@@ -17,4 +17,4 @@
 
 1. **campaign-analyzer** (sonnet) — analyze active campaign metrics including conversion rates, engagement, and spend efficiency
 2. **channel-comparator** (haiku) — compare performance across marketing channels and identify growth opportunities or budget reallocation needs
-3. **growth-signal-writer** (haiku) — persist findings, update campaigns, and route signals to other bots after analysis completes
+3. **growth-signal-writer** (haiku) — persist findings, update campaigns, and route signals to other agents after analysis completes
