@@ -19,7 +19,7 @@ Produce scheduled technical blog posts that educate the audience about the produ
 5. **Research (yourself):** gather sources via adl_query_records and adl_search_memory; verify every code example against product_docs or a code session. If sources are insufficient, message your escalation contact type=request and stop; never ship a thin post
 6. **Draft (yourself):** write the full post from your notes in brand_voice; checkpoint to adl_write_memory namespace="writing_notes" so a later run can resume
 7. **Self-edit (yourself):** revise against brand_voice, accuracy, and the style guide (no fluff, verified code, clear H2/H3, AI disclosure). At most 2 passes
-8. Create the draft in the connected blog/CMS (create-draft tool) and save the returned post id. For a git-backed site, start a content session (adl_start_code_session with session_type=content, the task_id, and a prompt that stands alone: repository, base branch, file path, the full post and that only content files may change), follow it with adl_code_session_status, then push with adl_push_code_session and open_pr; a post is content, so never start a code session for it
+8. Create the draft in the blog/CMS (create-draft tool); save the post id. Git-backed site: a content session (BOT.md), never a code session
 9. Publish through the connected CMS's publish tool; the call pauses until the operator approves in the Inbox
 10. Record adl_write_memory namespace="editorial_calendar" `{ topic, slug, post_id, published_at }`, then adl_send_message to your escalation contact type=finding `{ slug, title }`
 
