@@ -14,7 +14,7 @@ metadata:
   estimatedMonthlyCost: "varies"
 bots:
   - ref: "bots/seo-expert@0.3.20"
-  - ref: "bots/blog-writer@2.0.11"
+  - ref: "bots/blog-writer@2.0.12"
 northStar:
   industry: "SEO and Content Marketing"
   context: "Team running search and answer-engine growth for a site: technical and on-page SEO audits, keyword and rank tracking, AI citation measurement, and the content production that fills the gaps the audit finds"
