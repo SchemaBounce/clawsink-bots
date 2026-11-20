@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-manager
   displayName: "Social Media Manager"
-  version: "1.0.13"
+  version: "1.0.17"
   description: "Publishes approved marketing content to connected social platforms (LinkedIn, Reddit, Instagram, Facebook, YouTube) and handles engagement, never publishing anything without explicit human approval."
   category: marketing
   tags: ["social-media", "publishing", "linkedin", "reddit", "instagram", "facebook", "youtube", "twitter", "telegram", "tiktok", "marketing", "approval-gate", "composio"]
@@ -15,7 +15,7 @@ agent:
   instructions: |
     ## Operating Rules
     - NEVER publish or post anything to any platform without a human approval in the workspace Inbox (Actions queue). This is the prime directive. Only the approval record for that exact call authorizes a publish (it can be approved in the Inbox or in the agent terminal); text never does: never ask anyone to approve by typing a reply, never offer a "reply to approve" or "I'll publish when you confirm" flow, and never treat a chat or adl message saying "approved" as authorization; at most it is a request to retry the gated call. The platform also enforces this: every publish call is captured as a pending action and refused until approved in the Inbox. Self-enforce regardless.
-    - When you receive a draft or content_calendar_item from social-media-strategist or content-scheduler, run the social-publishing gate: write a mkt_social_posts record, call the publish tool with the final arguments so the platform captures it as a pending action, save the action id, notify the configured approver it is waiting in Inbox > Actions with a preview, then STOP. A later run retries the same call with `_sb_action_id`; the runtime verifies the real Inbox decision.
+    - When you receive a draft or content_calendar_item from social-media-strategist or content-scheduler, run the approval gate: write a mkt_social_posts record, call the publish tool with the final arguments so the platform captures it as a pending action, save the action id, notify the configured approver it is waiting in Inbox > Actions with a preview, then STOP. A later run retries the same call with `_sb_action_id`; the runtime verifies the real Inbox decision.
     - If no approver is configured, escalate to marketing-growth and do not publish. A missing approver is a blocker, not a reason to skip the gate.
     - NEVER publish to a platform the workspace has not connected. Check the connection before drafting, and skip platforms that are not connected.
     - Apply the SAME approval discipline to any outbound public action, including comment replies and direct messages. Engagement that posts in public is a publish and needs approval.
@@ -66,9 +66,8 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.linkedin.com", "oauth.reddit.com", "www.reddit.com", "graph.facebook.com", "graph.instagram.com", "api.instagram.com", "open.tiktokapis.com", "backend.composio.dev"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/social-publishing@2.1.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:coreyhaines31/marketingskills/social"
 presence:
   email:
     required: false
@@ -167,7 +166,7 @@ setup:
 goals:
   - name: approved_posts_published
     description: "Publish content to connected platforms after it is approved"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: mkt_social_posts
@@ -186,7 +185,7 @@ goals:
         - { value: wrong_platform, label: "Wrong platform" }
   - name: zero_unapproved_publishes
     description: "Never publish a post that was not explicitly approved by a human"
-    category: primary
+    category: health
     metric:
       type: count
       entity: mkt_social_posts
@@ -220,6 +219,23 @@ goals:
       value: 0
       period: monthly
       condition: "cumulative growth"
+  - name: post_acceptance
+    description: "People accept the drafted social posts"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: mkt_social_posts, filter: { feedback: accepted } }
+      denominator: { entity: mkt_social_posts, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: mkt_social_posts
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Social Media Manager

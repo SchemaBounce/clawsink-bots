@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: sprint-planner
   displayName: "Sprint Planner"
-  version: "1.0.9"
+  version: "1.0.12"
   description: "Sprint planning, backlog prioritization, and velocity tracking."
   category: project-management
   tags: ["sprints", "backlog", "velocity", "prioritization", "agile", "RICE"]
@@ -65,9 +65,8 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/sprint-planning@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:anthropics/knowledge-work-plugins/sprint-planning"
 automations:
   triggers:
     - name: "Assess new task priority"
@@ -150,7 +149,7 @@ setup:
 goals:
   - name: sprint_plans_delivered
     description: "Generate actionable sprint plans on each planning cycle"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: sprint_plans

@@ -27,8 +27,8 @@ The typical CMS tool shape:
 
 ## tools/github (recommended connection)
 
-- `github.create_pull_request`: publish blog post drafts as PRs to the content repository
-- `github.get_file_contents`: read existing blog posts to check for topic overlap
+- Content session (`adl_start_code_session` with `session_type` content, then `adl_code_session_status` and `adl_push_code_session` with `open_pr`): publish blog post drafts as pull requests to the content repository. Content sessions run the repository's setup but skip checks that do not apply to prose
+- Connected code-hosting tool: read existing blog posts to check for topic overlap
 
 # Work Phases (single agent, no spawning)
 

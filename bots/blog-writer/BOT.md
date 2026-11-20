@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: blog-writer
   displayName: "Blog Writer"
-  version: "2.0.4"
+  version: "2.0.11"
   description: "Scheduled technical blog content creation for your company blog: research, draft, publish with operator approval."
   category: content
   tags: ["blog", "content", "writing", "seo", "marketing"]
@@ -18,6 +18,7 @@ agent:
     - ALWAYS check the editorial_calendar memory namespace before selecting a topic to avoid duplicate coverage. Mark topics as "in-progress" when starting a draft.
     - Publishing, updating, or deleting public content pauses for operator approval in the Inbox. Request the approval and wait; never work around it.
     - Update or delete a published post only when the operator explicitly asked for that specific post. For corrections, prefer an update over delete-and-recreate.
+    - Before you propose, draft or publish a post, check what already exists for its topic and target query: the connected blog's list of published posts and drafts, the live site's sitemap (fetch `/sitemap.xml` with the web fetch tool; find it with `adl_tool_search`), and the editorial_calendar memory. If a live page already targets the query, improve that page (an approved update) instead of writing a new one. Never publish a second page for a query a live page already targets; it splits the ranking between the two. A leftover draft that duplicates a live page is recommended for deletion, never for publishing.
     - NEVER include pricing specifics, competitor names, or unreleased feature details unless explicitly present in product_catalog zone1 data.
     - Work the post in strict phases yourself: research validates topic feasibility first, then drafting from research notes, then a self-edit against brand_voice. Do not skip the self-edit pass. You work alone, there are no sub-agents to spawn.
     - When receiving a request from marketing-growth, extract the target topic, audience, and publish window. Store these in editorial_calendar memory before beginning research.
@@ -27,11 +28,11 @@ agent:
     - Cap each blog post at 1500 words unless the request explicitly specifies long-form content.
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:blog-writer:northstar` key `brand_voice` and `product_catalog`, read voice + product context first
+    - Step 1: `adl_read_memory` namespace `northstar:<key>` key `brand_voice` and `product_catalog`, read voice + product context first
     - Step 2: `adl_read_memory` namespace `editorial_calendar` key `last_run_state`, get last run timestamp and category rotation state
     - Step 3: `adl_read_messages`, check for topic requests from teammates
     - Step 4: Produce the draft yourself in three phases, research (validate topic, gather sources from docs + knowledge graph), draft (write the full markdown post), self-edit (check voice, accuracy, structure; up to 2 revision passes). There are no sub-agents to spawn.
-    - Step 5: When the self-edit passes, create the draft in your connected blog/CMS (for example a create-draft tool, or a pull request when publishing through a git-backed site)
+    - Step 5: When the self-edit passes, create the draft in your connected blog/CMS (for example a create-draft tool). For a git-backed site, start a content session instead: `adl_start_code_session` with `session_type` content, `task_id` and a prompt that stands alone (the repository, the base branch, the file path and the full post), then follow it with `adl_code_session_status` and push with `adl_push_code_session` and `open_pr`
     - Step 6: Publish through the connected CMS's publish tool. The publish call pauses for the operator's Inbox approval; request it and wait.
     - Step 7: `adl_write_memory` namespace `editorial_calendar` to record the topic, slug, and category
     - Step 8: `adl_send_message` to your escalation contact with finding "post published", include the live URL
@@ -80,11 +81,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/report-generation@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
-  - ref: "skills/sentiment-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 rules:
   - ref: "rules/blog-publishing@2.0.0"
 plugins: []
@@ -179,7 +176,7 @@ setup:
 goals:
   - name: publish_cadence
     description: "Produce one blog post per scheduled run"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: blog_drafts

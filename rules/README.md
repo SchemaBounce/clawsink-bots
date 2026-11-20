@@ -35,7 +35,7 @@ metadata:
   author: string         # Author or organization
   license: string        # License identifier
 severity: string         # guideline | guardrail | hard (default: guardrail)
-appliesTo: [string]      # Optional scoping: ["tools/github", "skills/code-review"]. Empty = agent-wide.
+appliesTo: [string]      # Optional scoping: ["tools/github", "skills/schemabounce"]. Empty = agent-wide.
 enforce:                 # Optional. Only honoured on severity: hard. See below.
   denyTools: [string]    # Tool-name patterns the platform blocks outright
   askTools: [string]     # Tool-name patterns routed to a human for approval
@@ -79,7 +79,7 @@ Default when omitted: `guardrail`.
 
 ### appliesTo scoping
 
-- Entries reference artifacts by repo path: `tools/{server-name}` for MCP servers, `skills/{skill-name}` for skills.
+- Entries reference artifacts by repo path: `tools/{server-name}` for MCP servers, `skills/schemabounce` for the platform skill.
 - Empty or omitted = agent-wide; the rule renders on every turn for every agent that carries it.
 - Scoped = the rule renders only when the agent has the target MCP server granted or the target skill composed. A rule about GitHub is dead weight for an agent with no GitHub access; scoping keeps the prompt budget for rules that matter.
 
@@ -136,7 +136,7 @@ Problems: nothing testable, no tool names, no NEVER lines, restates the platform
 
 - `metadata.name` must match the directory name under `rules/`
 - `severity` must be one of `guideline`, `guardrail`, `hard` (or omitted)
-- `appliesTo` entries must reference existing `tools/{name}` or `skills/{name}` directories
+- `appliesTo` entries must reference an existing `tools/{name}` directory or `skills/schemabounce`
 - Rules must NOT define identity, schedule, model, tools, or messaging — a rule is text, nothing else
 
 ## Validation

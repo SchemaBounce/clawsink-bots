@@ -12,9 +12,9 @@
 
 # MCP Server Tools
 
-- `github.issues`: create bug issues, search for duplicates, apply labels and assign owners
-- `jira.issues`: create and track bugs in Jira projects when workspace uses Jira
-- `linear.issues`: create and track bugs in Linear when workspace uses Linear
+- Connected code-hosting issue tracker: create bug issues, search for duplicates, apply labels and assign owners
+- Connected Jira-style issue tracker: create and track bugs when the workspace uses one
+- Connected Linear-style issue tracker: create and track bugs when the workspace uses one
 
 # Sub-Agent Orchestration
 

@@ -6,7 +6,7 @@ This directory catalogs the 133 built-in deterministic tools available to all ag
 
 **Relationship to Bots**: Bots may list `toolPacks[]` in BOT.md as informational documentation indicating which tool categories the bot is designed to use. This field has no effect on tool availability -- it exists for documentation purposes only.
 
-**Relationship to Teams**: Teams may list `toolPacks[]` in TEAM.md for documentation purposes. All tools are available to all team bots regardless of what is declared.
+**Relationship to Teams**: Teams may list `toolPacks[]` in TEMPLATE.md for documentation purposes. All tools are available to all team bots regardless of what is declared.
 
 ## Built-in Tools vs MCP Servers vs Skills
 
@@ -16,7 +16,7 @@ This directory catalogs the 133 built-in deterministic tools available to all ag
 | **How they run** | Inside the ADL infrastructure (same process) | Separate process (stdio, SSE, or HTTP) | Appended to bot's system prompt |
 | **Execution** | Deterministic, <10ms, zero LLM tokens | Network call to external API | LLM follows instructions |
 | **What they provide** | Computation: math, parsing, formatting, analysis | External API access: GitHub, Slack, Stripe | Procedural guidance: how to analyze, categorize |
-| **Where defined** | `packs/{pack-name}/PACK.md` (catalog) + Go in core-api | `tools/{server-name}/SERVER.md` | `skills/{skill-name}/SKILL.md` + `prompt.md` |
+| **Where defined** | `packs/{pack-name}/PACK.md` (catalog) + Go in core-api | `tools/{server-name}/SERVER.md` | `skills/schemabounce` (agent kit) or a public `registry:` skill |
 | **Availability** | **All 133 tools available to every agent automatically** | Must be declared and configured | Composed into bot's system prompt |
 | **Examples** | CSV parsing, financial ratios, PII detection | GitHub issues, Stripe charges, Slack messages | Invoice categorization, anomaly detection |
 

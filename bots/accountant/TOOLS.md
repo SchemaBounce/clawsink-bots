@@ -16,9 +16,9 @@
 
 # MCP Server Tools
 
-- `stripe.list_charges`: reconcile invoices against Stripe payment records
-- `stripe.list_disputes`: monitor billing disputes and flag for review
-- `stripe.get_balance`: check current balance for cash flow indicators
+- Connected billing tool: reconcile invoices against payment records
+- Connected billing tool: monitor billing disputes and flag for review
+- Connected billing tool: check current balance for cash flow indicators
 
 # Sub-Agent Orchestration
 

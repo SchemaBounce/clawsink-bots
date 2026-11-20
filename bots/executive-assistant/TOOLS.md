@@ -28,7 +28,7 @@
 
 # MCP Server Tools
 
-- `slack.post_message`: post daily briefings and critical alerts to leadership channels
+- Connected chat tool: post daily briefings and critical alerts to leadership channels
 
 # Sub-Agent Orchestration
 

@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-guest-communicator
   displayName: "Guest Communicator"
-  version: "1.0.9"
+  version: "1.0.10"
   description: "Auto-responds to guest messages across all channels. Handles pre-booking, check-in, during-stay, and post-stay communication."
   category: support
   tags: ["str", "guest-communication", "messaging", "superhost", "response-time", "hospitality"]
@@ -68,9 +68,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.airbnb.com", "ws.airbnb.com", "api.vrbo.com", "app.lodgify.com", "graph.facebook.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/guest-message-templating@1.0.0"
+  - ref: "skills/schemabounce"
 presence:
   email:
     required: true

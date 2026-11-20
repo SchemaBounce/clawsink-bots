@@ -13,6 +13,7 @@ auth:
   method: "composio"
   composioToolkit: "REDDIT"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with REDDIT_* action names (e.g. REDDIT_CREATE_REDDIT_POST, REDDIT_POST_REDDIT_COMMENT, REDDIT_DELETE_REDDIT_POST)."
+  sign_in_unavailable: "Reddit is rejecting the shared sign-in app this tool uses, so it cannot be connected right now. To post to your own Reddit account, add a custom MCP server with your own Reddit app."
 transport:
   # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
   # is resolved automatically at connection time and stored on the

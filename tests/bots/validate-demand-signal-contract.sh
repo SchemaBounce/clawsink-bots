@@ -9,7 +9,8 @@ BOT="$BOT_DIR/BOT.md"
 TOOLS="$BOT_DIR/TOOLS.md"
 NORTH_STAR="$BOT_DIR/data-seeds/zone1-north-star.json"
 ENTITY_TYPES="$BOT_DIR/data-seeds/zone2-entity-types.json"
-TEAM="$ROOT_DIR/teams/sales-team/TEAM.md"
+TEAM="$ROOT_DIR/templates/sales-team/TEMPLATE.md"
+[ -f "$TEAM" ] || TEAM="$ROOT_DIR/teams/sales-team/TEAM.md"  # alias window (dec-189)
 FAILURES=0
 
 fail() {
@@ -57,10 +58,11 @@ for contract in 'Acquisition Priority Score' 'Company Buying Signal Contract' 'C
   fi
 done
 
-if grep -q 'bots/demand-signal-scout@1\.0\.10' "$TEAM"; then
-  pass "Sales team references Demand Signal Scout 1.0.10"
+SCOUT_VERSION="$(awk '/^  version: / { gsub(/"/, "", $2); print $2; exit }' "$ROOT_DIR/bots/demand-signal-scout/BOT.md")"
+if grep -q "bots/demand-signal-scout@$SCOUT_VERSION" "$TEAM"; then
+  pass "Sales team pins the current Demand Signal Scout ($SCOUT_VERSION)"
 else
-  fail "Sales team must reference Demand Signal Scout 1.0.10"
+  fail "Sales team must pin demand-signal-scout@$SCOUT_VERSION"
 fi
 
 if grep -q '<run_context>.runId' "$BOT" && \

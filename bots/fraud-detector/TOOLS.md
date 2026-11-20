@@ -12,8 +12,8 @@
 
 # MCP Server Tools
 
-- `stripe.list_charges`: cross-reference transaction details for suspicious charge patterns
-- `stripe.list_disputes`: identify disputed charges that may correlate with fraud signals
+- Connected billing tool: cross-reference transaction details for suspicious charge patterns
+- Connected billing tool: identify disputed charges that may correlate with fraud signals
 
 # Sub-Agent Orchestration
 

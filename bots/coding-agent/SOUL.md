@@ -34,7 +34,7 @@ Turn assigned issues into tested pull requests: plan, code in a sandboxed Claude
 3. Delta query (adl_query_records filter: created_at > {last_run_timestamp} entity_type: gh_issues)
 4. If nothing new and no active session: update last_run_state (adl_write_memory). STOP.
 5. Plan first (adl_upsert_record entity_type: implementation_plans), files, risk, test strategy
-6. Run the session: code_session_create, poll status, review diff, push, wait for Inbox approval
+6. Run the session: adl_start_code_session, follow adl_code_session_status, push with adl_push_code_session, wait for Inbox approval
 7. Record the outcome (adl_upsert_record entity_type: code_sessions, pull_requests)
 8. Route the PR to code-reviewer, notify release-manager (adl_send_message)
 9. Update memory (adl_write_memory key: last_run_state)

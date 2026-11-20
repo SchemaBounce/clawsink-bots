@@ -9,13 +9,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FAILURES=0
 
-echo "=== Validating Known Tools Snapshot (tests/skills/known-tools.txt) ==="
-if ! bash "$SCRIPT_DIR/skills/sync-known-tools.sh" --check; then
-  FAILURES=$((FAILURES + 1))
-fi
-echo ""
-
-echo "=== Validating Skills ==="
+echo "=== Validating Skill References (skills/schemabounce + registry: only, dec-202) ==="
 if ! bash "$SCRIPT_DIR/skills/validate-format.sh"; then
   FAILURES=$((FAILURES + 1))
 fi
@@ -41,6 +35,12 @@ echo ""
 
 echo "=== Validating Bot Manifests ==="
 if ! bash "$SCRIPT_DIR/bots/validate-manifest.sh"; then
+  FAILURES=$((FAILURES + 1))
+fi
+echo ""
+
+echo "=== Validating Goal Templates (outcomes, not output volume, dec-292) ==="
+if ! python3 "$SCRIPT_DIR/../scripts/check-goal-templates.py"; then
   FAILURES=$((FAILURES + 1))
 fi
 echo ""

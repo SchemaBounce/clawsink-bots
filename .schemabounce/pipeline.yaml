@@ -2,7 +2,7 @@ apiVersion: schemabounce.com/v1
 kind: RepoPipeline
 
 # How a ticket becomes finished work in clawsink-bots (dec-110). This repo is
-# manifests and prompts (BOT.md, SOUL.md, SKILL.md, SERVER.md, TEAM.md), not
+# manifests and prompts (BOT.md, SOUL.md, SKILL.md, SERVER.md, TEMPLATE.md), not
 # application code, so the gates are the repository's own manifest validators
 # plus a scan that nothing internal lands in a PUBLIC repository.
 #
@@ -52,7 +52,7 @@ pipeline:
         severity: blocking
         timeout: 10m
         when:
-          paths: ['skills/**', 'tests/skills/**']
+          paths: ['skills/**', 'tests/skills/**', 'bots/**/BOT.md', 'templates/**', 'rules/**']
 
       - name: packs
         run: bash tests/packs/validate-manifest.sh && bash tests/packs/validate-references.sh
@@ -70,14 +70,14 @@ pipeline:
         severity: blocking
         timeout: 15m
         when:
-          paths: ['bots/**', 'skills/**', 'teams/**', 'tools/**', 'rules/**', 'tests/bots/**']
+          paths: ['bots/**', 'skills/**', 'teams/**', 'templates/**', 'tools/**', 'rules/**', 'tests/bots/**']
 
       - name: tools
         run: bash tests/tools/validate-manifest.sh
         severity: blocking
         timeout: 10m
         when:
-          paths: ['tools/**', 'bots/**', 'teams/**', 'tests/tools/**']
+          paths: ['tools/**', 'bots/**', 'teams/**', 'templates/**', 'tests/tools/**']
 
       - name: rules
         run: bash tests/rules/validate-manifest.sh
@@ -91,7 +91,7 @@ pipeline:
         severity: advisory
         timeout: 5m
         when:
-          paths: ['teams/**', 'bots/**']
+          paths: ['teams/**', 'templates/**', 'bots/**']
 
       # This repo is PUBLIC and world-readable the moment it is pushed
       # (.claude/rules/public-repo-no-internal-content.md). Scans only the files

@@ -41,41 +41,42 @@ env:
     required: true
     sensitive: true
 
-# Tools listed are verified top-level operations from the DataForSEO MCP server's
-# SERP, KEYWORDS_DATA, DATAFORSEO_LABS, ONPAGE, and BACKLINKS modules.
-# Tool names verified from https://github.com/dataforseo/mcp-server-typescript
-# and https://dataforseo.com/model-context-protocol (2026-06-11).
+# Tools listed are the exact tool names the pinned package (dataforseo-mcp-server@2.9.8)
+# serves, read from its source at tag v2.9.8 (src/core/modules/*/tools/*.tool.ts,
+# getName()) on 2026-10-28. The earlier list named tools the package never had
+# (serp_google_organic_live, labs_google_keyword_ideas, onpage_task_post ...),
+# so agents called names the server refused. Re-read the source when the pin moves.
 # The full server has 10 modules; ENABLED_MODULES can restrict to a subset.
 tools:
-  - name: serp_google_organic_live
-    description: "Real-time Google organic search results for a keyword: URL, title, description, position, and SERP features."
+  - name: serp_organic_live_advanced
+    description: "Real-time organic search results for a keyword (Google, Bing, Yahoo): URL, title, description, position, and SERP features such as AI Overviews."
     category: serp
-  - name: serp_google_organic_task_post
-    description: "Schedule a Google organic SERP task for batch processing; use when requesting results for many keywords at once."
+  - name: serp_locations
+    description: "Location names and codes accepted by the SERP tools."
     category: serp
-  - name: keywords_google_ads_search_volume
+  - name: kw_data_google_ads_search_volume
     description: "Monthly search volume, CPC, and competition level for a list of keywords via Google Ads data."
     category: keywords
-  - name: keywords_google_ads_keywords_for_site
-    description: "Keyword suggestions derived from a target domain or URL with volume and CPC data."
-    category: keywords
-  - name: keywords_google_trends_explore
+  - name: kw_data_google_trends_explore
     description: "Google Trends interest-over-time data for one or more keywords with geographic and category filters."
     category: keywords
-  - name: labs_google_keyword_ideas
+  - name: dataforseo_labs_google_keyword_ideas
     description: "DataForSEO Labs keyword ideas: search volume, keyword difficulty, traffic potential, and SERP competition."
     category: labs
-  - name: labs_google_domain_rank_overview
-    description: "Organic traffic estimate, keyword count, authority score, and visibility trends for a domain."
+  - name: dataforseo_labs_google_keywords_for_site
+    description: "Keywords a target domain or URL is relevant for, with volume and CPC data."
     category: labs
-  - name: labs_google_related_keywords
+  - name: dataforseo_labs_google_domain_rank_overview
+    description: "Organic traffic estimate, keyword count, and visibility for a domain."
+    category: labs
+  - name: dataforseo_labs_google_related_keywords
     description: "Semantically related keywords with SERP overlap data and difficulty scores."
     category: labs
-  - name: onpage_task_post
-    description: "Start an on-page crawl of a URL or domain to collect meta tags, headings, canonicals, schema, and load time."
+  - name: on_page_instant_pages
+    description: "Fetch and analyze one page on demand: meta tags, headings, canonicals, schema, and load time."
     category: onpage
   - name: backlinks_summary
-    description: "Backlink count, referring domain count, domain rating, and top anchor text distribution for a domain."
+    description: "Backlink count, referring domain count, domain rank, and anchor distribution for a domain."
     category: backlinks
 ---
 
@@ -106,7 +107,7 @@ The `dataforseo-mcp-server` supports ten modules. Set `ENABLED_MODULES` to a com
 
 ## Which Bots Use This
 
-- **seo-expert** — keyword research and SERP gap analysis. The auditor uses `labs_google_keyword_ideas` and `keywords_google_ads_search_volume` to validate almost-ranking opportunities from GSC; `backlinks_summary` to surface link-building context; `onpage_task_post` for a structured on-page crawl when `adl_proxy_call` is insufficient.
+- **seo-expert** — keyword research and SERP gap analysis. The auditor uses `dataforseo_labs_google_keyword_ideas` and `kw_data_google_ads_search_volume` to validate almost-ranking opportunities from GSC; `backlinks_summary` to surface link-building context; `on_page_instant_pages` for a structured on-page check when `adl_proxy_call` is insufficient.
 
 ## Setup
 

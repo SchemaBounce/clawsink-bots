@@ -10,7 +10,7 @@
 # to agree afterwards, then makes an unrelated plain commit and requires it not
 # to touch the bot at all.
 #
-# The same bump must rewrite every teams/*/TEAM.md pin of the bot (4ebd6c9
+# The same bump must rewrite every templates/*/TEMPLATE.md pin of the bot (4ebd6c9
 # bumped sales-pipeline to 1.0.13 and teams/sales-team still pinned 1.0.12,
 # which failed the sales-pipeline contract in CI), and must NOT touch a TEAM.md
 # that already carries uncommitted changes.
@@ -102,9 +102,9 @@ status="$(git status --porcelain -- "$BOT")"
 
 # Every team that pins the bot must now pin the bumped version, in the commit
 # and in a clean index.
-pinned_teams="$(grep -lE "bots/$BOT_NAME@[0-9]+\.[0-9]+\.[0-9]+" teams/*/TEAM.md 2>/dev/null || true)"
+pinned_teams="$(grep -lE "bots/$BOT_NAME@[0-9]+\.[0-9]+\.[0-9]+" templates/*/TEMPLATE.md teams/*/TEAM.md 2>/dev/null || true)"
 if [ -z "$pinned_teams" ]; then
-  fail "no teams/*/TEAM.md pins bots/$BOT_NAME; pick a pinned bot with TEST_BOT"
+  fail "no templates/*/TEMPLATE.md pins bots/$BOT_NAME; pick a pinned bot with TEST_BOT"
 fi
 for team_md in $pinned_teams; do
   if git show "HEAD:$team_md" | grep -q "bots/$BOT_NAME@$expected"; then

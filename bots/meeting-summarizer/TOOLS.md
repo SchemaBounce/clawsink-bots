@@ -12,7 +12,7 @@
 
 # MCP Server Tools
 
-- `notion.create_page` / `notion.update_page`: publish meeting summaries and action item lists to Notion
+- Connected wiki or notes tool: publish meeting summaries and action item lists
 
 # Sub-Agent Orchestration
 

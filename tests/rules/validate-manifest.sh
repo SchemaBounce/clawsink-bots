@@ -12,7 +12,7 @@
 #   3. metadata.name, displayName, version, description are non-empty
 #   4. metadata.name matches the directory name
 #   5. severity is one of: guideline | guardrail | hard (or absent = guardrail)
-#   6. appliesTo entries resolve to existing tools/{name} or skills/{name} dirs
+#   6. appliesTo entries resolve to an existing tools/{name} dir or skills/schemabounce
 #   7. prompt.md is non-empty; FAIL over 1200 chars (runtime per-rule cap),
 #      WARN over 1000 chars (crowds out sibling rules in the 4000-char budget)
 #   8. Cross-references: every rules[].ref in bots/*/BOT.md resolves to a
@@ -106,6 +106,9 @@ def artifact_dir_exists(ref):
     kind, _, name = ref.partition("/")
     if kind not in ("tools", "skills") or not name:
         return False
+    if kind == "skills":
+        # dec-202: the one SchemaBounce skill is resolved from the agent kit, not a local dir
+        return name == "schemabounce"
     return os.path.isdir(os.path.join(REPO_ROOT, kind, name))
 
 
@@ -204,7 +207,7 @@ def validate_rule_dir(rule_name, rule_path):
                 if not artifact_dir_exists(ref):
                     errors.append(
                         f"appliesTo[{i}] {ref!r} does not resolve to an existing "
-                        f"tools/{{name}} or skills/{{name}} directory"
+                        f"tools/{{name}} directory or skills/schemabounce"
                     )
 
     # -- enforce block (optional; the deterministic half of a rule) -----------

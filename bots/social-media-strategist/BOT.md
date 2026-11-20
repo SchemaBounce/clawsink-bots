@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-strategist
   displayName: "Social Media Strategist"
-  version: "1.0.13"
+  version: "1.0.15"
   description: "Cross-platform social media strategy, content planning, and engagement analysis."
   category: marketing
   tags: ["social-media", "content", "engagement", "strategy", "scheduling", "analytics"]
@@ -69,10 +69,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.twitter.com", "api.x.com", "api.linkedin.com", "graph.facebook.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/trend-analysis@1.0.0"
-  - ref: "skills/sentiment-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 presence:
   email:
     required: false
@@ -172,7 +169,7 @@ setup:
 goals:
   - name: content_calendar_output
     description: "Produce scheduled content calendar items across platforms"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: content_calendar_items
@@ -190,7 +187,7 @@ goals:
         - { value: wrong_platform, label: "Wrong platform" }
   - name: engagement_trend_detection
     description: "Identify significant engagement changes and report actionable insights"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: social_strategy
@@ -222,6 +219,23 @@ goals:
       operator: "=="
       value: true
       period: weekly
+  - name: strategy_usefulness
+    description: "People mark strategy items as worth acting on"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: social_strategy, filter: { feedback: useful } }
+      denominator: { entity: social_strategy, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: social_strategy
+      actions:
+        - { value: useful, label: "Worth acting on" }
+        - { value: not_useful, label: "Not useful" }
 ---
 
 # Social Media Strategist

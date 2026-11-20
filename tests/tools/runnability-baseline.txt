@@ -61,3 +61,37 @@ zoom:composio-not-remote
 # which answer 401 "Access token appears malformed" for an API token and need
 # OAuth. That is an auth-model change for this entry, not a package pin.
 cloudflare:requires-subcommand
+
+# sign-in-unverified: a server whose sign-in goes through a shared OAuth app, with no
+# recorded finished sign-in (2026-11-19). Each was listed after checking that its
+# actions exist, not that anyone could sign in. Remove a line when a real sign-in
+# finishes: add sign_in_verified with that date to its auth block, or
+# sign_in_unavailable with a customer-safe sentence if it cannot work.
+basecamp:sign-in-unverified
+discord:sign-in-unverified
+freshdesk:sign-in-unverified
+gmail:sign-in-unverified
+google-calendar:sign-in-unverified
+google-docs:sign-in-unverified
+google-drive:sign-in-unverified
+google-meet:sign-in-unverified
+google-sheets:sign-in-unverified
+instagram:sign-in-unverified
+mailchimp:sign-in-unverified
+microsoft-teams:sign-in-unverified
+mixpanel:sign-in-unverified
+n8n:sign-in-unverified
+pipedrive:sign-in-unverified
+quickbooks:sign-in-unverified
+salesforce:sign-in-unverified
+shopify:sign-in-unverified
+spotify:sign-in-unverified
+telegram:sign-in-unverified
+tiktok:sign-in-unverified
+trello:sign-in-unverified
+twilio:sign-in-unverified
+whatsapp:sign-in-unverified
+xero:sign-in-unverified
+youtube:sign-in-unverified
+zendesk:sign-in-unverified
+zoom:sign-in-unverified

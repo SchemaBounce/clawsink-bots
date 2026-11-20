@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: marketing-growth
   displayName: "Marketing & Growth"
-  version: "1.0.11"
+  version: "1.0.13"
   description: "Content calendar management, SEO tracking, campaign metric analysis, social scheduling."
   category: marketing
   tags: ["marketing", "growth", "seo", "campaigns", "content", "social"]
@@ -76,9 +76,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["www.googleapis.com", "analyticsdata.googleapis.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
+  - ref: "skills/schemabounce"
 plugins:
   - ref: "composio@latest"
     slot: "oauth"
@@ -166,7 +164,7 @@ setup:
 goals:
   - name: identify_growth_opportunities
     description: "Surface actionable growth insights from campaign and channel data"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: mktg_findings
@@ -178,7 +176,7 @@ goals:
       condition: "when campaign data exists"
   - name: content_calendar_coverage
     description: "Maintain a populated content calendar with upcoming scheduled content"
-    category: primary
+    category: health
     metric:
       type: count
       source: memory
@@ -209,6 +207,23 @@ goals:
       operator: ">"
       value: 0
       period: monthly
+  - name: growth_finding_usefulness
+    description: "People mark growth findings as worth acting on"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: mktg_findings, filter: { feedback: useful } }
+      denominator: { entity: mktg_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: mktg_findings
+      actions:
+        - { value: useful, label: "Worth acting on" }
+        - { value: not_useful, label: "Not useful" }
 ---
 
 # Marketing & Growth

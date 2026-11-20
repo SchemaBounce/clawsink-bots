@@ -66,7 +66,7 @@ This server is backed by the Composio TELEGRAM toolkit (18 tools). Authenticatio
 
 ## Posting Is Approval-Gated
 
-`send_message` posts publicly to a channel or chat. The `social-publishing` skill holds every broadcast behind explicit human approval before it goes live. Update polling and chat reads are not gated.
+`send_message` posts publicly to a channel or chat. Every publish is held behind explicit human approval in the workspace Inbox before it goes live. Update polling and chat reads are not gated.
 
 ## External Requirements
 

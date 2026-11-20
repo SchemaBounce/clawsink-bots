@@ -13,6 +13,7 @@ auth:
   method: "composio"
   composioToolkit: "TWITTER"
   setupReason: "Authorized via Composio against your own Twitter/X Developer app. The agent calls execute_composio_tool with TWITTER_* action names (e.g. TWITTER_CREATION_OF_A_POST, TWITTER_RECENT_SEARCH, TWITTER_GET_USER_BY_ID)."
+  sign_in_unavailable: "X sign-in needs an X developer app that is not set up for this tool yet, so it cannot be connected right now. To post to your own X account, add a custom MCP server with your own X app."
 transport:
   # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
   # is resolved automatically at connection time and stored on the
@@ -74,7 +75,7 @@ This is not zero-setup managed OAuth. As of February 2026, Composio removed mana
 
 ## Posting Is Approval-Gated
 
-`create_post` and `reply` publish publicly. The `social-publishing` skill holds every post behind explicit human approval before it goes live. Deletes, lookups, search, and user reads are not gated.
+`create_post` and `reply` publish publicly. Every publish is held behind explicit human approval in the workspace Inbox before it goes live. Deletes, lookups, search, and user reads are not gated.
 
 ## External Requirements
 

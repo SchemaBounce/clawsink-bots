@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: str-property-manager
   displayName: "Property Manager"
-  version: "1.0.9"
+  version: "1.0.11"
   description: "Lead coordinator for short-term rental operations, consolidates reports, manages portfolio dashboard, coordinates specialists."
   category: operations
   tags: ["str", "property-management", "portfolio", "coordination", "lead", "hospitality"]
@@ -65,10 +65,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/daily-briefing@1.0.0"
-  - ref: "skills/cross-domain-synthesis@1.0.0"
+  - ref: "skills/schemabounce"
 presence:
   email:
     required: true
@@ -163,7 +160,7 @@ setup:
 goals:
   - name: daily_briefing_delivery
     description: "Produce and distribute daily portfolio briefings to all specialist bots"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: str_findings

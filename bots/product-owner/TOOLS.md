@@ -20,11 +20,11 @@
 
 # MCP Server Tools
 
-- `jira.create_issue`: Create prioritized feature requests or bug reports in Jira
-- `jira.get_issue`: Check existing Jira issues to avoid duplicates
-- `jira.search_issues`: Search for related issues before creating new ones
-- `linear.create_issue`: Create prioritized issues in Linear when workspace uses Linear
-- `linear.search_issues`: Search existing Linear issues to avoid duplicates
+- Connected issue tracker: create prioritized feature requests or bug reports
+- Connected issue tracker: check existing issues to avoid duplicates
+- Connected issue tracker: search for related issues before creating new ones
+- Any other connected issue tracker the workspace uses: create prioritized issues the same way
+- Any other connected issue tracker the workspace uses: search existing issues to avoid duplicates
 
 # Sub-Agent Orchestration
 

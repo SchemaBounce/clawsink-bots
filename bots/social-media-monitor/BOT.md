@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: social-media-monitor
   displayName: "Social Media Monitor"
-  version: "1.0.14"
+  version: "1.0.16"
   description: "Monitors brand mentions and sentiment across platforms."
   category: marketing
   tags: ["social-media", "sentiment", "brand"]
@@ -61,10 +61,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.twitter.com", "api.x.com", "api.linkedin.com", "graph.facebook.com", "backend.composio.dev"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
-  - ref: "skills/sentiment-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 presence:
   web:
     browsing: true
@@ -154,7 +151,7 @@ setup:
 goals:
   - name: mention_coverage
     description: "Capture and analyze brand mentions across all connected platforms"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: sentiment_reports
@@ -175,7 +172,7 @@ goals:
       condition: "when crisis threshold exceeded"
   - name: sentiment_trend_accuracy
     description: "Sentiment shifts correctly identified against rolling baselines"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: mention_alerts, filter: { alert_validated: true } }

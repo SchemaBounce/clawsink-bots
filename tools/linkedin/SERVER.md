@@ -13,6 +13,7 @@ auth:
   method: "composio"
   composioToolkit: "LINKEDIN"
   setupReason: "Authorized via Composio's managed-OAuth gateway. The agent calls execute_composio_tool with LINKEDIN_* action names (e.g. LINKEDIN_CREATE_LINKED_IN_POST, LINKEDIN_GET_MY_INFO, LINKEDIN_GET_COMPANY_INFO)."
+  sign_in_verified: "2026-08-11"
 transport:
   # Remote streamable-HTTP. The scoped, per-connected-account Composio MCP URL
   # is resolved automatically at connection time and stored on the

@@ -2,7 +2,7 @@
 
 A Data Kit is a full-stack domain data package that deploys holistically with a team: entity schemas, graph relationship templates, vector search configurations, memory bootstraps, and sample data. Data Kits are the data foundation that makes AI agents domain-aware from day one.
 
-**Relationship to Teams**: Teams bundle Data Kits via `dataKits[].ref: "data-kits/{name}@{version}"` in TEAM.md. Activating a team auto-installs its referenced kits.
+**Relationship to Teams**: Teams bundle Data Kits via `dataKits[].ref: "data-kits/{name}@{version}"` in TEMPLATE.md. Activating a team auto-installs its referenced kits.
 
 **Relationship to Bots**: Bots read/write entity types defined by Data Kits. The kit's entity prefix ensures collision-free naming across composed kits.
 

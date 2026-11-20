@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: data-quality-monitor
   displayName: "Data Quality Monitor"
-  version: "1.0.10"
+  version: "1.0.12"
   description: "Validates data quality rules on incoming records across all entity types."
   category: engineering
   tags: ["data-quality", "validation", "cdc"]
@@ -64,11 +64,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/cdc-event-analysis@1.0.0"
-  - ref: "skills/data-validation@1.0.0"
+  - ref: "skills/schemabounce"
 plugins: []
 # Internal-only by design, first-party platform bot. Validates data
 # quality rules against ADL records via adl_query_records. No third-party
@@ -133,7 +129,7 @@ goals:
     description: "Total records processed through quality validation rules."
     metricType: count
     target: "> 0 per day"
-    category: primary
+    category: secondary
     feedback:
       question: "Are the quality checks catching real data issues?"
       options: ["yes", "mostly", "too many false positives", "missing real problems"]

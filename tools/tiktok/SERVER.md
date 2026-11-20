@@ -76,7 +76,7 @@ TikTok's Content Posting API only allows direct public posting for audited apps.
 
 ## Posting Is Approval-Gated
 
-`publish_video`, `upload_video`, and `post_photo` publish content. The `social-publishing` skill holds every post behind explicit human approval before it goes live. Status checks, video listing, and stat reads are not gated.
+`publish_video`, `upload_video`, and `post_photo` publish content. Every publish is held behind explicit human approval in the workspace Inbox before it goes live. Status checks, video listing, and stat reads are not gated.
 
 ## External Requirements
 

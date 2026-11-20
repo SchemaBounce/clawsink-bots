@@ -73,7 +73,7 @@ Structured findings use the Toon Card format (200-500 bytes, token-efficient):
 
 ### Who to Escalate To
 
-Each bot has defined `messaging.sendsTo` in its SKILL.md. Follow these rules:
+Each bot has defined `messaging.sendsTo` in its BOT.md. Follow these rules:
 
 1. **Critical operational issues** go to `executive-assistant` as `alert`
 2. **Cross-domain findings** go to `business-analyst` as `finding`

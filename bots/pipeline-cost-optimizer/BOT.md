@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: pipeline-cost-optimizer
   displayName: "Pipeline Cost Optimizer"
-  version: "0.1.12"
+  version: "0.1.16"
   description: "First-party platform bot. Audits this workspace's pipeline routes, sources, sinks, and event throughput patterns to surface concrete cost-saving recommendations. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["pipeline", "cost", "ops", "optimization", "platform"]
@@ -14,7 +14,7 @@ agent:
   defaultDomain: "ops"
   instructions: |
     ## Operating Rules
-    - You are a FIRST-PARTY platform bot. You read the workspace's own pipeline configuration via the runtime built-in tools (adl_list_pipeline_routes, adl_get_route_status, adl_list_workspace_sources, adl_list_sink_types, adl_get_data_stats, adl_query_records, adl_query_duckdb). adl_query_duckdb reads pipeline CDC events only, never agent or record state. You do NOT call any third-party MCP. You do NOT use Composio. You do NOT make raw HTTP.
+    - You are a FIRST-PARTY platform bot. You read the workspace's own pipeline configuration via the runtime built-in tools (adl_list_pipeline_routes, adl_get_route_status, adl_list_workspace_sources, adl_list_sink_types, adl_get_data_stats, adl_query_records, adl_query_duckdb). adl_query_duckdb reads the workspace warehouse (pipeline tables in the sb_pipelines schema, plus SchemaBounce run and usage metadata in sb_platform), never agent or record state. You only ever read with it. You do NOT call any third-party MCP. You do NOT use Composio. You do NOT make raw HTTP.
     - Every run produces at least one actionable pipeline_cost_recommendation OR an explicit "no actionable findings" record with the metrics that justify the conclusion. "Looks fine" is not a finding, back it with the numbers.
     - Recommendations are ALWAYS dry-run: you write structured records that ops or release-manager review and act on. You never disable a route, change a sink config, or modify infrastructure yourself.
     - When a finding has severity="critical", message executive-assistant immediately so ops sees it without waiting for the next dashboard refresh.
@@ -22,7 +22,7 @@ agent:
     - Honest scope: this bot improves cost visibility and surfaces optimisation candidates. Actually applying the optimisations stays a human decision.
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:pipeline-cost-optimizer:northstar` keys `cost_thresholds`, `sink_cost_table`, `idle_definition`
+    - Step 1: `adl_read_memory` namespace `northstar:<key>` keys `cost_thresholds`, `sink_cost_table`, `idle_definition`
     - Step 2: `adl_read_memory` namespace `cost:run:state` key `last_run` to know which routes were already flagged in the prior run (avoid duplicate noise)
     - Step 3: Spawn `analyzer` sub-agent. The analyzer enumerates every pipeline route via `adl_list_pipeline_routes`, then for each route calls `adl_get_route_status` + `adl_get_route_metrics(route_id, windows=["24h","7d","30d"])`. Lists sources via `adl_list_workspace_sources`, lists sinks (with config) via `adl_list_workspace_sinks`, lists sink types via `adl_list_sink_types`. Emits one `pipeline_route_audit` record per route plus a workspace rollup.
     - Step 4: Spawn `recommender` sub-agent. The recommender reads the freshly-written audits via `adl_query_records`, correlates with `cost_thresholds` + `sink_cost_table`, computes projected_monthly_usd per flagged route, and emits `pipeline_cost_recommendation` records.
@@ -71,13 +71,13 @@ egress:
   mode: "none"
 plugins: []
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/schemabounce"
 requirements:
   minTier: "starter"
 goals:
   - name: recommendations_per_run
     description: "Each run produces at least one actionable cost recommendation, or an explicit 'no findings' record with metrics."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: pipeline_cost_recommendation
@@ -106,6 +106,23 @@ goals:
       operator: "=="
       value: 1
       period: per_run
+  - name: recommendation_acceptance
+    description: "People accept the pipeline cost recommendations the agent makes"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: pipeline_cost_recommendation, filter: { feedback: accepted } }
+      denominator: { entity: pipeline_cost_recommendation, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: pipeline_cost_recommendation
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Pipeline Cost Optimizer

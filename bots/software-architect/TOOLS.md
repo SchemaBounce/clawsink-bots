@@ -1,6 +1,7 @@
 # Data Access
 
 - Query `gh_issues`: `adl_query_records` — filter by `assignee` or `labels` for issues assigned to this agent, by `created_at` for new requests
+- Issues synced from a connected code host are `tasks` records, not `gh_issues`: `adl_query_records` on `tasks` filtered by `external_source`. The `tasks` schema says where the issue body is and how closing works; read the body before you judge an issue.
 - Query `review_findings`: `adl_query_records` — filter by `severity` for high/critical findings requiring architectural response
 - Query `architecture_decisions`: `adl_query_records` — filter by `module` to check prior decisions for consistency
 - Write `implementation_plans`: `adl_upsert_record` — ID format `plan-{issue_id}`, include file changes, risk level, test strategy, architecture rationale
@@ -15,9 +16,9 @@
 
 # MCP Server Tools
 
-- `github.issues`: read issue details, comments, and linked PRs for context when creating implementation plans
-- `github.code_search`: search codebase to understand module structure and find affected files
-- `github.pull_requests`: review recent PRs to understand current development patterns
+- Connected code-hosting tool: read issue details, comments, and linked pull requests for context when creating implementation plans
+- Connected code-hosting tool: search the codebase to understand module structure and find affected files
+- Connected code-hosting tool: review recent pull requests to understand current development patterns
 
 # Sub-Agent Orchestration
 

@@ -16,4 +16,4 @@
 
 # MCP Server Tools
 
-- `slack.post_message`: Post incident alerts and status updates to operations channels
+- Connected chat tool: post incident alerts and status updates to operations channels

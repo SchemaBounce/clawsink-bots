@@ -202,7 +202,7 @@ for bot_manifest in "$REPO_ROOT"/bots/*/BOT.md; do
   validate_manifest "$bot_manifest" "bot"
 done
 
-for team_manifest in "$REPO_ROOT"/teams/*/TEAM.md; do
+for team_manifest in "$REPO_ROOT"/templates/*/TEMPLATE.md "$REPO_ROOT"/teams/*/TEAM.md; do
   [ -f "$team_manifest" ] || continue
   validate_manifest "$team_manifest" "team"
 done

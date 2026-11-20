@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: infrastructure-reporter
   displayName: "Infrastructure Reporter"
-  version: "1.0.10"
+  version: "1.0.12"
   description: "Periodic infrastructure health summary reports."
   category: engineering
   tags: ["infrastructure", "health", "monitoring"]
@@ -59,9 +59,7 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
+  - ref: "skills/schemabounce"
 plugins: []
 # Internal-only by design, first-party platform bot. Reads pipeline,
 # environment, and ADL infrastructure state via adl_list_pipeline_routes,
@@ -135,7 +133,7 @@ goals:
     description: "Health reports produced on schedule (every 6 hours by default)."
     metricType: count
     target: ">= 4 per day"
-    category: primary
+    category: secondary
     feedback:
       question: "Are the infrastructure health reports actionable and useful?"
       options: ["yes", "mostly", "too verbose", "missing key metrics"]

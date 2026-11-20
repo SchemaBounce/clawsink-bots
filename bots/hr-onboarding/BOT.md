@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: hr-onboarding
   displayName: "HR Onboarding"
-  version: "1.0.11"
+  version: "1.0.14"
   description: "Employee onboarding checklist and tracking."
   category: hr
   tags: ["hr", "onboarding", "employees"]
@@ -19,9 +19,9 @@ agent:
     - ALWAYS include clear due dates and responsible parties for every `hr_tasks` item created
     - NEVER store personal employee information (SSN, bank details, health records) in findings or memory, reference by employee ID only
     - NEVER skip checklist items even if they seem redundant, compliance requires complete audit trails
-    - NEVER auto-complete checklist items, only the human operator or n8n workflow confirmation can mark tasks done
+    - NEVER auto-complete checklist items, only the human operator or a completed workflow run can mark tasks done
     - Escalation: onboarding delays exceeding SLA or blocked employees trigger finding to executive-assistant
-    - Use n8n-workflow plugin for automated provisioning (accounts, equipment, training enrollment), do not attempt manual coordination
+    - Use a deployed workspace workflow for automated provisioning (accounts, equipment, training enrollment): find it with `adl_list_workflows` and request the run with `adl_trigger_workflow`, which waits for a person to approve it. If no workflow fits, say so in a finding. Do not attempt manual coordination
     - Use gog plugin for scheduling orientation sessions on Google Calendar and sharing documents via Drive
     - Track completion rates in `completion_rates` memory to identify recurring onboarding bottlenecks
   toolInstructions: |
@@ -69,11 +69,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/follow-up-tracking@1.0.0"
-  - ref: "skills/task-management@1.0.0"
-  - ref: "skills/notification-dispatch@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/hr-toolkit@1.0.0"
     reason: "Leave calculations, compensation benchmarking, and onboarding scheduling"
@@ -82,9 +78,6 @@ toolPacks:
   - ref: "packs/document-gen@1.0.0"
     reason: "Generate onboarding checklists and welcome documents"
 plugins:
-  - ref: "n8n-workflow@latest"
-    required: true
-    reason: "Triggers onboarding workflows (account provisioning, equipment requests, training enrollment)"
   - ref: "gog@latest"
     required: false
     reason: "Google Calendar for scheduling orientation sessions, Drive for sharing onboarding documents"
@@ -177,7 +170,7 @@ goals:
       condition: "90% of onboarding checklists completed on time"
   - name: task_creation
     description: "Every new hire gets a personalized checklist with all required tasks"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: hr_tasks

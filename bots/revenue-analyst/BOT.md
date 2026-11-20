@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: revenue-analyst
   displayName: "Revenue Analyst"
-  version: "1.0.10"
+  version: "1.0.13"
   description: "Daily revenue analysis and trend reporting."
   category: finance
   tags: ["revenue", "analytics", "trends"]
@@ -69,10 +69,7 @@ egress:
   mode: "restricted"
   allowedDomains: ["api.stripe.com"]
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/scheduled-report@1.0.0"
+  - ref: "skills/schemabounce"
 requirements:
   minTier: "starter"
 setup:
@@ -145,7 +142,7 @@ setup:
 goals:
   - name: daily_revenue_report
     description: "Produce actionable daily revenue analysis with trend context"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: revenue_reports
@@ -155,7 +152,7 @@ goals:
       period: daily
   - name: anomaly_detection
     description: "Flag revenue anomalies exceeding baseline thresholds"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: trend_findings
@@ -167,7 +164,7 @@ goals:
       condition: "when anomalies exist"
   - name: forecast_accuracy
     description: "Revenue forecasts within 15% of actuals over a rolling 30-day window"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: revenue_reports, filter: { forecast_accuracy: "within_threshold" } }

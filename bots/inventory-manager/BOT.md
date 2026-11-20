@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: inventory-manager
   displayName: "Inventory & Acquisition Manager"
-  version: "1.0.11"
+  version: "1.0.13"
   description: "Stock level monitoring, reorder calculations, vendor tracking, acquisition pipeline management."
   category: operations
   tags: ["inventory", "stock", "vendors", "reorder", "acquisition", "procurement"]
@@ -74,10 +74,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/record-monitoring@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/ecommerce-toolkit@1.0.0"
     reason: "Inventory calculations, reorder points, and safety stock analysis"
@@ -190,7 +187,7 @@ setup:
 goals:
   - name: prevent_stockouts
     description: "No critical stock-outs. All SKUs stay above safety stock thresholds"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: inv_alerts
@@ -202,7 +199,7 @@ goals:
       condition: "zero critical stock-out alerts"
   - name: reorder_recommendations
     description: "Generate timely reorder recommendations before stock hits threshold"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: inv_findings
@@ -235,6 +232,23 @@ goals:
       value: 0
       period: per_run
       condition: "cumulative growth"
+  - name: reorder_recommendation_accuracy
+    description: "Reorder recommendations are confirmed as right by a person"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: inv_findings, filter: { feedback: correct } }
+      denominator: { entity: inv_findings, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: inv_findings
+      actions:
+        - { value: correct, label: "Right call" }
+        - { value: wrong, label: "Wrong call" }
 ---
 
 # Inventory & Acquisition Manager

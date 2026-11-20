@@ -14,8 +14,8 @@
 
 - Use the dedicated HubSpot connection's visible read-only list, search, and get actions for deals, companies, activities, pipelines, and stages.
 - Never call HubSpot create, update, archive, or delete actions. Keep contact properties out of ADL outputs.
-- `stripe.stripe_list_invoices`: Verify payment status for closed deals to confirm revenue recognition
-- `stripe.stripe_list_customers`: Cross-reference deal customers with payment records
+- Connected billing tool: verify payment status for closed deals to confirm revenue recognition
+- Connected billing tool: cross-reference deal customers with payment records
 
 # Sub-Agent Orchestration
 

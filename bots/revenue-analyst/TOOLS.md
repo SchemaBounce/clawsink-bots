@@ -12,8 +12,8 @@
 
 # MCP Server Tools
 
-- `stripe.list_charges`: pull MRR/ARR data and subscription metrics for revenue trend analysis
-- `stripe.list_subscriptions`: track subscription changes affecting recurring revenue
+- Connected billing tool: pull MRR/ARR data and subscription metrics for revenue trend analysis
+- Connected billing tool: track subscription changes affecting recurring revenue
 
 # Sub-Agent Orchestration
 

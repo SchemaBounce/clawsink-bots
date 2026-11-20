@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Validate TEAM.md manifests in teams/*/TEAM.md.
+Validate domain template manifests in templates/*/TEMPLATE.md (alias window,
+dec-189: the old teams/*/TEAM.md layout is read too).
 
 Checks applied to every team:
   1. orgChart.roles[*].bot must appear in bots[*].ref
@@ -29,7 +30,9 @@ from typing import List, Optional, Tuple
 
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEAM_GLOB = os.path.join(REPO_ROOT, "teams", "*", "TEAM.md")
+TEAM_GLOB = os.path.join(REPO_ROOT, "templates", "*", "TEMPLATE.md")
+# Alias window (dec-189): the pre-rename layout is still read until it is retired.
+LEGACY_TEAM_GLOB = os.path.join(REPO_ROOT, "teams", "*", "TEAM.md")
 
 
 def extract_frontmatter(path: str) -> str:
@@ -241,9 +244,9 @@ def validate_team(path: str) -> List[str]:
 
 
 def main() -> int:
-    paths = sorted(glob(TEAM_GLOB))
+    paths = sorted(glob(TEAM_GLOB)) + sorted(glob(LEGACY_TEAM_GLOB))
     if not paths:
-        print(f"no TEAM.md files found under {TEAM_GLOB}", file=sys.stderr)
+        print(f"no TEMPLATE.md files found under {TEAM_GLOB}", file=sys.stderr)
         return 1
 
     total_errors = 0

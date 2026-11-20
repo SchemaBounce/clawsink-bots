@@ -13,7 +13,7 @@ Identify deals at risk of being lost and generate alerts for timely intervention
 
 ## Process
 
-You operate on `deal_score` records already produced by the `deal-scorer` sub-agent. The parent Sales Pipeline bot pulls CRM data via Composio (`composio.search_composio_tools` then `composio.execute_composio_tool` against SALESFORCE / HUBSPOT) and verifies revenue via direct Stripe calls before spawning the scoring chain. You do not call external tools.
+You operate on `deal_score` records already produced by the `deal-scorer` sub-agent. The parent Sales Pipeline bot pulls CRM data with the connected CRM tool and verifies revenue with the connected billing tool before spawning the scoring chain. You do not call external tools.
 
 1. Query the latest `deal_score` records.
 2. Filter for deals meeting at-risk criteria (see below).

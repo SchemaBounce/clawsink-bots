@@ -4,7 +4,7 @@ Helpers for authoring and validating the content in this repo.
 
 ## `validate-team-manifests.py`
 
-Validates every `teams/*/TEAM.md` manifest against the org-chart schema
+Validates every `templates/*/TEMPLATE.md` manifest against the org-chart schema
 documented in [`../teams/README.md`](../teams/README.md).
 
 Checks applied to every team:

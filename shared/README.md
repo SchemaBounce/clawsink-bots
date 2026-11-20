@@ -6,7 +6,7 @@ Cross-cutting resources used by multiple bots and teams. These files are referen
 
 ### escalation-chains.json
 
-Global default escalation routing for bots operating **outside** a team context (standalone deployment). When a bot is activated within a team, the team's `orgChart.escalation` takes precedence. See [teams/README.md](../teams/README.md) for team-level escalation.
+Global default escalation routing for bots operating **outside** a team context (standalone deployment). When a bot is activated within a team, the team's `orgChart.escalation` takes precedence. See [templates/README.md](../teams/README.md) for team-level escalation.
 
 This is the only file in `shared/` that is parsed by the platform at runtime.
 

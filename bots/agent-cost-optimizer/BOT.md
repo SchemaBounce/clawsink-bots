@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: agent-cost-optimizer
   displayName: "Agent Cost Optimizer"
-  version: "0.1.9"
+  version: "0.1.12"
   description: "First-party platform bot. Audits per-agent token usage, model spend, and run patterns to surface concrete cost-saving recommendations, model downgrades, schedule reductions, runaway-agent detection. Uses only SchemaBounce-platform built-in tools, no third-party MCP, no Composio in the data path."
   category: ops
   tags: ["agents", "cost", "ops", "optimization", "platform", "tokens"]
@@ -22,7 +22,7 @@ agent:
     - Honest scope: this bot improves cost visibility and surfaces optimisation candidates. Actually applying the optimisations stays a human decision (or release-manager bot's job).
   toolInstructions: |
     ## Tool Usage
-    - Step 1: `adl_read_memory` namespace `bot:agent-cost-optimizer:northstar` keys `cost_thresholds`, `tier_rules`
+    - Step 1: `adl_read_memory` namespace `northstar:<key>` keys `cost_thresholds`, `tier_rules`
     - Step 2: `adl_read_memory` namespace `cost:agents:run_state` key `last_run` to know which agents were already flagged in the prior run (avoid duplicate noise)
     - Step 3: Spawn `analyzer` sub-agent. The analyzer enumerates every active agent via `adl_list_agents`, then for each calls `adl_get_agent_metrics(agent_id, windows=["24h","7d","30d"])` + `adl_get_agent_status` for current state. Emits one `agent_cost_audit` record per agent plus a workspace rollup.
     - Step 4: Spawn `recommender` sub-agent. The recommender reads the freshly-written audits via `adl_query_records`, applies tier_rules + cost_thresholds, and emits `agent_cost_recommendation` records carrying tokens, the platform's cost figure, and a suggested alias.
@@ -70,13 +70,13 @@ egress:
   mode: "none"
 plugins: []
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
+  - ref: "skills/schemabounce"
 requirements:
   minTier: "starter"
 goals:
   - name: recommendations_per_run
     description: "Each run produces at least one actionable agent cost recommendation, or an explicit 'no findings' record with metrics."
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: agent_cost_recommendation
@@ -105,6 +105,23 @@ goals:
       operator: "=="
       value: 1
       period: per_run
+  - name: recommendation_acceptance
+    description: "People accept the cost recommendations the agent makes"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: agent_cost_recommendation, filter: { feedback: accepted } }
+      denominator: { entity: agent_cost_recommendation, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: agent_cost_recommendation
+      actions:
+        - { value: accepted, label: "Accept" }
+        - { value: rejected, label: "Reject" }
 ---
 
 # Agent Cost Optimizer

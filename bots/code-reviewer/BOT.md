@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: code-reviewer
   displayName: "Code Reviewer"
-  version: "1.0.11"
+  version: "1.0.14"
   description: "Automated code review with security, quality, and architecture analysis."
   category: engineering
   tags: ["code-review", "security", "quality", "architecture", "pull-requests"]
@@ -66,9 +66,8 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/code-review@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:mattpocock/skills/code-review"
 rules:
   - ref: "rules/github-safety@1.0.0"
 presence:
@@ -170,7 +169,7 @@ goals:
       condition: "all open PRs reviewed"
   - name: security_detection
     description: "Detect OWASP Top 10 vulnerabilities and flag with severity"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: review_findings
@@ -182,7 +181,7 @@ goals:
       condition: "when security issues exist in reviewed code"
   - name: review_accuracy
     description: "Review findings confirmed as valid by developers"
-    category: secondary
+    category: primary
     metric:
       type: rate
       numerator: { entity: review_findings, filter: { feedback: "valid" } }

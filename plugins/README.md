@@ -36,7 +36,7 @@ plugins.slots.memory = "memory-lancedb"
 
 ## Relationship to Bots and Teams
 
-Plugins are declared in BOT.md under `plugins:` or in TEAM.md under `plugins:` (team-level shared plugins). See [bots/README.md](../bots/README.md) for the full plugin field reference (categories, slots, config merging, field rules). See [teams/README.md](../teams/README.md) for how teams share plugins across all member bots.
+Plugins are declared in BOT.md under `plugins:` or in TEMPLATE.md under `plugins:` (team-level shared plugins). See [bots/README.md](../bots/README.md) for the full plugin field reference (categories, slots, config merging, field rules). See [templates/README.md](../teams/README.md) for how teams share plugins across all member bots.
 
 When you install a bot pack, check its `plugins:` section to see what needs to be installed. Bots with `required: true` (the default) won't start without their plugins.
 

@@ -17,8 +17,8 @@ Analyze per-agent token consumption, identify cost reduction opportunities, mode
 2. Read `performance_baselines` from memory — compare current metrics to historical baselines, flag regressions and improvements
 3. Identify model downgrade candidates: agents with 5+ consecutive successful runs where output quality (finding count, severity distribution, escalation accuracy) is consistent — these could run on haiku instead of sonnet
 4. Identify schedule optimization candidates: agents running more frequently than data arrival rate justifies (no new input data between runs)
-5. Use `list_namespaces` to detect orphaned or bloated memory namespaces (no recent writes, excessive key count)
-6. Use `list_collections` to check vector collection utilization vs tier limits
+5. List memory namespaces with the platform memory tools to detect orphaned or bloated memory namespaces (no recent writes, excessive key count)
+6. List vector collections to check vector collection utilization vs tier limits
 7. Use `adl_list_entity_types` to identify stale entity types (zero new records in 14+ days)
 8. Use `get_stats` for aggregate workspace utilization vs tier capacity
 

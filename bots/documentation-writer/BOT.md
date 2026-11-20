@@ -4,12 +4,12 @@ kind: Bot
 metadata:
   name: documentation-writer
   displayName: "Documentation Writer"
-  version: "1.0.18"
+  version: "1.0.24"
   description: "Automatically updates documentation when code implementations complete, creating doc PRs linked to implementation PRs."
   category: engineering
   tags: ["documentation", "docs", "technical-writing", "engineering"]
 agent:
-  capabilities: ["writing", "documentation", "code-analysis"]
+  capabilities: ["writing", "documentation", "code-analysis", "coding"]
   hostingMode: "openclaw"
   defaultDomain: "engineering"
   instructions: |
@@ -70,10 +70,8 @@ zones:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/pr-creation@1.0.0"
-  - ref: "skills/ui-navigation@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:addyosmani/agent-skills/git-workflow-and-versioning"
 toolPacks:
   - ref: "packs/text-processing@1.0.0"
     reason: "Extract keywords, detect language, chunk text for processing"
@@ -124,18 +122,6 @@ setup:
       ui:
         icon: github
         actionLabel: "Connect GitHub"
-    - id: enable-code-sandbox
-      name: "Enable Code Sandbox"
-      description: "Hosted Claude Code sessions in per-workspace sandboxes for documentation file edits, metered on workspace credits."
-      type: mcp_connection
-      ref: tools/code-sandbox
-      group: connections
-      priority: recommended
-      reason: "Doc file edits run inside sandboxed code sessions that produce reviewable doc PRs"
-      ui:
-        icon: code
-        actionLabel: "Enable Code Sandbox"
-        helpUrl: "https://docs.schemabounce.com/integrations/code-sandbox"
     - id: import-implementation-plans
       name: "Connect implementation plan data"
       description: "Implementation plans from software-architect that trigger doc updates"

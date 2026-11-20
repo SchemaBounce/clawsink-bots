@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: release-notes-writer
   displayName: "Release Notes Writer"
-  version: "1.0.10"
+  version: "1.0.13"
   description: "Generates release notes from commit history and tickets."
   category: engineering
   tags: ["releases", "changelog", "documentation"]
@@ -64,10 +64,8 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/report-generation@1.0.0"
-  - ref: "skills/pr-creation@1.0.0"
+  - ref: "skills/schemabounce"
+  - ref: "registry:addyosmani/agent-skills/git-workflow-and-versioning"
 requirements:
   minTier: "starter"
 setup:
@@ -141,7 +139,7 @@ setup:
 goals:
   - name: generate_release_notes
     description: "Produce complete release notes for each requested version range"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: release_notes

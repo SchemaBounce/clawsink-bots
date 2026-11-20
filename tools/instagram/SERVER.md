@@ -102,7 +102,7 @@ Instagram's Graph API requires two calls to publish a post:
 1. `post_ig_user_media` — create a media container (returns a `creation_id`)
 2. `publish_ig_user_media` — publish the container using the `creation_id`
 
-The `social-publishing` skill enforces a **human-approval gate** between steps. Bots must send the draft container ID to str-property-manager and wait for approval before calling `publish_ig_user_media`.
+Publishing is gated by a **human approval** in the workspace Inbox between the two steps. Bots must send the draft container ID to str-property-manager and wait for approval before calling `publish_ig_user_media`.
 
 ## Team Usage
 

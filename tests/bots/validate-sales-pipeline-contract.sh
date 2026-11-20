@@ -5,7 +5,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 BOT="$ROOT_DIR/bots/sales-pipeline/BOT.md"
-TEAM="$ROOT_DIR/teams/sales-team/TEAM.md"
+TEAM="$ROOT_DIR/templates/sales-team/TEMPLATE.md"
+[ -f "$TEAM" ] || TEAM="$ROOT_DIR/teams/sales-team/TEAM.md"  # alias window (dec-189)
 FAILURES=0
 
 pass() { echo "PASS: $1"; }

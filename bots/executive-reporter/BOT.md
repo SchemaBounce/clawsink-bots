@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: executive-reporter
   displayName: "Executive Reporter"
-  version: "1.0.10"
+  version: "1.0.12"
   description: "C-suite executive summaries, KPI dashboards, and cross-domain business intelligence."
   category: analytics
   tags: ["executive", "reports", "KPI", "dashboards", "business-intelligence", "c-suite"]
@@ -70,9 +70,7 @@ presence:
 egress:
   mode: "none"
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/report-generation@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/document-gen@1.0.0"
     reason: "Generate executive reports, formatted tables, and chart data"
@@ -155,7 +153,7 @@ setup:
 goals:
   - name: report_generation
     description: "Generate executive summaries on schedule with cross-domain coverage"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: executive_summaries
@@ -201,6 +199,23 @@ goals:
       operator: "=="
       value: 1
       period: weekly
+  - name: summary_usefulness
+    description: "People mark the executive summaries as useful"
+    category: primary
+    metric:
+      type: rate
+      numerator: { entity: executive_summaries, filter: { feedback: useful } }
+      denominator: { entity: executive_summaries, filter: { feedback: { "$exists": true } } }
+    target:
+      operator: ">"
+      value: 0.8
+      period: weekly
+    feedback:
+      enabled: true
+      entityType: executive_summaries
+      actions:
+        - { value: useful, label: "Useful" }
+        - { value: not_useful, label: "Not useful" }
 ---
 
 # Executive Reporter

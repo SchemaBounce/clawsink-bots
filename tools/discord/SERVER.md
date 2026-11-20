@@ -71,7 +71,7 @@ No manual API key is required for the gateway. The workspace's Composio connecti
 
 ## Posting Is Approval-Gated
 
-`create_message` posts publicly to a channel. The `social-publishing` skill holds every post behind explicit human approval before it goes live. Reading messages, reactions, and reads are not gated.
+`create_message` posts publicly to a channel. Every publish is held behind explicit human approval in the workspace Inbox before it goes live. Reading messages, reactions, and reads are not gated.
 
 ## External Requirements
 

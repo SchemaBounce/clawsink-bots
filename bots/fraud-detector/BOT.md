@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: fraud-detector
   displayName: "Fraud Detector"
-  version: "1.0.11"
+  version: "1.0.14"
   description: "Scores new transactions for fraud risk using pattern analysis and anomaly detection."
   category: fintech
   tags: ["fraud", "transactions", "risk", "cdc"]
@@ -70,10 +70,7 @@ egress:
   mode: "restricted"
   allowedDomains: []
 skills:
-  - ref: "skills/platform-awareness@1.0.0"
-  - ref: "skills/inter-agent-comms@1.0.0"
-  - ref: "skills/data-ops@1.0.0"
-  - ref: "skills/cdc-event-analysis@1.0.0"
+  - ref: "skills/schemabounce"
 toolPacks:
   - ref: "packs/financial-toolkit@1.0.0"
     reason: "Calculate financial ratios and detect billing anomalies"
@@ -169,7 +166,7 @@ setup:
 goals:
   - name: flag_suspicious_transactions
     description: "Identify and flag potentially fraudulent transactions"
-    category: primary
+    category: secondary
     metric:
       type: count
       entity: fraud_scores
