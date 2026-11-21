@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.22"
+  version: "1.0.23"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -59,7 +59,7 @@ agent:
     | `sink_destination` | `sinkType` (string), `sinkName` (string, optional), `sinkId` (string, optional) | **Blocked at deploy.** Use `upsert_record`, `http_request`, `warehouse_write` or a pipeline route instead. |
     | `sub_workflow` | `workflowId` (string, required), `inputMapping` (Record<string,string>, optional) | Call another deployed workflow as a child. Parent waits until child completes. Use for reusable workflow modules. |
     | `for_each` | `arrayField` (string, required), `workflowId` (string, required), `elementKey` (string, default "item"), `concurrency` (number, default 5, max 50) | Iterate over an array field, spawning parallel child workflow runs per element. Parent waits until all children complete. |
-    | `escalation` | `targetMode` (position/domain/supervisor), `targetPositionId` (number, when position), `targetDomain` (string, when domain), `escalationType` (approval/decision/info/directive), `urgency` (low/normal/high/critical), `summaryTemplate` (string, template vars), `expiresInMinutes` (number, 0=never), `notifyTarget` (boolean) | Escalate to another agent or human in the org chart. Workflow **branches on response**: outgoing edges use sourceHandle `"approved"`, `"denied"`, or `"expired"`. Defaults: supervisor mode, normal urgency, approval type. Use for approvals, decisions, and human-in-the-loop workflows. Optional `reviewSteps` (array of node ids) picks and orders the earlier steps the reviewer reads; default is every earlier step. |
+    | `escalation` | `targetMode` (position/domain/supervisor), `targetPositionId` (number, when position), `targetDomain` (string, when domain), `escalationType` (approval/decision/info/directive), `urgency` (low/normal/high/critical), `summaryTemplate` (string, template vars), `expiresInMinutes` (number, saved but not used by the runtime: expiry follows `urgency`), `notifyTarget` (boolean) | Escalate to another agent or human in the org chart. Workflow **branches on response**: outgoing edges use sourceHandle `"approved"`, `"denied"`, or `"expired"`. Defaults: supervisor mode, normal urgency, approval type. Use for approvals, decisions, and human-in-the-loop workflows. An escalation always expires, by `urgency`: critical 1 hour, high 4 hours, normal 24 hours (default), low 72 hours; with no `expired` edge the run fails when it expires. Optional `reviewSteps` (array of node ids) picks and orders the earlier steps the reviewer reads; default is every earlier step. |
 
     ### Transforms (inline, <1ms execution)
 
