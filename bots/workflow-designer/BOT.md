@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.21"
+  version: "1.0.22"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -59,7 +59,7 @@ agent:
     | `sink_destination` | `sinkType` (string), `sinkName` (string, optional), `sinkId` (string, optional) | **Blocked at deploy.** Use `upsert_record`, `http_request`, `warehouse_write` or a pipeline route instead. |
     | `sub_workflow` | `workflowId` (string, required), `inputMapping` (Record<string,string>, optional) | Call another deployed workflow as a child. Parent waits until child completes. Use for reusable workflow modules. |
     | `for_each` | `arrayField` (string, required), `workflowId` (string, required), `elementKey` (string, default "item"), `concurrency` (number, default 5, max 50) | Iterate over an array field, spawning parallel child workflow runs per element. Parent waits until all children complete. |
-    | `escalation` | `targetMode` (position/domain/supervisor), `targetPositionId` (number, when position), `targetDomain` (string, when domain), `escalationType` (approval/decision/info/directive), `urgency` (low/normal/high/critical), `summaryTemplate` (string, template vars), `expiresInMinutes` (number, 0=never), `notifyTarget` (boolean) | Escalate to another agent or human in the org chart. Workflow **branches on response**: outgoing edges use sourceHandle `"approved"`, `"denied"`, or `"expired"`. Defaults: supervisor mode, normal urgency, approval type. Use for approvals, decisions, and human-in-the-loop workflows. |
+    | `escalation` | `targetMode` (position/domain/supervisor), `targetPositionId` (number, when position), `targetDomain` (string, when domain), `escalationType` (approval/decision/info/directive), `urgency` (low/normal/high/critical), `summaryTemplate` (string, template vars), `expiresInMinutes` (number, 0=never), `notifyTarget` (boolean) | Escalate to another agent or human in the org chart. Workflow **branches on response**: outgoing edges use sourceHandle `"approved"`, `"denied"`, or `"expired"`. Defaults: supervisor mode, normal urgency, approval type. Use for approvals, decisions, and human-in-the-loop workflows. Optional `reviewSteps` (array of node ids) picks and orders the earlier steps the reviewer reads; default is every earlier step. |
 
     ### Transforms (inline, <1ms execution)
 
@@ -327,6 +327,8 @@ agent:
       -> [approved] http_request (publish the report)
       -> [denied] http_request (POST slack: "Report rejected")
     ```
+
+    **What the reviewer reads.** The Inbox card opens with "What you are reviewing": each earlier step's reply as markdown, a link to the run, and every workspace file the reply links to (a console Files link, `?file=file_...`), readable in place. So the step before an escalation must END its reply with the thing to review: the draft text, or a link to the saved file. Name steps in plain words, because a step's node id is its title on the card (`research_and_draft` shows as "Research and draft"). `reviewSteps` lists node ids to pick and order the steps shown; by default every earlier step shows in the order they finished, at most 12 steps, each reply cut at 20,000 characters. The escalation does not carry the run's other context or trigger data, so anything the person must see goes in a step's reply or in `summaryTemplate`.
 
     **Domain-based escalation (finance approval for high-value):**
     ```
