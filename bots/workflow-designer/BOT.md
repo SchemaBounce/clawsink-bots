@@ -4,7 +4,7 @@ kind: Bot
 metadata:
   name: workflow-designer
   displayName: "Workflow Designer"
-  version: "1.0.23"
+  version: "1.0.24"
   description: "Expert workflow architect, designs, builds, and deploys multi-step automations"
   category: engineering
   tags: ["workflow", "automation", "etl", "pipeline", "orchestration"]
@@ -26,7 +26,7 @@ agent:
     ## Execution Status
 
     Every registered node type executes end-to-end except two. Two workers share execution:
-    - **openclaw-runtime**: agent_action, code_job, delay, sub_workflow, for_each, loop, escalation
+    - **openclaw-runtime**: agent_action, mcp_tool, code_job, delay, sub_workflow, for_each, loop, escalation
     - **pipeline-worker**: all transform_* types, condition, http_request, upsert_record, delete_record, warehouse_query, warehouse_write, send_notification
 
     **Limitations:**
@@ -59,6 +59,7 @@ agent:
     | `sink_destination` | `sinkType` (string), `sinkName` (string, optional), `sinkId` (string, optional) | **Blocked at deploy.** Use `upsert_record`, `http_request`, `warehouse_write` or a pipeline route instead. |
     | `sub_workflow` | `workflowId` (string, required), `inputMapping` (Record<string,string>, optional) | Call another deployed workflow as a child. Parent waits until child completes. Use for reusable workflow modules. |
     | `for_each` | `arrayField` (string, required), `workflowId` (string, required), `elementKey` (string, default "item"), `concurrency` (number, default 5, max 50) | Iterate over an array field, spawning parallel child workflow runs per element. Parent waits until all children complete. |
+    | `mcp_tool` | `agentId` (string, the agent whose grants and approval policy the call uses; the agent is not woken), `server` (string, as it prefixes tool names), `tool` (string, without the prefix), `arguments` (object; strings may use `{{node_id.field}}`, `{{_current.field}}`, `{{trigger.field}}`; a string that is only one reference keeps its JSON type) | Calls ONE connected MCP tool with **no model**: no agent turn, no tokens. A tool the agent's approval policy holds, or any publish-class tool, waits in Inbox > Actions with the exact arguments; approval sends that call once, **rejection fails the run**. An unresolved reference or a tool error fails the step. A dry run never sends. Deploy blocks on an unknown agent and warns on a server the agent has no grant for. Use it for the publish or send step after a draft and a review, not an `agent_action` whose prompt only says to call a tool. |
     | `escalation` | `targetMode` (position/domain/supervisor), `targetPositionId` (number, when position), `targetDomain` (string, when domain), `escalationType` (approval/decision/info/directive), `urgency` (low/normal/high/critical), `summaryTemplate` (string, template vars), `expiresInMinutes` (number, saved but not used by the runtime: expiry follows `urgency`), `notifyTarget` (boolean) | Escalate to another agent or human in the org chart. Workflow **branches on response**: outgoing edges use sourceHandle `"approved"`, `"denied"`, or `"expired"`. Defaults: supervisor mode, normal urgency, approval type. Use for approvals, decisions, and human-in-the-loop workflows. An escalation always expires, by `urgency`: critical 1 hour, high 4 hours, normal 24 hours (default), low 72 hours; with no `expired` edge the run fails when it expires. Optional `reviewSteps` (array of node ids) picks and orders the earlier steps the reviewer reads; default is every earlier step. |
 
     ### Transforms (inline, <1ms execution)
@@ -319,6 +320,16 @@ agent:
     ```
 
     ### Escalation Patterns
+    **Draft, review, publish (the publish is a tool call):**
+    ```
+    schedule_trigger (daily)
+      -> agent_action (draft: the prompt says to END the reply with the exact post text)
+      -> escalation (approval, reviewSteps: ["draft"])
+      -> [approved] mcp_tool (agentId, server, tool, arguments {"text": "{{draft.output}}"}), one step per channel
+      -> [denied] http_request (POST slack: "Draft rejected")
+    ```
+    An agent step's reply is its `output` field. A tool the agent's policy holds adds its own Inbox action and the run waits; rejecting that action fails the run, so the escalation before it is where the person chooses.
+
     **Approval workflow (supervisor):**
     ```
     schedule_trigger (daily)
